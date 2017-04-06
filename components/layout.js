@@ -6,7 +6,7 @@ import Head from 'next/head'
 export default class extends React.Component {
 
   static propTypes = {
-    children: React.PropTypes.object.isRequired
+    children: React.PropTypes.array.isRequired
   }
 
   render () {

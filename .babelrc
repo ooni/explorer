@@ -1,8 +1,25 @@
 {
+  "plugins": [
+    [
+      "module-resolver", {
+      "root": ["."],
+      "alias": {
+        "styles": "./styles"
+      },
+      "cwd": "babelrc"
+    }],
+    [
+      "wrap-in-js",
+      {
+        "extensions": ["css$", "scss$"]
+      }
+    ]
+  ],
   "presets": [
     "es2015",
     "next/babel",
     "stage-2",
     "react"
   ],
+  "ignore": []
 }
