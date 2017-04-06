@@ -1,4 +1,5 @@
 const express = require('express')
+const sass = require('node-sass')
 const path = require('path')
 const next = require('next')
 
@@ -27,6 +28,13 @@ app.prepare()
 
     server.get('/country/:name', (req, res) => {
       return app.render(req, res, '/country', req.params)
+    })
+    const sassResult = sass.renderSync({file: './styles/main.scss', outputStyle: 'compressed'})
+    server.get('/assets/:id/main.css', (req, res) => {
+      res.setHeader('Content-Type', 'text/css')
+      res.setHeader('Cache-Control', 'public, max-age=2592000')
+      res.setHeader('Expires', new Date(Date.now() + 2592000000).toUTCString())
+      res.send(sassResult.css)
     })
 
     // Default catch all

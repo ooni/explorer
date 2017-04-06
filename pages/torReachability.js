@@ -125,9 +125,6 @@ const calcSummary = (byCountry) => {
       if (success === 0 && failed === 0) {
         continue
       }
-      console.log(cc)
-      console.log('success', success)
-      console.log('failed', failed)
       msmtCount += 1
       if (success > failed) {
         if (status === 'red' || status === 'orange') {

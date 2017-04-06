@@ -36,6 +36,8 @@
     "react-map-gl": "^2.0.2",
     "react-no-ssr": "^1.1.0",
     "react-vis": "^1.0.1",
+    "rebass": "^0.3.4",
+    "reflexbox": "^2.2.3",
     "sass-loader": "^4.1.1",
     "style-loader": "^0.16.0",
     "topojson": "^2.2.0",
