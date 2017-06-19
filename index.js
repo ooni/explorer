@@ -1,54 +1,54 @@
 const express = require('express')
-const sass = require('node-sass')
-const path = require('path')
 const next = require('next')
+const path = require('path')
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'production'
-const isDev = process.env.NODE_ENV === 'development'
-process.env.PORT = process.env.PORT || isDev ? 3000 : 80
+process.env.PORT = process.env.PORT || 3100
 
-const app = next({ dir: '.', dev: isDev })
+const dev = process.env.NODE_ENV !== 'production'
+if (dev === true) {
+  process.env.REGISTRY_URL = process.env.REGISTRY_URL || "http://127.0.0.1:8080"
+  process.env.EVENTS_URL = process.env.EVENTS_URL || "http://127.0.0.1:8082"
+}
+
+const app = next({ dir: '.', dev })
 const handle = app.getRequestHandler()
 
 const server = express()
 
 app.prepare()
-  .then(() => {
-    return new Promise((resolve, reject) => {
-      // XXX in here I can do setup
-      return resolve()
-    })
+.then(() => {
+	return new Promise((resolve, reject) => {
+	// XXX in here I can do setup
+    return resolve()
   })
-  .then(() => {
+})
+.then(() => {
 
-    server.use('/_/world-atlas',
-               express.static(__dirname + '/node_modules/world-atlas/world/'))
-    server.use('/_/data',
-               express.static(__dirname + '/data/'))
+	server.use('/_/world-atlas',
+						 express.static(__dirname + '/node_modules/world-atlas/world/'))
+	server.use('/_/data',
+						 express.static(__dirname + '/data/'))
 
-    server.get('/country/:name', (req, res) => {
-      return app.render(req, res, '/country', req.params)
-    })
-    const sassResult = sass.renderSync({file: './styles/main.scss', outputStyle: 'compressed'})
-    server.get('/assets/:id/main.css', (req, res) => {
-      res.setHeader('Content-Type', 'text/css')
-      res.setHeader('Cache-Control', 'public, max-age=2592000')
-      res.setHeader('Expires', new Date(Date.now() + 2592000000).toUTCString())
-      res.send(sassResult.css)
-    })
+	server.get('/country/:countryCode', (req, res) => {
+		return app.render(req, res, '/country', req.params)
+	})
 
-    // Default catch all
-    server.all('*', (req, res) => {
-      return handle(req, res)
-    })
+	// Default catch all
+	server.all('*', (req, res) => {
+		return handle(req, res)
+	})
 
-    server.listen(process.env.PORT, err => {
-      if (err) {
-        throw err
-      }
-      console.log('> Ready on http://localhost:' +
-                  process.env.PORT +
-                  ' [' + process.env.NODE_ENV + ']')
-    })
-
+	server.listen(process.env.PORT, err => {
+		if (err) {
+			throw err
+		}
+		console.log('> Ready on http://localhost:' +
+								process.env.PORT +
+								' [' + process.env.NODE_ENV + ']')
   })
+})
+.catch(err => {
+  console.log('An error occurred, unable to start the server')
+  console.log(err)
+});

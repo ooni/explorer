@@ -12,8 +12,12 @@ export default class extends React.Component {
     return (
       <Layout>
         <Head>
-          <title>OONI Explorer - World</title>
+          <title>OONI Explorer</title>
         </Head>
+        <div className="hero">
+          <div className="foo">
+          </div>
+        </div>
         <Container>
           <h3>Hello world</h3>
           <Flex

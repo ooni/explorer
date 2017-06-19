@@ -1,38 +1,20 @@
-const path = require('path')
-const glob = require('glob')
+const webpack = require('webpack')
+
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
 
 module.exports = {
-  webpack: (config, { dev }) => {
-    config.node = {
-      'fs': 'empty'
+  webpack: (config) => {
+    if (config.resolve.alias) {
+      // We need to remove the react-dom alias because it breaks react-tap-event-plugin in production
+      delete config.resolve.alias['react-dom']
+      delete config.resolve.alias['react']
     }
-    config.module.rules.push(
-      {
-        test: /\.(css|scss)/,
-        loader: 'emit-file-loader',
-        options: {
-          name: 'dist/[path][name].[ext]'
-        }
-      }
-      ,
-      {
-        test: /\.css$/,
-        use: ['babel-loader', 'raw-loader', 'postcss-loader']
-      }
-      ,
-      {
-        test: /\.s(a|c)ss$/,
-        use: ['babel-loader', 'raw-loader', 'postcss-loader',
-          { loader: 'sass-loader',
-            options: {
-              includePaths: ['styles', 'node_modules']
-                .map((d) => path.join(__dirname, d))
-                .map((g) => glob.sync(g))
-                .reduce((a, c) => a.concat(c), [])
-            }
-          }
-        ]
-      }
+    config.plugins.push(
+      new webpack.DefinePlugin({
+        'process.env.MEASUREMENTS_URL': JSON.stringify(process.env.REGISTRY_URL)
+      })
     )
     return config
   }
