@@ -1,4 +1,5 @@
 {
+  "plugins": [ "styled-jsx/babel" ],
   "presets": [
     "es2015",
     "next/babel",

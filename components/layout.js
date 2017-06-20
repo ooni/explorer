@@ -3,7 +3,7 @@ import React from 'react'
 import Header from './header'
 import { config } from 'rebass'
 
-const colors = {
+export const colors = {
   'ooniBlue': '#0588CB',
   'offBlack': '#1c1c1c',
   'white': '#fff',
@@ -75,12 +75,60 @@ export default class extends React.Component {
   render () {
     return (
       <div>
-        <Header/>
-        <div>
+        <style global jsx>{`
+          * {
+            margin: 0;
+            padding: 0;
+            text-rendering: geometricPrecision;
+            box-sizing: border-box;
+          }
+          body, html {
+            background: ${ colors.offWhite };
+            color: ${ colors.offBlack };
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+            height: 100%;
+          }
+        `}</style>
+        <Header />
+        <div className="content">
           { this.props.children }
         </div>
-
-        <footer></footer>
+        <footer>
+          <div className="footer-content">
+            <h2>Proudly made by the Open Observatory of Network Interference</h2>
+            <p>© OONI - Open Observatory of Network Interference • <a href="#">Privacy</a></p>
+          </div>
+        </footer>
+        <style jsx>{`
+          header {
+            width: 100%;
+            margin-bottom: 20px;
+            padding: 0;
+          }
+          footer {
+            background: #202428 linear-gradient(rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 10%);
+            min-width: 900px;
+            width: 100%;
+          }
+          .footer-content {
+            margin: 0 auto;
+            width: 900px;
+            color: #474d53;
+            text-align: center;
+            padding: 25px 0 10px 0;
+          }
+          .footer-content h2 {
+            padding-bottom: 20px;
+          }
+          .footer-content p {
+            color: white;
+          }
+          .footer-content a {
+            color: white;
+            text-decoration: none;
+          }
+        `}
+        </style>
       </div>
     )
   }

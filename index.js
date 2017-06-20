@@ -7,8 +7,7 @@ process.env.PORT = process.env.PORT || 3100
 
 const dev = process.env.NODE_ENV !== 'production'
 if (dev === true) {
-  process.env.REGISTRY_URL = process.env.REGISTRY_URL || "http://127.0.0.1:8080"
-  process.env.EVENTS_URL = process.env.EVENTS_URL || "http://127.0.0.1:8082"
+  process.env.MEASUREMENTS_URL = process.env.MEASUREMENTS_URL || "http://127.0.0.1:3000"
 }
 
 const app = next({ dir: '.', dev })
@@ -29,6 +28,8 @@ app.prepare()
 						 express.static(__dirname + '/node_modules/world-atlas/world/'))
 	server.use('/_/data',
 						 express.static(__dirname + '/data/'))
+	server.use('/_/static',
+						 express.static(__dirname + '/static/'))
 
 	server.get('/country/:countryCode', (req, res) => {
 		return app.render(req, res, '/country', req.params)

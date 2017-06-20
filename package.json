@@ -2,10 +2,9 @@
   "name": "ooni-explorer",
   "version": "2.0.0-dev0",
   "author": "",
-  "license": "BSD-2-Clause",
+  "license": "MIT",
   "main": "index.js",
   "repository": {},
-  "license": "MIT",
   "dependencies": {
     "axios": "^0.15.3",
     "babel-preset-es2015": "^6.24.0",
@@ -22,7 +21,9 @@
     "react-no-ssr": "^1.1.0",
     "react-select": "^1.0.0-rc.3",
     "react-tap-event-plugin": "^2.0.1",
-    "reflexbox": "^2.2.3"
+    "rebass": "^0.3.4",
+    "reflexbox": "^2.2.0",
+    "styled-jsx": "^1.0.5"
   },
   "devDependencies": {
     "babel-plugin-transform-define": "^1.2.0"
