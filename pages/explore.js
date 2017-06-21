@@ -30,23 +30,38 @@ const inputTrunc = 50
 
 const queryToParams = ({ query }) => {
   // XXX do better validation
-  let params = {}
+  let params = {},
+    show = 50
   const supportedParams = ["probe_cc", "input", "probe_asn", "test_name", "since", "until"]
+  if (query.show) {
+    show = parseInt(query.show)
+  }
   supportedParams.forEach((p) => {
     if (query[p]) {
       params[p] = query[p]
     }
   })
+  params["limit"] = show
+  if (query.page) {
+    params["offset"] = (parseInt(query.page) - 1) * show
+  }
   return params
 }
 
 export default class extends React.Component {
   static async getInitialProps ({ req, query }) {
     let client = axios.create({baseURL: process.env.MEASUREMENTS_URL})
-    console.log(query)
     const params = queryToParams({ query })
-    const res = await client.get('/api/v1/measurements', { params } )
-    return { measurements: res.data.results }
+    let [msmtR, testNamesR, countriesR] = await Promise.all([
+        client.get('/api/v1/measurements', { params } ),
+        client.get('/api/_/test_names'),
+        client.get('/api/_/countries')
+    ])
+    return {
+      measurements: msmtR.data,
+      testNames: testNamesR.data.test_names,
+      countries: countriesR.data.countries,
+    }
   }
 
   constructor(props) {
@@ -66,6 +81,8 @@ export default class extends React.Component {
     this.getFilterQuery = this.getFilterQuery.bind(this)
     this.onChangeFilter = this.onChangeFilter.bind(this)
     this.onApplyFilter = this.onApplyFilter.bind(this)
+    this.goToPage = this.goToPage.bind(this)
+    this.onShowCount = this.onShowCount.bind(this)
   }
 
   componentDidMount () {
@@ -75,7 +92,6 @@ export default class extends React.Component {
   }
 
   shouldComponentUpdate (nextProps, nextState) {
-    console.log("Should I update?")
     if (this.props != nextProps) {
       return true
     }
@@ -85,6 +101,42 @@ export default class extends React.Component {
     return false
   }
 
+  goToPage (n) {
+    if (n < 1) {
+      n = 1
+    }
+    let onHandler = () => {
+      this.setState({
+        loading: true
+      })
+      Router.push({
+        pathname: '/explore',
+        query: {...this.props.url.query, page: n}
+      }).then(() => {
+        this.setState({
+          loading: false
+        })
+        window.scrollTo(0, 0)
+      })
+    }
+    onHandler = onHandler.bind(this)
+    return onHandler
+  }
+
+  onShowCount ({target}) {
+    this.setState({
+      loading: true
+    })
+    Router.push({
+      pathname: '/explore',
+      query: {...this.props.url.query, show: parseInt(target.value)}
+    }).then(() => {
+      this.setState({
+        loading: false
+      })
+    })
+  }
+
   onApplyFilter () {
     this.setState({
       loading: true
@@ -92,17 +144,14 @@ export default class extends React.Component {
     Router.push({
       pathname: '/explore',
       query: this.getFilterQuery()
-    })
-    Router.onRouteChangeComplete = () => {
+    }).then(() => {
       this.setState({
         loading: false
       })
-    }
+    })
   }
 
   onChangeFilter ({target}) {
-    console.log("Setting", target.value)
-    console.log("Setting", target.name)
     this.setState({[target.name]: target.value})
   }
 
@@ -125,21 +174,42 @@ export default class extends React.Component {
   }
 
   render () {
-    const testOptions = [
-      { children: 'Any', value: '' },
-      { children: 'Web Connectivity', value: 'web_connectivity' },
-      { children: 'HTTP Invalid Request Line', value: 'http_invalid_request_line' }
-    ]
+    const { measurements, testNames, countries, url } = this.props
+    const currentPage = measurements.metadata.current_page,
+      totalPages = measurements.metadata.pages,
+      nextUrl = measurements.metadata.next_url;
 
-    const countryOptions = [
-      { children: 'Any', value: '' },
-      { children: 'Italy', value: 'IT' },
-      { children: 'China', value: 'CN' }
-    ]
+    let showCount = 50;
+    if (url.query.show) {
+      showCount = parseInt(url.query.show)
+    }
 
-    const currentPage = 1,
-      totalPages = 10;
-    const { measurements } = this.props
+    const sortByChildren = (a, b) => {
+			a = a.children.toUpperCase();
+			b = b.children.toUpperCase();
+			return (a < b) ? -1 : (a > b) ? 1 : 0
+    }
+
+    let testOptions = []
+    testNames.forEach((v) => {
+      testOptions.push({
+        children: v.name,
+        value: v.id
+      })
+    })
+	  testOptions.sort(sortByChildren)	
+    testOptions.unshift({ children: 'Any', value: '' })
+
+    let countryOptions = []
+    countries.forEach((v) => {
+      countryOptions.push({
+        children: v.name,
+        value: v.alpha_2
+      })
+    })
+	  countryOptions.sort(sortByChildren)	
+    countryOptions.unshift({ children: 'Any', value: '' })
+
     return (
       <Layout>
         <Head>
@@ -243,7 +313,8 @@ export default class extends React.Component {
               </ButtonOutline>
             </div>
             {this.state.loading && <h2>Loading</h2>}
-            {!this.state.loading && measurements.map((msmt) => {
+            {measurements.results.length == 0 && <h2>No results found</h2>}
+            {!this.state.loading && measurements.results.map((msmt) => {
               if (msmt.input && msmt.input.length > inputTrunc) {
                 msmt.input = `${msmt.input.substr(0, inputTrunc - 10)}…${msmt.input.substr(msmt.input.length - 10, msmt.input.length)}`
               }
@@ -295,8 +366,12 @@ export default class extends React.Component {
               <Flex>
               <Box col={10}>
               <div className='pages'>
-              <ButtonOutline style={{marginRight: '10px'}} color="primary">{'<'}</ButtonOutline>
-              {Array.apply(null, Array(totalPages)).map((_, i) => {
+              {currentPage > 1 && <ButtonOutline
+                style={{marginRight: '10px'}}
+                color="primary"
+                onClick={this.goToPage(currentPage - 1)}>{'<'}</ButtonOutline>
+              }
+              {totalPages != -1 && Array.apply(null, Array(totalPages)).map((_, i) => {
                   let pageNum = i+1
                   const btnStyle = {
                     marginRight: '10px'
@@ -310,14 +385,17 @@ export default class extends React.Component {
                   }
                   return <ButtonOutline style={btnStyle} className='page-button' color="primary">{pageNum}</ButtonOutline>
                 })}
-                <ButtonOutline color="primary">{'>'}</ButtonOutline>
+                {(totalPages == -1 || totalPages > currentPage) && <ButtonOutline color="primary" onClick={this.goToPage(currentPage + 1)}>{'>'}</ButtonOutline>}
               </div>
               </Box>
               <Box style={{marginLeft: 'auto'}}>
               <Select
                 label="show"
-                name="show_number"
+                name="showCount"
+                defaultValue={showCount}
+                onChange={this.onShowCount}
                 options={[
+                  {children: '10', value: 10},
                   {children: '50', value: 50},
                   {children: '100', value: 100},
                   {children: '200', value: 200}
