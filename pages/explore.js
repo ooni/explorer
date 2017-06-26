@@ -48,6 +48,37 @@ const queryToParams = ({ query }) => {
   return params
 }
 
+const OnlyFilterButton = ({
+    text,
+    onlyFilter,
+    thisValue,
+    onChangeOnly,
+    rounded
+}) => {
+  const style = {
+    marginLeft: -1
+  }
+  if (onlyFilter == thisValue) {
+    return (
+        <Button
+          onClick={() => { onChangeOnly(thisValue) }}
+          backgroundColor='primary'
+          color='white'
+          inverted
+          rounded={rounded}
+          style={style}>{text}</Button>
+    )
+  } else {
+    return (
+        <ButtonOutline
+          onClick={() => { onChangeOnly(thisValue) }}
+          color='primary'
+          rounded={rounded}
+          style={style}>{text}</ButtonOutline>
+    )
+  }
+}
+
 export default class extends React.Component {
   static async getInitialProps ({ req, query }) {
     let client = axios.create({baseURL: process.env.MEASUREMENTS_URL})
@@ -74,6 +105,8 @@ export default class extends React.Component {
       sinceFilter: props.url.query.since,
       untilFilter: props.url.query.until,
 
+      onlyFilter: props.url.query.only || 'all',
+
       search: null,
 
       loading: true
@@ -83,6 +116,8 @@ export default class extends React.Component {
     this.onApplyFilter = this.onApplyFilter.bind(this)
     this.goToPage = this.goToPage.bind(this)
     this.onShowCount = this.onShowCount.bind(this)
+
+    this.onChangeOnly = this.onChangeOnly.bind(this)
   }
 
   componentDidMount () {
@@ -155,6 +190,23 @@ export default class extends React.Component {
     this.setState({[target.name]: target.value})
   }
 
+  onChangeOnly (value) {
+    this.setState({
+      onlyFilter: value
+    })
+    this.setState({
+      loading: true
+    })
+    Router.push({
+      pathname: '/explore',
+      query: {...this.props.url.query, only: value}
+    }).then(() => {
+      this.setState({
+        loading: false
+      })
+    })
+  }
+
   getFilterQuery () {
     const mappings = [
       ['inputFilter', 'input'],
@@ -164,7 +216,7 @@ export default class extends React.Component {
       ['sinceFilter', 'since'],
       ['untilFilter', 'until'],
     ]
-    let query = {}
+    let query = {...this.props.url.query}
     mappings.forEach((m) => {
       if (this.state[m[0]]) {
         query[m[1]] = this.state[m[0]]
@@ -216,7 +268,7 @@ export default class extends React.Component {
           <title>Explore - OONI Explorer</title>
         </Head>
         <div className='mini-header'>
-          <h1>Explore</h1>
+          <h1>Search</h1>
         </div>
 
         <div className='explore-view'>
@@ -288,29 +340,37 @@ export default class extends React.Component {
           <Box col={10}>
           <div className='result-container'>
             <div className='result-selectors'>
-              <Button
-                backgroundColor="primary"
-                color="white"
-                inverted
-                rounded="left"
-                style={{
-                  marginLeft: -1
-                }}>All</Button>
-             <ButtonOutline
-              color="primary"
-              rounded={false}
-             >
-             Confirmed censorship
-             </ButtonOutline>
-             <ButtonOutline
-              color="primary"
-              rounded="right"
-              style={{
-                  marginLeft: -1
-              }}
-              >
-              Anomalies
-              </ButtonOutline>
+              <Flex>
+              <Box>
+                <OnlyFilterButton
+                  text="All"
+                  onlyFilter={this.state.onlyFilter}
+                  thisValue="all"
+                  onChangeOnly={this.onChangeOnly}
+                  rounded="left" />
+                <OnlyFilterButton
+                  text="Confirmed censorship"
+                  onlyFilter={this.state.onlyFilter}
+                  thisValue="confirmed_censorship"
+                  rounded={false}
+                  onChangeOnly={this.onChangeOnly} />
+                <OnlyFilterButton
+                  text="Anomalies"
+                  onlyFilter={this.state.onlyFilter}
+                  thisValue="anomalies"
+                  rounded="right"
+                  onChangeOnly={this.onChangeOnly} />
+              </Box>
+              <Box style={{marginLeft: 'auto'}}>
+                {currentPage > 1
+                 && <ButtonOutline style={{marginRight: '10px'}} color="primary" onClick={this.goToPage(currentPage - 1)}>{'<'}</ButtonOutline>
+                }
+                {(totalPages == -1 || totalPages > currentPage)
+                 && <ButtonOutline color="primary" onClick={this.goToPage(currentPage + 1)}>{'>'}</ButtonOutline>
+                }
+              </Box>
+            </Flex>
+
             </div>
             {this.state.loading && <h2>Loading</h2>}
             {measurements.results.length == 0 && <h2>No results found</h2>}
@@ -365,28 +425,6 @@ export default class extends React.Component {
               <Divider />
               <Flex>
               <Box col={10}>
-              <div className='pages'>
-              {currentPage > 1 && <ButtonOutline
-                style={{marginRight: '10px'}}
-                color="primary"
-                onClick={this.goToPage(currentPage - 1)}>{'<'}</ButtonOutline>
-              }
-              {totalPages != -1 && Array.apply(null, Array(totalPages)).map((_, i) => {
-                  let pageNum = i+1
-                  const btnStyle = {
-                    marginRight: '10px'
-                  }
-                  if (pageNum == currentPage) {
-                    return <Button
-                              style={btnStyle}
-                              backgroundColor="primary"
-                              color="white"
-                              inverted>{pageNum}</Button>
-                  }
-                  return <ButtonOutline style={btnStyle} className='page-button' color="primary">{pageNum}</ButtonOutline>
-                })}
-                {(totalPages == -1 || totalPages > currentPage) && <ButtonOutline color="primary" onClick={this.goToPage(currentPage + 1)}>{'>'}</ButtonOutline>}
-              </div>
               </Box>
               <Box style={{marginLeft: 'auto'}}>
               <Select
