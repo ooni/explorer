@@ -59,7 +59,8 @@ const rebassConfig = {
 export default class extends React.Component {
 
   static propTypes = {
-    children: React.PropTypes.array.isRequired
+    children: React.PropTypes.array.isRequired,
+    hideHeader: React.PropTypes.bool
   }
 
   static childContextTypes = {
@@ -73,6 +74,10 @@ export default class extends React.Component {
   }
 
   render () {
+    const {
+      hideHeader
+    } = this.props
+
     return (
       <div>
         <style global jsx>{`
@@ -89,7 +94,7 @@ export default class extends React.Component {
             height: 100%;
           }
         `}</style>
-        <Header />
+        <Header hideHeader={hideHeader} />
         <div className="content">
           { this.props.children }
         </div>
@@ -106,14 +111,14 @@ export default class extends React.Component {
             padding: 0;
           }
           footer {
-            background: #202428 linear-gradient(rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 10%);
+            background: ${ colors.footerBg } linear-gradient(rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 10%);
             min-width: 900px;
             width: 100%;
           }
           .footer-content {
             margin: 0 auto;
             width: 900px;
-            color: #474d53;
+            color: ${ colors.footerFg };
             text-align: center;
             padding: 25px 0 10px 0;
           }

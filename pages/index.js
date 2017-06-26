@@ -8,12 +8,15 @@ import { Container, Text, Stat, Button } from 'rebass'
 import { Avatar } from 'rebass'
 
 import Layout from '../components/layout'
+import Globe from '../components/globe'
+import NavMenu from '../components/navmenu'
+
 import { colors } from '../components/layout'
 
 export default class extends React.Component {
   render () {
     return (
-      <Layout>
+      <Layout hideHeader>
         <Head>
           <title>OONI Explorer</title>
         </Head>
@@ -25,11 +28,7 @@ export default class extends React.Component {
               </div>
             </Box>
             <Box p={2} w={1/2} ml='auto'>
-              <div className="nav-menu">
-                <a href="#">Countries</a>
-                <a href="#">Results</a>
-                <a href="#">Highlights</a>
-              </div>
+              <NavMenu />
             </Box>
           </Flex>
           <Flex align='center' justify='space-around' width={1}>
@@ -44,9 +43,7 @@ export default class extends React.Component {
               </div>
             </Box>
             <Box p={2} width={1/2}>
-              <div className='globe'>
-                <p style={{color: "white", paddingTop: "50px", paddingLeft: "20px"}}>3d animated globe</p>
-              </div>
+              <Globe />
             </Box>
           </Flex>
           <style jsx>{`
@@ -58,17 +55,7 @@ export default class extends React.Component {
             }
             .explorer-logo {
             }
-            .globe {
-              background-color: black;
-              width: 300px;
-              height: 300px;
-            }
-            .nav-menu a {
-              color: ${ colors.white };
-              text-decoration: none;
-              text-transform: uppercase;
-              padding-left: 10px;
-            }
+
             .call-to-action {
               width: 400px;
             }
