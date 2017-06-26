@@ -8,25 +8,26 @@ export default class Flag extends React.Component {
   }
 
 	static defaultProps = {
-    size: 100
+    size: 100,
+    withCountryName: false
 	}
   constructor(props) {
     super(props)
   }
 
   render () {
-    let { countryCode, size, withAsn } = this.props
+    let { countryCode, size, withAsn, withCountryName } = this.props
     countryCode = countryCode.toLowerCase()
     return (
       <div>
         <div className="flag-container" style={{ height: `${size/2}px`, overflow: 'hidden' }}>
-          <div className="country-container" style={{ width: `${size}px`, height: `${size/4}px` }}>
+        {withCountryName && <div className="country-container" style={{ width: `${size}px`, height: `${size/4}px` }}>
             <span>{countryCode.toUpperCase()}</span>
-          </div>
+          </div>}
           <img src={`/_/static/flags/png${size}px/${countryCode}.png`} />
-          <div className="asn-container" style={{ width: `${size}px`, height: `${size/4}px` }}>
+          {withAsn && <div className="asn-container" style={{ width: `${size}px`, height: `${size/4}px` }}>
             <span>{withAsn}</span>
-          </div>
+          </div>}
         </div>
         <style jsx>{`
           .flag-container {

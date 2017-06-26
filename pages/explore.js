@@ -26,6 +26,8 @@ import Flag from '../components/flag'
 
 import { colors } from '../components/layout'
 
+import { sortByKey } from '../utils'
+
 const inputTrunc = 50
 
 const queryToParams = ({ query }) => {
@@ -236,12 +238,6 @@ export default class extends React.Component {
       showCount = parseInt(url.query.show)
     }
 
-    const sortByChildren = (a, b) => {
-			a = a.children.toUpperCase();
-			b = b.children.toUpperCase();
-			return (a < b) ? -1 : (a > b) ? 1 : 0
-    }
-
     let testOptions = []
     testNames.forEach((v) => {
       testOptions.push({
@@ -249,7 +245,7 @@ export default class extends React.Component {
         value: v.id
       })
     })
-	  testOptions.sort(sortByChildren)	
+	  testOptions.sort(sortByKey('children'))
     testOptions.unshift({ children: 'Any', value: '' })
 
     let countryOptions = []
@@ -259,7 +255,7 @@ export default class extends React.Component {
         value: v.alpha_2
       })
     })
-	  countryOptions.sort(sortByChildren)	
+	  countryOptions.sort(sortByKey('children'))
     countryOptions.unshift({ children: 'Any', value: '' })
 
     return (
@@ -383,7 +379,7 @@ export default class extends React.Component {
                 <Divider />
                 <Flex>
                   <Box>
-                    <Flag countryCode={msmt.probe_cc} withAsn={msmt.probe_asn} />
+                    <Flag withCountryName={true} countryCode={msmt.probe_cc} withAsn={msmt.probe_asn} />
                   </Box>
                   <Flex column pl={2}>
                     <Box>

@@ -100,7 +100,6 @@ export default class extends React.Component {
         </div>
         <footer>
           <div className="footer-content">
-            <h2>Proudly made by the Open Observatory of Network Interference</h2>
             <p>© OONI - Open Observatory of Network Interference • <a href="#">Privacy</a></p>
           </div>
         </footer>
@@ -114,13 +113,14 @@ export default class extends React.Component {
             background: ${ colors.footerBg } linear-gradient(rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 10%);
             min-width: 900px;
             width: 100%;
+            padding-bottom: 50px;
           }
           .footer-content {
             margin: 0 auto;
             width: 900px;
             color: ${ colors.footerFg };
             text-align: center;
-            padding: 25px 0 10px 0;
+            padding: 25px 0 20px 0;
           }
           .footer-content h2 {
             padding-bottom: 20px;
