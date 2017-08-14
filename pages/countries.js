@@ -65,7 +65,9 @@ export default class extends React.Component {
           <title>Countries - OONI Explorer</title>
         </Head>
         <div className='mini-header'>
+          <Container>
           <h1>Countries</h1>
+          </Container>
         </div>
         <div className='countries-view'>
         <Container>
@@ -87,27 +89,27 @@ export default class extends React.Component {
           }
           return (
               <Grid>
-                <div className='country'>
-                  <Flex align='center'>
-                    <Box style={{paddingRight: '10px'}}>
-                    <Link href={`/country?countryCode=${country.alpha_2.toUpperCase()}`} as={`/country/${country.alpha_2.toUpperCase()}`}>
-                      <Avatar src={`/_/static/flags/png250px/${country.alpha_2.toLowerCase()}.png`} />
-                    </Link>
-                    </Box>
-                    <Box>
-                    <h2>{country.name}</h2>
-                    </Box>
-                  </Flex>
-                  <Flex style={{paddingTop: '20px'}}>
-                    <Box>
-                    <Stat
-                      label="Measurements"
-                      value={value}
-                      unit={unit}
-                    />
-                    </Box>
-                  </Flex>
-                </div>
+                <Link href={`/country?countryCode=${country.alpha_2.toUpperCase()}`} as={`/country/${country.alpha_2.toUpperCase()}`}>
+                  <div className='country'>
+                    <Flex align='center'>
+                      <Box style={{paddingRight: '10px'}}>
+                        <Avatar src={`/_/static/flags/png250px/${country.alpha_2.toLowerCase()}.png`} />
+                      </Box>
+                      <Box>
+                      <h2>{country.name}</h2>
+                      </Box>
+                    </Flex>
+                    <Flex style={{paddingTop: '20px'}}>
+                      <Box>
+                      <Stat
+                        label="Measurements"
+                        value={value}
+                        unit={unit}
+                      />
+                      </Box>
+                    </Flex>
+                  </div>
+                </Link>
               </Grid>
           )})
         }
@@ -132,6 +134,10 @@ export default class extends React.Component {
             border-radius: 25px;
             margin-bottom: 20px;
             margin-left: 20px;
+          }
+          .country:hover {
+            background-color: ${ colors.ooniBlue };
+            cursor: pointer;
           }
         `}</style>
       </Layout>

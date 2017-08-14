@@ -12,7 +12,6 @@
     "dotenv": "^4.0.0",
     "express": "^4.14.0",
     "immutable": "^3.8.1",
-    "material-ui": "^0.17.4",
     "moment": "^2.17.1",
     "next": "^2.4.0",
     "react": "^15.4.2",
@@ -23,13 +22,16 @@
     "react-tap-event-plugin": "^2.0.1",
     "rebass": "^0.3.4",
     "reflexbox": "^2.2.0",
-    "styled-jsx": "^1.0.5"
+    "styled-jsx": "^1.0.5",
+    "three": "^0.86.0",
+    "tween.js": "^16.6.0",
+    "victory": "^0.21.0"
   },
   "devDependencies": {
     "babel-plugin-transform-define": "^1.2.0"
   },
   "scripts": {
-    "dev": "NODE_ENV=development node index.js",
+    "dev": "NODE_ENV=development MEASUREMENTS_URL=http://127.0.0.1:3000 node index.js",
     "build": "next build",
     "export": "next export",
     "start": "node index.js"

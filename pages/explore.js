@@ -382,12 +382,12 @@ export default class extends React.Component {
                     <Flag withCountryName={true} countryCode={msmt.probe_cc} withAsn={msmt.probe_asn} />
                   </Box>
                   <Flex column pl={2}>
-                    <Box>
+                    {msmt.input && <Box>
                       <div className='input'>
                         <span className='input-name'>{msmt.input}</span>
                         <span className='input-cat'>({msmt.input_category})</span>
                       </div>
-                    </Box>
+                    </Box>}
                     <Box>
                       <div className='test-name'>
                         <span>{msmt.test_name}</span>
@@ -395,8 +395,14 @@ export default class extends React.Component {
                     </Box>
                     <Box>
                       <div className='test-result'>
-                        <div className='test-result-dot'></div>
-                        <span className='test-result-text'>{msmt.result_text}</span>
+                        <Flex align='center'>
+                          <Box pr={1}>
+                          <div className={`test-result-dot test-result-dot-${msmt.anomaly_color}`}></div>
+                          </Box>
+                          <Box>
+                          <span className='test-result-text'>{msmt.anomaly_text}</span>
+                          </Box>
+                        </Flex>
                       </div>
                     </Box>
                   </Flex>
@@ -474,12 +480,32 @@ export default class extends React.Component {
             padding-left: 5px;
             color: ${ colors.offBlack };
           }
+          .test-name {
+            padding-bottom: 10px;
+          }
           .search-bar {
             margin-top: 20px;
             margin-bottom: 20px;
           }
           .filter-tab {
             padding-right: 10px;
+          }
+          .test-result-dot-red {
+            background: red;
+          }
+          .test-result-dot-green {
+            background: green;
+          }
+          .test-result-dot-yellow {
+            background: yellow;
+          }
+          .test-result-dot {
+            width: 20px;
+            height: 20px;
+            margin-top: 3px;
+            display: inline-block;
+            border-radius: 20px;
+            border: 2px solid black;
           }
         `}</style>
       </Layout>

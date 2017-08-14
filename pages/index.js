@@ -2,6 +2,8 @@ import React from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 
+import axios from 'axios'
+
 import { Flex, Box } from 'reflexbox'
 
 import { Container, Text, Stat, Button } from 'rebass'
@@ -13,8 +15,37 @@ import NavMenu from '../components/navmenu'
 
 import { colors } from '../components/layout'
 
+import { toCompactNumberUnit } from '../utils'
+
 export default class extends React.Component {
+
+  static async getInitialProps ({ req, query }) {
+    let client = axios.create({baseURL: process.env.MEASUREMENTS_URL})
+    let [statsR] = await Promise.all([
+        client.get('/api/_/stats')
+    ])
+    return {
+      measurementCount: statsR.data.measurement_count,
+      asnCount: statsR.data.asn_count,
+      countryCount: statsR.data.country_count,
+      censorshipCount: statsR.data.censorship_count
+    }
+  }
+
+  constructor(props) {
+    super(props)
+  }
+
   render () {
+    let {
+      measurementCount, asnCount,
+      countryCount, censorshipCount
+    } = this.props;
+
+    measurementCount = toCompactNumberUnit(measurementCount)
+    asnCount = toCompactNumberUnit(asnCount)
+    censorshipCount = toCompactNumberUnit(censorshipCount)
+
     return (
       <Layout hideHeader>
         <Head>
@@ -22,12 +53,12 @@ export default class extends React.Component {
         </Head>
         <div className="hero">
           <Flex align="center" justify='space-around' w={1}>
-            <Box p={2} w={1/2} mr='auto'>
+            <Box p={2} w={1/2} style={{marginRight: 'auto'}}>
               <div className="explorer-logo">
                 <img src="/_/static/ooni-explorer-logo.svg" />
               </div>
             </Box>
-            <Box p={2} w={1/2} ml='auto'>
+            <Box p={2} w={1/2} style={{marginLeft: 'auto'}}>
               <NavMenu />
             </Box>
           </Flex>
@@ -76,23 +107,25 @@ export default class extends React.Component {
             >
               <Stat
                 label="Measurements"
-                unit="M"
-                value="172"
+                unit={measurementCount.unit}
+                value={measurementCount.value}
               />
 
               <Stat
                 label="Countries"
-                value="192"
+                value={countryCount}
               />
 
               <Stat
                 label="Networks"
-                value="5029"
+                unit={asnCount.unit}
+                value={asnCount.value}
               />
 
               <Stat
                 label="Confirmed cases of censorship"
-                value="2120"
+                unit={censorshipCount.unit}
+                value={censorshipCount.value}
               />
             </Flex>
           </div>
@@ -130,21 +163,17 @@ export default class extends React.Component {
                     src="http://lorempixel.com/64/64/cats"/>
                 </div>
                 <div className='feature-title'>
-                  <h2>Lorem ipsum</h2>
+                  <h2>Countries</h2>
                 </div>
                 <div className='feature-text'>
-                  <p>
-										Panels are great for visually separating UI, content, or data from the rest of the page.
-										Panels are great for visually separating UI, content, or data from the rest of the page.
-										Panels are great for visually separating UI, content, or data from the rest of the page.
-                  </p>
+                  <p>Discover what is happening on the internet in any country in the world.</p>
                 </div>
                 <div className='feature-action'>
                   <Button
                     backgroundColor="primary"
                     color="white"
                     inverted
-                    rounded>Do it!</Button>
+                    rounded>Go</Button>
                 </div>
               </div>
             </Box>
@@ -157,7 +186,7 @@ export default class extends React.Component {
                     src="http://lorempixel.com/64/64/cats"/>
                 </div>
                 <div className='feature-title'>
-                  <h2>Explore</h2>
+                  <h2>Search</h2>
                 </div>
                 <div className='feature-text'>
                   <p>Search, filter and explore millions of network measurements collected from thousands of network vantage points all over the world.</p>
@@ -168,7 +197,7 @@ export default class extends React.Component {
                     backgroundColor="primary"
                     color="white"
                     inverted
-                    rounded>Explore</Button>
+                    rounded>Go</Button>
                   </Link>
                 </div>
               </div>
@@ -182,14 +211,10 @@ export default class extends React.Component {
                     src="http://lorempixel.com/64/64/cats"/>
                 </div>
                 <div className='feature-title'>
-                  <h2>Lorem ipsum</h2>
+                  <h2>Results</h2>
                 </div>
                 <div className='feature-text'>
-                  <p>
-										Panels are great for visually separating UI, content, or data from the rest of the page.
-										Panels are great for visually separating UI, content, or data from the rest of the page.
-										Panels are great for visually separating UI, content, or data from the rest of the page.
-                  </p>
+                  <p>Check to see what results OONI has discovered around the world</p>
                 </div>
                 <div className='feature-action'>
                   <Button

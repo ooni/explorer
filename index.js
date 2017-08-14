@@ -1,3 +1,5 @@
+const mockedMeasurementsAPI = require('./mocked_endpoints')
+
 const express = require('express')
 const next = require('next')
 const path = require('path')
@@ -7,7 +9,7 @@ process.env.PORT = process.env.PORT || 3100
 
 const dev = process.env.NODE_ENV !== 'production'
 if (dev === true) {
-  process.env.MEASUREMENTS_URL = process.env.MEASUREMENTS_URL || "http://127.0.0.1:3000"
+  process.env.MEASUREMENTS_URL = process.env.MEASUREMENTS_URL || "http://127.0.0.1:" + process.env.PORT
 }
 
 const app = next({ dir: '.', dev })
@@ -23,6 +25,10 @@ app.prepare()
   })
 })
 .then(() => {
+
+  if (process.env.MEASUREMENTS_URL == "http://127.0.0.1:" + process.env.PORT) {
+    mockedMeasurementsAPI(server);
+  }
 
 	server.use('/_/world-atlas',
 						 express.static(__dirname + '/node_modules/world-atlas/world/'))

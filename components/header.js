@@ -24,15 +24,15 @@ export default class extends React.Component {
           <meta name='viewport' content='initial-scale=1.0, width=device-width'/>
         </Head>
         {!hideHeader && <div className='headerNav'>
-          <Flex align="center" justify='space-around' w={1}>
-          <Box p={2} w={1/2} mr='auto'>
+          <Flex align="center">
+          <Box p={2} w={1/2} justify='space-around'>
             <div className="explorer-logo">
               <Link href="/">
               <a><img src="/_/static/ooni-explorer-logo.svg" /></a>
               </Link>
             </div>
           </Box>
-          <Box p={2} w={1/2} ml='auto'>
+          <Box p={2} w={1/2} style={{marginLeft: 'auto'}} justify='space-around'>
             <NavMenu />
           </Box>
         </Flex>

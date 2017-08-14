@@ -14,22 +14,18 @@ import {
 
 import Layout from '../components/layout'
 import { colors } from '../components/layout'
+import { toCompactNumberUnit } from '../utils'
+
+import { VictoryPie } from 'victory'
 
 export default class extends React.Component {
   static async getInitialProps ({ req, query }) {
     const cc = query.countryCode
     let client = axios.create({baseURL: process.env.MEASUREMENTS_URL})
     let [countriesR] = await Promise.all([
-        client.get('/api/_/countries?with_counts=true')
+        client.get('/api/_/country/'+cc.toUpperCase())
     ])
-    let countries = countriesR.data.countries
-    let country = {}
-    countries.forEach((c) => {
-      if (c.alpha_2.toUpperCase() == cc.toUpperCase()) {
-        country = c
-      }
-    })
-    return {country: country}
+    return {country: countriesR.data}
   }
 
   static propTypes = {
@@ -39,18 +35,10 @@ export default class extends React.Component {
   render () {
     const { country } = this.props
 
-    const prettyUnitValue = (value) => {
-      let unit = ''
-      if (value > 1000*100) {
-        value = Math.round((value / (1000 * 1000) * 10)) / 10
-        unit = 'M'
-      } else if (value > 100) {
-        value = Math.round((value / (1000) * 10)) / 10
-        unit = 'k'
-      }
-      return {unit, value}
-    }
-    let msmtStats = prettyUnitValue(country.count)
+    let measurementCount = toCompactNumberUnit(country.measurement_count)
+    let asnCount = toCompactNumberUnit(country.asn_count)
+    let blkdWebsiteCount = toCompactNumberUnit(country.blocked_website_count)
+
     return (
       <Layout>
         <Head>
@@ -71,34 +59,40 @@ export default class extends React.Component {
             </p>
             </Box>
             <Box col={2} p={1}>
-            <Flex flexColumn align='center'>
+            <Flex flexColumn align='left'>
               <Box p={2}>
                 <Stat
                   label="Measurements"
-                  value={msmtStats.value}
-                  unit={msmtStats.unit}
+                  value={measurementCount.value}
+                  unit={measurementCount.unit}
                 />
               </Box>
               <Box p={2}>
                 <Stat
                   label="Networks"
-                  value={10}
-                  unit=""
+                  value={asnCount.value}
+                  unit={asnCount.unit}
                 />
               </Box>
               <Box p={2}>
                 <Stat
-                  label="Other"
-                  value={10}
-                  unit=""
+                  label="Blocked websites"
+                  value={blkdWebsiteCount.value}
+                  unit={blkdWebsiteCount.unit}
                 />
               </Box>
             </Flex>
             </Box>
             <Box col={4} p={1}>
-            <div style={{backgroundColor: 'black', height: '300px', margin: '0 auto', borderRadius: '100px'}}>
-              <h2 style={{color: 'white', width: '150px', textAlign: 'center', paddingTop: '50px'}}>Make way, I am a pie chart!</h2>
-            </div>
+              <VictoryPie
+                data={[
+                  {month: "Sep", profit: 35000, loss: 2000},
+                  {month: "Oct", profit: 42000, loss: 8000},
+                  {month: "Nov", profit: 55000, loss: 5000}
+                ]}
+                x="month"
+                y={(datum) => datum.profit - datum.loss}
+              />
             </Box>
           </Flex>
           <Flex pt={2} pb={2}>
