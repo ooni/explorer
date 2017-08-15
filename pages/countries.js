@@ -6,7 +6,7 @@ import axios from 'axios'
 
 import {
   Flex, Grid, Box
-} from 'reflexbox'
+} from 'grid-styled'
 
 import {
   Container,
@@ -20,16 +20,15 @@ import Layout from '../components/layout'
 
 import { colors } from '../components/layout'
 
-import { sortByKey } from '../utils'
+import { sortByKey, truncateString } from '../utils'
 
 export default class extends React.Component {
   static async getInitialProps ({ req, query }) {
     let client = axios.create({baseURL: process.env.MEASUREMENTS_URL})
     let [countriesR] = await Promise.all([
-        client.get('/api/_/countries?with_counts=true')
+        client.get('/api/_/countries?by_region=1')
     ])
     let countries = countriesR.data.countries
-    countries.sort(sortByKey('name'))
     return {countries}
   }
 
@@ -39,7 +38,6 @@ export default class extends React.Component {
       loading: true,
       shownCountries: props.countries
     }
-    this.onFilterCountries = this.onFilterCountries.bind(this)
   }
 
   componentDidMount () {
@@ -48,17 +46,9 @@ export default class extends React.Component {
     })
   }
 
-  onFilterCountries ({target}) {
-    let allCountries = this.props.countries.slice()
-    let shownCountries = allCountries.filter((c) => {
-      return c.name.toLowerCase().startsWith(target.value.toLowerCase())
-    })
-    this.setState({shownCountries})
-  }
-
   render () {
-    const { shownCountries } = this.state
-
+    const { countries } = this.props
+    console.log(countries)
     return (
       <Layout>
         <Head>
@@ -66,78 +56,66 @@ export default class extends React.Component {
         </Head>
         <div className='mini-header'>
           <Container>
-          <h1>Countries</h1>
+          <h1>Internet Censorship around the world</h1>
           </Container>
         </div>
         <div className='countries-view'>
         <Container>
-        <Input
-          name="filterCountries"
-          style={{ backgroundColor: 'white', marginTop: '20px', marginBottom: '20px', width: '300px' }}
-          onChange={this.onFilterCountries}
-          />
-
-        {shownCountries.map((country) => {
-          let value = country.count
-          let unit = ''
-          if (value > 1000*100) {
-            value = Math.round((value / (1000 * 1000) * 10)) / 10
-            unit = 'M'
-          } else if (value > 100) {
-            value = Math.round((value / (1000) * 10)) / 10
-            unit = 'k'
-          }
+        {countries.map((countriesInRegion) => {
           return (
-              <Grid>
-                <Link href={`/country?countryCode=${country.alpha_2.toUpperCase()}`} as={`/country/${country.alpha_2.toUpperCase()}`}>
-                  <div className='country'>
+            <div className='region'>
+            <h2>{countriesInRegion[0].region}</h2>
+            <hr />
+            <Flex wrap>
+            {
+              countriesInRegion.map((country) => {
+                return (
+                  <Box w={[1/2, 1/3, 1/4, 1/6]} px={2} py={1}>
                     <Flex align='center'>
-                      <Box style={{paddingRight: '10px'}}>
-                        <Avatar src={`/_/static/flags/png250px/${country.alpha_2.toLowerCase()}.png`} />
+                      <Box mr={2}>
+                        <Avatar size={30} src={`/_/static/flags/png250px/${country.alpha_2.toLowerCase()}.png`} />
                       </Box>
                       <Box>
-                      <h2>{country.name}</h2>
+                      <Link href={`/country?countryCode=${country.alpha_2.toUpperCase()}`} as={`/country/${country.alpha_2.toUpperCase()}`}>
+                        <a alt={country.name}>{truncateString(country.name, 20)}</a>
+                      </Link>
                       </Box>
                     </Flex>
-                    <Flex style={{paddingTop: '20px'}}>
-                      <Box>
-                      <Stat
-                        label="Measurements"
-                        value={value}
-                        unit={unit}
-                      />
-                      </Box>
-                    </Flex>
-                  </div>
-                </Link>
-              </Grid>
-          )})
-        }
+                  </Box>
+                )
+              })
+            }
+            </Flex>
+            </div>
+          )
+        })}
         </Container>
         </div>
         <style jsx>{`
           .mini-header {
-            color: ${ colors.offWhite };
-            background-color: ${ colors.ooniBlue };
             padding-top: 30px;
             padding-bottom: 30px;
-            padding-left: 30px;
+            font-size: 24px;
           }
-          .country {
-            position: relative;
-            width: 310px;
-            padding-bottom: 30px;
-            padding-top: 30px;
-            padding-right: 20px;
-            padding-left: 20px;
-            background-color: white;
-            border-radius: 25px;
-            margin-bottom: 20px;
-            margin-left: 20px;
+          .region {
+            padding-bottom: 64px;
           }
-          .country:hover {
-            background-color: ${ colors.ooniBlue };
-            cursor: pointer;
+          .region h2 {
+            padding-bottom: 12px;
+          }
+          .region hr {
+            margin-bottom: 12px;
+          }
+
+          a {
+            font-size: 12px;
+            color: #000;
+            text-decoration: none;
+            color: rgba(0, 0, 0, 0.6);
+          }
+          a:hover {
+            text-decoration: underline;
+            color: #0588CB;
           }
         `}</style>
       </Layout>
