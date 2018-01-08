@@ -20,7 +20,7 @@ const server = express()
 app.prepare()
 .then(() => {
 	return new Promise((resolve, reject) => {
-	// XXX in here I can do setup
+  	// XXX in here I can do setup
     return resolve()
   })
 })

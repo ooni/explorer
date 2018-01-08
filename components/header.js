@@ -1,8 +1,7 @@
 import React from 'react'
 import Package from '../package'
 
-import { Flex, Box } from 'reflexbox'
-import { NavItem, Toolbar } from 'rebass'
+import { Flex, Box, NavItem, Toolbar } from 'rebass'
 
 import { colors } from './layout'
 

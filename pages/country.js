@@ -3,13 +3,13 @@ import Link from 'next/link'
 import Head from 'next/head'
 
 import axios from 'axios'
-import { Flex, Box, Grid } from 'reflexbox'
 
 import {
   Container,
   Stat,
   Avatar,
-  Input
+  Input,
+  Flex, Box, Grid
 } from 'rebass'
 
 import Layout from '../components/layout'

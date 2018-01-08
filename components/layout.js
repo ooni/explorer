@@ -1,7 +1,8 @@
 import React from 'react'
 
 import Header from './header'
-import { config } from 'rebass'
+
+import { Provider, theme } from 'ooni-components'
 
 export const colors = {
   'ooniBlue': '#0588CB',
@@ -21,56 +22,11 @@ export const colors = {
   'gray': '#c1c1c1'
 }
 
-const rebassConfig = {
-  name: 'Ooni',
-  fontFamily: '"Fira Sans", Helvetica, sans-serif',
-  color: colors.offBlack,
-  backgroundColor: colors.offWhite,
-  borderRadius: 3,
-  borderColor: colors.ooniBlue,
-
-  colors: {
-    ...config.colors,
-    blue: colors.ooniBlue,
-    info: colors.ooniBlue,
-
-    green: colors.green,
-    success: colors.green,
-
-    orange: colors.orange,
-    warning: colors.orange,
-
-    red: colors.red,
-    error: colors.red,
-
-    // primary: ,
-    // midgray: '#778',
-    gray: colors.gray,
-    // secondary: '#333339',
-  },
-  inverted: colors.offWhite,
-  Toolbar: {
-    minHeight: 64,
-    color: colors.offWhite,
-    backgroundColor: colors.ooniBlue
-  },
-}
-
 export default class extends React.Component {
 
   static propTypes = {
     children: React.PropTypes.array.isRequired,
     hideHeader: React.PropTypes.bool
-  }
-
-  static childContextTypes = {
-    rebass: React.PropTypes.object
-  }
-
-  getChildContext () {
-    return {
-      rebass: rebassConfig
-    }
   }
 
   render () {
@@ -79,7 +35,7 @@ export default class extends React.Component {
     } = this.props
 
     return (
-      <div>
+      <Provider theme={theme}>
         <style global jsx>{`
           * {
             margin: 0;
@@ -110,7 +66,7 @@ export default class extends React.Component {
             padding: 0;
           }
           footer {
-            background: ${ colors.footerBg } linear-gradient(rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 10%);
+            background: #26292c linear-gradient(rgba(0,0,0,0.4) 0%, rgba(0,0,0,0) 10%);
             min-width: 900px;
             width: 100%;
             padding-bottom: 50px;
@@ -118,7 +74,7 @@ export default class extends React.Component {
           .footer-content {
             margin: 0 auto;
             width: 900px;
-            color: ${ colors.footerFg };
+            color: #b4b4b4;
             text-align: center;
             padding: 25px 0 20px 0;
           }
@@ -134,7 +90,7 @@ export default class extends React.Component {
           }
         `}
         </style>
-      </div>
+      </Provider>
     )
   }
 }

@@ -45,3 +45,5 @@ export const truncateString = (s, maxStart, maxEnd) => {
   truncatedString += s.substr(s.length - maxEnd, s.length)
   return truncatedString
 }
+
+

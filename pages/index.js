@@ -4,9 +4,7 @@ import Link from 'next/link'
 
 import axios from 'axios'
 
-import { Flex, Box } from 'reflexbox'
-
-import { Container, Text, Stat, Button } from 'rebass'
+import { Flex, Box, Container, Text, Button } from 'rebass'
 import { Avatar } from 'rebass'
 
 import Layout from '../components/layout'
@@ -17,6 +15,12 @@ import { colors } from '../components/layout'
 
 import { toCompactNumberUnit } from '../utils'
 
+const Stat = ({label, unit, value}) => (
+  <div>
+  {value}{unit}
+  {label}
+  </div>
+)
 export default class extends React.Component {
 
   static async getInitialProps ({ req, query }) {

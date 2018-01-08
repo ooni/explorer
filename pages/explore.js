@@ -5,10 +5,7 @@ import Router from 'next/router'
 import axios from 'axios'
 
 import {
-  Flex, Grid, Box
-} from 'reflexbox'
-
-import {
+  Flex, Grid, Box,
   Divider,
   Container,
   Button,
