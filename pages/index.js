@@ -6,8 +6,6 @@ import axios from 'axios'
 
 import styled from 'styled-components'
 
-import ExplorerLogo from 'ooni-components/components/svgs/logos/Explorer-HorizontalMonochromeInverted.svg'
-
 import {
   Flex,
   Box,

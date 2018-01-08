@@ -2,6 +2,8 @@ import React from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import Router from 'next/router'
+
+import styled from 'styled-components'
 import axios from 'axios'
 
 import {
@@ -15,13 +17,12 @@ import {
   Panel,
   PanelHeader,
   Text,
-  InlineForm
-} from 'rebass'
+  InlineForm,
+  Label
+} from 'ooni-components'
 
+import NavBar from '../components/NavBar'
 import Layout from '../components/layout'
-import Flag from '../components/flag'
-
-import { colors } from '../components/layout'
 
 import { sortByKey } from '../utils'
 
@@ -46,6 +47,117 @@ const queryToParams = ({ query }) => {
   }
   return params
 }
+
+const StyledInputWithLabel = styled.div``
+const StyledLabel = styled(Label)`
+  color: ${props => props.theme.colors.blue5};
+  padding-top: 32px;
+`
+const InputWithLabel = (props) => (
+  <StyledInputWithLabel>
+    <StyledLabel>
+    {props.label}
+    </StyledLabel>
+    <Input {...props} />
+  </StyledInputWithLabel>
+)
+
+const StyledSelectWithLabel = styled.div``
+
+const SelectWithLabel = (props) => (
+  <StyledSelectWithLabel>
+  <StyledLabel>
+  {props.label}
+  </StyledLabel>
+    <Select {...props}>
+    {props.children}
+    </Select>
+  </StyledSelectWithLabel>
+)
+
+const StyledFilterSidebar = styled.div`
+`
+
+const FilterSidebar = ({
+  inputFilter,
+  testNameFilter,
+  testOptions,
+  countryFilter,
+  countryOptions,
+  asnFilter,
+  sinceFilter,
+  untilFilter,
+  onChangeFilter,
+  onApplyFilter
+}) => (
+  <StyledFilterSidebar>
+    <InputWithLabel
+      label="Input"
+      name="inputFilter"
+      defaultValue={inputFilter}
+      onChange={onChangeFilter}
+      placeholder="ex. torproject.org"
+      rounded
+      type="text" />
+    <SelectWithLabel
+      pt={2}
+      label="Test Name"
+      defaultValue={testNameFilter}
+      name="testNameFilter"
+      onChange={onChangeFilter}
+      options={testOptions}
+      rounded>
+      <option value='web_connectivity'>Web Connectivity</option>
+      <option value='telegram'>Telegram</option>
+      <option value='whatsapp'>WhatsApp</option>
+    </SelectWithLabel>
+
+    <SelectWithLabel
+      pt={2}
+      label="Country"
+      defaultValue={countryFilter}
+      name="countryFilter"
+      onChange={onChangeFilter}
+      options={countryOptions}
+      rounded>
+      <option value='IT'>Italy</option>
+      <option value='RU'>Russia</option>
+      <option value='GR'>Greece</option>
+      <option value='AL'>Albania</option>
+    </SelectWithLabel>
+
+    <InputWithLabel
+      label="ASN"
+      defaultValue={asnFilter}
+      name="asnFilter"
+      onChange={onChangeFilter}
+      rounded />
+
+    <Flex>
+    <Box w={1/2} pr={1}>
+    <InputWithLabel
+      label="Since"
+      defaultValue={sinceFilter}
+      name="sinceFilter"
+      onChange={onChangeFilter}
+      rounded />
+    </Box>
+    <Box w={1/2} pl={1}>
+    <InputWithLabel
+      label="Until"
+      defaultValue={untilFilter}
+      name="untilFilter"
+      onChange={onChangeFilter}
+      rounded />
+    </Box>
+    </Flex>
+    <Button
+      mt={3}
+      onClick={onApplyFilter}>
+      Apply filter
+    </Button>
+  </StyledFilterSidebar>
+)
 
 const OnlyFilterButton = ({
     text,
@@ -77,6 +189,148 @@ const OnlyFilterButton = ({
     )
   }
 }
+
+const StyledFilterTab = styled(Button)`
+  font-size: 14px;
+  text-transform: none;
+  padding: 0 10px;
+
+  background-color: ${props => props.active ? props.theme.colors.blue5 : 'transparent'};
+  color: ${props => props.active ? props.theme.colors.white : props.theme.colors.blue5};
+
+  ${props => {
+    if (props.pos == 'left') {
+      return `border-radius: 32px 0px 0px 32px;
+      border-right: 0px;
+      border: 1px solid ${props.theme.colors.blue5};
+      `
+    }
+    if (props.pos == 'right') {
+      return `border-radius: 0px 32px 32px 0px;
+      border-left: 0px;
+      border: 1px solid ${props.theme.colors.blue5};
+      `
+    }
+    return `border-radius: 0px;
+    border: 1px solid ${props.theme.colors.blue5};`
+  }}
+
+  &:hover {
+    background-color: ${props => props.theme.colors.blue4};
+    color: ${props => props.theme.colors.white};
+    transition: .2s ease-in;
+    ${props => {
+      if (props.pos == 'right') {
+        return 'border-left: 0px;'
+      } else if (props.pos == 'left') {
+        return 'border-right: 0px;'
+      }
+    }}
+  }
+  &:active {
+    transition: .2s ease-in;
+    background-color: ${props => props.theme.colors.blue4};
+    color: ${props => props.theme.colors.white};
+    ${props => {
+      if (props.pos == 'right') {
+        return 'border-left: 0px;'
+      } else if (props.pos == 'left') {
+        return 'border-right: 0px;'
+      } else {
+        return 'border-radius: 0px;'
+      }
+    }}
+  }
+`
+
+const FilterTab = (props) => {
+  return <StyledFilterTab {...props}>
+  {props.text}
+  </StyledFilterTab>
+}
+
+const FilterTabs = () => (
+  <Flex>
+  <Box>
+  <FilterTab text='All Results' pos='left' onClick={() => {}} active />
+  </Box>
+  <Box>
+  <FilterTab text='Confirmed' pos='center' onClick={() => {}} />
+  </Box>
+  <Box>
+  <FilterTab text='Anomalies' pos='right' onClick={() => {}} />
+  </Box>
+  </Flex>
+)
+
+const ResultItem = ({msmt}) => (
+  <Flex>
+    <Box>
+    </Box>
+    <Flex column pl={2}>
+      {msmt.input && <Box>
+        <div className='input'>
+          <span className='input-name'>{msmt.input}</span>
+          <span className='input-cat'>({msmt.input_category})</span>
+        </div>
+      </Box>}
+      <Box>
+        <div className='test-name'>
+          <span>{msmt.test_name}</span>
+        </div>
+      </Box>
+      <Box>
+        <div className='test-result'>
+          <Flex align='center'>
+            <Box pr={1}>
+            <div className={`test-result-dot test-result-dot-${msmt.anomaly_color}`}></div>
+            </Box>
+            <Box>
+            <span className='test-result-text'>{msmt.anomaly_text}</span>
+            </Box>
+          </Flex>
+        </div>
+      </Box>
+    </Flex>
+    <Flex style={{marginLeft: 'auto'}} column>
+      <Box style={{marginLeft: 'auto'}}>
+        <div className='view'>
+          <Link href={`/measurement/${msmt.id}`}><a>»</a></Link>
+        </div>
+      </Box>
+      <Box style={{marginTop: 'auto'}}>
+        <div className='timestamp'>
+          <span>{msmt.measurement_start_time}</span>
+        </div>
+      </Box>
+    </Flex>
+  </Flex>
+)
+
+const ResultsList = ({measurements}) => {
+  return measurements.results.map((msmt) => {
+    if (msmt.input && msmt.input.length > inputTrunc) {
+      msmt.input = `${msmt.input.substr(0, inputTrunc - 10)}…${msmt.input.substr(msmt.input.length - 10, msmt.input.length)}`
+    }
+    return <ResultItem msmt={msmt} />
+  })
+}
+
+const Pagination = ({showCount, onShowCount}) => (
+  <Select
+    label="show"
+    name="showCount"
+    defaultValue={showCount}
+    onChange={onShowCount}
+    options={[
+      {children: '10', value: 10},
+      {children: '50', value: 50},
+      {children: '100', value: 100},
+      {children: '200', value: 200}
+    ]}
+    rounded />
+)
+
 
 export default class extends React.Component {
   static async getInitialProps ({ req, query }) {
@@ -255,256 +509,75 @@ export default class extends React.Component {
 	  countryOptions.sort(sortByKey('children'))
     countryOptions.unshift({ children: 'Any', value: '' })
 
+    const navItems = [
+      {
+        label: 'Search',
+        href: '/search',
+        active: true
+      },
+      {
+        label: 'Results',
+        href: '/results',
+        active: false
+      },
+      {
+        label: 'Countries',
+        href: '/countries',
+        active: false
+      },
+      {
+        label: 'About',
+        href: '/about',
+        active: false
+      },
+    ]
+
     return (
       <Layout>
         <Head>
-          <title>Explore - OONI Explorer</title>
+          <title>Search Measurements - OONI Explorer</title>
         </Head>
-        <div className='mini-header'>
-          <h1>Search</h1>
-        </div>
 
-        <div className='explore-view'>
+        <NavBar items={navItems} />
+
         <Container>
-        <Flex col={12} wrap>
-          <Box col={12}>
-          <div className='search-bar'>
-            <InlineForm
-              buttonLabel="Search"
-              label="Search"
-              name="search"
-              style={{ backgroundColor: 'white' }}
-              onChange={function noRefCheck() {}}
-              onClick={function noRefCheck() {}}
-            />
-          </div>
+        <Flex>
+          <Box w={1/4} pr={2}>
+            <FilterSidebar />
           </Box>
-          <Box col={2}>
-            <div className='filter-tab'>
-              <Input
-                label="Input"
-                name="inputFilter"
-                defaultValue={this.state.inputFilter}
-                onChange={this.onChangeFilter}
-                placeholder="ex. torproject.org"
-                rounded
-                type="text" />
-              <Select
-                label="Test Name"
-                defaultValue={this.state.testNameFilter}
-                name="testNameFilter"
-                onChange={this.onChangeFilter}
-                options={testOptions}
-                rounded />
-              <Select
-                label="Country"
-                defaultValue={this.state.countryFilter}
-                name="countryFilter"
-                onChange={this.onChangeFilter}
-                options={countryOptions}
-                rounded />
-              <Input
-                label="ASN"
-                defaultValue={this.state.asnFilter}
-                name="asnFilter"
-                onChange={this.onChangeFilter}
-                rounded />
-              <Input
-                label="Since"
-                defaultValue={this.state.sinceFilter}
-                name="sinceFilter"
-                onChange={this.onChangeFilter}
-                rounded />
-              <Input
-                label="Until"
-                defaultValue={this.state.untilFilter}
-                name="untilFilter"
-                onChange={this.onChangeFilter}
-                rounded />
-              <Button
-                onClick={this.onApplyFilter}
-                backgroundColor="primary"
-                inverted
-                rounded>
-                Apply filter
-              </Button>
-            </div>
-          </Box>
-          <Box col={10}>
-          <div className='result-container'>
-            <div className='result-selectors'>
-              <Flex>
-              <Box>
-                <OnlyFilterButton
-                  text="All"
-                  onlyFilter={this.state.onlyFilter}
-                  thisValue="all"
-                  onChangeOnly={this.onChangeOnly}
-                  rounded="left" />
-                <OnlyFilterButton
-                  text="Confirmed censorship"
-                  onlyFilter={this.state.onlyFilter}
-                  thisValue="confirmed_censorship"
-                  rounded={false}
-                  onChangeOnly={this.onChangeOnly} />
-                <OnlyFilterButton
-                  text="Anomalies"
-                  onlyFilter={this.state.onlyFilter}
-                  thisValue="anomalies"
-                  rounded="right"
-                  onChangeOnly={this.onChangeOnly} />
+          <Box w={3/4}>
+            <Flex pt={2}>
+              <Box w={1/2}>
+                <FilterTabs />
               </Box>
-              <Box style={{marginLeft: 'auto'}}>
-                {currentPage > 1
-                 && <ButtonOutline style={{marginRight: '10px'}} color="primary" onClick={this.goToPage(currentPage - 1)}>{'<'}</ButtonOutline>
-                }
-                {(totalPages == -1 || totalPages > currentPage)
-                 && <ButtonOutline color="primary" onClick={this.goToPage(currentPage + 1)}>{'>'}</ButtonOutline>
-                }
+              <Box w={1/2}>
+                <Flex>
+                <Box w={3/4}>
+                  <Input
+                    name="search"
+                    onChange={function noRefCheck() {}}
+                    onClick={function noRefCheck() {}}
+                  />
+                </Box>
+                <Box w={1/4} pl={2}>
+                  <Button>Search</Button>
+                </Box>
+                </Flex>
               </Box>
             </Flex>
-
-            </div>
+            {currentPage > 1
+             && <ButtonOutline style={{marginRight: '10px'}} color="primary" onClick={this.goToPage(currentPage - 1)}>{'<'}</ButtonOutline>
+            }
+            {(totalPages == -1 || totalPages > currentPage)
+             && <ButtonOutline color="primary" onClick={this.goToPage(currentPage + 1)}>{'>'}</ButtonOutline>
+            }
             {this.state.loading && <h2>Loading</h2>}
             {measurements.results.length == 0 && <h2>No results found</h2>}
-            {!this.state.loading && measurements.results.map((msmt) => {
-              if (msmt.input && msmt.input.length > inputTrunc) {
-                msmt.input = `${msmt.input.substr(0, inputTrunc - 10)}…${msmt.input.substr(msmt.input.length - 10, msmt.input.length)}`
-              }
-              return (
-                <div className='result-item'>
-                <Divider />
-                <Flex>
-                  <Box>
-                    <Flag withCountryName={true} countryCode={msmt.probe_cc} withAsn={msmt.probe_asn} />
-                  </Box>
-                  <Flex column pl={2}>
-                    {msmt.input && <Box>
-                      <div className='input'>
-                        <span className='input-name'>{msmt.input}</span>
-                        <span className='input-cat'>({msmt.input_category})</span>
-                      </div>
-                    </Box>}
-                    <Box>
-                      <div className='test-name'>
-                        <span>{msmt.test_name}</span>
-                      </div>
-                    </Box>
-                    <Box>
-                      <div className='test-result'>
-                        <Flex align='center'>
-                          <Box pr={1}>
-                          <div className={`test-result-dot test-result-dot-${msmt.anomaly_color}`}></div>
-                          </Box>
-                          <Box>
-                          <span className='test-result-text'>{msmt.anomaly_text}</span>
-                          </Box>
-                        </Flex>
-                      </div>
-                    </Box>
-                  </Flex>
-                  <Flex style={{marginLeft: 'auto'}} column>
-                    <Box style={{marginLeft: 'auto'}}>
-                      <div className='view'>
-                        <Link href={`/measurement/${msmt.id}`}><a>»</a></Link>
-                      </div>
-                    </Box>
-                    <Box style={{marginTop: 'auto'}}>
-                      <div className='timestamp'>
-                        <span>{msmt.measurement_start_time}</span>
-                      </div>
-                    </Box>
-                  </Flex>
-                </Flex>
-                </div>
-              )
-            })}
-
-            <div className='result-pagination'>
-              <Divider />
-              <Flex>
-              <Box col={10}>
-              </Box>
-              <Box style={{marginLeft: 'auto'}}>
-              <Select
-                label="show"
-                name="showCount"
-                defaultValue={showCount}
-                onChange={this.onShowCount}
-                options={[
-                  {children: '10', value: 10},
-                  {children: '50', value: 50},
-                  {children: '100', value: 100},
-                  {children: '200', value: 200}
-                ]}
-                rounded />
-              </Box>
-              </Flex>
-            </div>
-          </div>
+            {!this.state.loading && <ResultsList measurements={measurements} />}
+            <Pagination />
           </Box>
         </Flex>
         </Container>
-        </div>
-        <style jsx>{`
-          .mini-header {
-            color: ${ colors.offWhite };
-            background-color: ${ colors.ooniBlue };
-            padding-top: 30px;
-            padding-bottom: 30px;
-            padding-left: 30px;
-          }
-          .explore-view {
-            min-height: 85vh;
-          }
-          .result-container {
-            background-color: ${ colors.white };
-            padding: 20px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            border: 1px solid #ccc;
-            box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-          }
-          .result-item {
-          }
-          .input {
-            padding-bottom: 10px;
-          }
-          .input .input-name {
-            font-weight: bold;
-          }
-          .input .input-cat {
-            padding-left: 5px;
-            color: ${ colors.offBlack };
-          }
-          .test-name {
-            padding-bottom: 10px;
-          }
-          .search-bar {
-            margin-top: 20px;
-            margin-bottom: 20px;
-          }
-          .filter-tab {
-            padding-right: 10px;
-          }
-          .test-result-dot-red {
-            background: red;
-          }
-          .test-result-dot-green {
-            background: green;
-          }
-          .test-result-dot-yellow {
-            background: yellow;
-          }
-          .test-result-dot {
-            width: 20px;
-            height: 20px;
-            margin-top: 3px;
-            display: inline-block;
-            border-radius: 20px;
-            border: 2px solid black;
-          }
-        `}</style>
       </Layout>
     )
   }

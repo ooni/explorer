@@ -4,6 +4,8 @@ import NLink from 'next/link'
 
 import styled from 'styled-components'
 
+import ExplorerLogo from 'ooni-components/components/svgs/logos/Explorer-HorizontalMonochromeInverted.svg'
+
 import {
   Flex,
   Box,
@@ -19,7 +21,7 @@ const StyledNavItem = styled.div`
 const NavItemLabel = styled.span`
   color: ${props => props.theme.colors.white};
   cursor: pointer;
-  opacity: 0.6;
+  opacity: ${props => props.active ? '1' : '0.6 '};
 
   ${StyledNavItem}:hover & {
     opacity: 1;
@@ -28,23 +30,23 @@ const NavItemLabel = styled.span`
 
 const Underline = styled.span`
   display: block;
-  height: 4px;
+  height: 2px;
   background: ${props => props.theme.colors.white};
   position: absolute;
   left: 16px;
-  bottom: -10px;
+  bottom: -6px;
 
-  width: 0px;
+  width: ${props => props.active ? 'calc(100% - 15px)' : '0px'};
   ${StyledNavItem}:hover & {
-    width: calc(100% - 20px);
+    width: calc(100% - 15px);
   }
 `
 
 const NavItem = ({label, href, active, LinkEl }) => (
   <LinkEl href={href}>
     <StyledNavItem>
-      <NavItemLabel active>{label}</NavItemLabel>
-      <Underline active/>
+      <NavItemLabel active={active} >{label}</NavItemLabel>
+      <Underline active={active} />
     </StyledNavItem>
   </LinkEl>
 )
