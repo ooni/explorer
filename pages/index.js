@@ -1,15 +1,27 @@
 import React from 'react'
 import Head from 'next/head'
-import Link from 'next/link'
+import NLink from 'next/link'
 
 import axios from 'axios'
 
-import { Flex, Box, Container, Text, Button } from 'rebass'
+import styled from 'styled-components'
+
+import ExplorerLogo from 'ooni-components/components/svgs/logos/Explorer-HorizontalMonochromeInverted.svg'
+
+import {
+  Flex,
+  Box,
+  Container,
+  Text,
+  Button,
+  Heading,
+  Link
+} from 'ooni-components'
+
 import { Avatar } from 'rebass'
 
 import Layout from '../components/layout'
 import Globe from '../components/globe'
-import NavMenu from '../components/navmenu'
 
 import { colors } from '../components/layout'
 
@@ -21,18 +33,141 @@ const Stat = ({label, unit, value}) => (
   {label}
   </div>
 )
+
+
+const StyledNavItem = styled.div`
+  position: relative;
+  display: inline;
+  padding-left: 16px;
+`
+
+const NavItemLabel = styled.span`
+  color: ${props => props.theme.colors.white};
+  cursor: pointer;
+  opacity: 0.6;
+
+  ${StyledNavItem}:hover & {
+    opacity: 1;
+  }
+`
+
+const Underline = styled.span`
+  display: block;
+  height: 4px;
+  background: ${props => props.theme.colors.white};
+  position: absolute;
+  left: 16px;
+  bottom: -10px;
+
+  width: 0px;
+  ${StyledNavItem}:hover & {
+    width: calc(100% - 20px);
+  }
+`
+
+const NavItem = ({label, href, active, LinkEl }) => (
+  <LinkEl href={href}>
+    <StyledNavItem>
+      <NavItemLabel active>{label}</NavItemLabel>
+      <Underline active/>
+    </StyledNavItem>
+  </LinkEl>
+)
+
+const StyledNavBar = styled.div`
+  background-color: ${props => props.theme.colors.blue5};
+  padding-top: 16px;
+  padding-bottom: 20px;
+`
+
+const NavBar = ({items, LinkEl = NLink}) => (
+  <StyledNavBar>
+  <Container>
+  <Flex>
+    <Box>
+      <ExplorerLogo height='26px' />
+    </Box>
+    <Box ml='auto'>
+      {items.map(item => (
+        <NavItem {...item} LinkEl={LinkEl} />
+      ))}
+    </Box>
+  </Flex>
+  </Container>
+  </StyledNavBar>
+)
+
+const HeroUnit = styled.div`
+  background-color: ${props => props.theme.colors.blue5};
+  padding-bottom: 16px;
+  padding-top: 16px;
+`
+
+const HeroClaim = styled(Heading)`
+  color: ${props => props.theme.colors.white};
+`
+
+const StatsContainer = styled.div`
+  position: relative;
+`
+
+const StatsBox = styled(Flex)`
+  position: absolute;
+  z-index: 999999;
+  top: -55px;
+  border-radius: 20px;
+  width: 800px;
+  background-color: ${props => props.theme.colors.white};
+  padding-left: 16px;
+  box-shadow: -1px 3px 21px 0px rgba(0,0,0,0.75);
+`
+
+const StyledValue = styled.div`
+  color: ${props => props.theme.colors.blue5};
+  font-size: 60px;
+`
+
+const StyledUnit = styled.span`
+  color: ${props => props.theme.colors.blue5};
+  font-size: 26px;
+`
+
+const StyledLabel = styled.div`
+  color: ${props => props.theme.colors.gray7};
+`
+
+const StyledStatsItem = styled(Box)`
+  padding: 16px;
+`
+
+const StatsItem = ({label, unit, value}) => (
+  <StyledStatsItem w={1/4}>
+    <StyledValue>
+      {value}
+      <StyledUnit>{unit}</StyledUnit>
+    </StyledValue>
+    <StyledLabel>
+    {label}
+    </StyledLabel>
+  </StyledStatsItem>
+)
+
+const FeatureBox = styled(Box)`
+  text-align: center;
+`
+
 export default class extends React.Component {
 
   static async getInitialProps ({ req, query }) {
     let client = axios.create({baseURL: process.env.MEASUREMENTS_URL})
     let [statsR] = await Promise.all([
-        client.get('/api/_/stats')
+        client.get('/api/_/measurement_count_by_country')
     ])
     return {
-      measurementCount: statsR.data.measurement_count,
-      asnCount: statsR.data.asn_count,
-      countryCount: statsR.data.country_count,
-      censorshipCount: statsR.data.censorship_count
+      measurementCount: 100*100,
+      asnCount: 10*1000,
+      countryCount: 201,
+      censorshipCount: 2231
     }
   }
 
@@ -46,215 +181,107 @@ export default class extends React.Component {
       countryCount, censorshipCount
     } = this.props;
 
+    const navItems = [
+      {
+        label: 'Search',
+        href: '/search',
+        active: false
+      },
+      {
+        label: 'Results',
+        href: '/results',
+        active: false
+      },
+      {
+        label: 'Countries',
+        href: '/countries',
+        active: false
+      },
+      {
+        label: 'About',
+        href: '/about',
+        active: false
+      },
+    ]
+
     measurementCount = toCompactNumberUnit(measurementCount)
     asnCount = toCompactNumberUnit(asnCount)
     censorshipCount = toCompactNumberUnit(censorshipCount)
 
     return (
-      <Layout hideHeader>
+      <Layout>
         <Head>
           <title>OONI Explorer</title>
         </Head>
-        <div className="hero">
-          <Flex align="center" justify='space-around' w={1}>
-            <Box p={2} w={1/2} style={{marginRight: 'auto'}}>
-              <div className="explorer-logo">
-                <img src="/_/static/ooni-explorer-logo.svg" />
-              </div>
-            </Box>
-            <Box p={2} w={1/2} style={{marginLeft: 'auto'}}>
-              <NavMenu />
-            </Box>
-          </Flex>
-          <Flex align='center' justify='space-around' width={1}>
-            <Box p={2} width={1/2}>
-              <div className='call-to-action'>
-                <p>Uncover evidence of network tampering, near and far!</p>
-                <Button
-                  backgroundColor="primary"
-                  color="white"
-                  inverted
-                  rounded>Do it!</Button>
-              </div>
-            </Box>
-            <Box p={2} width={1/2}>
-              <Globe />
-            </Box>
-          </Flex>
-          <style jsx>{`
-            .hero {
-              min-height: 50vh;
-              min-height: 500px;
-              background-image: url("/_/static/background-pattern.png");
-              background-repeat: repeat;
-            }
-            .explorer-logo {
-            }
-
-            .call-to-action {
-              width: 400px;
-            }
-            .call-to-action p {
-              color: ${ colors.white };
-              font-size: 40px;
-              font-weight: bold;
-              padding-bottom: 10px;
-            }
-          `}</style>
-        </div>
-        <div className='stats-container'>
-          <div className='stats'>
-            <Flex
-              align="center"
-              justify="space-between"
-              wrap
-            >
-              <Stat
-                label="Measurements"
-                unit={measurementCount.unit}
-                value={measurementCount.value}
-              />
-
-              <Stat
-                label="Countries"
-                value={countryCount}
-              />
-
-              <Stat
-                label="Networks"
-                unit={asnCount.unit}
-                value={asnCount.value}
-              />
-
-              <Stat
-                label="Confirmed cases of censorship"
-                unit={censorshipCount.unit}
-                value={censorshipCount.value}
-              />
+        <NavBar items={navItems} />
+        <HeroUnit>
+          <Container>
+            <Flex>
+              <Box width={2/3}>
+                <HeroClaim h={2}>Uncover evidence of network tampering, near and far!</HeroClaim>
+                <Button inverted hollow>Explore</Button>
+              </Box>
+              <Box width={1/3}>
+                <Globe />
+              </Box>
             </Flex>
-          </div>
-          <style jsx>{`
-            .stats-container {
-              position: relative;
-            }
-            .stats {
-              color: ${ colors.offBlack };
-              background-color: ${ colors.white };
-              box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-              padding-top: 40px;
-              padding-bottom: 40px;
-              padding-left: 30px;
-              padding-right: 30px;
-              border-radius: 25px;
-              width: 900px;
-              margin: 0 auto;
-              position: absolute;
-              left: 0;
-              right: 0;
-              top: -70px;
-            }
-          `}</style>
-        </div>
-        <div className='features-container'>
-          <div className='features'>
-          <Flex align='center' justify='space-around' width={1}>
-            <Box p={2} width={1}>
-              <div className='feature'>
-                <div className='feature-icon'>
-                  <Avatar
-                    circle
-                    size={64}
-                    src="http://lorempixel.com/64/64/cats"/>
-                </div>
-                <div className='feature-title'>
-                  <h2>Countries</h2>
-                </div>
-                <div className='feature-text'>
-                  <p>Discover what is happening on the internet in any country in the world.</p>
-                </div>
-                <div className='feature-action'>
-                  <Button
-                    backgroundColor="primary"
-                    color="white"
-                    inverted
-                    rounded>Go</Button>
-                </div>
-              </div>
-            </Box>
-            <Box p={2} width={1/3}>
-              <div className='feature'>
-                <div className='feature-icon'>
-                  <Avatar
-                    circle
-                    size={64}
-                    src="http://lorempixel.com/64/64/cats"/>
-                </div>
-                <div className='feature-title'>
-                  <h2>Search</h2>
-                </div>
-                <div className='feature-text'>
-                  <p>Search, filter and explore millions of network measurements collected from thousands of network vantage points all over the world.</p>
-                </div>
-                <div className='feature-action'>
-                  <Link href='/explore'>
-                  <Button
-                    backgroundColor="primary"
-                    color="white"
-                    inverted
-                    rounded>Go</Button>
-                  </Link>
-                </div>
-              </div>
-            </Box>
-            <Box p={2} width={1/3}>
-              <div className='feature'>
-                <div className='feature-icon'>
-                  <Avatar
-                    circle
-                    size={64}
-                    src="http://lorempixel.com/64/64/cats"/>
-                </div>
-                <div className='feature-title'>
-                  <h2>Results</h2>
-                </div>
-                <div className='feature-text'>
-                  <p>Check to see what results OONI has discovered around the world</p>
-                </div>
-                <div className='feature-action'>
-                  <Button
-                    backgroundColor="primary"
-                    color="white"
-                    inverted
-                    rounded>Do it!</Button>
-                </div>
-              </div>
-            </Box>
-          </Flex>
-          </div>
-          <style jsx>{`
-            .features-container {
-              background: linear-gradient(#F0F4F7, ${ colors.offWhite })
-            }
-            .features {
-              padding-top: 100px;
-              padding-bottom: 30px;
-            }
-            .feature {
-              width: 300px;
-            }
-            .feature-icon {
-              width: 64px;
-              margin: 0 auto;
-            }
-            .feature-title {
-              text-align: center;
-              padding-bottom: 20px;
-            }
-            .feature-text {
-              padding-bottom: 20px;
-            }
-          `}</style>
-        </div>
+          </Container>
+        </HeroUnit>
+        <Container>
+        <StatsContainer>
+        <StatsBox>
+          <StatsItem
+            label="Measurements"
+            unit={measurementCount.unit}
+            value={measurementCount.value}
+          />
+          <StatsItem
+            label="Countries"
+            value={countryCount}
+          />
+          <StatsItem
+            label="Networks"
+            unit={asnCount.unit}
+            value={asnCount.value}
+          />
+          <StatsItem
+            label="Censorship cases"
+            unit={censorshipCount.unit}
+            value={censorshipCount.value}
+          />
+        </StatsBox>
+        </StatsContainer>
+
+        <Flex style={{paddingTop: '100px'}}>
+        <FeatureBox w={1/3} p={2}>
+          <Heading h={3}>Countries</Heading>
+          <Text>Discover what is happening on the internet in any country in the world.</Text>
+          <NLink href='/countries'>
+          <Link>
+          Read more
+          </Link>
+          </NLink>
+        </FeatureBox>
+        <FeatureBox w={1/3} p={2}>
+          <Heading h={3}>Search</Heading>
+          <Text>Search, filter and explore millions of network measurements collected from thousands of network vantage points all over the world.</Text>
+          <NLink href='/search'>
+            <Link>
+            Read more
+            </Link>
+          </NLink>
+        </FeatureBox>
+        <FeatureBox w={1/3} p={2}>
+          <Heading h={3}>Results</Heading>
+          <Text>Check to see what results OONI has discovered around the world</Text>
+          <NLink href='/results'>
+            <Link pt={2}>
+            Read more
+            </Link>
+          </NLink>
+        </FeatureBox>
+        </Flex>
+        </Container>
       </Layout>
     )
   }
