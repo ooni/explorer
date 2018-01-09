@@ -1,8 +1,16 @@
 import React from 'react'
 
+import random from 'lodash.random'
 import NoSSR from 'react-no-ssr'
 import DAT from './vendor/webgl-globe'
 import TWEEN from 'tween.js'
+
+import styled from 'styled-components'
+
+const StyledGlobe = styled.div`
+  height: 350px;
+  width: 350px;
+`
 
 class WebGLGlobe extends React.Component {
 
@@ -35,17 +43,33 @@ class WebGLGlobe extends React.Component {
     var globe = new DAT.Globe(container, opts);
     var i, tweens = [];
 
+
+    let dummyData = []
+    /*
+    for (i=0;i<10000;i++) {
+      dummyData.push(random(-100, 100))
+      dummyData.push(random(-100, 100))
+      dummyData.push(random(0, 0.8, true))
+    }
+
+    dummyData.push(41.9)
+    dummyData.push(12.49)
+    dummyData.push(0.3)
+    globe.addData(dummyData, {format: 'magnitude', animated: true})
+    globe.createPoints()
+    globe.time = 0
+    globe.animate()
+    */
+
     var xhr;
     xhr = new XMLHttpRequest();
-    xhr.open('GET', 'static/population909500.json', true);
+    xhr.open('GET', 'static/map-magnitude.json', true);
     var onreadystatechangecallback = function(e) {
       if (xhr.readyState === 4) {
         if (xhr.status === 200) {
           var data = JSON.parse(xhr.responseText);
-          window.data = data;
-          for (i=0;i<data.length;i++) {
-            globe.addData(data[i][1], {format: 'magnitude', name: data[i][0], animated: true});
-          }
+          window.data = data.coordinates;
+          globe.addData(data.coordinates, {format: 'magnitude', animated: true});
           globe.createPoints();
           globe.time = 0
           globe.animate();
@@ -58,15 +82,7 @@ class WebGLGlobe extends React.Component {
 
   render () {
     return (
-      <div>
-        <div className='globe' ref={(el) => { this.globeRef = el; }} />
-      <style jsx>{`
-        .globe {
-          height: 350px;
-          width: 350px;
-        }
-      `}</style>
-      </div>
+      <StyledGlobe innerRef={(el) => { this.globeRef = el; }} />
     )
   }
 }
