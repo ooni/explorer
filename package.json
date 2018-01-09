@@ -16,7 +16,7 @@
     "immutable": "^3.8.1",
     "moment": "^2.20.1",
     "next": "^4.0.0",
-    "ooni-components": "../design",
+    "ooni-components": "^0.1.0-beta.7",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-addons-shallow-compare": "^15.4.2",
