@@ -11,6 +11,7 @@ import {
   theme
 } from 'ooni-components'
 
+theme.maxWidth = 1024
 
 injectGlobal`
   * {

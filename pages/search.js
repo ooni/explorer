@@ -1,11 +1,13 @@
 import React from 'react'
 import Head from 'next/head'
-import Link from 'next/link'
+import NLink from 'next/link'
 import Router from 'next/router'
 
 import styled from 'styled-components'
 import axios from 'axios'
+import moment from 'moment'
 
+import { BarLoader } from 'react-css-loaders'
 import {
   Flex, Grid, Box,
   Divider,
@@ -18,7 +20,9 @@ import {
   PanelHeader,
   Text,
   InlineForm,
-  Label
+  Label,
+  Link,
+  Heading
 } from 'ooni-components'
 
 import NavBar from '../components/NavBar'
@@ -26,7 +30,7 @@ import Layout from '../components/layout'
 
 import { sortByKey } from '../utils'
 
-const inputTrunc = 50
+const inputTrunc = 26
 
 const queryToParams = ({ query }) => {
   // XXX do better validation
@@ -44,6 +48,13 @@ const queryToParams = ({ query }) => {
   params["limit"] = show
   if (query.page) {
     params["offset"] = (parseInt(query.page) - 1) * show
+  }
+  if (query.only) {
+    if (query.only === 'anomalies') {
+      params['anomaly'] = true
+    } else if (query.only === 'confirmed') {
+      params['confirmed'] = true
+    }
   }
   return params
 }
@@ -78,170 +89,118 @@ const SelectWithLabel = (props) => (
 const StyledFilterSidebar = styled.div`
 `
 
-const FilterSidebar = ({
-  inputFilter,
-  testNameFilter,
-  testOptions,
-  countryFilter,
-  countryOptions,
-  asnFilter,
-  sinceFilter,
-  untilFilter,
-  onChangeFilter,
-  onApplyFilter
-}) => (
-  <StyledFilterSidebar>
-    <InputWithLabel
-      label="Input"
-      name="inputFilter"
-      defaultValue={inputFilter}
-      onChange={onChangeFilter}
-      placeholder="ex. torproject.org"
-      rounded
-      type="text" />
-    <SelectWithLabel
-      pt={2}
-      label="Test Name"
-      defaultValue={testNameFilter}
-      name="testNameFilter"
-      onChange={onChangeFilter}
-      options={testOptions}
-      rounded>
-      <option value='web_connectivity'>Web Connectivity</option>
-      <option value='telegram'>Telegram</option>
-      <option value='whatsapp'>WhatsApp</option>
-    </SelectWithLabel>
-
-    <SelectWithLabel
-      pt={2}
-      label="Country"
-      defaultValue={countryFilter}
-      name="countryFilter"
-      onChange={onChangeFilter}
-      options={countryOptions}
-      rounded>
-      <option value='IT'>Italy</option>
-      <option value='RU'>Russia</option>
-      <option value='GR'>Greece</option>
-      <option value='AL'>Albania</option>
-    </SelectWithLabel>
-
-    <InputWithLabel
-      label="ASN"
-      defaultValue={asnFilter}
-      name="asnFilter"
-      onChange={onChangeFilter}
-      rounded />
-
-    <Flex>
-    <Box w={1/2} pr={1}>
-    <InputWithLabel
-      label="Since"
-      defaultValue={sinceFilter}
-      name="sinceFilter"
-      onChange={onChangeFilter}
-      rounded />
-    </Box>
-    <Box w={1/2} pl={1}>
-    <InputWithLabel
-      label="Until"
-      defaultValue={untilFilter}
-      name="untilFilter"
-      onChange={onChangeFilter}
-      rounded />
-    </Box>
-    </Flex>
-    <Button
-      mt={3}
-      onClick={onApplyFilter}>
-      Apply filter
-    </Button>
-  </StyledFilterSidebar>
-)
-
-const OnlyFilterButton = ({
-    text,
-    onlyFilter,
-    thisValue,
-    onChangeOnly,
-    rounded
-}) => {
-  const style = {
-    marginLeft: -1
+class FilterSidebar extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      inputFilter: props.inputFilter || '',
+      testNameFilter: props.testNameFilter || '',
+      countryFilter: props.countryFilter || '',
+      asnFilter: props.asnFilter || '',
+      sinceFilter: props.sinceFilter || '',
+      untilFilter: props.untilFilter || ''
+    }
+    this.onChangeFilter = this.onChangeFilter.bind(this)
+    this.onClickApplyFilter = this.onClickApplyFilter.bind(this)
   }
-  if (onlyFilter == thisValue) {
+
+  onChangeFilter (filterName) {
+    return ((e) => {
+      this.setState({[filterName]: e.target.value})
+    }).bind(this)
+  }
+
+  onClickApplyFilter() {
+    this.props.onApplyFilter({
+      inputFilter: this.state.inputFilter,
+      testNameFilter: this.state.testNameFilter,
+      countryFilter: this.state.countryFilter,
+      asnFilter: this.state.asnFilter,
+      sinceFilter: this.state.sinceFilter,
+      untilFilter: this.state.untilFilter,
+    })
+  }
+
+  render() {
+    const {
+      testNames,
+      countries,
+      onApplyFilter
+    } = this.props
+
+    const {
+      inputFilter,
+      testNameFilter,
+      countryFilter,
+      asnFilter,
+      sinceFilter,
+      untilFilter,
+    } = this.state
     return (
-        <Button
-          onClick={() => { onChangeOnly(thisValue) }}
-          backgroundColor='primary'
-          color='white'
-          inverted
-          rounded={rounded}
-          style={style}>{text}</Button>
-    )
-  } else {
-    return (
-        <ButtonOutline
-          onClick={() => { onChangeOnly(thisValue) }}
-          color='primary'
-          rounded={rounded}
-          style={style}>{text}</ButtonOutline>
+    <StyledFilterSidebar>
+      <InputWithLabel
+        label="Input"
+        name="inputFilter"
+        value={inputFilter}
+        onChange={this.onChangeFilter('inputFilter')}
+        placeholder="ex. torproject.org"
+        type="text" />
+      <SelectWithLabel
+        pt={2}
+        label="Test Name"
+        value={testNameFilter}
+        onChange={this.onChangeFilter('testNameFilter')}>
+        {testNames.map((v, idx) => {
+          return (
+            <option key={idx} value={v.id}>{v.name}</option>
+          )
+        })}
+      </SelectWithLabel>
+
+      <SelectWithLabel
+        pt={2}
+        label="Country"
+        value={countryFilter}
+        name="countryFilter"
+        onChange={this.onChangeFilter('countryFilter')}>
+        {countries.map((v, idx) => {
+          return (
+            <option key={idx} value={v.alpha_2}>{v.name}</option>
+          )
+        })}
+      </SelectWithLabel>
+
+      <InputWithLabel
+        label="ASN"
+        value={asnFilter}
+        name="asnFilter"
+        onChange={this.onChangeFilter('asnFilter')} />
+
+      <Flex>
+      <Box w={1/2} pr={1}>
+      <InputWithLabel
+        label="Since"
+        value={sinceFilter}
+        name="sinceFilter"
+        onChange={this.onChangeFilter('sinceFilter')} />
+      </Box>
+      <Box w={1/2} pl={1}>
+      <InputWithLabel
+        label="Until"
+        value={untilFilter}
+        name="untilFilter"
+        onChange={this.onChangeFilter('untilFilter')} />
+      </Box>
+      </Flex>
+      <Button
+        mt={3}
+        onClick={this.onClickApplyFilter}>
+        Apply filter
+      </Button>
+    </StyledFilterSidebar>
     )
   }
 }
-
-const StyledFilterTab = styled(Button)`
-  font-size: 14px;
-  text-transform: none;
-  padding: 0 10px;
-
-  background-color: ${props => props.active ? props.theme.colors.blue5 : 'transparent'};
-  color: ${props => props.active ? props.theme.colors.white : props.theme.colors.blue5};
-
-  ${props => {
-    if (props.pos == 'left') {
-      return `border-radius: 32px 0px 0px 32px;
-      border-right: 0px;
-      border: 1px solid ${props.theme.colors.blue5};
-      `
-    }
-    if (props.pos == 'right') {
-      return `border-radius: 0px 32px 32px 0px;
-      border-left: 0px;
-      border: 1px solid ${props.theme.colors.blue5};
-      `
-    }
-    return `border-radius: 0px;
-    border: 1px solid ${props.theme.colors.blue5};`
-  }}
-
-  &:hover {
-    background-color: ${props => props.theme.colors.blue4};
-    color: ${props => props.theme.colors.white};
-    transition: .2s ease-in;
-    ${props => {
-      if (props.pos == 'right') {
-        return 'border-left: 0px;'
-      } else if (props.pos == 'left') {
-        return 'border-right: 0px;'
-      }
-    }}
-  }
-  &:active {
-    transition: .2s ease-in;
-    background-color: ${props => props.theme.colors.blue4};
-    color: ${props => props.theme.colors.white};
-    ${props => {
-      if (props.pos == 'right') {
-        return 'border-left: 0px;'
-      } else if (props.pos == 'left') {
-        return 'border-right: 0px;'
-      } else {
-        return 'border-radius: 0px;'
-      }
-    }}
-  }
-`
 
 const FilterTab = (props) => {
   return <StyledFilterTab {...props}>
@@ -249,88 +208,284 @@ const FilterTab = (props) => {
   </StyledFilterTab>
 }
 
-const FilterTabs = () => (
+const StyledFilterTab = styled.button`
+  font-size: 14px;
+  height: 32px;
+  text-transform: none;
+  padding: 0 16px;
+  display: inline-block;
+  line-height: 1;
+  vertical-align: middle;
+  // Gets rid of tap active state
+  -webkit-tap-highlight-color: transparent;
+
+  outline: 0;
+
+  // Specific
+  font-family: inherit;
+  font-weight: 600;
+  text-decoration: none;
+
+  text-align: center;
+  letter-spacing: .5px;
+  z-index: 1;
+  transition: .2s ease-out;
+  cursor: pointer;
+
+  background-color: ${props => props.active ? props.theme.colors.blue5 : 'transparent'};
+  color: ${props => props.active ? props.theme.colors.white : props.theme.colors.blue5};
+  &:active {
+    transition: .2s ease-in;
+    background-color: ${props => props.theme.colors.blue4};
+    color: ${props => props.theme.colors.white};
+  }
+  &:hover {
+    background-color: ${props => props.theme.colors.blue4};
+    color: ${props => props.theme.colors.white};
+    transition: .2s ease-in;
+  }
+`
+
+const FilterTabLeft = styled(StyledFilterTab)`
+  border-radius: 32px 0px 0px 32px;
+  border: 1px solid ${props => props.theme.colors.blue5};
+  border-right: 0px;
+`
+const FilterTabRight = styled(StyledFilterTab)`
+  border: 1px solid ${props => props.theme.colors.blue5};
+  border-radius: 0px 32px 32px 0px;
+  border-left: 0px;
+`
+
+const FilterTabCenter = styled(StyledFilterTab)`
+  border: 1px solid ${props => props.theme.colors.blue5};
+  border-radius: 0px;
+`
+
+const FilterTabs = ({onClick, onlyFilter}) => (
   <Flex>
   <Box>
-  <FilterTab text='All Results' pos='left' onClick={() => {}} active />
+  <FilterTabLeft
+    onClick={() => {onClick('all')}}
+    active={onlyFilter === 'all'}>
+    All Results
+  </FilterTabLeft>
   </Box>
   <Box>
-  <FilterTab text='Confirmed' pos='center' onClick={() => {}} />
+  <FilterTabCenter
+    onClick={() => {onClick('confirmed')}}
+    active={onlyFilter === 'confirmed'}>
+    Confirmed
+  </FilterTabCenter >
   </Box>
   <Box>
-  <FilterTab text='Anomalies' pos='right' onClick={() => {}} />
+  <FilterTabRight
+    onClick={() => {onClick('anomalies')}}
+    active={onlyFilter === 'anomalies'}>
+    Anomalies
+  </FilterTabRight>
   </Box>
   </Flex>
 )
 
-const ResultItem = ({msmt}) => (
-  <Flex>
-    <Box>
-    </Box>
-    <Flex column pl={2}>
-      {msmt.input && <Box>
-        <div className='input'>
-          <span className='input-name'>{msmt.input}</span>
-          <span className='input-cat'>({msmt.input_category})</span>
-        </div>
-      </Box>}
-      <Box>
-        <div className='test-name'>
-          <span>{msmt.test_name}</span>
-        </div>
-      </Box>
-      <Box>
-        <div className='test-result'>
-          <Flex align='center'>
-            <Box pr={1}>
-            <div className={`test-result-dot test-result-dot-${msmt.anomaly_color}`}></div>
-            </Box>
-            <Box>
-            <span className='test-result-text'>{msmt.anomaly_text}</span>
-            </Box>
-          </Flex>
-        </div>
-      </Box>
-    </Flex>
-    <Flex style={{marginLeft: 'auto'}} column>
-      <Box style={{marginLeft: 'auto'}}>
-        <div className='view'>
-          <Link href={`/measurement/${msmt.id}`}><a>»</a></Link>
-        </div>
-      </Box>
-      <Box style={{marginTop: 'auto'}}>
-        <div className='timestamp'>
-          <span>{msmt.measurement_start_time}</span>
-        </div>
-      </Box>
-    </Flex>
-  </Flex>
-)
+const ResultRow = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  width: 100%;
+`
 
-const ResultsList = ({measurements}) => {
-  return measurements.results.map((msmt) => {
-    if (msmt.input && msmt.input.length > inputTrunc) {
-      msmt.input = `${msmt.input.substr(0, inputTrunc - 10)}…${msmt.input.substr(msmt.input.length - 10, msmt.input.length)}`
-    }
-    return <ResultItem msmt={msmt} />
-  })
+const ResultColumn = styled.div`
+  display: flex;
+  flex-flow: row nowrap;
+  flex-grow: ${props => props.grow || 1};
+  flex-basis: 0;
+  padding: 7px 5px;
+  word-break: break-word;
+  color: ${props => props.theme.colors.gray6};
+  font-weight: 500;
+`
+
+const ColorCode = styled.div`
+  height: 80px;
+  width: 5px;
+  background-color: red;
+  margin-right: 10px;
+`
+
+const ResultInput = styled.div`
+  font-size: 16px;
+  color: ${props => props.theme.colors.blue9};
+`
+
+const StyledResultTag = styled.div`
+  border-radius: 16px;
+  padding: 8px 16px;
+  height: 32px;
+  line-height: 1;
+  font-size: 16px;
+`
+
+const ResultTagFilled = StyledResultTag.extend`
+  background-color: ${props => props.theme.colors.gray7};
+  color: ${props => props.theme.colors.white};
+`
+
+const ResultTagHollow = StyledResultTag.extend`
+  background-color: transparent;
+  border: 1px solid ${props => props.theme.colors.gray7};
+  color: ${props => props.theme.colors.gray7};
+`
+
+const ResultTag = ({msmt}) => {
+  if (msmt.confirmed === true) {
+    return <ResultTagFilled>
+      Confirmed
+    </ResultTagFilled>
+  } else if (msmt.failure === true) {
+    return <StyledResultTag>
+      Failure
+    </StyledResultTag>
+  } else if (msmt.anomaly === true) {
+    return <ResultTagHollow>
+      Anomaly
+    </ResultTagHollow>
+  } else {
+    return <StyledResultTag></StyledResultTag>
+  }
 }
 
-const Pagination = ({showCount, onShowCount}) => (
-  <Select
-    label="show"
-    name="showCount"
-    defaultValue={showCount}
-    onChange={onShowCount}
-    options={[
-      {children: '10', value: 10},
-      {children: '50', value: 50},
-      {children: '100', value: 100},
-      {children: '200', value: 200}
-    ]}
-    rounded />
+
+const ASNBox = ({asn}) => {
+  const justNumber = asn.split('AS')[1]
+  return <Flex column>
+  <Box>ASN</Box>
+  <Box>{justNumber}</Box>
+  </Flex>
+}
+
+// XXX add this to the design system
+const ViewDetailsLink = styled(Link)`
+  cursor: pointer;
+  &:hover {
+    color: ${props => props.theme.colors.blue9};
+  }
+`
+const ResultItem = ({msmt}) => (
+  <ResultRow>
+    <ColorCode grow={0.1}>
+    </ColorCode>
+    <ResultColumn>
+      {msmt.probe_cc}
+    </ResultColumn>
+    <ResultColumn>
+      <ASNBox asn={msmt.probe_asn} />
+    </ResultColumn>
+    <ResultColumn grow={4}>
+      <Flex column>
+      <Box>
+      {msmt.input &&
+        <ResultInput>
+          {msmt.input}
+        </ResultInput>}
+      </Box>
+      <Box>{msmt.testName}</Box>
+      </Flex>
+    </ResultColumn>
+    <ResultColumn grow={1.5}>
+      {moment(msmt.measurement_start_time).format('YYYY-MM-DD')}
+    </ResultColumn>
+    <ResultColumn grow={2}>
+      <ResultTag msmt={msmt} />
+    </ResultColumn>
+    <ResultColumn grow={2}>
+      <NLink href={`/measurement/${msmt.id}`}>
+        <ViewDetailsLink>View details</ViewDetailsLink>
+      </NLink>
+    </ResultColumn>
+  </ResultRow>
 )
 
+const ResultTable = styled.div`
+  display: flex;
+  flex-flow: column nowrap;
+  justify-content: space-between;
+  margin: 8px;
+  line-height: 1.5;
+`
+
+const ResultsList = ({measurements, testNamesKeyed}) => {
+  return (
+    <ResultTable>
+    {measurements.results.map((msmt, idx) => {
+      if (msmt.input && msmt.input.length > inputTrunc) {
+        msmt.input = `${msmt.input.substr(0, inputTrunc - 10)}…${msmt.input.substr(msmt.input.length - 10, msmt.input.length)}`
+      }
+      msmt.testName = testNamesKeyed[msmt.test_name]
+      return <div key={idx}>
+        <Divider />
+        <ResultItem msmt={msmt} />
+      </div>
+    })}
+    </ResultTable>
+  )
+}
+
+const PreviousPage = styled.div`
+  cursor: pointer;
+`
+
+const NextPage = styled.div`
+  cursor: pointer;
+`
+
+const Pagination = ({currentPage, totalPages, goToPage, showCount, onShowCount}) => (
+  <Flex align='baseline' justify='space-around' pb={3}>
+    <Box>
+    <Flex>
+    <Box styled={{width: '100px'}} pr={2}>
+    {currentPage > 1
+    && <PreviousPage onClick={goToPage(currentPage - 1)}>
+        &lsaquo; Previous Page
+    </PreviousPage>
+    }
+    </Box>
+    <Box>
+    {currentPage}/{totalPages === -1 ? '?' : totalPages }
+    </Box>
+    <Box styled={{width: '100px'}} pl={2}>
+    {(totalPages == -1 || totalPages > currentPage)
+    && <NextPage onClick={goToPage(currentPage + 1)}>
+    Next Page &rsaquo;
+    </NextPage>
+    }
+    </Box>
+    </Flex>
+    </Box>
+  </Flex>
+)
+
+const StyledLoader = styled.div`
+  width: 100%;
+  padding-bottom: 100px;
+  display: ${props => props.loading === true ? 'block' : 'none'};
+`
+
+const Loader = ({loading}) => (
+  <StyledLoader loading={loading}>
+    <Flex align='baseline' justify='space-around'>
+    <Box>
+      <Flex column>
+      <Box style={{height: '200px'}}>
+      <BarLoader />
+      </Box>
+      <Box style={{textAlign: 'center'}}>
+      <Heading h={3}>Loading</Heading>
+      </Box>
+      </Flex>
+    </Box>
+    </Flex>
+  </StyledLoader>
+)
 
 export default class extends React.Component {
   static async getInitialProps ({ req, query }) {
@@ -341,10 +496,23 @@ export default class extends React.Component {
         client.get('/api/_/test_names'),
         client.get('/api/_/countries')
     ])
+    const measurements = msmtR.data
+
+    let countries = countriesR.data.countries
+    countries.sort(sortByKey('name'))
+    // We use XX to denote anything
+    countries.unshift({ name: 'Any', alpha_2: 'XX' })
+
+    let testNames = testNamesR.data.test_names
+    let testNamesKeyed = {}
+    testNames.forEach(v => testNamesKeyed[v.id] = v.name)
+    testNames.sort(sortByKey('name'))
+    testNames.unshift({ name: 'Any', id: 'XX' })
     return {
-      measurements: msmtR.data,
-      testNames: testNamesR.data.test_names,
-      countries: countriesR.data.countries,
+      measurements,
+      testNamesKeyed,
+      testNames,
+      countries,
     }
   }
 
@@ -365,7 +533,6 @@ export default class extends React.Component {
       loading: true
     }
     this.getFilterQuery = this.getFilterQuery.bind(this)
-    this.onChangeFilter = this.onChangeFilter.bind(this)
     this.onApplyFilter = this.onApplyFilter.bind(this)
     this.goToPage = this.goToPage.bind(this)
     this.onShowCount = this.onShowCount.bind(this)
@@ -398,7 +565,7 @@ export default class extends React.Component {
         loading: true
       })
       Router.push({
-        pathname: '/explore',
+        pathname: '/search',
         query: {...this.props.url.query, page: n}
       }).then(() => {
         this.setState({
@@ -416,7 +583,7 @@ export default class extends React.Component {
       loading: true
     })
     Router.push({
-      pathname: '/explore',
+      pathname: '/search',
       query: {...this.props.url.query, show: parseInt(target.value)}
     }).then(() => {
       this.setState({
@@ -425,22 +592,20 @@ export default class extends React.Component {
     })
   }
 
-  onApplyFilter () {
+  onApplyFilter (state) {
     this.setState({
-      loading: true
-    })
-    Router.push({
-      pathname: '/explore',
-      query: this.getFilterQuery()
-    }).then(() => {
-      this.setState({
-        loading: false
+      loading: true,
+      ...state
+    }, () => {
+      Router.push({
+        pathname: '/search',
+        query: this.getFilterQuery()
+      }).then(() => {
+        this.setState({
+          loading: false
+        })
       })
     })
-  }
-
-  onChangeFilter ({target}) {
-    this.setState({[target.name]: target.value})
   }
 
   onChangeOnly (value) {
@@ -451,7 +616,7 @@ export default class extends React.Component {
       loading: true
     })
     Router.push({
-      pathname: '/explore',
+      pathname: '/search',
       query: {...this.props.url.query, only: value}
     }).then(() => {
       this.setState({
@@ -471,7 +636,12 @@ export default class extends React.Component {
     ]
     let query = {...this.props.url.query}
     mappings.forEach((m) => {
-      if (this.state[m[0]]) {
+      if (!this.state[m[0]] || this.state[m[0]] === 'XX') {
+        // If it's unset or marked as XX, let's be sure the path is clean
+        if (query[m[1]]) {
+          delete query[m[1]]
+        }
+      } else {
         query[m[1]] = this.state[m[0]]
       }
     })
@@ -479,7 +649,23 @@ export default class extends React.Component {
   }
 
   render () {
-    const { measurements, testNames, countries, url } = this.props
+    const {
+      measurements,
+      testNames,
+      testNamesKeyed,
+      countries,
+      url
+    } = this.props
+    const {
+      onlyFilter,
+      inputFilter,
+      testNameFilter,
+      countryFilter,
+      asnFilter,
+      sinceFilter,
+      untilFilter
+    } = this.state
+
     const currentPage = measurements.metadata.current_page,
       totalPages = measurements.metadata.pages,
       nextUrl = measurements.metadata.next_url;
@@ -488,26 +674,6 @@ export default class extends React.Component {
     if (url.query.show) {
       showCount = parseInt(url.query.show)
     }
-
-    let testOptions = []
-    testNames.forEach((v) => {
-      testOptions.push({
-        children: v.name,
-        value: v.id
-      })
-    })
-	  testOptions.sort(sortByKey('children'))
-    testOptions.unshift({ children: 'Any', value: '' })
-
-    let countryOptions = []
-    countries.forEach((v) => {
-      countryOptions.push({
-        children: v.name,
-        value: v.alpha_2
-      })
-    })
-	  countryOptions.sort(sortByKey('children'))
-    countryOptions.unshift({ children: 'Any', value: '' })
 
     const navItems = [
       {
@@ -543,12 +709,23 @@ export default class extends React.Component {
         <Container>
         <Flex>
           <Box w={1/4} pr={2}>
-            <FilterSidebar />
+            <FilterSidebar
+              inputFilter={inputFilter}
+              testNameFilter={testNameFilter}
+              countryFilter={countryFilter}
+              asnFilter={asnFilter}
+              sinceFilter={sinceFilter}
+              untilFilter={untilFilter}
+
+              onApplyFilter={this.onApplyFilter}
+              testNames={testNames}
+              countries={countries}
+            />
           </Box>
           <Box w={3/4}>
             <Flex pt={2}>
               <Box w={1/2}>
-                <FilterTabs />
+                <FilterTabs onClick={this.onChangeOnly} onlyFilter={onlyFilter} />
               </Box>
               <Box w={1/2}>
                 <Flex>
@@ -565,16 +742,14 @@ export default class extends React.Component {
                 </Flex>
               </Box>
             </Flex>
-            {currentPage > 1
-             && <ButtonOutline style={{marginRight: '10px'}} color="primary" onClick={this.goToPage(currentPage - 1)}>{'<'}</ButtonOutline>
-            }
-            {(totalPages == -1 || totalPages > currentPage)
-             && <ButtonOutline color="primary" onClick={this.goToPage(currentPage + 1)}>{'>'}</ButtonOutline>
-            }
-            {this.state.loading && <h2>Loading</h2>}
+
+            <Loader loading={this.state.loading} />
+
             {measurements.results.length == 0 && <h2>No results found</h2>}
-            {!this.state.loading && <ResultsList measurements={measurements} />}
-            <Pagination />
+            {!this.state.loading
+            && <ResultsList measurements={measurements} testNamesKeyed={testNamesKeyed} />
+            }
+            <Pagination currentPage={currentPage} totalPages={totalPages} goToPage={this.goToPage} />
           </Box>
         </Flex>
         </Container>

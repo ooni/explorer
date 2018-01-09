@@ -8,7 +8,7 @@ export default class extends React.Component {
     return (
       <header>
         <Head>
-          <meta charset='utf-8'/>
+          <meta charSet='utf-8'/>
           <meta name='viewport' content='initial-scale=1.0, width=device-width'/>
         </Head>
       </header>

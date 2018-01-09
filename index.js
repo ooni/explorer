@@ -1,5 +1,3 @@
-const mockedMeasurementsAPI = require('./mocked_endpoints')
-
 const express = require('express')
 const next = require('next')
 const path = require('path')
@@ -25,10 +23,6 @@ app.prepare()
   })
 })
 .then(() => {
-
-  if (process.env.MEASUREMENTS_URL == "http://127.0.0.1:" + process.env.PORT) {
-    mockedMeasurementsAPI(server);
-  }
 
 	server.use('/_/world-atlas',
 						 express.static(__dirname + '/node_modules/world-atlas/world/'))

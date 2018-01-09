@@ -62,11 +62,13 @@ export const NavBar = ({items, LinkEl = NLink}) => (
   <Container>
   <Flex>
     <Box>
-      <ExplorerLogo height='26px' />
+      <NLink href='/'>
+        <ExplorerLogo height='26px' />
+      </NLink>
     </Box>
     <Box ml='auto'>
-      {items.map(item => (
-        <NavItem {...item} LinkEl={LinkEl} />
+      {items.map((item, idx) => (
+        <NavItem key={idx} {...item} LinkEl={LinkEl} />
       ))}
     </Box>
   </Flex>
