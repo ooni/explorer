@@ -8,7 +8,7 @@ module.exports = {
   webpack: (config) => {
     config.plugins.push(
       new webpack.DefinePlugin({
-        'process.env.MEASUREMENTS_URL': JSON.stringify(process.env.MEASUREMENTS_URL)
+        'process.env.MEASUREMENTS_URL': JSON.stringify(process.env.MEASUREMENTS_URL || 'https://api.ooni.io')
       })
     )
     return config

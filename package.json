@@ -16,7 +16,7 @@
     "immutable": "^3.8.1",
     "moment": "^2.20.1",
     "next": "^4.0.0",
-    "ooni-components": "^0.1.0-beta.7",
+    "ooni-components": "^0.1.0-beta.8",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
     "react-addons-shallow-compare": "^15.4.2",
@@ -29,7 +29,7 @@
     "victory": "^0.21.0"
   },
   "resolutions": {
-    "styled-components": "2.2.0"
+    "styled-components": "2.4.0"
   },
   "devDependencies": {
     "babel-plugin-transform-define": "^1.2.0"
