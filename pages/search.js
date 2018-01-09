@@ -26,6 +26,7 @@ import {
 } from 'ooni-components'
 
 import NavBar from '../components/NavBar'
+import Flag from '../components/Flag'
 import Layout from '../components/layout'
 
 import { sortByKey } from '../utils'
@@ -292,6 +293,8 @@ const ResultRow = styled.div`
   display: flex;
   flex-flow: row nowrap;
   width: 100%;
+  align-items: center;
+  justify-content: center;
 `
 
 const ResultColumn = styled.div`
@@ -303,13 +306,6 @@ const ResultColumn = styled.div`
   word-break: break-word;
   color: ${props => props.theme.colors.gray6};
   font-weight: 500;
-`
-
-const ColorCode = styled.div`
-  height: 80px;
-  width: 5px;
-  background-color: red;
-  margin-right: 10px;
 `
 
 const ResultInput = styled.div`
@@ -341,16 +337,16 @@ const ResultTag = ({msmt}) => {
     return <ResultTagFilled>
       Confirmed
     </ResultTagFilled>
-  } else if (msmt.failure === true) {
-    return <StyledResultTag>
-      Failure
-    </StyledResultTag>
+  //} else if (msmt.failure === true) {
+  //  return <StyledResultTag>
+  //    Failure
+  //  </StyledResultTag>
   } else if (msmt.anomaly === true) {
     return <ResultTagHollow>
       Anomaly
     </ResultTagHollow>
   } else {
-    return <StyledResultTag></StyledResultTag>
+    return <StyledResultTag>Normal</StyledResultTag>
   }
 }
 
@@ -370,14 +366,47 @@ const ViewDetailsLink = styled(Link)`
     color: ${props => props.theme.colors.blue9};
   }
 `
+
+
+const StyledColorCode = styled.div`
+  height: 80px;
+  width: 5px;
+  margin-right: 10px;
+`
+
+const ColorCodeFailed = styled(StyledColorCode)`
+  background-color: ${props => props.theme.colors.orange4};
+`
+const ColorCodeConfirmed = styled(StyledColorCode)`
+  background-color: ${props => props.theme.colors.pink5};
+`
+const ColorCodeAnomaly = styled(StyledColorCode)`
+  background-color: ${props => props.theme.colors.yellow3};
+`
+const ColorCodeNormal = styled(StyledColorCode)`
+  background-color: ${props => props.theme.colors.cyan3};
+`
+
+const ColorCode = ({msmt}) => {
+  if (msmt.confirmed === true) {
+    return <ColorCodeConfirmed />
+  //} else if (msmt.failure === true) {
+  //  return <ColorCodeFailed />
+  } else if (msmt.anomaly === true) {
+    return <ColorCodeAnomaly />
+  }
+  return <ColorCodeNormal />
+}
 const ResultItem = ({msmt}) => (
   <ResultRow>
-    <ColorCode grow={0.1}>
-    </ColorCode>
-    <ResultColumn>
+    <ColorCode msmt={msmt} />
+    <ResultColumn grow={0.5}>
       {msmt.probe_cc}
     </ResultColumn>
-    <ResultColumn>
+    <ResultColumn grow={1}>
+      <Flag alpha2={msmt.probe_cc} />
+    </ResultColumn>
+    <ResultColumn grow={1.5}>
       <ASNBox asn={msmt.probe_asn} />
     </ResultColumn>
     <ResultColumn grow={4}>
@@ -391,7 +420,7 @@ const ResultItem = ({msmt}) => (
       <Box>{msmt.testName}</Box>
       </Flex>
     </ResultColumn>
-    <ResultColumn grow={1.5}>
+    <ResultColumn grow={2}>
       {moment(msmt.measurement_start_time).format('YYYY-MM-DD')}
     </ResultColumn>
     <ResultColumn grow={2}>
