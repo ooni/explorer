@@ -76,6 +76,10 @@ DAT.Globe = function(container, opts) {
   var overRenderer;
 
   var curZoomSpeed = 0;
+  var curRotateSpeed = {
+    x: 0.001,
+    y: 0
+  }
   var zoomSpeed = 50;
 
   var mouse = { x: 0, y: 0 }, mouseOnDown = { x: 0, y: 0 };
@@ -230,11 +234,8 @@ DAT.Globe = function(container, opts) {
             }));
       } else {
         if (this._baseGeometry.morphTargets.length < 8) {
-          console.log('t l',this._baseGeometry.morphTargets.length);
           var padding = 8-this._baseGeometry.morphTargets.length;
-          console.log('padding', padding);
           for(var i=0; i<=padding; i++) {
-            console.log('padding',i);
             this._baseGeometry.morphTargets.push({'name': 'morphPadding'+i, vertices: this._baseGeometry.vertices});
           }
         }
@@ -274,6 +275,9 @@ DAT.Globe = function(container, opts) {
   }
 
   function onMouseDown(event) {
+    // Stop rotating when we interact with the globe
+    curRotateSpeed = { x: 0, y: 0 }
+
     event.preventDefault();
 
     container.addEventListener('mousemove', onMouseMove, false);
@@ -348,6 +352,11 @@ DAT.Globe = function(container, opts) {
     distanceTarget = distanceTarget < 350 ? 350 : distanceTarget;
   }
 
+  function rotate(delta) {
+    target.x -= delta.x;
+    target.y -= delta.y;
+  }
+
   function animate() {
     requestAnimationFrame(animate);
     render();
@@ -355,6 +364,7 @@ DAT.Globe = function(container, opts) {
 
   function render() {
     zoom(curZoomSpeed);
+    rotate(curRotateSpeed);
 
     rotation.x += (target.x - rotation.x) * 0.1;
     rotation.y += (target.y - rotation.y) * 0.1;
