@@ -25,6 +25,7 @@ import {
   Heading
 } from 'ooni-components'
 
+import DatePicker from '../components/date-picker'
 import NavBar from '../components/NavBar'
 import Flag from '../components/Flag'
 import Layout from '../components/layout'
@@ -99,7 +100,9 @@ class FilterSidebar extends React.Component {
       countryFilter: props.countryFilter || '',
       asnFilter: props.asnFilter || '',
       sinceFilter: props.sinceFilter || '',
-      untilFilter: props.untilFilter || ''
+      untilFilter: props.untilFilter || '',
+      showSinceCalendar: true,
+      showUntilCalendar: false,
     }
     this.onChangeFilter = this.onChangeFilter.bind(this)
     this.onClickApplyFilter = this.onClickApplyFilter.bind(this)
@@ -136,6 +139,8 @@ class FilterSidebar extends React.Component {
       asnFilter,
       sinceFilter,
       untilFilter,
+      showSinceCalendar,
+      showUntilCalendar
     } = this.state
     return (
     <StyledFilterSidebar>
@@ -179,18 +184,24 @@ class FilterSidebar extends React.Component {
 
       <Flex>
       <Box w={1/2} pr={1}>
-      <InputWithLabel
-        label="Since"
-        value={sinceFilter}
-        name="sinceFilter"
-        onChange={this.onChangeFilter('sinceFilter')} />
+        <StyledLabel>
+        Since
+        </StyledLabel>
+        <DatePicker
+          value={sinceFilter}
+          onChange={this.onChangeFilter('sinceFilter')}
+          timeFormat={false}
+          />
       </Box>
       <Box w={1/2} pl={1}>
-      <InputWithLabel
-        label="Until"
-        value={untilFilter}
-        name="untilFilter"
-        onChange={this.onChangeFilter('untilFilter')} />
+        <StyledLabel>
+        Until
+        </StyledLabel>
+        <DatePicker
+          value={untilFilter}
+          onChange={this.onChangeFilter('untilFilter')}
+          timeFormat={false}
+          />
       </Box>
       </Flex>
       <Button
