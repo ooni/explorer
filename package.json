@@ -24,6 +24,7 @@
     "react-addons-shallow-compare": "^15.4.2",
     "react-css-loaders": "^0.0.5",
     "react-dom": "^16.0.0",
+    "react-json-view": "^1.16.0",
     "react-no-ssr": "^1.1.0",
     "styled-components": "^2.1.2",
     "three": "^0.86.0",

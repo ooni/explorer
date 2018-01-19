@@ -360,13 +360,24 @@ const ASNBox = ({asn}) => {
 }
 
 // XXX add this to the design system
-const ViewDetailsLink = styled(Link)`
+const StyledViewDetailsLink = styled(Link)`
   cursor: pointer;
   &:hover {
     color: ${props => props.theme.colors.blue9};
   }
 `
 
+const ViewDetailsLink = ({reportId, input}) => {
+  let href = `/measurement?report_id=${reportId}`
+  if (input) {
+    href += `&input=${input}`
+  }
+  return (
+    <NLink href={href}>
+      <StyledViewDetailsLink href={href}>View details</StyledViewDetailsLink>
+    </NLink>
+  )
+}
 
 const StyledColorCode = styled.div`
   height: 80px;
@@ -427,9 +438,7 @@ const ResultItem = ({msmt}) => (
       <ResultTag msmt={msmt} />
     </ResultColumn>
     <ResultColumn grow={2}>
-      <NLink href={`/measurement/${msmt.id}`}>
-        <ViewDetailsLink>View details</ViewDetailsLink>
-      </NLink>
+      <ViewDetailsLink reportId={msmt.report_id} input={msmt.input} />
     </ResultColumn>
   </ResultRow>
 )
@@ -755,20 +764,6 @@ export default class extends React.Component {
             <Flex pt={2}>
               <Box w={1/2}>
                 <FilterTabs onClick={this.onChangeOnly} onlyFilter={onlyFilter} />
-              </Box>
-              <Box w={1/2}>
-                <Flex>
-                <Box w={3/4}>
-                  <Input
-                    name="search"
-                    onChange={function noRefCheck() {}}
-                    onClick={function noRefCheck() {}}
-                  />
-                </Box>
-                <Box w={1/4} pl={2}>
-                  <Button>Search</Button>
-                </Box>
-                </Flex>
               </Box>
             </Flex>
 
