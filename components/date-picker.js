@@ -4,6 +4,10 @@ import Datetime from 'react-datetime'
 
 import styled from 'styled-components'
 
+/* This is a copy paste of what was inside of:
+ * https://github.com/YouCanBookMe/react-datetime/blob/8055e630d9486913e5ae75d2f076f98962efdb70/css/react-datetime.css
+ */
+ 
 const BaseDatetimeStyle = styled.div`
 .rdt {
   position: relative;
