@@ -1695,6 +1695,10 @@ core-util-is@^1.0.1, core-util-is@~1.0.0:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/core-util-is/-/core-util-is-1.0.2.tgz#b5fd54220aa2bc5ab57aab7140c940754503c1a7"
 
+country-util@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/country-util/-/country-util-0.0.3.tgz#6cf531b25dcbc130988613693edca6a014030e21"
+
 create-ecdh@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/create-ecdh/-/create-ecdh-4.0.0.tgz#888c723596cdf7612f6498233eebd7a35301737d"
