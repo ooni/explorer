@@ -27,7 +27,7 @@ import {
 
 import DatePicker from '../components/date-picker'
 import NavBar from '../components/NavBar'
-import Flag from '../components/Flag'
+import Flag from '../components/flag'
 import Layout from '../components/layout'
 
 import { sortByKey } from '../utils'
@@ -426,7 +426,7 @@ const ResultItem = ({msmt}) => (
       {msmt.probe_cc}
     </ResultColumn>
     <ResultColumn grow={1}>
-      <Flag alpha2={msmt.probe_cc} />
+      <Flag countryCode={msmt.probe_cc} />
     </ResultColumn>
     <ResultColumn grow={1.5}>
       <ASNBox asn={msmt.probe_asn} />

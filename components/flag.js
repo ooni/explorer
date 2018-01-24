@@ -34,7 +34,7 @@ const FlagImg = styled.img`
 const FlagContainer = styled.div`
   border-radius: 50%;
   position: relative;
-  border: 1px solid black;
+  border: 2px solid ${props => props.theme.colors.gray7};
   overflow: hidden;
   width: 60px;
   height: 60px;
@@ -49,7 +49,7 @@ export const Flag = ({countryCode, center, border}) => {
   }
   const src = `/static/flags/1x1/${countryCode}.svg`
   return (
-    <FlagContainer center={center} border={border}>
+    <FlagContainer className='country-flag' center={center} border={border}>
       <FlagImg src={src} />
     </FlagContainer>
   )
