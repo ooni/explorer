@@ -19,36 +19,34 @@ const server = express()
 
 app.prepare()
 .then(() => {
-	return new Promise((resolve, reject) => {
-  	// XXX in here I can do setup
+  return new Promise((resolve, reject) => {
+    // XXX in here I can do setup
     return resolve()
   })
 })
 .then(() => {
 
-	server.use('/_/world-atlas',
-						 express.static(__dirname + '/node_modules/world-atlas/world/'))
-	server.use('/_/data',
-						 express.static(__dirname + '/data/'))
-	server.use('/_/static',
-						 express.static(__dirname + '/static/'))
+  server.use('/_/world-atlas',
+    express.static(__dirname + '/node_modules/world-atlas/world/'))
+  server.use('/_/data',
+    express.static(__dirname + '/data/'))
 
-	server.get('/country/:countryCode', (req, res) => {
-		return app.render(req, res, '/country', req.params)
-	})
+  server.get('/country/:countryCode', (req, res) => {
+    return app.render(req, res, '/country', req.params)
+  })
 
-	// Default catch all
-	server.all('*', (req, res) => {
-		return handle(req, res)
-	})
+  // Default catch all
+  server.all('*', (req, res) => {
+    return handle(req, res)
+  })
 
-	server.listen(process.env.PORT, err => {
-		if (err) {
-			throw err
-		}
-		console.log('> Ready on http://localhost:' +
-								process.env.PORT +
-								' [' + process.env.NODE_ENV + ']')
+  server.listen(process.env.PORT, err => {
+    if (err) {
+      throw err
+    }
+    console.log('> Ready on http://localhost:' +
+    process.env.PORT +
+    ' [' + process.env.NODE_ENV + ']')
   })
 })
 .catch(err => {
