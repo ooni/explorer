@@ -22,7 +22,7 @@ import {
   Heading
 } from 'ooni-components'
 
-import Flag from '../components/Flag'
+import Flag from '../components/flag'
 import Layout from '../components/layout'
 import NavBar from '../components/NavBar'
 
@@ -36,7 +36,7 @@ const CountryBlock = ({countryCode}) => {
   return (
     <Box w={1/6} pb={3}>
     <CountryBlockContent>
-      <Flag center border alpha2={countryCode} />
+      <Flag center border countryCode={countryCode} />
       <Heading h={6}>{countryUtil.territoryNames[countryCode]}</Heading>
     </CountryBlockContent>
     </Box>
