@@ -67,36 +67,14 @@ const RegionBlock = ({regionCode}) => {
 
 export default class extends React.Component {
   render () {
-    const navItems = [
-      {
-        label: 'Search',
-        href: '/search',
-        active: false
-      },
-      {
-        label: 'Results',
-        href: '/results',
-        active: false
-      },
-      {
-        label: 'Countries',
-        href: '/countries',
-        active: true
-      },
-      {
-        label: 'About',
-        href: '/about',
-        active: false
-      },
-    ]
-
+  
     return (
       <Layout>
         <Head>
           <title>Internet Censorship around the world - OONI Explorer</title>
         </Head>
 
-        <NavBar items={navItems} />
+        <NavBar />
 
         <Container>
           {/* Africa */}

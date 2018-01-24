@@ -1,5 +1,6 @@
 import React from 'react'
 
+import { withRouter } from 'next/router'
 import NLink from 'next/link'
 
 import styled from 'styled-components'
@@ -42,14 +43,18 @@ const Underline = styled.span`
   }
 `
 
-const NavItem = ({label, href, active, LinkEl }) => (
-  <LinkEl href={href}>
-    <StyledNavItem>
-      <NavItemLabel active={active} >{label}</NavItemLabel>
-      <Underline active={active} />
-    </StyledNavItem>
-  </LinkEl>
-)
+const NavItemComponent = ({router, label, href}) => {
+  const active = router.pathname === href
+  return (
+    <NLink href={href}>
+      <StyledNavItem>
+        <NavItemLabel active={active} >{label}</NavItemLabel>
+        <Underline active={active} />
+      </StyledNavItem>
+    </NLink>
+  )
+}
+const NavItem = withRouter(NavItemComponent)
 
 const StyledNavBar = styled.div`
   background-color: ${props => props.theme.colors.blue5};
@@ -57,7 +62,7 @@ const StyledNavBar = styled.div`
   padding-bottom: 20px;
 `
 
-export const NavBar = ({items, LinkEl = NLink}) => (
+export const NavBar = () => (
   <StyledNavBar>
   <Container>
   <Flex>
@@ -67,9 +72,10 @@ export const NavBar = ({items, LinkEl = NLink}) => (
       </NLink>
     </Box>
     <Box ml='auto'>
-      {items.map((item, idx) => (
-        <NavItem key={idx} {...item} LinkEl={LinkEl} />
-      ))}
+      <NavItem label='Search' href='/search' />
+      <NavItem label='Results' href='/results' />
+      <NavItem label='Countries' href='/countries' />
+      <NavItem label='About' href='/about' />
     </Box>
   </Flex>
   </Container>

@@ -724,36 +724,13 @@ export default class extends React.Component {
       showCount = parseInt(url.query.show)
     }
 
-    const navItems = [
-      {
-        label: 'Search',
-        href: '/search',
-        active: true
-      },
-      {
-        label: 'Results',
-        href: '/results',
-        active: false
-      },
-      {
-        label: 'Countries',
-        href: '/countries',
-        active: false
-      },
-      {
-        label: 'About',
-        href: '/about',
-        active: false
-      },
-    ]
-
     return (
       <Layout>
         <Head>
           <title>Search Measurements - OONI Explorer</title>
         </Head>
 
-        <NavBar items={navItems} />
+        <NavBar />
 
         <Container>
         <Flex>

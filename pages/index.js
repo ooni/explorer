@@ -117,29 +117,6 @@ export default class extends React.Component {
       countryCount, censorshipCount
     } = this.props;
 
-    const navItems = [
-      {
-        label: 'Search',
-        href: '/search',
-        active: false
-      },
-      {
-        label: 'Results',
-        href: '/results',
-        active: false
-      },
-      {
-        label: 'Countries',
-        href: '/countries',
-        active: false
-      },
-      {
-        label: 'About',
-        href: '/about',
-        active: false
-      },
-    ]
-
     measurementCount = toCompactNumberUnit(measurementCount)
     asnCount = toCompactNumberUnit(asnCount)
     censorshipCount = toCompactNumberUnit(censorshipCount)
@@ -149,7 +126,7 @@ export default class extends React.Component {
         <Head>
           <title>OONI Explorer</title>
         </Head>
-        <NavBar items={navItems} />
+        <NavBar />
         <HeroUnit>
           <Container>
             <Flex>
