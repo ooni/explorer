@@ -5,6 +5,14 @@
 
 FROM node:carbon
 
+# BEGIN root
+USER root
+COPY . /usr/src/app
+RUN set -ex \
+    && chown -R node:node /usr/src/app \
+    && :
+# END root
+
 USER node
 WORKDIR /usr/src/app
 
