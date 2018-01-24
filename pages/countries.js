@@ -28,17 +28,28 @@ import NavBar from '../components/NavBar'
 
 import countryUtil from 'country-util'
 
-const CountryBlockContent = styled.div`
+const CountryLink = styled(Link)`
+  color: ${props => props.theme.colors.black};
+  text-decoration: none;
   text-align: center;
+  &:hover {
+    color: ${props => props.theme.colors.blue5};
+    .country-flag {
+      border: 2px solid ${props => props.theme.colors.blue5};
+    }
+  }
 `
 
 const CountryBlock = ({countryCode}) => {
+  const href = `/country/${countryCode}`
   return (
     <Box w={1/6} pb={3}>
-    <CountryBlockContent>
-      <Flag center border countryCode={countryCode} />
-      <Heading h={6}>{countryUtil.territoryNames[countryCode]}</Heading>
-    </CountryBlockContent>
+    <NLink href={href}>
+      <CountryLink href={href}>
+        <Flag center border countryCode={countryCode} />
+        <Heading h={6}>{countryUtil.territoryNames[countryCode]}</Heading>
+      </CountryLink>
+    </NLink>
     </Box>
   )
 }
