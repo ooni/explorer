@@ -7,7 +7,6 @@ import styled from 'styled-components'
 import axios from 'axios'
 import moment from 'moment'
 
-import { BarLoader } from 'react-css-loaders'
 import {
   Flex, Grid, Box,
   Divider,
@@ -25,6 +24,7 @@ import {
   Heading
 } from 'ooni-components'
 
+import BarLoader from '../components/bar-loader'
 import DatePicker from '../components/date-picker'
 import NavBar from '../components/NavBar'
 import Flag from '../components/flag'
@@ -332,12 +332,12 @@ const StyledResultTag = styled.div`
   font-size: 16px;
 `
 
-const ResultTagFilled = StyledResultTag.extend`
+const ResultTagFilled = styled(StyledResultTag)`
   background-color: ${props => props.theme.colors.gray7};
   color: ${props => props.theme.colors.white};
 `
 
-const ResultTagHollow = StyledResultTag.extend`
+const ResultTagHollow = styled(StyledResultTag)`
   background-color: transparent;
   border: 1px solid ${props => props.theme.colors.gray7};
   color: ${props => props.theme.colors.gray7};
