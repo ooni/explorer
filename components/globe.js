@@ -12,6 +12,28 @@ const StyledGlobe = styled.div`
   width: 350px;
 `
 
+const isWebGLEnabled = () => {
+  // Check for the WebGL rendering context
+  if ( !! window.WebGLRenderingContext) {
+    var canvas = document.createElement('canvas'),
+      names = ['webgl', 'experimental-webgl', 'moz-webgl', 'webkit-3d'],
+      context = false;
+    for (var i in names) {
+      try {
+        context = canvas.getContext(names[i]);
+        if (context && typeof context.getParameter === 'function') {
+          // WebGL is enabled.
+          return true
+        }
+      } catch (e) {}
+    }
+    // WebGL is supported, but disabled.
+    return false
+  }
+  // WebGL not supported.
+  return false
+}
+
 class WebGLGlobe extends React.Component {
 
   static propTypes = {
@@ -22,6 +44,9 @@ class WebGLGlobe extends React.Component {
 	}
   constructor(props) {
     super(props)
+    this.state = {
+      webGLEnabled: isWebGLEnabled()
+    }
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -29,61 +54,50 @@ class WebGLGlobe extends React.Component {
   }
 
   componentDidMount () {
-    var _this = this;
-    var container = this.globeRef;
+    let container = this.globeRef
+    if (this.state.webGLEnabled) {
+      let opts = {
+        imgDir: 'static/',
+        animated: true
+      }
+      const globe = new DAT.Globe(container, opts);
 
-    /*
-     * if(!Detector.webgl){
-      Detector.addGetWebGLMessage();
-    } else {
-    }
-    */
+      let i
+      let xhr
+      let tweens = []
 
-    var opts = {imgDir: 'static/', animated: true};
-    var globe = new DAT.Globe(container, opts);
-    var i, tweens = [];
-
-
-    let dummyData = []
-    /*
-    for (i=0;i<10000;i++) {
-      dummyData.push(random(-100, 100))
-      dummyData.push(random(-100, 100))
-      dummyData.push(random(0, 0.8, true))
-    }
-
-    dummyData.push(41.9)
-    dummyData.push(12.49)
-    dummyData.push(0.3)
-    globe.addData(dummyData, {format: 'magnitude', animated: true})
-    globe.createPoints()
-    globe.time = 0
-    globe.animate()
-    */
-
-    var xhr;
-    xhr = new XMLHttpRequest();
-    xhr.open('GET', 'static/map-magnitude.json', true);
-    var onreadystatechangecallback = function(e) {
-      if (xhr.readyState === 4) {
-        if (xhr.status === 200) {
-          var data = JSON.parse(xhr.responseText);
-          window.data = data.coordinates;
-          globe.addData(data.coordinates, {format: 'magnitude', animated: true});
-          globe.createPoints();
-          globe.time = 0
-          globe.animate();
+      xhr = new XMLHttpRequest()
+      xhr.open('GET', 'static/map-magnitude.json', true)
+      let onreadystatechangecallback = (e) => {
+        if (xhr.readyState === 4) {
+          if (xhr.status === 200) {
+            var data = JSON.parse(xhr.responseText)
+            window.data = data.coordinates
+            globe.addData(data.coordinates, {format: 'magnitude', animated: true})
+            globe.createPoints()
+            globe.time = 0
+            globe.animate()
+          }
         }
       }
-    };
-    xhr.onreadystatechange = onreadystatechangecallback.bind(this);
-    xhr.send(null);
+
+      xhr.onreadystatechange = onreadystatechangecallback.bind(this)
+      xhr.send(null)
+    }
   }
 
   render () {
-    return (
-      <StyledGlobe innerRef={(el) => { this.globeRef = el; }} />
-    )
+    const {
+      webGLEnabled
+    } = this.state
+
+    if (webGLEnabled) {
+      return (
+        <StyledGlobe innerRef={(el) => { this.globeRef = el; }} />
+      )
+    } else {
+      return <div>Your browser does not support WebGL</div>
+    }
   }
 }
 
