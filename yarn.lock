@@ -1734,14 +1734,6 @@ create-react-class@^15.5.2:
     loose-envify "^1.3.1"
     object-assign "^4.1.1"
 
-create-react-class@^15.6.0:
-  version "15.6.0"
-  resolved "https://registry.yarnpkg.com/create-react-class/-/create-react-class-15.6.0.tgz#ab448497c26566e1e29413e883207d57cfe7bed4"
-  dependencies:
-    fbjs "^0.8.9"
-    loose-envify "^1.3.1"
-    object-assign "^4.1.1"
-
 cross-spawn@5.1.0, cross-spawn@^5.0.1:
   version "5.1.0"
   resolved "https://registry.yarnpkg.com/cross-spawn/-/cross-spawn-5.1.0.tgz#e8bd0efee58fcff6f8f94510a0a554bbfa235449"
@@ -2798,7 +2790,7 @@ graceful-fs@^4.1.2, graceful-fs@^4.1.4, graceful-fs@^4.1.6:
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/graceful-readlink/-/graceful-readlink-1.0.1.tgz#4cafad76bc62f02fa039b2f94e9a3dd3a391a725"
 
-grid-styled@^2.0.0-10:
+grid-styled@2.0.0-11, grid-styled@^2.0.0-10:
   version "2.0.0-11"
   resolved "https://registry.yarnpkg.com/grid-styled/-/grid-styled-2.0.0-11.tgz#4cf40503bfe202e7764f08a5346adb99f6fdf260"
   dependencies:
@@ -3871,9 +3863,9 @@ netrc@^0.1.4:
   version "0.1.4"
   resolved "https://registry.yarnpkg.com/netrc/-/netrc-0.1.4.tgz#6be94fcaca8d77ade0a9670dc460914c94472444"
 
-next@^4.0.0:
-  version "4.2.1"
-  resolved "https://registry.yarnpkg.com/next/-/next-4.2.1.tgz#37b5637050235b92a487ca484e20088ace7e37fe"
+next@^4.2.3:
+  version "4.2.3"
+  resolved "https://registry.yarnpkg.com/next/-/next-4.2.3.tgz#6f85f9bd6df2c420b4f6425f9f158e82515b7bc8"
   dependencies:
     ansi-html "0.0.7"
     babel-core "6.26.0"
@@ -4177,17 +4169,17 @@ once@~1.3.0:
   dependencies:
     wrappy "1"
 
-ooni-components@^0.1.0-beta.8:
-  version "0.1.0-beta.8"
-  resolved "https://registry.yarnpkg.com/ooni-components/-/ooni-components-0.1.0-beta.8.tgz#75c4b52779a69eeffc67a855c64d5160f92de46b"
+ooni-components@^0.1.0-rc.3:
+  version "0.1.0-rc.3"
+  resolved "https://registry.yarnpkg.com/ooni-components/-/ooni-components-0.1.0-rc.3.tgz#9a9eafb86fc7a3eab83fbce37d1d422c417e6fb4"
   dependencies:
     palx "^1.0.2"
     prop-types "^15.5.10"
     react "^16.0.0"
     react-icons "^2.2.5"
     rebass "^1.0.4"
-    styled-components "^2.2.0"
-    styled-system "^1.0.2"
+    styled-components "^2.4.0"
+    styled-system "^1.1.0"
     victory "^0.22.1"
 
 optimist@^0.6.1, optimist@~0.6.0:
@@ -4501,7 +4493,7 @@ prop-types-exact@1.1.1:
     has "^1.0.1"
     object.assign "^4.0.4"
 
-prop-types@15.6.0, prop-types@^15.5.7, prop-types@^15.5.8, prop-types@^15.6.0:
+prop-types@15.6.0, prop-types@^15.5.7, prop-types@^15.6.0:
   version "15.6.0"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.6.0.tgz#ceaf083022fc46b4a35f69e13ef75aed0d639856"
   dependencies:
@@ -4643,14 +4635,6 @@ react-base16-styling@^0.5.3:
     lodash.flow "^3.3.0"
     pure-color "^1.2.0"
 
-react-css-loaders@^0.0.5:
-  version "0.0.5"
-  resolved "https://registry.yarnpkg.com/react-css-loaders/-/react-css-loaders-0.0.5.tgz#be0395b10fb5ce12748973b44cd90d6a3c4404e3"
-  dependencies:
-    prop-types "^15.5.8"
-    react "^15.5.4"
-    react-dom "^15.5.4"
-
 react-datetime@^2.11.1:
   version "2.11.1"
   resolved "https://registry.yarnpkg.com/react-datetime/-/react-datetime-2.11.1.tgz#11d15081dd7d6729284e21c1b8ea7b975e3bdc7e"
@@ -4667,15 +4651,6 @@ react-deep-force-update@^1.0.0:
 react-deep-force-update@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/react-deep-force-update/-/react-deep-force-update-2.1.1.tgz#8ea4263cd6455a050b37445b3f08fd839d86e909"
-
-react-dom@^15.5.4:
-  version "15.6.2"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-15.6.2.tgz#41cfadf693b757faf2708443a1d1fd5a02bef730"
-  dependencies:
-    fbjs "^0.8.9"
-    loose-envify "^1.1.0"
-    object-assign "^4.1.0"
-    prop-types "^15.5.10"
 
 react-dom@^16.0.0:
   version "16.2.0"
@@ -4750,16 +4725,6 @@ react-transform-hmr@^1.0.4:
     global "^4.3.0"
     react-proxy "^1.1.7"
 
-react@^15.5.4:
-  version "15.6.2"
-  resolved "https://registry.yarnpkg.com/react/-/react-15.6.2.tgz#dba0434ab439cfe82f108f0f511663908179aa72"
-  dependencies:
-    create-react-class "^15.6.0"
-    fbjs "^0.8.9"
-    loose-envify "^1.1.0"
-    object-assign "^4.1.0"
-    prop-types "^15.5.10"
-
 react@^16.0.0:
   version "16.2.0"
   resolved "https://registry.yarnpkg.com/react/-/react-16.2.0.tgz#a31bd2dab89bff65d42134fa187f24d054c273ba"
@@ -4832,7 +4797,7 @@ readdirp@^2.0.0:
     readable-stream "^2.0.2"
     set-immediate-shim "^1.0.1"
 
-rebass@^1.0.4:
+rebass@1.0.4, rebass@^1.0.4:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/rebass/-/rebass-1.0.4.tgz#c606625a441a69c54d710106d1b7f81a7fd9aaba"
   dependencies:
@@ -5458,7 +5423,7 @@ strip-json-comments@~2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/strip-json-comments/-/strip-json-comments-2.0.1.tgz#3c531942e908c2697c0ec344858c286c7ca0a60a"
 
-styled-components@2.4.0, styled-components@^2.1.2, styled-components@^2.2.0:
+styled-components@2.4.0, styled-components@^2.1.2, styled-components@^2.2.0, styled-components@^2.4.0:
   version "2.4.0"
   resolved "https://registry.yarnpkg.com/styled-components/-/styled-components-2.4.0.tgz#086d0fd483d54638837fca3ea546a030b94adf75"
   dependencies:
@@ -5483,9 +5448,9 @@ styled-jsx@2.2.1:
     stylis "3.4.5"
     stylis-rule-sheet "0.0.7"
 
-styled-system@^1.0.0-12, styled-system@^1.0.2:
-  version "1.0.7"
-  resolved "https://registry.yarnpkg.com/styled-system/-/styled-system-1.0.7.tgz#3780625e800f903340d7742af3cf5ee43c1c023c"
+styled-system@1.1.0, styled-system@^1.0.0-12, styled-system@^1.0.2, styled-system@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/styled-system/-/styled-system-1.1.0.tgz#a6bc0a329311c6efea357730c40a33ae4c33e3fb"
   dependencies:
     prop-types "^15.6.0"
 
