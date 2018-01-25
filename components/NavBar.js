@@ -62,11 +62,30 @@ const StyledNavBar = styled.div`
   padding-bottom: 20px;
 `
 
+const PrototypeBannerContainer = styled.div`
+position: relative;
+`
+
+const PrototypeBanner = styled.div`
+  color: ${props => props.theme.colors.black};
+  font-size: 30px;
+  position: absolute;
+  top: -10px;
+  left: 0px;
+  padding: 20px;
+  opacity: 0.8;
+  background-color: ${props => props.theme.colors.red8};
+  z-index: 0;
+`
+
 export const NavBar = () => (
   <StyledNavBar>
   <Container>
+  <PrototypeBannerContainer>
+    <PrototypeBanner>PROTOTYPE</PrototypeBanner>
+  </PrototypeBannerContainer>
   <Flex>
-    <Box>
+    <Box style={{zIndex: 1}}>
       <NLink href='/'>
         <ExplorerLogo height='26px' />
       </NLink>
