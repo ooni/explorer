@@ -27,25 +27,23 @@ var supportedCountryCodes = [
 const FlagImg = styled.img`
   width: 60px;
   height: 60px;
-  display: inline;
-  position: inline-block;
+  clip-path: circle(50% at 50% 50%);
 `
 
 const FlagContainer = styled.div`
   border-radius: 50%;
-  position: relative;
-  border: 2px solid ${props => props.theme.colors.gray7};
-  overflow: hidden;
-  width: 60px;
-  height: 60px;
-  margin: 0 auto;
+  padding-left: 3px;
+  padding-top: 3px;
+  width: 66px;
+  height: 66px;
+  background-color: ${props => props.theme.colors.gray5};
 `
 
 export const Flag = ({countryCode, center, border}) => {
   countryCode = countryCode.toLowerCase()
   if (supportedCountryCodes.indexOf(countryCode) === -1) {
-    // XXX we should maybe return some generic flag
-    throw Error('invalid country code')
+    // Map unsupported country codes to ZZ
+    countryCode = 'zz'
   }
   const src = `/static/flags/1x1/${countryCode}.svg`
   return (
