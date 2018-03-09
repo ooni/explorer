@@ -300,31 +300,13 @@ const FilterTabs = ({onClick, onlyFilter}) => (
   </Flex>
 )
 
-const ResultRow = styled.div`
-  display: flex;
-  flex-flow: row nowrap;
-  width: 100%;
-  align-items: center;
-  justify-content: center;
-`
-
-const ResultColumn = styled.div`
-  display: flex;
-  flex-flow: row nowrap;
-  flex-grow: ${props => props.grow || 1};
-  flex-basis: 0;
-  padding: 7px 5px;
-  word-break: break-word;
-  color: ${props => props.theme.colors.gray6};
-  font-weight: 500;
-`
-
 const ResultInput = styled.div`
   font-size: 16px;
   color: ${props => props.theme.colors.blue9};
 `
 
 const StyledResultTag = styled.div`
+  margin-top: -4px;
   border-radius: 16px;
   padding: 8px 16px;
   height: 32px;
@@ -419,19 +401,35 @@ const ColorCode = ({msmt}) => {
   }
   return <ColorCodeNormal />
 }
-const ResultItem = ({msmt}) => (
-  <ResultRow>
-    <ColorCode msmt={msmt} />
-    <ResultColumn grow={0.5}>
-      {msmt.probe_cc}
-    </ResultColumn>
-    <ResultColumn grow={1}>
-      <Flag countryCode={msmt.probe_cc} />
-    </ResultColumn>
-    <ResultColumn grow={1.5}>
-      <ASNBox asn={msmt.probe_asn} />
-    </ResultColumn>
-    <ResultColumn grow={4}>
+
+const ResultRow = styled(Flex)`
+  color: ${props => props.theme.colors.gray6};
+`
+
+const ResultItem = ({msmt}) => {
+  let input = msmt.input
+  if (input && input.length > inputTrunc) {
+    input = `${input.substr(0, inputTrunc - 10)}…${input.substr(input.length - 10, input.length)}`
+  }
+  return (
+  <ResultRow align='center' justify='center'>
+    <Box w={1/3}>
+      <Flex align='center' justify='center'>
+      <Box>
+        <ColorCode msmt={msmt} />
+      </Box>
+      <Box flex='auto'>
+        {msmt.probe_cc}
+      </Box>
+      <Box flex='1 1 auto'>
+        <Flag countryCode={msmt.probe_cc} />
+      </Box>
+      <Box flex='1 1 auto'>
+        <ASNBox asn={msmt.probe_asn} />
+      </Box>
+      </Flex>
+    </Box>
+    <Box w={2/3}>
       <Flex column>
       <Box>
       {msmt.input &&
@@ -439,20 +437,27 @@ const ResultItem = ({msmt}) => (
           {msmt.input}
         </ResultInput>}
       </Box>
-      <Box>{msmt.testName}</Box>
+      <Box>
+        <Flex>
+        <Box pr={2} w={2/5}>
+          {msmt.testName}
+        </Box>
+        <Box w={1/5}>
+        {moment(msmt.measurement_start_time).format('YYYY-MM-DD')}
+        </Box>
+        <Box w={1/5}>
+        <ResultTag msmt={msmt} />
+        </Box>
+        <Box w={1/5}>
+        <ViewDetailsLink reportId={msmt.report_id} input={msmt.input} />
+        </Box>
+        </Flex>
+      </Box>
       </Flex>
-    </ResultColumn>
-    <ResultColumn grow={2}>
-      {moment(msmt.measurement_start_time).format('YYYY-MM-DD')}
-    </ResultColumn>
-    <ResultColumn grow={2}>
-      <ResultTag msmt={msmt} />
-    </ResultColumn>
-    <ResultColumn grow={2}>
-      <ViewDetailsLink reportId={msmt.report_id} input={msmt.input} />
-    </ResultColumn>
+    </Box>
   </ResultRow>
-)
+  )
+}
 
 const ResultTable = styled.div`
   display: flex;
@@ -466,9 +471,7 @@ const ResultsList = ({measurements, testNamesKeyed}) => {
   return (
     <ResultTable>
     {measurements.results.map((msmt, idx) => {
-      if (msmt.input && msmt.input.length > inputTrunc) {
-        msmt.input = `${msmt.input.substr(0, inputTrunc - 10)}…${msmt.input.substr(msmt.input.length - 10, msmt.input.length)}`
-      }
+
       msmt.testName = testNamesKeyed[msmt.test_name]
       return <div key={idx}>
         <Divider />
