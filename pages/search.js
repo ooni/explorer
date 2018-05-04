@@ -6,6 +6,7 @@ import Router from 'next/router'
 import styled from 'styled-components'
 import axios from 'axios'
 import moment from 'moment'
+import url from 'url'
 
 import {
   Flex, Grid, Box,
@@ -32,7 +33,6 @@ import Layout from '../components/layout'
 
 import { sortByKey } from '../utils'
 
-const inputTrunc = 26
 
 const queryToParams = ({ query }) => {
   // XXX do better validation
@@ -300,11 +300,6 @@ const FilterTabs = ({onClick, onlyFilter}) => (
   </Flex>
 )
 
-const ResultInput = styled.div`
-  font-size: 16px;
-  color: ${props => props.theme.colors.blue9};
-`
-
 const StyledResultTag = styled.div`
   margin-top: -4px;
   border-radius: 16px;
@@ -405,11 +400,33 @@ const ColorCode = ({msmt}) => {
 const ResultRow = styled(Flex)`
   color: ${props => props.theme.colors.gray6};
 `
+const HTTPSPrefix = styled.span`
+  color: ${props => props.theme.colors.green8};
+`
+const Hostname = styled.span`
+  color: ${props => props.theme.colors.black};
+`
+
+const ResultInput = styled.div`
+  font-size: 16px;
+  color: ${props => props.theme.colors.gray5};
+`
 
 const ResultItem = ({msmt}) => {
+  const pathMaxLen = 10
   let input = msmt.input
-  if (input && input.length > inputTrunc) {
-    input = `${input.substr(0, inputTrunc - 10)}…${input.substr(input.length - 10, input.length)}`
+  if (input) {
+    const p = url.parse(input)
+    let path = p.path
+    if (path && path.length > pathMaxLen) {
+      path = `${path.substr(0, pathMaxLen)}…`
+    }
+    console.log(p)
+    if (p.protocol && p.protocol === 'http:') {
+      input = <span><Hostname>{p.host}</Hostname>{path}</span>
+    } else if (p.protocol && p.protocol === 'https:') {
+      input = <span><HTTPSPrefix>https</HTTPSPrefix>{'://'}<Hostname>{p.host}</Hostname>{path}</span>
+    }
   }
   return (
   <ResultRow align='center' justify='center'>
@@ -432,9 +449,9 @@ const ResultItem = ({msmt}) => {
     <Box w={2/3}>
       <Flex column>
       <Box>
-      {msmt.input &&
+      {input &&
         <ResultInput>
-          {msmt.input}
+          {input}
         </ResultInput>}
       </Box>
       <Box>
