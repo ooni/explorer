@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "babel-plugin-transform-define": "^1.2.0",
+    "flow-bin": "^0.71.0",
     "mustache": "^2.3.0"
   },
   "scripts": {
