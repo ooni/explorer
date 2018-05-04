@@ -2,7 +2,6 @@ import React from 'react'
 import Head from 'next/head'
 import Router from 'next/router'
 
-import styled from 'styled-components'
 import axios from 'axios'
 
 import {
@@ -50,7 +49,7 @@ const queryToParams = ({ query }) => {
 
 export default class extends React.Component {
   static async getInitialProps ({ query }) {
-    let client = axios.create({baseURL: process.env.MEASUREMENTS_URL})
+    let client = axios.create({baseURL: process.env.MEASUREMENTS_URL})  // eslint-disable-line
     const params = queryToParams({ query })
     let [msmtR, testNamesR, countriesR] = await Promise.all([
       client.get('/api/v1/measurements', { params } ),
@@ -229,7 +228,7 @@ export default class extends React.Component {
 
     const currentPage = measurements.metadata.current_page,
       totalPages = measurements.metadata.pages,
-      nextUrl = measurements.metadata.next_url
+      nextUrl = measurements.metadata.next_url // eslint-disable-line
 
     let showCount = 50
     if (url.query.show) {

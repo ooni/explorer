@@ -14,7 +14,7 @@ const NextPage = styled.div`
   cursor: pointer;
 `
 
-const Pagination = ({currentPage, totalPages, goToPage, showCount, onShowCount}) => (
+const Pagination = ({currentPage, totalPages, goToPage, showCount, onShowCount}) => ( // eslint-disable-line
   <Flex align='baseline' justify='space-around' pb={3}>
     <Box>
       <Flex>

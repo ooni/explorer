@@ -22,7 +22,7 @@ var supportedCountryCodes = [
   'ss', 'st', 'sv', 'sx', 'sy', 'sz', 'tc', 'td', 'tf', 'tg', 'th', 'tj', 'tk',
   'tl', 'tm', 'tn', 'to', 'tr', 'tt', 'tv', 'tw', 'tz', 'ua', 'ug', 'um', 'un',
   'us', 'uy', 'uz', 'va', 'vc', 've', 'vg', 'vi', 'vn', 'vu', 'wf', 'ws', 'ye',
-  'yt', 'za', 'zm', 'zw'];
+  'yt', 'za', 'zm', 'zw']
 
 const FlagImg = styled.img`
   width: 60px;
@@ -36,7 +36,6 @@ const FlagContainer = styled.div`
   padding-top: 3px;
   width: 66px;
   height: 66px;
-  background-color: ${props => props.theme.colors.gray5};
 `
 
 export const Flag = ({countryCode, center, border}) => {

@@ -9,8 +9,10 @@ import styled from 'styled-components'
 
 import {
   Flex, Box,
+  Link,
+  Text,
   Divider,
-  Link
+  theme
 } from 'ooni-components'
 
 import Flag from '../flag'
@@ -56,10 +58,7 @@ const ResultTag = ({msmt}) => {
 
 const ASNBox = ({asn}) => {
   const justNumber = asn.split('AS')[1]
-  return <Flex column>
-    <Box>ASN</Box>
-    <Box>{justNumber}</Box>
-  </Flex>
+  return <Text bold color='gray7'>AS {justNumber}</Text>
 }
 
 ASNBox.propTypes = {
@@ -69,6 +68,7 @@ ASNBox.propTypes = {
 // XXX add this to the design system
 const StyledViewDetailsLink = styled(Link)`
   cursor: pointer;
+  color: ${props => props.theme.colors.blue5};
   &:hover {
     color: ${props => props.theme.colors.blue9};
   }
@@ -81,7 +81,7 @@ const ViewDetailsLink = ({reportId, input}) => {
   }
   return (
     <NLink href={href}>
-      <StyledViewDetailsLink href={href}>View details</StyledViewDetailsLink>
+      <StyledViewDetailsLink href={href}>»</StyledViewDetailsLink>
     </NLink>
   )
 }
@@ -95,6 +95,8 @@ const StyledColorCode = styled.div`
   height: 80px;
   width: 5px;
   margin-right: 10px;
+  margin-top: 1px;
+  margin-bottom: 1px;
 `
 
 /*
@@ -103,14 +105,19 @@ const ColorCodeFailed = styled(StyledColorCode)`
 `
 */
 
+const colorNormal = theme.colors.green7
+const colorError = theme.colors.yellow5
+const colorConfirmed = theme.colors.red8
+const colorAnomaly = theme.colors.yellow8
+
 const ColorCodeConfirmed = styled(StyledColorCode)`
-  background-color: ${props => props.theme.colors.pink5};
+  background-color: ${colorConfirmed};
 `
 const ColorCodeAnomaly = styled(StyledColorCode)`
-  background-color: ${props => props.theme.colors.yellow3};
+  background-color: ${colorAnomaly};
 `
 const ColorCodeNormal = styled(StyledColorCode)`
-  background-color: ${props => props.theme.colors.cyan3};
+  background-color: ${colorNormal};
 `
 
 const ColorCode = ({msmt}) => {
@@ -129,7 +136,12 @@ ColorCode.propTypes = {
 }
 
 const ResultRow = styled(Flex)`
-  color: ${props => props.theme.colors.gray6};
+  color: ${props => props.theme.colors.gray7};
+  background-color: #ffffff;
+  :hover {
+    background-color: ${props => props.theme.colors.gray1};
+  }
+  border-bottom: 1px solid ${props => props.theme.colors.gray4};
 `
 const HTTPSPrefix = styled.span`
   color: ${props => props.theme.colors.green8};
@@ -162,16 +174,16 @@ const ResultItem = ({msmt}) => {
     <ResultRow align='center' justify='center'>
       <Box w={1/3}>
         <Flex align='center' justify='center'>
-          <Box>
+          <Box width={1/16}>
             <ColorCode msmt={msmt} />
           </Box>
-          <Box flex='auto'>
-            {msmt.probe_cc}
+          <Box flex='auto' width={2/16}>
+            <Text bold color='gray8'>{msmt.probe_cc}</Text>
           </Box>
-          <Box flex='1 1 auto'>
+          <Box flex='1 1 auto' width={5/16}>
             <Flag countryCode={msmt.probe_cc} />
           </Box>
-          <Box flex='1 1 auto'>
+          <Box flex='1 1 auto' width={8/16}>
             <ASNBox asn={msmt.probe_asn} />
           </Box>
         </Flex>
@@ -186,16 +198,16 @@ const ResultItem = ({msmt}) => {
           </Box>
           <Box>
             <Flex>
-              <Box pr={2} w={2/5}>
+              <Box pr={2} w={7/16}>
                 {msmt.testName}
               </Box>
-              <Box w={1/5}>
+              <Box w={4/16}>
                 {moment(msmt.measurement_start_time).format('YYYY-MM-DD')}
               </Box>
-              <Box w={1/5}>
+              <Box w={4/16}>
                 <ResultTag msmt={msmt} />
               </Box>
-              <Box w={1/5}>
+              <Box w={1/16}>
                 <ViewDetailsLink reportId={msmt.report_id} input={msmt.input} />
               </Box>
             </Flex>
@@ -210,6 +222,33 @@ ResultItem.propTypes = {
   msmt: PropTypes.object
 }
 
+const LegendColorBox = styled.div`
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background-color: ${props => props.color};
+  float: left;
+  margin-right: 10px;
+`
+
+const StyledLegendItem = styled.div`
+  float: left;
+  margin-right: 20px;
+`
+
+const LegendItem = ({color, label}) => {
+  return <StyledLegendItem>
+    <LegendColorBox color={color}/> {label}
+  </StyledLegendItem>
+}
+
+const LegendContainer = styled.div`
+  padding-top: 20px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-bottom: 10px;
+`
+
 const ResultTable = styled.div`
   display: flex;
   flex-flow: column nowrap;
@@ -221,11 +260,16 @@ const ResultTable = styled.div`
 const ResultsList = ({measurements, testNamesKeyed}) => {
   return (
     <ResultTable>
+      <LegendContainer>
+        <LegendItem color={colorAnomaly} label='Anomaly' />
+        <LegendItem color={colorConfirmed} label='Confirmed' />
+        <LegendItem color={colorNormal} label='OK' />
+        <LegendItem color={colorError} label='Error' />
+      </LegendContainer>
+      <Divider width='100%' color='gray5'/>
       {measurements.results.map((msmt, idx) => {
-
         msmt.testName = testNamesKeyed[msmt.test_name]
         return <div key={idx}>
-          <Divider />
           <ResultItem msmt={msmt} />
         </div>
       })}
