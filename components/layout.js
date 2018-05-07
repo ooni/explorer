@@ -23,6 +23,7 @@ injectGlobal`
     padding: 0;
     font-family: "Fira Sans";
     height: 100%;
+    background-color: ${theme.colors.gray1};
   }`
 
 export default class extends React.Component {
