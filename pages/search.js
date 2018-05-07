@@ -7,7 +7,8 @@ import axios from 'axios'
 import {
   Flex, Box,
   Container,
-  Button
+  Button,
+  Heading
 } from 'ooni-components'
 
 import NavBar from '../components/nav-bar'
@@ -50,14 +51,51 @@ const getMeasurements = (query) => {
   return client.get('/api/v1/measurements', {params})
 }
 
+const formatError = (error) => {
+  let errorString = ''
+  if (error.code) {
+    errorString += `Error code: ${error.code}`
+  }
+  if (error.errno) {
+    errorString += ` (${error.errno})`
+  }
+  if (errorString === '') {
+    errorString = JSON.stringify(error)
+  }
+  return errorString
+}
+
+const ErrorBox = ({error}) => {
+  if (!error) {
+    return <div></div>
+  }
+
+  return (
+    <div>
+      <Heading h={2}>Error</Heading>
+      <p>{formatError(error)}</p>
+    </div>
+  )
+}
+
 export default class Search extends React.Component {
   static async getInitialProps ({ query }) {
     let client = axios.create({baseURL: process.env.MEASUREMENTS_URL})  // eslint-disable-line
-    let [msmtR, testNamesR, countriesR] = await Promise.all([
-      getMeasurements(query),
-      client.get('/api/_/test_names'),
-      client.get('/api/_/countries')
-    ])
+    try {
+      let [msmtR, testNamesR, countriesR] = await Promise.all([
+        getMeasurements(query),
+        client.get('/api/_/test_names'),
+        client.get('/api/_/countries')
+      ])
+    } catch (err) {
+      return {
+        error: err,
+        results: [],
+        testNamesKeyed: {},
+        testNames: [],
+        countries: [],
+      }
+    }
     const measurements = msmtR.data
 
     let countries = countriesR.data.countries
@@ -71,7 +109,8 @@ export default class Search extends React.Component {
     testNames.sort(sortByKey('name'))
     testNames.unshift({ name: 'Any', id: 'XX' })
     return {
-      measurements,
+      results: measurements.results,
+      nextURL: measurements.metadata.next_url,
       testNamesKeyed,
       testNames,
       countries,
@@ -87,12 +126,13 @@ export default class Search extends React.Component {
       asnFilter: props.url.query.probe_asn,
       sinceFilter: props.url.query.since,
       untilFilter: props.url.query.until,
-      results: props.measurements.results,
-      nextURL: props.measurements.metadata.next_url,
+      results: props.results,
+      nextURL: props.nextURL,
 
       onlyFilter: props.url.query.only || 'all',
 
       search: null,
+      error: props.error,
 
       loading: true
     }
@@ -132,6 +172,11 @@ export default class Search extends React.Component {
           show: this.state.show + 50
         })
       })
+      .catch((err) => {
+        this.setState({
+          error: err
+        })
+      })
   }
 
   onApplyFilter (state) {
@@ -151,6 +196,11 @@ export default class Search extends React.Component {
               loading: false,
               results: res.data.results,
               nextURL: res.data.metadata.next_url
+            })
+          })
+          .catch((err) => {
+            this.setState({
+              error: err
             })
           })
       })
@@ -175,6 +225,11 @@ export default class Search extends React.Component {
             loading: false,
             results: res.data.results,
             nextURL: res.data.metadata.next_url
+          })
+        })
+        .catch((err) => {
+          this.setState({
+            error: err
           })
         })
     })
@@ -251,10 +306,11 @@ export default class Search extends React.Component {
                 </Box>
               </Flex>
 
+              <ErrorBox error={this.state.error} />
               <Loader loading={this.state.loading} />
 
-              {results.length == 0 && <h2>No results found</h2>}
-              {!this.state.loading
+              {!this.state.error && results.length == 0 && <h2>No results found</h2>}
+              {!this.state.error && !this.state.loading
             && <div>
               <ResultsList results={results} testNamesKeyed={testNamesKeyed} />
               <Flex center justify='center'>
