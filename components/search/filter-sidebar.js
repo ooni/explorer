@@ -155,7 +155,7 @@ class FilterSidebar extends React.Component {
         <Button
           mt={3}
           onClick={this.onClickApplyFilter}>
-        Apply filter
+        Filter Results
         </Button>
       </StyledFilterSidebar>
     )

@@ -257,7 +257,7 @@ const ResultTable = styled.div`
   line-height: 1.5;
 `
 
-const ResultsList = ({measurements, testNamesKeyed}) => {
+const ResultsList = ({results, testNamesKeyed}) => {
   return (
     <ResultTable>
       <LegendContainer>
@@ -267,7 +267,7 @@ const ResultsList = ({measurements, testNamesKeyed}) => {
         <LegendItem color={colorError} label='Error' />
       </LegendContainer>
       <Divider width='100%' color='gray5'/>
-      {measurements.results.map((msmt, idx) => {
+      {results.map((msmt, idx) => {
         msmt.testName = testNamesKeyed[msmt.test_name]
         return <div key={idx}>
           <ResultItem msmt={msmt} />
@@ -278,7 +278,7 @@ const ResultsList = ({measurements, testNamesKeyed}) => {
 }
 
 ResultsList.propTypes = {
-  measurements: PropTypes.array,
+  results: PropTypes.array,
   testNamesKeyed: PropTypes.object,
 }
 

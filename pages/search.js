@@ -6,7 +6,8 @@ import axios from 'axios'
 
 import {
   Flex, Box,
-  Container
+  Container,
+  Button
 } from 'ooni-components'
 
 import NavBar from '../components/NavBar'
@@ -16,7 +17,6 @@ import ResultsList from '../components/search/results-list'
 import FilterTabs from '../components/search/filter-tabs'
 import FilterSidebar from '../components/search/filter-sidebar'
 import Loader from '../components/search/loader'
-import Pagination from '../components/search/pagination'
 
 import { sortByKey } from '../utils'
 
@@ -34,9 +34,6 @@ const queryToParams = ({ query }) => {
     }
   })
   params['limit'] = show
-  if (query.page) {
-    params['offset'] = (parseInt(query.page) - 1) * show
-  }
   if (query.only) {
     if (query.only === 'anomalies') {
       params['anomaly'] = true
@@ -47,7 +44,7 @@ const queryToParams = ({ query }) => {
   return params
 }
 
-export default class extends React.Component {
+export default class Search extends React.Component {
   static async getInitialProps ({ query }) {
     let client = axios.create({baseURL: process.env.MEASUREMENTS_URL})  // eslint-disable-line
     const params = queryToParams({ query })
@@ -85,6 +82,8 @@ export default class extends React.Component {
       asnFilter: props.url.query.probe_asn,
       sinceFilter: props.url.query.since,
       untilFilter: props.url.query.until,
+      results: props.measurements.results,
+      nextURL: props.measurements.metadata.next_url,
 
       onlyFilter: props.url.query.only || 'all',
 
@@ -94,8 +93,7 @@ export default class extends React.Component {
     }
     this.getFilterQuery = this.getFilterQuery.bind(this)
     this.onApplyFilter = this.onApplyFilter.bind(this)
-    this.goToPage = this.goToPage.bind(this)
-    this.onShowCount = this.onShowCount.bind(this)
+    this.loadMore = this.loadMore.bind(this)
 
     this.onChangeOnly = this.onChangeOnly.bind(this)
   }
@@ -110,46 +108,25 @@ export default class extends React.Component {
     if (this.props != nextProps) {
       return true
     }
+    if (this.state.results != nextState.results) {
+      return true
+    }
     if (this.state.loading != nextState.loading) {
       return true
     }
     return false
   }
 
-  goToPage (n) {
-    if (n < 1) {
-      n = 1
-    }
-    let onHandler = () => {
-      this.setState({
-        loading: true
-      })
-      Router.push({
-        pathname: '/search',
-        query: {...this.props.url.query, page: n}
-      }).then(() => {
+  loadMore() {
+    axios.get(this.state.nextURL)
+      .then((res) => {
+        // XXX update the query
         this.setState({
-          loading: false
+          results: this.state.results.concat(res.data.results),
+          nextURL: res.data.metadata.next_url,
+          show: this.state.show + 50
         })
-        window.scrollTo(0, 0)
       })
-    }
-    onHandler = onHandler.bind(this)
-    return onHandler
-  }
-
-  onShowCount ({target}) {
-    this.setState({
-      loading: true
-    })
-    Router.push({
-      pathname: '/search',
-      query: {...this.props.url.query, show: parseInt(target.value)}
-    }).then(() => {
-      this.setState({
-        loading: false
-      })
-    })
   }
 
   onApplyFilter (state) {
@@ -210,13 +187,12 @@ export default class extends React.Component {
 
   render () {
     const {
-      measurements,
       testNames,
       testNamesKeyed,
-      countries,
-      url
+      countries
     } = this.props
     const {
+      results,
       onlyFilter,
       inputFilter,
       testNameFilter,
@@ -225,15 +201,6 @@ export default class extends React.Component {
       sinceFilter,
       untilFilter
     } = this.state
-
-    const currentPage = measurements.metadata.current_page,
-      totalPages = measurements.metadata.pages,
-      nextUrl = measurements.metadata.next_url // eslint-disable-line
-
-    let showCount = 50
-    if (url.query.show) {
-      showCount = parseInt(url.query.show)
-    }
 
     return (
       <Layout>
@@ -268,11 +235,15 @@ export default class extends React.Component {
 
               <Loader loading={this.state.loading} />
 
-              {measurements.results.length == 0 && <h2>No results found</h2>}
+              {results.length == 0 && <h2>No results found</h2>}
               {!this.state.loading
-            && <ResultsList measurements={measurements} testNamesKeyed={testNamesKeyed} />
+            && <div>
+              <ResultsList results={results} testNamesKeyed={testNamesKeyed} />
+              <Flex justify='center'>
+                <Button onClick={this.loadMore}>Load more</Button>
+              </Flex>
+            </div>
               }
-              <Pagination currentPage={currentPage} totalPages={totalPages} goToPage={this.goToPage} showCount={showCount} />
             </Box>
           </Flex>
         </Container>
