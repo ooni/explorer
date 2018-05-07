@@ -44,12 +44,17 @@ const queryToParams = ({ query }) => {
   return params
 }
 
+const getMeasurements = (query) => {
+  let client = axios.create({baseURL: process.env.MEASUREMENTS_URL})  // eslint-disable-line
+  const params = queryToParams({ query })
+  return client.get('/api/v1/measurements', {params})
+}
+
 export default class Search extends React.Component {
   static async getInitialProps ({ query }) {
     let client = axios.create({baseURL: process.env.MEASUREMENTS_URL})  // eslint-disable-line
-    const params = queryToParams({ query })
     let [msmtR, testNamesR, countriesR] = await Promise.all([
-      client.get('/api/v1/measurements', { params } ),
+      getMeasurements(query),
       client.get('/api/_/test_names'),
       client.get('/api/_/countries')
     ])
@@ -134,13 +139,20 @@ export default class Search extends React.Component {
       loading: true,
       ...state
     }, () => {
+      const query = this.getFilterQuery()
       Router.push({
         pathname: '/search',
-        query: this.getFilterQuery()
+        query
       }).then(() => {
-        this.setState({
-          loading: false
-        })
+        // XXX do error handling
+        getMeasurements(query)
+          .then((res) => {
+            this.setState({
+              loading: false,
+              results: res.data.results,
+              nextURL: res.data.metadata.next_url
+            })
+          })
       })
     })
   }
@@ -152,13 +164,19 @@ export default class Search extends React.Component {
     this.setState({
       loading: true
     })
+    const query = {...this.props.url.query, only: value}
     Router.push({
       pathname: '/search',
-      query: {...this.props.url.query, only: value}
+      query
     }).then(() => {
-      this.setState({
-        loading: false
-      })
+      getMeasurements(query)
+        .then((res) => {
+          this.setState({
+            loading: false,
+            results: res.data.results,
+            nextURL: res.data.metadata.next_url
+          })
+        })
     })
   }
 
