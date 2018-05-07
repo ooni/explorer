@@ -13,7 +13,7 @@ import {
   Flex, Box, Grid
 } from 'ooni-components'
 
-import NavBar from '../components/NavBar'
+import NavBar from '../components/nav-bar'
 import Flag from '../components/flag'
 import Layout from '../components/layout'
 import { toCompactNumberUnit } from '../utils'
@@ -24,8 +24,8 @@ import countryUtil from 'country-util'
 
 const Stat = ({label, valueWithUnit}) => {
   return <div>
-  <Heading h={5}>{label}</Heading>
-  <Text>{valueWithUnit.value} {valueWithUnit.unit}</Text>
+    <Heading h={5}>{label}</Heading>
+    <Text>{valueWithUnit.value} {valueWithUnit.unit}</Text>
   </div>
 }
 
@@ -83,12 +83,12 @@ export default class extends React.Component {
               <Flag countryCode={countryCode} />
             </Box>
             <Box>
-            <Heading pl={2} h={1}>{countryName}</Heading>
+              <Heading pl={2} h={1}>{countryName}</Heading>
             </Box>
           </Flex>
           <Flex pt={2} pb={2}>
             <Box width={2/3}>
-            <Text>
+              <Text>
             Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
             eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
             ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut
@@ -96,19 +96,19 @@ export default class extends React.Component {
             reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla
             pariatur. Excepteur sint occaecat cupidatat non proident, sunt in
             culpa qui officia deserunt mollit anim id est laborum.
-            </Text>
+              </Text>
             </Box>
             <Box width={1/3}>
               <Box>
-              <VictoryPie
-                data={[
-                  {category: "MMED", count: 40},
-                  {category: "NEWS", count: 20},
-                  {category: "ALDR", count: 20}
-                ]}
-                x="category"
-                y="count"
-              />
+                <VictoryPie
+                  data={[
+                    {category: 'MMED', count: 40},
+                    {category: 'NEWS', count: 20},
+                    {category: 'ALDR', count: 20}
+                  ]}
+                  x="category"
+                  y="count"
+                />
               </Box>
               <Flex flexColumn align='left'>
                 <Box p={2}>

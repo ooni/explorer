@@ -26,22 +26,22 @@ injectGlobal`
     background-color: ${theme.colors.gray1};
   }`
 
-export default class extends React.Component {
-
-  static propTypes = {
-    children: PropTypes.array.isRequired,
-  }
-
+export default class Layout extends React.Component {
   render () {
+    const { children } = this.props
     return (
       <div>
         <Provider theme={theme}>
           <Header />
           <div className="content">
-            { this.props.children }
+            { children }
           </div>
         </Provider>
       </div>
     )
   }
+}
+
+Layout.propTypes = {
+  children: PropTypes.array.isRequired
 }

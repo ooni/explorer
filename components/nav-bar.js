@@ -57,47 +57,28 @@ const NavItemComponent = ({router, label, href}) => {
 const NavItem = withRouter(NavItemComponent)
 
 const StyledNavBar = styled.div`
-  background-color: ${props => props.theme.colors.blue5};
+  background-color: ${props => props.color || props.theme.colors.blue5};
   padding-top: 16px;
   padding-bottom: 20px;
 `
 
-const PrototypeBannerContainer = styled.div`
-position: relative;
-`
-
-const PrototypeBanner = styled.div`
-  color: ${props => props.theme.colors.black};
-  font-size: 30px;
-  position: absolute;
-  top: -10px;
-  left: 0px;
-  padding: 20px;
-  opacity: 0.8;
-  background-color: ${props => props.theme.colors.red8};
-  z-index: 0;
-`
-
-export const NavBar = () => (
-  <StyledNavBar>
-  <Container>
-  <PrototypeBannerContainer>
-    <PrototypeBanner>PROTOTYPE</PrototypeBanner>
-  </PrototypeBannerContainer>
-  <Flex>
-    <Box style={{zIndex: 1}}>
-      <NLink href='/'>
-        <ExplorerLogo height='26px' />
-      </NLink>
-    </Box>
-    <Box ml='auto'>
-      <NavItem label='Search' href='/search' />
-      <NavItem label='Results' href='/results' />
-      <NavItem label='Countries' href='/countries' />
-      <NavItem label='About' href='/about' />
-    </Box>
-  </Flex>
-  </Container>
+export const NavBar = ({color}) => (
+  <StyledNavBar color={color}>
+    <Container>
+      <Flex align='center'>
+        <Box style={{zIndex: 1}}>
+          <NLink href='/'>
+            <ExplorerLogo height='26px' />
+          </NLink>
+        </Box>
+        <Box ml='auto'>
+          <NavItem label='Search' href='/search' />
+          <NavItem label='Results' href='/results' />
+          <NavItem label='Countries' href='/countries' />
+          <NavItem label='About' href='/about' />
+        </Box>
+      </Flex>
+    </Container>
   </StyledNavBar>
 )
 

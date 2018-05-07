@@ -20,7 +20,7 @@ import { Avatar } from 'rebass'
 
 import Layout from '../components/layout'
 import Globe from '../components/globe'
-import NavBar from '../components/NavBar'
+import NavBar from '../components/nav-bar'
 
 import { colors } from '../components/layout'
 
@@ -28,8 +28,8 @@ import { toCompactNumberUnit } from '../utils'
 
 const Stat = ({label, unit, value}) => (
   <div>
-  {value}{unit}
-  {label}
+    {value}{unit}
+    {label}
   </div>
 )
 
@@ -83,7 +83,7 @@ const StatsItem = ({label, unit, value}) => (
       <StyledUnit>{unit}</StyledUnit>
     </StyledValue>
     <StyledLabel>
-    {label}
+      {label}
     </StyledLabel>
   </StyledStatsItem>
 )
@@ -97,7 +97,7 @@ export default class extends React.Component {
   static async getInitialProps ({ req, query }) {
     let client = axios.create({baseURL: process.env.MEASUREMENTS_URL})
     let [statsR] = await Promise.all([
-        client.get('/api/_/measurement_count_by_country')
+      client.get('/api/_/measurement_count_by_country')
     ])
     return {
       measurementCount: 100*100,
@@ -115,7 +115,7 @@ export default class extends React.Component {
     let {
       measurementCount, asnCount,
       countryCount, censorshipCount
-    } = this.props;
+    } = this.props
 
     measurementCount = toCompactNumberUnit(measurementCount)
     asnCount = toCompactNumberUnit(asnCount)
@@ -141,59 +141,59 @@ export default class extends React.Component {
           </Container>
         </HeroUnit>
         <Container>
-        <StatsContainer>
-        <StatsBox>
-          <StatsItem
-            label="Measurements"
-            unit={measurementCount.unit}
-            value={measurementCount.value}
-          />
-          <StatsItem
-            label="Countries"
-            value={countryCount}
-          />
-          <StatsItem
-            label="Networks"
-            unit={asnCount.unit}
-            value={asnCount.value}
-          />
-          <StatsItem
-            label="Censorship cases"
-            unit={censorshipCount.unit}
-            value={censorshipCount.value}
-          />
-        </StatsBox>
-        </StatsContainer>
+          <StatsContainer>
+            <StatsBox>
+              <StatsItem
+                label="Measurements"
+                unit={measurementCount.unit}
+                value={measurementCount.value}
+              />
+              <StatsItem
+                label="Countries"
+                value={countryCount}
+              />
+              <StatsItem
+                label="Networks"
+                unit={asnCount.unit}
+                value={asnCount.value}
+              />
+              <StatsItem
+                label="Censorship cases"
+                unit={censorshipCount.unit}
+                value={censorshipCount.value}
+              />
+            </StatsBox>
+          </StatsContainer>
 
-        <Flex style={{paddingTop: '100px'}}>
-        <FeatureBox w={1/3} p={2}>
-          <Heading h={3}>Countries</Heading>
-          <Text>Discover what is happening on the internet in any country in the world.</Text>
-          <NLink href='/countries'>
-          <Link>
+          <Flex style={{paddingTop: '100px'}}>
+            <FeatureBox w={1/3} p={2}>
+              <Heading h={3}>Countries</Heading>
+              <Text>Discover what is happening on the internet in any country in the world.</Text>
+              <NLink href='/countries'>
+                <Link>
           Read more
-          </Link>
-          </NLink>
-        </FeatureBox>
-        <FeatureBox w={1/3} p={2}>
-          <Heading h={3}>Search</Heading>
-          <Text>Search, filter and explore millions of network measurements collected from thousands of network vantage points all over the world.</Text>
-          <NLink href='/search'>
-            <Link>
+                </Link>
+              </NLink>
+            </FeatureBox>
+            <FeatureBox w={1/3} p={2}>
+              <Heading h={3}>Search</Heading>
+              <Text>Search, filter and explore millions of network measurements collected from thousands of network vantage points all over the world.</Text>
+              <NLink href='/search'>
+                <Link>
             Read more
-            </Link>
-          </NLink>
-        </FeatureBox>
-        <FeatureBox w={1/3} p={2}>
-          <Heading h={3}>Results</Heading>
-          <Text>Check to see what results OONI has discovered around the world</Text>
-          <NLink href='/results'>
-            <Link pt={2}>
+                </Link>
+              </NLink>
+            </FeatureBox>
+            <FeatureBox w={1/3} p={2}>
+              <Heading h={3}>Results</Heading>
+              <Text>Check to see what results OONI has discovered around the world</Text>
+              <NLink href='/results'>
+                <Link pt={2}>
             Read more
-            </Link>
-          </NLink>
-        </FeatureBox>
-        </Flex>
+                </Link>
+              </NLink>
+            </FeatureBox>
+          </Flex>
         </Container>
       </Layout>
     )

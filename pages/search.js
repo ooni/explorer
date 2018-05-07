@@ -10,7 +10,7 @@ import {
   Button
 } from 'ooni-components'
 
-import NavBar from '../components/NavBar'
+import NavBar from '../components/nav-bar'
 import Layout from '../components/layout'
 
 import ResultsList from '../components/search/results-list'
@@ -211,7 +211,7 @@ export default class Search extends React.Component {
         <NavBar />
 
         <Container>
-          <Flex>
+          <Flex pt={3}>
             <Box w={1/4} pr={2}>
               <FilterSidebar
                 inputFilter={inputFilter}
@@ -239,7 +239,7 @@ export default class Search extends React.Component {
               {!this.state.loading
             && <div>
               <ResultsList results={results} testNamesKeyed={testNamesKeyed} />
-              <Flex justify='center'>
+              <Flex center justify='center'>
                 <Button onClick={this.loadMore}>Load more</Button>
               </Flex>
             </div>

@@ -14,7 +14,7 @@ import {
 
 import Flag from '../components/flag'
 import Layout from '../components/layout'
-import NavBar from '../components/NavBar'
+import NavBar from '../components/nav-bar'
 
 import countryUtil from 'country-util'
 

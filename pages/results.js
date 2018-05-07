@@ -12,7 +12,7 @@ import {
 } from 'ooni-components'
 
 import Layout from '../components/layout'
-import NavBar from '../components/NavBar'
+import NavBar from '../components/nav-bar'
 
 export default class extends React.Component {
   render () {
@@ -26,8 +26,8 @@ export default class extends React.Component {
         <NavBar />
 
         <Container>
-        <Heading h={2}>XXX Implement Me</Heading>
-        <Text>Maybe this should be called findings?</Text>
+          <Heading h={2}>XXX Implement Me</Heading>
+          <Text>Maybe this should be called findings?</Text>
         </Container>
       </Layout>
     )
