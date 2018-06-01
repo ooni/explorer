@@ -21,7 +21,7 @@ injectGlobal`
     padding: 0;
     font-family: "Fira Sans";
     height: 100%;
-    background-color: ${theme.colors.gray1};
+    background-color: ${theme.colors.white};
   }`
 
 export default class Layout extends React.Component {
