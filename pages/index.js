@@ -122,7 +122,7 @@ export default class extends React.Component {
     censorshipCount = toCompactNumberUnit(censorshipCount)
 
     return (
-      <Layout>
+      <Layout disableFooter>
         <Head>
           <title>OONI Explorer</title>
         </Head>

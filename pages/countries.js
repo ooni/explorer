@@ -15,7 +15,6 @@ import {
 import Flag from '../components/flag'
 import Layout from '../components/layout'
 import NavBar from '../components/nav-bar'
-import Footer from '../components/footer'
 
 import countryUtil from 'country-util'
 
@@ -104,7 +103,6 @@ export default class Countries extends React.Component {
           {/* Antarctica */}
           <RegionBlock regionCode='AQ' />
         </Container>
-        <Footer />
       </Layout>
     )
   }

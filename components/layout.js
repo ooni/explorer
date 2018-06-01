@@ -1,15 +1,13 @@
 import React from 'react'
-
 import PropTypes from 'prop-types'
-
-import Header from './header'
-
 import { injectGlobal } from 'styled-components'
-
 import {
   Provider,
   theme
 } from 'ooni-components'
+
+import Header from './header'
+import Footer from './footer'
 
 theme.maxWidth = 1024
 
@@ -28,7 +26,7 @@ injectGlobal`
 
 export default class Layout extends React.Component {
   render () {
-    const { children } = this.props
+    const { children, disableFooter = false } = this.props
     return (
       <div>
         <Provider theme={theme}>
@@ -36,6 +34,7 @@ export default class Layout extends React.Component {
           <div className="content">
             { children }
           </div>
+          {!disableFooter && <Footer />}
         </Provider>
       </div>
     )
@@ -43,5 +42,6 @@ export default class Layout extends React.Component {
 }
 
 Layout.propTypes = {
-  children: PropTypes.array.isRequired
+  children: PropTypes.array.isRequired,
+  disableFooter: PropTypes.bool
 }
