@@ -1,16 +1,13 @@
 import React from 'react'
-import Link from 'next/link'
 import Head from 'next/head'
 
 import axios from 'axios'
 
 import {
   Container,
-  Avatar,
-  Input,
   Heading,
   Text,
-  Flex, Box, Grid
+  Flex, Box
 } from 'ooni-components'
 
 import NavBar from '../components/nav-bar'
@@ -29,16 +26,15 @@ const Stat = ({label, valueWithUnit}) => {
   </div>
 }
 
-export default class extends React.Component {
+export default class Country extends React.Component {
   static async getInitialProps ({ req, query }) {
     const { countryCode } = query
-    let client = axios.create({baseURL: process.env.MEASUREMENTS_URL})
+    let client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
     let results = await Promise.all([
       // XXX cc @darkk we should ideally have better dedicated daily dumps for this view
       client.get('/api/_/measurement_count_by_country'),
       client.get('/api/_/blockpages', {params: {'probe_cc': countryCode}})
     ])
-    console.log(results)
     let measurementCount = results[0].data.results.filter(d => d.probe_cc === countryCode)
     if (measurementCount.length === 0) {
       measurementCount = 0
