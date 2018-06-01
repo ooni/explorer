@@ -22,21 +22,35 @@ injectGlobal`
     font-family: "Fira Sans";
     height: 100%;
     background-color: ${theme.colors.white};
+  }
+
+  /*
+    Sticky Footer fix
+    Based on: https://philipwalton.github.io/solved-by-flexbox/demos/sticky-footer/
+  */
+  .site {
+      display: flex;
+      flex-direction: column;
+      min-height: 100vh;
+  }
+
+  .content {
+    flex: 1 0 auto;
   }`
 
 export default class Layout extends React.Component {
   render () {
     const { children, disableFooter = false } = this.props
     return (
-      <div>
-        <Provider theme={theme}>
+      <Provider theme={theme}>
+        <div className="site">
           <Header />
           <div className="content">
             { children }
           </div>
           {!disableFooter && <Footer />}
-        </Provider>
-      </div>
+        </div>
+      </Provider>
     )
   }
 }
