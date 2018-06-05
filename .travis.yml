@@ -1,0 +1,20 @@
+language: node_js
+env:
+  - REPO_NAME=explorer
+node_js:
+  - "node"
+cache:
+  directories:
+    - "node_modules"
+script: npm test
+before_deploy: npm install now --no-save
+deploy:
+  - provider: script
+    script:
+    - now --token $NOW_TOKEN
+    - URL=$(now -t ${NOW_TOKEN} ./ -n ${REPO_NAME}-${TRAVIS_COMMIT} --public --npm)
+    - NOW_URL=$(echo ${URL} | sed s/'http:\/\/'/''/g | sed s/'https:\/\/'//g)
+    - now --token ${NOW_TOKEN} alias set ${NOW_URL} ${REPO_NAME}-${TRAVIS_COMMIT}.now.sh
+    skip_cleanup: true
+    on:
+      all_branches: true
