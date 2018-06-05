@@ -2,7 +2,6 @@ import React from 'react'
 import styled from 'styled-components'
 import { Flex, Box, Container, Avatar } from 'ooni-components'
 import ExplorerLogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochrome.svg'
-import { withRouter } from 'next/router'
 import NLink from 'next/link'
 
 const StyledFooter = styled.footer`
@@ -131,4 +130,4 @@ const Footer = () => (
   </StyledFooter>
 )
 
-export default Footer;
+export default Footer
