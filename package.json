@@ -49,6 +49,7 @@
     "dev": "NODE_ENV=development MEASUREMENTS_URL=https://api.ooni.io node index.js",
     "build": "next build",
     "export": "next export",
+    "test": "echo nothing interesting",
     "start": "node index.js"
   }
 }
