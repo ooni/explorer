@@ -1,6 +1,7 @@
+/* global require, process, __dirname */
+/* eslint no-console: off */
 const express = require('express')
 const next = require('next')
-const path = require('path')
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'production'
 process.env.PORT = process.env.PORT || 3100
@@ -18,38 +19,38 @@ const handle = app.getRequestHandler()
 const server = express()
 
 app.prepare()
-.then(() => {
-  return new Promise((resolve, reject) => {
+  .then(() => {
+    return new Promise((resolve) => {
     // XXX in here I can do setup
-    return resolve()
+      return resolve()
+    })
   })
-})
-.then(() => {
+  .then(() => {
 
-  server.use('/_/world-atlas',
-    express.static(__dirname + '/node_modules/world-atlas/world/'))
-  server.use('/_/data',
-    express.static(__dirname + '/data/'))
+    server.use('/_/world-atlas',
+      express.static(__dirname + '/node_modules/world-atlas/world/'))
+    server.use('/_/data',
+      express.static(__dirname + '/data/'))
 
-  server.get('/country/:countryCode', (req, res) => {
-    return app.render(req, res, '/country', req.params)
-  })
+    server.get('/country/:countryCode', (req, res) => {
+      return app.render(req, res, '/country', req.params)
+    })
 
-  // Default catch all
-  server.all('*', (req, res) => {
-    return handle(req, res)
-  })
+    // Default catch all
+    server.all('*', (req, res) => {
+      return handle(req, res)
+    })
 
-  server.listen(process.env.PORT, err => {
-    if (err) {
-      throw err
-    }
-    console.log('> Ready on http://localhost:' +
+    server.listen(process.env.PORT, err => {
+      if (err) {
+        throw err
+      }
+      console.log('> Ready on http://localhost:' +
     process.env.PORT +
     ' [' + process.env.NODE_ENV + ']')
+    })
   })
-})
-.catch(err => {
-  console.log('An error occurred, unable to start the server')
-  console.log(err)
-});
+  .catch(err => {
+    console.log('An error occurred, unable to start the server')
+    console.log(err)
+  })
