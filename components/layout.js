@@ -9,7 +9,6 @@ import {
 import Header from './header'
 import Footer from './footer'
 
-
 theme.maxWidth = 1024
 
 injectGlobal`

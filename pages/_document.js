@@ -16,7 +16,6 @@ export default class MyDocument extends Document {
     return (
       <html>
         <Head>
-          {/* XXX when outside of production this file does not appear to be available */}
           <link rel='stylesheet' href='/_next/static/style.css' />
           {this.props.styleTags}
         </Head>
