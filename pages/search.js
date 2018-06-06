@@ -1,6 +1,6 @@
 import React from 'react'
 import Head from 'next/head'
-import Router from 'next/router'
+import { withRouter } from 'next/router'
 
 import axios from 'axios'
 
@@ -78,7 +78,7 @@ const ErrorBox = ({error}) => {
   )
 }
 
-export default class Search extends React.Component {
+class Search extends React.Component {
   static async getInitialProps ({ query }) {
     let msmtR, testNamesR, countriesR
     let client = axios.create({baseURL: process.env.MEASUREMENTS_URL})  // eslint-disable-line
@@ -121,16 +121,16 @@ export default class Search extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      testNameFilter: props.url.query.test_name,
-      inputFilter: props.url.query.input,
-      countryFilter: props.url.query.probe_cc,
-      asnFilter: props.url.query.probe_asn,
-      sinceFilter: props.url.query.since,
-      untilFilter: props.url.query.until,
+      testNameFilter: props.router.query.test_name,
+      inputFilter: props.router.query.input,
+      countryFilter: props.router.query.probe_cc,
+      asnFilter: props.router.query.probe_asn,
+      sinceFilter: props.router.query.since,
+      untilFilter: props.router.query.until,
       results: props.results,
       nextURL: props.nextURL,
 
-      onlyFilter: props.url.query.only || 'all',
+      onlyFilter: props.router.query.only || 'all',
 
       search: null,
       error: props.error,
@@ -186,7 +186,7 @@ export default class Search extends React.Component {
       ...state
     }, () => {
       const query = this.getFilterQuery()
-      Router.push({
+      this.props.router.push({
         pathname: '/search',
         query
       }).then(() => {
@@ -216,7 +216,7 @@ export default class Search extends React.Component {
       loading: true
     })
     const query = {...this.props.url.query, only: value}
-    Router.push({
+    this.props.router.push({
       pathname: '/search',
       query
     }).then(() => {
@@ -314,7 +314,7 @@ export default class Search extends React.Component {
               {!this.state.error && !this.state.loading
             && <div>
               <ResultsList results={results} testNamesKeyed={testNamesKeyed} />
-              <Flex center justify='center'>
+              <Flex align='center' justify='center'>
                 <Button onClick={this.loadMore}>Load more</Button>
               </Flex>
             </div>
@@ -326,3 +326,5 @@ export default class Search extends React.Component {
     )
   }
 }
+
+export default withRouter(Search)
