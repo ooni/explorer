@@ -124,7 +124,7 @@ export default class LandingPage extends React.Component {
                 <Button inverted hollow>Explore</Button>
               </Box>
               <Box width={1/3}>
-                <Globe />
+                <Globe magnitudeURL="https://s3.us-east-2.amazonaws.com/ooni-explorer/static/map-magnitude.json" />
               </Box>
             </Flex>
           </Container>

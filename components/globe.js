@@ -58,7 +58,7 @@ class WebGLGlobe extends React.Component {
 
       let xhr
       xhr = new XMLHttpRequest()
-      xhr.open('GET', 'static/map-magnitude.json', true)
+      xhr.open('GET', this.props.magnitudeURL, true)
       let onreadystatechangecallback = () => {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
@@ -100,7 +100,7 @@ export default class Globe extends React.Component {
   render () {
     return (
       <NoSSR>
-        <WebGLGlobe />
+        <WebGLGlobe magnitudeURL={this.props.magnitudeURL} />
       </NoSSR>
     )
   }
