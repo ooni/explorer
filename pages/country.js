@@ -107,7 +107,7 @@ export default class Country extends React.Component {
                   y="count"
                 />
               </Box>
-              <Flex flexColumn align='left'>
+              <Flex column align='left'>
                 <Box p={2}>
                   <Stat
                     label="Measurements"
