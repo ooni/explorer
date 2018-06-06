@@ -1,3 +1,5 @@
+/* global require, __dirname */
+/* eslint no-console: off */
 const fs = require('fs')
 const path = require('path')
 const Mustache = require('mustache')

@@ -1,9 +1,7 @@
 import React from 'react'
 
-import random from 'lodash.random'
 import NoSSR from 'react-no-ssr'
 import DAT from './vendor/webgl-globe'
-import TWEEN from 'tween.js'
 
 import styled from 'styled-components'
 
@@ -14,18 +12,20 @@ const StyledGlobe = styled.div`
 
 const isWebGLEnabled = () => {
   // Check for the WebGL rendering context
-  if ( !! window.WebGLRenderingContext) {
+  if ( window.WebGLRenderingContext) {
     var canvas = document.createElement('canvas'),
       names = ['webgl', 'experimental-webgl', 'moz-webgl', 'webkit-3d'],
-      context = false;
+      context = false
     for (var i in names) {
       try {
-        context = canvas.getContext(names[i]);
+        context = canvas.getContext(names[i])
         if (context && typeof context.getParameter === 'function') {
           // WebGL is enabled.
           return true
         }
-      } catch (e) {}
+      } catch (e) {
+        continue
+      }
     }
     // WebGL is supported, but disabled.
     return false
@@ -36,12 +36,6 @@ const isWebGLEnabled = () => {
 
 class WebGLGlobe extends React.Component {
 
-  static propTypes = {
-  }
-
-	static defaultProps = {
-    size: 100
-	}
   constructor(props) {
     super(props)
     this.state = {
@@ -49,8 +43,8 @@ class WebGLGlobe extends React.Component {
     }
   }
 
-  shouldComponentUpdate (nextProps, nextState) {
-    return false;
+  shouldComponentUpdate() {
+    return false
   }
 
   componentDidMount () {
@@ -60,15 +54,12 @@ class WebGLGlobe extends React.Component {
         imgDir: 'static/',
         animated: true
       }
-      const globe = new DAT.Globe(container, opts);
+      const globe = new DAT.Globe(container, opts)
 
-      let i
       let xhr
-      let tweens = []
-
       xhr = new XMLHttpRequest()
       xhr.open('GET', 'static/map-magnitude.json', true)
-      let onreadystatechangecallback = (e) => {
+      let onreadystatechangecallback = () => {
         if (xhr.readyState === 4) {
           if (xhr.status === 200) {
             var data = JSON.parse(xhr.responseText)
@@ -93,12 +84,16 @@ class WebGLGlobe extends React.Component {
 
     if (webGLEnabled) {
       return (
-        <StyledGlobe innerRef={(el) => { this.globeRef = el; }} />
+        <StyledGlobe innerRef={(el) => { this.globeRef = el }} />
       )
     } else {
       return <div>Your browser does not support WebGL</div>
     }
   }
+}
+
+WebGLGlobe.defaultProps = {
+  size: 100
 }
 
 export default class Globe extends React.Component {

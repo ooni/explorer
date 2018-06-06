@@ -1,3 +1,4 @@
+/* global process */
 import React from 'react'
 import Head from 'next/head'
 
@@ -27,7 +28,7 @@ const Stat = ({label, valueWithUnit}) => {
 }
 
 export default class Country extends React.Component {
-  static async getInitialProps ({ req, query }) {
+  static async getInitialProps ({ query }) {
     const { countryCode } = query
     let client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
     let results = await Promise.all([
@@ -131,8 +132,8 @@ export default class Country extends React.Component {
           <Flex pt={2} pb={2}>
             <Box w={1/2}>
               <Heading h={3}>Blocked sites</Heading>
-              {blockedWebsites.map(url => (
-                <Text>{url}</Text>
+              {blockedWebsites.map((url, idx) => (
+                <Text key={idx}>{url}</Text>
               ))}
             </Box>
             <Box w={1/2}>

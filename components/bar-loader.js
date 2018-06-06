@@ -2,7 +2,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes } from 'styled-components'
 
 const loading = keyframes`
   0%,
@@ -15,7 +15,7 @@ const loading = keyframes`
     box-shadow: 0 -2em;
     height: 5em;
   }
-`;
+`
 
 const Bar = styled.div`
   animation: ${props => `${loading} ${props.duration}s infinite ease-in-out`};
@@ -51,22 +51,22 @@ const Bar = styled.div`
     top: 0;
     width: 1em;
   }
-`;
+`
 
 const BarLoader = props => (
   <Bar {...props} />
-);
+)
 
 BarLoader.propTypes = {
   color: PropTypes.string,
   duration: PropTypes.number,
   size: PropTypes.number,
-};
+}
 
 BarLoader.defaultProps = {
   color: '#000',
   duration: 1,
   size: 11,
-};
+}
 
-export default BarLoader;
+export default BarLoader

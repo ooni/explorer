@@ -2,8 +2,6 @@ import React from 'react'
 import Head from 'next/head'
 import NLink from 'next/link'
 
-import axios from 'axios'
-
 import styled from 'styled-components'
 
 import {
@@ -16,22 +14,11 @@ import {
   Link
 } from 'ooni-components'
 
-import { Avatar } from 'rebass'
-
 import Layout from '../components/layout'
 import Globe from '../components/globe'
 import NavBar from '../components/nav-bar'
 
-import { colors } from '../components/layout'
-
 import { toCompactNumberUnit } from '../utils'
-
-const Stat = ({label, unit, value}) => (
-  <div>
-    {value}{unit}
-    {label}
-  </div>
-)
 
 const HeroUnit = styled.div`
   background-color: ${props => props.theme.colors.blue5};
@@ -92,13 +79,15 @@ const FeatureBox = styled(Box)`
   text-align: center;
 `
 
-export default class extends React.Component {
+export default class LandingPage extends React.Component {
 
-  static async getInitialProps ({ req, query }) {
+  static async getInitialProps () {
+    /*
     let client = axios.create({baseURL: process.env.MEASUREMENTS_URL})
     let [statsR] = await Promise.all([
       client.get('/api/_/measurement_count_by_country')
     ])
+    */
     return {
       measurementCount: 100*100,
       asnCount: 10*1000,
@@ -122,7 +111,7 @@ export default class extends React.Component {
     censorshipCount = toCompactNumberUnit(censorshipCount)
 
     return (
-      <Layout>
+      <Layout disableFooter>
         <Head>
           <title>OONI Explorer</title>
         </Head>

@@ -1,12 +1,12 @@
 const isGreater = (key, a, b) => {
-  a = a[key];
-  b = b[key];
+  a = a[key]
+  b = b[key]
   return (a < b) ? -1 : (a > b) ? 1 : 0
 }
 
 export const sortByKey = (key, secondaryKey) => {
   return (a, b) => {
-    let r = isGreater(key, a, b);
+    let r = isGreater(key, a, b)
     if (secondaryKey === undefined) {
       return r
     }
@@ -40,10 +40,8 @@ export const truncateString = (s, maxStart, maxEnd) => {
   if ((maxStart + maxEnd) > s.length) {
     return s
   }
-  truncatedString += s.substr(0, maxStart - maxEnd);
+  truncatedString += s.substr(0, maxStart - maxEnd)
   truncatedString += '…'
   truncatedString += s.substr(s.length - maxEnd, s.length)
   return truncatedString
 }
-
-

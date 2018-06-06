@@ -1,6 +1,6 @@
+/* global require */
 import React from 'react'
 import Head from 'next/head'
-import NLink from 'next/link'
 
 import moment from 'moment'
 import NoSSR from 'react-no-ssr'
@@ -12,13 +12,10 @@ import styled from 'styled-components'
 import axios from 'axios'
 
 import {
-  Flex, Grid, Box,
-  Divider,
+  Flex, Box,
   Container,
   Heading,
-  Text,
-  Link,
-  theme
+  Text
 } from 'ooni-components'
 
 import { testGroups, testNames } from '../components/test-info'
@@ -176,8 +173,7 @@ export default class Measurement extends React.Component {
 
   render () {
     let {
-      measurement,
-      warning
+      measurement
     } = this.props
 
     const tstMetadata = getTestMetadata(measurement.test_name)
