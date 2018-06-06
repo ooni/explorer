@@ -80,9 +80,10 @@ const ErrorBox = ({error}) => {
 
 export default class Search extends React.Component {
   static async getInitialProps ({ query }) {
+    let msmtR, testNamesR, countriesR
     let client = axios.create({baseURL: process.env.MEASUREMENTS_URL})  // eslint-disable-line
     try {
-      let [msmtR, testNamesR, countriesR] = await Promise.all([
+      [msmtR, testNamesR, countriesR] = await Promise.all([
         getMeasurements(query),
         client.get('/api/_/test_names'),
         client.get('/api/_/countries')

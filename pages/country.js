@@ -1,16 +1,14 @@
+/* global process */
 import React from 'react'
-import Link from 'next/link'
 import Head from 'next/head'
 
 import axios from 'axios'
 
 import {
   Container,
-  Avatar,
-  Input,
   Heading,
   Text,
-  Flex, Box, Grid
+  Flex, Box
 } from 'ooni-components'
 
 import NavBar from '../components/nav-bar'
@@ -29,8 +27,8 @@ const Stat = ({label, valueWithUnit}) => {
   </div>
 }
 
-export default class extends React.Component {
-  static async getInitialProps ({ req, query }) {
+export default class Country extends React.Component {
+  static async getInitialProps ({ query }) {
     const { countryCode } = query
     let client = axios.create({baseURL: process.env.MEASUREMENTS_URL})
     let results = await Promise.all([
@@ -38,7 +36,6 @@ export default class extends React.Component {
       client.get('/api/_/measurement_count_by_country'),
       client.get('/api/_/blockpages', {params: {'probe_cc': countryCode}})
     ])
-    console.log(results)
     let measurementCount = results[0].data.results.filter(d => d.probe_cc === countryCode)
     if (measurementCount.length === 0) {
       measurementCount = 0
@@ -135,8 +132,8 @@ export default class extends React.Component {
           <Flex pt={2} pb={2}>
             <Box w={1/2}>
               <Heading h={3}>Blocked sites</Heading>
-              {blockedWebsites.map(url => (
-                <Text>{url}</Text>
+              {blockedWebsites.map((url, idx) => (
+                <Text key={idx}>{url}</Text>
               ))}
             </Box>
             <Box w={1/2}>
