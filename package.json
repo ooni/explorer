@@ -28,7 +28,7 @@
     "react-dom": "^16.0.0",
     "react-json-view": "^1.16.0",
     "react-no-ssr": "^1.1.0",
-    "styled-components": "^2.4.0",
+    "styled-components": "2.4.1",
     "three": "^0.86.0",
     "tween.js": "^16.6.0",
     "url": "^0.11.0",
@@ -37,7 +37,7 @@
   "resolutions": {
     "grid-styled": "2.0.0-11",
     "rebass": "1.0.4",
-    "styled-components": "2.4.0",
+    "styled-components": "2.4.1",
     "styled-system": "1.1.0"
   },
   "devDependencies": {
