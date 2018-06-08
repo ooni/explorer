@@ -8,7 +8,8 @@ module.exports = withSourceMaps(withCSS({
   webpack: (config) => {
     config.plugins.push(
       new webpack.DefinePlugin({
-        'process.env.MEASUREMENTS_URL': JSON.stringify(process.env.MEASUREMENTS_URL || 'https://api.ooni.io')
+        'process.env.MEASUREMENTS_URL': JSON.stringify(process.env.MEASUREMENTS_URL || 'https://api.ooni.io'),
+        'process.env.EXPLORER_URL': JSON.stringify(process.env.EXPLORER_URL  || 'http://127.0.0.1:' + process.env.PORT)
       })
     )
     config.module.rules.push({

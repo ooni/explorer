@@ -1,8 +1,10 @@
+/* global process */
 import React from 'react'
 import Head from 'next/head'
 import NLink from 'next/link'
 
 import styled from 'styled-components'
+import axios from 'axios'
 
 import {
   Flex,
@@ -30,16 +32,11 @@ const HeroClaim = styled(Heading)`
   color: ${props => props.theme.colors.white};
 `
 
-const StatsContainer = styled.div`
-  position: relative;
-`
-
-const StatsBox = styled(Flex)`
+const StatsContainer = styled(Flex)`
   position: absolute;
-  z-index: 999999;
   top: -55px;
-  border-radius: 20px;
-  width: 800px;
+  border-radius: 60px;
+  width: 600px;
   background-color: ${props => props.theme.colors.white};
   padding-left: 16px;
   box-shadow: -1px 3px 21px 0px rgba(0,0,0,0.75);
@@ -64,7 +61,7 @@ const StyledStatsItem = styled(Box)`
 `
 
 const StatsItem = ({label, unit, value}) => (
-  <StyledStatsItem w={1/4}>
+  <StyledStatsItem w={1/3}>
     <StyledValue>
       {value}
       <StyledUnit>{unit}</StyledUnit>
@@ -82,17 +79,13 @@ const FeatureBox = styled(Box)`
 export default class LandingPage extends React.Component {
 
   static async getInitialProps () {
-    /*
-    let client = axios.create({baseURL: process.env.MEASUREMENTS_URL})
-    let [statsR] = await Promise.all([
-      client.get('/api/_/measurement_count_by_country')
-    ])
-    */
+    let stats = await axios.get('/_/s3/homepage-overview.json', {
+      baseURL: process.env.EXPLORER_URL
+    })
     return {
-      measurementCount: 100*100,
-      asnCount: 10*1000,
-      countryCount: 201,
-      censorshipCount: 2231
+      measurementCount: stats.data.measurement_count,
+      asnCount: stats.data.network_count,
+      countryCount: stats.data.country_count
     }
   }
 
@@ -103,12 +96,11 @@ export default class LandingPage extends React.Component {
   render () {
     let {
       measurementCount, asnCount,
-      countryCount, censorshipCount
+      countryCount
     } = this.props
 
     measurementCount = toCompactNumberUnit(measurementCount)
     asnCount = toCompactNumberUnit(asnCount)
-    censorshipCount = toCompactNumberUnit(censorshipCount)
 
     return (
       <Layout disableFooter>
@@ -124,14 +116,14 @@ export default class LandingPage extends React.Component {
                 <Button inverted hollow>Explore</Button>
               </Box>
               <Box width={1/3}>
-                <Globe magnitudeURL="https://s3.us-east-2.amazonaws.com/ooni-explorer/static/map-magnitude.json" />
+                <Globe magnitudeURL="/_/s3/map-magnitude.json" />
               </Box>
             </Flex>
           </Container>
         </HeroUnit>
         <Container>
-          <StatsContainer>
-            <StatsBox>
+          <Flex align='center' justify='center' style={{position: 'relative'}}>
+            <StatsContainer>
               <StatsItem
                 label="Measurements"
                 unit={measurementCount.unit}
@@ -146,13 +138,8 @@ export default class LandingPage extends React.Component {
                 unit={asnCount.unit}
                 value={asnCount.value}
               />
-              <StatsItem
-                label="Censorship cases"
-                unit={censorshipCount.unit}
-                value={censorshipCount.value}
-              />
-            </StatsBox>
-          </StatsContainer>
+            </StatsContainer>
+          </Flex>
 
           <Flex style={{paddingTop: '100px'}}>
             <FeatureBox w={1/3} p={2}>
