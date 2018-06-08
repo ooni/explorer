@@ -4,6 +4,8 @@ const withSourceMaps = require('@zeit/next-source-maps')
 
 const webpack = require('webpack')
 
+process.env.PORT = process.env.PORT || 3100
+
 module.exports = withSourceMaps(withCSS({
   webpack: (config) => {
     config.plugins.push(
