@@ -4173,13 +4173,14 @@ onetime@^2.0.0:
   dependencies:
     mimic-fn "^1.0.0"
 
-ooni-components@^0.1.0-rc.3:
-  version "0.1.0-rc.3"
-  resolved "https://registry.yarnpkg.com/ooni-components/-/ooni-components-0.1.0-rc.3.tgz#9a9eafb86fc7a3eab83fbce37d1d422c417e6fb4"
+ooni-components@0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/ooni-components/-/ooni-components-0.1.0.tgz#ceda3a95742bf97a592af2d6b36c7d3484b0256b"
   dependencies:
     palx "^1.0.2"
     prop-types "^15.5.10"
     react "^16.0.0"
+    react-dom "^16.4.0"
     react-icons "^2.2.5"
     rebass "^1.0.4"
     styled-components "^2.4.0"
@@ -4892,6 +4893,15 @@ react-datetime@^2.11.1:
 react-dom@^16.0.0:
   version "16.4.0"
   resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.4.0.tgz#099f067dd5827ce36a29eaf9a6cdc7cbf6216b1e"
+  dependencies:
+    fbjs "^0.8.16"
+    loose-envify "^1.1.0"
+    object-assign "^4.1.1"
+    prop-types "^15.6.0"
+
+react-dom@^16.4.0:
+  version "16.4.1"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.4.1.tgz#7f8b0223b3a5fbe205116c56deb85de32685dad6"
   dependencies:
     fbjs "^0.8.16"
     loose-envify "^1.1.0"

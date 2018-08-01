@@ -33,7 +33,7 @@ const SelectWithLabel = (props) => (
     <StyledLabel>
       {props.label}
     </StyledLabel>
-    <Select {...props}>
+    <Select {...props} style={{width: '100%'}}>
       {props.children}
     </Select>
   </StyledSelectWithLabel>
