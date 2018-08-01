@@ -2,57 +2,9 @@
 
 ## Major
 
-### General purpose components
-
-* Implement footer component
-
-### Country page
-
-* Implement or select a table component suitable for our use case
-
-* Implement charts for country page
-
-- Bar chart for "types of blocked websites"
-
-- Sparkline for "Measurements by test class"
-
-- Websites chart
-
-### Measurements
-
-Views for the following measurement types:
-
-- Web Connectivity
-
-- HTTP Invalid request Line
-
-- HTTP Header Field Manipulation
-
-- NDT Speed Test
-
-- DASH video streaming
-
-- Telegram test
-
-- WhatsApp
-
-- Facebook Messenger
-
-- Generic unclassified page
-
 Charts:
 
 - Download speed by time chart component
-
-## Search page
-
-* Align the form components with the mockups
-
-* Add by date sortable
-
-## Minor/cleanup refactor
-
-* Ensure all the props are validated properly and pass all the eslint tests.
 
 # Backend TODO
 
