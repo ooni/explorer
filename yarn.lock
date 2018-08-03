@@ -4173,14 +4173,15 @@ onetime@^2.0.0:
   dependencies:
     mimic-fn "^1.0.0"
 
-ooni-components@0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/ooni-components/-/ooni-components-0.1.0.tgz#ceda3a95742bf97a592af2d6b36c7d3484b0256b"
+ooni-components@0.1.3:
+  version "0.1.3"
+  resolved "https://registry.yarnpkg.com/ooni-components/-/ooni-components-0.1.3.tgz#78ecb8dee14c824c5d58c8baf1e5a151ff3cca9c"
   dependencies:
     palx "^1.0.2"
     prop-types "^15.5.10"
     react "^16.0.0"
     react-dom "^16.4.0"
+    react-icon-base "^2.1.2"
     react-icons "^2.2.5"
     rebass "^1.0.4"
     styled-components "^2.4.0"
@@ -4900,8 +4901,8 @@ react-dom@^16.0.0:
     prop-types "^15.6.0"
 
 react-dom@^16.4.0:
-  version "16.4.1"
-  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.4.1.tgz#7f8b0223b3a5fbe205116c56deb85de32685dad6"
+  version "16.4.2"
+  resolved "https://registry.yarnpkg.com/react-dom/-/react-dom-16.4.2.tgz#4afed569689f2c561d2b8da0b819669c38a0bda4"
   dependencies:
     fbjs "^0.8.16"
     loose-envify "^1.1.0"
@@ -4922,6 +4923,10 @@ react-hot-loader@4.1.3:
 react-icon-base@2.1.0:
   version "2.1.0"
   resolved "https://registry.yarnpkg.com/react-icon-base/-/react-icon-base-2.1.0.tgz#a196e33fdf1e7aaa1fda3aefbb68bdad9e82a79d"
+
+react-icon-base@^2.1.2:
+  version "2.1.2"
+  resolved "https://registry.yarnpkg.com/react-icon-base/-/react-icon-base-2.1.2.tgz#a17101dad9c1192652356096860a9ab43a0766c7"
 
 react-icons@2.2.7, react-icons@^2.2.5:
   version "2.2.7"
