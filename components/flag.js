@@ -1,5 +1,5 @@
 import React from 'react'
-
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
 
 var supportedCountryCodes = [
@@ -25,8 +25,8 @@ var supportedCountryCodes = [
   'yt', 'za', 'zm', 'zw']
 
 const FlagImg = styled.img`
-  width: 60px;
-  height: 60px;
+  width: ${props => props.size}px;
+  height: ${props => props.size}px;
   clip-path: circle(50% at 50% 50%);
 `
 
@@ -34,11 +34,11 @@ const FlagContainer = styled.div`
   border-radius: 50%;
   padding-left: 3px;
   padding-top: 3px;
-  width: 66px;
-  height: 66px;
+  width: ${props => props.size + 6}px;
+  height: ${props => props.size + 6}px;
 `
 
-export const Flag = ({countryCode, center, border}) => {
+export const Flag = ({countryCode, size}) => {
   countryCode = countryCode.toLowerCase()
   if (supportedCountryCodes.indexOf(countryCode) === -1) {
     // Map unsupported country codes to ZZ
@@ -46,10 +46,20 @@ export const Flag = ({countryCode, center, border}) => {
   }
   const src = `/static/flags/1x1/${countryCode}.svg`
   return (
-    <FlagContainer className='country-flag' center={center} border={border}>
-      <FlagImg src={src} />
+    <FlagContainer className='country-flag' size={size}>
+      <FlagImg src={src} size={size} />
     </FlagContainer>
   )
+}
+
+Flag.propTypes = {
+  countryCode: PropTypes.string.isRequired,
+  size: PropTypes.number,
+}
+
+Flag.defaultProps = {
+  countryCode: 'zz',
+  size: 60
 }
 
 export default Flag
