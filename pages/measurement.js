@@ -21,6 +21,8 @@ import {
   Text
 } from 'ooni-components'
 
+import prettyMs from 'pretty-ms'
+
 import { testGroups, testNames } from '../components/test-info'
 import Badge from '../components/badge'
 
@@ -137,7 +139,7 @@ const TestMetadata = ({
               <Text><MdRestore />{' '}Runtime:</Text>
             </Box>
             <Box w={2/3} style={{flexGrow: '1'}}>
-              {runtime}
+              {prettyMs(runtime * 1000)}
             </Box>
           </Flex>
         </Box>
