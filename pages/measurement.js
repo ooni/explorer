@@ -147,10 +147,12 @@ export default class Measurement extends React.Component {
     if (query.input) {
       params['input'] = query.input
     }
-    let msmtResult = await client.get('/api/v1/measurements', {
-      params
-    })
-
+    let [msmtResult, countriesR] = await Promise.all([
+      client.get('/api/v1/measurements', {
+        params
+      }),
+      client.get('/api/_/countries')
+    ])
     if (msmtResult.data.results.length > 0) {
       const measurementUrl = msmtResult.data.results[0].measurement_url
       if (msmtResult.data.results.length > 1) {
@@ -158,6 +160,11 @@ export default class Measurement extends React.Component {
       }
       let msmtContent = await client.get(measurementUrl)
       initialProps['measurement'] = msmtContent.data
+      let countries = countriesR.data.countries
+      const { name: country } = countries.find(c =>
+        c.alpha_2 === msmtContent.data.probe_cc
+      )
+      initialProps['country'] = country
     }
     return initialProps
   }
@@ -168,7 +175,8 @@ export default class Measurement extends React.Component {
 
   render () {
     let {
-      measurement
+      measurement,
+      country
     } = this.props
 
     const tstMetadata = getTestMetadata(measurement.test_name)
