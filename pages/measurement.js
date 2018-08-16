@@ -3,32 +3,18 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 
-import moment from 'moment'
 import NoSSR from 'react-no-ssr'
-
-import MdPublic from 'react-icons/lib/md/public'
-import MdPhonelink from 'react-icons/lib/md/phonelink'
-import MdRestore from 'react-icons/lib/md/restore'
-
-import styled from 'styled-components'
 
 import axios from 'axios'
 
 import {
-  Flex, Box,
   Container,
   Heading,
-  Text
 } from 'ooni-components'
 
-import prettyMs from 'pretty-ms'
+import CommonSummary from '../components/measurement/CommonSummary'
 
-import { testGroups, testNames } from '../components/test-info'
-import Badge from '../components/badge'
-
-import NavBar from '../components/nav-bar'
 import Layout from '../components/layout'
-import Flag from '../components/flag'
 
 // We wrap the json viewer so that we can render it only in client side rendering
 class JsonViewer extends React.Component {
@@ -41,111 +27,6 @@ class JsonViewer extends React.Component {
       <ReactJson src={src} />
     )
   }
-}
-
-const getTestMetadata = (testName) => {
-  let metadata = {
-    'name': testName,
-    'groupName': testGroups.default.name,
-    'color': testGroups.default.color,
-    'icon': testGroups.default.icon
-  }
-
-  const test = testNames[testName]
-  if (test === undefined) {
-    return metadata
-  }
-  const group = testGroups[test.group]
-  metadata['name'] = test.name
-  metadata['groupName'] = group.name
-  metadata['icon'] = group.icon
-  metadata['color'] = group.color
-  return metadata
-}
-
-const TestMetadataContainer =  styled.div`
-  background-color: ${props => props.color };
-  color: white;
-`
-
-const TestGroupBadge = ({icon, name, color}) => {
-  return <Badge bg='white' color={color}>
-    {icon} {name}
-  </Badge>
-}
-
-const VerticalDivider = styled.div`
-  background-color: white;
-  height: 100%;
-  width: 1px;
-  margin-left: 10px;
-  margin-right: 10px;
-`
-
-const TestMetadata = ({
-  countryCode,
-  country,
-  metadata,
-  startTime,
-  runtime,
-  platform,
-  network
-}) => {
-  return <TestMetadataContainer color={metadata.color}>
-    <Container>
-      <Flex pb={3}>
-        <Box w={1/2}>
-          <Flex align='center'>
-            <Box p={1}>
-              <Flag countryCode={countryCode} size={24} />
-            </Box>
-            <Box>
-              <Text>{country}</Text>
-            </Box>
-          </Flex>
-          <Flex align='center' pb={2}>
-            <Box pr={4}>
-              <Text f={3}>{metadata.name}</Text>
-            </Box>
-            <Box>
-              <TestGroupBadge
-                icon={metadata.icon}
-                name={metadata.groupName}
-                color={metadata.color}
-              />
-            </Box>
-          </Flex>
-          <Text>{moment(startTime).format('lll')}</Text>
-        </Box>
-        <Box>
-          <VerticalDivider />
-        </Box>
-        <Box w={1/2}>
-          <Flex wrap>
-            {/* XXX Probably refactor these into a component */}
-            <Box w={1/3} style={{flexGrow: '1'}} pb={2}>
-              <Text><MdPublic />{' '}Network:</Text>
-            </Box>
-            <Box w={2/3} style={{flexGrow: '1'}}>
-              {network}
-            </Box>
-            <Box w={1/3} style={{flexGrow: '1'}} pb={2}>
-              <Text><MdPhonelink />{' '}Platform:</Text>
-            </Box>
-            <Box w={2/3} style={{flexGrow: '1'}}>
-              {platform}
-            </Box>
-            <Box w={1/3} style={{flexGrow: '1'}} pb={2}>
-              <Text><MdRestore />{' '}Runtime:</Text>
-            </Box>
-            <Box w={2/3} style={{flexGrow: '1'}}>
-              {prettyMs(runtime * 1000)}
-            </Box>
-          </Flex>
-        </Box>
-      </Flex>
-    </Container>
-  </TestMetadataContainer>
 }
 
 export default class Measurement extends React.Component {
@@ -191,24 +72,15 @@ export default class Measurement extends React.Component {
       country
     } = this.props
 
-    const tstMetadata = getTestMetadata(measurement.test_name)
-
     return (
       <Layout>
         <Head>
           <title>OONI Explorer</title>
         </Head>
 
-        <NavBar color={tstMetadata.color} />
-
-        <TestMetadata
-          countryCode={measurement.probe_cc}
-          country={country}
-          startTime={measurement.test_start_time}
-          network={measurement.probe_asn}
-          platform={measurement.software_name}
-          runtime={measurement.test_runtime}
-          metadata={tstMetadata} />
+        <CommonSummary
+          measurement={measurement}
+          country={country} />
 
         <Container>
 
