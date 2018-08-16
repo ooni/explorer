@@ -5,27 +5,34 @@ import {
 } from 'ooni-components'
 
 import FaBeer from 'react-icons/lib/fa/beer'
+import {
+  NettestGroupWebsites,
+  NettestGroupInstantMessaging,
+  NettestGroupMiddleBoxes,
+  NettestGroupPerformance
+} from 'ooni-components/dist/icons'
+
 
 export const testGroups = {
   'websites': {
     'color': theme.colors.indigo5,
     'name': 'Websites',
-    'icon': <FaBeer />
+    'icon': <NettestGroupWebsites />
   },
   'im': {
     'color': theme.colors.cyan6,
     'name': 'Instant Messagging',
-    'icon': <FaBeer />
+    'icon': <NettestGroupInstantMessaging />
   },
   'middlebox': {
     'color': theme.colors.violet8,
     'name': 'Middlebox',
-    'icon': <FaBeer />
+    'icon': <NettestGroupMiddleBoxes />
   },
   'performance': {
     'color': theme.colors.fuschia6,
     'name': 'Performance',
-    'icon': <FaBeer />
+    'icon': <NettestGroupPerformance />
   },
   'circumvention': {
     'color': '',
