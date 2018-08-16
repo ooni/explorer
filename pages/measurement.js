@@ -26,6 +26,7 @@ import Badge from '../components/badge'
 
 import NavBar from '../components/nav-bar'
 import Layout from '../components/layout'
+import Flag from '../components/flag'
 
 // We wrap the json viewer so that we can render it only in client side rendering
 class JsonViewer extends React.Component {
@@ -81,6 +82,7 @@ const VerticalDivider = styled.div`
 
 const TestMetadata = ({
   countryCode,
+  country,
   metadata,
   startTime,
   runtime,
@@ -91,10 +93,17 @@ const TestMetadata = ({
     <Container>
       <Flex pb={3}>
         <Box w={1/2}>
-          <Text>{countryCode}</Text>
           <Flex align='center'>
-            <Box pr={3}>
-              <Heading h={2}>{metadata.name}</Heading>
+            <Box p={1}>
+              <Flag countryCode={countryCode} size={24} />
+            </Box>
+            <Box>
+              <Text>{country}</Text>
+            </Box>
+          </Flex>
+          <Flex align='center' pb={2}>
+            <Box pr={4}>
+              <Text f={3}>{metadata.name}</Text>
             </Box>
             <Box>
               <TestGroupBadge
@@ -192,6 +201,7 @@ export default class Measurement extends React.Component {
 
         <TestMetadata
           countryCode={measurement.probe_cc}
+          country={country}
           startTime={measurement.test_start_time}
           network={measurement.probe_asn}
           platform={measurement.software_name}
