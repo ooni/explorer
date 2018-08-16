@@ -1,5 +1,6 @@
 /* global require */
 import React from 'react'
+import PropTypes from 'prop-types'
 import Head from 'next/head'
 
 import moment from 'moment'
@@ -208,4 +209,9 @@ export default class Measurement extends React.Component {
       </Layout>
     )
   }
+}
+
+Measurement.propTypes = {
+  measurement: PropTypes.object.isRequired,
+  country: PropTypes.string
 }
