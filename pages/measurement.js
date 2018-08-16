@@ -5,7 +5,9 @@ import Head from 'next/head'
 import moment from 'moment'
 import NoSSR from 'react-no-ssr'
 
-import MdLink from 'react-icons/lib/md/link'
+import MdPublic from 'react-icons/lib/md/public'
+import MdPhonelink from 'react-icons/lib/md/phonelink'
+import MdRestore from 'react-icons/lib/md/restore'
 
 import styled from 'styled-components'
 
@@ -80,7 +82,6 @@ const TestMetadata = ({
   countryCode,
   metadata,
   startTime,
-  input,
   runtime,
   platform,
   network
@@ -111,25 +112,19 @@ const TestMetadata = ({
           <Flex wrap>
             {/* XXX Probably refactor these into a component */}
             <Box w={1/3} style={{flexGrow: '1'}} pb={2}>
-              <Text><MdLink />URL:</Text>
-            </Box>
-            <Box w={2/3} style={{flexGrow: '1'}}>
-              {input}
-            </Box>
-            <Box w={1/3} style={{flexGrow: '1'}} pb={2}>
-              <Text><MdLink />Network:</Text>
+              <Text><MdPublic />{' '}Network:</Text>
             </Box>
             <Box w={2/3} style={{flexGrow: '1'}}>
               {network}
             </Box>
             <Box w={1/3} style={{flexGrow: '1'}} pb={2}>
-              <Text><MdLink />Platform:</Text>
+              <Text><MdPhonelink />{' '}Platform:</Text>
             </Box>
             <Box w={2/3} style={{flexGrow: '1'}}>
               {platform}
             </Box>
             <Box w={1/3} style={{flexGrow: '1'}} pb={2}>
-              <Text><MdLink />Runtime:</Text>
+              <Text><MdRestore />{' '}Runtime:</Text>
             </Box>
             <Box w={2/3} style={{flexGrow: '1'}}>
               {runtime}
