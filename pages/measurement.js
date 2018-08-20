@@ -3,31 +3,11 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 
-import NoSSR from 'react-no-ssr'
-
 import axios from 'axios'
 
-import {
-  Container,
-  Heading,
-} from 'ooni-components'
-
 import CommonSummary from '../components/measurement/CommonSummary'
-
+import CommonDetails from '../components/measurement/CommonDetails'
 import Layout from '../components/layout'
-
-// We wrap the json viewer so that we can render it only in client side rendering
-class JsonViewer extends React.Component {
-  render() {
-    const ReactJson = require('react-json-view').default
-    const {
-      src
-    } = this.props
-    return (
-      <ReactJson src={src} />
-    )
-  }
-}
 
 export default class Measurement extends React.Component {
 
@@ -82,14 +62,8 @@ export default class Measurement extends React.Component {
           measurement={measurement}
           country={country} />
 
-        <Container>
+        <CommonDetails measurement={measurement} />
 
-          <Heading h={4}>Raw Measurement Data</Heading>
-
-          <NoSSR>
-            <JsonViewer src={measurement} />
-          </NoSSR>
-        </Container>
       </Layout>
     )
   }
