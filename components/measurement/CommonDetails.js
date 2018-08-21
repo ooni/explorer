@@ -118,7 +118,7 @@ const CommonDetails = ({
 }
 
 CommonDetails.propTypes = {
-  measurement: PropTypes.string.isRequired
+  measurement: PropTypes.object.isRequired
 }
 
 export default CommonDetails
