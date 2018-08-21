@@ -6,6 +6,8 @@ import axios from 'axios'
 
 import CommonSummary from '../components/measurement/CommonSummary'
 import CommonDetails from '../components/measurement/CommonDetails'
+import renderDetails from '../components/measurement/renderDetails'
+
 import Layout from '../components/layout'
 
 export default class Measurement extends React.Component {
@@ -60,6 +62,8 @@ export default class Measurement extends React.Component {
         <CommonSummary
           measurement={measurement}
           country={country} />
+
+        {renderDetails(measurement.test_name, measurement.test_keys)}
 
         <CommonDetails measurement={measurement} />
 
