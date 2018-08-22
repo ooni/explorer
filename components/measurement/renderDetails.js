@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import {
   Container,
   Heading,
@@ -6,6 +7,8 @@ import {
   Flex,
   Box
 } from 'ooni-components'
+
+import { Tick, Cross } from 'ooni-components/dist/icons'
 
 import styled from 'styled-components'
 
@@ -17,24 +20,41 @@ const mapTestDetails = {
   other: Other
 }
 
+const StatusLabelOK = () => (
+  <Flex align='center'>
+    <Tick size={32} /><Text ml={1} f={2}>OK</Text>
+  </Flex>
+)
+
+const StatusLabelAnomaly = () => (
+  <Flex align='center'>
+    <Cross size={32} /><Text ml={1} f={2}>Anomaly</Text>
+  </Flex>
+)
+
+
 const StatusBar = ({
-  normal,
-  message
+  anomaly,
+  hint
 }) => (
-  <Box p={3} color='white' bg={normal ? 'green7' : 'yellow8'}>
+  <Box mb={4} p={3} color='white' bg={anomaly ? 'yellow8' : 'green7'}>
     <Container>
       <Flex>
         <Box w={1/2}>
-          {normal ? 'OK' : 'Anomaly'}
+          {anomaly ? <StatusLabelAnomaly /> : <StatusLabelOK />}
         </Box>
         <Box w={1/2}>
-          {message}
+          <Text f={2}>Type: <strong>{hint}</strong></Text>
         </Box>
-
       </Flex>
     </Container>
   </Box>
 )
+
+StatusBar.propTypes = {
+  anomaly: PropTypes.string.isRequired,
+  hint: PropTypes.string.isRequired
+}
 
 const renderDetails = (testName = 'other', testKeys) => {
   const TestDetails = mapTestDetails[testName]
@@ -45,8 +65,10 @@ const renderDetails = (testName = 'other', testKeys) => {
   } = testKeys
 
   let anomaly = null
+  let hint = 'No Censorship Detected'
 
   if ((accessible === true || accessible === null) && blocking === null) {
+    hint = 'Error In Measurement'
     if (accessible === true) {
       anomaly = 'SITEUP'
     } else if (accessible === null) {
@@ -54,23 +76,29 @@ const renderDetails = (testName = 'other', testKeys) => {
     }
   } else if (accessible === false && (blocking === false || blocking === null)) {
     anomaly = 'SITEDOWN'
+    hint = 'Site Unavailable'
   } else if (blocking !== null && blocking !== false) {
     anomaly = 'CENSORSHIP'
+    hint = 'Evidence of Possible Censorship'
     // Further identify type of censorship
     if (blocking === 'dns') {
       anomaly = 'DNS'
+      hint = 'DNS Based Blocking'
     } else if (blocking === 'http-diff') {
       anomaly = 'HTTPDIFF'
+      hint = 'Different HTTP Response'
     } else if (blocking === 'http-failure') {
       anomaly = 'HTTPFAILURE'
+      hint = 'HTTP Reqeust Failed'
     } else if (blocking === 'tcp-ip') {
       anomaly = 'TCPIP'
+      hint = 'TCP/IP Based Blocking'
     }
   }
 
   return (
     <div>
-      <StatusBar normal={true} message='DNS based blocking' />
+      <StatusBar anomaly={anomaly} hint={hint} />
       <Container>
         <Flex>
           <Box w={1/2}>
