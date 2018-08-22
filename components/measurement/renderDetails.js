@@ -39,8 +39,34 @@ const StatusBar = ({
 const renderDetails = (testName = 'other', testKeys) => {
   const TestDetails = mapTestDetails[testName]
   const {
+    accessible,
+    blocking,
     queries
   } = testKeys
+
+  let anomaly = null
+
+  if ((accessible === true || accessible === null) && blocking === null) {
+    if (accessible === true) {
+      anomaly = 'SITEUP'
+    } else if (accessible === null) {
+      anomaly = 'UNKNOWN'
+    }
+  } else if (accessible === false && (blocking === false || blocking === null)) {
+    anomaly = 'SITEDOWN'
+  } else if (blocking !== null && blocking !== false) {
+    anomaly = 'CENSORSHIP'
+    // Further identify type of censorship
+    if (blocking === 'dns') {
+      anomaly = 'DNS'
+    } else if (blocking === 'http-diff') {
+      anomaly = 'HTTPDIFF'
+    } else if (blocking === 'http-failure') {
+      anomaly = 'HTTPFAILURE'
+    } else if (blocking === 'tcp-ip') {
+      anomaly = 'TCPIP'
+    }
+  }
 
   return (
     <div>
