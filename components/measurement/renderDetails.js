@@ -10,8 +10,6 @@ import {
 
 import { Tick, Cross } from 'ooni-components/dist/icons'
 
-import styled from 'styled-components'
-
 const Web = ({testKeys}) => (<div> Web - {testKeys.toString()}</div>)
 const Other = () => (<div> Other </div>)
 
@@ -56,12 +54,25 @@ StatusBar.propTypes = {
   hint: PropTypes.string.isRequired
 }
 
+const DetailsBox = ({ title, content }) => (
+  <Box w={1/2}>
+    <Heading h={4}>{title}</Heading>
+    {content}
+  </Box>
+)
+
+DetailsBox.propTypes = {
+  title: PropTypes.string.isRequired,
+  content: PropTypes.element
+}
+
 const renderDetails = (testName = 'other', testKeys) => {
   const TestDetails = mapTestDetails[testName]
   const {
     accessible,
     blocking,
-    queries
+    queries,
+    tcp_connect
   } = testKeys
 
   let anomaly = null
@@ -96,44 +107,57 @@ const renderDetails = (testName = 'other', testKeys) => {
     }
   }
 
+  const resolver = queries[0].resolver_hostname
+  const tcpConnections = tcp_connect.map((connection) => {
+    const status = (connection.status.success) ? 'successful' :
+      (connection.status.blocked) ? 'blocked' : 'failed'
+    return {
+      destination: connection.ip + ':' + connection.port,
+      status
+    }
+  })
   return (
     <div>
       <StatusBar anomaly={anomaly} hint={hint} />
       <Container>
         <Flex>
-          <Box w={1/2}>
-            <Heading h={4}>DNS Query Answers</Heading>
-            <Flex>
-              <Box w={1/4}>
-                <Text>Resolver:</Text>
-              </Box>
-              <Box w={1/4}>
-                <Text>8.8.8.8</Text>
-              </Box>
-            </Flex>
-            <Flex align='center'>
-              <Box w={1/4}>
-                <Text>Answers:</Text>
-              </Box>
-              <Box w={1/4}>
-                <Text>{queries.length}</Text>
-              </Box>
-            </Flex>
-          </Box>
-          <Box w={1/2} ml='auto'>
-            <Heading h={4}>TCP Connect Results</Heading>
-
-            <Flex>
-              <Box>
-                <Text>Connection to <strong>31.32.33.34:80</strong> was successful.</Text>
-              </Box>
-            </Flex>
-            <Flex>
-              <Box>
-                <Text>Connection to <strong>star-mini.c10r.facebook.com:80</strong> was successful.</Text>
-              </Box>
-            </Flex>
-          </Box>
+          <DetailsBox title='DNS Query Answers' content={
+            <React.Fragment>
+              <Flex mb={2}>
+                <Box w={1/3}>
+                  <Text>Resolver:</Text>
+                </Box>
+                <Box w={2/3}>
+                  <Text>{resolver || '(unknown)'}</Text>
+                </Box>
+              </Flex>
+              <Flex mb={2}>
+                <Box w={1/3}>
+                  <Text>Answers:</Text>
+                </Box>
+                <Box w={2/3}>
+                  {queries[0].answers.map((dnsAnswer, index) => {
+                    if (dnsAnswer.answer_type === 'A') {
+                      return <Text key={index}>{dnsAnswer.ipv4}</Text>
+                    } else if (dnsAnswer.answer_type === 'CNAME') {
+                      return <Text key={index}>{dnsAnswer.hostname}</Text>
+                    }
+                  })}
+                </Box>
+              </Flex>
+            </React.Fragment>
+          } />
+          <DetailsBox title='TCP Connect Results' content={
+            <React.Fragment>
+              {tcpConnections.map((connection, index) => (
+                <Flex key={index}>
+                  <Box>
+                    <Text>Connection to <strong>{connection.destination}</strong> was {connection.status}.</Text>
+                  </Box>
+                </Flex>
+              ))}
+            </React.Fragment>
+          } />
         </Flex>
       </Container>
     </div>
