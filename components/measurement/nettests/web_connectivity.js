@@ -5,10 +5,13 @@ import {
   Heading,
   Text,
   Flex,
+  Pre,
   Box
 } from 'ooni-components'
 
 import { Tick, Cross } from 'ooni-components/dist/icons'
+
+import styled from 'styled-components'
 
 const StatusLabelOK = () => (
   <Flex align='center'>
@@ -21,7 +24,6 @@ const StatusLabelAnomaly = () => (
     <Cross size={32} /><Text ml={1} f={2}>Anomaly</Text>
   </Flex>
 )
-
 
 const StatusBar = ({
   anomaly,
@@ -58,12 +60,18 @@ DetailsBox.propTypes = {
   content: PropTypes.element
 }
 
+const HttpResponseBodyContainer = styled(Pre)`
+  max-height: 500px;
+  overflow: auto;
+`
+
 const WebConnectivityDetails = ({ testKeys }) => {
   const {
     accessible,
     blocking,
     queries,
-    tcp_connect
+    tcp_connect,
+    requests
   } = testKeys
 
   let anomaly = null
@@ -149,6 +157,16 @@ const WebConnectivityDetails = ({ testKeys }) => {
               ))}
             </React.Fragment>
           } />
+        </Flex>
+        <Flex>
+          <Box w={1}>
+            <Heading h={4}>HTTP Response Body</Heading>
+            <Box bg='gray2' p={3}>
+              <HttpResponseBodyContainer>
+                {requests[0].response.body}
+              </HttpResponseBodyContainer>
+            </Box>
+          </Box>
         </Flex>
       </Container>
     </div>
