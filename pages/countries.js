@@ -13,7 +13,7 @@ import {
 } from 'ooni-components'
 
 import Flag from '../components/flag'
-import Layout from '../components/layout'
+import Layout from '../components/Layout'
 import NavBar from '../components/nav-bar'
 
 import countryUtil from 'country-util'

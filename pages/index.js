@@ -16,7 +16,7 @@ import {
   Link
 } from 'ooni-components'
 
-import Layout from '../components/layout'
+import Layout from '../components/Layout'
 import Globe from '../components/globe'
 import NavBar from '../components/nav-bar'
 

@@ -8,7 +8,7 @@ import CommonSummary from '../components/measurement/CommonSummary'
 import CommonDetails from '../components/measurement/CommonDetails'
 import renderDetails from '../components/measurement/renderDetails'
 
-import Layout from '../components/layout'
+import Layout from '../components/Layout'
 
 export default class Measurement extends React.Component {
 

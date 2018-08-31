@@ -7,7 +7,7 @@ import {
   Container
 } from 'ooni-components'
 
-import Layout from '../components/layout'
+import Layout from '../components/Layout'
 import NavBar from '../components/nav-bar'
 
 export default class About extends React.Component {
