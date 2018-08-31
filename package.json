@@ -32,6 +32,7 @@
     "react-datetime": "^2.11.1",
     "react-dom": "^16.0.0",
     "react-icons": "2.2.7",
+    "react-intl": "^2.4.0",
     "react-json-view": "^1.16.0",
     "react-no-ssr": "^1.1.0",
     "styled-components": "2.4.1",
@@ -56,6 +57,7 @@
   },
   "scripts": {
     "dev": "NODE_ENV=development MEASUREMENTS_URL=https://api.ooni.io node index.js",
+    "build-translations": "node ./scripts/build-translations.js",
     "build": "next build",
     "export": "next export",
     "lint": "eslint --ignore-path .gitignore --ignore-pattern components/vendor .",
