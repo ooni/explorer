@@ -34,11 +34,12 @@ export default class Measurement extends React.Component {
       }
       let msmtContent = await client.get(measurementUrl)
       initialProps['measurement'] = msmtContent.data
+
       let countries = countriesR.data.countries
-      const { name: country } = countries.find(c =>
+      const countryObj = countries.find(c =>
         c.alpha_2 === msmtContent.data.probe_cc
       )
-      initialProps['country'] = country
+      initialProps['country'] = (countryObj) ? countryObj.name : 'Unknown'
     }
     return initialProps
   }
