@@ -65,13 +65,57 @@ const HttpResponseBodyContainer = styled(Pre)`
   overflow: auto;
 `
 
+const QueryContainer = ({query}) => {
+  const {
+    query_type,
+    answers,
+    hostname,
+    engine,
+    failure
+  } = query
+
+  return (
+    <Flex wrap>
+      <Box w={1} pb={2}>
+        <Flex justify='space-between'>
+          <Box>
+            <Pre>{hostname}</Pre>
+          </Box>
+          <Box>
+            <Pre>IN</Pre>
+          </Box>
+          <Box>
+            <Pre>{query_type}</Pre>
+          </Box>
+          <Box>
+            engine: {engine}
+          </Box>
+        </Flex>
+      </Box>
+      {failure && <Box w={1}><Cross size={20} /> {failure}</Box>}
+      <Box w={1}>
+        <Flex>
+          {answers.map((dnsAnswer, index) => {
+            if (dnsAnswer.answer_type === 'A') {
+              return <Box key={index}><Text>{dnsAnswer.ipv4}</Text></Box>
+            } else if (dnsAnswer.answer_type === 'CNAME') {
+              return <Box key={index}><Text>{dnsAnswer.hostname}</Text></Box>
+            }
+          })}
+        </Flex>
+      </Box>
+    </Flex>
+  )
+}
+
 const WebConnectivityDetails = ({ testKeys }) => {
   const {
     accessible,
     blocking,
     queries,
     tcp_connect,
-    requests
+    requests,
+    client_resolver
   } = testKeys
 
   let anomaly = null
@@ -106,7 +150,6 @@ const WebConnectivityDetails = ({ testKeys }) => {
     }
   }
 
-  const resolver = queries[0].resolver_hostname
   const tcpConnections = tcp_connect.map((connection) => {
     const status = (connection.status.success) ? 'successful' :
       (connection.status.blocked) ? 'blocked' : 'failed'
@@ -120,34 +163,29 @@ const WebConnectivityDetails = ({ testKeys }) => {
       <StatusBar anomaly={anomaly} hint={hint} />
       <Container>
         <Flex>
-          <DetailsBox title='DNS Query Answers' content={
+          <DetailsBox title='DNS Queries' content={
             <React.Fragment>
               <Flex mb={2}>
                 <Box w={1/3}>
                   <Text>Resolver:</Text>
                 </Box>
                 <Box w={2/3}>
-                  <Text>{resolver || '(unknown)'}</Text>
+                  <Text>{client_resolver || '(unknown)'}</Text>
                 </Box>
               </Flex>
               <Flex mb={2}>
                 <Box w={1/3}>
-                  <Text>Answers:</Text>
+                  <Text>Queries:</Text>
                 </Box>
                 <Box w={2/3}>
-                  {queries[0].answers.map((dnsAnswer, index) => {
-                    if (dnsAnswer.answer_type === 'A') {
-                      return <Text key={index}>{dnsAnswer.ipv4}</Text>
-                    } else if (dnsAnswer.answer_type === 'CNAME') {
-                      return <Text key={index}>{dnsAnswer.hostname}</Text>
-                    }
-                  })}
+                  {queries.map((query, index) => <QueryContainer key={index} query={query} />)}
                 </Box>
               </Flex>
             </React.Fragment>
           } />
-          <DetailsBox title='TCP Connect Results' content={
+          <DetailsBox title='TCP Connections' content={
             <React.Fragment>
+              {tcpConnections.length === 0 && <Text>No results</Text>}
               {tcpConnections.map((connection, index) => (
                 <Flex key={index}>
                   <Box>
@@ -158,6 +196,9 @@ const WebConnectivityDetails = ({ testKeys }) => {
             </React.Fragment>
           } />
         </Flex>
+        {/* I would like us to enrich the HTTP response body section with
+        information about every request and response as this is a very common
+        thing we look at when investigating a case. */}
         <Flex>
           <Box w={1}>
             <Heading h={4}>HTTP Response Body</Heading>
