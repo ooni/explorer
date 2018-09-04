@@ -90,9 +90,9 @@ const QueryContainer = ({query}) => {
   } = query
 
   return (
-    <Flex wrap>
+    <Flex wrap bg='gray2' p={2}>
       <Box w={1} pb={2}>
-        <Flex justify='space-between'>
+        <Flex justify='space-between' pr={4}>
           <Box>
             <Pre>{hostname}</Pre>
           </Box>
@@ -109,12 +109,12 @@ const QueryContainer = ({query}) => {
       </Box>
       {failure && <Box w={1}><FailureString failure={failure} /></Box>}
       <Box w={1}>
-        <Flex>
+        <Flex wrap>
           {answers.map((dnsAnswer, index) => {
             if (dnsAnswer.answer_type === 'A') {
-              return <Box key={index}><Text>{dnsAnswer.ipv4}</Text></Box>
+              return <Box w={1} pb={2} key={index}><Text>{dnsAnswer.ipv4}</Text></Box>
             } else if (dnsAnswer.answer_type === 'CNAME') {
-              return <Box key={index}><Text>{dnsAnswer.hostname}</Text></Box>
+              return <Box w={1} pb={2} key={index}><Text>{dnsAnswer.hostname}</Text></Box>
             }
           })}
         </Flex>
@@ -214,14 +214,7 @@ const WebConnectivityDetails = ({ testKeys }) => {
                   <Text>{client_resolver || '(unknown)'}</Text>
                 </Box>
               </Flex>
-              <Flex mb={2}>
-                <Box w={1/3}>
-                  <Text>Queries:</Text>
-                </Box>
-                <Box w={2/3}>
-                  {queries.map((query, index) => <QueryContainer key={index} query={query} />)}
-                </Box>
-              </Flex>
+              {queries.map((query, index) => <QueryContainer key={index} query={query} />)}
             </React.Fragment>
           } />
           <DetailsBox title='TCP Connections' content={
