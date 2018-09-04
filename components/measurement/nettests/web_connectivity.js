@@ -61,6 +61,7 @@ DetailsBox.propTypes = {
 }
 
 const HttpResponseBodyContainer = styled(Pre)`
+  background-color: ${props => props.theme.colors.gray2};
   max-height: 500px;
   overflow: auto;
 `
@@ -123,6 +124,30 @@ const QueryContainer = ({query}) => {
   )
 }
 
+const RequestResponseContainer = ({request}) => {
+  return (
+    <Box>
+      <Flex wrap>
+        <Box w={1} pb={2}>
+          <Pre>{request.request.method} {request.request.url}</Pre>
+        </Box>
+        <Box w={1}>
+          <Heading h={5}>Response</Heading>
+        </Box>
+        <Box w={1}>
+          <Pre>
+            {JSON.stringify(request.response.headers, 0, 2)}
+          </Pre>
+        </Box>
+        <Box w={1}>
+          <HttpResponseBodyContainer>
+            {request.response.body}
+          </HttpResponseBodyContainer>
+        </Box>
+      </Flex>
+    </Box>
+  )
+}
 const WebConnectivityDetails = ({ testKeys }) => {
   const {
     accessible,
@@ -235,12 +260,8 @@ const WebConnectivityDetails = ({ testKeys }) => {
         thing we look at when investigating a case. */}
         <Flex>
           <Box w={1}>
-            <Heading h={4}>HTTP Response Body</Heading>
-            <Box bg='gray2' p={3}>
-              <HttpResponseBodyContainer>
-                {requests[0].response.body}
-              </HttpResponseBodyContainer>
-            </Box>
+            <Heading h={4}>HTTP Requests</Heading>
+            {requests.map((request, index) => <RequestResponseContainer key={index} request={request} />)}
           </Box>
         </Flex>
       </Container>
