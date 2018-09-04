@@ -33,17 +33,6 @@ JsonViewer.propTypes = {
   src: PropTypes.object.isRequired
 }
 
-const softwareNames = {
-  'ooniprobe-ios': {
-    software: 'OONI Probe',
-    platform: 'iOS'
-  },
-  'ooniprobe-android': {
-    software: 'OONI Probe',
-    platform: 'Android'
-  }
-}
-
 const CommonDetails = ({
   measurement
 }) => {
@@ -51,7 +40,8 @@ const CommonDetails = ({
     software_name,
     software_version,
     annotations: {
-      engine_version
+      engine_version,
+      platform
     }
   } = measurement
   return (
@@ -66,7 +56,7 @@ const CommonDetails = ({
                   Software
                 </Box>
                 <Box w={1/2}>
-                  <Text bold>{softwareNames[software_name].software}</Text>
+                  <Text bold>{software_name}</Text>
                 </Box>
               </Flex>
               <Flex mb={1}>
@@ -74,7 +64,7 @@ const CommonDetails = ({
                   Platform
                 </Box>
                 <Box w={1/2}>
-                  <Text bold>{softwareNames[software_name].platform}</Text>
+                  <Text bold>{platform ? platform : 'unknown'}</Text>
                 </Box>
               </Flex>
               <Flex mb={1}>
