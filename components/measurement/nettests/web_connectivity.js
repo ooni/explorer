@@ -65,6 +65,21 @@ const HttpResponseBodyContainer = styled(Pre)`
   overflow: auto;
 `
 
+const FailureString = ({failure}) => {
+  if (!failure) {
+    return (
+      <div>
+        <Tick size={20} /> null
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      <Cross size={20} /> {failure}
+    </div>
+  )
+}
 const QueryContainer = ({query}) => {
   const {
     query_type,
@@ -92,7 +107,7 @@ const QueryContainer = ({query}) => {
           </Box>
         </Flex>
       </Box>
-      {failure && <Box w={1}><Cross size={20} /> {failure}</Box>}
+      {failure && <Box w={1}><FailureString failure={failure} /></Box>}
       <Box w={1}>
         <Flex>
           {answers.map((dnsAnswer, index) => {
@@ -115,7 +130,11 @@ const WebConnectivityDetails = ({ testKeys }) => {
     queries,
     tcp_connect,
     requests,
-    client_resolver
+    client_resolver,
+    http_experiment_failure,
+    dns_experiment_failure,
+    control_failure
+
   } = testKeys
 
   let anomaly = null
@@ -162,6 +181,28 @@ const WebConnectivityDetails = ({ testKeys }) => {
     <div>
       <StatusBar anomaly={anomaly} hint={hint} />
       <Container>
+        <Heading h={4}>Failures</Heading>
+        <Flex mb={2} wrap>
+          <Box w={1/3}>
+          HTTP Experiment
+          </Box>
+          <Box w={2/3}>
+            <FailureString failure={http_experiment_failure} />
+          </Box>
+          <Box w={1/3}>
+          DNS Experiment
+          </Box>
+          <Box w={2/3}>
+            <FailureString failure={dns_experiment_failure} />
+          </Box>
+          <Box w={1/3}>
+          Control
+          </Box>
+          <Box w={2/3}>
+            <FailureString failure={control_failure} />
+          </Box>
+        </Flex>
+
         <Flex>
           <DetailsBox title='DNS Queries' content={
             <React.Fragment>
