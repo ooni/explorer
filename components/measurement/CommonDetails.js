@@ -48,7 +48,7 @@ const CommonDetails = ({
     <Container>
       <Flex my={4}>
         <Box w={1/2} bg='WHITE'>
-          <Border border={1} borderColor={theme.colors.gray3}>
+          <Border color={theme.colors.gray3}>
             <Box p={3}>
               <Heading h={4}>Probe Metadata</Heading>
               <Flex mb={1}>

@@ -19,7 +19,7 @@ import Badge from '../badge'
 import { testGroups, testNames } from '../test-info'
 
 const SummaryContainer = styled.div`
-  background-color: ${props => props.color };
+  background-color: ${props => props.color};
   color: white;
 `
 
