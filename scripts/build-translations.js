@@ -1,8 +1,24 @@
 /* global require */
 const glob = require('glob')
-const { basename } = require('path')
+const { basename, resolve } = require('path')
 // const csvParse = require('csv-parse/lib/sync')
 const { readFileSync, writeFileSync } = require('fs')
+
+const defaultMessages = glob.sync('./static/lang/.messages/**/*.json')
+  .map((filename) => readFileSync(filename, 'utf8'))
+  .map((file) => JSON.parse(file))
+  .reduce((messages, descriptors) => {
+    descriptors.forEach(({id, defaultMessage}) => {
+      if (messages.hasOwnProperty(id)) {
+        throw new Error(`Duplicate message id: ${id}`)
+      }
+      messages[id] = defaultMessage
+    })
+    return messages
+  }, {})
+
+writeFileSync('./static/lang/en.json', JSON.stringify(defaultMessages, null, 2))
+console.log(`> Wrote default messages to: "${resolve('./static/lang/en.json')}"`)
 
 const supportedLanguages = glob.sync('./static/lang/*.json').map((f) => basename(f, '.json'))
 const localeDataFilesContent = supportedLanguages
@@ -11,21 +27,6 @@ const localeDataFilesContent = supportedLanguages
 
 writeFileSync('./static/locale-data.js', localeDataFilesContent.join('\n'))
 console.log('> Wrote locale-data to: ./static/locale-data.js')
-
-// const lang = csvParse(readFileSync('./data/lang-en.csv'), {from: 2})
-//   .reduce((messages, row) => {
-//     const id = row[0]
-//     const text = row[1].replace('{{', '{').replace('}}', '}')
-//
-//     if (messages.hasOwnProperty(id)) {
-//       throw new Error(`Duplicate message id: ${id}`)
-//     }
-//     messages[id] = text
-//     return messages
-//   }, {})
-//
-// writeFileSync('./lang/en.json', JSON.stringify(lang, null, 2))
-// console.log('> Wrote messages to: ./lang/en.json')
 
 const translationsMap = supportedLanguages
   .reduce((t, lang) => {

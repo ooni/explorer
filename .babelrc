@@ -1,7 +1,11 @@
 {
   "plugins": [
     "inline-react-svg",
-    ["styled-components", {"ssr": true, "displayName": true, "preprocess": false}]
+    ["styled-components", {"ssr": true, "displayName": true, "preprocess": false}],
+    ["react-intl", {
+      "messagesDir": "./static/lang/.messages",
+      "enforceDescriptions": false
+    }]
   ],
   "presets": [
     "next/babel",

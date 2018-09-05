@@ -51,6 +51,7 @@
     "styled-system": "1.1.0"
   },
   "devDependencies": {
+    "babel-plugin-react-intl": "^2.4.0",
     "eslint": "^4.19.1",
     "eslint-plugin-react": "^7.7.0",
     "mustache": "^2.3.0"
