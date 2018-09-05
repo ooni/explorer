@@ -54,7 +54,7 @@ export const Flag = ({countryCode, size}) => {
 
 Flag.propTypes = {
   countryCode: PropTypes.string.isRequired,
-  size: PropTypes.number,
+  size: PropTypes.number.isRequired
 }
 
 Flag.defaultProps = {
