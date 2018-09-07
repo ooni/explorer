@@ -42,7 +42,8 @@ const TelegramDetails = ({ testKeys }) => {
   const {
     telegram_web_status,
     telegram_tcp_blocking,
-    telegram_http_blocking
+    telegram_http_blocking,
+    tcp_connect
   } = testKeys
 
   let telegramWebOK = true
@@ -68,6 +69,20 @@ const TelegramDetails = ({ testKeys }) => {
               <AccessPointStatus label='Web App' ok={telegramWebOK} />
             </Box>
           </Flex>
+        } />
+        <DetailsBox w={1/2} title='Endpoint Status' content={
+          <React.Fragment>
+            {tcp_connect.length === 0 && <Text> No results</Text>}
+            {tcp_connect.map((connection, index) => (
+              <Flex key={index}>
+                <Box>
+                  <Text>Connection to <strong>{connection.ip}:{connection.port}</strong>{
+                    connection.status.success ? ' was successful' : ' failed'
+                  }</Text>
+                </Box>
+              </Flex>
+            ))}
+          </React.Fragment>
         } />
       </Flex>
     </Container>
