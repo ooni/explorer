@@ -130,13 +130,13 @@ export default class Country extends React.Component {
             </Box>
           </Flex>
           <Flex pt={2} pb={2}>
-            <Box w={1/2}>
+            <Box width={1/2}>
               <Heading h={3}>Blocked sites</Heading>
               {blockedWebsites.map((url, idx) => (
                 <Text key={idx}>{url}</Text>
               ))}
             </Box>
-            <Box w={1/2}>
+            <Box width={1/2}>
               <Heading h={3}>Censorship methods</Heading>
             </Box>
           </Flex>

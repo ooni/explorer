@@ -88,7 +88,7 @@ const TestMetadata = ({
   return <TestMetadataContainer color={metadata.color}>
     <Container>
       <Flex pb={3}>
-        <Box w={1/2}>
+        <Box width={1/2}>
           <Text>{countryCode}</Text>
           <Flex align='center'>
             <Box pr={3}>
@@ -107,31 +107,31 @@ const TestMetadata = ({
         <Box>
           <VerticalDivider />
         </Box>
-        <Box w={1/2}>
+        <Box width={1/2}>
           <Flex wrap>
             {/* XXX Probably refactor these into a component */}
-            <Box w={1/3} style={{flexGrow: '1'}} pb={2}>
+            <Box width={1/3} style={{flexGrow: '1'}} pb={2}>
               <Text><MdLink />URL:</Text>
             </Box>
-            <Box w={2/3} style={{flexGrow: '1'}}>
+            <Box width={2/3} style={{flexGrow: '1'}}>
               {input}
             </Box>
-            <Box w={1/3} style={{flexGrow: '1'}} pb={2}>
+            <Box width={1/3} style={{flexGrow: '1'}} pb={2}>
               <Text><MdLink />Network:</Text>
             </Box>
-            <Box w={2/3} style={{flexGrow: '1'}}>
+            <Box width={2/3} style={{flexGrow: '1'}}>
               {network}
             </Box>
-            <Box w={1/3} style={{flexGrow: '1'}} pb={2}>
+            <Box width={1/3} style={{flexGrow: '1'}} pb={2}>
               <Text><MdLink />Platform:</Text>
             </Box>
-            <Box w={2/3} style={{flexGrow: '1'}}>
+            <Box width={2/3} style={{flexGrow: '1'}}>
               {platform}
             </Box>
-            <Box w={1/3} style={{flexGrow: '1'}} pb={2}>
+            <Box width={1/3} style={{flexGrow: '1'}} pb={2}>
               <Text><MdLink />Runtime:</Text>
             </Box>
-            <Box w={2/3} style={{flexGrow: '1'}}>
+            <Box width={2/3} style={{flexGrow: '1'}}>
               {runtime}
             </Box>
           </Flex>

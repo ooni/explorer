@@ -171,43 +171,43 @@ const ResultItem = ({msmt}) => {
     }
   }
   return (
-    <ResultRow align='center' justify='center'>
-      <Box w={1/3}>
-        <Flex align='center' justify='center'>
-          <Box width={1/16}>
+    <ResultRow alignItems='center' justifyContent='center'>
+      <Box width={1/3}>
+        <Flex alignItems='center' justifyContent='center'>
+          <Box flex='auto' width={1/16}>
             <ColorCode msmt={msmt} />
           </Box>
           <Box flex='auto' width={2/16}>
             <Text bold color='gray8'>{msmt.probe_cc}</Text>
           </Box>
-          <Box flex='1 1 auto' width={5/16}>
+          <Box flex='auto' width={5/16}>
             <Flag countryCode={msmt.probe_cc} />
           </Box>
-          <Box flex='1 1 auto' width={8/16}>
+          <Box flex='auto' width={8/16}>
             <ASNBox asn={msmt.probe_asn} />
           </Box>
         </Flex>
       </Box>
-      <Box w={2/3}>
-        <Flex column>
+      <Box width={2/3}>
+        <Flex flexDirection='column'>
           <Box>
             {input &&
-        <ResultInput>
-          {input}
-        </ResultInput>}
+              <ResultInput>
+                {input}
+              </ResultInput>}
           </Box>
           <Box>
             <Flex>
-              <Box pr={2} w={7/16}>
+              <Box pr={2} width={7/16}>
                 {msmt.testName}
               </Box>
-              <Box w={4/16}>
+              <Box width={4/16}>
                 {moment(msmt.measurement_start_time).format('YYYY-MM-DD')}
               </Box>
-              <Box w={4/16}>
+              <Box width={4/16}>
                 <ResultTag msmt={msmt} />
               </Box>
-              <Box w={1/16}>
+              <Box width={1/16}>
                 <ViewDetailsLink reportId={msmt.report_id} input={msmt.input} />
               </Box>
             </Flex>

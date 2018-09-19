@@ -30,7 +30,7 @@ const CountryLink = styled(Link)`
 const CountryBlock = ({countryCode}) => {
   const href = `/country/${countryCode}`
   return (
-    <Box w={1/6} pb={3}>
+    <Box width={1/6} pb={3}>
       <NLink href={href}>
         <CountryLink href={href}>
           <Flex justify='center'>
