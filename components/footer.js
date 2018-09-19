@@ -66,37 +66,37 @@ const SocialLink = ({ logo, href}) => (
 const Footer = () => (
   <StyledFooter>
     <Container>
-      <Flex wrap>
-        <FooterBox width={[1, 2/6]}>
-          <Flex wrap align='center'>
+      <Flex flexWrap='wrap'>
+        <Box py={3} w={[1, 2/6]}>
+          <Flex flexWrap='wrap' alignItems='center'>
             <Box p={[1, 0]} mb={[0, 3]} width={[1/2, 1]}>
               <StyledIcon height='32px' />
             </Box>
             <Box p={[1, 0]} pr={[0, '50%']} width={[1/2, 1]}> <FooterText>Detect and measure internet censorship all around the world.</FooterText> </Box>
           </Flex>
-        </FooterBox>
-        <FooterBox width={[1/2, 1/6]}>
+        </Box>
+        <Box width={[1/2, 1/6]}>
           <FooterHead>OONI</FooterHead>
           <FooterLink href='https://ooni.io/about/' label='About' />
           <FooterLink href='https://ooni.io/post/' label='Blog' />
           <FooterLink href='#' label='Reports' />
           <FooterLink href='https://ooni.io/about/#contact' label='Contact Us' />
-        </FooterBox>
-        <FooterBox width={[1/2, 1/6]}>
+        </Box>
+        <Box width={[1/2, 1/6]}>
           <FooterHead>Data</FooterHead>
           <FooterLink href='https://ooni.io/install/' label='Install Probe' />
           <FooterLink href='https://explorer.ooni.io/' label='Explorer' />
           <FooterLink href='https://api.ooni.io/' label='API' />
           <FooterLink href='https://ooni.io/nettest/' label='Test Docs' />
-        </FooterBox>
-        <FooterBox width={[1/2, 1/6]}>
+        </Box>
+        <Box width={[1/2, 1/6]}>
           <FooterHead>Get Involved</FooterHead>
           <FooterLink href='https://ooni.io/get-involved/' label='Contribute' />
           <FooterLink href='#' label='Donate' />
           <FooterLink href='https://ooni.io/get-involved/partnership-program/' label='Partners' />
           <FooterLink href='https://run.ooni.io/' label='Run OONI' />
-        </FooterBox>
-        <FooterBox width={[1/2, 1/6]}>
+        </Box>
+        <Box width={[1/2, 1/6]}>
           <FooterHead>Follow Us</FooterHead>
           <SocialLink
             logo='https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=2048&q=20'
@@ -111,20 +111,20 @@ const Footer = () => (
           <SocialLink
             logo='https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=2048&q=20'
           />
-        </FooterBox>
+        </Box>
       </Flex>
-      <Flex wrap>
-        <FooterBox width={[1, 2/6]}>
+      <Flex flexWrap='wrap'>
+        <Box width={[1, 2/6]}>
           <small>
             <Box mb={1}>© 2018 Open Observatory of Network Interference.</Box>
             <Box>Content available under a Creative Commons license.</Box>
           </small>
-        </FooterBox>
-        <FooterBox ml='auto' width={[1, 2/6]}>
+        </Box>
+        <Box ml='auto' width={[1, 2/6]}>
           <FooterLink horizontal href='/data-policy' label='Data Policy' />
           <FooterLink horizontal href='/legal' label='Legal' />
           <FooterLink horizontal href='/sitemap' label='Sitemap' />
-        </FooterBox>
+        </Box>
       </Flex>
     </Container>
   </StyledFooter>

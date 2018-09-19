@@ -17,9 +17,9 @@ const StyledLoader = styled.div`
 
 const Loader = ({loading}) => (
   <StyledLoader loading={loading}>
-    <Flex align='baseline' justify='space-around'>
+    <Flex alignItems='baseline' justifyContent='space-around'>
       <Box>
-        <Flex column>
+        <Flex flexDirection='column'>
           <Box style={{height: '200px'}}>
             <BarLoader />
           </Box>

@@ -75,7 +75,7 @@ export default class Country extends React.Component {
 
         <NavBar />
         <Container>
-          <Flex align='center'>
+          <Flex alignItems='center'>
             <Box>
               <Flag countryCode={countryCode} />
             </Box>
@@ -107,7 +107,7 @@ export default class Country extends React.Component {
                   y="count"
                 />
               </Box>
-              <Flex column align='left'>
+              <Flex flexDirection='column' alignItems='left'>
                 <Box p={2}>
                   <Stat
                     label="Measurements"

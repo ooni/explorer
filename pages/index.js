@@ -122,7 +122,7 @@ export default class LandingPage extends React.Component {
           </Container>
         </HeroUnit>
         <Container>
-          <Flex align='center' justify='center' style={{position: 'relative'}}>
+          <Flex alignItems='center' justifyContent='center' style={{position: 'relative'}}>
             <StatsContainer>
               <StatsItem
                 label="Measurements"

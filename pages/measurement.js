@@ -90,7 +90,7 @@ const TestMetadata = ({
       <Flex pb={3}>
         <Box width={1/2}>
           <Text>{countryCode}</Text>
-          <Flex align='center'>
+          <Flex alignItems='center'>
             <Box pr={3}>
               <Heading h={2}>{metadata.name}</Heading>
             </Box>
@@ -108,7 +108,7 @@ const TestMetadata = ({
           <VerticalDivider />
         </Box>
         <Box width={1/2}>
-          <Flex wrap>
+          <Flex flexWrap='wrap'>
             {/* XXX Probably refactor these into a component */}
             <Box width={1/3} style={{flexGrow: '1'}} pb={2}>
               <Text><MdLink />URL:</Text>

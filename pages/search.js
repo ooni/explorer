@@ -314,7 +314,7 @@ class Search extends React.Component {
               {!this.state.error && !this.state.loading
             && <div>
               <ResultsList results={results} testNamesKeyed={testNamesKeyed} />
-              <Flex align='center' justify='center'>
+              <Flex alignItems='center' justifyContent='center'>
                 <Button onClick={this.loadMore}>Load more</Button>
               </Flex>
             </div>
