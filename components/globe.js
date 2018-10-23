@@ -84,7 +84,7 @@ class WebGLGlobe extends React.Component {
 
     if (webGLEnabled) {
       return (
-        <StyledGlobe ref={(el) => { this.globeRef = el }} />
+        <StyledGlobe innerRef={(el) => { this.globeRef = el }} />
       )
     } else {
       return <div>Your browser does not support WebGL</div>
