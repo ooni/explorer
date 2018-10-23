@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { createGlobalStyle } from 'styled-components'
+import { injectGlobal } from 'styled-components'
 import {
   Provider,
   theme
@@ -11,7 +11,7 @@ import Footer from './footer'
 
 theme.maxWidth = 1024
 
-const GlobalStyle = createGlobalStyle`
+injectGlobal`
   * {
     text-rendering: geometricPrecision;
     box-sizing: border-box;
@@ -51,7 +51,6 @@ export default class Layout extends React.Component {
           </div>
           {!disableFooter && <Footer />}
         </div>
-        <GlobalStyle />
       </Provider>
     )
   }
