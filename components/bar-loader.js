@@ -2,7 +2,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import styled, { css, keyframes } from 'styled-components'
+import styled, { keyframes } from 'styled-components'
 
 const loading = keyframes`
   0%,
@@ -18,7 +18,7 @@ const loading = keyframes`
 `
 
 const Bar = styled.div`
-  animation: ${props => css`${loading} ${props.duration}s infinite ease-in-out`};
+  animation: ${props => `${loading} ${props.duration}s infinite ease-in-out`};
   animation-delay: ${props => `${props.duration * -0.16}s`};
   background: ${props => props.color};
   color: ${props => props.color};
@@ -30,7 +30,7 @@ const Bar = styled.div`
   transform: translateZ(0);
   width: 1em;
   &:before {
-    animation: ${props => css`${loading} ${props.duration}s infinite ease-in-out;`};
+    animation: ${props => `${loading} ${props.duration}s infinite ease-in-out;`};
     animation-delay: ${props => `${props.duration * -0.32}s`};
     background: ${props => props.color};
     content: '';
@@ -41,7 +41,7 @@ const Bar = styled.div`
     width: 1em;
   }
   &:after {
-    animation: ${props => css`${loading} ${props.duration}s infinite ease-in-out`};
+    animation: ${props => `${loading} ${props.duration}s infinite ease-in-out`};
     animation-delay: ${props => `${props.duration * 0.08}s`};
     background: ${props => props.color};
     content: '';
