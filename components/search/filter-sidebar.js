@@ -131,7 +131,7 @@ class FilterSidebar extends React.Component {
           onChange={this.onChangeFilter('asnFilter')} />
 
         <Flex>
-          <Box w={1/2} pr={1}>
+          <Box width={1/2} pr={1}>
             <StyledLabel>
         Since
             </StyledLabel>
@@ -141,7 +141,7 @@ class FilterSidebar extends React.Component {
               timeFormat={false}
             />
           </Box>
-          <Box w={1/2} pl={1}>
+          <Box width={1/2} pl={1}>
             <StyledLabel>
         Until
             </StyledLabel>

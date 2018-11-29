@@ -66,9 +66,9 @@ const SocialLink = ({ logo, href}) => (
 const Footer = () => (
   <StyledFooter>
     <Container>
-      <Flex wrap>
+      <Flex flexWrap='wrap'>
         <FooterBox width={[1, 2/6]}>
-          <Flex wrap align='center'>
+          <Flex flexWrap='wrap' alignItems='center'>
             <Box p={[1, 0]} mb={[0, 3]} width={[1/2, 1]}>
               <StyledIcon height='32px' />
             </Box>
@@ -113,7 +113,7 @@ const Footer = () => (
           />
         </FooterBox>
       </Flex>
-      <Flex wrap>
+      <Flex flexWrap='wrap'>
         <FooterBox width={[1, 2/6]}>
           <small>
             <Box mb={1}>© 2018 Open Observatory of Network Interference.</Box>

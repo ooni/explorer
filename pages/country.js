@@ -75,7 +75,7 @@ export default class Country extends React.Component {
 
         <NavBar />
         <Container>
-          <Flex align='center'>
+          <Flex alignItems='center'>
             <Box>
               <Flag countryCode={countryCode} />
             </Box>
@@ -107,7 +107,7 @@ export default class Country extends React.Component {
                   y="count"
                 />
               </Box>
-              <Flex column align='left'>
+              <Flex flexDirection='column' alignItems='left'>
                 <Box p={2}>
                   <Stat
                     label="Measurements"
@@ -130,13 +130,13 @@ export default class Country extends React.Component {
             </Box>
           </Flex>
           <Flex pt={2} pb={2}>
-            <Box w={1/2}>
+            <Box width={1/2}>
               <Heading h={3}>Blocked sites</Heading>
               {blockedWebsites.map((url, idx) => (
                 <Text key={idx}>{url}</Text>
               ))}
             </Box>
-            <Box w={1/2}>
+            <Box width={1/2}>
               <Heading h={3}>Censorship methods</Heading>
             </Box>
           </Flex>

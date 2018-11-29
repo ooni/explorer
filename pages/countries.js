@@ -30,10 +30,10 @@ const CountryLink = styled(Link)`
 const CountryBlock = ({countryCode}) => {
   const href = `/country/${countryCode}`
   return (
-    <Box w={1/6} pb={3}>
+    <Box width={1/6} pb={3}>
       <NLink href={href}>
         <CountryLink href={href}>
-          <Flex justify='center'>
+          <Flex justifyContent='center'>
             <Flag center border countryCode={countryCode} />
           </Flex>
           <Text pt={2}>{countryUtil.territoryNames[countryCode]}</Text>
@@ -47,7 +47,7 @@ const RegionBlock = ({regionCode}) => {
   return <div>
     <Heading h={1} id={regionName} center pb={2}>{regionName}</Heading>
 
-    <Flex wrap pb={5}>
+    <Flex flexWrap='wrap' pb={5}>
       {countryUtil.regions[regionCode].countries.map((countryCode) =>
         <CountryBlock key={countryCode} countryCode={countryCode} />
       )}

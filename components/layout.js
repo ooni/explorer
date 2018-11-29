@@ -36,7 +36,8 @@ injectGlobal`
 
   .content {
     flex: 1 0 auto;
-  }`
+  }
+`
 
 export default class Layout extends React.Component {
   render () {
