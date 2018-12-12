@@ -82,7 +82,7 @@ const CommonSummary = ({
       <SummaryContainer color={metadata.color}>
         <Container>
           <Flex pb={3}>
-            <Box w={1/2}>
+            <Box width={1/2}>
               <Flex align='center'>
                 <Box p={1}>
                   <Flag countryCode={countryCode} size={24} />
@@ -108,24 +108,24 @@ const CommonSummary = ({
             <Box>
               <VerticalDivider />
             </Box>
-            <Box w={1/2} mt={3}>
-              <Flex wrap>
-                <Box w={1/3} style={{flexGrow: '1'}} pb={2}>
+            <Box width={1/2} mt={3}>
+              <Flex flexWrap='wrap'>
+                <Box width={1/3} style={{flexGrow: '1'}} pb={2}>
                   <Text><MdPublic />{' '}Network:</Text>
                 </Box>
-                <Box w={2/3} style={{flexGrow: '1'}}>
+                <Box width={2/3} style={{flexGrow: '1'}}>
                   {network}
                 </Box>
-                <Box w={1/3} style={{flexGrow: '1'}} pb={2}>
+                <Box width={1/3} style={{flexGrow: '1'}} pb={2}>
                   <Text><MdPhonelink />{' '}Platform:</Text>
                 </Box>
-                <Box w={2/3} style={{flexGrow: '1'}}>
+                <Box width={2/3} style={{flexGrow: '1'}}>
                   {platform}
                 </Box>
-                <Box w={1/3} style={{flexGrow: '1'}} pb={2}>
+                <Box width={1/3} style={{flexGrow: '1'}} pb={2}>
                   <Text><MdRestore />{' '}Runtime:</Text>
                 </Box>
-                <Box w={2/3} style={{flexGrow: '1'}}>
+                <Box width={2/3} style={{flexGrow: '1'}}>
                   {prettyMs(runtime * 1000)}
                 </Box>
               </Flex>

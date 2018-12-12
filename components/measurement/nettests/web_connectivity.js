@@ -32,10 +32,10 @@ const StatusBar = ({
   <Box mb={4} p={3} color='white' bg={anomaly ? 'yellow8' : 'green7'}>
     <Container>
       <Flex>
-        <Box w={1/2}>
+        <Box width={1/2}>
           {anomaly ? <StatusLabelAnomaly /> : <StatusLabelOK />}
         </Box>
-        <Box w={1/2}>
+        <Box width={1/2}>
           <Text f={2}>Type: <strong>{hint}</strong></Text>
         </Box>
       </Flex>
@@ -49,7 +49,7 @@ StatusBar.propTypes = {
 }
 
 const DetailsBox = ({ title, content }) => (
-  <Box w={1/2}>
+  <Box width={1/2}>
     <Heading h={4}>{title}</Heading>
     {content}
   </Box>
@@ -91,8 +91,8 @@ const QueryContainer = ({query}) => {
   } = query
 
   return (
-    <Flex wrap bg='gray2' p={2}>
-      <Box w={1} pb={2}>
+    <Flex flexWrap='wrap' bg='gray2' p={2}>
+      <Box width={1} pb={2}>
         <Flex justify='space-between' pr={4}>
           <Box>
             <Pre>{hostname}</Pre>
@@ -108,14 +108,14 @@ const QueryContainer = ({query}) => {
           </Box>
         </Flex>
       </Box>
-      {failure && <Box w={1}><FailureString failure={failure} /></Box>}
-      <Box w={1}>
-        <Flex wrap>
+      {failure && <Box width={1}><FailureString failure={failure} /></Box>}
+      <Box width={1}>
+        <Flex flexWrap='wrap'>
           {answers.map((dnsAnswer, index) => {
             if (dnsAnswer.answer_type === 'A') {
-              return <Box w={1} pb={2} key={index}><Text>{dnsAnswer.ipv4}</Text></Box>
+              return <Box width={1} pb={2} key={index}><Text>{dnsAnswer.ipv4}</Text></Box>
             } else if (dnsAnswer.answer_type === 'CNAME') {
-              return <Box w={1} pb={2} key={index}><Text>{dnsAnswer.hostname}</Text></Box>
+              return <Box width={1} pb={2} key={index}><Text>{dnsAnswer.hostname}</Text></Box>
             }
           })}
         </Flex>
@@ -127,19 +127,19 @@ const QueryContainer = ({query}) => {
 const RequestResponseContainer = ({request}) => {
   return (
     <Box>
-      <Flex wrap>
-        <Box w={1} pb={2}>
+      <Flex flexWrap='wrap'>
+        <Box width={1} pb={2}>
           <Pre>{request.request.method} {request.request.url}</Pre>
         </Box>
-        <Box w={1}>
+        <Box width={1}>
           <Heading h={5}>Response</Heading>
         </Box>
-        <Box w={1}>
+        <Box width={1}>
           <Pre>
             {JSON.stringify(request.response.headers, 0, 2)}
           </Pre>
         </Box>
-        <Box w={1}>
+        <Box width={1}>
           <HttpResponseBodyContainer>
             {request.response.body}
           </HttpResponseBodyContainer>
@@ -207,23 +207,23 @@ const WebConnectivityDetails = ({ testKeys }) => {
       <StatusBar anomaly={anomaly} hint={hint} />
       <Container>
         <Heading h={4}>Failures</Heading>
-        <Flex mb={2} wrap>
-          <Box w={1/3}>
+        <Flex mb={2} flexWrap='wrap'>
+          <Box width={1/3}>
           HTTP Experiment
           </Box>
-          <Box w={2/3}>
+          <Box width={2/3}>
             <FailureString failure={http_experiment_failure} />
           </Box>
-          <Box w={1/3}>
+          <Box width={1/3}>
           DNS Experiment
           </Box>
-          <Box w={2/3}>
+          <Box width={2/3}>
             <FailureString failure={dns_experiment_failure} />
           </Box>
-          <Box w={1/3}>
+          <Box width={1/3}>
           Control
           </Box>
-          <Box w={2/3}>
+          <Box width={2/3}>
             <FailureString failure={control_failure} />
           </Box>
         </Flex>
@@ -232,10 +232,10 @@ const WebConnectivityDetails = ({ testKeys }) => {
           <DetailsBox title='DNS Queries' content={
             <React.Fragment>
               <Flex mb={2}>
-                <Box w={1/3}>
+                <Box width={1/3}>
                   <Text>Resolver:</Text>
                 </Box>
-                <Box w={2/3}>
+                <Box width={2/3}>
                   <Text>{client_resolver || '(unknown)'}</Text>
                 </Box>
               </Flex>
@@ -259,7 +259,7 @@ const WebConnectivityDetails = ({ testKeys }) => {
         information about every request and response as this is a very common
         thing we look at when investigating a case. */}
         <Flex>
-          <Box w={1}>
+          <Box width={1}>
             <Heading h={4}>HTTP Requests</Heading>
             {requests.map((request, index) => <RequestResponseContainer key={index} request={request} />)}
           </Box>

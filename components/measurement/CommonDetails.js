@@ -47,40 +47,40 @@ const CommonDetails = ({
   return (
     <Container>
       <Flex my={4}>
-        <Box w={1/2} bg='WHITE'>
+        <Box width={1/2} bg='WHITE'>
           <Border color={theme.colors.gray3}>
             <Box p={3}>
               <Heading h={4}>Probe Metadata</Heading>
               <Flex mb={1}>
-                <Box w={1/2}>
+                <Box width={1/2}>
                   Software
                 </Box>
-                <Box w={1/2}>
+                <Box width={1/2}>
                   <Text bold>{software_name}</Text>
                 </Box>
               </Flex>
               <Flex mb={1}>
-                <Box w={1/2}>
+                <Box width={1/2}>
                   Platform
                 </Box>
-                <Box w={1/2}>
+                <Box width={1/2}>
                   <Text bold>{platform ? platform : 'unknown'}</Text>
                 </Box>
               </Flex>
               <Flex mb={1}>
-                <Box w={1/2}>
+                <Box width={1/2}>
                   Software Version
                 </Box>
-                <Box w={1/2}>
+                <Box width={1/2}>
                   <Text bold>{software_version}</Text>
                 </Box>
               </Flex>
               {engine_version &&
               <Flex mb={1}>
-                <Box w={1/2}>
+                <Box width={1/2}>
                   Measurement Kit Version
                 </Box>
-                <Box w={1/2}>
+                <Box width={1/2}>
                   <Text bold>{engine_version}</Text>
                 </Box>
               </Flex>}
