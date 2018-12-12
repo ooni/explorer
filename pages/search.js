@@ -286,7 +286,7 @@ class Search extends React.Component {
 
         <Container>
           <Flex pt={3}>
-            <Box w={1/4} pr={2}>
+            <Box width={1/4} pr={2}>
               <FilterSidebar
                 inputFilter={inputFilter}
                 testNameFilter={testNameFilter}
@@ -300,9 +300,9 @@ class Search extends React.Component {
                 countries={countries}
               />
             </Box>
-            <Box w={3/4}>
+            <Box width={3/4}>
               <Flex pt={2}>
-                <Box w={1/2}>
+                <Box width={1/2}>
                   <FilterTabs onClick={this.onChangeOnly} onlyFilter={onlyFilter} />
                 </Box>
               </Flex>
@@ -314,7 +314,7 @@ class Search extends React.Component {
               {!this.state.error && !this.state.loading
             && <div>
               <ResultsList results={results} testNamesKeyed={testNamesKeyed} />
-              <Flex align='center' justify='center'>
+              <Flex alignItems='center' justifyContent='center'>
                 <Button onClick={this.loadMore}>Load more</Button>
               </Flex>
             </div>

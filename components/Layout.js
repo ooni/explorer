@@ -37,7 +37,8 @@ injectGlobal`
 
   .content {
     flex: 1 0 auto;
-  }`
+  }
+`
 
 const Layout = ({ children, disableFooter = false }) => (
   <Provider theme={theme}>

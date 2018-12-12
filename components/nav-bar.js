@@ -65,7 +65,7 @@ const StyledNavBar = styled.div`
 export const NavBar = ({color}) => (
   <StyledNavBar color={color}>
     <Container>
-      <Flex align='center'>
+      <Flex alignItems='center'>
         <Box style={{zIndex: 1}}>
           <NLink href='/'>
             <ExplorerLogo height='26px' />
