@@ -116,7 +116,8 @@ export default class LandingPage extends React.Component {
                 <Button inverted hollow>Explore</Button>
               </Box>
               <Box width={1/3}>
-                <Globe magnitudeURL="/_/s3/map-magnitude.json" />
+                {/* FIXME: Disabled globe animation crashing in production env. 
+                  <Globe magnitudeURL="/_/s3/map-magnitude.json" /> */}
               </Box>
             </Flex>
           </Container>
