@@ -13,7 +13,7 @@ import {
 
 import NavBar from '../components/nav-bar'
 import Flag from '../components/flag'
-import Layout from '../components/layout'
+import Layout from '../components/Layout'
 import { toCompactNumberUnit } from '../utils'
 
 import { VictoryPie } from 'victory'

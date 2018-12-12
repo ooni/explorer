@@ -8,6 +8,7 @@ import {
 
 import Header from './header'
 import Footer from './footer'
+import withIntl from './withIntl'
 
 theme.maxWidth = 1024
 
@@ -39,24 +40,21 @@ injectGlobal`
   }
 `
 
-export default class Layout extends React.Component {
-  render () {
-    const { children, disableFooter = false } = this.props
-    return (
-      <Provider theme={theme}>
-        <div className="site">
-          <Header />
-          <div className="content">
-            { children }
-          </div>
-          {!disableFooter && <Footer />}
-        </div>
-      </Provider>
-    )
-  }
-}
+const Layout = ({ children, disableFooter = false }) => (
+  <Provider theme={theme}>
+    <div className="site">
+      <Header />
+      <div className="content">
+        { children }
+      </div>
+      {!disableFooter && <Footer />}
+    </div>
+  </Provider>
+)
 
 Layout.propTypes = {
   children: PropTypes.array.isRequired,
   disableFooter: PropTypes.bool
 }
+
+export default withIntl(Layout)

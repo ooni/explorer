@@ -16,7 +16,7 @@ import {
   Link
 } from 'ooni-components'
 
-import Layout from '../components/layout'
+import Layout from '../components/Layout'
 import Globe from '../components/globe'
 import NavBar from '../components/nav-bar'
 
@@ -116,7 +116,8 @@ export default class LandingPage extends React.Component {
                 <Button inverted hollow>Explore</Button>
               </Box>
               <Box width={1/3}>
-                <Globe magnitudeURL="/_/s3/map-magnitude.json" />
+                {/* FIXME: Disabled globe animation crashing in production env. 
+                  <Globe magnitudeURL="/_/s3/map-magnitude.json" /> */}
               </Box>
             </Flex>
           </Container>

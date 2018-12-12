@@ -12,7 +12,7 @@ import {
 } from 'ooni-components'
 
 import NavBar from '../components/nav-bar'
-import Layout from '../components/layout'
+import Layout from '../components/Layout'
 
 import ResultsList from '../components/search/results-list'
 import FilterTabs from '../components/search/filter-tabs'
