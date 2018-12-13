@@ -24,23 +24,20 @@ const WhatsAppDetails = ({ testKeys }) => {
   const isFailed = (working === false && possibleCensorship === false)
 
   return <div>
-    <Text>possibleCensorship: {possibleCensorship}</Text>
-    <Text>working: {working}</Text>
-    <Text>isFailed: {isFailed}</Text>
+    <Text>possibleCensorship: {possibleCensorship.toString()}</Text>
+    <Text>working: {working.toString()}</Text>
+    <Text>isFailed: {isFailed.toString()}</Text>
     <Text>
-  working: {working}
+  working: {working.toString()}
     </Text>
     <Text>
-  registrationServerBlocked: {registrationServerBlocked}
+  registrationServerBlocked: {registrationServerBlocked.toString()}
     </Text>
     <Text>
-  webBlocked: {webBlocked}
+  webBlocked: {webBlocked.toString()}
     </Text>
     <Text>
-  endpointsBlocked: {endpointsBlocked}
-    </Text>
-    <Text>
-  possibleCensorship: {possibleCensorship}
+  endpointsBlocked: {endpointsBlocked.toString()}
     </Text>
   </div>
 }
