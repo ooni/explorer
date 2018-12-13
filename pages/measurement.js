@@ -9,6 +9,7 @@ import CommonDetails from '../components/measurement/CommonDetails'
 import renderDetails from '../components/measurement/renderDetails'
 
 import Layout from '../components/Layout'
+import NavBar from '../components/nav-bar'
 
 export default class Measurement extends React.Component {
 
@@ -59,6 +60,7 @@ export default class Measurement extends React.Component {
         <Head>
           <title>OONI Explorer</title>
         </Head>
+        <NavBar />
 
         <CommonSummary
           measurement={measurement}
