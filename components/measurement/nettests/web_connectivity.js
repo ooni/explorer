@@ -13,39 +13,45 @@ import { Tick, Cross } from 'ooni-components/dist/icons'
 
 import styled from 'styled-components'
 
-const StatusLabelOK = () => (
-  <Flex align='center'>
-    <Tick size={32} /><Text ml={1} f={2}>OK</Text>
-  </Flex>
-)
+export const checkAnomaly = ( testKeys ) => {
+  const {
+    accessible,
+    blocking,
+  } = testKeys
 
-const StatusLabelAnomaly = () => (
-  <Flex align='center'>
-    <Cross size={32} /><Text ml={1} f={2}>Anomaly</Text>
-  </Flex>
-)
+  let anomaly = null
+  let hint = 'No Censorship Detected'
 
-const StatusBar = ({
-  anomaly,
-  hint
-}) => (
-  <Box mb={4} p={3} color='white' bg={anomaly ? 'yellow8' : 'green7'}>
-    <Container>
-      <Flex>
-        <Box width={1/2}>
-          {anomaly ? <StatusLabelAnomaly /> : <StatusLabelOK />}
-        </Box>
-        <Box width={1/2}>
-          <Text f={2}>Type: <strong>{hint}</strong></Text>
-        </Box>
-      </Flex>
-    </Container>
-  </Box>
-)
+  if ((accessible === true || accessible === null) && blocking === null) {
+    hint = 'Error In Measurement'
+    if (accessible === true) {
+      anomaly = 'SITEUP'
+    } else if (accessible === null) {
+      anomaly = 'UNKNOWN'
+    }
+  } else if (accessible === false && (blocking === false || blocking === null)) {
+    anomaly = 'SITEDOWN'
+    hint = 'Site Unavailable'
+  } else if (blocking !== null && blocking !== false) {
+    anomaly = 'CENSORSHIP'
+    hint = 'Evidence of Possible Censorship'
+    // Further identify type of censorship
+    if (blocking === 'dns') {
+      anomaly = 'DNS'
+      hint = 'DNS Based Blocking'
+    } else if (blocking === 'http-diff') {
+      anomaly = 'HTTPDIFF'
+      hint = 'Different HTTP Response'
+    } else if (blocking === 'http-failure') {
+      anomaly = 'HTTPFAILURE'
+      hint = 'HTTP Reqeust Failed'
+    } else if (blocking === 'tcp-ip') {
+      anomaly = 'TCPIP'
+      hint = 'TCP/IP Based Blocking'
+    }
+  }
 
-StatusBar.propTypes = {
-  anomaly: PropTypes.string.isRequired,
-  hint: PropTypes.string.isRequired
+  return anomaly
 }
 
 const DetailsBox = ({ title, content }) => (
@@ -150,8 +156,6 @@ const RequestResponseContainer = ({request}) => {
 }
 const WebConnectivityDetails = ({ testKeys }) => {
   const {
-    accessible,
-    blocking,
     queries,
     tcp_connect,
     requests,
@@ -159,40 +163,7 @@ const WebConnectivityDetails = ({ testKeys }) => {
     http_experiment_failure,
     dns_experiment_failure,
     control_failure
-
   } = testKeys
-
-  let anomaly = null
-  let hint = 'No Censorship Detected'
-
-  if ((accessible === true || accessible === null) && blocking === null) {
-    hint = 'Error In Measurement'
-    if (accessible === true) {
-      anomaly = 'SITEUP'
-    } else if (accessible === null) {
-      anomaly = 'UNKNOWN'
-    }
-  } else if (accessible === false && (blocking === false || blocking === null)) {
-    anomaly = 'SITEDOWN'
-    hint = 'Site Unavailable'
-  } else if (blocking !== null && blocking !== false) {
-    anomaly = 'CENSORSHIP'
-    hint = 'Evidence of Possible Censorship'
-    // Further identify type of censorship
-    if (blocking === 'dns') {
-      anomaly = 'DNS'
-      hint = 'DNS Based Blocking'
-    } else if (blocking === 'http-diff') {
-      anomaly = 'HTTPDIFF'
-      hint = 'Different HTTP Response'
-    } else if (blocking === 'http-failure') {
-      anomaly = 'HTTPFAILURE'
-      hint = 'HTTP Reqeust Failed'
-    } else if (blocking === 'tcp-ip') {
-      anomaly = 'TCPIP'
-      hint = 'TCP/IP Based Blocking'
-    }
-  }
 
   const tcpConnections = tcp_connect.map((connection) => {
     const status = (connection.status.success) ? 'successful' :
@@ -204,7 +175,6 @@ const WebConnectivityDetails = ({ testKeys }) => {
   })
   return (
     <div>
-      <StatusBar anomaly={anomaly} hint={hint} />
       <Container>
         <Heading h={4}>Failures</Heading>
         <Flex mb={2} flexWrap='wrap'>
