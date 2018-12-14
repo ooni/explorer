@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import Head from 'next/head'
 
 import axios from 'axios'
-
+import { Container } from 'ooni-components'
 
 import StatusHeader from '../components/measurement/StatusHeader'
 import CommonSummary from '../components/measurement/CommonSummary'
@@ -80,11 +80,14 @@ export default class Measurement extends React.Component {
           color={color}
           measurement={measurement}
           country={country} />
-        <DetailsHeader testName={measurement.test_name} runtime={measurement.test_runtime} />
 
-        {renderDetails(measurement.test_name, measurement.test_keys)}
+        <Container>
+          <DetailsHeader testName={measurement.test_name} runtime={measurement.test_runtime} />
 
-        <CommonDetails measurement={measurement} />
+          {renderDetails(measurement.test_name, measurement.test_keys)}
+
+          <CommonDetails measurement={measurement} />
+        </Container>
 
       </Layout>
     )
