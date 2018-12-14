@@ -6,7 +6,7 @@ import { Flex, Box, Border } from 'ooni-components'
 // Using Text from rebass directly for now
 import { Text } from 'rebass'
 
-import { testGroups, testNames } from '../test-info'
+import { getTestMetadata } from '../utils'
 import Badge from '../badge'
 
 const TestGroupBadge = ({icon, name, color}) => (
@@ -21,33 +21,8 @@ TestGroupBadge.propTypes = {
   color: PropTypes.string
 }
 
-const getTestMetadata = (testName) => {
-  let metadata = {
-    'name': testName,
-    'groupName': testGroups.default.name,
-    'color': testGroups.default.color,
-    'icon': testGroups.default.icon
-  }
-
-  const test = testNames[testName]
-  if (test === undefined) {
-    return metadata
-  }
-  const group = testGroups[test.group]
-  metadata['name'] = test.name
-  metadata['groupName'] = group.name
-  metadata['icon'] = group.icon
-  metadata['color'] = group.color
-  return metadata
-}
-
 const DetailsHeader = ({testName, runtime, notice}) => {
   const metadata = getTestMetadata(testName)
-  const test = testNames[testName]
-  if (test === undefined) {
-    return metadata
-  }
-  const group = testGroups[test.group]
 
   return (
     <Flex py={4} alignItems='center'>
