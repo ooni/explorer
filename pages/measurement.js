@@ -7,6 +7,7 @@ import axios from 'axios'
 
 import StatusHeader from '../components/measurement/StatusHeader'
 import CommonSummary from '../components/measurement/CommonSummary'
+import DetailsHeader from '../components/measurement/DetailsHeader'
 import CommonDetails from '../components/measurement/CommonDetails'
 import renderDetails from '../components/measurement/renderDetails'
 
@@ -79,6 +80,7 @@ export default class Measurement extends React.Component {
           color={color}
           measurement={measurement}
           country={country} />
+        <DetailsHeader testName={measurement.test_name} runtime={measurement.test_runtime} />
 
         {renderDetails(measurement.test_name, measurement.test_keys)}
 
