@@ -9,7 +9,7 @@ import {
 } from 'ooni-components'
 import moment from 'moment'
 
-const SummaryContainer = styled.div`
+const SummaryContainer = styled(Box)`
   background-color: ${props => props.color};
   color: white;
 `
@@ -47,7 +47,7 @@ const CommonSummary = ({
 
   return (
     <React.Fragment>
-      <SummaryContainer color={color}>
+      <SummaryContainer py={4} color={color}>
         <Container>
           <Flex>
             <SummaryItemBox
