@@ -4,6 +4,8 @@ import Head from 'next/head'
 
 import axios from 'axios'
 
+
+import StatusHeader from '../components/measurement/StatusHeader'
 import CommonSummary from '../components/measurement/CommonSummary'
 import CommonDetails from '../components/measurement/CommonDetails'
 import renderDetails from '../components/measurement/renderDetails'
