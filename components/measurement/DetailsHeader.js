@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import prettyMs from 'pretty-ms'
-import { Flex, Box, Border } from 'ooni-components'
+import { Flex, Box } from 'ooni-components'
 // FIXME: Include 'fontWeight' to ooni-components/atoms/Text
 // Using Text from rebass directly for now
 import { Text } from 'rebass'
@@ -44,6 +44,12 @@ const DetailsHeader = ({testName, runtime, notice}) => {
       </Box>
     </Flex>
   )
+}
+
+DetailsHeader.propTypes = {
+  testName: PropTypes.string.isRequired,
+  runtime: PropTypes.string.isRequired,
+  notice: PropTypes.element
 }
 
 export default DetailsHeader
