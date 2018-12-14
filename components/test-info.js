@@ -55,64 +55,78 @@ export const testNames = {
   /* Websites */
   'web_connectivity': {
     group: 'websites',
-    name: 'Web Connectivity'
+    name: 'Web Connectivity',
+    info: 'https://ooni.io/nettest/web-connectivity/'
   },
 
   /* Middlebox tests */
   'http_invalid_request_line': {
     group: 'middlebox',
-    name: 'HTTP Invalid Request Line'
+    name: 'HTTP Invalid Request Line',
+    info: 'https://ooni.io/nettest/http-invalid-request-line/'
   },
   'http_header_field_manipulation': {
     group: 'middlebox',
-    name: 'HTTP Header Field Manipulation'
+    name: 'HTTP Header Field Manipulation',
+    info: 'https://ooni.io/nettest/http-header-field-manipulation/'
   },
 
   /* IM Tests */
   'facebook_messenger': {
     group: 'im',
-    name: 'Facebook Messenger'
+    name: 'Facebook Messenger',
+    info: 'https://ooni.io/nettest/facebook-messenger/'
   },
   'telegram': {
     group: 'im',
-    name: 'Telegram'
+    name: 'Telegram',
+    info: 'https://ooni.io/nettest/telegram/'
   },
   'whatsapp': {
     group: 'im',
-    name: 'WhatsApp'
+    name: 'WhatsApp',
+    info: 'https://ooni.io/nettest/whatsapp/'
   },
 
   /* Performance */
   'ndt': {
     group: 'performance',
-    name: 'NDT Speed Test'
+    name: 'NDT Speed Test',
+    info: 'https://ooni.io/nettest/ndt/'
   },
   'dash': {
     group: 'performance',
-    name: 'Dash video streaming'
+    name: 'Dash video streaming',
+    info: 'https://ooni.io/nettest/dash/'
   },
 
   /* Censorship circumvention */
   'vanilla_tor': {
     group: 'circumvention',
-    name: 'Tor (Vanilla)'
+    name: 'Tor (Vanilla)',
+    info: 'https://ooni.io/nettest/vanilla-tor/'
   },
   'bridge_reachability': {
     group: 'circumvention',
-    name: 'Tor Bridge Reachability'
+    name: 'Tor Bridge Reachability',
+    info: 'https://ooni.io/nettest/tor-bridge-reachability/'
   },
 
   /* Legacy tests */
   'tcp_connect': {
     group: 'legacy',
-    name: 'TCP Connect'
+    name: 'TCP Connect',
+    // FIXME: Use a more relevant link
+    info: 'https://ooni.io/nettest/'
   },
   'dns_consistency': {
     group: 'legacy',
-    name: 'DNS Consistency'
+    name: 'DNS Consistency',
+    info: 'https://ooni.io/nettest/dns-consistency/'
   },
   'http_requests': {
     group: 'legacy',
-    name: 'HTTP Requests'
+    name: 'HTTP Requests',
+    info: 'https://ooni.io/nettest/http-requests/'
   },
 }
