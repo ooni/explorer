@@ -23,7 +23,7 @@ const StatusHeader = ({ anomaly, color, icon, label, moreInfo }) => {
     icon = icon || <MdCheck />
   }
   return (
-    <StatusHeaderContainer py={5} color={color}>
+    <StatusHeaderContainer py={4} color={color}>
       <Container>
         <Flex py={1} justifyContent='center'>
           <Box>
