@@ -174,7 +174,7 @@ const WebConnectivityDetails = ({ testKeys }) => {
     }
   })
   return (
-    <div>
+    <React.Fragment>
       <Container>
         <Heading h={4}>Failures</Heading>
         <Flex mb={2} flexWrap='wrap'>
@@ -235,7 +235,7 @@ const WebConnectivityDetails = ({ testKeys }) => {
           </Box>
         </Flex>
       </Container>
-    </div>
+    </React.Fragment>
   )
 }
 
