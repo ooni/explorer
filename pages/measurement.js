@@ -8,6 +8,7 @@ import { Container } from 'ooni-components'
 import StatusHeader from '../components/measurement/StatusHeader'
 import CommonSummary from '../components/measurement/CommonSummary'
 import DetailsHeader from '../components/measurement/DetailsHeader'
+import SummaryText from '../components/measurement/SummaryText'
 import CommonDetails from '../components/measurement/CommonDetails'
 import renderDetails from '../components/measurement/renderDetails'
 
@@ -83,6 +84,14 @@ export default class Measurement extends React.Component {
 
         <Container>
           <DetailsHeader testName={measurement.test_name} runtime={measurement.test_runtime} />
+
+          <SummaryText
+            testName={measurement.test_name}
+            testUrl={measurement.input}
+            network={measurement.probe_asn}
+            country={country}
+            date={measurement.test_start_time}
+          />
 
           {renderDetails(measurement.test_name, measurement.test_keys)}
 
