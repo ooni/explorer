@@ -11,6 +11,12 @@ import renderDetails from '../components/measurement/renderDetails'
 import Layout from '../components/Layout'
 import NavBar from '../components/nav-bar'
 
+import { checkAnomaly as checkAnomalyWeb} from '../components/measurement/nettests/web_connectivity'
+
+const anomalyCheckers = {
+  web_connectivity: checkAnomalyWeb
+}
+
 export default class Measurement extends React.Component {
 
   static async getInitialProps ({ query }) {
@@ -55,14 +61,20 @@ export default class Measurement extends React.Component {
       country
     } = this.props
 
+    const anomaly = anomalyCheckers[measurement.test_name](measurement.test_keys)
+    const color = anomaly ? '#E67700': '#2F9E44'
     return (
       <Layout>
         <Head>
           <title>OONI Explorer</title>
         </Head>
-        <NavBar />
-
+        <NavBar color={color} />
+        <StatusHeader
+          anomaly={anomaly}
+          color={color}
+        />
         <CommonSummary
+          color={color}
           measurement={measurement}
           country={country} />
 

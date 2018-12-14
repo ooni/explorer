@@ -38,6 +38,7 @@ SummaryItemBox.propTypes = {
 }
 
 const CommonSummary = ({
+  color,
   measurement,
   country
 }) => {
@@ -46,7 +47,7 @@ const CommonSummary = ({
 
   return (
     <React.Fragment>
-      <SummaryContainer color='#feab1e'>
+      <SummaryContainer color={color}>
         <Container>
           <Flex>
             <SummaryItemBox
