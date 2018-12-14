@@ -1,0 +1,19 @@
+DASH:
+http://localhost:3100/measurement?report_id=20181206T001426Z_AS28573_r7WMXWZJlqlYbPmZRnDXK0njXfZTQKM3jcpTGgOaDtHV02SlaF
+
+WhatsApp:
+http://localhost:3100/measurement?report_id=20181206T002923Z_AS19108_ZEkssXIQ3LjOgggBSk9Isxp201tim6U3zSgZVBqSesxqyk3b0l
+
+FacebookMessenger:
+http://localhost:3100/measurement?report_id=20181206T002926Z_AS19108_J7eRipPcy5sWqvpic0hqmlUgk6dfcyrWenHItYXDBuRLVxqFJB
+
+HTTP Header Field:
+http://localhost:3100/measurement?report_id=20181206T002745Z_AS200052_saYIxESNPWDGORR9dhY2zMXKnHzHe5OagA5rHnN7KRBEGM3pIy
+http://localhost:3100/measurement?report_id=20180721T183330Z_AS30722_7Uh6oJB9i7NfNDzHYHB7f22RcZ4rq2YQwEFa6dHxYlKUGUUThu
+
+HTTP Invalid Request Line:
+http://localhost:3100/measurement?report_id=20181206T002925Z_AS35807_BYfkPq14HlEkNkfAXwhPj1hHLFL7KD26MEKvdUBOCp9qzruvHb
+
+NDT:
+http://localhost:3100/measurement?report_id=20181205T214220Z_AS27725_vbcUMHkxSEEFD3sTeqZU0T4hYLNvwf9CkO1vNcJKmoUNr8HNnS
+http://localhost:3100/measurement?report_id=20181205T233133Z_AS6848_m9yxZnfL2pechmOpk6AMOXcYYNBML0gB9TAuDCUMpqrAO7QsHR

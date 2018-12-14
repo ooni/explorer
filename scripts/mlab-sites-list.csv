@@ -1,0 +1,159 @@
+Site,Status,Country Name,CountryCode,State,City,In service,Retired,Region
+ACC01,retired,Ghana,GH,,Accra,2014-12-03,2015-08-01,Africa
+ACC02,in service,Ghana,GH,,Accra,2014-11-17,,Africa
+AKL01,in service,New Zealand,NZ,,Auckland,2013-01-02,,Oceania
+AMS01,in service,Netherlands,NL,,Amsterdam,2009-07-09,,Europe
+AMS02,retired,Netherlands,NL,,Amsterdam,2009-07-23,2018-05-21,Europe
+AMS03,in service,Netherlands,NL,,Amsterdam,2017-07-06,,Europe
+AMS04,in service,Netherlands,NL,,Amsterdam,2017-07-06,,Europe
+AMS05,in service,Netherlands,NL,,Amsterdam,2017-11-29,,Europe
+AMS06,in service,Netherlands,NL,,Amsterdam,2017-12-04,,Europe
+AMS07,in service,Netherlands,NL,,Amsterdam,2018-05-17,,Europe
+ARN01,retired,Sweden,SE,,Stockholm,,2017-10-31,Europe
+ARN02,in service,Sweden,SE,,Stockholm,2017-07-25,,Europe
+ARN03,in service,Sweden,SE,,Stockholm,2017-10-19,,Europe
+ARN04,in service,Sweden,SE,,Stockholm,2017-10-19,,Europe
+ARN05,in service,Sweden,SE,,Stockholm,2017-07-27,,Europe
+ATH01,retired,Greece,GR,,Athens,2009-08-10,2016-07-06,Europe
+ATH02,retired,Greece,GR,,Athens,2011-07-11,2016-07-06,Europe
+ATH03,in service,Greece,GR,,Athens,2016-07-22,,Europe
+ATL01,in service,United States,US,GA,Atlanta,2009-05-04,,North America
+ATL02,in service,United States,US,GA,Atlanta,2016-06-17,,North America
+ATL03,in service,United States,US,GA,Atlanta,2014-09-25,,North America
+ATL04,in service,United States,US,GA,Atlanta,2014-09-25,,North America
+ATL05,in service,United States,US,GA,Atlanta,2016-01-01,,North America
+ATL06,in service,United States,US,GA,Atlanta,2017-03-28,,North America
+BCN01,in service,Spain,ES,,Barcelona,2017-10-11,,Europe
+BEG01,in service,Serbia,RS,,Belgrade,2014-06-13,,Europe
+BKK01,retired,Thailand,TH,,Bangkok,2015-01-28,2018-03-09,Asia
+BOG01,retired,Colombia,CO,,Bogota,2014-05-20,2018-03-09,South America
+BOM01,in service,India,IN,,Mumbai,2018-03-23,,Asia
+BOM02,in service,India,IN,,Mumbai,2018-03-27,,Asia
+BRU01,in service,Belgium,BE,,Brussels,2017-07-20,,Europe
+BRU02,in service,Belgium,BE,,Brussels,2017-08-17,,Europe
+BRU03,in service,Belgium,BE,,Brussels,2017-08-18,,Europe
+BRU04,in service,Belgium,BE,,Brussels,2017-07-25,,Europe
+CPT01,in service,South Africa,ZA,,Cape Town,2018-10-18,,Africa
+DEN01,in service,United States,US,CO,Denver,2014-11-06,,North America
+DEN02,in service,United States,US,CO,Denver,2015-08-01,,North America
+DEN03,retired,United States,US,CO,Denver,2016-01-01,2018-07-24,North America
+DEN04,in service,United States,US,CO,Denver,2014-11-06,,North America
+DEN05,in service,United States,US,CO,Denver,2018-07-25,,North America
+DFW01,in service,United States,US,TX,Dallas,2009-07-08,,North America
+DFW02,in service,United States,US,TX,Dallas,2014-09-25,,North America
+DFW03,in service,United States,US,TX,Dallas,2015-01-05,,North America
+DFW04,retired,United States,US,TX,Dallas,2016-01-01,2017-07-19,North America
+DFW05,in service,United States,US,TX,Dallas,2014-10-01,,North America
+DFW06,in service,United States,US,TX,Dallas,2017-03-28,,North America
+DFW07,in service,United States,US,TX,Dallas,2018-07-19,,North America
+DUB01,in service,Ireland,IE,,Dublin,,,Europe
+FLN01,in service,Brazil,BR,,Florianópolis,2017-02-22, ,South America
+FRA01,in service,Germany,DE,,Frankfurt,2017-07-28,,Europe
+FRA02,in service,Germany,DE,,Frankfurt,2017-08-23,,Europe
+FRA03,in service,Germany,DE,,Frankfurt,2017-07-28,,Europe
+FRA04,in service,Germany,DE,,Frankfurt,2017-07-28,,Europe
+HAM01,in service,Germany,DE,,Hamburg,2009-10-19,,Europe
+HND01,in service,Japan,JP,,Tokyo,2011-11-28,,Asia
+HND02,in service,Japan,JP,,Tokyo,2018-03-02,,Asia
+IAD01,retired,United States,US,VA,Reston,2011-10-12,2018-07-19,North America
+IAD02,in service,United States,US,VA,Ashburn,2014-09-01,,North America
+IAD03,in service,United States,US,VA,Ashburn,2014-11-17,,North America
+IAD04,in service,United States,US,VA,Ashburn,2014-09-25,,North America
+IAD05,in service,United States,US,VA,Ashburn,2014-12-17,,North America
+IAD06,in service,United States,US,VA,Reston,2018-07-19,,North America
+IAD0T,in service,United States,US,DC,Washington,2017-06-01,,North America
+IAD1T,in service,United States,US,DC,Washington,2017-06-01,,North America
+JNB01,in service,South Africa,ZA,,Johannesburg,2013-02-11,,Africa
+LAX01,in service,United States,US,CA,Los Angeles,2009-05-14,,North America
+LAX02,in service,United States,US,CA,Los Angeles,2014-11-10,,North America
+LAX03,in service,United States,US,CA,Los Angeles,2014-09-25,,North America
+LAX04,in service,United States,US,CA,Los Angeles,2014-12-17,,North America
+LAX05,in service,United States,US,CA,Los Angeles,2014-09-25,,North America
+LBA01,in service,United Kingdom,UK,,Leeds,2012-08-03,,Europe
+LCA01,in service,Cyprus,CY,,Nicosia,2013-02-20,,Europe
+LGA01,retired,United States,US,NY,New York,2009-02-10,2016-04-21,North America
+LGA02,in service,United States,US,NY,New York,2009-06-08,,North America
+LGA03,in service,United States,US,NY,New York,2015-05-05,,North America
+LGA04,in service,United States,US,NY,New York,2014-09-25,,North America
+LGA05,in service,United States,US,NY,New York,2014-11-14,,North America
+LGA06,in service,United States,US,NY,New York,2014-10-21,,North America
+LGA07,in service,United States,US,NY,New York,,,North America
+LGA0T,in service,United States,US,NY,New York,,,North America
+LGA1T,in service,United States,US,NY,New York,2017-09-20,,North America
+LHR01,retired,United Kingdom,UK,,London,2009-06-04,2017-05-30,Europe
+LHR02,in service,United Kingdom,UK,,London,2017-06-15,,Europe
+LHR03,in service,United Kingdom,UK,,London,2017-06-15,,Europe
+LHR04,in service,United Kingdom,UK,,London,2017-06-15,,Europe
+LHR05,in service,United Kingdom,UK,,London,2017-06-15,,Europe
+LIS01,in service,Portugal,EU,,Lisbon,2017-06-20,,Europe
+LIS02,in service,Portugal,EU,,Lisbon,2017-06-20,,Europe
+LJU01,in service,Slovenia,SI,,Ljubljana,2012-08-03,,Europe
+LOS01,in service,Nigeria,NG,,Lagos,2015-01-15,,Africa
+MAD01,retired,Spain,ES,,Madrid,,2017-08-02,Europe
+MAD02,in service,Spain,ES,,Madrid,2017-07-18,,Europe
+MAD03,in service,Spain,ES,,Madrid,2017-07-18,,Europe
+MAD04,in service,Spain,ES,,Madrid,2017-07-18,,Europe
+MIA01,in service,United States,US,FL,Miami,2009-05-28,,North America
+MIA02,in service,United States,US,FL,Miami,2014-11-10,,North America
+MIA03,in service,United States,US,FL,Miami,2014-11-10,,North America
+MIA04,in service,United States,US,FL,Miami,2014-11-10,,North America
+MIA05,in service,United States,US,FL,Miami,2014-11-10,,North America
+MIL01,retired,Italy,IT,,Milan,? (old site),2017-08-02,Europe
+MIL02,in service,Italy,IT,,Milan,2017-07-18,,Europe
+MIL03,in service,Italy,IT,,Milan,2017-07-18,,Europe
+MIL04,in service,Italy,IT,,Milan,2017-07-18,,Europe
+MIL05,in service,Italy,IT,,Milan,2017-07-18,,Europe
+MNL01,in service,Phillipines,PH,,Quezon City,2015-05-01,,Asia
+MPM01,in service,Mozambique,MZ,,Maputo,2017-08-17,,Africa
+NBO01,in service,Kenya,KE,,Nairobi,2013-02-13,,Africa
+NUQ01,retired,United States,US,CA,Mountain View,2009-01-28,2015-01-01,North America
+NUQ02,in service,United States,US,CA,Redwood City,2012-10-26,,North America
+NUQ03,in service,United States,US,CA,San Jose,2014-10-01,,North America
+NUQ04,in service,United States,US,CA,San Jose,2014-09-25,,North America
+NUQ05,retired,United States,US,CA,San Jose,2016-01-01,2018-07-18,North America
+NUQ06,in service,United States,US,CA,San Jose,2014-10-01,,North America
+NUQ07,in service,United States,US,CA,San Jose,2018-07-18,,North America
+ORD01,in service,United States,US,IL,Chicago,2009-03-20,,North America
+ORD02,in service,United States,US,IL,Chicago,2014-10-01,,North America
+ORD03,in service,United States,US,IL,Chicago,2014-10-01,,North America
+ORD04,in service,United States,US,IL,Chicago,2014-09-25,,North America
+ORD05,in service,United States,US,IL,Chicago,2014-10-01,,North America
+PAR01,retired,France,FR,,Paris,2009-07-09,2017-08-02,Europe
+PAR02,in service,France,FR,,Paris,2017-09-13,,Europe
+PAR03,in service,France,FR,,Paris,2017-07-05,,Europe
+PAR04,in service,France,FR,,Paris,2017-10-12,,Europe
+PAR05,in service,France,FR,,Paris,2017-07-05,,Europe
+PRG01,retired,Czech Republic,CZ,,Prague,2012-12-05,2017-08-02,Europe
+PRG02,in service,Czech Republic,CZ,,Prague,2017-08-01,,Europe
+PRG03,in service,Czech Republic,CZ,,Prague,2017-08-01,,Europe
+PRG04,in service,Czech Republic,CZ,,Prague,2017-08-02,,Europe
+PRG05,in service,Czech Republic,CZ,,Prague,2017-08-01,,Europe
+SEA01,in service,United States,US,WA,Seattle,2009-03-13,,North America
+SEA02,in service,United States,US,WA,Seattle,2014-09-25,,North America
+SEA03,in service,United States,US,WA,Seattle,2014-09-25,,North America
+SEA04,in service,United States,US,WA,Seattle,2015-01-05,,North America
+SEA05,in service,United States,US,WA,Seattle,2016-01-01,,North America
+SEA06,in service,United States,US,WA,Seattle,2017-03-28,,North America
+SEA07,in service,United States,US,WA,Seattle,2018-07-21,,North America
+SIN01,in service,Singapore,SG,,Changi,2014-01-30,,Asia
+SJC01,in service,United States,US,CA,San Jose,2017-03-27,,North America
+SVG01,in service,Norway,NO,,Sola,,,Europe
+SYD01,in service,Australia,AU,,Sydney,2010-05-05,,Oceania
+SYD02,in service,Australia,AU,,Sydney,2012-05-14,,Oceania
+TGD01,in service,Montenegro,ME,,Podgorica,2018-09-26,,Europe
+TNR01,in service,Madagascar,MG,,Antananarivo,2016-04-14,,Africa
+TPE01,in service,Taiwan,TW,,Taipei,2012-05-29,,Asia
+TRN01,in service,Italy,IT,,Turin,2012-02-03,,Europe
+TUN01,in service,Tunisia,TN,,Tunis,2013-04-24,,Africa
+VIE01,in service,Austria,AT,,Vienna,2012-05-10,,Europe
+WLG01,retired,New Zealand,NZ,,Wellington,2011-09-13,2016-01-01,Oceania
+WLG02,in service,New Zealand,NZ,,Wellington,2016-01-01,,Oceania
+YQM01,in service,Canada,CA,,Moncton,2017-11-13,,North America
+YUL01,retired,Canada,CA,,Montreal,?,2017-10-25,North America
+YUL02,in service,Canada,CA,,Montreal,2017-10-25,,North America
+YVR01,in service,Canada,CA,,Vancouver,2017-10-13,,North America
+YWG01,in service,Canada,CA,,Winnipeg,2017-10-10,,North America
+YYC01,retired,Canada,CA,,Calgary,2014-09-01,2017-09-27,North America
+YYC02,in service,Canada,CA,,Calgary,2017-09-27,,North America
+YYZ01,retired,Canada,CA,,Toronto,?,2017-10-18,North America
+YYZ02,in service,Canada,CA,,Toronto,2017-10-18,,North America
