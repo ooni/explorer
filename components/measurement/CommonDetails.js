@@ -3,9 +3,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import {
-  Container,
   Heading,
-  Border,
   Button,
   Flex,
   Box,
@@ -13,7 +11,6 @@ import {
   theme
 } from 'ooni-components'
 
-import MdFileDownload from 'react-icons/lib/md/file-download'
 import NoSSR from 'react-no-ssr'
 import styled from 'styled-components'
 import jsFileDownload from 'js-file-download'
