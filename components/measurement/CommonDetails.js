@@ -16,6 +16,7 @@ import {
 import MdFileDownload from 'react-icons/lib/md/file-download'
 import NoSSR from 'react-no-ssr'
 import styled from 'styled-components'
+import jsFileDownload from 'js-file-download'
 
 // We wrap the json viewer so that we can render it only in client side rendering
 class JsonViewer extends React.Component {
@@ -98,7 +99,15 @@ const CommonDetails = ({
             <Heading h={4}>Raw Measurement Data</Heading>
           </Box>
           <Box >
-            <Button fontSize={11} mx={3} px={3}>Download JSON</Button>
+            <Button
+              onClick={() => (
+                jsFileDownload(
+                  JSON.stringify(measurement, null, 2),
+                  'ooni-measurement-' + report_id + '.json')
+              )}
+              fontSize={11}
+              mx={3}
+              px={3}>Download JSON</Button>
           </Box>
         </Flex>
         <Flex bg='WHITE' p={3}>
