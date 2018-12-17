@@ -6,6 +6,11 @@ import {
   theme
 } from 'ooni-components'
 
+// Moved this from `_document.js` because `next-css` fails to extract
+// imported css from `_document.js`. `next-css` should be upgraded along with
+// the upgrade to `next@latest`
+import 'typeface-fira-sans/index.css'
+
 import Header from './header'
 import Footer from './footer'
 import withIntl from './withIntl'
