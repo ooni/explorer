@@ -29,4 +29,12 @@ const DetailsBox = ({
   </Box>
 )
 
+DetailsBox.propTypes = {
+  title: PropTypes.string.isRequired,
+  items: PropTypes.arrayOf(PropTypes.shape({
+    label: PropTypes.string.isRequired,
+    value: PropTypes.string
+  }))
+}
+
 export default DetailsBox
