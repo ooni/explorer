@@ -2,8 +2,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
-  Text
+  Heading,
+  Flex,
+  Box,
+  theme
 } from 'ooni-components'
+
+import {
+  VictoryChart,
+  VictoryLine,
+  VictoryTooltip,
+  VictoryVoronoiContainer,
+} from 'victory'
 
 /*
  * This table is derived from:
@@ -59,29 +69,52 @@ const getOptimalQualityForBitrate = (testKeys) => {
 }
 
 const DashDetails = ({testKeys}) => {
-  const isFailed = testKeys.failure !== null
-  const failure = testKeys.failure
-  const optimalVideoRate = getOptimalQualityForBitrate(testKeys).type
-  const medianBitrate = (testKeys.simple.median_bitrate / 1000).toFixed(2)
-  const playoutDelay = (testKeys.simple.min_playout_delay).toFixed(2)
+  // const isFailed = testKeys.failure !== null
+  // const failure = testKeys.failure
+  // const optimalVideoRate = getOptimalQualityForBitrate(testKeys).type
+  // const medianBitrate = (testKeys.simple.median_bitrate / 1000).toFixed(2)
+  // const playoutDelay = (testKeys.simple.min_playout_delay).toFixed(2)
 
-  return <div>
-    <Text>
-  isFailed: {isFailed}
-    </Text>
-    <Text>
-  failure: {failure}
-    </Text>
-    <Text>
-  optimalVideoRate: {optimalVideoRate}
-    </Text>
-    <Text>
-  medianBitrate: {medianBitrate}
-    </Text>
-    <Text>
-  playoutDelay: {playoutDelay}
-    </Text>
-  </div>
+  // construct data for graph
+  const clientData = testKeys.receiver_data
+  const data = clientData.map(iteration => ({
+    x: iteration.iteration,
+    y: iteration.rate / 1000,
+  }))
+
+  return (
+    <Flex>
+      <Box p={3}>
+        <Heading h={4}> Video Quality by time </Heading>
+        <Box>
+          <VictoryChart
+            containerComponent={
+              <VictoryVoronoiContainer voronoiDimension="x"
+                labels={(d) => `${d.y} Mb/s`}
+                labelComponent={<VictoryTooltip
+                  cornerRadius={0}
+                  flyoutStyle={{fill: 'WHITE'}}
+                />}
+              />
+            }
+          >
+            <VictoryLine
+              style={{
+                data: { stroke: theme.colors.base }
+              }}
+              data={data}
+              animate={{
+                duration: 2000,
+                onLoad: { duration: 1000 }
+              }}
+
+
+            />
+          </VictoryChart>
+        </Box>
+      </Box>
+    </Flex>
+  )
 }
 
 DashDetails.propTypes = {

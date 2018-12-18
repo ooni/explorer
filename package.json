@@ -43,7 +43,7 @@
     "typeface-fira-sans": "^0.0.54",
     "url": "^0.11.0",
     "url-loader": "^1.0.1",
-    "victory": "^0.21.0"
+    "victory": "^31.0.2"
   },
   "resolutions": {
     "hoist-non-react-statics": "3.0.1",
