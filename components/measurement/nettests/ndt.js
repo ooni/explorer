@@ -5,6 +5,7 @@ import {
 } from 'ooni-components'
 
 import { mlabServerToCountry, mlabServerToName } from './mlab_utils.js'
+import PerformanceDetails from '../PerformanceDetails'
 
 const NdtDetails = ({testKeys}) => {
   const isFailed = testKeys.failure !== null
@@ -34,6 +35,15 @@ const NdtDetails = ({testKeys}) => {
 
   return (
     <div>
+      <PerformanceDetails
+        averagePing={ping}
+        maxPing={ping}
+        mss={mss}
+        packetLoss={packetLoss}
+        outOfOrder={outOfOrder}
+        timeouts={timeouts}
+
+      />
       <Text>isFailed: {'' + isFailed}</Text>
       <Text>failure: {failure}</Text>
       <Text>downloadMbit: {'' + downloadMbit}</Text>
