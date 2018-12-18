@@ -7,13 +7,14 @@ import {
   Button,
   Flex,
   Box,
-  Text,
   theme
 } from 'ooni-components'
 
 import NoSSR from 'react-no-ssr'
 import styled from 'styled-components'
 import jsFileDownload from 'js-file-download'
+
+import DetailsBox from './DetailsBox'
 
 // We wrap the json viewer so that we can render it only in client side rendering
 class JsonViewer extends React.Component {
@@ -32,63 +33,46 @@ JsonViewer.propTypes = {
   src: PropTypes.object.isRequired
 }
 
-const DetailBoxLabel = styled(Text)`
-  font-weight: 600;
-`
-
 const CommonDetails = ({
   measurement
 }) => {
   const {
     report_id,
-    software_name,
     software_version,
     annotations: {
       engine_version,
       platform
     }
   } = measurement
+
+  const items = [
+    {
+      label: 'Measurement ID',
+      value: report_id
+    },
+    {
+      label: 'Platform',
+      value: platform ? platform : 'unknown'
+    },
+    {
+      label: 'Software Version',
+      value: software_version
+    }
+  ]
+  if(engine_version) {
+    items.push({
+      label: 'Measurement Kit Version',
+      value: engine_version
+    })
+  }
   return (
     <React.Fragment>
       <Flex my={4}>
-        <Box width={1} bg={theme.colors.gray2}>
-          <Box p={3}>
-            <Heading h={4}>Other Details</Heading>
-            <Flex mb={1}>
-              <Box width={1/4}>
-                <DetailBoxLabel>Measurement ID</DetailBoxLabel>
-              </Box>
-              <Box>
-                <Text>{report_id}</Text>
-              </Box>
-            </Flex>
-            <Flex mb={1}>
-              <Box width={1/4}>
-                <DetailBoxLabel>Platform</DetailBoxLabel>
-              </Box>
-              <Box width={3/4}>
-                <Text bold>{platform ? platform : 'unknown'}</Text>
-              </Box>
-            </Flex>
-            <Flex mb={1}>
-              <Box width={1/4}>
-                <DetailBoxLabel>Software Version</DetailBoxLabel>
-              </Box>
-              <Box>
-                <Text bold>{software_version}</Text>
-              </Box>
-            </Flex>
-            {engine_version &&
-            <Flex mb={1}>
-              <Box width={1/4}>
-                <DetailBoxLabel>Measurement Kit Version</DetailBoxLabel>
-              </Box>
-              <Box>
-                <Text bold>{engine_version}</Text>
-              </Box>
-            </Flex>}
-          </Box>
-        </Box>
+        <DetailsBox
+          title='Other Details'
+          items={items}
+          bg={theme.colors.gray2}
+        />
       </Flex>
       <Box>
         <Flex px={3} alignItems='center' bg={theme.colors.gray2}>
