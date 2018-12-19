@@ -9,7 +9,7 @@ const SummaryText = ({
   network,
   country,
   date,
-  status = 'is reachable',
+  hint = 'is reachable',
   testUrl,
 
 }) => {
@@ -21,7 +21,7 @@ const SummaryText = ({
       The <a href={metadata.info}>{metadata.name}</a> test
       of {testUrl && <a href={testUrl}>{testUrl}</a>} in the {network} network
       of {country} on <abbr title={formattedDateTime}>{formattedDate}</abbr>&nbsp;
-      {status}. Check the network measurement data below, as well as other
+      {hint}. Check the network measurement data below, as well as other
       measurements from this network testing this site to explore further.
     </Text>
   )
@@ -32,7 +32,7 @@ SummaryText.propTypes = {
   network: PropTypes.string.isRequired,
   country: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
-  status: PropTypes.string.isRequired,
+  hint: PropTypes.string.isRequired,
   testUrl: PropTypes.string
 }
 
