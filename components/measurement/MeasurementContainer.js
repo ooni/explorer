@@ -26,9 +26,9 @@ const mapTestDetails = {
   vanilla_tor: VanillaTorDetails
 }
 
-const renderDetails = (testName = 'other', testKeys) => {
+const MeasurementContainer = ({ testName, testKeys, render }) => {
   const TestDetails = mapTestDetails[testName] || DefaultTestDetails
-  return <TestDetails testKeys={testKeys} />
+  return <TestDetails testKeys={testKeys} render={render} />
 }
 
-export default renderDetails
+export default MeasurementContainer
