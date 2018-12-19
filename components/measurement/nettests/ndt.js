@@ -1,13 +1,33 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
-  Text
+  Flex,
+  Box,
 } from 'ooni-components'
+import { Text } from 'rebass'
+import MdFlashOn from 'react-icons/lib/md/flash-on'
 
 import { mlabServerToCountry, mlabServerToName } from './mlab_utils.js'
 import PerformanceDetails from '../PerformanceDetails'
 
-const NdtDetails = ({testKeys}) => {
+const InfoBoxItem = ({
+  label,
+  content,
+  unit
+}) => (
+  <Box>
+    <Text fontSize={24}>
+      {content} <Text is='small'>{unit}</Text>
+    </Text>
+    <Text fontWeight='bold' fontSize={16} >
+      {label}
+    </Text>
+  </Box>
+)
+
+
+const NdtDetails = ({ measurement, render }) => {
+  const testKeys = measurement.test_keys
   const isFailed = testKeys.failure !== null
   const failure = testKeys.failure
 
@@ -34,31 +54,45 @@ const NdtDetails = ({testKeys}) => {
   const timeouts = advanced.timeouts
 
   return (
-    <div>
-      <PerformanceDetails
-        averagePing={ping}
-        maxPing={ping}
-        mss={mss}
-        packetLoss={packetLoss}
-        outOfOrder={outOfOrder}
-        timeouts={timeouts}
+    render({
+      statusIcon: <MdFlashOn />,
+      statusLabel: 'Results',
+      statusInfo: (
+        <Box width={1}>
+          <Flex justifyContent='space-around'>
+            <InfoBoxItem label='Download' content={downloadMbit} unit='Mbps' />
+            <InfoBoxItem label='Upload' content={uploadMbit} unit='Mbps' />
+            <InfoBoxItem label='Ping' content={ping} unit='ms' />
+          </Flex>
+        </Box>
+      ),
+      details: (
+        <div>
+          <PerformanceDetails
+            averagePing={ping}
+            maxPing={ping}
+            mss={mss}
+            packetLoss={packetLoss}
+            outOfOrder={outOfOrder}
+            timeouts={timeouts}
+          />
+          <Text>isFailed: {'' + isFailed}</Text>
+          <Text>failure: {failure}</Text>
+          <Text>downloadMbit: {'' + downloadMbit}</Text>
+          <Text>uploadMbit: {'' + uploadMbit}</Text>
+          <Text>ping: {'' + ping}</Text>
 
-      />
-      <Text>isFailed: {'' + isFailed}</Text>
-      <Text>failure: {failure}</Text>
-      <Text>downloadMbit: {'' + downloadMbit}</Text>
-      <Text>uploadMbit: {'' + uploadMbit}</Text>
-      <Text>ping: {'' + ping}</Text>
-
-      <Text>serverCountry: {'' + serverCountry}</Text>
-      <Text>serverName: {'' + serverName}</Text>
-      <Text>packetLoss: {'' + packetLoss}</Text>
-      <Text>outOfOrder: {'' + outOfOrder}</Text>
-      <Text>minRTT: {'' + minRTT}</Text>
-      <Text>maxRTT: {'' + maxRTT}</Text>
-      <Text>mss: {'' + mss}</Text>
-      <Text>timeouts: {'' + timeouts}</Text>
-    </div>
+          <Text>serverCountry: {'' + serverCountry}</Text>
+          <Text>serverName: {'' + serverName}</Text>
+          <Text>packetLoss: {'' + packetLoss}</Text>
+          <Text>outOfOrder: {'' + outOfOrder}</Text>
+          <Text>minRTT: {'' + minRTT}</Text>
+          <Text>maxRTT: {'' + maxRTT}</Text>
+          <Text>mss: {'' + mss}</Text>
+          <Text>timeouts: {'' + timeouts}</Text>
+        </div>
+      )
+    })
   )
 }
 
