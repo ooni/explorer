@@ -14,14 +14,31 @@ const StatusLabel = styled(Text)`
   font-weight: 600;
 `
 
-const StatusHeader = ({ anomaly, color, icon, label, moreInfo }) => {
-  if (anomaly) {
-    label = label || 'Anomaly'
-    icon = icon || <MdPriorityHigh />
-  } else {
-    label = label || 'Reachable'
-    icon = icon || <MdCheck />
+const StatusHeader = ({ status, color, icon, label, info }) => {
+  if (status) {
+    switch (status) {
+      case 'anomaly':
+        label = 'Anomaly'
+        icon = <MdPriorityHigh />
+        break
+      case 'reachable':
+        label = 'Reachable'
+        icon = <MdCheck />
+        break
+      case 'error':
+        label = 'Error'
+        icon = <MdCheck />
+        break
+      case 'confirmed':
+        label = 'Blocking Confirmed'
+        icon = <MdCheck />
+        break
+      default:
+        label: ''
+        icon: <div />
+    }
   }
+
   return (
     <StatusHeaderContainer py={4} color={color}>
       <Container>
@@ -32,8 +49,8 @@ const StatusHeader = ({ anomaly, color, icon, label, moreInfo }) => {
             </StatusLabel>
           </Box>
         </Flex>
-        {moreInfo && <Flex py={1} justifyContent='center'>
-          {moreInfo}
+        {info && <Flex py={1} justifyContent='center'>
+          {info}
         </Flex>}
       </Container>
     </StatusHeaderContainer>
