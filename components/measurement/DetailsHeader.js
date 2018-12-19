@@ -37,7 +37,7 @@ const DetailsHeader = ({testName, runtime, notice}) => {
         <Text fontWeight='bold'>{metadata.name}</Text>
       </Box>
       <Box mx='auto'>
-        {notice && 'This is a notice'}
+        {notice}
       </Box>
       <Box>
         Runtime: <Text is='span' fontWeight='bold'>{prettyMs(runtime * 1000)}</Text>
