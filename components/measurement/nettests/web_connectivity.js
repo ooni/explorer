@@ -69,8 +69,8 @@ const StatusInfo = ({ url, message}) => (
   </Flex>
 )
 
-const DetailsBox = ({ title, content }) => (
-  <Box width={1/2}>
+const DetailsBox = ({ title, content, ...props }) => (
+  <Box width={1/2} {...props}>
     <Heading h={4}>{title}</Heading>
     {content}
   </Box>
@@ -114,7 +114,7 @@ const QueryContainer = ({query}) => {
   return (
     <Flex flexWrap='wrap' bg='gray2' p={2}>
       <Box width={1} pb={2}>
-        <Flex justify='space-between' pr={4}>
+        <Flex justifyContent='space-between' pr={4}>
           <Box>
             <Pre>{hostname}</Pre>
           </Box>
@@ -229,7 +229,7 @@ const WebConnectivityDetails = ({ measurement, render }) => {
             </Flex>
 
             <Flex>
-              <DetailsBox title='DNS Queries' content={
+              <DetailsBox pr={2} title='DNS Queries' content={
                 <React.Fragment>
                   <Flex mb={2}>
                     <Box width={1/3}>
@@ -242,7 +242,7 @@ const WebConnectivityDetails = ({ measurement, render }) => {
                   {queries.map((query, index) => <QueryContainer key={index} query={query} />)}
                 </React.Fragment>
               } />
-              <DetailsBox title='TCP Connections' content={
+              <DetailsBox pl={2} title='TCP Connections' content={
                 <React.Fragment>
                   {tcpConnections.length === 0 && <Text>No results</Text>}
                   {tcpConnections.map((connection, index) => (
