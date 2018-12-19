@@ -15,24 +15,6 @@ import MeasurementContainer from '../components/measurement/MeasurementContainer
 import Layout from '../components/Layout'
 import NavBar from '../components/nav-bar'
 
-import { checkAnomaly as checkAnomalyWeb} from '../components/measurement/nettests/web_connectivity'
-
-const anomalyCheckers = {
-  web_connectivity: checkAnomalyWeb,
-  http_invalid_request_line: () => 'DNS',
-  http_header_field_manipulation: () => 'DNS',
-  facebook_messenger: () => 'DNS',
-  telegram: () => null,
-  whatsapp: () => 'DNS',
-  ndt: () => null,
-  dash: () => 'DNS',
-  vanilla_tor: () => 'DNS',
-  bridge_reachability: () => 'DNS',
-  tcp_connect: () => 'DNS',
-  dns_consistency: () => 'DNS',
-  http_requests: () => 'DNS',
-}
-
 const pageColors = {
   default: theme.colors.base,
   anomaly: theme.colors.yellow9,
@@ -85,8 +67,6 @@ export default class Measurement extends React.Component {
       country
     } = this.props
 
-    const anomaly = anomalyCheckers[measurement.test_name](measurement.test_keys)
-    const color = anomaly ? '#E67700': '#2F9E44'
     return (
       <Layout>
         <Head>
