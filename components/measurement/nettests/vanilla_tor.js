@@ -4,7 +4,8 @@ import {
   Text
 } from 'ooni-components'
 
-const VanillaTorDetails = ({testKeys}) => {
+const VanillaTorDetails = ({ measurement, render }) => {
+  const testKeys = measurement.test_keys
   const isOK = testKeys.success === true
   const isAnomaly = testKeys.success === false
   const torVersion = testKeys.tor_version
@@ -13,15 +14,22 @@ const VanillaTorDetails = ({testKeys}) => {
   const isFailure = testKeys.error !== null
   const failure = testKeys.failure
 
-  return <div>
-    <Text>isOK: {'' + isOK}</Text>
-    <Text>isFailure: {'' + isFailure}</Text>
-    <Text>failure: {'' + failure}</Text>
-    <Text>isAnomaly: {'' + isAnomaly}</Text>
-    <Text>torVersion: {'' + torVersion}</Text>
-    <Text>torLog: {'' + torLog}</Text>
-    <Text>torProgress: {'' + torProgress}</Text>
-  </div>
+  return (
+    render({
+      status: isAnomaly ? 'anomaly' : 'reachable',
+      details: (
+        <div>
+          <Text>isOK: {'' + isOK}</Text>
+          <Text>isFailure: {'' + isFailure}</Text>
+          <Text>failure: {'' + failure}</Text>
+          <Text>isAnomaly: {'' + isAnomaly}</Text>
+          <Text>torVersion: {'' + torVersion}</Text>
+          <Text>torLog: {'' + torLog}</Text>
+          <Text>torProgress: {'' + torProgress}</Text>
+        </div>
+      )}
+    )
+  )
 }
 
 VanillaTorDetails.propTypes = {

@@ -4,7 +4,8 @@ import {
   Text
 } from 'ooni-components'
 
-export const HttpHeaderFieldManipulationDetails = ({ testKeys }) => {
+export const HttpHeaderFieldManipulationDetails = ({ measurement, render }) => {
+  const testKeys = measurement.test_keys
   let isAnomaly = false
   let isFailed = true
   const tampering = testKeys.tampering
@@ -18,11 +19,18 @@ export const HttpHeaderFieldManipulationDetails = ({ testKeys }) => {
   })
   const headerDiff = testKeys.tampering.header_name_diff
 
-  return <div>
-    <Text>isAnomaly: {isAnomaly.toString()}</Text>
-    <Text>isFailed: {isFailed.toString()}</Text>
-    <Text>headerDiff: {headerDiff.toString()}</Text>
-  </div>
+  return (
+    render({
+      status: isAnomaly ? 'anomaly' : 'reachable',
+      details: (
+        <div>
+          <Text>isAnomaly: {isAnomaly.toString()}</Text>
+          <Text>isFailed: {isFailed.toString()}</Text>
+          <Text>headerDiff: {headerDiff.toString()}</Text>
+        </div>
+      )
+    })
+  )
 }
 
 HttpHeaderFieldManipulationDetails.propTypes = {

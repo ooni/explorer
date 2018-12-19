@@ -4,7 +4,8 @@ import {
   Text
 } from 'ooni-components'
 
-export const FacebookMessengerDetails = ({ testKeys }) => {
+export const FacebookMessengerDetails = ({ measurement, render }) => {
+  const testKeys = measurement.test_keys
   const isWorking = (
     testKeys.facebook_dns_blocking === false &&
     testKeys.facebook_tcp_blocking === false
@@ -32,12 +33,21 @@ export const FacebookMessengerDetails = ({ testKeys }) => {
   "facebook_stun_dns_consistent": true,
   "facebook_stun_reachable": null,
   */
-  return <div>
-    <Text>dnsBlocking: {dnsBlocking.toString()}</Text>
-    <Text>tcpBlocking: {tcpBlocking.toString()}</Text>
-    <Text>isWorking: {isWorking.toString()}</Text>
-    <Text>isFailed: {isFailed.toString()}</Text>
-  </div>
+  return (
+    render({
+      status: isWorking ? 'reachable' : 'anomaly',
+      statusInfo: 'Facebook Messenger is working fine',
+      summaryText: <b> XXX UPDATE THIS XXX </b>,
+      details: (
+        <div>
+          <Text>dnsBlocking: {dnsBlocking.toString()}</Text>
+          <Text>tcpBlocking: {tcpBlocking.toString()}</Text>
+          <Text>isWorking: {isWorking.toString()}</Text>
+          <Text>isFailed: {isFailed.toString()}</Text>
+        </div>
+      )
+    })
+  )
 }
 FacebookMessengerDetails.propTypes = {
   testKeys: PropTypes.object

@@ -60,7 +60,8 @@ StatusBar.propTypes = {
   hint: PropTypes.string.isRequired
 }
 
-const TelegramDetails = ({ testKeys }) => {
+const TelegramDetails = ({ measurement, render }) => {
+  const testKeys = measurement.test_keys
   const {
     telegram_web_status,
     telegram_tcp_blocking,
@@ -87,37 +88,41 @@ const TelegramDetails = ({ testKeys }) => {
   }
 
   return (
-    <React.Fragment>
-      <StatusBar anomaly={anomaly} hint={hint} />
-      <Container>
-        <Flex>
-          <DetailsBox w={1/2} title='Test Details' content={
+    render({
+      status: anomaly ? 'anomaly': 'reachable',
+      details: (
+        <React.Fragment>
+          <Container>
             <Flex>
-              <Box w={1/4}>
-                <AccessPointStatus label='Desktop App' ok={telegramDesktopOK} />
-              </Box>
-              <Box w={1/4}>
-                <AccessPointStatus label='Web App' ok={telegramWebOK} />
-              </Box>
-            </Flex>
-          } />
-          <DetailsBox w={1/2} title='Endpoint Status' content={
-            <React.Fragment>
-              {tcp_connect.length === 0 && <Text> No results</Text>}
-              {tcp_connect.map((connection, index) => (
-                <Flex key={index}>
-                  <Box>
-                    <Text>Connection to <strong>{connection.ip}:{connection.port}</strong>{
-                      connection.status.success ? ' was successful' : ' failed'
-                    }</Text>
+              <DetailsBox width={1/2} title='Test Details' content={
+                <Flex>
+                  <Box width={1/4}>
+                    <AccessPointStatus label='Desktop App' ok={telegramDesktopOK} />
+                  </Box>
+                  <Box width={1/4}>
+                    <AccessPointStatus label='Web App' ok={telegramWebOK} />
                   </Box>
                 </Flex>
-              ))}
-            </React.Fragment>
-          } />
-        </Flex>
-      </Container>
-    </React.Fragment>
+              } />
+              <DetailsBox width={1/2} title='Endpoint Status' content={
+                <React.Fragment>
+                  {tcp_connect.length === 0 && <Text> No results</Text>}
+                  {tcp_connect.map((connection, index) => (
+                    <Flex key={index}>
+                      <Box>
+                        <Text>Connection to <strong>{connection.ip}:{connection.port}</strong>{
+                          connection.status.success ? ' was successful' : ' failed'
+                        }</Text>
+                      </Box>
+                    </Flex>
+                  ))}
+                </React.Fragment>
+              } />
+            </Flex>
+          </Container>
+        </React.Fragment>
+      )
+    })
   )
 }
 
