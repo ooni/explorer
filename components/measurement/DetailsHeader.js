@@ -49,7 +49,7 @@ const DetailsHeader = ({testName, runtime, notice}) => {
 DetailsHeader.propTypes = {
   testName: PropTypes.string.isRequired,
   runtime: PropTypes.string.isRequired,
-  notice: PropTypes.element
+  notice: PropTypes.any
 }
 
 export default DetailsHeader
