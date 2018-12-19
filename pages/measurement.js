@@ -3,14 +3,14 @@ import PropTypes from 'prop-types'
 import Head from 'next/head'
 
 import axios from 'axios'
-import { Container } from 'ooni-components'
+import { Container, theme } from 'ooni-components'
 
 import StatusHeader from '../components/measurement/StatusHeader'
 import CommonSummary from '../components/measurement/CommonSummary'
 import DetailsHeader from '../components/measurement/DetailsHeader'
 import SummaryText from '../components/measurement/SummaryText'
 import CommonDetails from '../components/measurement/CommonDetails'
-import renderDetails from '../components/measurement/renderDetails'
+import MeasurementContainer from '../components/measurement/MeasurementContainer'
 
 import Layout from '../components/Layout'
 import NavBar from '../components/nav-bar'
@@ -31,6 +31,14 @@ const anomalyCheckers = {
   tcp_connect: () => 'DNS',
   dns_consistency: () => 'DNS',
   http_requests: () => 'DNS',
+}
+
+const pageColors = {
+  default: theme.colors.base,
+  anomaly: theme.colors.yellow9,
+  reachable: theme.colors.green8,
+  error: theme.colors.yellow5,
+  confirmed: theme.colors.red7
 }
 
 export default class Measurement extends React.Component {
@@ -84,32 +92,52 @@ export default class Measurement extends React.Component {
         <Head>
           <title>OONI Explorer</title>
         </Head>
-        <NavBar color={color} />
-        <StatusHeader
-          anomaly={anomaly}
-          color={color}
-        />
-        <CommonSummary
-          color={color}
-          measurement={measurement}
-          country={country} />
+        <MeasurementContainer
+          testName={measurement.test_name}
+          testKeys={measurement.test_keys}
+          render={({
+            status = 'default',
+            statusIcon,
+            statusLabel,
+            statusInfo,
+            legacy = false,
+            summaryText,
+            details }) => (
 
-        <Container>
-          <DetailsHeader testName={measurement.test_name} runtime={measurement.test_runtime} />
+            <React.Fragment>
+              <NavBar color={pageColors[status]} />
+              <StatusHeader
+                color={pageColors[status]}
+                status={status}
+                icon={statusIcon}
+                label={statusLabel}
+                info={statusInfo}
+              />
+              <CommonSummary
+                color={pageColors[status]}
+                measurement={measurement}
+                country={country} />
 
-          <SummaryText
-            testName={measurement.test_name}
-            testUrl={measurement.input}
-            network={measurement.probe_asn}
-            country={country}
-            date={measurement.test_start_time}
-          />
+              <Container>
+                <DetailsHeader
+                  testName={measurement.test_name}
+                  runtime={measurement.test_runtime}
+                  notice={legacy}
+                />
 
-          {renderDetails(measurement.test_name, measurement.test_keys)}
-
-          <CommonDetails measurement={measurement} />
-        </Container>
-
+                {summaryText && <SummaryText
+                  testName={measurement.test_name}
+                  testUrl={measurement.input}
+                  network={measurement.probe_asn}
+                  country={country}
+                  date={measurement.test_start_time}
+                  hint={summaryText}
+                />}
+                {details}
+                <CommonDetails measurement={measurement} />
+              </Container>
+            </React.Fragment>
+          )} />
       </Layout>
     )
   }
