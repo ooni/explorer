@@ -15,6 +15,7 @@ import {
   VictoryLine,
   VictoryTooltip,
   VictoryVoronoiContainer,
+  VictoryAxis
 } from 'victory'
 
 import MdFlashOn from 'react-icons/lib/md/flash-on'
@@ -117,10 +118,12 @@ const DashDetails = ({ measurement, render }) => {
       ),
       details: (
         <Flex>
-          <Box p={3}>
+          <Box p={3} width={1}>
             <Heading h={4}> Video Quality by time </Heading>
             <Box>
               <VictoryChart
+                height={200}
+                width={600}
                 containerComponent={
                   <VictoryVoronoiContainer voronoiDimension="x"
                     labels={(d) => `${d.y} Mb/s`}
@@ -131,6 +134,20 @@ const DashDetails = ({ measurement, render }) => {
                   />
                 }
               >
+                <VictoryAxis
+                  tickValues={data.map((i => i.x + 's'))}
+                  style={{
+                    tickLabels: { fontSize: 10, padding: 5}
+                  }}
+                />
+                <VictoryAxis
+                  dependentAxis
+                  style={{
+                    axisLabel: { fontSize: 10, padding: 0 },
+                    ticks: { stroke: "grey", size: 5 },
+                    tickLabels: { fontSize: 10, padding: 5 }
+                  }}
+                />
                 <VictoryLine
                   style={{
                     data: { stroke: theme.colors.base }
