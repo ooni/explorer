@@ -8,12 +8,31 @@ import {
   theme
 } from 'ooni-components'
 
+import { Text } from 'rebass'
+
 import {
   VictoryChart,
   VictoryLine,
   VictoryTooltip,
   VictoryVoronoiContainer,
 } from 'victory'
+
+import MdFlashOn from 'react-icons/lib/md/flash-on'
+
+const InfoBoxItem = ({
+  label,
+  content,
+  unit
+}) => (
+  <Box>
+    <Text fontSize={24}>
+      {content} <Text is='small'>{unit}</Text>
+    </Text>
+    <Text fontWeight='bold' fontSize={16} >
+      {label}
+    </Text>
+  </Box>
+)
 
 /*
  * This table is derived from:
@@ -68,12 +87,13 @@ const getOptimalQualityForBitrate = (testKeys) => {
   return optimalQuality
 }
 
-const DashDetails = ({testKeys}) => {
+const DashDetails = ({ measurement, render }) => {
+  const testKeys = measurement.test_keys
   // const isFailed = testKeys.failure !== null
   // const failure = testKeys.failure
-  // const optimalVideoRate = getOptimalQualityForBitrate(testKeys).type
-  // const medianBitrate = (testKeys.simple.median_bitrate / 1000).toFixed(2)
-  // const playoutDelay = (testKeys.simple.min_playout_delay).toFixed(2)
+  const optimalVideoRate = getOptimalQualityForBitrate(testKeys).type
+  const medianBitrate = (testKeys.simple.median_bitrate / 1000).toFixed(2)
+  const playoutDelay = (testKeys.simple.min_playout_delay).toFixed(2)
 
   // construct data for graph
   const clientData = testKeys.receiver_data
@@ -83,37 +103,52 @@ const DashDetails = ({testKeys}) => {
   }))
 
   return (
-    <Flex>
-      <Box p={3}>
-        <Heading h={4}> Video Quality by time </Heading>
-        <Box>
-          <VictoryChart
-            containerComponent={
-              <VictoryVoronoiContainer voronoiDimension="x"
-                labels={(d) => `${d.y} Mb/s`}
-                labelComponent={<VictoryTooltip
-                  cornerRadius={0}
-                  flyoutStyle={{fill: 'WHITE'}}
-                />}
-              />
-            }
-          >
-            <VictoryLine
-              style={{
-                data: { stroke: theme.colors.base }
-              }}
-              data={data}
-              animate={{
-                duration: 2000,
-                onLoad: { duration: 1000 }
-              }}
-
-
-            />
-          </VictoryChart>
+    render({
+      statusIcon: <MdFlashOn />,
+      statusLabel: 'Results',
+      statusInfo: (
+        <Box width={1}>
+          <Flex justifyContent='space-around'>
+            <InfoBoxItem label='Video Quality' content={optimalVideoRate}/>
+            <InfoBoxItem label='Median Bitrate' content={medianBitrate} unit='Mbit/s' />
+            <InfoBoxItem label='Playout Delay' content={playoutDelay} unit='s' />
+          </Flex>
         </Box>
-      </Box>
-    </Flex>
+      ),
+      details: (
+        <Flex>
+          <Box p={3}>
+            <Heading h={4}> Video Quality by time </Heading>
+            <Box>
+              <VictoryChart
+                containerComponent={
+                  <VictoryVoronoiContainer voronoiDimension="x"
+                    labels={(d) => `${d.y} Mb/s`}
+                    labelComponent={<VictoryTooltip
+                      cornerRadius={0}
+                      flyoutStyle={{fill: 'WHITE'}}
+                    />}
+                  />
+                }
+              >
+                <VictoryLine
+                  style={{
+                    data: { stroke: theme.colors.base }
+                  }}
+                  data={data}
+                  animate={{
+                    duration: 2000,
+                    onLoad: { duration: 1000 }
+                  }}
+
+
+                />
+              </VictoryChart>
+            </Box>
+          </Box>
+        </Flex>
+      )
+    })
   )
 }
 

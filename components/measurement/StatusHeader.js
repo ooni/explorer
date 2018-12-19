@@ -49,7 +49,7 @@ const StatusHeader = ({ status, color, icon, label, info }) => {
             </StatusLabel>
           </Box>
         </Flex>
-        {info && <Flex justifyContent='center'>
+        {info && <Flex flexWrap='wrap' justifyContent='center'>
           {info}
         </Flex>}
       </Container>
