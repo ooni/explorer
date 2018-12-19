@@ -4,12 +4,13 @@ import {
   Container,
   Heading,
   Flex,
-  Text,
   Box,
   theme
 } from 'ooni-components'
 
-import { Tick, Cross } from 'ooni-components/dist/icons'
+import { Text } from 'rebass'
+import MdPhoneAndroid from 'react-icons/lib/md/phone-android'
+import MdWebAsset from 'react-icons/lib/md/web-asset'
 
 const DetailsBox = ({ title, content, ...props}) => (
   <Box {...props}>
@@ -23,12 +24,13 @@ DetailsBox.propTypes = {
   content: PropTypes.element,
 }
 
-const AccessPointStatus = ({ label, ok }) => (
+const AccessPointStatus = ({ icon, label, ok }) => (
   <Box>
-    <Text fontSize={0}>{label}</Text>
+    {icon}
+    <Text fontWeight='bold' fontSize={0}>{label}</Text>
     <Text
       fontSize={3}
-      color={ok ? theme.colors.blue5 : theme.colors.red7}
+      fontWeight={200}
     >
       {ok ? 'Okay' : 'Failed'}
     </Text>
@@ -36,28 +38,9 @@ const AccessPointStatus = ({ label, ok }) => (
 )
 
 AccessPointStatus.propTypes = {
+  icon: PropTypes.element.isRequired,
   label: PropTypes.string.isRequired,
   ok: PropTypes.bool.isRequired
-}
-
-const StatusBar = ({ anomaly, hint }) => (
-  <Box mb={4} p={3} color='white' bg={anomaly ? 'yellow9' : 'green7'}>
-    <Container>
-      <Flex>
-        <Box>
-          {anomaly ? <Cross size={32} /> : <Tick size={32} />}
-        </Box>
-        <Box ml={1}>
-          <Text bold f={2}>{hint}</Text>
-        </Box>
-      </Flex>
-    </Container>
-  </Box>
-)
-
-StatusBar.propTypes = {
-  anomaly: PropTypes.string.isRequired,
-  hint: PropTypes.string.isRequired
 }
 
 const TelegramDetails = ({ measurement, render }) => {
@@ -90,32 +73,46 @@ const TelegramDetails = ({ measurement, render }) => {
   return (
     render({
       status: anomaly ? 'anomaly': 'reachable',
+      statusInfo: (anomaly === true) && 'Telegram is not working',
+      summaryText: (anomaly === true)
+        ? 'presented signs of Application Failure'
+        : 'presented no signs of tampering and is reachable',
       details: (
         <React.Fragment>
           <Container>
             <Flex>
-              <DetailsBox width={1/2} title='Test Details' content={
-                <Flex>
-                  <Box width={1/4}>
-                    <AccessPointStatus label='Desktop App' ok={telegramDesktopOK} />
-                  </Box>
-                  <Box width={1/4}>
-                    <AccessPointStatus label='Web App' ok={telegramWebOK} />
-                  </Box>
-                </Flex>
-              } />
-              <DetailsBox width={1/2} title='Endpoint Status' content={
+              <DetailsBox width={1/2} content={
                 <React.Fragment>
-                  {tcp_connect.length === 0 && <Text> No results</Text>}
-                  {tcp_connect.map((connection, index) => (
-                    <Flex key={index}>
-                      <Box>
-                        <Text>Connection to <strong>{connection.ip}:{connection.port}</strong>{
-                          connection.status.success ? ' was successful' : ' failed'
-                        }</Text>
-                      </Box>
-                    </Flex>
-                  ))}
+                  <Flex>
+                    <Box width={1/4}>
+                      <AccessPointStatus
+                        icon={<MdPhoneAndroid />}
+                        label='Desktop App'
+                        ok={telegramDesktopOK}
+                      />
+                    </Box>
+                    <Box width={1/4}>
+                      <AccessPointStatus
+                        icon={<MdWebAsset />}
+                        label='Web App'
+                        ok={telegramWebOK}
+                      />
+                    </Box>
+                  </Flex>
+                  {tcp_connect.length > 0 &&
+                    <React.Fragment>
+                      <Heading h={4}> End Point Status </Heading>
+                      {tcp_connect.map((connection, index) => (
+                        <Flex key={index}>
+                          <Box>
+                            <Text>Connection to <strong>{connection.ip}:{connection.port}</strong>{
+                              connection.status.success ? ' was successful' : ' failed'
+                            }</Text>
+                          </Box>
+                        </Flex>
+                      ))}
+                    </React.Fragment>
+                  }
                 </React.Fragment>
               } />
             </Flex>
