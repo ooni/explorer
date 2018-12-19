@@ -73,8 +73,7 @@ export default class Measurement extends React.Component {
           <title>OONI Explorer</title>
         </Head>
         <MeasurementContainer
-          testName={measurement.test_name}
-          testKeys={measurement.test_keys}
+          measurement={measurement}
           render={({
             status = 'default',
             statusIcon,

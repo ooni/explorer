@@ -42,14 +42,14 @@ const StatusHeader = ({ status, color, icon, label, info }) => {
   return (
     <StatusHeaderContainer py={4} color={color}>
       <Container>
-        <Flex py={1} justifyContent='center'>
+        <Flex pb={4} justifyContent='center'>
           <Box>
             <StatusLabel fontSize={4}>
               {icon} {label}
             </StatusLabel>
           </Box>
         </Flex>
-        {info && <Flex py={1} justifyContent='center'>
+        {info && <Flex justifyContent='center'>
           {info}
         </Flex>}
       </Container>
@@ -58,10 +58,10 @@ const StatusHeader = ({ status, color, icon, label, info }) => {
 }
 
 StatusHeader.propTypes = {
-  anomaly: PropTypes.string,
+  status: PropTypes.string,
   color: PropTypes.string,
   icon: PropTypes.node,
   label: PropTypes.string,
-  moreInfo: PropTypes.node
+  info: PropTypes.node
 }
 export default StatusHeader

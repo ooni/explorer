@@ -3,11 +3,12 @@ import PropTypes from 'prop-types'
 import {
   Container,
   Heading,
-  Text,
   Flex,
   Pre,
   Box
 } from 'ooni-components'
+
+import { Text } from 'rebass'
 
 import { Tick, Cross } from 'ooni-components/dist/icons'
 
@@ -51,8 +52,22 @@ export const checkAnomaly = ( testKeys ) => {
     }
   }
 
-  return { anomaly, hint }
+  return {
+    status: anomaly,
+    hint
+  }
 }
+
+const StatusInfo = ({ url, message}) => (
+  <Flex flexDirection='column'>
+    <Box>
+      <Text textAlign='center' fontSize={28}> {url} </Text>
+    </Box>
+    <Box>
+      <Text textAlign='center' fontSize={20} fontWeight='bold'> {message} </Text>
+    </Box>
+  </Flex>
+)
 
 const DetailsBox = ({ title, content }) => (
   <Box width={1/2}>
@@ -132,6 +147,10 @@ const QueryContainer = ({query}) => {
 
 const RequestResponseContainer = ({request}) => {
   return (
+    // FIXME: This sometime ends up creating empty sections with just a title
+    // when request data contains states like 'generic_timeout_error'
+    // e.g ?report_id=20180709T222326Z_AS37594_FFQFSoqLJWYMgU0EnSbIK7PxicwJTFenIz9PupZYZWoXwtpCTy
+    !request.failure &&
     <Box>
       <Flex flexWrap='wrap'>
         <Box width={1} pb={2}>
@@ -155,18 +174,21 @@ const RequestResponseContainer = ({request}) => {
   )
 }
 
-const WebConnectivityDetails = ({ testKeys, render }) => {
+const WebConnectivityDetails = ({ measurement, render }) => {
   const {
-    queries,
-    tcp_connect,
-    requests,
-    client_resolver,
-    http_experiment_failure,
-    dns_experiment_failure,
-    control_failure
-  } = testKeys
+    input,
+    test_keys: {
+      queries,
+      tcp_connect,
+      requests,
+      client_resolver,
+      http_experiment_failure,
+      dns_experiment_failure,
+      control_failure
+    }
+  } = measurement
 
-  const { status, hint } = checkAnomaly(testKeys)
+  const { status, hint } = checkAnomaly(measurement.test_keys)
 
   const tcpConnections = tcp_connect.map((connection) => {
     const status = (connection.status.success) ? 'successful' :
@@ -180,6 +202,7 @@ const WebConnectivityDetails = ({ testKeys, render }) => {
     <React.Fragment>
       {render({
         status: status ? 'anomaly' : 'reachable',
+        statusInfo: <StatusInfo url={input} message={hint} />,
         summaryText: hint,
         details: (
           <Container>
@@ -249,7 +272,7 @@ const WebConnectivityDetails = ({ testKeys, render }) => {
 }
 
 WebConnectivityDetails.propTypes = {
-  testKeys: PropTypes.object.isRequired,
+  measurement: PropTypes.object.isRequired,
   render: PropTypes.func
 }
 
