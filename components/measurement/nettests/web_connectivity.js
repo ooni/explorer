@@ -51,7 +51,7 @@ export const checkAnomaly = ( testKeys ) => {
     }
   }
 
-  return anomaly
+  return { anomaly, hint }
 }
 
 const DetailsBox = ({ title, content }) => (
@@ -154,7 +154,8 @@ const RequestResponseContainer = ({request}) => {
     </Box>
   )
 }
-const WebConnectivityDetails = ({ testKeys }) => {
+
+const WebConnectivityDetails = ({ testKeys, render }) => {
   const {
     queries,
     tcp_connect,
@@ -164,6 +165,8 @@ const WebConnectivityDetails = ({ testKeys }) => {
     dns_experiment_failure,
     control_failure
   } = testKeys
+
+  const { status, hint } = checkAnomaly(testKeys)
 
   const tcpConnections = tcp_connect.map((connection) => {
     const status = (connection.status.success) ? 'successful' :
@@ -175,72 +178,79 @@ const WebConnectivityDetails = ({ testKeys }) => {
   })
   return (
     <React.Fragment>
-      <Container>
-        <Heading h={4}>Failures</Heading>
-        <Flex mb={2} flexWrap='wrap'>
-          <Box width={1/3}>
-          HTTP Experiment
-          </Box>
-          <Box width={2/3}>
-            <FailureString failure={http_experiment_failure} />
-          </Box>
-          <Box width={1/3}>
-          DNS Experiment
-          </Box>
-          <Box width={2/3}>
-            <FailureString failure={dns_experiment_failure} />
-          </Box>
-          <Box width={1/3}>
-          Control
-          </Box>
-          <Box width={2/3}>
-            <FailureString failure={control_failure} />
-          </Box>
-        </Flex>
+      {render({
+        status: status ? 'anomaly' : 'reachable',
+        summaryText: hint,
+        details: (
+          <Container>
+            <Heading h={4}>Failures</Heading>
+            <Flex mb={2} flexWrap='wrap'>
+              <Box width={1/3}>
+              HTTP Experiment
+              </Box>
+              <Box width={2/3}>
+                <FailureString failure={http_experiment_failure} />
+              </Box>
+              <Box width={1/3}>
+              DNS Experiment
+              </Box>
+              <Box width={2/3}>
+                <FailureString failure={dns_experiment_failure} />
+              </Box>
+              <Box width={1/3}>
+              Control
+              </Box>
+              <Box width={2/3}>
+                <FailureString failure={control_failure} />
+              </Box>
+            </Flex>
 
-        <Flex>
-          <DetailsBox title='DNS Queries' content={
-            <React.Fragment>
-              <Flex mb={2}>
-                <Box width={1/3}>
-                  <Text>Resolver:</Text>
-                </Box>
-                <Box width={2/3}>
-                  <Text>{client_resolver || '(unknown)'}</Text>
-                </Box>
-              </Flex>
-              {queries.map((query, index) => <QueryContainer key={index} query={query} />)}
-            </React.Fragment>
-          } />
-          <DetailsBox title='TCP Connections' content={
-            <React.Fragment>
-              {tcpConnections.length === 0 && <Text>No results</Text>}
-              {tcpConnections.map((connection, index) => (
-                <Flex key={index}>
-                  <Box>
-                    <Text>Connection to <strong>{connection.destination}</strong> was {connection.status}.</Text>
-                  </Box>
-                </Flex>
-              ))}
-            </React.Fragment>
-          } />
-        </Flex>
-        {/* I would like us to enrich the HTTP response body section with
-        information about every request and response as this is a very common
-        thing we look at when investigating a case. */}
-        <Flex>
-          <Box width={1}>
-            <Heading h={4}>HTTP Requests</Heading>
-            {requests.map((request, index) => <RequestResponseContainer key={index} request={request} />)}
-          </Box>
-        </Flex>
-      </Container>
+            <Flex>
+              <DetailsBox title='DNS Queries' content={
+                <React.Fragment>
+                  <Flex mb={2}>
+                    <Box width={1/3}>
+                      <Text>Resolver:</Text>
+                    </Box>
+                    <Box width={2/3}>
+                      <Text>{client_resolver || '(unknown)'}</Text>
+                    </Box>
+                  </Flex>
+                  {queries.map((query, index) => <QueryContainer key={index} query={query} />)}
+                </React.Fragment>
+              } />
+              <DetailsBox title='TCP Connections' content={
+                <React.Fragment>
+                  {tcpConnections.length === 0 && <Text>No results</Text>}
+                  {tcpConnections.map((connection, index) => (
+                    <Flex key={index}>
+                      <Box>
+                        <Text>Connection to <strong>{connection.destination}</strong> was {connection.status}.</Text>
+                      </Box>
+                    </Flex>
+                  ))}
+                </React.Fragment>
+              } />
+            </Flex>
+            {/* I would like us to enrich the HTTP response body section with
+            information about every request and response as this is a very common
+            thing we look at when investigating a case. */}
+            <Flex>
+              <Box width={1}>
+                <Heading h={4}>HTTP Requests</Heading>
+                {requests.map((request, index) => <RequestResponseContainer key={index} request={request} />)}
+              </Box>
+            </Flex>
+          </Container>
+        )
+      })}
     </React.Fragment>
   )
 }
 
 WebConnectivityDetails.propTypes = {
-  testKeys: PropTypes.object.isRequired
+  testKeys: PropTypes.object.isRequired,
+  render: PropTypes.func
 }
 
 export default WebConnectivityDetails
