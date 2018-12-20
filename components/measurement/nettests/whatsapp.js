@@ -4,7 +4,8 @@ import {
   Text
 } from 'ooni-components'
 
-const WhatsAppDetails = ({ testKeys }) => {
+const WhatsAppDetails = ({ measurement, render }) => {
+  const testKeys = measurement.test_keys
   const registrationServerBlocked = testKeys.registration_server_status === 'blocked'
   const webBlocked = testKeys.whatsapp_web_status === 'blocked'
   const endpointsBlocked = testKeys.whatsapp_endpoints_status === 'blocked'
@@ -22,24 +23,38 @@ const WhatsAppDetails = ({ testKeys }) => {
   )
 
   const isFailed = (working === false && possibleCensorship === false)
+  let status = 'reachable', info = 'is reachable'
+  if (possibleCensorship || !working) {
+    status = 'anomaly'
+    info = possibleCensorship
+      ? 'presented signs of possible censorship'
+      : 'is not working'
+  }
 
-  return <div>
-    <Text>possibleCensorship: {possibleCensorship.toString()}</Text>
-    <Text>working: {working.toString()}</Text>
-    <Text>isFailed: {isFailed.toString()}</Text>
-    <Text>
-  working: {working.toString()}
-    </Text>
-    <Text>
-  registrationServerBlocked: {registrationServerBlocked.toString()}
-    </Text>
-    <Text>
-  webBlocked: {webBlocked.toString()}
-    </Text>
-    <Text>
-  endpointsBlocked: {endpointsBlocked.toString()}
-    </Text>
-  </div>
+  return render({
+    status: status,
+    statusInfo: info,
+    summaryText: info,
+    details: (
+      <div>
+        <Text>possibleCensorship: {possibleCensorship.toString()}</Text>
+        <Text>working: {working.toString()}</Text>
+        <Text>isFailed: {isFailed.toString()}</Text>
+        <Text>
+      working: {working.toString()}
+        </Text>
+        <Text>
+      registrationServerBlocked: {registrationServerBlocked.toString()}
+        </Text>
+        <Text>
+      webBlocked: {webBlocked.toString()}
+        </Text>
+        <Text>
+      endpointsBlocked: {endpointsBlocked.toString()}
+        </Text>
+      </div>
+    )
+  })
 }
 
 WhatsAppDetails.propTypes = {
