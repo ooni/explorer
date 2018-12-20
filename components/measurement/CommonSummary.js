@@ -5,8 +5,8 @@ import {
   Flex,
   Container,
   Box,
-  Text
 } from 'ooni-components'
+import { Text } from 'rebass'
 import moment from 'moment'
 
 const SummaryContainer = styled(Box)`
@@ -23,7 +23,7 @@ const SummaryItemBox = ({
   content
 }) => (
   <Box width={1/2} mx={4} my={2}>
-    <Text fontSize={24}>
+    <Text fontSize={24} fontWeight={300}>
       {content}
     </Text>
     <StyledSummaryItemLabel fontSize={16} >
