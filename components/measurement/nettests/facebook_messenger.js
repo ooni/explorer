@@ -36,8 +36,8 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
   return (
     render({
       status: isWorking ? 'reachable' : 'anomaly',
-      statusInfo: 'Facebook Messenger is working fine',
-      summaryText: <b> XXX UPDATE THIS XXX </b>,
+      statusInfo: `Facebook Messenger is ${isWorking? 'working fine' : 'likely blocked'}`,
+      summaryText: `presented ${isWorking ? 'no' : ''} signs of blocking`,
       details: (
         <div>
           {/*<Text>dnsBlocking: {dnsBlocking.toString()}</Text>
