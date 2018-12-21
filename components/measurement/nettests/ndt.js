@@ -70,7 +70,7 @@ const NdtDetails = ({ measurement, render }) => {
         <div>
           <PerformanceDetails
             averagePing={ping}
-            maxPing={ping}
+            maxPing={maxRTT}
             mss={mss}
             packetLoss={packetLoss}
             outOfOrder={outOfOrder}
