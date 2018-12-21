@@ -12,11 +12,11 @@ const HttpInvalidRequestLineDetails = ({ measurement, render }) => {
 
   const sentMessages = testKeys.sent
   const receivedMessages = testKeys.received
-
   return (
     render({
       status: isAnomaly ? 'anomaly' : 'reachable',
       statusLabel: isAnomaly ? 'Network Tampering' : 'No middleboxes detected',
+      summaryText: `presented ${!isAnomaly ? 'no' : ''} signs of potential network traffic manipulation`,
       details: (
         <div>
           {/*<Text>isAnomaly: {isAnomaly.toString()}</Text>
