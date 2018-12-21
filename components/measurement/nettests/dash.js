@@ -118,7 +118,7 @@ const DashDetails = ({ measurement, render }) => {
       ),
       details: (
         <Flex>
-          <Box p={3} width={1}>
+          {/*<Box p={3} width={1}>
             <Heading h={4}> Video Quality by time </Heading>
             <Box>
               <VictoryChart
@@ -162,7 +162,7 @@ const DashDetails = ({ measurement, render }) => {
                 />
               </VictoryChart>
             </Box>
-          </Box>
+          </Box>*/}
         </Flex>
       )
     })
