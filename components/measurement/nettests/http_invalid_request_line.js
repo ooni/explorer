@@ -16,6 +16,7 @@ const HttpInvalidRequestLineDetails = ({ measurement, render }) => {
   return (
     render({
       status: isAnomaly ? 'anomaly' : 'reachable',
+      statusLabel: isAnomaly ? 'Network Tampering' : 'No middleboxes detected',
       details: (
         <div>
           {/*<Text>isAnomaly: {isAnomaly.toString()}</Text>

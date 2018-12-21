@@ -15,28 +15,33 @@ const StatusLabel = styled(Text)`
 `
 
 const StatusHeader = ({ status, color, icon, label, info }) => {
+  let computedLabel = ''
   if (status) {
     switch (status) {
       case 'anomaly':
-        label = 'Anomaly'
+        computedLabel = 'Anomaly'
         icon = <MdPriorityHigh />
         break
       case 'reachable':
-        label = 'Reachable'
+        computedLabel = 'Reachable'
         icon = <MdCheck />
         break
       case 'error':
-        label = 'Error'
+        computedLabel = 'Error'
         icon = <MdCheck />
         break
       case 'confirmed':
-        label = 'Blocking Confirmed'
+        computedLabel = 'Blocking Confirmed'
         icon = <MdCheck />
         break
       default:
-        label: ''
+        computedLabel: ''
         icon: <div />
     }
+  }
+
+  if (!label) {
+    label = computedLabel
   }
 
   return (
