@@ -50,10 +50,10 @@ const CommonSummary = ({
       <SummaryContainer py={4} color={color}>
         <Container>
           <Flex>
-            <SummaryItemBox
+            {/*<SummaryItemBox
               label='Network Name'
               content='AT&T Lorem Ipsum Name A.T.T Internationale'
-            />
+            />*/}
             <SummaryItemBox
               label='ASN'
               content={network}
