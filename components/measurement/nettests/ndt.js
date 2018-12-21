@@ -76,7 +76,7 @@ const NdtDetails = ({ measurement, render }) => {
             outOfOrder={outOfOrder}
             timeouts={timeouts}
           />
-          <Text>isFailed: {'' + isFailed}</Text>
+          {/*<Text>isFailed: {'' + isFailed}</Text>
           <Text>failure: {failure}</Text>
           <Text>downloadMbit: {'' + downloadMbit}</Text>
           <Text>uploadMbit: {'' + uploadMbit}</Text>
@@ -89,7 +89,7 @@ const NdtDetails = ({ measurement, render }) => {
           <Text>minRTT: {'' + minRTT}</Text>
           <Text>maxRTT: {'' + maxRTT}</Text>
           <Text>mss: {'' + mss}</Text>
-          <Text>timeouts: {'' + timeouts}</Text>
+          <Text>timeouts: {'' + timeouts}</Text>*/}
         </div>
       )
     })

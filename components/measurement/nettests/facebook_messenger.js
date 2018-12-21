@@ -40,10 +40,10 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
       summaryText: <b> XXX UPDATE THIS XXX </b>,
       details: (
         <div>
-          <Text>dnsBlocking: {dnsBlocking.toString()}</Text>
+          {/*<Text>dnsBlocking: {dnsBlocking.toString()}</Text>
           <Text>tcpBlocking: {tcpBlocking.toString()}</Text>
           <Text>isWorking: {isWorking.toString()}</Text>
-          <Text>isFailed: {isFailed.toString()}</Text>
+          <Text>isFailed: {isFailed.toString()}</Text>*/}
         </div>
       )
     })

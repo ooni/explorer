@@ -18,11 +18,11 @@ const HttpInvalidRequestLineDetails = ({ measurement, render }) => {
       status: isAnomaly ? 'anomaly' : 'reachable',
       details: (
         <div>
-          <Text>isAnomaly: {isAnomaly.toString()}</Text>
+          {/*<Text>isAnomaly: {isAnomaly.toString()}</Text>
           <Text>isOK: {isOK.toString()}</Text>
           <Text>isFailed: {isFailed.toString()}</Text>
           <Text>sentMessages: {sentMessages.toString()}</Text>
-          <Text>receivedMessages: {receivedMessages.toString()}</Text>
+          <Text>receivedMessages: {receivedMessages.toString()}</Text>*/}
         </div>
       )}
     )

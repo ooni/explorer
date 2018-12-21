@@ -19,13 +19,13 @@ const VanillaTorDetails = ({ measurement, render }) => {
       status: isAnomaly ? 'anomaly' : 'reachable',
       details: (
         <div>
-          <Text>isOK: {'' + isOK}</Text>
+          {/*<Text>isOK: {'' + isOK}</Text>
           <Text>isFailure: {'' + isFailure}</Text>
           <Text>failure: {'' + failure}</Text>
           <Text>isAnomaly: {'' + isAnomaly}</Text>
           <Text>torVersion: {'' + torVersion}</Text>
           <Text>torLog: {'' + torLog}</Text>
-          <Text>torProgress: {'' + torProgress}</Text>
+          <Text>torProgress: {'' + torProgress}</Text>*/}
         </div>
       )}
     )

@@ -37,7 +37,7 @@ const WhatsAppDetails = ({ measurement, render }) => {
     summaryText: info,
     details: (
       <div>
-        <Text>possibleCensorship: {possibleCensorship.toString()}</Text>
+        {/*<Text>possibleCensorship: {possibleCensorship.toString()}</Text>
         <Text>working: {working.toString()}</Text>
         <Text>isFailed: {isFailed.toString()}</Text>
         <Text>
@@ -51,7 +51,7 @@ const WhatsAppDetails = ({ measurement, render }) => {
         </Text>
         <Text>
       endpointsBlocked: {endpointsBlocked.toString()}
-        </Text>
+        </Text>*/}
       </div>
     )
   })

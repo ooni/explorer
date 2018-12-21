@@ -24,9 +24,9 @@ export const HttpHeaderFieldManipulationDetails = ({ measurement, render }) => {
       status: isAnomaly ? 'anomaly' : 'reachable',
       details: (
         <div>
-          <Text>isAnomaly: {isAnomaly.toString()}</Text>
+          {/*<Text>isAnomaly: {isAnomaly.toString()}</Text>
           <Text>isFailed: {isFailed.toString()}</Text>
-          <Text>headerDiff: {headerDiff.toString()}</Text>
+          <Text>headerDiff: {headerDiff.toString()}</Text>*/}
         </div>
       )
     })
