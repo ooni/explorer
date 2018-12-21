@@ -59,15 +59,17 @@ const NdtDetails = ({ measurement, render }) => {
       statusLabel: 'Results',
       statusInfo: (
         <Box width={1}>
-          <Flex justifyContent='space-around'>
-            <InfoBoxItem label='Download' content={downloadMbit} unit='Mbps' />
-            <InfoBoxItem label='Upload' content={uploadMbit} unit='Mbps' />
-            <InfoBoxItem label='Ping' content={ping} unit='ms' />
-          </Flex>
+          {!isFailed &&
+            <Flex justifyContent='space-around'>
+              <InfoBoxItem label='Download' content={downloadMbit} unit='Mbps' />
+              <InfoBoxItem label='Upload' content={uploadMbit} unit='Mbps' />
+              <InfoBoxItem label='Ping' content={ping} unit='ms' />
+            </Flex>
+          }
         </Box>
       ),
       details: (
-        <div>
+        <div> {!isFailed &&
           <PerformanceDetails
             averagePing={ping}
             maxPing={maxRTT}
@@ -75,7 +77,7 @@ const NdtDetails = ({ measurement, render }) => {
             packetLoss={packetLoss}
             outOfOrder={outOfOrder}
             timeouts={timeouts}
-          />
+          />}
           {/*<Text>isFailed: {'' + isFailed}</Text>
           <Text>failure: {failure}</Text>
           <Text>downloadMbit: {'' + downloadMbit}</Text>
