@@ -41,12 +41,13 @@ export default class Measurement extends React.Component {
       client.get('/api/_/countries')
     ])
     if (msmtResult.data.results.length > 0) {
-      const measurementUrl = msmtResult.data.results[0].measurement_url
+      const measurementURL = msmtResult.data.results[0].measurement_url
       if (msmtResult.data.results.length > 1) {
         initialProps['warning'] = 'dupes'
       }
-      let msmtContent = await client.get(measurementUrl)
+      let msmtContent = await client.get(measurementURL)
       initialProps['measurement'] = msmtContent.data
+      initialProps['measurementURL'] = measurementURL
 
       let countries = countriesR.data.countries
       const countryObj = countries.find(c =>
@@ -64,7 +65,8 @@ export default class Measurement extends React.Component {
   render () {
     let {
       measurement,
-      country
+      country,
+      measurementURL
     } = this.props
 
     return (
@@ -113,7 +115,9 @@ export default class Measurement extends React.Component {
                   hint={summaryText}
                 />}
                 {details}
-                <CommonDetails measurement={measurement} />
+                <CommonDetails
+                  measurementURL={measurementURL}
+                  measurement={measurement} />
               </Container>
             </React.Fragment>
           )} />
@@ -124,5 +128,6 @@ export default class Measurement extends React.Component {
 
 Measurement.propTypes = {
   measurement: PropTypes.object.isRequired,
+  measurementURL: PropTypes.string,
   country: PropTypes.string
 }
