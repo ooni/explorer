@@ -53,13 +53,18 @@ const NdtDetails = ({ measurement, render }) => {
   const mss = advanced.mss
   const timeouts = advanced.timeouts
 
+  // FIXME we need to style the failed test case properly
   return (
     render({
       statusIcon: <MdFlashOn />,
       statusLabel: 'Results',
       statusInfo: (
         <Box width={1}>
-          {!isFailed &&
+          {isFailed ?
+            <Flex justifyContent='space-around'>
+              <h4>Failed Test</h4>
+            </Flex>
+            :
             <Flex justifyContent='space-around'>
               <InfoBoxItem label='Download' content={downloadMbit} unit='Mbps' />
               <InfoBoxItem label='Upload' content={uploadMbit} unit='Mbps' />
@@ -78,7 +83,7 @@ const NdtDetails = ({ measurement, render }) => {
             outOfOrder={outOfOrder}
             timeouts={timeouts}
           />}
-          {/*<Text>isFailed: {'' + isFailed}</Text>
+        {/*<Text>isFailed: {'' + isFailed}</Text>
           <Text>failure: {failure}</Text>
           <Text>downloadMbit: {'' + downloadMbit}</Text>
           <Text>uploadMbit: {'' + uploadMbit}</Text>
