@@ -26,7 +26,14 @@ const mapTestDetails = {
   vanilla_tor: VanillaTorDetails
 }
 
+// FIXME to have header and stuff
+const MeasurementNotFound = () => <h4>Measurement not Found</h4>
+
 const MeasurementContainer = ({ measurement, render }) => {
+  if (measurement === undefined) {
+    return <MeasurementNotFound />
+  }
+
   const TestDetails = mapTestDetails[measurement.test_name] || DefaultTestDetails
   return <TestDetails measurement={measurement} render={render} />
 }
