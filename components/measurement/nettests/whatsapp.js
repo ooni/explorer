@@ -23,12 +23,12 @@ const WhatsAppDetails = ({ measurement, render }) => {
   )
 
   const isFailed = (working === false && possibleCensorship === false)
-  let status = 'reachable', info = 'is reachable'
+  let status = 'reachable', info = 'WhatsApp is reachable'
   if (possibleCensorship || !working) {
     status = 'anomaly'
     info = possibleCensorship
-      ? 'presented signs of possible censorship'
-      : 'is not working'
+      ? 'WhatsApp presented signs of possible censorship'
+      : 'WhatsApp is not working'
   }
 
   return render({
