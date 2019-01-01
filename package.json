@@ -21,10 +21,11 @@
     "file-loader": "^1.1.11",
     "flag-icon-css": "^2.9.0",
     "immutable": "^3.8.1",
+    "js-file-download": "^0.4.4",
     "lodash.random": "^3.2.0",
     "moment": "^2.20.1",
     "next": "6.0.3",
-    "ooni-components": "0.2.1",
+    "ooni-components": "0.2.3",
     "pretty-ms": "^3.2.0",
     "prop-types": "^15.6.0",
     "react": "^16.0.0",
@@ -42,7 +43,7 @@
     "typeface-fira-sans": "^0.0.54",
     "url": "^0.11.0",
     "url-loader": "^1.0.1",
-    "victory": "^0.21.0"
+    "victory": "^31.0.2"
   },
   "resolutions": {
     "hoist-non-react-statics": "3.0.1",

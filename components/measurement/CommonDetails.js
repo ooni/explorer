@@ -3,18 +3,18 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import {
-  Container,
   Heading,
-  Border,
   Button,
   Flex,
   Box,
-  Text,
   theme
 } from 'ooni-components'
 
-import MdFileDownload from 'react-icons/lib/md/file-download'
 import NoSSR from 'react-no-ssr'
+import styled from 'styled-components'
+import jsFileDownload from 'js-file-download'
+
+import DetailsBox from './DetailsBox'
 
 // We wrap the json viewer so that we can render it only in client side rendering
 class JsonViewer extends React.Component {
@@ -37,64 +37,58 @@ const CommonDetails = ({
   measurement
 }) => {
   const {
-    software_name,
+    report_id,
     software_version,
     annotations: {
       engine_version,
       platform
     }
   } = measurement
+
+  const items = [
+    {
+      label: 'Measurement ID',
+      value: report_id
+    },
+    {
+      label: 'Platform',
+      value: platform ? platform : 'unknown'
+    },
+    {
+      label: 'Software Version',
+      value: software_version
+    }
+  ]
+  if(engine_version) {
+    items.push({
+      label: 'Measurement Kit Version',
+      value: engine_version
+    })
+  }
   return (
-    <Container>
+    <React.Fragment>
       <Flex my={4}>
-        <Box width={1/2} bg='WHITE'>
-          <Border color={theme.colors.gray3}>
-            <Box p={3}>
-              <Heading h={4}>Probe Metadata</Heading>
-              <Flex mb={1}>
-                <Box width={1/2}>
-                  Software
-                </Box>
-                <Box width={1/2}>
-                  <Text bold>{software_name}</Text>
-                </Box>
-              </Flex>
-              <Flex mb={1}>
-                <Box width={1/2}>
-                  Platform
-                </Box>
-                <Box width={1/2}>
-                  <Text bold>{platform ? platform : 'unknown'}</Text>
-                </Box>
-              </Flex>
-              <Flex mb={1}>
-                <Box width={1/2}>
-                  Software Version
-                </Box>
-                <Box width={1/2}>
-                  <Text bold>{software_version}</Text>
-                </Box>
-              </Flex>
-              {engine_version &&
-              <Flex mb={1}>
-                <Box width={1/2}>
-                  Measurement Kit Version
-                </Box>
-                <Box width={1/2}>
-                  <Text bold>{engine_version}</Text>
-                </Box>
-              </Flex>}
-            </Box>
-          </Border>
-        </Box>
+        <DetailsBox
+          title='Other Details'
+          items={items}
+          bg={theme.colors.gray2}
+        />
       </Flex>
       <Box>
-        <Flex px={3} align='center' bg='gray1'>
+        <Flex px={3} alignItems='center' bg={theme.colors.gray2}>
           <Box>
             <Heading h={4}>Raw Measurement Data</Heading>
           </Box>
           <Box >
-            <Button fontSize={11} mx={3} px={3}><MdFileDownload />{' '}JSON</Button>
+            <Button
+              onClick={() => (
+                jsFileDownload(
+                  JSON.stringify(measurement, null, 2),
+                  'ooni-measurement-' + report_id + '.json')
+              )}
+              fontSize={11}
+              mx={3}
+              px={3}>Download JSON</Button>
           </Box>
         </Flex>
         <Flex bg='WHITE' p={3}>
@@ -103,7 +97,7 @@ const CommonDetails = ({
           </NoSSR>
         </Flex>
       </Box>
-    </Container>
+    </React.Fragment>
   )
 }
 
