@@ -11,8 +11,6 @@ import {
 } from 'ooni-components'
 
 import NoSSR from 'react-no-ssr'
-import styled from 'styled-components'
-import jsFileDownload from 'js-file-download'
 
 import DetailsBox from './DetailsBox'
 
@@ -34,7 +32,8 @@ JsonViewer.propTypes = {
 }
 
 const CommonDetails = ({
-  measurement
+  measurement,
+  measurementURL
 }) => {
   const {
     report_id,
@@ -45,6 +44,7 @@ const CommonDetails = ({
     }
   } = measurement
 
+  const downloadFilename = `ooni-measurement-${report_id}.json`
   const items = [
     {
       label: 'Measurement ID',
@@ -80,15 +80,12 @@ const CommonDetails = ({
             <Heading h={4}>Raw Measurement Data</Heading>
           </Box>
           <Box >
-            <Button
-              onClick={() => (
-                jsFileDownload(
-                  JSON.stringify(measurement, null, 2),
-                  'ooni-measurement-' + report_id + '.json')
-              )}
-              fontSize={11}
-              mx={3}
-              px={3}>Download JSON</Button>
+            <a href={measurementURL} download={downloadFilename}>
+              <Button
+                fontSize={11}
+                mx={3}
+                px={3}>Download JSON</Button>
+            </a>
           </Box>
         </Flex>
         <Flex bg='WHITE' p={3}>
@@ -102,7 +99,8 @@ const CommonDetails = ({
 }
 
 CommonDetails.propTypes = {
-  measurement: PropTypes.object.isRequired
+  measurement: PropTypes.object.isRequired,
+  measurementURL: PropTypes.string.isRequired,
 }
 
 export default CommonDetails

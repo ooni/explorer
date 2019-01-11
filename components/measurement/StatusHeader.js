@@ -1,8 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Container, Flex, Box, Text } from 'ooni-components'
+import { Tick } from 'ooni-components/dist/icons'
 import MdPriorityHigh from 'react-icons/lib/md/priority-high'
-import MdCheck from 'react-icons/lib/md/check'
 import styled from 'styled-components'
 
 const StatusHeaderContainer = styled(Box)`
@@ -18,25 +18,24 @@ const StatusHeader = ({ status, color, icon, label, info }) => {
   let computedLabel = ''
   if (status) {
     switch (status) {
-      case 'anomaly':
-        computedLabel = 'Anomaly'
-        icon = <MdPriorityHigh />
-        break
-      case 'reachable':
-        computedLabel = 'Reachable'
-        icon = <MdCheck />
-        break
-      case 'error':
-        computedLabel = 'Error'
-        icon = <MdCheck />
-        break
-      case 'confirmed':
-        computedLabel = 'Blocking Confirmed'
-        icon = <MdCheck />
-        break
-      default:
-        computedLabel: ''
-        icon: <div />
+    case 'anomaly':
+      computedLabel = 'Anomaly'
+      icon = <MdPriorityHigh />
+      break
+    case 'reachable':
+      computedLabel = 'Reachable'
+      icon = <Tick />
+      break
+    case 'error':
+      computedLabel = 'Error'
+      icon = <Tick />
+      break
+    case 'confirmed':
+      computedLabel = 'Blocking Confirmed'
+      icon = <Tick />
+      break
+    default:
+      icon = <div/>
     }
   }
 

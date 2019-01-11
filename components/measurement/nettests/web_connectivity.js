@@ -45,7 +45,7 @@ export const checkAnomaly = ( testKeys ) => {
       hint = 'Different HTTP Response'
     } else if (blocking === 'http-failure') {
       anomaly = 'HTTPFAILURE'
-      hint = 'HTTP Reqeust Failed'
+      hint = 'HTTP Request Failed'
     } else if (blocking === 'tcp-ip') {
       anomaly = 'TCPIP'
       hint = 'TCP/IP Based Blocking'
