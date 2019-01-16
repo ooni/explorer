@@ -5,6 +5,7 @@ import { Flex, Box } from 'ooni-components'
 // FIXME: Include 'fontWeight' to ooni-components/atoms/Text
 // Using Text from rebass directly for now
 import { Text } from 'rebass'
+import { injectIntl, intlShape } from 'react-intl'
 
 import { getTestMetadata } from '../utils'
 import Badge from '../badge'
@@ -21,7 +22,7 @@ TestGroupBadge.propTypes = {
   color: PropTypes.string
 }
 
-const DetailsHeader = ({testName, runtime, notice}) => {
+const DetailsHeader = ({testName, runtime, notice, intl}) => {
   const metadata = getTestMetadata(testName)
 
   return (
@@ -29,18 +30,19 @@ const DetailsHeader = ({testName, runtime, notice}) => {
       <Box>
         <TestGroupBadge
           icon={metadata.icon}
-          name={metadata.groupName}
+          name={intl.formatMessage({ id: `Tests.Groups.${metadata.groupName}.Name` })}
+
           color={metadata.color}
         />
       </Box>
       <Box ml={1}>
-        <Text fontWeight='bold'>{metadata.name}</Text>
+        <Text fontWeight='bold'>{intl.formatMessage({ id: `Tests.${metadata.name}.Name`})}</Text>
       </Box>
       <Box mx='auto'>
         {notice}
       </Box>
       <Box>
-        Runtime: <Text is='span' fontWeight='bold'>{prettyMs(runtime * 1000)}</Text>
+        {intl.formatMessage({id: 'Measurement.DetailsHeader.Runtime'})}: <Text is='span' fontWeight='bold'>{prettyMs(runtime * 1000)}</Text>
       </Box>
     </Flex>
   )
@@ -48,8 +50,9 @@ const DetailsHeader = ({testName, runtime, notice}) => {
 
 DetailsHeader.propTypes = {
   testName: PropTypes.string.isRequired,
-  runtime: PropTypes.string.isRequired,
-  notice: PropTypes.any
+  runtime: PropTypes.number.isRequired,
+  notice: PropTypes.any,
+  intl: intlShape.isRequired
 }
 
-export default DetailsHeader
+export default injectIntl(DetailsHeader)

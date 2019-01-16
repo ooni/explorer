@@ -32,7 +32,7 @@ SummaryText.propTypes = {
   network: PropTypes.string.isRequired,
   country: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
-  hint: PropTypes.string.isRequired,
+  hint: PropTypes.object.isRequired,
   testUrl: PropTypes.string
 }
 

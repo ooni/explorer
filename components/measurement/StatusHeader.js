@@ -4,6 +4,7 @@ import { Container, Flex, Box, Text } from 'ooni-components'
 import { Tick } from 'ooni-components/dist/icons'
 import MdPriorityHigh from 'react-icons/lib/md/priority-high'
 import styled from 'styled-components'
+import { FormattedMessage } from 'react-intl'
 
 const StatusHeaderContainer = styled(Box)`
   background-color: ${props => props.color};
@@ -19,19 +20,19 @@ const StatusHeader = ({ status, color, icon, label, info }) => {
   if (status) {
     switch (status) {
     case 'anomaly':
-      computedLabel = 'Anomaly'
+      computedLabel = <FormattedMessage id='Measurement.Status.Header.Websites' />
       icon = <MdPriorityHigh />
       break
     case 'reachable':
-      computedLabel = 'Reachable'
+      computedLabel = <FormattedMessage id='Measurement.Status.Header.Websites' />
       icon = <Tick />
       break
     case 'error':
-      computedLabel = 'Error'
+      computedLabel = <FormattedMessage id='Measurement.Status.Header.Websites.Error' />
       icon = <Tick />
       break
     case 'confirmed':
-      computedLabel = 'Blocking Confirmed'
+      computedLabel = <FormattedMessage id='Measurement.Status.Header.Websites.Confirmed' />
       icon = <Tick />
       break
     default:

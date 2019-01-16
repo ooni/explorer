@@ -14,6 +14,8 @@ import { Tick, Cross } from 'ooni-components/dist/icons'
 
 import styled from 'styled-components'
 
+import { FormattedMessage } from 'react-intl'
+
 export const checkAnomaly = ( testKeys ) => {
   const {
     accessible,
@@ -21,10 +23,10 @@ export const checkAnomaly = ( testKeys ) => {
   } = testKeys
 
   let anomaly = null
-  let hint = 'No Censorship Detected'
+  let hint = <FormattedMessage id='Measurement.Status.Info.Websites.NoCensorship' />
 
   if ((accessible === true || accessible === null) && blocking === null) {
-    hint = 'Error In Measurement'
+    hint = <FormattedMessage id='Measurement.Status.Hint.Websites.Error' />
     if (accessible === true) {
       anomaly = 'SITEUP'
     } else if (accessible === null) {
@@ -32,23 +34,23 @@ export const checkAnomaly = ( testKeys ) => {
     }
   } else if (accessible === false && (blocking === false || blocking === null)) {
     anomaly = 'SITEDOWN'
-    hint = 'Site Unavailable'
+    hint = <FormattedMessage id='Measurement.Status.Hint.Websites.Unavailable' />
   } else if (blocking !== null && blocking !== false) {
     anomaly = 'CENSORSHIP'
-    hint = 'Evidence of Possible Censorship'
+    hint = <FormattedMessage id='Measurement.Status.Hint.Websites.Censorship' />
     // Further identify type of censorship
     if (blocking === 'dns') {
       anomaly = 'DNS'
-      hint = 'DNS Based Blocking'
+      hint = <FormattedMessage id='Measurement.Status.Hint.Websites.DNS' />
     } else if (blocking === 'http-diff') {
       anomaly = 'HTTPDIFF'
-      hint = 'Different HTTP Response'
+      hint = <FormattedMessage id='Measurement.Status.Hint.Websites.HTTPdiff' />
     } else if (blocking === 'http-failure') {
       anomaly = 'HTTPFAILURE'
-      hint = 'HTTP Request Failed'
+      hint = <FormattedMessage id='Measurement.Status.Hint.Websites.HTTPfail' />
     } else if (blocking === 'tcp-ip') {
       anomaly = 'TCPIP'
-      hint = 'TCP/IP Based Blocking'
+      hint = <FormattedMessage id='Measurement.Status.Hint.Websites.TCPBlock' />
     }
   }
 
