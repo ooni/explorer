@@ -93,7 +93,7 @@ const FailureString = ({failure}) => {
   if (!failure) {
     return (
       <div>
-        <Tick size={20} /> null
+        <Tick size={20} /> <FormattedMessage id='Measurement.Details.Websites.Failures.Values.Null' />
       </div>
     )
   }
@@ -159,7 +159,7 @@ const RequestResponseContainer = ({request}) => {
           <Pre>{request.request.method} {request.request.url}</Pre>
         </Box>
         <Box width={1}>
-          <Heading h={5}>Response</Heading>
+          <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Labels.Response' /></Heading>
         </Box>
         <Box width={1}>
           <Pre>
@@ -208,22 +208,22 @@ const WebConnectivityDetails = ({ measurement, render }) => {
         summaryText: hint,
         details: (
           <Container>
-            <Heading h={4}>Failures</Heading>
+            <Heading h={4}><FormattedMessage id='Measurement.Details.Websites.Failures.Heading' /></Heading>
             <Flex mb={2} flexWrap='wrap'>
               <Box width={1/3}>
-              HTTP Experiment
+                <FormattedMessage id='Measurement.Details.Websites.Failures.Labels.HTTP' />
               </Box>
               <Box width={2/3}>
                 <FailureString failure={http_experiment_failure} />
               </Box>
               <Box width={1/3}>
-              DNS Experiment
+                <FormattedMessage id='Measurement.Details.Websites.Failures.Labels.DNS' />
               </Box>
               <Box width={2/3}>
                 <FailureString failure={dns_experiment_failure} />
               </Box>
               <Box width={1/3}>
-              Control
+                <FormattedMessage id='Measurement.Details.Websites.Failures.Labels.Control' />
               </Box>
               <Box width={2/3}>
                 <FailureString failure={control_failure} />
@@ -231,11 +231,11 @@ const WebConnectivityDetails = ({ measurement, render }) => {
             </Flex>
 
             <Flex>
-              <DetailsBox pr={2} title='DNS Queries' content={
+              <DetailsBox pr={2} title={<FormattedMessage id='Measurement.Details.Websites.DNSQueries.Heading' />} content={
                 <React.Fragment>
                   <Flex mb={2}>
                     <Box width={1/3}>
-                      <Text>Resolver:</Text>
+                      <Text><FormattedMessage id='Measurement.Details.Websites.DNSQueries.Labels.Resolver' />:</Text>
                     </Box>
                     <Box width={2/3}>
                       <Text>{client_resolver || '(unknown)'}</Text>
@@ -244,13 +244,22 @@ const WebConnectivityDetails = ({ measurement, render }) => {
                   {queries.map((query, index) => <QueryContainer key={index} query={query} />)}
                 </React.Fragment>
               } />
-              <DetailsBox pl={2} title='TCP Connections' content={
+              <DetailsBox pl={2} title={<FormattedMessage id='Measurement.Details.Websites.TCP.Heading' />} content={
                 <React.Fragment>
-                  {tcpConnections.length === 0 && <Text>No results</Text>}
+                  {tcpConnections.length === 0 && <Text><FormattedMessage id='Measurement.Details.Websites.TCP.NoData' /></Text>}
                   {tcpConnections.map((connection, index) => (
                     <Flex key={index}>
                       <Box>
-                        <Text>Connection to <strong>{connection.destination}</strong> was {connection.status}.</Text>
+                        <Text>
+                          <FormattedMessage
+                            id='Measurement.Details.Websites.TCP.ConnectionTo'
+                            defaultMessage='Connection to {destination} was {status, select, successful {succcessful} failed {failed} blocked {blocked}}.'
+                            values={{
+                              destination: <strong> {connection.destination} </strong>,
+                              status: connection.status
+                            }}
+                          />
+                        </Text>
                       </Box>
                     </Flex>
                   ))}
@@ -258,11 +267,11 @@ const WebConnectivityDetails = ({ measurement, render }) => {
               } />
             </Flex>
             {/* I would like us to enrich the HTTP response body section with
-            information about every request and response as this is a very common
+              information about every request and response as this is a very common
             thing we look at when investigating a case. */}
             <Flex>
               <Box width={1}>
-                <Heading h={4}>HTTP Requests</Heading>
+                <Heading h={4}><FormattedMessage id='Measurement.Details.Websites.HTTP.Heading' /></Heading>
                 {requests.map((request, index) => <RequestResponseContainer key={index} request={request} />)}
               </Box>
             </Flex>
