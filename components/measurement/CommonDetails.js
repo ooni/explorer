@@ -86,7 +86,7 @@ const CommonDetails = ({
               <Button
                 fontSize={11}
                 mx={3}
-                px={3}>Download JSON</Button>
+                px={3}>{intl.formatMessage({ id: 'Measurement.CommonDetails.RawMeasurement.Download' })}</Button>
             </a>
           </Box>
         </Flex>

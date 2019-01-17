@@ -20,11 +20,11 @@ const StatusHeader = ({ status, color, icon, label, info }) => {
   if (status) {
     switch (status) {
     case 'anomaly':
-      computedLabel = <FormattedMessage id='Measurement.Status.Header.Websites' />
+      computedLabel = <FormattedMessage id='Measurement.Status.Header.Websites.Anomaly' />
       icon = <MdPriorityHigh />
       break
     case 'reachable':
-      computedLabel = <FormattedMessage id='Measurement.Status.Header.Websites' />
+      computedLabel = <FormattedMessage id='Measurement.Status.Header.Websites.Reachable' />
       icon = <Tick />
       break
     case 'error':
