@@ -30,13 +30,13 @@ const DetailsHeader = ({testName, runtime, notice, intl}) => {
       <Box>
         <TestGroupBadge
           icon={metadata.icon}
-          name={intl.formatMessage({ id: `Tests.Groups.${metadata.groupName}.Name` })}
+          name={metadata.groupName}
 
           color={metadata.color}
         />
       </Box>
       <Box ml={1}>
-        <Text fontWeight='bold'>{intl.formatMessage({ id: `Tests.${metadata.name}.Name`})}</Text>
+        <Text fontWeight='bold'>{metadata.name}</Text>
       </Box>
       <Box mx='auto'>
         {notice}
