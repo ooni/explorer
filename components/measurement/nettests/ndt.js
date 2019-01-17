@@ -6,6 +6,7 @@ import {
 } from 'ooni-components'
 import { Text } from 'rebass'
 import MdFlashOn from 'react-icons/lib/md/flash-on'
+import { injectIntl, intlShape } from 'react-intl'
 
 import { mlabServerToCountry, mlabServerToName } from './mlab_utils.js'
 import PerformanceDetails from '../PerformanceDetails'
@@ -26,7 +27,7 @@ const InfoBoxItem = ({
 )
 
 
-const NdtDetails = ({ measurement, render }) => {
+const NdtDetails = ({ measurement, render, intl }) => {
   const testKeys = measurement.test_keys
   const isFailed = testKeys.failure !== null
   const failure = testKeys.failure
@@ -57,7 +58,7 @@ const NdtDetails = ({ measurement, render }) => {
   return (
     render({
       statusIcon: <MdFlashOn />,
-      statusLabel: 'Results',
+      statusLabel: intl.formatMessage({id: 'Measurement.Status.Header.NDT.Title'}),
       statusInfo: (
         <Box width={1}>
           {isFailed ?
@@ -66,9 +67,9 @@ const NdtDetails = ({ measurement, render }) => {
             </Flex>
             :
             <Flex justifyContent='space-around'>
-              <InfoBoxItem label='Download' content={downloadMbit} unit='Mbps' />
-              <InfoBoxItem label='Upload' content={uploadMbit} unit='Mbps' />
-              <InfoBoxItem label='Ping' content={ping} unit='ms' />
+              <InfoBoxItem label={intl.formatMessage({ id: 'Measurement.Status.Info.Labels.Download' })} content={downloadMbit} unit='Mbps' />
+              <InfoBoxItem label={intl.formatMessage({ id: 'Measurement.Status.Info.Labels.Upload' })} content={uploadMbit} unit='Mbps' />
+              <InfoBoxItem label={intl.formatMessage({ id: 'Measurement.Status.Info.Labels.Ping' })} content={ping} unit='ms' />
             </Flex>
           }
         </Box>
@@ -104,7 +105,8 @@ const NdtDetails = ({ measurement, render }) => {
 }
 
 NdtDetails.propTypes = {
-  testKeys: PropTypes.object
+  testKeys: PropTypes.object,
+  intl: intlShape.isRequired
 }
 
-export default NdtDetails
+export default injectIntl(NdtDetails)

@@ -9,6 +9,7 @@ import {
 } from 'ooni-components'
 
 import { Text } from 'rebass'
+import { injectIntl, intlShape } from 'react-intl'
 
 import {
   VictoryChart,
@@ -88,7 +89,7 @@ const getOptimalQualityForBitrate = (testKeys) => {
   return optimalQuality
 }
 
-const DashDetails = ({ measurement, render }) => {
+const DashDetails = ({ measurement, render, intl }) => {
   const testKeys = measurement.test_keys
   // const isFailed = testKeys.failure !== null
   // const failure = testKeys.failure
@@ -106,13 +107,22 @@ const DashDetails = ({ measurement, render }) => {
   return (
     render({
       statusIcon: <MdFlashOn />,
-      statusLabel: 'Results',
+      statusLabel: intl.formatMessage({ id: 'Measurement.Status.Header.Dash.Title' }),
       statusInfo: (
         <Box width={1}>
           <Flex justifyContent='space-around'>
-            <InfoBoxItem label='Video Quality' content={optimalVideoRate}/>
-            <InfoBoxItem label='Median Bitrate' content={medianBitrate} unit='Mbit/s' />
-            <InfoBoxItem label='Playout Delay' content={playoutDelay} unit='s' />
+            <InfoBoxItem
+              label={intl.formatMessage({ id: 'Measurement.Status.Info.Labels.VideoQuality' })}
+              content={optimalVideoRate}
+            />
+            <InfoBoxItem
+              label={intl.formatMessage({ id: 'Measurement.Status.Info.Labels.Bitrate' })}
+              content={medianBitrate} unit='Mbit/s'
+            />
+            <InfoBoxItem
+              label={intl.formatMessage({ id: 'Measurement.Status.Info.Labels.Delay' })}
+              content={playoutDelay} unit='s'
+            />
           </Flex>
         </Box>
       ),
@@ -170,7 +180,8 @@ const DashDetails = ({ measurement, render }) => {
 }
 
 DashDetails.propTypes = {
-  testKeys: PropTypes.object
+  testKeys: PropTypes.object.isRequired,
+  intl: intlShape.isRequired
 }
 
-export default DashDetails
+export default injectIntl(DashDetails)
