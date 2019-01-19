@@ -7,7 +7,7 @@ import {
   Box,
   theme
 } from 'ooni-components'
-
+import { FormattedMessage } from 'react-intl'
 import { Text } from 'rebass'
 import MdPhoneAndroid from 'react-icons/lib/md/phone-android'
 import MdWebAsset from 'react-icons/lib/md/web-asset'
@@ -32,7 +32,10 @@ const AccessPointStatus = ({ icon, label, ok }) => (
       fontSize={3}
       fontWeight={200}
     >
-      {ok ? 'Okay' : 'Failed'}
+      {ok
+        ? <FormattedMessage id='Measurement.Details.Telegram.Endpoint.Status.Okay' />
+        : <FormattedMessage id='Measurement.Details.Telegram.Endpoint.Status.Failed' />
+      }
     </Text>
   </Box>
 )
@@ -55,7 +58,7 @@ const TelegramDetails = ({ measurement, render }) => {
   let telegramWebOK = true
   let telegramDesktopOK = true
   let anomaly = false
-  let hint = 'Telegram is working'
+  let hint = <FormattedMessage id='Measurement.Status.Hint.Telegram.Reachable' />
 
   if (telegram_web_status === 'blocked') {
     telegramWebOK = false
@@ -67,7 +70,7 @@ const TelegramDetails = ({ measurement, render }) => {
 
   if (!telegramWebOK || !telegramDesktopOK) {
     anomaly = true
-    hint = 'Telegram is not working'
+    hint = <FormattedMessage id='Measurement.Status.Hint.Telegram.Blocked' />
   }
 
   return (
@@ -87,27 +90,34 @@ const TelegramDetails = ({ measurement, render }) => {
                     <Box width={1/4}>
                       <AccessPointStatus
                         icon={<MdPhoneAndroid />}
-                        label='Desktop App'
+                        label={<FormattedMessage id='Measurement.Details.Telegram.Endpoint.Label.Desktop' />}
                         ok={telegramDesktopOK}
                       />
                     </Box>
                     <Box width={1/4}>
                       <AccessPointStatus
                         icon={<MdWebAsset />}
-                        label='Web App'
+                        label={<FormattedMessage id='Measurement.Details.Telegram.Endpoint.Label.Web' />}
                         ok={telegramWebOK}
                       />
                     </Box>
                   </Flex>
                   {tcp_connect.length > 0 &&
                     <React.Fragment>
-                      <Heading h={4}> End Point Status </Heading>
+                      <Heading h={4}> <FormattedMessage id='Measurement.Details.Telegram.Endpoint.Status.Heading' /> </Heading>
                       {tcp_connect.map((connection, index) => (
                         <Flex key={index}>
                           <Box>
-                            <Text>Connection to <strong>{connection.ip}:{connection.port}</strong>{
-                              connection.status.success ? ' was successful' : ' failed'
-                            }</Text>
+                            <Text>
+                              <FormattedMessage
+                                id='Measurement.Details.Telegram.Endpoint.ConnectionTo'
+                                defaultMessage='Connection to {destination} {status, select, success {was successful} fail {failed}}.'
+                                values={{
+                                  destination: <strong> {connection.ip}:{connection.port} </strong>,
+                                  status: connection.status.success ? 'success' : 'fail'
+                                }}
+                              />
+                            </Text>
                           </Box>
                         </Flex>
                       ))}
