@@ -76,7 +76,10 @@ const TelegramDetails = ({ measurement, render }) => {
   return (
     render({
       status: anomaly ? 'anomaly': 'reachable',
-      statusInfo: (anomaly === true) && 'Telegram is not working',
+      statusInfo: <FormattedMessage id={ anomaly
+        ? 'Measurement.Status.Hint.Telegram.Blocked'
+        : 'Measurement.Status.Hint.Telegram.Reachable'}
+      />,
       summaryText: (anomaly === true)
         ? 'presented signs of Application Failure'
         : 'presented no signs of tampering and is reachable',
@@ -109,14 +112,12 @@ const TelegramDetails = ({ measurement, render }) => {
                         <Flex key={index}>
                           <Box>
                             <Text>
-                              <FormattedMessage
-                                id='Measurement.Details.Telegram.Endpoint.ConnectionTo'
-                                defaultMessage='Connection to {destination} {status, select, success {was successful} fail {failed}}.'
-                                values={{
-                                  destination: <strong> {connection.ip}:{connection.port} </strong>,
-                                  status: connection.status.success ? 'success' : 'fail'
-                                }}
-                              />
+                              {connection.status.failure && <FormattedMessage id="Measurement.Details.Telegram.Endpoint.ConnectionTo.Failed"
+                                values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
+                              />}
+                              {connection.status.success && <FormattedMessage id="Measurement.Details.Telegram.Endpoint.ConnectionTo.Successful"
+                                values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
+                              />}
                             </Text>
                           </Box>
                         </Flex>
