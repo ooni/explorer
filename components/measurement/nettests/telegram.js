@@ -3,14 +3,16 @@ import PropTypes from 'prop-types'
 import {
   Container,
   Heading,
+  Text,
   Flex,
   Box,
   theme
 } from 'ooni-components'
 import { FormattedMessage } from 'react-intl'
-import { Text } from 'rebass'
 import MdPhoneAndroid from 'react-icons/lib/md/phone-android'
 import MdWebAsset from 'react-icons/lib/md/web-asset'
+
+import AccessPointStatus from '../AccessPointStatus'
 
 const DetailsBox = ({ title, content, ...props}) => (
   <Box {...props}>
@@ -22,28 +24,6 @@ const DetailsBox = ({ title, content, ...props}) => (
 DetailsBox.propTypes = {
   title: PropTypes.string.isRequired,
   content: PropTypes.element,
-}
-
-const AccessPointStatus = ({ icon, label, ok }) => (
-  <Box>
-    {icon}
-    <Text fontWeight='bold' fontSize={0}>{label}</Text>
-    <Text
-      fontSize={3}
-      fontWeight={200}
-    >
-      {ok
-        ? <FormattedMessage id='Measurement.Details.Telegram.Endpoint.Status.Okay' />
-        : <FormattedMessage id='Measurement.Details.Telegram.Endpoint.Status.Failed' />
-      }
-    </Text>
-  </Box>
-)
-
-AccessPointStatus.propTypes = {
-  icon: PropTypes.element.isRequired,
-  label: PropTypes.string.isRequired,
-  ok: PropTypes.bool.isRequired
 }
 
 const TelegramDetails = ({ measurement, render }) => {
@@ -112,12 +92,16 @@ const TelegramDetails = ({ measurement, render }) => {
                         <Flex key={index}>
                           <Box>
                             <Text>
-                              {connection.status.failure && <FormattedMessage id="Measurement.Details.Telegram.Endpoint.ConnectionTo.Failed"
-                                values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
-                              />}
-                              {connection.status.success && <FormattedMessage id="Measurement.Details.Telegram.Endpoint.ConnectionTo.Successful"
-                                values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
-                              />}
+                              {connection.status.failure &&
+                                <FormattedMessage id="Measurement.Details.Telegram.Endpoint.ConnectionTo.Failed"
+                                  values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
+                                />
+                              }
+                              {connection.status.success &&
+                                <FormattedMessage id="Measurement.Details.Telegram.Endpoint.ConnectionTo.Successful"
+                                  values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
+                                />
+                              }
                             </Text>
                           </Box>
                         </Flex>
@@ -135,7 +119,8 @@ const TelegramDetails = ({ measurement, render }) => {
 }
 
 TelegramDetails.propTypes = {
-  testKeys: PropTypes.object.isRequired
+  measurement: PropTypes.object.isRequired,
+  render: PropTypes.func
 }
 
 export default TelegramDetails
