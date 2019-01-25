@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import {
   Text
 } from 'ooni-components'
+import { FormattedMessage } from 'react-intl'
 
 const HttpInvalidRequestLineDetails = ({ measurement, render }) => {
   const testKeys = measurement.test_keys
@@ -15,12 +16,14 @@ const HttpInvalidRequestLineDetails = ({ measurement, render }) => {
   return (
     render({
       status: isAnomaly ? 'anomaly' : 'reachable',
-      statusLabel: isAnomaly ? 'Network Tampering' : 'No middleboxes detected',
+      statusLabel: isAnomaly
+        ? <FormattedMessage id='Measurement.Status.Header.HTTPInvalidReqLine.MiddleboxesDetected' />
+        : <FormattedMessage id='Measurement.Status.Header.HTTPInvalidReqLine.NoMiddleBoxes' />,
       summaryText: `presented ${!isAnomaly ? 'no' : ''} signs of potential network traffic manipulation`,
       details: (
         <div>
           {/*<Text>isAnomaly: {isAnomaly.toString()}</Text>
-          <Text>isOK: {isOK.toString()}</Text>
+            <Text>isOK: {isOK.toString()}</Text>
           <Text>isFailed: {isFailed.toString()}</Text>
           <Text>sentMessages: {sentMessages.toString()}</Text>
           <Text>receivedMessages: {receivedMessages.toString()}</Text>*/}

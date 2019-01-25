@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import {
   Text
 } from 'ooni-components'
+import { FormattedMessage } from 'react-intl'
 
 export const HttpHeaderFieldManipulationDetails = ({ measurement, render }) => {
   const testKeys = measurement.test_keys
@@ -22,7 +23,9 @@ export const HttpHeaderFieldManipulationDetails = ({ measurement, render }) => {
   return (
     render({
       status: isAnomaly ? 'anomaly' : 'reachable',
-      statusLabel: isAnomaly ? 'Network Tampering' : 'No middleboxes detected',
+      statusLabel: isAnomaly
+        ? <FormattedMessage id='Measurement.Status.Header.HTTPHeaderManipulation.MiddleboxesDetected' />
+        : <FormattedMessage id='Measurement.Status.Header.HTTPHeaderManipulation.NoMiddleBoxes' />,
       summaryText: `presented ${!isAnomaly ? 'no' : ''} signs of potential network traffic manipulation`,
       details: (
         <div>
