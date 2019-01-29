@@ -14,7 +14,8 @@ import {
   Container
 } from 'ooni-components'
 
-const StyledNavItem = styled.div`
+const StyledNavItem = styled.a`
+  text-decoration: none;
   position: relative;
   display: inline;
   padding-left: 16px;
