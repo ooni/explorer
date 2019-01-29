@@ -26,7 +26,7 @@ const FooterLinkItem = styled(Box)`
   margin-left: ${props => (props.horizontal === 'true') ? '1rem' : 0};
 `
 
-const StyledFooterLabel = styled.span`
+const StyledFooterLabel = styled.a`
   text-decoration: none;
   color: {props => props.theme.colors.blue1};
   cursor: pointer;
