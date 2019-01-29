@@ -116,7 +116,7 @@ export default class Measurement extends React.Component {
                   network={measurement.probe_asn}
                   country={country}
                   date={measurement.test_start_time}
-                  hint={summaryText}
+                  content={summaryText}
                 />}
                 {details}
                 <CommonDetails

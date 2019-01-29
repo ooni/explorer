@@ -23,7 +23,7 @@ export const checkAnomaly = ( testKeys ) => {
   } = testKeys
 
   let anomaly = null
-  let hint = <FormattedMessage id='Measurement.Status.Info.Websites.NoCensorship' />
+  let hint = <FormattedMessage id='Measurement.Status.Hint.Websites.NoCensorship' />
 
   if ((accessible === true || accessible === null) && blocking === null) {
     hint = <FormattedMessage id='Measurement.Status.Hint.Websites.Error' />
