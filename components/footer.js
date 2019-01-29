@@ -73,32 +73,32 @@ const Footer = ({ intl }) => (
             <Box p={[1, 0]} mb={[0, 3]} width={[1/2, 1]}>
               <StyledIcon height='32px' />
             </Box>
-            <Box p={[1, 0]} pr={[0, '50%']} width={[1/2, 1]}> <FooterText>Detect and measure internet censorship all around the world.</FooterText> </Box>
+            <Box p={[1, 0]} pr={[0, '50%']} width={[1/2, 1]}> <FooterText>{intl.formatMessage({ id: 'Footer.Text.Slogan' })}</FooterText> </Box>
           </Flex>
         </FooterBox>
         <FooterBox width={[1/2, 1/6]}>
-          <FooterHead>OONI</FooterHead>
+          <FooterHead>{intl.formatMessage({ id: 'Footer.Headings.OONI' })}</FooterHead>
           <FooterLink href='https://ooni.io/about/' label={intl.formatMessage({ id: 'Footer.Links.About' })} />
           <FooterLink href='https://ooni.io/post/' label={intl.formatMessage({ id: 'Footer.Links.Blog' })} />
           <FooterLink href='#' label={intl.formatMessage({ id: 'Footer.Links.Reports' })} />
           <FooterLink href='https://ooni.io/about/#contact' label={intl.formatMessage({ id: 'Footer.Links.Contact' })} />
         </FooterBox>
         <FooterBox width={[1/2, 1/6]}>
-          <FooterHead>Data</FooterHead>
+          <FooterHead>{intl.formatMessage({ id: 'Footer.Headings.Data' })}</FooterHead>
           <FooterLink href='https://ooni.io/install/' label={intl.formatMessage({ id: 'Footer.Links.Probe' })} />
           <FooterLink href='https://explorer.ooni.io/' label={intl.formatMessage({ id: 'Footer.Links.Explorer' })} />
           <FooterLink href='https://api.ooni.io/' label={intl.formatMessage({ id: 'Footer.Links.API' })} />
           <FooterLink href='https://ooni.io/nettest/' label={intl.formatMessage({ id: 'Footer.Links.Tests' })} />
         </FooterBox>
         <FooterBox width={[1/2, 1/6]}>
-          <FooterHead>Get Involved</FooterHead>
+          <FooterHead>{intl.formatMessage({ id: 'Footer.Headings.GetInvolved' })}</FooterHead>
           <FooterLink href='https://ooni.io/get-involved/' label={intl.formatMessage({ id: 'Footer.Links.Contribute' })} />
           <FooterLink href='#' label={intl.formatMessage({ id: 'Footer.Links.Donate' })} />
           <FooterLink href='https://ooni.io/get-involved/partnership-program/' label={intl.formatMessage({ id: 'Footer.Links.Partners' })} />
           <FooterLink href='https://run.ooni.io/' label={intl.formatMessage({ id: 'Footer.Links.Run' })} />
         </FooterBox>
         <FooterBox width={[1/2, 1/6]}>
-          <FooterHead>Follow Us</FooterHead>
+          <FooterHead>{intl.formatMessage({ id: 'Footer.Headings.SocialLinks' })}</FooterHead>
           <SocialLink
             logo='https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=2048&q=20'
             href='https://twitter.com/OpenObservatory'
