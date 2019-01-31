@@ -159,7 +159,7 @@ const RequestResponseContainer = ({request}) => {
           <Pre>{request.request.method} {request.request.url}</Pre>
         </Box>
         <Box width={1}>
-          <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Labels.Response' /></Heading>
+          <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Label.Response' /></Heading>
         </Box>
         <Box width={1}>
           <Pre>
@@ -211,19 +211,19 @@ const WebConnectivityDetails = ({ measurement, render }) => {
             <Heading h={4}><FormattedMessage id='Measurement.Details.Websites.Failures.Heading' /></Heading>
             <Flex mb={2} flexWrap='wrap'>
               <Box width={1/3}>
-                <FormattedMessage id='Measurement.Details.Websites.Failures.Labels.HTTP' />
+                <FormattedMessage id='Measurement.Details.Websites.Failures.Label.HTTP' />
               </Box>
               <Box width={2/3}>
                 <FailureString failure={http_experiment_failure} />
               </Box>
               <Box width={1/3}>
-                <FormattedMessage id='Measurement.Details.Websites.Failures.Labels.DNS' />
+                <FormattedMessage id='Measurement.Details.Websites.Failures.Label.DNS' />
               </Box>
               <Box width={2/3}>
                 <FailureString failure={dns_experiment_failure} />
               </Box>
               <Box width={1/3}>
-                <FormattedMessage id='Measurement.Details.Websites.Failures.Labels.Control' />
+                <FormattedMessage id='Measurement.Details.Websites.Failures.Label.Control' />
               </Box>
               <Box width={2/3}>
                 <FailureString failure={control_failure} />
@@ -235,7 +235,7 @@ const WebConnectivityDetails = ({ measurement, render }) => {
                 <React.Fragment>
                   <Flex mb={2}>
                     <Box width={1/3}>
-                      <Text><FormattedMessage id='Measurement.Details.Websites.DNSQueries.Labels.Resolver' />:</Text>
+                      <Text><FormattedMessage id='Measurement.Details.Websites.DNSQueries.Label.Resolver' />:</Text>
                     </Box>
                     <Box width={2/3}>
                       <Text>{client_resolver || '(unknown)'}</Text>

@@ -14,27 +14,27 @@ const PerformanceDetails = ({
 }) => {
   const items = [
     {
-      label: intl.formatMessage({ id: 'Measurement.Details.Performance.Labels.AvgPing' }),
+      label: intl.formatMessage({ id: 'Measurement.Details.Performance.Label.AvgPing' }),
       value: averagePing.toString() + ' ms'
     },
     {
-      label: intl.formatMessage({ id: 'Measurement.Details.Performance.Labels.MaxPing' }),
+      label: intl.formatMessage({ id: 'Measurement.Details.Performance.Label.MaxPing' }),
       value: maxPing.toString() + ' ms'
     },
     {
-      label: intl.formatMessage({ id: 'Measurement.Details.Performance.Labels.MSS' }),
+      label: intl.formatMessage({ id: 'Measurement.Details.Performance.Label.MSS' }),
       value: mss.toString()
     },
     {
-      label: intl.formatMessage({ id: 'Measurement.Details.Performance.Labels.PktLoss' }),
+      label: intl.formatMessage({ id: 'Measurement.Details.Performance.Label.PktLoss' }),
       value: packetLoss.toString() + '%'
     },
     {
-      label: intl.formatMessage({ id: 'Measurement.Details.Performance.Labels.OutOfOrder' }),
+      label: intl.formatMessage({ id: 'Measurement.Details.Performance.Label.OutOfOrder' }),
       value: outOfOrder.toString() + '%'
     },
     {
-      label: intl.formatMessage({ id: 'Measurement.Details.Performance.Labels.Timeouts' }),
+      label: intl.formatMessage({ id: 'Measurement.Details.Performance.Label.Timeouts' }),
       value: timeouts.toString()
     }
   ]

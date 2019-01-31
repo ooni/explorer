@@ -49,21 +49,21 @@ const CommonDetails = ({
   const downloadFilename = `ooni-measurement-${report_id}.json`
   const items = [
     {
-      label: intl.formatMessage({ id: 'Measurement.CommonDetails.Labels.MsmtID' }),
+      label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.MsmtID' }),
       value: report_id
     },
     {
-      label: intl.formatMessage({ id: 'Measurement.CommonDetails.Labels.Platform' }),
+      label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.Platform' }),
       value: platform ? platform : 'unknown'
     },
     {
-      label: intl.formatMessage({ id: 'Measurement.CommonDetails.Labels.SoftwareVersion' }),
+      label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.SoftwareVersion' }),
       value: software_version
     }
   ]
   if(engine_version) {
     items.push({
-      label: intl.formatMessage({ id: 'Measurement.CommonDetails.Labels.MKVersion' }),
+      label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.MKVersion' }),
       value: engine_version
     })
   }

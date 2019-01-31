@@ -112,15 +112,15 @@ const DashDetails = ({ measurement, render, intl }) => {
         <Box width={1}>
           <Flex justifyContent='space-around'>
             <InfoBoxItem
-              label={intl.formatMessage({ id: 'Measurement.Status.Info.Labels.VideoQuality' })}
+              label={intl.formatMessage({ id: 'Measurement.Status.Info.Label.VideoQuality' })}
               content={optimalVideoRate}
             />
             <InfoBoxItem
-              label={intl.formatMessage({ id: 'Measurement.Status.Info.Labels.Bitrate' })}
+              label={intl.formatMessage({ id: 'Measurement.Status.Info.Label.Bitrate' })}
               content={medianBitrate} unit='Mbit/s'
             />
             <InfoBoxItem
-              label={intl.formatMessage({ id: 'Measurement.Status.Info.Labels.Delay' })}
+              label={intl.formatMessage({ id: 'Measurement.Status.Info.Label.Delay' })}
               content={playoutDelay} unit='s'
             />
           </Flex>

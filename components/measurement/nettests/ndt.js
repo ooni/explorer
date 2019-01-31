@@ -67,9 +67,9 @@ const NdtDetails = ({ measurement, render, intl }) => {
             </Flex>
             :
             <Flex justifyContent='space-around'>
-              <InfoBoxItem label={intl.formatMessage({ id: 'Measurement.Status.Info.Labels.Download' })} content={downloadMbit} unit='Mbps' />
-              <InfoBoxItem label={intl.formatMessage({ id: 'Measurement.Status.Info.Labels.Upload' })} content={uploadMbit} unit='Mbps' />
-              <InfoBoxItem label={intl.formatMessage({ id: 'Measurement.Status.Info.Labels.Ping' })} content={ping} unit='ms' />
+              <InfoBoxItem label={intl.formatMessage({ id: 'Measurement.Status.Info.Label.Download' })} content={downloadMbit} unit='Mbps' />
+              <InfoBoxItem label={intl.formatMessage({ id: 'Measurement.Status.Info.Label.Upload' })} content={uploadMbit} unit='Mbps' />
+              <InfoBoxItem label={intl.formatMessage({ id: 'Measurement.Status.Info.Label.Ping' })} content={ping} unit='ms' />
             </Flex>
           }
         </Box>
