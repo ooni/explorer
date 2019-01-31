@@ -25,10 +25,7 @@ const SummaryText = ({
   } else {
     textToRender = <Text py={4} fontSize={3}>
       <FormattedMessage id='Measurement.Details.SummaryTextTemplate'
-        defaultMessage='The {testName} test
-        in the {network} network of {country} on {date}
-        {content}. Check the network measurement data below, as well as other
-        measurements from this network testing this site to explore further.'
+        description='This is a multi-sentence paragraph with tokens.'
         values={{
           testName: <a href={metadata.info}>{metadata.name}</a>,
           network: network,
