@@ -58,7 +58,7 @@ const NdtDetails = ({ measurement, render, intl }) => {
   return (
     render({
       statusIcon: <MdFlashOn />,
-      statusLabel: intl.formatMessage({id: 'Measurement.Status.Header.NDT.Title'}),
+      statusLabel: intl.formatMessage({id: 'Measurement.Hero.Status.NDT.Title'}),
       statusInfo: (
         <Box width={1}>
           {isFailed ?

@@ -107,7 +107,7 @@ const DashDetails = ({ measurement, render, intl }) => {
   return (
     render({
       statusIcon: <MdFlashOn />,
-      statusLabel: intl.formatMessage({ id: 'Measurement.Status.Header.Dash.Title' }),
+      statusLabel: intl.formatMessage({ id: 'Measurement.Hero.Status.Dash.Title' }),
       statusInfo: (
         <Box width={1}>
           <Flex justifyContent='space-around'>

@@ -17,8 +17,8 @@ const HttpInvalidRequestLineDetails = ({ measurement, render }) => {
     render({
       status: isAnomaly ? 'anomaly' : 'reachable',
       statusLabel: isAnomaly
-        ? <FormattedMessage id='Measurement.Status.Header.HTTPInvalidReqLine.MiddleboxesDetected' />
-        : <FormattedMessage id='Measurement.Status.Header.HTTPInvalidReqLine.NoMiddleBoxes' />,
+        ? <FormattedMessage id='Measurement.Hero.Status.HTTPInvalidReqLine.MiddleboxesDetected' />
+        : <FormattedMessage id='Measurement.Hero.Status.HTTPInvalidReqLine.NoMiddleBoxes' />,
       summaryText: `presented ${!isAnomaly ? 'no' : ''} signs of potential network traffic manipulation`,
       details: (
         <div>

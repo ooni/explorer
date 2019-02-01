@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl'
 
 const DefaultTestDetails = ({ measurement, render }) => (
   render({
-    statusLabel: <FormattedMessage id='Measurement.Default.Status.Header' />,
+    statusLabel: <FormattedMessage id='Measurement.Hero.Status.Default' />,
   })
 )
 
