@@ -39,13 +39,16 @@ const TelegramDetails = ({ measurement, render }) => {
   let telegramDesktopOK = true
   let anomaly = false
   let hint = <FormattedMessage id='Measurement.Status.Hint.Telegram.Reachable' />
+  let summaryText = <FormattedMessage id='Measurement.Details.SummaryText.Telegram.Reachable' />
 
   if (telegram_web_status === 'blocked') {
     telegramWebOK = false
+    summaryText = <FormattedMessage id='Measurement.Details.SummaryText.Telegram.AppFailure' />
   }
 
   if (telegram_tcp_blocking === true || telegram_http_blocking === true) {
     telegramDesktopOK = false
+    summaryText = <FormattedMessage id='Measurement.Details.SummaryText.Telegram.DesktopFailure' />
   }
 
   if (!telegramWebOK || !telegramDesktopOK) {
@@ -56,13 +59,8 @@ const TelegramDetails = ({ measurement, render }) => {
   return (
     render({
       status: anomaly ? 'anomaly': 'reachable',
-      statusInfo: <FormattedMessage id={ anomaly
-        ? 'Measurement.Status.Hint.Telegram.Blocked'
-        : 'Measurement.Status.Hint.Telegram.Reachable'}
-      />,
-      summaryText: (anomaly === true)
-        ? 'presented signs of Application Failure'
-        : 'presented no signs of tampering and is reachable',
+      statusInfo: hint,
+      summaryText: summaryText,
       details: (
         <React.Fragment>
           <Container>
