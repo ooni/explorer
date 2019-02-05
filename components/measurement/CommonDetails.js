@@ -11,6 +11,7 @@ import {
 } from 'ooni-components'
 
 import NoSSR from 'react-no-ssr'
+import { injectIntl, intlShape } from 'react-intl'
 
 import DetailsBox from './DetailsBox'
 
@@ -33,7 +34,8 @@ JsonViewer.propTypes = {
 
 const CommonDetails = ({
   measurement,
-  measurementURL
+  measurementURL,
+  intl
 }) => {
   const {
     report_id,
@@ -47,21 +49,21 @@ const CommonDetails = ({
   const downloadFilename = `ooni-measurement-${report_id}.json`
   const items = [
     {
-      label: 'Measurement ID',
+      label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.MsmtID' }),
       value: report_id
     },
     {
-      label: 'Platform',
+      label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.Platform' }),
       value: platform ? platform : 'unknown'
     },
     {
-      label: 'Software Version',
+      label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.SoftwareVersion' }),
       value: software_version
     }
   ]
   if(engine_version) {
     items.push({
-      label: 'Measurement Kit Version',
+      label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.MKVersion' }),
       value: engine_version
     })
   }
@@ -69,7 +71,7 @@ const CommonDetails = ({
     <React.Fragment>
       <Flex my={4}>
         <DetailsBox
-          title='Other Details'
+          title={intl.formatMessage({ id: 'Measurement.CommonDetails.OtherDetails.Heading' })}
           items={items}
           bg={theme.colors.gray2}
         />
@@ -77,14 +79,14 @@ const CommonDetails = ({
       <Box>
         <Flex px={3} alignItems='center' bg={theme.colors.gray2}>
           <Box>
-            <Heading h={4}>Raw Measurement Data</Heading>
+            <Heading h={4}>{intl.formatMessage({ id: 'Measurement.CommonDetails.RawMeasurement.Heading' })}</Heading>
           </Box>
           <Box >
             <a href={measurementURL} download={downloadFilename}>
               <Button
                 fontSize={11}
                 mx={3}
-                px={3}>Download JSON</Button>
+                px={3}>{intl.formatMessage({ id: 'Measurement.CommonDetails.RawMeasurement.Download' })}</Button>
             </a>
           </Box>
         </Flex>
@@ -101,6 +103,7 @@ const CommonDetails = ({
 CommonDetails.propTypes = {
   measurement: PropTypes.object.isRequired,
   measurementURL: PropTypes.string.isRequired,
+  intl: intlShape.isRequired
 }
 
-export default CommonDetails
+export default injectIntl(CommonDetails)

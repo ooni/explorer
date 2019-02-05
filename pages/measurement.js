@@ -5,7 +5,7 @@ import Head from 'next/head'
 import axios from 'axios'
 import { Container, theme } from 'ooni-components'
 
-import StatusHeader from '../components/measurement/StatusHeader'
+import Hero from '../components/measurement/Hero'
 import CommonSummary from '../components/measurement/CommonSummary'
 import DetailsHeader from '../components/measurement/DetailsHeader'
 import SummaryText from '../components/measurement/SummaryText'
@@ -91,7 +91,7 @@ export default class Measurement extends React.Component {
 
             <React.Fragment>
               <NavBar color={pageColors[status]} />
-              <StatusHeader
+              <Hero
                 color={pageColors[status]}
                 status={status}
                 icon={statusIcon}
@@ -116,7 +116,7 @@ export default class Measurement extends React.Component {
                   network={measurement.probe_asn}
                   country={country}
                   date={measurement.test_start_time}
-                  hint={summaryText}
+                  content={summaryText}
                 />}
                 {details}
                 <CommonDetails

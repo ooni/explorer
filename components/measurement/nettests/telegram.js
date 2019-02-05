@@ -3,14 +3,16 @@ import PropTypes from 'prop-types'
 import {
   Container,
   Heading,
+  Text,
   Flex,
   Box,
   theme
 } from 'ooni-components'
-
-import { Text } from 'rebass'
+import { FormattedMessage } from 'react-intl'
 import MdPhoneAndroid from 'react-icons/lib/md/phone-android'
 import MdWebAsset from 'react-icons/lib/md/web-asset'
+
+import AccessPointStatus from '../AccessPointStatus'
 
 const DetailsBox = ({ title, content, ...props}) => (
   <Box {...props}>
@@ -22,25 +24,6 @@ const DetailsBox = ({ title, content, ...props}) => (
 DetailsBox.propTypes = {
   title: PropTypes.string.isRequired,
   content: PropTypes.element,
-}
-
-const AccessPointStatus = ({ icon, label, ok }) => (
-  <Box>
-    {icon}
-    <Text fontWeight='bold' fontSize={0}>{label}</Text>
-    <Text
-      fontSize={3}
-      fontWeight={200}
-    >
-      {ok ? 'Okay' : 'Failed'}
-    </Text>
-  </Box>
-)
-
-AccessPointStatus.propTypes = {
-  icon: PropTypes.element.isRequired,
-  label: PropTypes.string.isRequired,
-  ok: PropTypes.bool.isRequired
 }
 
 const TelegramDetails = ({ measurement, render }) => {
@@ -55,28 +38,29 @@ const TelegramDetails = ({ measurement, render }) => {
   let telegramWebOK = true
   let telegramDesktopOK = true
   let anomaly = false
-  let hint = 'Telegram is working'
+  let hint = <FormattedMessage id='Measurement.Status.Hint.Telegram.Reachable' />
+  let summaryText = <FormattedMessage id='Measurement.Details.SummaryText.Telegram.Reachable' />
 
   if (telegram_web_status === 'blocked') {
     telegramWebOK = false
+    summaryText = <FormattedMessage id='Measurement.Details.SummaryText.Telegram.AppFailure' />
   }
 
   if (telegram_tcp_blocking === true || telegram_http_blocking === true) {
     telegramDesktopOK = false
+    summaryText = <FormattedMessage id='Measurement.Details.SummaryText.Telegram.DesktopFailure' />
   }
 
   if (!telegramWebOK || !telegramDesktopOK) {
     anomaly = true
-    hint = 'Telegram is not working'
+    hint = <FormattedMessage id='Measurement.Status.Hint.Telegram.Blocked' />
   }
 
   return (
     render({
       status: anomaly ? 'anomaly': 'reachable',
-      statusInfo: (anomaly === true) && 'Telegram is not working',
-      summaryText: (anomaly === true)
-        ? 'presented signs of Application Failure'
-        : 'presented no signs of tampering and is reachable',
+      statusInfo: hint,
+      summaryText: summaryText,
       details: (
         <React.Fragment>
           <Container>
@@ -87,27 +71,36 @@ const TelegramDetails = ({ measurement, render }) => {
                     <Box width={1/4}>
                       <AccessPointStatus
                         icon={<MdPhoneAndroid />}
-                        label='Desktop App'
+                        label={<FormattedMessage id='Measurement.Details.Telegram.Endpoint.Label.Desktop' />}
                         ok={telegramDesktopOK}
                       />
                     </Box>
                     <Box width={1/4}>
                       <AccessPointStatus
                         icon={<MdWebAsset />}
-                        label='Web App'
+                        label={<FormattedMessage id='Measurement.Details.Telegram.Endpoint.Label.Web' />}
                         ok={telegramWebOK}
                       />
                     </Box>
                   </Flex>
                   {tcp_connect.length > 0 &&
                     <React.Fragment>
-                      <Heading h={4}> End Point Status </Heading>
+                      <Heading h={4}> <FormattedMessage id='Measurement.Details.Telegram.Endpoint.Status.Heading' /> </Heading>
                       {tcp_connect.map((connection, index) => (
                         <Flex key={index}>
                           <Box>
-                            <Text>Connection to <strong>{connection.ip}:{connection.port}</strong>{
-                              connection.status.success ? ' was successful' : ' failed'
-                            }</Text>
+                            <Text>
+                              {connection.status.failure &&
+                                <FormattedMessage id="Measurement.Details.Telegram.Endpoint.ConnectionTo.Failed"
+                                  values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
+                                />
+                              }
+                              {connection.status.success &&
+                                <FormattedMessage id="Measurement.Details.Telegram.Endpoint.ConnectionTo.Successful"
+                                  values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
+                                />
+                              }
+                            </Text>
                           </Box>
                         </Flex>
                       ))}
@@ -124,7 +117,8 @@ const TelegramDetails = ({ measurement, render }) => {
 }
 
 TelegramDetails.propTypes = {
-  testKeys: PropTypes.object.isRequired
+  measurement: PropTypes.object.isRequired,
+  render: PropTypes.func
 }
 
 export default TelegramDetails

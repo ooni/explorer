@@ -3,6 +3,7 @@ import styled from 'styled-components'
 import { Flex, Box, Container, Avatar } from 'ooni-components'
 import ExplorerLogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochrome.svg'
 import NLink from 'next/link'
+import { injectIntl, intlShape } from 'react-intl'
 
 const StyledFooter = styled.footer`
   background-color: ${props => props.theme.colors.gray1};
@@ -25,7 +26,7 @@ const FooterLinkItem = styled(Box)`
   margin-left: ${props => (props.horizontal === 'true') ? '1rem' : 0};
 `
 
-const StyledFooterLabel = styled.span`
+const StyledFooterLabel = styled.a`
   text-decoration: none;
   color: {props => props.theme.colors.blue1};
   cursor: pointer;
@@ -63,7 +64,7 @@ const SocialLink = ({ logo, href}) => (
   </a>
 )
 
-const Footer = () => (
+const Footer = ({ intl }) => (
   <StyledFooter>
     <Container>
       <Flex flexWrap='wrap'>
@@ -72,32 +73,32 @@ const Footer = () => (
             <Box p={[1, 0]} mb={[0, 3]} width={[1/2, 1]}>
               <StyledIcon height='32px' />
             </Box>
-            <Box p={[1, 0]} pr={[0, '50%']} width={[1/2, 1]}> <FooterText>Detect and measure internet censorship all around the world.</FooterText> </Box>
+            <Box p={[1, 0]} pr={[0, '50%']} width={[1/2, 1]}> <FooterText>{intl.formatMessage({ id: 'Footer.Text.Slogan' })}</FooterText> </Box>
           </Flex>
         </FooterBox>
         <FooterBox width={[1/2, 1/6]}>
-          <FooterHead>OONI</FooterHead>
-          <FooterLink href='https://ooni.io/about/' label='About' />
-          <FooterLink href='https://ooni.io/post/' label='Blog' />
-          <FooterLink href='#' label='Reports' />
-          <FooterLink href='https://ooni.io/about/#contact' label='Contact Us' />
+          <FooterHead>{intl.formatMessage({ id: 'Footer.Heading.OONI' })}</FooterHead>
+          <FooterLink href='https://ooni.io/about/' label={intl.formatMessage({ id: 'Footer.Link.About' })} />
+          <FooterLink href='https://ooni.io/post/' label={intl.formatMessage({ id: 'Footer.Link.Blog' })} />
+          <FooterLink href='#' label={intl.formatMessage({ id: 'Footer.Link.Reports' })} />
+          <FooterLink href='https://ooni.io/about/#contact' label={intl.formatMessage({ id: 'Footer.Link.Contact' })} />
         </FooterBox>
         <FooterBox width={[1/2, 1/6]}>
-          <FooterHead>Data</FooterHead>
-          <FooterLink href='https://ooni.io/install/' label='Install Probe' />
-          <FooterLink href='https://explorer.ooni.io/' label='Explorer' />
-          <FooterLink href='https://api.ooni.io/' label='API' />
-          <FooterLink href='https://ooni.io/nettest/' label='Test Docs' />
+          <FooterHead>{intl.formatMessage({ id: 'Footer.Heading.Data' })}</FooterHead>
+          <FooterLink href='https://ooni.io/install/' label={intl.formatMessage({ id: 'Footer.Link.Probe' })} />
+          <FooterLink href='https://explorer.ooni.io/' label={intl.formatMessage({ id: 'Footer.Link.Explorer' })} />
+          <FooterLink href='https://api.ooni.io/' label={intl.formatMessage({ id: 'Footer.Link.API' })} />
+          <FooterLink href='https://ooni.io/nettest/' label={intl.formatMessage({ id: 'Footer.Link.Tests' })} />
         </FooterBox>
         <FooterBox width={[1/2, 1/6]}>
-          <FooterHead>Get Involved</FooterHead>
-          <FooterLink href='https://ooni.io/get-involved/' label='Contribute' />
-          <FooterLink href='#' label='Donate' />
-          <FooterLink href='https://ooni.io/get-involved/partnership-program/' label='Partners' />
-          <FooterLink href='https://run.ooni.io/' label='Run OONI' />
+          <FooterHead>{intl.formatMessage({ id: 'Footer.Heading.GetInvolved' })}</FooterHead>
+          <FooterLink href='https://ooni.io/get-involved/' label={intl.formatMessage({ id: 'Footer.Link.Contribute' })} />
+          <FooterLink href='#' label={intl.formatMessage({ id: 'Footer.Link.Donate' })} />
+          <FooterLink href='https://ooni.io/get-involved/partnership-program/' label={intl.formatMessage({ id: 'Footer.Link.Partners' })} />
+          <FooterLink href='https://run.ooni.io/' label={intl.formatMessage({ id: 'Footer.Link.Run' })} />
         </FooterBox>
         <FooterBox width={[1/2, 1/6]}>
-          <FooterHead>Follow Us</FooterHead>
+          <FooterHead>{intl.formatMessage({ id: 'Footer.Heading.SocialLinks' })}</FooterHead>
           <SocialLink
             logo='https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=2048&q=20'
             href='https://twitter.com/OpenObservatory'
@@ -116,18 +117,22 @@ const Footer = () => (
       <Flex flexWrap='wrap'>
         <FooterBox width={[1, 2/6]}>
           <small>
-            <Box mb={1}>© 2018 Open Observatory of Network Interference.</Box>
-            <Box>Content available under a Creative Commons license.</Box>
+            <Box mb={1}>{intl.formatMessage({ id: 'Footer.Text.Copyright' })}</Box>
+            <Box>{intl.formatMessage({ id: 'Footer.Text.CCommons' })}</Box>
           </small>
         </FooterBox>
         <FooterBox ml='auto' width={[1, 2/6]}>
-          <FooterLink horizontal href='/data-policy' label='Data Policy' />
-          <FooterLink horizontal href='/legal' label='Legal' />
-          <FooterLink horizontal href='/sitemap' label='Sitemap' />
+          <FooterLink horizontal href='/data-policy' label={intl.formatMessage({ id: 'Footer.Link.DataPolicy' })} />
+          <FooterLink horizontal href='/legal' label={intl.formatMessage({ id: 'Footer.Link.Legal' })} />
+          <FooterLink horizontal href='/sitemap' label={intl.formatMessage({ id: 'Footer.Link.Sitemap' })} />
         </FooterBox>
       </Flex>
     </Container>
   </StyledFooter>
 )
 
-export default Footer
+Footer.propTypes = {
+  intl: intlShape.isRequired
+}
+
+export default injectIntl(Footer)

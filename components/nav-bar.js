@@ -4,6 +4,7 @@ import { withRouter } from 'next/router'
 import NLink from 'next/link'
 
 import styled from 'styled-components'
+import { FormattedMessage } from 'react-intl'
 
 import ExplorerLogo from 'ooni-components/components/svgs/logos/Explorer-HorizontalMonochromeInverted.svg'
 
@@ -13,7 +14,8 @@ import {
   Container
 } from 'ooni-components'
 
-const StyledNavItem = styled.div`
+const StyledNavItem = styled.a`
+  text-decoration: none;
   position: relative;
   display: inline;
   padding-left: 16px;
@@ -46,7 +48,7 @@ const Underline = styled.span`
 const NavItemComponent = ({router, label, href}) => {
   const active = router.pathname === href
   return (
-    <NLink href={href}>
+    <NLink href={href} passHref>
       <StyledNavItem>
         <NavItemLabel active={active} >{label}</NavItemLabel>
         <Underline active={active} />
@@ -72,10 +74,10 @@ export const NavBar = ({color}) => (
           </NLink>
         </Box>
         <Box ml='auto'>
-          <NavItem label='Search' href='/search' />
-          <NavItem label='Results' href='/results' />
-          <NavItem label='Countries' href='/countries' />
-          <NavItem label='About' href='/about' />
+          <NavItem label={<FormattedMessage id='Navbar.Search' />} href='/search' />
+          <NavItem label={<FormattedMessage id='Navbar.Results' />} href='/results' />
+          <NavItem label={<FormattedMessage id='Navbar.Countries' />} href='/countries' />
+          <NavItem label={<FormattedMessage id='Navbar.About' />} href='/about' />
         </Box>
       </Flex>
     </Container>

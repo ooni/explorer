@@ -5,6 +5,7 @@ import { Flex, Box } from 'ooni-components'
 // FIXME: Include 'fontWeight' to ooni-components/atoms/Text
 // Using Text from rebass directly for now
 import { Text } from 'rebass'
+import { FormattedMessage } from 'react-intl'
 
 import { getTestMetadata } from '../utils'
 import Badge from '../badge'
@@ -30,6 +31,7 @@ const DetailsHeader = ({testName, runtime, notice}) => {
         <TestGroupBadge
           icon={metadata.icon}
           name={metadata.groupName}
+
           color={metadata.color}
         />
       </Box>
@@ -40,7 +42,7 @@ const DetailsHeader = ({testName, runtime, notice}) => {
         {notice}
       </Box>
       <Box>
-        Runtime: <Text is='span' fontWeight='bold'>{prettyMs(runtime * 1000)}</Text>
+        <FormattedMessage id='Measurement.DetailsHeader.Runtime' />: <Text is='span' fontWeight='bold'>{prettyMs(runtime * 1000)}</Text>
       </Box>
     </Flex>
   )
@@ -48,7 +50,7 @@ const DetailsHeader = ({testName, runtime, notice}) => {
 
 DetailsHeader.propTypes = {
   testName: PropTypes.string.isRequired,
-  runtime: PropTypes.string.isRequired,
+  runtime: PropTypes.number.isRequired,
   notice: PropTypes.any
 }
 

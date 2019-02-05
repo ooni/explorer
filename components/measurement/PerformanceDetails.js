@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { injectIntl, intlShape } from 'react-intl'
 import DetailsBox from './DetailsBox'
 
 const PerformanceDetails = ({
@@ -8,37 +9,38 @@ const PerformanceDetails = ({
   mss,
   packetLoss,
   outOfOrder,
-  timeouts
+  timeouts,
+  intl
 }) => {
   const items = [
     {
-      label: 'Average Ping',
+      label: intl.formatMessage({ id: 'Measurement.Details.Performance.Label.AvgPing' }),
       value: averagePing.toString() + ' ms'
     },
     {
-      label: 'Max Ping',
+      label: intl.formatMessage({ id: 'Measurement.Details.Performance.Label.MaxPing' }),
       value: maxPing.toString() + ' ms'
     },
     {
-      label: 'MSS',
+      label: intl.formatMessage({ id: 'Measurement.Details.Performance.Label.MSS' }),
       value: mss.toString()
     },
     {
-      label: 'Packet Loss',
+      label: intl.formatMessage({ id: 'Measurement.Details.Performance.Label.PktLoss' }),
       value: packetLoss.toString() + '%'
     },
     {
-      label: 'Out of Order',
+      label: intl.formatMessage({ id: 'Measurement.Details.Performance.Label.OutOfOrder' }),
       value: outOfOrder.toString() + '%'
     },
     {
-      label: 'Timeouts',
+      label: intl.formatMessage({ id: 'Measurement.Details.Performance.Label.Timeouts' }),
       value: timeouts.toString()
     }
   ]
   return (
     <DetailsBox
-      title='Performance Details'
+      title={intl.formatMessage({ id: 'Measurement.Details.Performance.Heading' })}
       items={items}
       bg='WHITE'
     />
@@ -51,7 +53,8 @@ PerformanceDetails.propTypes = {
   mss: PropTypes.number.isRequired,
   packetLoss: PropTypes.number.isRequired,
   outOfOrder: PropTypes.number.isRequired,
-  timeouts: PropTypes.number.isRequired
+  timeouts: PropTypes.number.isRequired,
+  intl: intlShape.isRequired
 }
 
-export default PerformanceDetails
+export default injectIntl(PerformanceDetails)
