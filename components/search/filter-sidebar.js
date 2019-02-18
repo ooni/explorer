@@ -65,6 +65,12 @@ class FilterSidebar extends React.Component {
     }).bind(this)
   }
 
+  onDateChangeFilter (filterName) {
+    return ((date) => {
+      this.setState({[filterName]: date.utc().format('l')})
+    })
+  }
+
   onClickApplyFilter() {
     this.props.onApplyFilter({
       inputFilter: this.state.inputFilter,
@@ -137,7 +143,7 @@ class FilterSidebar extends React.Component {
             </StyledLabel>
             <DatePicker
               value={sinceFilter}
-              onChange={this.onChangeFilter('sinceFilter')}
+              onChange={this.onDateChangeFilter('sinceFilter')}
               timeFormat={false}
             />
           </Box>
@@ -147,7 +153,7 @@ class FilterSidebar extends React.Component {
             </StyledLabel>
             <DatePicker
               value={untilFilter}
-              onChange={this.onChangeFilter('untilFilter')}
+              onChange={this.onDateChangeFilter('untilFilter')}
               timeFormat={false}
             />
           </Box>

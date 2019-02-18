@@ -234,7 +234,7 @@ export default class DatePicker extends React.Component {
   render() {
     return (
       <StyledDatetime>
-        <Datetime {...this.props} />
+        <Datetime {...this.props} closeOnSelect={true} />
       </StyledDatetime>
     )
   }
