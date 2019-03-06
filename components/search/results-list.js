@@ -92,7 +92,7 @@ ViewDetailsLink.propTypes = {
 }
 
 const StyledColorCode = styled.div`
-  height: 80px;
+  height: 48px;
   width: 5px;
   margin-right: 10px;
   margin-top: 1px;
