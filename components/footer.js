@@ -9,6 +9,7 @@ const StyledFooter = styled.footer`
   background-color: ${props => props.theme.colors.gray1};
   color: ${props => props.theme.colors.blue9};
   font-size: 0.857rem;
+  margin-top: 32px;
 `
 
 const FooterBox = styled(Box)`
