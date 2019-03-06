@@ -138,10 +138,11 @@ ColorCode.propTypes = {
 const ResultRow = styled(Flex)`
   color: ${props => props.theme.colors.gray7};
   background-color: #ffffff;
-  :hover {
-    background-color: ${props => props.theme.colors.gray1};
+  &:hover {
+    background-color: ${props => props.theme.colors.gray0};
   }
-  border-bottom: 1px solid ${props => props.theme.colors.gray4};
+  border-bottom: 1px solid ${props => props.theme.colors.gray3};
+  border-right: 1px solid ${props => props.theme.colors.gray3};
 `
 const HTTPSPrefix = styled.span`
   color: ${props => props.theme.colors.green8};

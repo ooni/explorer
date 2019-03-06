@@ -34,11 +34,11 @@ const StyledFilterTab = styled.button`
   color: ${props => props.active ? props.theme.colors.white : props.theme.colors.blue5};
   &:active {
     transition: .2s ease-in;
-    background-color: ${props => props.theme.colors.blue4};
+    background-color: ${props => props.theme.colors.blue5};
     color: ${props => props.theme.colors.white};
   }
   &:hover {
-    background-color: ${props => props.theme.colors.blue4};
+    background-color: ${props => props.theme.colors.blue5};
     color: ${props => props.theme.colors.white};
     transition: .2s ease-in;
   }
