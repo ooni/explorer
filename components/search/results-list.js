@@ -23,7 +23,6 @@ const StyledResultTag = styled.div`
   padding: 8px 16px;
   height: 32px;
   line-height: 1;
-  font-size: 16px;
 `
 
 const ResultTagFilled = styled(StyledResultTag)`
@@ -152,7 +151,6 @@ const Hostname = styled.span`
 `
 
 const ResultInput = styled.div`
-  font-size: 16px;
   color: ${props => props.theme.colors.gray5};
 `
 
