@@ -180,7 +180,7 @@ const ResultItem = ({msmt}) => {
             <Text bold color='gray8'>{msmt.probe_cc}</Text>
           </Box>
           <Box flex='auto' width={5/16}>
-            <Flag countryCode={msmt.probe_cc} />
+            <Flag countryCode={msmt.probe_cc} size={32} />
           </Box>
           <Box flex='auto' width={8/16}>
             <ASNBox asn={msmt.probe_asn} />
