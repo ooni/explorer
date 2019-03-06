@@ -8,7 +8,7 @@ import { injectIntl, intlShape } from 'react-intl'
 const StyledFooter = styled.footer`
   background-color: ${props => props.theme.colors.gray1};
   color: ${props => props.theme.colors.blue9};
-  font-size: 0.8rem;
+  font-size: 0.857rem;
 `
 
 const FooterBox = styled(Box)`
