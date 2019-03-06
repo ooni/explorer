@@ -56,7 +56,10 @@ class FilterSidebar extends React.Component {
       showUntilCalendar: false,
     }
     this.onChangeFilter = this.onChangeFilter.bind(this)
+    this.onDateChangeFilter = this.onDateChangeFilter.bind(this)
     this.onClickApplyFilter = this.onClickApplyFilter.bind(this)
+    this.isSinceValid = this.isSinceValid.bind(this)
+    this.isUntilValid = this.isUntilValid.bind(this)
   }
 
   onChangeFilter (filterName) {
@@ -69,6 +72,16 @@ class FilterSidebar extends React.Component {
     return ((date) => {
       this.setState({[filterName]: date.utc().format('l')})
     })
+  }
+
+  isSinceValid(currentDate) {
+    const { untilFilter } = this.props
+    return currentDate.isBefore(untilFilter)
+  }
+
+  isUntilValid(currentDate) {
+    const { sinceFilter } = this.props
+    return currentDate.isAfter(sinceFilter) && currentDate.isSameOrBefore(new Date())
   }
 
   onClickApplyFilter() {
@@ -145,6 +158,7 @@ class FilterSidebar extends React.Component {
               value={sinceFilter}
               onChange={this.onDateChangeFilter('sinceFilter')}
               timeFormat={false}
+              isValidDate={this.isSinceValid}
             />
           </Box>
           <Box width={1/2} pl={1}>
@@ -155,6 +169,7 @@ class FilterSidebar extends React.Component {
               value={untilFilter}
               onChange={this.onDateChangeFilter('untilFilter')}
               timeFormat={false}
+              isValidDate={this.isUntilValid}
             />
           </Box>
         </Flex>
