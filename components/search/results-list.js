@@ -137,8 +137,8 @@ const ResultRow = styled(Flex)`
   &:hover {
     background-color: ${props => props.theme.colors.gray0};
   }
-  border-bottom: 1px solid ${props => props.theme.colors.gray3};
-  border-right: 1px solid ${props => props.theme.colors.gray3};
+  border-bottom: 1px solid ${props => props.theme.colors.gray4};
+  cursor: pointer;
 `
 const HTTPSPrefix = styled.span`
   color: ${props => props.theme.colors.green8};
@@ -245,17 +245,15 @@ const LegendContainer = styled.div`
   padding-bottom: 10px;
 `
 
-const ResultTable = styled.div`
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: space-between;
-  margin: 8px;
-  line-height: 1.5;
+const ResultContainer = styled(Box)`
+  border: 1px solid ${props => props.theme.colors.gray4};
+  border-radius: 5px;
+  overflow: hidden;
 `
 
 const ResultsList = ({results, testNamesKeyed}) => {
   return (
-    <ResultTable>
+    <div>
       <LegendContainer>
         <LegendItem color={colorAnomaly} label='Anomaly' />
         <LegendItem color={colorConfirmed} label='Confirmed' />
@@ -263,13 +261,13 @@ const ResultsList = ({results, testNamesKeyed}) => {
         <LegendItem color={colorError} label='Error' />
       </LegendContainer>
       <Divider width='100%' color='gray5'/>
-      {results.map((msmt, idx) => {
-        msmt.testName = testNamesKeyed[msmt.test_name]
-        return <div key={idx}>
-          <ResultItem msmt={msmt} />
-        </div>
-      })}
-    </ResultTable>
+      <ResultContainer mb={2}>
+        {results.map((msmt, idx) => {
+          msmt.testName = testNamesKeyed[msmt.test_name]
+          return <ResultItem key={idx} msmt={msmt} />
+        })}
+      </ResultContainer>
+    </div>
   )
 }
 
