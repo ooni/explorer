@@ -18,7 +18,6 @@ import {
 import Flag from '../flag'
 
 const StyledResultTag = styled.div`
-  margin-top: -4px;
   border-radius: 16px;
   padding: 8px 16px;
   height: 32px;
@@ -94,8 +93,6 @@ const StyledColorCode = styled.div`
   height: 48px;
   width: 5px;
   margin-right: 10px;
-  margin-top: 1px;
-  margin-bottom: 1px;
 `
 
 /*
@@ -170,9 +167,9 @@ const ResultItem = ({msmt}) => {
     }
   }
   return (
-    <ResultRow alignItems='center' justifyContent='center'>
+    <ResultRow alignItems='center'>
       <Box width={1/3}>
-        <Flex alignItems='center' justifyContent='center'>
+        <Flex alignItems='center'>
           <Box flex='auto' width={1/16}>
             <ColorCode msmt={msmt} />
           </Box>
@@ -196,7 +193,7 @@ const ResultItem = ({msmt}) => {
               </ResultInput>}
           </Box>
           <Box>
-            <Flex>
+            <Flex alignItems='center'>
               <Box pr={2} width={7/16}>
                 {msmt.testName}
               </Box>
