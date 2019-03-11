@@ -18,12 +18,10 @@ import {
 import Flag from '../flag'
 
 const StyledResultTag = styled.div`
-  margin-top: -4px;
   border-radius: 16px;
   padding: 8px 16px;
   height: 32px;
   line-height: 1;
-  font-size: 16px;
 `
 
 const ResultTagFilled = styled(StyledResultTag)`
@@ -92,11 +90,9 @@ ViewDetailsLink.propTypes = {
 }
 
 const StyledColorCode = styled.div`
-  height: 80px;
+  height: 48px;
   width: 5px;
   margin-right: 10px;
-  margin-top: 1px;
-  margin-bottom: 1px;
 `
 
 /*
@@ -138,10 +134,11 @@ ColorCode.propTypes = {
 const ResultRow = styled(Flex)`
   color: ${props => props.theme.colors.gray7};
   background-color: #ffffff;
-  :hover {
-    background-color: ${props => props.theme.colors.gray1};
+  &:hover {
+    background-color: ${props => props.theme.colors.gray0};
   }
   border-bottom: 1px solid ${props => props.theme.colors.gray4};
+  cursor: pointer;
 `
 const HTTPSPrefix = styled.span`
   color: ${props => props.theme.colors.green8};
@@ -151,7 +148,6 @@ const Hostname = styled.span`
 `
 
 const ResultInput = styled.div`
-  font-size: 16px;
   color: ${props => props.theme.colors.gray5};
 `
 
@@ -171,9 +167,9 @@ const ResultItem = ({msmt}) => {
     }
   }
   return (
-    <ResultRow alignItems='center' justifyContent='center'>
+    <ResultRow alignItems='center'>
       <Box width={1/3}>
-        <Flex alignItems='center' justifyContent='center'>
+        <Flex alignItems='center'>
           <Box flex='auto' width={1/16}>
             <ColorCode msmt={msmt} />
           </Box>
@@ -181,7 +177,7 @@ const ResultItem = ({msmt}) => {
             <Text bold color='gray8'>{msmt.probe_cc}</Text>
           </Box>
           <Box flex='auto' width={5/16}>
-            <Flag countryCode={msmt.probe_cc} />
+            <Flag countryCode={msmt.probe_cc} size={32} />
           </Box>
           <Box flex='auto' width={8/16}>
             <ASNBox asn={msmt.probe_asn} />
@@ -197,7 +193,7 @@ const ResultItem = ({msmt}) => {
               </ResultInput>}
           </Box>
           <Box>
-            <Flex>
+            <Flex alignItems='center'>
               <Box pr={2} width={7/16}>
                 {msmt.testName}
               </Box>
@@ -249,17 +245,15 @@ const LegendContainer = styled.div`
   padding-bottom: 10px;
 `
 
-const ResultTable = styled.div`
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: space-between;
-  margin: 8px;
-  line-height: 1.5;
+const ResultContainer = styled(Box)`
+  border: 1px solid ${props => props.theme.colors.gray4};
+  border-radius: 5px;
+  overflow: hidden;
 `
 
 const ResultsList = ({results, testNamesKeyed}) => {
   return (
-    <ResultTable>
+    <div>
       <LegendContainer>
         <LegendItem color={colorAnomaly} label='Anomaly' />
         <LegendItem color={colorConfirmed} label='Confirmed' />
@@ -267,13 +261,13 @@ const ResultsList = ({results, testNamesKeyed}) => {
         <LegendItem color={colorError} label='Error' />
       </LegendContainer>
       <Divider width='100%' color='gray5'/>
-      {results.map((msmt, idx) => {
-        msmt.testName = testNamesKeyed[msmt.test_name]
-        return <div key={idx}>
-          <ResultItem msmt={msmt} />
-        </div>
-      })}
-    </ResultTable>
+      <ResultContainer mb={2}>
+        {results.map((msmt, idx) => {
+          msmt.testName = testNamesKeyed[msmt.test_name]
+          return <ResultItem key={idx} msmt={msmt} />
+        })}
+      </ResultContainer>
+    </div>
   )
 }
 

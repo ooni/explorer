@@ -286,7 +286,7 @@ class Search extends React.Component {
 
         <Container>
           <Flex pt={3}>
-            <Box width={1/4} pr={2}>
+            <Box width={1/4}>
               <FilterSidebar
                 inputFilter={inputFilter}
                 testNameFilter={testNameFilter}
@@ -300,7 +300,7 @@ class Search extends React.Component {
                 countries={countries}
               />
             </Box>
-            <Box width={3/4}>
+            <Box width={3/4} ml={4}>
               <Flex pt={2}>
                 <Box width={1/2}>
                   <FilterTabs onClick={this.onChangeOnly} onlyFilter={onlyFilter} />
