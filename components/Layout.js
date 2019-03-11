@@ -28,7 +28,7 @@ injectGlobal`
     font-family: "Fira Sans";
     font-size: 14px;
     height: 100%;
-    background-color: ${theme.colors.white};
+    background-color: #ffffff;
   }
 
   /*
