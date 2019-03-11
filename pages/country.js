@@ -15,6 +15,7 @@ import NavBar from '../components/nav-bar'
 import Flag from '../components/flag'
 import Layout from '../components/Layout'
 import { toCompactNumberUnit } from '../utils'
+import Sidebar from '../components/country/sidebar'
 
 import { VictoryPie } from 'victory'
 
@@ -85,6 +86,16 @@ export default class Country extends React.Component {
             </Box>
           </Flex>
         </Hero>
+        <Container>
+          <Flex flexWrap='flex' mt={4}>
+            <Box width={1/4}>
+              <Sidebar />
+            </Box>
+            <Box width={3/4}>
+
+            </Box>
+          </Flex>
+        </Container>
       </Layout>
     )
   }
