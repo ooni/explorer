@@ -7,7 +7,7 @@ import axios from 'axios'
 import {
   Container,
   Heading,
-  Text,
+  Text, Hero,
   Flex, Box
 } from 'ooni-components'
 
@@ -72,8 +72,21 @@ export default class Country extends React.Component {
         <Head>
           <title>Internet Censorship in {countryName} - OONI Explorer</title>
         </Head>
-
         <NavBar />
+        <Hero>
+          <Container>
+            <Flex alignItems='center' pt={5} pb={4}>
+              <Box width={1/4}>
+              </Box>
+              <Box>
+                <Flag countryCode={countryCode} />
+              </Box>
+              <Box ml={3}>
+                <Text fontSize={4} fontWeight={600}>{countryName}</Text>
+              </Box>
+            </Flex>
+          </Container>
+        </Hero>
       </Layout>
     )
   }
