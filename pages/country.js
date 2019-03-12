@@ -11,11 +11,14 @@ import {
   Flex, Box
 } from 'ooni-components'
 
+import { FormattedMessage } from 'react-intl'
+
 import NavBar from '../components/nav-bar'
 import Flag from '../components/flag'
 import Layout from '../components/Layout'
 import { toCompactNumberUnit } from '../utils'
 import Sidebar from '../components/country/sidebar'
+import Overview from '../components/country/overview'
 
 import { VictoryPie } from 'victory'
 
@@ -92,7 +95,7 @@ export default class Country extends React.Component {
               <Sidebar />
             </Box>
             <Box width={3/4}>
-
+              <Overview />
             </Box>
           </Flex>
         </Container>
