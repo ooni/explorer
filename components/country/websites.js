@@ -14,11 +14,11 @@ const WebsitesSection = ({
         <FormattedMessage id='Country.Heading.Websites' />
       </SectionHeader.Title>
       <Flex flexDirection='column'>
-        <FormattedMessage id='Country.Websites.PeriodFilter.Label' />
-        <FormattedMessage id='Country.Websites.PeriodFilter.Option.30Days' />
-        <FormattedMessage id='Country.Websites.PeriodFilter.Option.2Months' />
-        <FormattedMessage id='Country.Websites.PeriodFilter.Option.3Months' />
-        <FormattedMessage id='Country.Websites.PeriodFilter.Option.6Months' />
+        <FormattedMessage id='Country.PeriodFilter.Label' />
+        <FormattedMessage id='Country.PeriodFilter.Option.30Days' />
+        <FormattedMessage id='Country.PeriodFilter.Option.2Months' />
+        <FormattedMessage id='Country.PeriodFilter.Option.3Months' />
+        <FormattedMessage id='Country.PeriodFilter.Option.6Months' />
       </Flex>
     </SectionHeader>
     <SimpleBox>
