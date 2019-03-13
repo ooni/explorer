@@ -1,7 +1,7 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
 import styled from 'styled-components'
-import { Flex, Box, Text } from 'ooni-components'
+import { Flex, Box, Text, Heading } from 'ooni-components'
 
 import SectionHeader from './section-header'
 import { BoxWithTitle } from './box'
@@ -50,6 +50,24 @@ const Overview = ({
         </NwInterferenceStatus>
       </Flex>
     </BoxWithTitle>
+    <FormattedMessage id='Country.Overview.Heading.TestsByClass' />
+    <Flex>
+      <Box px={2}><FormattedMessage id='Tests.Groups.Webistes.Name' /></Box>
+      <Box px={2}><FormattedMessage id='Tests.Groups.Instant Messagging.Name' /></Box>
+      <Box px={2}><FormattedMessage id='Tests.Groups.Performance.Name' /></Box>
+      <Box px={2}><FormattedMessage id='Tests.Groups.Middlebox.Name' /></Box>
+      <Box px={2}><FormattedMessage id='Tests.Groups.Circumvention.Name' /></Box>
+    </Flex>
+    {/* Bar chart */}
+
+    <BoxWithTitle title={<FormattedMessage id='Country.Overview.Heading.FeaturedResearch' />}>
+      List of blog articles
+    </BoxWithTitle>
+    {/* Highlight Box */}
+    <FormattedMessage
+      id='Country.Overview.SummaryTextTemplate'
+      defaultMessage='During the time period {startDate} to {endDate}, {measurementCount} Measurements have been conducted in {countryName}, resulting in {confirmCount} Confirmed Blocked, {anomalyCount} Anomalies and {accessibleCount} Accessible results. These measurements cover {networkCovered} networks out of {totalNetworks} in total in {countryName}. The network with the most measurements is {mostBlockedASNname} ({mmostBlockedASN}).'
+    />
   </React.Fragment>
 )
 
