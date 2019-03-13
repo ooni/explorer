@@ -19,6 +19,7 @@ import Layout from '../components/Layout'
 import { toCompactNumberUnit } from '../utils'
 import Sidebar from '../components/country/sidebar'
 import Overview from '../components/country/overview'
+import WebsitesSection from '../components/country/websites'
 
 import { VictoryPie } from 'victory'
 
@@ -96,6 +97,7 @@ export default class Country extends React.Component {
             </Box>
             <Box width={3/4}>
               <Overview />
+              <WebsitesSection />
             </Box>
           </Flex>
         </Container>
