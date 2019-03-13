@@ -21,6 +21,7 @@ import Sidebar from '../components/country/sidebar'
 import Overview from '../components/country/overview'
 import WebsitesSection from '../components/country/websites'
 import AppsSection from '../components/country/apps'
+import NetworkPropertiesSection from '../components/country/network-properties'
 
 import { VictoryPie } from 'victory'
 
@@ -100,6 +101,7 @@ export default class Country extends React.Component {
               <Overview />
               <WebsitesSection />
               <AppsSection />
+              <NetworkPropertiesSection />
             </Box>
           </Flex>
         </Container>

@@ -22,7 +22,7 @@ const WebsitesSection = ({
       </Flex>
     </SectionHeader>
     <SimpleBox>
-      <FormattedMessage id='Country.Websites.SummaryText' />
+      <FormattedMessage id='Country.Websites.Description' />
       {/* Why rel='noopener noreferrer'? See: https://mathiasbynens.github.io/rel-noopener/ */}
       <a href='https://ooni.io' target='_blank' rel='noopener noreferrer'>
         <FormattedMessage id='Country.Websites.SummaryText.MoreLinkText' />

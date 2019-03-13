@@ -20,7 +20,7 @@ const AppsSection = () => (
       </Flex>
     </SectionHeader>
     <SimpleBox>
-      <FormattedMessage id='Country.Apps.SummaryText' />
+      <FormattedMessage id='Country.Apps.Description' />
     </SimpleBox>
     {/* App-wise graphs */}
     <FormattedMessage id='Country.Apps.Label.LastTested' />
