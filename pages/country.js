@@ -40,26 +40,15 @@ export default class Country extends React.Component {
     let client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
     let results = await Promise.all([
       // XXX cc @darkk we should ideally have better dedicated daily dumps for this view
-      client.get('/api/_/measurement_count_by_country'),
-      client.get('/api/_/blockpages', {params: {'probe_cc': countryCode}})
+      client.get('/api/_/test_coverage', {params: {'probe_cc': countryCode}})
     ])
-    let measurementCount = results[0].data.results.filter(d => d.probe_cc === countryCode)
-    if (measurementCount.length === 0) {
-      measurementCount = 0
-    } else {
-      measurementCount = measurementCount[0].count
-    }
-    // XXX this is currently just to show something in the UI
-    let asnCount = 42
-    const unique = (value, index, self) => self.indexOf(value) === index
-    let blockedWebsites = results[1].data.results.map(d => d.input).filter(unique)
 
-    //https://api.ooni.io/api/_/measurement_count_by_country
-    //https://api.ooni.io/api/_/blockpages?probe_cc=IT
+    const testCoverage = results[0].data.test_coverage
+    const networkCoverage = results[0].data.network_coverage
+
     return {
-      measurementCount,
-      asnCount,
-      blockedWebsites,
+      testCoverage,
+      networkCoverage,
       countryCode,
       countryName: countryUtil.territoryNames[countryCode]
     }
@@ -67,9 +56,8 @@ export default class Country extends React.Component {
 
   render () {
     const {
-      measurementCount,
-      asnCount,
-      blockedWebsites,
+      testCoverage,
+      networkCoverage,
       countryCode,
       countryName
     } = this.props
@@ -98,7 +86,7 @@ export default class Country extends React.Component {
               <Sidebar />
             </Box>
             <Box width={3/4}>
-              <Overview />
+              <Overview testCoverage={testCoverage} networkCoverage={networkCoverage}/>
               <WebsitesSection />
               <AppsSection />
               <NetworkPropertiesSection />
