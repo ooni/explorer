@@ -58,7 +58,7 @@
     "mustache": "^2.3.0"
   },
   "scripts": {
-    "dev": "NODE_ENV=development MEASUREMENTS_URL=https://api.ooni.io node index.js",
+    "dev": "NODE_ENV=development MEASUREMENTS_URL=http://api.test.ooni.io node index.js",
     "build-translations": "node ./scripts/build-translations.js",
     "build": "next build",
     "export": "next export",
