@@ -2,7 +2,15 @@ import React from 'react'
 import { FormattedMessage } from 'react-intl'
 import styled from 'styled-components'
 import { Flex, Box, Text, Heading } from 'ooni-components'
-import { VictoryChart, VictoryBar, VictoryStack, VictoryAxis, VictoryTheme, VictoryLine } from 'victory'
+import {
+  VictoryChart,
+  VictoryBar,
+  VictoryStack,
+  VictoryAxis,
+  VictoryTheme,
+  VictoryLine,
+  VictoryVoronoiContainer,
+} from 'victory'
 
 import SectionHeader from './section-header'
 import { BoxWithTitle } from './box'
@@ -16,9 +24,77 @@ NwInterferenceStatus.defaultProps = {
   mb: 3
 }
 
+const Circle = styled.span`
+  height: 16px;
+  width: 16px;
+  border-radius: 50%;
+  background-color: ${props => props.color};
+`
+const StyledTestGroupSelector = styled(Flex)`
+  cursor: pointer;
+  &${Box}:hover {
+    text-shadow: 1px 1px 1px black;
+  }
+`
+const TestGroupSelector = ({ testGroup, active, onClick }) => (
+  <StyledTestGroupSelector m={2} onClick={() => onClick(testGroup)}>
+    <Circle color={active ? testGroups[testGroup].color : '#ced4da'} />
+    <Box mx={1} color={!active && '#ced4da' }> {testGroups[testGroup].name} </Box>
+  </StyledTestGroupSelector>
+)
+
+class TestsByGroup extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      websites: true,
+      im: true,
+      performance: true,
+      middlebox: true,
+      circumvention: true
+    }
+
+    this.onTestGroupClick = this.onTestGroupClick.bind(this)
+  }
+
+  componentDidUpdate() {
+    const activeTestGroups = Object.keys(this.state).filter((testGroup) => (
+      this.state[testGroup] === true
+    )).join(',')
+    this.props.fetchTestCoverageData(activeTestGroups)
+  }
+
+  onTestGroupClick(testGroup) {
+    // Toggle testGroup in the selection
+    this.setState((state) => ({
+      [testGroup]: !state[testGroup]
+    }))
+  }
+
+  render() {
+    return (
+      <React.Fragment>
+        <Flex>
+          {
+            Object.keys(testGroups).map((testGroup, index) => (
+              <TestGroupSelector
+                key={index}
+                testGroup={testGroup}
+                onClick={this.onTestGroupClick}
+                active={this.state[testGroup]}
+              />
+            ))
+          }
+        </Flex>
+      </React.Fragment>
+    )
+  }
+}
+
 const Overview = ({
   testCoverage,
   networkCoverage,
+  fetchTestCoverageData,
   middleboxCount,
   imCount,
   circumventionTools,
@@ -67,25 +143,26 @@ const Overview = ({
         </Flex>
       </BoxWithTitle>
       <FormattedMessage id='Country.Overview.Heading.TestsByClass' />
-      <Flex>
-        <Box px={2}><FormattedMessage id='Tests.Groups.Webistes.Name' /></Box>
-        <Box px={2}><FormattedMessage id='Tests.Groups.Instant Messagging.Name' /></Box>
-        <Box px={2}><FormattedMessage id='Tests.Groups.Performance.Name' /></Box>
-        <Box px={2}><FormattedMessage id='Tests.Groups.Middlebox.Name' /></Box>
-        <Box px={2}><FormattedMessage id='Tests.Groups.Circumvention.Name' /></Box>
-      </Flex>
+      <TestsByGroup fetchTestCoverageData={fetchTestCoverageData} />
       {/* Bar chart */}
       <Box>
         <VictoryChart
           domainPadding={20}
           theme={VictoryTheme.material}
           scale={{ x: 'time' }}
+          containerComponent={
+            <VictoryVoronoiContainer
+              labels={(d) => `Test: ${d.test_group} \n Count: ${d.count} \n Date: ${new Date(d.date).toLocaleDateString()}`}
+            />
+          }
           width={800}
         >
           <VictoryAxis
             dependentAxis
           />
-          <VictoryStack colorScale={['#4C6EF5', '#15AABF', '#BE4BDB', '#6741D9', '#CED4DA']}>
+          <VictoryStack
+            colorScale={['#4C6EF5', '#15AABF', '#BE4BDB', '#6741D9', '#CED4DA']}
+          >
             {/* TOOD: Compose these stacked bar charts from a single component */}
             <VictoryBar
               data={testCoverageGrouped.websites}
@@ -148,7 +225,12 @@ const Overview = ({
       <Box>
         <VictoryChart
           scale={{ x: 'time' }}
-          height={150}
+          height={120}
+          containerComponent={
+            <VictoryVoronoiContainer
+              labels={(d) => `Count: ${d.count} \n Date: ${new Date(d.date).toLocaleDateString()}`}
+            />
+          }
         >
           <VictoryAxis
             dependentAxis

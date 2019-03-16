@@ -54,6 +54,26 @@ export default class Country extends React.Component {
     }
   }
 
+  constructor(props) {
+    super(props)
+    this.fetchTestCoverageData = this.fetchTestCoverageData.bind(this)
+  }
+
+  async fetchTestCoverageData(testGroupList) {
+    let client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
+    const result = await client.get('/api/_/test_coverage', {
+      params: {
+        'probe_cc': this.props.countryCode,
+        'test_groups': testGroupList
+      }
+    })
+    // TODO: Use React.createContext to pass along data and methods
+    this.setState({
+      networkCoverage: result.data.network_coverage,
+      testCoverage: result.data.test_coverage
+    })
+  }
+
   render () {
     const {
       testCoverage,
@@ -86,7 +106,10 @@ export default class Country extends React.Component {
               <Sidebar />
             </Box>
             <Box width={3/4}>
-              <Overview testCoverage={testCoverage} networkCoverage={networkCoverage}/>
+              <Overview
+                testCoverage={testCoverage} networkCoverage={networkCoverage}
+                fetchTestCoverageData={this.fetchTestCoverageData}
+              />
               <WebsitesSection />
               <AppsSection />
               <NetworkPropertiesSection />
