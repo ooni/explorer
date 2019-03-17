@@ -119,11 +119,7 @@ class TestsByGroup extends React.PureComponent {
             scale={{ x: 'time' }}
             containerComponent={
               <VictoryVoronoiContainer
-                labels={(d, index, points) => {
-                  console.log(points)
-                  return (
-                    `${d.test_group}: ${d.count} \n Date: ${new Date(d.date).toLocaleDateString()}`
-                  )}}
+                labels={(d) => `${d.test_group}: ${d.count} \n Date: ${new Date(d.date).toLocaleDateString()}`}
               />
             }
             width={800}
