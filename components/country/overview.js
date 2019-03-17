@@ -15,6 +15,7 @@ import {
 import SectionHeader from './section-header'
 import { BoxWithTitle } from './box'
 import { testGroups } from '../test-info'
+import TestsByGroup from './overview-charts'
 
 const NwInterferenceStatus = styled(Box)`
   color: ${props => props.color || props.theme.colors.gray5};
@@ -22,73 +23,6 @@ const NwInterferenceStatus = styled(Box)`
 `
 NwInterferenceStatus.defaultProps = {
   mb: 3
-}
-
-const Circle = styled.span`
-  height: 16px;
-  width: 16px;
-  border-radius: 50%;
-  background-color: ${props => props.color};
-`
-const StyledTestGroupSelector = styled(Flex)`
-  cursor: pointer;
-  &${Box}:hover {
-    text-shadow: 1px 1px 1px black;
-  }
-`
-const TestGroupSelector = ({ testGroup, active, onClick }) => (
-  <StyledTestGroupSelector m={2} onClick={() => onClick(testGroup)}>
-    <Circle color={active ? testGroups[testGroup].color : '#ced4da'} />
-    <Box mx={1} color={!active && '#ced4da' }> {testGroups[testGroup].name} </Box>
-  </StyledTestGroupSelector>
-)
-
-class TestsByGroup extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      websites: true,
-      im: true,
-      performance: true,
-      middlebox: true,
-      circumvention: true
-    }
-
-    this.onTestGroupClick = this.onTestGroupClick.bind(this)
-  }
-
-  componentDidUpdate() {
-    const activeTestGroups = Object.keys(this.state).filter((testGroup) => (
-      this.state[testGroup] === true
-    )).join(',')
-    this.props.fetchTestCoverageData(activeTestGroups)
-  }
-
-  onTestGroupClick(testGroup) {
-    // Toggle testGroup in the selection
-    this.setState((state) => ({
-      [testGroup]: !state[testGroup]
-    }))
-  }
-
-  render() {
-    return (
-      <React.Fragment>
-        <Flex>
-          {
-            Object.keys(testGroups).map((testGroup, index) => (
-              <TestGroupSelector
-                key={index}
-                testGroup={testGroup}
-                onClick={this.onTestGroupClick}
-                active={this.state[testGroup]}
-              />
-            ))
-          }
-        </Flex>
-      </React.Fragment>
-    )
-  }
 }
 
 const Overview = ({
@@ -100,16 +34,6 @@ const Overview = ({
   circumventionTools,
   websitesCount
 }) => {
-  let testCoverageGrouped = {}
-  Object.keys(testGroups).forEach((testGroup) => {
-    // Not interested in legacy and other groups
-    if (testGroup === 'legacy' || testGroup === 'default') {
-      return
-    }
-    testCoverageGrouped[testGroup] = testCoverage.filter((item) => (
-      item.test_group == testGroup
-    ))
-  })
 
   return (
     <React.Fragment>
@@ -143,112 +67,11 @@ const Overview = ({
         </Flex>
       </BoxWithTitle>
       <FormattedMessage id='Country.Overview.Heading.TestsByClass' />
-      <TestsByGroup fetchTestCoverageData={fetchTestCoverageData} />
-      {/* Bar chart */}
-      <Box>
-        <VictoryChart
-          domainPadding={20}
-          theme={VictoryTheme.material}
-          scale={{ x: 'time' }}
-          containerComponent={
-            <VictoryVoronoiContainer
-              labels={(d) => `Test: ${d.test_group} \n Count: ${d.count} \n Date: ${new Date(d.date).toLocaleDateString()}`}
-            />
-          }
-          width={800}
-        >
-          <VictoryAxis
-            dependentAxis
-          />
-          <VictoryStack
-            colorScale={['#4C6EF5', '#15AABF', '#BE4BDB', '#6741D9', '#CED4DA']}
-          >
-            {/* TOOD: Compose these stacked bar charts from a single component */}
-            <VictoryBar
-              data={testCoverageGrouped.websites}
-              style={{
-                data: {
-                  stroke: '#ffffff',
-                  strokeWidth: 1
-                }
-              }}
-              x='date'
-              y='count'
-            />
-            <VictoryBar
-              data={testCoverageGrouped.im}
-              style={{
-                data: {
-                  stroke: '#ffffff',
-                  strokeWidth: 1
-                }
-              }}
-              x='date'
-              y='count'
-            />
-            <VictoryBar
-              data={testCoverageGrouped.circumvention}
-              style={{
-                data: {
-                  stroke: '#ffffff',
-                  strokeWidth: 1
-                }
-              }}
-              y='count'
-              x='date'
-            />
-            <VictoryBar
-              data={testCoverageGrouped.performance}
-              style={{
-                data: {
-                  stroke: '#ffffff',
-                  strokeWidth: 1
-                }
-              }}
-              x='date'
-              y='count'
-            />
-            <VictoryBar
-              data={testCoverageGrouped.middlebox}
-              style={{
-                data: {
-                  stroke: '#ffffff',
-                  strokeWidth: 1
-                }
-              }}
-              x='date'
-              y='count'
-            />
-          </VictoryStack>
-        </VictoryChart>
-      </Box>
-      <Box>
-        <VictoryChart
-          scale={{ x: 'time' }}
-          height={120}
-          containerComponent={
-            <VictoryVoronoiContainer
-              labels={(d) => `Count: ${d.count} \n Date: ${new Date(d.date).toLocaleDateString()}`}
-            />
-          }
-        >
-          <VictoryAxis
-            dependentAxis
-            style={{ axis: { stroke: 'none'}}}
-            tickFormat={() => (null)}
-          />
-          <VictoryLine
-            data={networkCoverage}
-            x='date'
-            y='count'
-            style={{
-              data: {
-                stroke: '#0588CB',
-              }
-            }}
-          />
-        </VictoryChart>
-      </Box>
+      <TestsByGroup
+        fetchTestCoverageData={fetchTestCoverageData}
+        testCoverage={testCoverage}
+        networkCoverage={networkCoverage}
+      />
 
       <BoxWithTitle title={<FormattedMessage id='Country.Overview.Heading.FeaturedResearch' />}>
         List of blog articles

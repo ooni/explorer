@@ -56,6 +56,9 @@ export default class Country extends React.Component {
 
   constructor(props) {
     super(props)
+    this.state = {
+      newData: false
+    }
     this.fetchTestCoverageData = this.fetchTestCoverageData.bind(this)
   }
 
@@ -69,18 +72,20 @@ export default class Country extends React.Component {
     })
     // TODO: Use React.createContext to pass along data and methods
     this.setState({
-      networkCoverage: result.data.network_coverage,
-      testCoverage: result.data.test_coverage
+      newData : {
+        networkCoverage: result.data.network_coverage,
+        testCoverage: result.data.test_coverage
+      }
     })
   }
 
   render () {
     const {
-      testCoverage,
-      networkCoverage,
       countryCode,
       countryName
     } = this.props
+
+    const { testCoverage, networkCoverage } = this.state.newData ? this.state.newData : this.props
 
     return (
       <Layout>
@@ -107,7 +112,8 @@ export default class Country extends React.Component {
             </Box>
             <Box width={3/4}>
               <Overview
-                testCoverage={testCoverage} networkCoverage={networkCoverage}
+                testCoverage={testCoverage}
+                networkCoverage={networkCoverage}
                 fetchTestCoverageData={this.fetchTestCoverageData}
               />
               <WebsitesSection />
