@@ -22,6 +22,7 @@ import Overview from '../components/country/overview'
 import WebsitesSection from '../components/country/websites'
 import AppsSection from '../components/country/apps'
 import NetworkPropertiesSection from '../components/country/network-properties'
+import { CountryContextProvider } from '../components/country/country-context'
 
 import { VictoryPie } from 'victory'
 
@@ -111,14 +112,16 @@ export default class Country extends React.Component {
               <Sidebar />
             </Box>
             <Box width={3/4}>
-              <Overview
-                testCoverage={testCoverage}
-                networkCoverage={networkCoverage}
-                fetchTestCoverageData={this.fetchTestCoverageData}
-              />
-              <WebsitesSection />
-              <AppsSection />
-              <NetworkPropertiesSection />
+              <CountryContextProvider countryCode={countryCode} countryName={countryName}>
+                <Overview
+                  testCoverage={testCoverage}
+                  networkCoverage={networkCoverage}
+                  fetchTestCoverageData={this.fetchTestCoverageData}
+                />
+                <WebsitesSection />
+                <AppsSection />
+                <NetworkPropertiesSection />
+              </CountryContextProvider>
             </Box>
           </Flex>
         </Container>
