@@ -6,7 +6,7 @@ const ASNSelector = ({ networks, onNetworkChange }) => (
     {
       networks.map((network, index) => (
         <option key={index} value={network.probe_asn}>
-          {`${network.probe_asn} (${network.count} Tests)`}
+          {`ASN${network.probe_asn} (${network.count} Tests)`}
         </option>
       ))
     }
