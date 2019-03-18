@@ -1,69 +1,74 @@
 import React from 'react'
 import { inCountry } from './country-context'
 import { FormattedMessage } from 'react-intl'
+import axios from 'axios'
 import { Flex, Box, Heading, Text, Input } from 'ooni-components'
 
 import SectionHeader from './section-header'
 import { SimpleBox } from './box'
 import PeriodFilter from './period-filter'
 import ASNSelector from './asn-selector'
+import TestsByCategoryInNetwork from './websites-charts'
 
-const WebsitesSection = ({
-  countryCode,
-  onPeriodChange,
-  testedUrls
-}) => (
-  <React.Fragment>
-    <SectionHeader>
-      <SectionHeader.Title name='websites'>
-        <FormattedMessage id='Country.Heading.Websites' />
-      </SectionHeader.Title>
-      <Box ml='auto'>
-        <PeriodFilter onChange={onPeriodChange} />
-      </Box>
-    </SectionHeader>
-    <SimpleBox>
-      <Text>
-        <FormattedMessage id='Country.Websites.Description' />
-      </Text>
-      {/* Why rel='noopener noreferrer'? See: https://mathiasbynens.github.io/rel-noopener/ */}
-      <a href='https://ooni.io' target='_blank' rel='noopener noreferrer'>
-        <FormattedMessage id='Country.Websites.SummaryText.MoreLinkText' />
-      </a>
-    </SimpleBox>
+class WebsitesSection extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = {
+      selectedNetwork: null,
+      networks: []
+    }
+  }
 
-    {/* Select ASN */}
-    <ASNSelector onNetworkChange={() => {}} />
+  async componentDidMount() {
+    const { countryCode } = this.props
+    const client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
+    const result = await client.get('/api/_/website_networks', {
+      params: {
+        probe_cc: countryCode
+      }
+    })
+    this.setState({
+      networks: result.data.results,
+      selectedNetwork: result.data.results[0].probe_asn
+    })
+  }
 
-    <Heading h={4}><FormattedMessage id='Country.Websites.Heading.BlockedByCategory' /></Heading>
-    <FormattedMessage id='Country.Websites.BlockedByCategory.Description'
-      defaultMessage='Websites that fall under the following categories are blocked in the {selectedASN} Network. To examine whether other types of websites are blocked as well, run OONI Probe!'
-    />
-    {/* Category Selection */}
-    {testedUrls} <FormattedMessage id='Country.Websites.TestedWebsitesCount' />
-    <FormattedMessage id='Country.Websites.Labels.ResultsPerPage' />
-    {/* Results per page dropdown */}
-    {/* Hide until API is available
-      <FormattedMessage id='Country.Websites.URLSearch.Placeholder'>
-      {(msg) => (
-        <Input
-      name='searchByURL'
-      placeholder={msg}
-        />
-      )}
-      </FormattedMessage>
-    */}
-    {/* URL-wise barcharts Start */}
-    <Flex flexDirection='column'>
-      <FormattedMessage id='Country.Websites.URLCharts.Legend.Label.Blocked' />
-      <FormattedMessage id='Country.Websites.URLCharts.Legend.Label.Anomaly' />
-      <FormattedMessage id='Country.Websites.URLCharts.Legend.Label.Accessible' />
-    </Flex>
-    {/* Pagination */}
-    <FormattedMessage id='Country.Websites.URLCharts.Pagination.Previous' />
-    <FormattedMessage id='Country.Websites.URLCharts.Pagination.Next' />
-    {/* URL-wise barcharts End */}
-  </React.Fragment>
-)
+  render () {
+    const { onPeriodChange, countryCode } = this.props
+    const { selectedNetwork } = this.state
+    return (
+      <React.Fragment>
+        <SectionHeader>
+          <SectionHeader.Title name='websites'>
+            <FormattedMessage id='Country.Heading.Websites' />
+          </SectionHeader.Title>
+          <Box ml='auto'>
+            <PeriodFilter onChange={onPeriodChange} />
+          </Box>
+        </SectionHeader>
+        <SimpleBox>
+          <Text>
+            <FormattedMessage id='Country.Websites.Description' />
+          </Text>
+          {/* Why rel='noopener noreferrer'? See: https://mathiasbynens.github.io/rel-noopener/ */}
+          <a href='https://ooni.io' target='_blank' rel='noopener noreferrer'>
+            <FormattedMessage id='Country.Websites.SummaryText.MoreLinkText' />
+          </a>
+        </SimpleBox>
+
+        {/* Select ASN */}
+        <ASNSelector onNetworkChange={() => {}} networks={this.state.networks} />
+
+        {selectedNetwork &&
+          <TestsByCategoryInNetwork
+            network={selectedNetwork}
+            countryCode={countryCode}
+          />
+        }
+
+      </React.Fragment>
+    )
+  }
+}
 
 export default inCountry(WebsitesSection)
