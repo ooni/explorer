@@ -1,20 +1,9 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
 import styled from 'styled-components'
-import { Flex, Box, Text, Heading } from 'ooni-components'
-import {
-  VictoryChart,
-  VictoryBar,
-  VictoryStack,
-  VictoryAxis,
-  VictoryTheme,
-  VictoryLine,
-  VictoryVoronoiContainer,
-} from 'victory'
-
+import { Flex, Box } from 'ooni-components'
 import SectionHeader from './section-header'
 import { BoxWithTitle } from './box'
-import { testGroups } from '../test-info'
 import TestsByGroup from './overview-charts'
 
 const NwInterferenceStatus = styled(Box)`

@@ -1,8 +1,8 @@
 import React from 'react'
-import { Box } from 'ooni-components'
+import { Flex, Box } from 'ooni-components'
 import styled from 'styled-components'
 
-const SectionHeader = styled(Box)`
+const SectionHeader = styled(Flex)`
   border-bottom: 1px solid ${props => props.theme.colors.gray3};
 `
 

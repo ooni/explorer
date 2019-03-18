@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Flex, Box, Text, Heading } from 'ooni-components'
+import { Flex, Box } from 'ooni-components'
 import {
   VictoryChart,
   VictoryBar,
@@ -30,20 +30,6 @@ const TestGroupSelector = ({ testGroup, active, onClick }) => (
     <Circle color={active ? testGroups[testGroup].color : '#ced4da'} />
     <Box mx={1} color={!active && '#ced4da' }> {testGroups[testGroup].name} </Box>
   </StyledTestGroupSelector>
-)
-
-const BarChart = ({ data }) => (
-  <VictoryBar
-    data={data}
-    style={{
-      data: {
-        stroke: '#ffffff',
-        strokeWidth: 1
-      }
-    }}
-    x='date'
-    y='count'
-  />
 )
 
 class TestsByGroup extends React.PureComponent {
