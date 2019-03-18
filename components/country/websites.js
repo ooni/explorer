@@ -1,28 +1,28 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { Flex, Box, Heading, Input } from 'ooni-components'
+import { Flex, Box, Heading, Text, Input } from 'ooni-components'
 
 import SectionHeader from './section-header'
 import { SimpleBox } from './box'
+import PeriodFilter from './period-filter'
 
 const WebsitesSection = ({
+  onPeriodChange,
   testedUrls
 }) => (
   <React.Fragment>
     <SectionHeader>
-      <SectionHeader.Title name='websites' >
+      <SectionHeader.Title name='websites'>
         <FormattedMessage id='Country.Heading.Websites' />
       </SectionHeader.Title>
-      <Flex flexDirection='column'>
-        <FormattedMessage id='Country.PeriodFilter.Label' />
-        <FormattedMessage id='Country.PeriodFilter.Option.30Days' />
-        <FormattedMessage id='Country.PeriodFilter.Option.2Months' />
-        <FormattedMessage id='Country.PeriodFilter.Option.3Months' />
-        <FormattedMessage id='Country.PeriodFilter.Option.6Months' />
-      </Flex>
+      <Box ml='auto'>
+        <PeriodFilter onChange={onPeriodChange} />
+      </Box>
     </SectionHeader>
     <SimpleBox>
-      <FormattedMessage id='Country.Websites.Description' />
+      <Text>
+        <FormattedMessage id='Country.Websites.Description' />
+      </Text>
       {/* Why rel='noopener noreferrer'? See: https://mathiasbynens.github.io/rel-noopener/ */}
       <a href='https://ooni.io' target='_blank' rel='noopener noreferrer'>
         <FormattedMessage id='Country.Websites.SummaryText.MoreLinkText' />
