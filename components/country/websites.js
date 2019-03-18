@@ -41,14 +41,16 @@ const WebsitesSection = ({
     {testedUrls} <FormattedMessage id='Country.Websites.TestedWebsitesCount' />
     <FormattedMessage id='Country.Websites.Labels.ResultsPerPage' />
     {/* Results per page dropdown */}
-    <FormattedMessage id='Country.Websites.URLSearch.Placeholder'>
+    {/* Hide until API is available
+      <FormattedMessage id='Country.Websites.URLSearch.Placeholder'>
       {(msg) => (
         <Input
-          name='searchByURL'
-          placeholder={msg}
+      name='searchByURL'
+      placeholder={msg}
         />
       )}
-    </FormattedMessage>
+      </FormattedMessage>
+    */}
     {/* URL-wise barcharts Start */}
     <Flex flexDirection='column'>
       <FormattedMessage id='Country.Websites.URLCharts.Legend.Label.Blocked' />
