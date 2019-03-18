@@ -5,6 +5,7 @@ import { Flex, Box, Heading, Text, Input } from 'ooni-components'
 import SectionHeader from './section-header'
 import { SimpleBox } from './box'
 import PeriodFilter from './period-filter'
+import ASNSelector from './asn-selector'
 
 const WebsitesSection = ({
   onPeriodChange,
@@ -28,6 +29,9 @@ const WebsitesSection = ({
         <FormattedMessage id='Country.Websites.SummaryText.MoreLinkText' />
       </a>
     </SimpleBox>
+
+    {/* Select ASN */}
+    <ASNSelector onNetworkChange={() => {}} />
 
     <Heading h={4}><FormattedMessage id='Country.Websites.Heading.BlockedByCategory' /></Heading>
     <FormattedMessage id='Country.Websites.BlockedByCategory.Description'
