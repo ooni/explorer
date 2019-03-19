@@ -25,5 +25,6 @@ RUN set -ex \
 
 EXPOSE 3100
 
+ENV MEASUREMENTS_URL="https://api.test.ooni.io"
 USER daemon
 CMD [ "yarn", "run", "start" ]
