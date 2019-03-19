@@ -109,7 +109,7 @@ class URLChart extends React.Component {
                     Confirmed: ${d.confirmed_count} \n
                     Anomalies: ${d.anomaly_count} \n
                     Failures: ${d.failure_count} \n
-                    Date: ${new Date(d.date).toLocaleDateString()}
+                    Date: ${new Date(d.test_day).toLocaleDateString()}
                   `}
                     />
                   }
@@ -124,7 +124,7 @@ class URLChart extends React.Component {
                         <VictoryBar
                           key={index}
                           data={data}
-                          x='date'
+                          x='test_day'
                           y={type}
                           style={{
                             data: {

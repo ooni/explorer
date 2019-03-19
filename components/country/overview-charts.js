@@ -105,7 +105,8 @@ class TestsByGroup extends React.PureComponent {
             scale={{ x: 'time' }}
             containerComponent={
               <VictoryVoronoiContainer
-                labels={(d) => `${d.test_group}: ${d.count} \n Date: ${new Date(d.date).toLocaleDateString()}`}
+                responsive={false}
+                labels={(d) => `${d.test_group}: ${d.count} \n Date: ${new Date(d.test_day).toLocaleDateString()}`}
               />
             }
             width={800}
@@ -126,7 +127,7 @@ class TestsByGroup extends React.PureComponent {
                         fill: testGroups[testGroup].color
                       }
                     }}
-                    x='date'
+                    x='test_day'
                     y='count'
                   />
                 ))
@@ -140,7 +141,7 @@ class TestsByGroup extends React.PureComponent {
             height={120}
             containerComponent={
               <VictoryVoronoiContainer
-                labels={(d) => `Count: ${d.count} \n Date: ${new Date(d.date).toLocaleDateString()}`}
+                labels={(d) => `Count: ${d.count} \n Date: ${new Date(d.test_day).toLocaleDateString()}`}
               />
             }
           >
@@ -151,7 +152,7 @@ class TestsByGroup extends React.PureComponent {
             />
             <VictoryLine
               data={networkCoverage}
-              x='date'
+              x='test_day'
               y='count'
               style={{
                 data: {
