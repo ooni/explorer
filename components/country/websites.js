@@ -17,6 +17,13 @@ class WebsitesSection extends React.Component {
       selectedNetwork: null,
       networks: []
     }
+    this.onNetworkChange = this.onNetworkChange.bind(this)
+  }
+
+  onNetworkChange(asn) {
+    this.setState({
+      selectedNetwork: asn
+    })
   }
 
   async componentDidMount() {
@@ -57,7 +64,7 @@ class WebsitesSection extends React.Component {
         </SimpleBox>
 
         {/* Select ASN */}
-        <ASNSelector onNetworkChange={() => {}} networks={this.state.networks} />
+        <ASNSelector onNetworkChange={this.onNetworkChange} networks={this.state.networks} />
 
         {selectedNetwork &&
           <TestsByCategoryInNetwork
