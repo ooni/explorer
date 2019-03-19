@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import { Flex, Box, Heading } from 'ooni-components'
 import axios from 'axios'
+import URLChart from './url-chart'
 
 class TestsByCategoryInNetwork extends React.Component {
   constructor(props) {
@@ -15,6 +16,17 @@ class TestsByCategoryInNetwork extends React.Component {
     }
   }
   async componentDidMount() {
+    this.fetchUrlsInNetwork()
+  }
+
+  async componentDidUpdate(prevProps, prevState) {
+    if (prevProps.network !== this.props.network
+      || prevState.currentPage !== this.state.currentPage) {
+      this.fetchUrlsInNetwork()
+    }
+  }
+
+  async fetchUrlsInNetwork() {
     const { network, countryCode } = this.props
     const { resultsPerPage, currentPage } = this.state
     const client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
@@ -22,8 +34,8 @@ class TestsByCategoryInNetwork extends React.Component {
       params: {
         probe_cc: countryCode,
         probe_asn: network,
-        // limit: resultsPerPage,
-        // offset: (currentPage > 0 ? (currentPage - 1) : 0) * resultsPerPage
+        limit: resultsPerPage,
+        offset: (currentPage > 0 ? (currentPage - 1) : 0) * resultsPerPage
       }
     })
     this.setState({
@@ -34,7 +46,8 @@ class TestsByCategoryInNetwork extends React.Component {
     })
   }
   render() {
-    const { testedUrlsCount } = this.state
+    const { network, countryCode } = this.props
+    const { testedUrlsCount, testedUrls, currentPage, resultsPerPage } = this.state
     return (
       <React.Fragment>
         <Heading h={4}><FormattedMessage id='Country.Websites.Heading.BlockedByCategory' /></Heading>
@@ -62,10 +75,10 @@ class TestsByCategoryInNetwork extends React.Component {
           </FormattedMessage>
         */}
         {/* URL-wise barcharts Start */}
-        <Flex flexDirection='column'>
-          <FormattedMessage id='Country.Websites.URLCharts.Legend.Label.Blocked' />
-          <FormattedMessage id='Country.Websites.URLCharts.Legend.Label.Anomaly' />
-          <FormattedMessage id='Country.Websites.URLCharts.Legend.Label.Accessible' />
+        {testedUrls &&
+          testedUrls.map((testedUrl, index) => (
+            <URLChart key={index} metadata={testedUrl} network={network} countryCode={countryCode} />
+          ))}
         </Flex>
         {/* Pagination */}
         <FormattedMessage id='Country.Websites.URLCharts.Pagination.Previous' />
