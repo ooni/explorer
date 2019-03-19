@@ -8,7 +8,8 @@ const SectionHeader = styled(Flex)`
 
 SectionHeader.defaultProps = {
   pb: 3,
-  mb: 4
+  mb: 4,
+  flexWrap: 'wrap'
 }
 
 SectionHeader.Title = styled.a`

@@ -85,7 +85,7 @@ class TestsByGroup extends React.PureComponent {
 
     return (
       <React.Fragment>
-        <Flex>
+        <Flex flexWrap='wrap'>
           {
             Object.keys(testGroups).map((testGroup, index) => (
               <TestGroupSelector
