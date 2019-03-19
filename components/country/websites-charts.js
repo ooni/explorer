@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
-import { Flex, Box, Heading } from 'ooni-components'
+import { Flex, Box, Heading, Text } from 'ooni-components'
 import axios from 'axios'
 import URLChart from './url-chart'
 
@@ -45,6 +45,19 @@ class TestsByCategoryInNetwork extends React.Component {
 
     })
   }
+
+  prevPage() {
+    this.setState((state) => ({
+      currentPage: state.currentPage - 1
+    }))
+  }
+
+  nextPage() {
+    this.setState((state) => ({
+      currentPage: state.currentPage + 1
+    }))
+  }
+
   render() {
     const { network, countryCode } = this.props
     const { testedUrlsCount, testedUrls, currentPage, resultsPerPage } = this.state
@@ -79,10 +92,11 @@ class TestsByCategoryInNetwork extends React.Component {
           testedUrls.map((testedUrl, index) => (
             <URLChart key={index} metadata={testedUrl} network={network} countryCode={countryCode} />
           ))}
+        <Flex flexWrap='wrap' justifyContent='space-around' alignItems='center'>
+          <a href='javascript:void(0)' onClick={() => this.prevPage()}>{'< '}<FormattedMessage id='Country.Websites.URLCharts.Pagination.Previous' /></a>
+          <Text>{currentPage} of { Math.ceil(testedUrlsCount / resultsPerPage)} pages</Text>
+          <a href='javascript:void(0)' onClick={() => this.nextPage()}><FormattedMessage id='Country.Websites.URLCharts.Pagination.Next' />{' >'}</a>
         </Flex>
-        {/* Pagination */}
-        <FormattedMessage id='Country.Websites.URLCharts.Pagination.Previous' />
-        <FormattedMessage id='Country.Websites.URLCharts.Pagination.Next' />
         {/* URL-wise barcharts End */}
       </React.Fragment>
     )
