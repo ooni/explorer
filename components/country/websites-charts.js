@@ -10,11 +10,12 @@ class TestsByCategoryInNetwork extends React.Component {
     super(props)
     this.state = {
       currentPage: 0,
-      resultsPerPage: 10,
+      resultsPerPage: 5,
       testedUrlsCount: 0,
       testedUrls: []
     }
   }
+
   async componentDidMount() {
     this.fetchUrlsInNetwork()
   }
