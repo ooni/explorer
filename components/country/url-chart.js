@@ -163,6 +163,16 @@ class URLChart extends React.Component {
                         />
                       ))
                     }
+                    <VictoryBar
+                      data={data}
+                      x='test_day'
+                      y={(d) => (d.total_count - d.confirmed_count - d.anomaly_count - d.failure_count)}
+                      style={{
+                        data: {
+                          fill: dataColorMap.total_count,
+                        }
+                      }}
+                    />
                   </VictoryStack>
                 </VictoryChart>
               }
