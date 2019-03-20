@@ -1,0 +1,566 @@
+[
+  {
+    "Key": "Country.Heading.Apps",
+    "Text": ""
+  },
+  {
+    "Key": "Country.PeriodFilter.Label",
+    "Text": ""
+  },
+  {
+    "Key": "Country.PeriodFilter.Option.30Days",
+    "Text": ""
+  },
+  {
+    "Key": "Country.PeriodFilter.Option.2Months",
+    "Text": ""
+  },
+  {
+    "Key": "Country.PeriodFilter.Option.3Months",
+    "Text": ""
+  },
+  {
+    "Key": "Country.PeriodFilter.Option.6Months",
+    "Text": ""
+  },
+  {
+    "Key": "Country.Apps.Description",
+    "Text": ""
+  },
+  {
+    "Key": "Country.Apps.Label.LastTested",
+    "Text": ""
+  },
+  {
+    "Key": "Country.Apps.Button.ShowMore",
+    "Text": ""
+  },
+  {
+    "Key": "Country.Heading.NetworkProperties",
+    "Text": ""
+  },
+  {
+    "Key": "Country.PeriodFilter.Label",
+    "Text": ""
+  },
+  {
+    "Key": "Country.PeriodFilter.Option.30Days",
+    "Text": ""
+  },
+  {
+    "Key": "Country.PeriodFilter.Option.2Months",
+    "Text": ""
+  },
+  {
+    "Key": "Country.PeriodFilter.Option.3Months",
+    "Text": ""
+  },
+  {
+    "Key": "Country.PeriodFilter.Option.6Months",
+    "Text": ""
+  },
+  {
+    "Key": "Country.NetworkProperties.Description",
+    "Text": ""
+  },
+  {
+    "Key": "Country.NetworkProperties.Heading.Summary",
+    "Text": ""
+  },
+  {
+    "Key": "Country.NetworkProperties.InfoBox.Label.AverageDownload",
+    "Text": ""
+  },
+  {
+    "Key": "Country.NetworkProperties.InfoBox.Label.AverageUpload",
+    "Text": ""
+  },
+  {
+    "Key": "Country.NetworkProperties.InfoBox.Label.Covered",
+    "Text": ""
+  },
+  {
+    "Key": "Country.NetworkProperties.InfoBox.Label.Middleboxes",
+    "Text": ""
+  },
+  {
+    "Key": "Country.NetworkProperties.InfoBox.Units.Mbits",
+    "Text": ""
+  },
+  {
+    "Key": "Country.NetworkProperties.InfoBox.Units.Networks.Singular",
+    "Text": ""
+  },
+  {
+    "Key": "Country.NetworkProperties.InfoBox.Units.Networks.Plural",
+    "Text": ""
+  },
+  {
+    "Key": "Country.NetworkProperties.Heading.Networks",
+    "Text": ""
+  },
+  {
+    "Key": "Country.NetworkProperties.InfoBox.Label.AverageStreaming",
+    "Text": ""
+  },
+  {
+    "Key": "Country.NetworkProperties.InfoBox.Label.AveragePing",
+    "Text": ""
+  },
+  {
+    "Key": "Country.NetworkProperties.InfoBox.Units.Milliseconds",
+    "Text": ""
+  },
+  {
+    "Key": "Country.NetworkProperties.InfoBox.Label.Middleboxes.Found",
+    "Text": ""
+  },
+  {
+    "Key": "Country.NetworkProperties.InfoBox.Label.Middleboxes.NotFound",
+    "Text": ""
+  },
+  {
+    "Key": "Country.NetworkProperties.Button.ShowMore",
+    "Text": ""
+  },
+  {
+    "Key": "Country.Heading.Overview",
+    "Text": ""
+  },
+  {
+    "Key": "Country.Overview.Heading.NwInterference",
+    "Text": ""
+  },
+  {
+    "Key": "Country.Overview.NwInterference.Middleboxes",
+    "Text": ""
+  },
+  {
+    "Key": "Country.Overview.NwInterference.CircumventionTools",
+    "Text": ""
+  },
+  {
+    "Key": "Country.Overview.NwInterference.IM",
+    "Text": ""
+  },
+  {
+    "Key": "Country.Overview.NwInterference.Websites",
+    "Text": ""
+  },
+  {
+    "Key": "Country.Overview.Heading.TestsByClass",
+    "Text": ""
+  },
+  {
+    "Key": "Country.Overview.Heading.FeaturedResearch",
+    "Text": ""
+  },
+  {
+    "Key": "Country.Overview.SummaryTextTemplate",
+    "Text": ""
+  },
+  {
+    "Key": "Country.PeriodFilter.Label",
+    "Text": ""
+  },
+  {
+    "Key": "Country.PeriodFilter.Option.30Days",
+    "Text": ""
+  },
+  {
+    "Key": "Country.PeriodFilter.Option.2Months",
+    "Text": ""
+  },
+  {
+    "Key": "Country.PeriodFilter.Option.3Months",
+    "Text": ""
+  },
+  {
+    "Key": "Country.PeriodFilter.Option.6Months",
+    "Text": ""
+  },
+  {
+    "Key": "Country.Heading.Overview",
+    "Text": ""
+  },
+  {
+    "Key": "Country.Heading.Websites",
+    "Text": ""
+  },
+  {
+    "Key": "Country.Heading.Apps",
+    "Text": ""
+  },
+  {
+    "Key": "Country.Heading.NetworkProperties",
+    "Text": ""
+  },
+  {
+    "Key": "Country.Websites.Heading.BlockedByCategory",
+    "Text": ""
+  },
+  {
+    "Key": "Country.Websites.BlockedByCategory.Description",
+    "Text": ""
+  },
+  {
+    "Key": "Country.Websites.TestedWebsitesCount",
+    "Text": ""
+  },
+  {
+    "Key": "Country.Websites.Labels.ResultsPerPage",
+    "Text": ""
+  },
+  {
+    "Key": "Country.Websites.URLCharts.Pagination.Previous",
+    "Text": ""
+  },
+  {
+    "Key": "Country.Websites.URLCharts.Pagination.Next",
+    "Text": ""
+  },
+  {
+    "Key": "Country.Heading.Websites",
+    "Text": ""
+  },
+  {
+    "Key": "Country.Websites.Description",
+    "Text": ""
+  },
+  {
+    "Key": "Country.Websites.SummaryText.MoreLinkText",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.Endpoint.Status.Okay",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.Endpoint.Status.Failed",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.DetailsHeader.Runtime",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Hero.Status.Anomaly",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Hero.Status.Reachable",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Hero.Status.Error",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Hero.Status.Confirmed",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Hero.Status.Default",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Hero.Status.HTTPHeaderManipulation.MiddleboxesDetected",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Hero.Status.HTTPHeaderManipulation.NoMiddleBoxes",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Hero.Status.HTTPInvalidReqLine.MiddleboxesDetected",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Hero.Status.HTTPInvalidReqLine.NoMiddleBoxes",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Status.Hint.Telegram.Reachable",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.SummaryText.Telegram.Reachable",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.SummaryText.Telegram.AppFailure",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.SummaryText.Telegram.DesktopFailure",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Status.Hint.Telegram.Blocked",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.Telegram.Endpoint.Label.Desktop",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.Telegram.Endpoint.Label.Web",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.Telegram.Endpoint.Status.Heading",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.Telegram.Endpoint.ConnectionTo.Failed",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.Telegram.Endpoint.ConnectionTo.Successful",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Hero.Status.TorVanilla.Blocked",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Hero.Status.TorVanilla.Reachable",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Status.Hint.TorVanilla.Blocked",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Status.Hint.TorVanilla.Reachable",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.VanillaTor.Endpoint.Label.Reachability",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.VanillaTor.Endpoint.Label.Progress",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.VanillaTor.Endpoint.Progress",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Status.Hint.Websites.NoCensorship",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Status.Hint.Websites.Error",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Status.Hint.Websites.Unavailable",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Status.Hint.Websites.Censorship",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Status.Hint.Websites.DNS",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Status.Hint.Websites.HTTPdiff",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Status.Hint.Websites.HTTPfail",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Status.Hint.Websites.TCPBlock",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.Websites.Failures.Values.Null",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.Websites.HTTP.Label.Response",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.Websites.Failures.Heading",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.Websites.Failures.Label.HTTP",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.Websites.Failures.Label.DNS",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.Websites.Failures.Label.Control",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.Websites.DNSQueries.Heading",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.Websites.DNSQueries.Label.Resolver",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.Websites.TCP.Heading",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.Websites.TCP.NoData",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.Websites.TCP.ConnectionTo",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.Websites.HTTP.Heading",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.Hint.WhatsApp.Reachable",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.SummaryText.WhatsApp.Reachable",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Status.Hint.WhatsApp.Blocked",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.SummaryText.WhatsApp.Blocked",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.WhatsApp.Endpoint.Label.Mobile",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.WhatsApp.Endpoint.Label.Web",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.WhatsApp.Endpoint.Label.Registration",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.WhatsApp.Endpoint.Status.Heading",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.WhatsApp.Endpoint.ConnectionTo.Failed",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.WhatsApp.Endpoint.ConnectionTo.Successful",
+    "Text": ""
+  },
+  {
+    "Key": "Measurement.Details.SummaryTextTemplate",
+    "Text": ""
+  },
+  {
+    "Key": "Navbar.Search",
+    "Text": ""
+  },
+  {
+    "Key": "Navbar.Results",
+    "Text": ""
+  },
+  {
+    "Key": "Navbar.Countries",
+    "Text": ""
+  },
+  {
+    "Key": "Navbar.About",
+    "Text": ""
+  },
+  {
+    "Key": "Tests.Groups.Webistes.Name",
+    "Text": ""
+  },
+  {
+    "Key": "Tests.Groups.Instant Messagging.Name",
+    "Text": ""
+  },
+  {
+    "Key": "Tests.Groups.Middlebox.Name",
+    "Text": ""
+  },
+  {
+    "Key": "Tests.Groups.Performance.Name",
+    "Text": ""
+  },
+  {
+    "Key": "Tests.Groups.Circumvention.Name",
+    "Text": ""
+  },
+  {
+    "Key": "Tests.Groups.Legacy.Name",
+    "Text": ""
+  },
+  {
+    "Key": "Tests.WebConnectivity.Name",
+    "Text": ""
+  },
+  {
+    "Key": "Tests.HTTPInvalidReqLine.Name",
+    "Text": ""
+  },
+  {
+    "Key": "Tests.HTTPHeaderManipulation.Name",
+    "Text": ""
+  },
+  {
+    "Key": "Tests.Facebook.Name",
+    "Text": ""
+  },
+  {
+    "Key": "Tests.Telegram.Name",
+    "Text": ""
+  },
+  {
+    "Key": "Tests.WhatsApp.Name",
+    "Text": ""
+  },
+  {
+    "Key": "Tests.NDT.Name",
+    "Text": ""
+  },
+  {
+    "Key": "Tests.Dash.Name",
+    "Text": ""
+  },
+  {
+    "Key": "Tests.TorVanilla.Name",
+    "Text": ""
+  },
+  {
+    "Key": "Tests.BridgeReachability.Name",
+    "Text": ""
+  },
+  {
+    "Key": "Tests.TCPConnect.Name",
+    "Text": ""
+  },
+  {
+    "Key": "Tests.DNSConsistency.Name",
+    "Text": ""
+  },
+  {
+    "Key": "Tests.HTTPRequests.Name",
+    "Text": ""
+  }
+]
