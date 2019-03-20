@@ -5,24 +5,25 @@ import { Flex, Box, Heading, Text } from 'ooni-components'
 import axios from 'axios'
 import URLChart from './url-chart'
 
+const defaultState = {
+  resultsPerPage: 5,
+  testedUrlsCount: 0,
+  testedUrls: null,
+  fetching: true
+}
+
 class TestsByCategoryInNetwork extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      currentPage: 0,
-      resultsPerPage: 5,
-      testedUrlsCount: 0,
-      testedUrls: []
-    }
+    this.state = defaultState
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     this.fetchUrlsInNetwork()
   }
 
-  async componentDidUpdate(prevProps, prevState) {
-    if (prevProps.network !== this.props.network
-      || prevState.currentPage !== this.state.currentPage) {
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.testedUrls === null) {
       this.fetchUrlsInNetwork()
     }
   }
@@ -42,8 +43,8 @@ class TestsByCategoryInNetwork extends React.Component {
     this.setState({
       testedUrlsCount: result.data.metadata.total_count,
       testedUrls: result.data.results,
-      currentPage: result.data.metadata.current_page
-
+      currentPage: result.data.metadata.current_page,
+      fetching: false
     })
   }
 
@@ -59,9 +60,32 @@ class TestsByCategoryInNetwork extends React.Component {
     }))
   }
 
+  static getDerivedStateFromProps(props, state) {
+    if (props.network !== state.prevNetwork) {
+      return {
+        prevNetwork: props.network,
+        currentPage: 1,
+        prevPage: 1,
+        ...defaultState
+      }
+    }
+    if (state.currentPage !== state.prevPage) {
+      return {
+        prevPage: state.currentPage || 1,
+        ...defaultState
+      }
+    }
+    return null
+  }
+
   render() {
     const { network, countryCode } = this.props
-    const { testedUrlsCount, testedUrls, currentPage, resultsPerPage } = this.state
+    const { testedUrlsCount, testedUrls, currentPage, resultsPerPage, fetching } = this.state
+
+    if (fetching) {
+      return (<Heading h={4}>Loading...</Heading>)
+    }
+
     return (
       <React.Fragment>
         <Heading h={4}><FormattedMessage id='Country.Websites.Heading.BlockedByCategory' /></Heading>

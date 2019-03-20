@@ -39,13 +39,16 @@ const ToggleMinimizeButton = ({ minimized, onToggle }) => (
   <Circle onClick={onToggle}><Triangle down={minimized} /></Circle>
 )
 
+const defaultState = {
+  data: null,
+  minimized: true,
+  fetching: true
+}
+
 class URLChart extends React.Component {
   constructor(props) {
     super(props)
-    this.state = {
-      data: false,
-      minimized: true
-    }
+    this.state = defaultState
     this.onToggleMinimize = this.onToggleMinimize.bind(this)
   }
 
@@ -55,7 +58,17 @@ class URLChart extends React.Component {
     }))
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    this.fetchURLChartData()
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if(this.state.data === null) {
+      this.fetchURLChartData()
+    }
+  }
+
+  async fetchURLChartData() {
     const { metadata, network, countryCode } = this.props
     const client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
     const result = await client.get('/api/_/website_stats', {
@@ -66,18 +79,33 @@ class URLChart extends React.Component {
       }
     })
     this.setState({
-      data: result.data.results
+      data: result.data.results,
+      fetching: false
     })
+  }
+
+  static getDerivedStateFromProps(props, state) {
+    if (props.metadata.input !== state.prevTestUrl) {
+      return {
+        prevTestUrl: props.metadata.input,
+        ...defaultState
+      }
+    }
+    return null
   }
 
   render() {
     const { metadata } = this.props
-    const { data, minimized } = this.state
+    const { data, minimized, fetching } = this.state
     const dataColorMap = {
       total_count: theme.colors.gray3,
       confirmed_count: theme.colors.green8,
       anomaly_count: theme.colors.yellow9,
       failure_count: theme.colors.red8
+    }
+
+    if (fetching) {
+      return (<div> Loading ... </div>)
     }
 
     return (
