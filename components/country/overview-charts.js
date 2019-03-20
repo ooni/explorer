@@ -139,8 +139,10 @@ class TestsByGroup extends React.PureComponent {
           <VictoryChart
             scale={{ x: 'time' }}
             height={120}
+            width={800}
             containerComponent={
               <VictoryVoronoiContainer
+                responsive={false}
                 labels={(d) => `Count: ${d.count} \n Date: ${new Date(d.test_day).toLocaleDateString()}`}
               />
             }
