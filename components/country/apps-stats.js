@@ -8,6 +8,7 @@ import moment from 'moment'
 
 import { inCountry } from './country-context'
 import { testNames } from '../test-info'
+import AppsStatRow from './apps-stats-row'
 
 const AppGroupHeading = styled(Box)`
   border: 1px solid ${props => props.theme.colors.gray3};
@@ -70,25 +71,7 @@ class AppsStatsGroup extends React.Component {
         </AppGroupHeading>
         <Box>
           {Object.keys(data).map((im, index) => (
-            <StyledRow key={index} px={2} py={3} alignItems='center'>
-              <Box width={1/12}>
-                <span>(icon)</span>
-              </Box>
-              <Box width={3/12}>
-                {testNames[im].name}
-              </Box>
-              <Box width={4/12}>
-                {`${data[im].anomaly_networks.length} / ${data[im].ok_networks.length} Networks`}
-              </Box>
-              <Box width={3/12}>
-                <FormattedMessage id='Country.Apps.Label.LastTested' />
-                {' '}
-                <strong>{moment(data[im].last_tested).fromNow()}</strong>
-              </Box>
-              <Box width={1/12}>
-                <MdArrowDropDownCircle size={19} />
-              </Box>
-            </StyledRow>
+            <AppsStatRow key={index} data={data[im]} app={im} />
           ))}
         </Box>
       </React.Fragment>

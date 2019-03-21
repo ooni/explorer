@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import SectionHeader from './section-header'
 import { SimpleBox } from './box'
 import PeriodFilter from './period-filter'
-import AppsStatsGroup from './apps-stats-group'
+import AppsStatsGroup from './apps-stats'
 
 const AppsSection = ({ onPeriodChange }) => (
   <React.Fragment>
@@ -14,9 +14,9 @@ const AppsSection = ({ onPeriodChange }) => (
       <SectionHeader.Title name='apps'>
         <FormattedMessage id='Country.Heading.Apps' />
       </SectionHeader.Title>
-      <Box ml='auto'>
+      {/* <Box ml='auto'>
         <PeriodFilter onChange={onPeriodChange} />
-      </Box>
+      </Box> */}
     </SectionHeader>
     <SimpleBox>
       <FormattedMessage id='Country.Apps.Description' />
@@ -30,8 +30,6 @@ const AppsSection = ({ onPeriodChange }) => (
       title={<FormattedMessage id='Country.Overview.TestsByClass.Circumvention'/>}
       testGroup='circumvention'
     /> */}
-    <FormattedMessage id='Country.Apps.Label.LastTested' />
-    <FormattedMessage id='Country.Apps.Button.ShowMore' />
   </React.Fragment>
 )
 
