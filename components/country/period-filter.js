@@ -3,7 +3,7 @@ import { Flex, Select } from 'ooni-components'
 import { FormattedMessage } from 'react-intl'
 
 const PeriodFilter = () => (
-  <Flex>
+  <Flex flexWrap='wrap' alignItems='center'>
     <FormattedMessage id='Country.PeriodFilter.Label' >{(msg) => <option value=''>{msg}</option>}</FormattedMessage>
     <Select>
       <FormattedMessage id='Country.PeriodFilter.Option.30Days' >{(msg) => <option value={30}>{msg}</option>}</FormattedMessage>
