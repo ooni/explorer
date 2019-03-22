@@ -103,6 +103,7 @@ export default class Country extends React.Component {
             <Box width={3/4}>
               <CountryContextProvider countryCode={countryCode} countryName={countryName}>
                 <Overview
+                  countryName={countryName}
                   middleboxCount={10 || overviewStats.middlebox_detected_networks}
                   imCount={1 || overviewStats.im_apps_blocked}
                   circumventionTools={1 || overviewStats.circumvention_tools_blocked}

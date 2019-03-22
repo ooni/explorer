@@ -72,10 +72,11 @@ class TestsByGroup extends React.PureComponent {
 
   render() {
     const { testCoverage, networkCoverage } = this.props
+    const supportedTestGroups = ['websites', 'im', 'middlebox', 'performance', 'circumvention']
     let testCoverageGrouped = {}
     Object.keys(testGroups).forEach((testGroup) => {
       // Not interested in legacy and other groups
-      if (testGroup === 'legacy' || testGroup === 'default') {
+      if (supportedTestGroups.indexOf(testGroup) === -1) {
         return
       }
       testCoverageGrouped[testGroup] = testCoverage.filter((item) => (
@@ -85,9 +86,9 @@ class TestsByGroup extends React.PureComponent {
 
     return (
       <React.Fragment>
-        <Flex flexWrap='wrap'>
+        <Flex my={4} flexWrap='wrap' justifyContent='space-between'>
           {
-            Object.keys(testGroups).map((testGroup, index) => (
+            Object.keys(testCoverageGrouped).map((testGroup, index) => (
               <TestGroupSelector
                 key={index}
                 testGroup={testGroup}

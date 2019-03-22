@@ -1,15 +1,14 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
 import styled from 'styled-components'
-import { Flex, Box } from 'ooni-components'
+import { Flex, Box, Heading } from 'ooni-components'
 import SectionHeader from './section-header'
-import { BoxWithTitle } from './box'
+import { SimpleBox, BoxWithTitle } from './box'
 import TestsByGroup from './overview-charts'
 import {
   NettestGroupWebsites,
   NettestGroupInstantMessaging,
   NettestGroupMiddleBoxes,
-  NettestGroupPerformance
 } from 'ooni-components/dist/icons'
 
 
@@ -31,15 +30,45 @@ const getStatus = (count, formattedMessageId)=> {
   }
 }
 
+const FeaturedArticle = ({link, title}) => (
+  <Box py={1}>
+    <a href={link} target='_blank' rel='noopener noreferrer'>
+      {title}
+    </a>
+  </Box>
+)
+
+const SummaryText = styled(Box)`
+  border: 1px solid ${props => props.theme.colors.gray4};
+  border-left: 12px solid ${props => props.theme.colors.blue5};
+  font-size: 28px;
+  font-style: italic;
+  line-height: 1.5;
+`
+
+SummaryText.defaultProps = {
+  p: 3,
+}
+
 const Overview = ({
+  countryName,
   testCoverage,
   networkCoverage,
   fetchTestCoverageData,
   middleboxCount,
   imCount,
   circumventionTools,
-  blockedWebsitesCount
+  blockedWebsitesCount,
+  featuredArticles = [],
 }) => {
+  const measurementCount = testCoverage.reduce((total, {count}) => (
+    total + count
+  ), 0)
+  const networkCovered = networkCoverage.reduce((total, {count}) => (
+    total + count
+  ), 0)
+
+  const startDate = testCoverage[0].test_day
 
   return (
     <React.Fragment>
@@ -79,21 +108,63 @@ const Overview = ({
           </NwInterferenceStatus>
         </Flex>
       </BoxWithTitle>
-      <FormattedMessage id='Country.Overview.Heading.TestsByClass' />
+      <Heading h={4}>
+        <FormattedMessage id='Country.Overview.Heading.TestsByClass' />
+      </Heading>
       <TestsByGroup
         fetchTestCoverageData={fetchTestCoverageData}
         testCoverage={testCoverage}
         networkCoverage={networkCoverage}
       />
-
-      <BoxWithTitle title={<FormattedMessage id='Country.Overview.Heading.FeaturedResearch' />}>
-        List of blog articles
+      <BoxWithTitle title={<FormattedMessage id='Country.Overview.FeaturedResearch' />}>
+        {
+          (featuredArticles.length === 0)
+            ? <FormattedMessage id='Country.Overview.FeaturedResearch.None' />
+            : <ul>
+              <li>
+                <FeaturedArticle
+                  link='https://ooni.io/post/cuba-referendum/'
+                  title='Cuba blocks independent media amid 2019 constitutional referendum'
+                />
+              </li>
+              <li>
+                <FeaturedArticle
+                  link='https://ooni.io/post/ooni-software-development-guidelines/'
+                  title='OONI Software Development Guidelines'
+                />
+              </li>
+              <li>
+                <FeaturedArticle
+                  link='https://ooni.io/post/ooni-probe-android-200-incident/'
+                  title='OONI Probe Android 2.0.0 Incident Report'
+                />
+              </li>
+              <li>
+                <FeaturedArticle
+                  link='https://ooni.io/post/venezuela-blocking-wikipedia-and-social-media-2019/'
+                  title='From the blocking of Wikipedia to Social Media: Venezuela&quote;s Political Crisis'
+                />
+              </li>
+            </ul>
+        }
       </BoxWithTitle>
       {/* Highlight Box */}
-      <FormattedMessage
-        id='Country.Overview.SummaryTextTemplate'
-        defaultMessage='During the time period {startDate} to {endDate}, {measurementCount} Measurements have been conducted in {countryName}, resulting in {confirmCount} Confirmed Blocked, {anomalyCount} Anomalies and {accessibleCount} Accessible results. These measurements cover {networkCovered} networks out of {totalNetworks} in total in {countryName}. The network with the most measurements is {mostBlockedASNname} ({mmostBlockedASN}).'
-      />
+      {/* <SummaryText> */}
+      <SummaryText>
+        <FormattedMessage
+          id='Country.Overview.SummaryTextTemplate'
+          values={{
+            measurementCount,
+            countryName,
+            startDate: new Date(startDate).toLocaleDateString(),
+            networkCovered,
+            totalNetworks: 9999,
+            mostBlockedASNname: 'Blocker McBlocky Inc.',
+            mostBlockedASN: 'AS5h013'
+          }}
+        />
+      </SummaryText>
+      {/* </SummaryText> */}
     </React.Fragment>
   )
 }

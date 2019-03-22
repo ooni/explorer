@@ -19,9 +19,9 @@ SimpleBox.propTypes = {
 }
 
 export const BoxWithTitle = ({ title, children }) => (
-  <StyledBox my={4}>
+  <StyledBox my={4} py={3}>
     <Container>
-      <Text my={3} fontSize={2} fontWeight={600}>{title}</Text>
+      <Text mb={3} fontSize={2} fontWeight={600}>{title}</Text>
       {children}
     </Container>
   </StyledBox>
