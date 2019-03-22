@@ -111,9 +111,9 @@ export default class Country extends React.Component {
                   networkCoverage={networkCoverage}
                   fetchTestCoverageData={this.fetchTestCoverageData}
                 />
-                {/* <WebsitesSection />
-                  <AppsSection />
-                <NetworkPropertiesSection countryCode={countryCode} /> */}
+                <WebsitesSection />
+                <AppsSection />
+                <NetworkPropertiesSection countryCode={countryCode} />
               </CountryContextProvider>
             </Box>
           </Flex>
