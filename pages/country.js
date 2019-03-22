@@ -120,7 +120,7 @@ export default class Country extends React.Component {
                 />
                 <WebsitesSection />
                 <AppsSection />
-                <NetworkPropertiesSection />
+                <NetworkPropertiesSection countryCode={countryCode} />
               </CountryContextProvider>
             </Box>
           </Flex>
