@@ -5,6 +5,13 @@ import { Flex, Box } from 'ooni-components'
 import SectionHeader from './section-header'
 import { BoxWithTitle } from './box'
 import TestsByGroup from './overview-charts'
+import {
+  NettestGroupWebsites,
+  NettestGroupInstantMessaging,
+  NettestGroupMiddleBoxes,
+  NettestGroupPerformance
+} from 'ooni-components/dist/icons'
+
 
 const NwInterferenceStatus = styled(Box)`
   color: ${props => props.color || props.theme.colors.gray5};
@@ -14,6 +21,16 @@ NwInterferenceStatus.defaultProps = {
   mb: 3
 }
 
+const getStatus = (count, formattedMessageId)=> {
+  if (count === null) {
+    return formattedMessageId + '.NoData'
+  } else if (count > 0) {
+    return formattedMessageId + '.Blocked'
+  } else {
+    return formattedMessageId + '.Normal'
+  }
+}
+
 const Overview = ({
   testCoverage,
   networkCoverage,
@@ -21,7 +38,7 @@ const Overview = ({
   middleboxCount,
   imCount,
   circumventionTools,
-  websitesCount
+  blockedWebsitesCount
 }) => {
 
   return (
@@ -33,24 +50,31 @@ const Overview = ({
       </SectionHeader>
       <BoxWithTitle title={<FormattedMessage id='Country.Overview.Heading.NwInterference' />}>
         <Flex flexWrap='wrap'>
-          <NwInterferenceStatus width={1/2} color='violet8'>
-            <FormattedMessage id='Country.Overview.NwInterference.Middleboxes'
+          <NwInterferenceStatus width={[1, 1/2]} color={middleboxCount && 'violet8'}>
+            <NettestGroupMiddleBoxes size={32} />
+            <FormattedMessage
+              id={ getStatus(middleboxCount, 'Country.Overview.NwInterference.Middleboxes') }
               values={{ middleboxCount }}
             />
           </NwInterferenceStatus>
-          <NwInterferenceStatus width={1/2} color='red'>
-            <FormattedMessage id='Country.Overview.NwInterference.CircumventionTools'
+          {/* <NwInterferenceStatus width={[1, 1/2]} color={circumventionTools && 'pink6'}>
+            <FormattedMessage
+              id={ getStatus(circumventionTools, 'Country.Overview.NwInterference.CircumventionTools') }
               values={{ circumventionTools }}
             />
-          </NwInterferenceStatus>
-          <NwInterferenceStatus width={1/2} color='yellow9'>
-            <FormattedMessage id='Country.Overview.NwInterference.IM'
+          </NwInterferenceStatus> */}
+          <NwInterferenceStatus width={[1, 1/2]} color={imCount && 'yellow9'}>
+            <NettestGroupInstantMessaging size={32} />
+            <FormattedMessage
+              id={ getStatus(imCount, 'Country.Overview.NwInterference.IM') }
               values={{ imCount }}
             />
           </NwInterferenceStatus>
-          <NwInterferenceStatus width={1/2} color='indigo5'>
-            <FormattedMessage id='Country.Overview.NwInterference.Websites'
-              values={{ websitesCount }}
+          <NwInterferenceStatus width={[1, 1/2]} color={blockedWebsitesCount && 'indigo5'}>
+            <NettestGroupWebsites size={32} />
+            <FormattedMessage
+              id={ getStatus(blockedWebsitesCount, 'Country.Overview.NwInterference.Websites') }
+              values={{ blockedWebsitesCount }}
             />
           </NwInterferenceStatus>
         </Flex>

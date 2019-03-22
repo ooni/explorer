@@ -41,15 +41,18 @@ export default class Country extends React.Component {
     let client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
     let results = await Promise.all([
       // XXX cc @darkk we should ideally have better dedicated daily dumps for this view
-      client.get('/api/_/test_coverage', {params: {'probe_cc': countryCode}})
+      client.get('/api/_/test_coverage', {params: {'probe_cc': countryCode}}),
+      client.get('/api/_/country_overview', { params: {'probe_cc': countryCode}})
     ])
 
     const testCoverage = results[0].data.test_coverage
     const networkCoverage = results[0].data.network_coverage
+    const overviewStats = results[1].data
 
     return {
       testCoverage,
       networkCoverage,
+      overviewStats,
       countryCode,
       countryName: countryUtil.territoryNames[countryCode]
     }
@@ -83,7 +86,8 @@ export default class Country extends React.Component {
   render () {
     const {
       countryCode,
-      countryName
+      countryName,
+      overviewStats
     } = this.props
 
     const { testCoverage, networkCoverage } = this.state.newData ? this.state.newData : this.props
@@ -114,13 +118,17 @@ export default class Country extends React.Component {
             <Box width={3/4}>
               <CountryContextProvider countryCode={countryCode} countryName={countryName}>
                 <Overview
+                  middleboxCount={10 || overviewStats.middlebox_detected_networks}
+                  imCount={1 || overviewStats.im_apps_blocked}
+                  circumventionTools={1 || overviewStats.circumvention_tools_blocked}
+                  blockedWebsitesCount={100 || overviewStats.websites_confirmed_blocked}
                   testCoverage={testCoverage}
                   networkCoverage={networkCoverage}
                   fetchTestCoverageData={this.fetchTestCoverageData}
                 />
-                <WebsitesSection />
-                <AppsSection />
-                <NetworkPropertiesSection countryCode={countryCode} />
+                {/* <WebsitesSection />
+                  <AppsSection />
+                <NetworkPropertiesSection countryCode={countryCode} /> */}
               </CountryContextProvider>
             </Box>
           </Flex>
