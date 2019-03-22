@@ -179,9 +179,11 @@ class URLChart extends React.Component {
             </Box>
           </Flex>
         </Box>
-        <Box mt={4}>
+        {/* 
+          <Box mt={4}>
           <ToggleMinimizeButton minimized={minimized} onToggle={this.onToggleMinimize} />
-        </Box>
+          </Box>
+        */}
       </Flex>
     )
   }
