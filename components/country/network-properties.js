@@ -42,7 +42,8 @@ class NetworkPropertiesSection extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.data.length === this.state.data.length) {
+    const { data, totalNetworks } = this.state
+    if (prevState.data.length === data.length && data.length < totalNetworks) {
       this.fetchNetworkStats()
     }
   }
