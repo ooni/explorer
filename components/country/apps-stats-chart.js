@@ -5,8 +5,7 @@ import {
   VictoryChart,
   VictoryBar,
   VictoryAxis,
-  VictoryTooltip,
-  VictoryVoronoiContainer
+  VictoryTooltip
 } from 'victory'
 import { theme } from 'ooni-components'
 
@@ -66,7 +65,7 @@ class AppsStatChart extends React.Component {
           <VictoryBar
             data={data}
             x='test_day'
-            y={d => yMax}
+            y={() => yMax}
             style={{
               data: {
                 fill: theme.colors.gray3,

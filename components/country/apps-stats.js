@@ -1,22 +1,14 @@
 import React from 'react'
-import { FormattedMessage } from 'react-intl'
-import { Flex, Box, Heading, theme } from 'ooni-components'
+import { Box, Heading } from 'ooni-components'
 import styled from 'styled-components'
 import axios from 'axios'
-import MdArrowDropDownCircle from 'react-icons/lib/md/arrow-drop-down-circle'
-import moment from 'moment'
 
 import { inCountry } from './country-context'
-import { testNames } from '../test-info'
 import AppsStatRow from './apps-stats-row'
 
 const AppGroupHeading = styled(Box)`
   border: 1px solid ${props => props.theme.colors.gray3};
   border-left: 12px solid ${props => props.theme.colors.cyan6};
-`
-
-const StyledRow = styled(Flex)`
-  border: 1px solid ${props => props.theme.colors.gray3};
 `
 
 const defaultState = {
@@ -65,16 +57,14 @@ class AppsStatsGroup extends React.Component {
       )
     }
     return (
-      <React.Fragment>
+      <Box my={4}>
         <AppGroupHeading mt={4} px={2}>
           <Heading h={5}>{title}</Heading>
         </AppGroupHeading>
-        <Box>
-          {Object.keys(data).map((im, index) => (
-            <AppsStatRow key={index} data={data[im]} app={im} />
-          ))}
-        </Box>
-      </React.Fragment>
+        {Object.keys(data).map((im, index) => (
+          <AppsStatRow key={index} data={data[im]} app={im} />
+        ))}
+      </Box>
     )
   }
 }

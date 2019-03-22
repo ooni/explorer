@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
-import { Flex, Box, Heading, Text } from 'ooni-components'
+import { Flex, Box } from 'ooni-components'
 import styled from 'styled-components'
 import MdArrowDropDownCircle from 'react-icons/lib/md/arrow-drop-down-circle'
 import moment from 'moment'

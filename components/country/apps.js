@@ -1,14 +1,12 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { Flex, Box, Heading, theme } from 'ooni-components'
-import styled from 'styled-components'
 
 import SectionHeader from './section-header'
 import { SimpleBox } from './box'
 import PeriodFilter from './period-filter'
 import AppsStatsGroup from './apps-stats'
 
-const AppsSection = ({ onPeriodChange }) => (
+const AppsSection = () => (
   <React.Fragment>
     <SectionHeader>
       <SectionHeader.Title name='apps'>
