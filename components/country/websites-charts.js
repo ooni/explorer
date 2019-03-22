@@ -97,10 +97,11 @@ class TestsByCategoryInNetwork extends React.Component {
           <Box>
             <strong>{testedUrlsCount}</strong> <FormattedMessage id='Country.Websites.TestedWebsitesCount' />
           </Box>
-          <Box>
+          {/* Results per page dropdown
+            <Box>
             <FormattedMessage id='Country.Websites.Labels.ResultsPerPage' />
-            {/* Results per page dropdown */}
-          </Box>
+            </Box>
+          */}
         </Flex>
         {/* Hide until API is available
           <FormattedMessage id='Country.Websites.URLSearch.Placeholder'>
