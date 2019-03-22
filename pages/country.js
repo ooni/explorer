@@ -1,39 +1,24 @@
 /* global process */
 import React from 'react'
 import Head from 'next/head'
-
 import axios from 'axios'
-
 import {
   Container,
   Heading,
   Text, Hero,
   Flex, Box
 } from 'ooni-components'
-
-import { FormattedMessage } from 'react-intl'
+import countryUtil from 'country-util'
 
 import NavBar from '../components/nav-bar'
 import Flag from '../components/flag'
 import Layout from '../components/Layout'
-import { toCompactNumberUnit } from '../utils'
 import Sidebar from '../components/country/sidebar'
 import Overview from '../components/country/overview'
 import WebsitesSection from '../components/country/websites'
 import AppsSection from '../components/country/apps'
 import NetworkPropertiesSection from '../components/country/network-properties'
 import { CountryContextProvider } from '../components/country/country-context'
-
-import { VictoryPie } from 'victory'
-
-import countryUtil from 'country-util'
-
-const Stat = ({label, valueWithUnit}) => {
-  return <div>
-    <Heading h={5}>{label}</Heading>
-    <Text>{valueWithUnit.value} {valueWithUnit.unit}</Text>
-  </div>
-}
 
 export default class Country extends React.Component {
   static async getInitialProps ({ query }) {
