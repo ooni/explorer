@@ -49,10 +49,10 @@ class WebsitesSection extends React.Component {
           <SectionHeader.Title name='websites'>
             <FormattedMessage id='Country.Heading.Websites' />
           </SectionHeader.Title>
-          <Box ml='auto'>
-            <PeriodFilter onChange={onPeriodChange} />
-          </Box>
         </SectionHeader>
+        {/* <Box ml='auto'>
+            <PeriodFilter onChange={onPeriodChange} />
+        </Box> */}
         <SimpleBox>
           <Text>
             <FormattedMessage id='Country.Websites.Description' />
