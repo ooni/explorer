@@ -91,13 +91,11 @@ const FeatureBoxTitle = styled(Text)`
 export default class LandingPage extends React.Component {
 
   static async getInitialProps () {
-    let stats = await axios.get('/_/s3/homepage-overview.json', {
-      baseURL: process.env.EXPLORER_URL
-    })
+    // XXX fetch this from the API
     return {
-      measurementCount: stats.data.measurement_count,
-      asnCount: stats.data.network_count,
-      countryCount: stats.data.country_count
+      measurementCount: 0,
+      asnCount: 0,
+      countryCount: 0
     }
   }
 
