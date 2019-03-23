@@ -75,9 +75,7 @@ export const NavBar = ({color}) => (
         </Box>
         <Box ml='auto'>
           <NavItem label={<FormattedMessage id='Navbar.Search' />} href='/search' />
-          <NavItem label={<FormattedMessage id='Navbar.Results' />} href='/results' />
           <NavItem label={<FormattedMessage id='Navbar.Countries' />} href='/countries' />
-          <NavItem label={<FormattedMessage id='Navbar.About' />} href='/about' />
         </Box>
       </Flex>
     </Container>
