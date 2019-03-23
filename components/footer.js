@@ -6,8 +6,8 @@ import NLink from 'next/link'
 import { injectIntl, intlShape } from 'react-intl'
 
 const StyledFooter = styled.footer`
-  background-color: ${props => props.theme.colors.gray1};
-  color: ${props => props.theme.colors.blue9};
+  background-color: #002c4b;
+  color: #ffffff;
   font-size: 0.857rem;
   margin-top: 32px;
 `
@@ -29,9 +29,9 @@ const FooterLinkItem = styled(Box)`
 
 const StyledFooterLabel = styled.a`
   text-decoration: none;
-  color: {props => props.theme.colors.blue1};
+  color: #ffffff;
   cursor: pointer;
-  opacity: 0.6;
+  opacity: 0.5;
   &:hover {
     opacity: 1;
   }
@@ -52,18 +52,8 @@ const FooterText = styled.div`
 `
 
 const StyledIcon = styled(ExplorerLogo)`
-  fill: ${props => props.theme.colors.blue9};
+  fill: #ffffff;
 `
-
-const SocialLink = ({ logo, href}) => (
-  <a href={href}>
-    <Avatar
-      size={28}
-      m={1}
-      src={logo}
-    />
-  </a>
-)
 
 const Footer = ({ intl }) => (
   <StyledFooter>
