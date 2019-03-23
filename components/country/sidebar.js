@@ -3,6 +3,11 @@ import { Flex, Box, NavLink } from 'ooni-components'
 import styled from 'styled-components'
 import { FormattedMessage } from 'react-intl'
 
+const StyledSideBar = styled(Flex)`
+  position: sticky;
+  top: 85px;
+`
+
 const StyledSidebarItem = styled(Box)``
 StyledSidebarItem.defaultProps = {
   mb: 1
