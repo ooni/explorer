@@ -5,51 +5,34 @@ import NLink from 'next/link'
 
 import styled from 'styled-components'
 import axios from 'axios'
-
+import { FormattedMessage } from 'react-intl'
 import {
   Flex,
   Box,
   Container,
-  Text,
   Button,
   Heading,
   Link
 } from 'ooni-components'
+import { Text } from 'rebass'
 
 import Layout from '../components/Layout'
-import Globe from '../components/globe'
 import NavBar from '../components/nav-bar'
 
 import { toCompactNumberUnit } from '../utils'
 
 const HeroUnit = styled.div`
-  background-color: ${props => props.theme.colors.blue5};
-  padding-bottom: 16px;
+  background: linear-gradient(326.31deg, #005A99 39.35%, #0588CB 82.69%), #0588CB;
+  padding-bottom: 48px;
   padding-top: 16px;
 `
 
-const HeroClaim = styled(Heading)`
-  color: ${props => props.theme.colors.white};
-`
-
 const StatsContainer = styled(Flex)`
-  position: absolute;
-  top: -55px;
-  border-radius: 60px;
-  width: 600px;
+  border-radius: 16px;
+  margin-top: -100px;
+  padding: 16px 32px;
+  padding-bottom: 64px;
   background-color: ${props => props.theme.colors.white};
-  padding-left: 16px;
-  box-shadow: -1px 3px 21px 0px rgba(0,0,0,0.75);
-`
-
-const StyledValue = styled.div`
-  color: ${props => props.theme.colors.blue5};
-  font-size: 60px;
-`
-
-const StyledUnit = styled.span`
-  color: ${props => props.theme.colors.blue5};
-  font-size: 26px;
 `
 
 const StyledLabel = styled.div`
@@ -60,20 +43,49 @@ const StyledStatsItem = styled(Box)`
   padding: 16px;
 `
 
-const StatsItem = ({label, unit, value}) => (
-  <StyledStatsItem width={1/3}>
-    <StyledValue>
+const StatsItem = ({label, unit, value }) => (
+  <StyledStatsItem width={1/3} mx={4} color='blue9'>
+    <Text fontSize={48} fontWeight={300}>
       {value}
-      <StyledUnit>{unit}</StyledUnit>
-    </StyledValue>
+      <Text is='span' fontSize={32}>{unit}</Text>
+    </Text>
     <StyledLabel>
       {label}
     </StyledLabel>
   </StyledStatsItem>
 )
 
+StatsItem.defaultProps = {
+  width: [1/3],
+  m: 4,
+}
+
+const FeatureRow = styled(Flex)`
+
+`
+
+FeatureRow.defaultProps = {
+  alignItems: 'center',
+  justifyContent: 'center',
+  py: 4
+}
+
 const FeatureBox = styled(Box)`
-  text-align: center;
+  font-size: 20px;
+  line-height: 1.5;
+`
+
+FeatureBox.defaultProps = {
+  mx: 3,
+  width: [1, 1/3],
+  lineHeight: 1.5,
+}
+
+const FeatureBoxTitle = styled(Text)`
+  color: ${props => props.theme.colors.blue9};
+  font-size: 24px;
+  font-weight: 600;
+  margin-bottom: 12px;
 `
 
 export default class LandingPage extends React.Component {
@@ -103,74 +115,85 @@ export default class LandingPage extends React.Component {
     asnCount = toCompactNumberUnit(asnCount)
 
     return (
-      <Layout disableFooter>
+      <Layout>
         <Head>
           <title>OONI Explorer</title>
         </Head>
-        <NavBar />
         <HeroUnit>
+          <NavBar color='transparent' />
           <Container>
-            <Flex>
-              <Box width={2/3}>
-                <HeroClaim h={2}>Uncover evidence of network tampering, near and far!</HeroClaim>
-                <Button inverted hollow>Explore</Button>
-              </Box>
-              <Box width={1/3}>
-                {/* FIXME: Disabled globe animation crashing in production env. 
-                  <Globe magnitudeURL="/_/s3/map-magnitude.json" /> */}
-              </Box>
-            </Flex>
+            <Text textAlign='center' my={120}>
+              <Heading h={1}>
+                <Text fontSize={64} color='#ffffff'><FormattedMessage id='Home.Banner.Title.UncoverEvidence' /></Text>
+              </Heading>
+              <Text fontSize={24} color='blue1'><FormattedMessage id='Home.Banner.Subtitle.ExploreCensorshipEvents' /></Text>
+              <Button mt={48} inverted hollow fontSize={24}><FormattedMessage id='Home.Banner.Button.Explore' /></Button>
+            </Text>
           </Container>
         </HeroUnit>
         <Container>
-          <Flex alignItems='center' justifyContent='center' style={{position: 'relative'}}>
+          <Flex alignItems='center' justifyContent='center'>
             <StatsContainer>
               <StatsItem
-                label="Measurements"
+                label={<FormattedMessage id='Home.Banner.Stats.Measurements' />}
                 unit={measurementCount.unit}
                 value={measurementCount.value}
               />
               <StatsItem
-                label="Countries"
+                label={<FormattedMessage id='Home.Banner.Stats.Countries' />}
                 value={countryCount}
               />
               <StatsItem
-                label="Networks"
+                label={<FormattedMessage id='Home.Banner.Stats.Networks' />}
                 unit={asnCount.unit}
                 value={asnCount.value}
               />
             </StatsContainer>
           </Flex>
-
-          <Flex style={{paddingTop: '100px'}}>
-            <FeatureBox width={1/3} p={2}>
-              <Heading h={3}>Countries</Heading>
-              <Text>Discover what is happening on the internet in any country in the world.</Text>
-              <NLink href='/countries'>
-                <Link>
-          Read more
-                </Link>
-              </NLink>
-            </FeatureBox>
-            <FeatureBox width={1/3} p={2}>
-              <Heading h={3}>Search</Heading>
-              <Text>Search, filter and explore millions of network measurements collected from thousands of network vantage points all over the world.</Text>
-              <NLink href='/search'>
-                <Link>
-            Read more
-                </Link>
-              </NLink>
-            </FeatureBox>
-            <FeatureBox width={1/3} p={2}>
-              <Heading h={3}>Results</Heading>
-              <Text>Check to see what results OONI has discovered around the world</Text>
-              <NLink href='/results'>
-                <Link pt={2}>
-            Read more
-                </Link>
-              </NLink>
-            </FeatureBox>
+          <Flex justifyContent='center'>
+            <Box width={2/3}>
+              <Text fontSize={20} lineHeight={1.5}>
+                <FormattedMessage id='Home.About.SummaryText' />
+              </Text>
+            </Box>
           </Flex>
+
+          {/* Websites & Apps */}
+          <FeatureRow>
+            <FeatureBox>
+              <img src='/static/countries.png' alt='Websites and Apps' />
+            </FeatureBox>
+            <FeatureBox>
+              <FeatureBoxTitle>
+                <FormattedMessage id='Home.Websites&Apps.Title' />
+              </FeatureBoxTitle>
+              <FormattedMessage id='Home.Search&Filter.SummaryText' />
+            </FeatureBox>
+          </FeatureRow>
+          {/* Search & Filter */}
+          <FeatureRow>
+            <FeatureBox>
+              <FeatureBoxTitle>
+                <FormattedMessage id='Home.Search&Filter.Title' />
+              </FeatureBoxTitle>
+              <FormattedMessage id='Home.Search&Filter.SummaryText' />
+            </FeatureBox>
+            <FeatureBox>
+              <img src='/static/countries.png' alt='Websites and Apps' />
+            </FeatureBox>
+          </FeatureRow>
+          {/* Network Properties */}
+          <FeatureRow>
+            <FeatureBox>
+              <img src='/static/countries.png' alt='Search and Filter' />
+            </FeatureBox>
+            <FeatureBox>
+              <FeatureBoxTitle>
+                <FormattedMessage id='Home.NetworkProperties.Title' />
+              </FeatureBoxTitle>
+              <FormattedMessage id='Home.Search&Filter.SummaryText' />
+            </FeatureBox>
+          </FeatureRow>
         </Container>
       </Layout>
     )
