@@ -8,7 +8,7 @@ const SectionHeader = styled(Flex)`
 
 SectionHeader.defaultProps = {
   pb: 3,
-  mt: 4,
+  my: 4,
   flexWrap: 'wrap'
 }
 

@@ -94,7 +94,7 @@ class TestsByCategoryInNetwork extends React.Component {
         />
         {/* Category Selection */}
         <Flex justifyContent='space-between'>
-          <Box>
+          <Box my={3}>
             <strong>{testedUrlsCount}</strong> <FormattedMessage id='Country.Websites.TestedWebsitesCount' />
           </Box>
           {/* Results per page dropdown

@@ -57,22 +57,19 @@ class WebsitesSection extends React.Component {
           <Text>
             <FormattedMessage id='Country.Websites.Description' />
           </Text>
-          {/* Why rel='noopener noreferrer'? See: https://mathiasbynens.github.io/rel-noopener/ */}
-          <a href='https://ooni.io' target='_blank' rel='noopener noreferrer'>
-            <FormattedMessage id='Country.Websites.SummaryText.MoreLinkText' />
-          </a>
         </SimpleBox>
 
-        {/* Select ASN */}
-        <ASNSelector onNetworkChange={this.onNetworkChange} networks={this.state.networks} />
+        <Box my={4}>
+          {/* Select ASN */}
+          <ASNSelector onNetworkChange={this.onNetworkChange} networks={this.state.networks} />
 
-        {selectedNetwork &&
-          <TestsByCategoryInNetwork
-            network={selectedNetwork}
-            countryCode={countryCode}
-          />
-        }
-
+          {selectedNetwork &&
+            <TestsByCategoryInNetwork
+              network={selectedNetwork}
+              countryCode={countryCode}
+            />
+          }
+        </Box>
       </React.Fragment>
     )
   }
