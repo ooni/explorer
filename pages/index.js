@@ -91,11 +91,12 @@ const FeatureBoxTitle = styled(Text)`
 export default class LandingPage extends React.Component {
 
   static async getInitialProps () {
-    // XXX fetch this from the API
+    const client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
+    const result = await client.get('/api/_/global_overview')
     return {
-      measurementCount: 0,
-      asnCount: 0,
-      countryCount: 0
+      measurementCount: result.data.measurement_count,
+      asnCount: result.data.network_count,
+      countryCount: result.data.country_count
     }
   }
 
