@@ -15,12 +15,12 @@ StyledSidebarItem.defaultProps = {
 
 const SidebarItem = ({link, children}) => (
   <StyledSidebarItem>
-    <NavLink href={link}>{children}</NavLink>
+    <NavLink fontWeight='normal' color='blue5' href={link}>{children}</NavLink>
   </StyledSidebarItem>
 )
 
 const Sidebar = () => (
-  <Flex flexDirection='column'>
+  <StyledSideBar flexDirection='column'>
     <SidebarItem link='#overview'>
       <FormattedMessage id='Country.Heading.Overview'/>
     </SidebarItem>
@@ -33,7 +33,7 @@ const Sidebar = () => (
     <SidebarItem link='#network-properties'>
       <FormattedMessage id='Country.Heading.NetworkProperties' />
     </SidebarItem>
-  </Flex>
+  </StyledSideBar>
 )
 
 export default Sidebar
