@@ -47,6 +47,11 @@ const CountryBlock = ({countryCode, msmtCount}) => {
   )
 }
 
+// To compenstate for the sticky navigation bar
+const RegionHeaderAnchor = styled.div`
+  height: 48px;
+`
+
 const RegionBlock = ({regionCode, countries}) => {
   const regionName = countryUtil.territoryNames[regionCode]
   // Select countries in the region where we have measuremennts from
@@ -61,7 +66,8 @@ const RegionBlock = ({regionCode, countries}) => {
 
   return (
     <Box my={3}>
-      <Heading h={1} id={regionName} center py={2}>{regionName}</Heading>
+      <RegionHeaderAnchor id={regionName} />
+      <Heading h={1} center py={2}>{regionName}</Heading>
 
       <Flex flexWrap='wrap' py={4}>
         {countries
