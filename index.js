@@ -40,6 +40,10 @@ app.prepare()
       return app.render(req, res, '/country', req.params)
     })
 
+    server.get('/measurement/:report_id', (req, res) => {
+      return app.render(req, res, '/country', req.params)
+    })
+
     // Default catch all
     server.all('*', (req, res) => {
       return handle(req, res)
