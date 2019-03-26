@@ -55,8 +55,9 @@ const RegionBlock = ({regionCode, countries}) => {
   ))
 
   // When there are no measurements from the region
-  // if (measuredCountriesInRegion.length === 0) {
-  // }
+  if (measuredCountriesInRegion.length === 0) {
+    return null
+  }
 
   return (
     <Box my={3}>
