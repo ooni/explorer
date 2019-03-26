@@ -27,22 +27,34 @@ const CountryLink = styled(Link)`
   }
 `
 
+const StyledCountryCard = styled(Box)`
+  border: 1px solid ${props => props.theme.colors.gray3};
+`
+
+const Divider = styled.div`
+  border: 1px solid ${props => props.theme.colors.gray3};
+  margin-bottom: 12px;
+`
+
 const CountryBlock = ({countryCode, msmtCount}) => {
   const href = `/country/${countryCode}`
   return (
-    <Box width={[1/2, 1/4]} my={5}>
-      <NLink href={href}>
-        <CountryLink href={href}>
-          <Flex flexDirection='column'>
-            <Flag center border countryCode={countryCode} size={48} />
-            <Text py={2} fontSize={24} style={{height: '80px'}}>{countryUtil.territoryNames[countryCode]}</Text>
-            <Flex alignItems='center'>
-              <Text mr={2} fontSize={20} fontWeight={600} color='blue9'><FormattedNumber value={msmtCount} /></Text>
-              <Text>Measurments</Text>
+    <Box width={[1/2, 1/4]} my={4} px={3}>
+      <StyledCountryCard p={3}>
+        <NLink href={href}>
+          <CountryLink href={href}>
+            <Flex flexDirection='column'>
+              <Flag center border countryCode={countryCode} size={48} />
+              <Text py={2} fontSize={24} style={{height: '72px'}}>{countryUtil.territoryNames[countryCode]}</Text>
+              <Divider />
+              <Flex alignItems='center'>
+                <Text mr={2} fontSize={20} fontWeight={600} color='blue9'><FormattedNumber value={msmtCount} /></Text>
+                <Text>Measurments</Text>
+              </Flex>
             </Flex>
-          </Flex>
-        </CountryLink>
-      </NLink>
+          </CountryLink>
+        </NLink>
+      </StyledCountryCard>
     </Box>
   )
 }
@@ -69,7 +81,7 @@ const RegionBlock = ({regionCode, countries}) => {
       <RegionHeaderAnchor id={regionName} />
       <Heading h={1} center py={2}>{regionName}</Heading>
 
-      <Flex flexWrap='wrap' py={4}>
+      <Flex flexWrap='wrap' py={2}>
         {countries
           .filter((c => ( measuredCountriesInRegion.indexOf(c.alpha_2) > 0 )))
           .map((country, index) => (
