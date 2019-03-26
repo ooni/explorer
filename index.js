@@ -41,7 +41,7 @@ app.prepare()
     })
 
     server.get('/measurement/:report_id', (req, res) => {
-      return app.render(req, res, '/country', req.params)
+      return app.render(req, res, '/measurement', req.params)
     })
 
     // Default catch all
