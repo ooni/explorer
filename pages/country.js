@@ -104,9 +104,9 @@ export default class Country extends React.Component {
               <CountryContextProvider countryCode={countryCode} countryName={countryName}>
                 <Overview
                   countryName={countryName}
-                  middleboxCount={10 || overviewStats.middlebox_detected_networks}
-                  imCount={1 || overviewStats.im_apps_blocked}
-                  circumventionTools={1 || overviewStats.circumvention_tools_blocked}
+                  middleboxCount={overviewStats.middlebox_detected_networks}
+                  imCount={overviewStats.im_apps_blocked}
+                  circumventionTools={overviewStats.circumvention_tools_blocked}
                   blockedWebsitesCount={100 || overviewStats.websites_confirmed_blocked}
                   testCoverage={testCoverage}
                   networkCoverage={networkCoverage}
