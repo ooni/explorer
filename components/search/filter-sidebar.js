@@ -70,13 +70,13 @@ class FilterSidebar extends React.Component {
 
   onDateChangeFilter (filterName) {
     return ((date) => {
-      this.setState({[filterName]: date.utc().format('YYYY-MM-DD')})
+      this.setState({[filterName]: (date !== '') ? date.utc().format('YYYY-MM-DD') : date})
     })
   }
 
   isSinceValid(currentDate) {
     const { untilFilter } = this.state
-    return currentDate.isBefore(untilFilter)
+    return (untilFilter.length === 0) || currentDate.isBefore(untilFilter)
   }
 
   isUntilValid(currentDate) {
