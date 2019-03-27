@@ -6,7 +6,7 @@ import NLink from 'next/link'
 import styled from 'styled-components'
 import { FormattedMessage } from 'react-intl'
 
-import ExplorerLogo from '../static/ExplorerBeta-HorizontalMonochromeInverted.svg'
+import ExplorerLogo from '../static/images/ExplorerBeta-HorizontalMonochromeInverted.svg'
 
 import {
   Flex,
