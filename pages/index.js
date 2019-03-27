@@ -29,10 +29,7 @@ const HeroUnit = styled.div`
 
 const StatsContainer = styled(Flex)`
   border-radius: 16px;
-  margin-top: -100px;
-  padding: 16px 32px;
-  padding-bottom: 64px;
-  background-color: ${props => props.theme.colors.white};
+  background-color: #ffffff;
 `
 
 const StyledLabel = styled.div`
@@ -65,6 +62,7 @@ const FeatureRow = styled(Flex)`
 `
 
 FeatureRow.defaultProps = {
+  flexWrap: 'wrap',
   alignItems: 'center',
   justifyContent: 'center',
   py: 4
@@ -76,8 +74,7 @@ const FeatureBox = styled(Box)`
 `
 
 FeatureBox.defaultProps = {
-  mx: 3,
-  width: [1, 1/3],
+  width: [1, 1/2],
   lineHeight: 1.5,
 }
 
@@ -136,7 +133,7 @@ export default class LandingPage extends React.Component {
         </HeroUnit>
         <Container>
           <Flex alignItems='center' justifyContent='center'>
-            <StatsContainer>
+            <StatsContainer px={32} py={16} mt={-120} mb={48}>
               <StatsItem
                 label={<FormattedMessage id='Home.Banner.Stats.Measurements' />}
                 unit={measurementCount.unit}
