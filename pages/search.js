@@ -10,6 +10,7 @@ import {
   Button,
   Heading
 } from 'ooni-components'
+import { FormattedMessage } from 'react-intl'
 
 import NavBar from '../components/nav-bar'
 import Layout from '../components/Layout'
@@ -101,14 +102,12 @@ class Search extends React.Component {
 
     let countries = countriesR.data.countries
     countries.sort(sortByKey('name'))
-    // We use XX to denote anything
-    countries.unshift({ name: 'Any', alpha_2: 'XX' })
 
     let testNames = testNamesR.data.test_names
     let testNamesKeyed = {}
     testNames.forEach(v => testNamesKeyed[v.id] = v.name)
     testNames.sort(sortByKey('name'))
-    testNames.unshift({ name: 'Any', id: 'XX' })
+
     return {
       results: measurements.results,
       nextURL: measurements.metadata.next_url,
@@ -315,7 +314,7 @@ class Search extends React.Component {
             && <div>
               <ResultsList results={results} testNamesKeyed={testNamesKeyed} />
               <Flex alignItems='center' justifyContent='center'>
-                <Button onClick={this.loadMore}>Load more</Button>
+                <Button onClick={this.loadMore}><FormattedMessage id='Search.Button.LoadMore' /></Button>
               </Flex>
             </div>
               }

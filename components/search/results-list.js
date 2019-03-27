@@ -6,7 +6,7 @@ import moment from 'moment'
 
 import NLink from 'next/link'
 import styled from 'styled-components'
-
+import { FormattedMessage } from 'react-intl'
 import {
   Flex, Box,
   Link,
@@ -35,21 +35,38 @@ const ResultTagHollow = styled(StyledResultTag)`
   color: ${props => props.theme.colors.gray7};
 `
 
+const testsWithStates = [
+  'web_connectivity',
+  'whatsapp',
+  'facebook_messenger',
+  'telegram',
+  'http_header_field_manipulation',
+  'http_invalid_request_line'
+]
+
 const ResultTag = ({msmt}) => {
-  if (msmt.confirmed === true) {
-    return <ResultTagFilled>
-      Confirmed
-    </ResultTagFilled>
-  //} else if (msmt.failure === true) {
-  //  return <StyledResultTag>
-  //    Failure
-  //  </StyledResultTag>
-  } else if (msmt.anomaly === true) {
-    return <ResultTagHollow>
-      Anomaly
-    </ResultTagHollow>
+  if (testsWithStates.indexOf(msmt.test_name) > -1) {
+    const testName = msmt.testName.replace(/ /gi, '')
+    const computedMessageIdPrefix = `Search.${testName}.Results`
+    if (msmt.confirmed === true) {
+      return <ResultTagFilled>
+        <FormattedMessage id={`${computedMessageIdPrefix}.Blocked`} />
+      </ResultTagFilled>
+    } else if (msmt.failure === true) {
+      return <StyledResultTag>
+        <FormattedMessage id={`${computedMessageIdPrefix}.Error`} />
+      </StyledResultTag>
+    } else if (msmt.anomaly === true) {
+      return <ResultTagHollow>
+        <FormattedMessage id={`${computedMessageIdPrefix}.Anomaly`} />
+      </ResultTagHollow>
+    } else {
+      return <StyledResultTag>
+        <FormattedMessage id={`${computedMessageIdPrefix}.Reachable`} />
+      </StyledResultTag>
+    }
   } else {
-    return <StyledResultTag>Normal</StyledResultTag>
+    return null
   }
 }
 
@@ -96,12 +113,6 @@ const StyledColorCode = styled.div`
   margin-right: 10px;
 `
 
-/*
-const ColorCodeFailed = styled(StyledColorCode)`
-  background-color: ${props => props.theme.colors.orange4};
-`
-*/
-
 const colorNormal = theme.colors.green7
 const colorError = theme.colors.yellow5
 const colorConfirmed = theme.colors.red8
@@ -116,16 +127,25 @@ const ColorCodeAnomaly = styled(StyledColorCode)`
 const ColorCodeNormal = styled(StyledColorCode)`
   background-color: ${colorNormal};
 `
+const ColorCodeFailed = styled(StyledColorCode)`
+  background-color: ${colorError};
+`
+// For tests without a result
+const NoColorCode = styled(StyledColorCode)``
 
 const ColorCode = ({msmt}) => {
-  if (msmt.confirmed === true) {
-    return <ColorCodeConfirmed />
-  //} else if (msmt.failure === true) {
-  //  return <ColorCodeFailed />
-  } else if (msmt.anomaly === true) {
-    return <ColorCodeAnomaly />
+  if (testsWithStates.indexOf(msmt.test_name) > -1) {
+    if (msmt.confirmed === true) {
+      return <ColorCodeConfirmed />
+    } else if (msmt.failure === true) {
+      return <ColorCodeFailed />
+    } else if (msmt.anomaly === true) {
+      return <ColorCodeAnomaly />
+    }
+    return <ColorCodeNormal />
+  } else {
+    return <NoColorCode />
   }
-  return <ColorCodeNormal />
 }
 
 ColorCode.propTypes = {
@@ -235,9 +255,9 @@ const StyledLegendItem = styled.div`
   margin-right: 20px;
 `
 
-const LegendItem = ({color, label}) => {
+const LegendItem = ({color, children}) => {
   return <StyledLegendItem>
-    <LegendColorBox color={color}/> {label}
+    <LegendColorBox color={color}/> {children}
   </StyledLegendItem>
 }
 
@@ -258,10 +278,18 @@ const ResultsList = ({results, testNamesKeyed}) => {
   return (
     <div>
       <LegendContainer>
-        <LegendItem color={colorAnomaly} label='Anomaly' />
-        <LegendItem color={colorConfirmed} label='Confirmed' />
-        <LegendItem color={colorNormal} label='OK' />
-        <LegendItem color={colorError} label='Error' />
+        <LegendItem color={colorNormal}>
+          <FormattedMessage id='Search.Bullet.Reachable' />
+        </LegendItem>
+        <LegendItem color={colorAnomaly}>
+          <FormattedMessage id='Search.Bullet.Anomaly' />
+        </LegendItem>
+        <LegendItem color={colorConfirmed}>
+          <FormattedMessage id='Search.Bullet.Blocked' />
+        </LegendItem>
+        <LegendItem color={colorError}>
+          <FormattedMessage id='Search.Bullet.Error' />
+        </LegendItem>
       </LegendContainer>
       <Divider width='100%' color='gray5'/>
       <ResultContainer mb={2}>
