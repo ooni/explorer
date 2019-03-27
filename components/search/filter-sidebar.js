@@ -76,12 +76,20 @@ class FilterSidebar extends React.Component {
 
   isSinceValid(currentDate) {
     const { untilFilter } = this.state
-    return (untilFilter.length === 0) || currentDate.isBefore(untilFilter)
+    if (untilFilter.length !== 0) {
+      return currentDate.isBefore(untilFilter)
+    } else {
+      return currentDate.isSameOrBefore(new Date())
+    }
   }
 
   isUntilValid(currentDate) {
     const { sinceFilter } = this.state
-    return currentDate.isAfter(sinceFilter) && currentDate.isSameOrBefore(new Date())
+    if (sinceFilter.length !== 0) {
+      return currentDate.isAfter(sinceFilter) && currentDate.isSameOrBefore(new Date())
+    } else {
+      return currentDate.isSameOrBefore(new Date())
+    }
   }
 
   onClickApplyFilter() {
