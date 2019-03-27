@@ -66,20 +66,21 @@ ASNBox.propTypes = {
 // XXX add this to the design system
 const StyledViewDetailsLink = styled(Link)`
   cursor: pointer;
+  text-decoration: none;
   color: ${props => props.theme.colors.blue5};
   &:hover {
     color: ${props => props.theme.colors.blue9};
   }
 `
 
-const ViewDetailsLink = ({reportId, input}) => {
+const ViewDetailsLink = ({reportId, input, children}) => {
   let href = `/measurement?report_id=${reportId}`
   if (input) {
     href += `&input=${input}`
   }
   return (
     <NLink href={href}>
-      <StyledViewDetailsLink href={href}>»</StyledViewDetailsLink>
+      <StyledViewDetailsLink href={href}>{children}</StyledViewDetailsLink>
     </NLink>
   )
 }
@@ -167,50 +168,52 @@ const ResultItem = ({msmt}) => {
     }
   }
   return (
-    <ResultRow alignItems='center'>
-      <Box width={1/3}>
-        <Flex alignItems='center'>
-          <Box flex='auto' width={1/16}>
-            <ColorCode msmt={msmt} />
-          </Box>
-          <Box flex='auto' width={2/16}>
-            <Text bold color='gray8'>{msmt.probe_cc}</Text>
-          </Box>
-          <Box flex='auto' width={5/16}>
-            <Flag countryCode={msmt.probe_cc} size={32} />
-          </Box>
-          <Box flex='auto' width={8/16}>
-            <ASNBox asn={msmt.probe_asn} />
-          </Box>
-        </Flex>
-      </Box>
-      <Box width={2/3}>
-        <Flex flexDirection='column'>
-          <Box>
-            {input &&
-              <ResultInput>
-                {input}
-              </ResultInput>}
-          </Box>
-          <Box>
-            <Flex alignItems='center'>
-              <Box pr={2} width={7/16}>
-                {msmt.testName}
-              </Box>
-              <Box width={4/16}>
-                {moment(msmt.measurement_start_time).format('YYYY-MM-DD')}
-              </Box>
-              <Box width={4/16}>
-                <ResultTag msmt={msmt} />
-              </Box>
-              <Box width={1/16}>
-                <ViewDetailsLink reportId={msmt.report_id} input={msmt.input} />
-              </Box>
-            </Flex>
-          </Box>
-        </Flex>
-      </Box>
-    </ResultRow>
+    <ViewDetailsLink reportId={msmt.report_id} input={msmt.input}>
+      <ResultRow alignItems='center'>
+        <Box width={1/3}>
+          <Flex alignItems='center'>
+            <Box flex='auto' width={1/16}>
+              <ColorCode msmt={msmt} />
+            </Box>
+            <Box flex='auto' width={2/16}>
+              <Text bold color='gray8'>{msmt.probe_cc}</Text>
+            </Box>
+            <Box flex='auto' width={5/16}>
+              <Flag countryCode={msmt.probe_cc} size={32} />
+            </Box>
+            <Box flex='auto' width={8/16}>
+              <ASNBox asn={msmt.probe_asn} />
+            </Box>
+          </Flex>
+        </Box>
+        <Box width={2/3}>
+          <Flex flexDirection='column'>
+            <Box>
+              {input &&
+                <ResultInput>
+                  {input}
+                </ResultInput>}
+            </Box>
+            <Box>
+              <Flex alignItems='center'>
+                <Box pr={2} width={7/16}>
+                  {msmt.testName}
+                </Box>
+                <Box width={4/16}>
+                  {moment(msmt.measurement_start_time).format('YYYY-MM-DD')}
+                </Box>
+                <Box width={4/16}>
+                  <ResultTag msmt={msmt} />
+                </Box>
+                <Box width={1/16}>
+
+                </Box>
+              </Flex>
+            </Box>
+          </Flex>
+        </Box>
+      </ResultRow>
+    </ViewDetailsLink>
   )
 }
 
