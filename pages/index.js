@@ -144,7 +144,7 @@ export default class LandingPage extends React.Component {
             />
           </StatsContainer>
           <Flex justifyContent='center'>
-            <Box width={2/3}>
+            <Box width={[1, 2/3]}>
               <Text fontSize={20} lineHeight={1.5}>
                 <FormattedMessage id='Home.About.SummaryText' />
               </Text>
