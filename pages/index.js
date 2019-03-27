@@ -164,7 +164,8 @@ export default class LandingPage extends React.Component {
             </FeatureBox>
           </FeatureRow>
           {/* Search & Filter */}
-          <FeatureRow>
+          {/* Arrange in {[img, para], [img, para], [img, para]} pattern on smaller screens */}
+          <FeatureRow flexDirection={['column-reverse', 'row']}>
             <FeatureBox>
               <FeatureBoxTitle>
                 <FormattedMessage id='Home.Search&Filter.Title' />
