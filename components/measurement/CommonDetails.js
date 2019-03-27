@@ -71,7 +71,6 @@ const CommonDetails = ({
     <React.Fragment>
       <Flex my={4}>
         <DetailsBox
-          title={intl.formatMessage({ id: 'Measurement.CommonDetails.OtherDetails.Heading' })}
           items={items}
           bg={theme.colors.gray2}
         />
