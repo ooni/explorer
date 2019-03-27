@@ -37,11 +37,11 @@ const StyledLabel = styled.div`
 `
 
 const StyledStatsItem = styled(Box)`
-  padding: 16px;
+  text-align: center;
 `
 
 const StatsItem = ({label, unit, value }) => (
-  <StyledStatsItem width={1/3} mx={4} color='blue9'>
+  <StyledStatsItem color='blue9' width={[1, 1/3]} p={3}>
     <Text fontSize={48} fontWeight={300}>
       {value}
       <Text is='span' fontSize={32}>{unit}</Text>
@@ -51,11 +51,6 @@ const StatsItem = ({label, unit, value }) => (
     </StyledLabel>
   </StyledStatsItem>
 )
-
-StatsItem.defaultProps = {
-  width: [1/3],
-  m: 4,
-}
 
 const FeatureRow = styled(Flex)`
 
@@ -132,24 +127,22 @@ export default class LandingPage extends React.Component {
           </Container>
         </HeroUnit>
         <Container>
-          <Flex alignItems='center' justifyContent='center'>
-            <StatsContainer px={32} py={16} mt={-120} mb={48}>
-              <StatsItem
-                label={<FormattedMessage id='Home.Banner.Stats.Measurements' />}
-                unit={measurementCount.unit}
-                value={measurementCount.value}
-              />
-              <StatsItem
-                label={<FormattedMessage id='Home.Banner.Stats.Countries' />}
-                value={countryCount}
-              />
-              <StatsItem
-                label={<FormattedMessage id='Home.Banner.Stats.Networks' />}
-                unit={asnCount.unit}
-                value={asnCount.value}
-              />
-            </StatsContainer>
-          </Flex>
+          <StatsContainer px={32} py={16} mx={[1, '25%']} mt={-120} mb={48} flexWrap='wrap'>
+            <StatsItem
+              label={<FormattedMessage id='Home.Banner.Stats.Measurements' />}
+              unit={measurementCount.unit}
+              value={measurementCount.value}
+            />
+            <StatsItem
+              label={<FormattedMessage id='Home.Banner.Stats.Countries' />}
+              value={countryCount}
+            />
+            <StatsItem
+              label={<FormattedMessage id='Home.Banner.Stats.Networks' />}
+              unit={asnCount.unit}
+              value={asnCount.value}
+            />
+          </StatsContainer>
           <Flex justifyContent='center'>
             <Box width={2/3}>
               <Text fontSize={20} lineHeight={1.5}>
