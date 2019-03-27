@@ -88,6 +88,10 @@ const FeatureBoxTitle = styled(Text)`
   margin-bottom: 12px;
 `
 
+const ImgBox = styled.img`
+  width: 100%;
+`
+
 export default class LandingPage extends React.Component {
 
   static async getInitialProps () {
@@ -160,7 +164,7 @@ export default class LandingPage extends React.Component {
           {/* Websites & Apps */}
           <FeatureRow>
             <FeatureBox>
-              <img src='/static/countries.png' alt='Websites and Apps' />
+              <ImgBox src='/static/images/websites-apps.png' alt='Websites and Apps' />
             </FeatureBox>
             <FeatureBox>
               <FeatureBoxTitle>
@@ -178,13 +182,13 @@ export default class LandingPage extends React.Component {
               <FormattedMessage id='Home.Search&Filter.SummaryText' />
             </FeatureBox>
             <FeatureBox>
-              <img src='/static/countries.png' alt='Websites and Apps' />
+              <ImgBox src='/static/images/search.png' alt='Websites and Apps' />
             </FeatureBox>
           </FeatureRow>
           {/* Network Properties */}
           <FeatureRow>
             <FeatureBox>
-              <img src='/static/countries.png' alt='Search and Filter' />
+              <ImgBox src='/static/images/network-performance.png' alt='Search and Filter' />
             </FeatureBox>
             <FeatureBox>
               <FeatureBoxTitle>
