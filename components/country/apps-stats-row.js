@@ -4,12 +4,30 @@ import { FormattedMessage } from 'react-intl'
 import { Flex, Box } from 'ooni-components'
 import styled from 'styled-components'
 import MdArrowDropDownCircle from 'react-icons/lib/md/arrow-drop-down-circle'
+import {
+  NettestWhatsApp,
+  NettestTelegram,
+  NettestFacebookMessenger
+} from 'ooni-components/dist/icons'
 import moment from 'moment'
 
 import { testNames } from '../test-info'
 import AppsStatChart from './apps-stats-chart'
 
 const NETWORK_STATS_PER_PAGE = 4
+
+const AppIcon = ({ app, size }) => {
+  switch(app) {
+  case 'whatsapp':
+    return <NettestWhatsApp size={size} />
+  case 'telegram':
+    return <NettestTelegram size={size} />
+  case 'facebook_messenger':
+    return <NettestFacebookMessenger size={size} />
+  default:
+    return <React.Fragment />
+  }
+}
 
 const StyledRow = styled(Box)`
   border: 1px solid ${props => props.theme.colors.gray3};
@@ -18,7 +36,7 @@ const StyledRow = styled(Box)`
 const NetworkRow = ({ asn, app }) => (
   <Box width={1}>
     <Flex alignItems='center'>
-      <Box width={1/3}>
+      <Box width={1/3} pl={4}>
         <strong>AS{ asn }</strong>
       </Box>
       <Box width={2/3}>
@@ -104,11 +122,8 @@ class AppsStatRow extends React.Component {
     return (
       <StyledRow px={2} py={3}>
         <Flex flexWrap='wrap' alignItems='center'>
-          {/* TODO: Add App Icon
-            <Box width={1/12}>
-            </Box>
-          */}
           <Box width={4/12}>
+            <AppIcon app={app} size={36} />
             {testNames[app].name}
           </Box>
           <Box width={4/12}>
