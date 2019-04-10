@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Flex, Box } from 'ooni-components'
+import { Flex, Box, theme } from 'ooni-components'
 import {
   VictoryChart,
   VictoryBar,
@@ -27,8 +27,8 @@ const StyledTestGroupSelector = styled(Flex)`
 `
 const TestGroupSelector = ({ testGroup, active, onClick }) => (
   <StyledTestGroupSelector m={2} onClick={() => onClick(testGroup)}>
-    <Circle color={active ? testGroups[testGroup].color : '#ced4da'} />
-    <Box mx={1} color={!active && '#ced4da' }> {testGroups[testGroup].name} </Box>
+    <Circle color={active ? testGroups[testGroup].color : theme.colors.gray4} />
+    <Box mx={1} color={!active && theme.colors.gray4 }> {testGroups[testGroup].name} </Box>
   </StyledTestGroupSelector>
 )
 
@@ -159,7 +159,7 @@ class TestsByGroup extends React.PureComponent {
               y='count'
               style={{
                 data: {
-                  stroke: '#0588CB',
+                  stroke: theme.colors.blue5,
                 }
               }}
             />
