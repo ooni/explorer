@@ -118,33 +118,17 @@ const Overview = ({
       />
       <BoxWithTitle title={<FormattedMessage id='Country.Overview.FeaturedResearch' />}>
         {
-          (featuredArticles.length === 0)
+          (featuredArticles.length === 1)
             ? <FormattedMessage id='Country.Overview.FeaturedResearch.None' />
             : <ul>
-              <li>
-                <FeaturedArticle
-                  link='https://ooni.io/post/cuba-referendum/'
-                  title='Cuba blocks independent media amid 2019 constitutional referendum'
-                />
-              </li>
-              <li>
-                <FeaturedArticle
-                  link='https://ooni.io/post/ooni-software-development-guidelines/'
-                  title='OONI Software Development Guidelines'
-                />
-              </li>
-              <li>
-                <FeaturedArticle
-                  link='https://ooni.io/post/ooni-probe-android-200-incident/'
-                  title='OONI Probe Android 2.0.0 Incident Report'
-                />
-              </li>
-              <li>
-                <FeaturedArticle
-                  link='https://ooni.io/post/venezuela-blocking-wikipedia-and-social-media-2019/'
-                  title='From the blocking of Wikipedia to Social Media: Venezuela&quote;s Political Crisis'
-                />
-              </li>
+              {featuredArticles.map((article, index) => (
+                <li key={index}>
+                  <FeaturedArticle
+                    link='https://ooni.io/post/cuba-referendum/'
+                    title='Cuba blocks independent media amid 2019 constitutional referendum'
+                  />
+                </li>
+              ))}
             </ul>
         }
       </BoxWithTitle>
