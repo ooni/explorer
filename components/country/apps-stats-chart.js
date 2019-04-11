@@ -10,6 +10,7 @@ import {
 import { theme } from 'ooni-components'
 
 import { inCountry } from './country-context'
+import SpinLoader from '../vendor/spin-loader'
 
 class AppsStatChart extends React.Component {
   constructor(props) {
@@ -45,7 +46,7 @@ class AppsStatChart extends React.Component {
     const { data, fetching } = this.state
 
     if (fetching) {
-      return (<div> Loading ... </div>)
+      return (<SpinLoader />)
     }
 
     const yMax = data.reduce((max, item) => (

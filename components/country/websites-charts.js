@@ -4,6 +4,7 @@ import { FormattedMessage } from 'react-intl'
 import { Flex, Box, Heading, Text } from 'ooni-components'
 import axios from 'axios'
 import URLChart from './url-chart'
+import SpinLoader from '../vendor/spin-loader'
 
 const defaultState = {
   resultsPerPage: 5,
@@ -83,7 +84,7 @@ class TestsByCategoryInNetwork extends React.Component {
     const { testedUrlsCount, testedUrls, currentPage, resultsPerPage, fetching } = this.state
 
     if (fetching) {
-      return (<Heading h={4}>Loading...</Heading>)
+      return (<SpinLoader />)
     }
 
     return (

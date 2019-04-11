@@ -13,6 +13,8 @@ import {
 import { theme } from 'ooni-components'
 import styled from 'styled-components'
 
+import SpinLoader from '../vendor/spin-loader'
+
 const Circle = styled.div`
   position: relative;
   top: 0;
@@ -105,7 +107,7 @@ class URLChart extends React.Component {
     }
 
     if (fetching) {
-      return (<div> Loading ... </div>)
+      return (<SpinLoader />)
     }
 
     return (

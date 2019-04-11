@@ -7,6 +7,7 @@ import SectionHeader from './section-header'
 import { SimpleBox } from './box'
 import PeriodFilter from './period-filter'
 import NetworkStats from './network-stats'
+import SpinLoader from '../vendor/spin-loader'
 
 const NETWORK_STATS_PER_PAGE = 4
 
@@ -73,7 +74,7 @@ class NetworkPropertiesSection extends React.Component {
     const { fetching, visibleNetworks, totalNetworks, data } = this.state
 
     if (fetching) {
-      return (<div> Loading ... </div>)
+      return (<SpinLoader />)
     }
     const content = []
 
