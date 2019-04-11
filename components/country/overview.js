@@ -118,7 +118,7 @@ const Overview = ({
       />
       <BoxWithTitle title={<FormattedMessage id='Country.Overview.FeaturedResearch' />}>
         {
-          (featuredArticles.length === 1)
+          (featuredArticles.length === 0)
             ? <FormattedMessage id='Country.Overview.FeaturedResearch.None' />
             : <ul>
               {featuredArticles.map((article, index) => (
