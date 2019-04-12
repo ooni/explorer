@@ -7,7 +7,6 @@ import {
   VictoryStack,
   VictoryBar,
   VictoryAxis,
-  VictoryTheme,
   VictoryVoronoiContainer
 } from 'victory'
 import { theme } from 'ooni-components'
@@ -181,7 +180,7 @@ class URLChart extends React.Component {
             </Box>
           </Flex>
         </Box>
-        {/* 
+        {/*
           <Box mt={4}>
           <ToggleMinimizeButton minimized={minimized} onToggle={this.onToggleMinimize} />
           </Box>

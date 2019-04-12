@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl'
 import styled from 'styled-components'
 import { Flex, Box, Heading } from 'ooni-components'
 import SectionHeader from './section-header'
-import { SimpleBox, BoxWithTitle } from './box'
+import { BoxWithTitle } from './box'
 import TestsByGroup from './overview-charts'
 import {
   NettestGroupWebsites,

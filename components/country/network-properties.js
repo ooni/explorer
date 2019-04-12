@@ -1,6 +1,6 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { Flex, Box, Heading, Input } from 'ooni-components'
+import { Flex, Heading } from 'ooni-components'
 import axios from 'axios'
 
 import SectionHeader from './section-header'

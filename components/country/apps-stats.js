@@ -45,7 +45,7 @@ class AppsStatsGroup extends React.Component {
     })
   }
 
-  static getDerivedStateFromprops(props, state) {
+  static getDerivedStateFromprops() {
     return defaultState
   }
 

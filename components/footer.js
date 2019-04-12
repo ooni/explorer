@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Flex, Box, Container, Avatar } from 'ooni-components'
+import { Flex, Box, Container } from 'ooni-components'
 import ExplorerLogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochrome.svg'
 import NLink from 'next/link'
 import { injectIntl, intlShape } from 'react-intl'

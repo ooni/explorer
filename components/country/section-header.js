@@ -1,5 +1,4 @@
-import React from 'react'
-import { Flex, Box } from 'ooni-components'
+import { Flex } from 'ooni-components'
 import styled from 'styled-components'
 
 const SectionHeader = styled(Flex)`

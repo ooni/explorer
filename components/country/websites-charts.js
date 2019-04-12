@@ -23,7 +23,7 @@ class TestsByCategoryInNetwork extends React.Component {
     this.fetchUrlsInNetwork()
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate() {
     if (this.state.testedUrls === null) {
       this.fetchUrlsInNetwork()
     }
