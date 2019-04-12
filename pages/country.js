@@ -108,6 +108,9 @@ export default class Country extends React.Component {
                   imCount={overviewStats.im_apps_blocked}
                   circumventionTools={overviewStats.circumvention_tools_blocked}
                   blockedWebsitesCount={overviewStats.websites_confirmed_blocked}
+                  networkCount={overviewStats.network_count}
+                  measurementCount={overviewStats.measurement_count}
+                  measuredSince={overviewStats.first_bucket_date}
                   testCoverage={testCoverage}
                   networkCoverage={networkCoverage}
                   fetchTestCoverageData={this.fetchTestCoverageData}

@@ -59,17 +59,11 @@ const Overview = ({
   imCount,
   circumventionTools,
   blockedWebsitesCount,
+  networkCount,
+  measurementCount,
+  measuredSince,
   featuredArticles = [],
 }) => {
-  const measurementCount = testCoverage.reduce((total, {count}) => (
-    total + count
-  ), 0)
-  const networkCovered = networkCoverage.reduce((total, {count}) => (
-    total + count
-  ), 0)
-
-  const startDate = testCoverage[0].test_day
-
   return (
     <React.Fragment>
       <SectionHeader>
@@ -137,9 +131,9 @@ const Overview = ({
           values={{
             measurementCount,
             countryName,
-            startDate: new Date(startDate).toLocaleDateString(),
-            networkCovered,
-            totalNetworks: 9999,
+            startDate: new Date(measuredSince).toLocaleDateString(),
+            networkCovered: networkCount,
+            totalNetworks: 'uh....🤔 many',
             mostBlockedASNname: 'Blocker McBlocky Inc.',
             mostBlockedASN: 'AS5h013'
           }}
