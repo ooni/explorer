@@ -111,6 +111,7 @@ export default class Country extends React.Component {
                   testCoverage={testCoverage}
                   networkCoverage={networkCoverage}
                   fetchTestCoverageData={this.fetchTestCoverageData}
+                  // featuredArticles={[{title: 'Title', link: 'https://ooni.nu'}]}
                 />
                 <WebsitesSection />
                 <AppsSection />

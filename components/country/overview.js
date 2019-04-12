@@ -123,10 +123,7 @@ const Overview = ({
             : <ul>
               {featuredArticles.map((article, index) => (
                 <li key={index}>
-                  <FeaturedArticle
-                    link='https://ooni.io/post/cuba-referendum/'
-                    title='Cuba blocks independent media amid 2019 constitutional referendum'
-                  />
+                  <FeaturedArticle link={article.link} title={article.title} />
                 </li>
               ))}
             </ul>
