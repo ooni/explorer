@@ -17,8 +17,8 @@ module.exports = withSourceMaps(withCSS({
       new webpack.DefinePlugin({
         'process.env.MEASUREMENTS_URL': JSON.stringify(process.env.MEASUREMENTS_URL || 'https://api.test.ooni.io'),
         'process.env.EXPLORER_URL': JSON.stringify(process.env.EXPLORER_URL  || 'http://127.0.0.1:' + process.env.PORT),
-        'process.env.SENTRY_DSN': JSON.stringify(process.env.SENTRY_DSN),
-        'process.env.SENTRY_RELEASE': JSON.stringify(buildId)
+        'process.env.SENTRY_DSN': JSON.stringify(process.env.SENTRY_DSN || 'https://49af7fff247c445b9a7c98ee21ddfd2f@sentry.io/1427510'),
+        'process.env.SENTRY_RELEASE': JSON.stringify(buildId) || 'development'
       })
     )
     config.module.rules.push({
