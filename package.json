@@ -8,6 +8,9 @@
   "dependencies": {
     "@babel/cli": "7.0.0-beta.42",
     "@babel/core": "7.0.0-beta.42",
+    "@sentry/browser": "^5.0.8",
+    "@sentry/integrations": "^5.0.8",
+    "@sentry/node": "^5.0.8",
     "@zeit/next-css": "^0.2.0",
     "@zeit/next-source-maps": "^0.0.2",
     "axios": "^0.15.3",
@@ -37,6 +40,7 @@
     "react-json-view": "^1.16.0",
     "react-no-ssr": "^1.1.0",
     "rebass": "2.3.3",
+    "sentry-testkit": "^2.2.0",
     "styled-components": "3.4.10",
     "three": "^0.86.0",
     "tween.js": "^16.6.0",
@@ -59,7 +63,7 @@
     "mustache": "^2.3.0"
   },
   "scripts": {
-    "dev": "NODE_ENV=development MEASUREMENTS_URL=http://api.test.ooni.io node index.js",
+    "dev": "NODE_ENV=development MEASUREMENTS_URL=http://api.test.ooni.io SENTRY_DSN=https://49af7fff247c445b9a7c98ee21ddfd2f@sentry.io/1427510 node index.js",
     "build-translations": "node ./scripts/build-translations.js",
     "build": "next build",
     "export": "next export",
