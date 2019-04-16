@@ -55,7 +55,7 @@ export default class MyApp extends App {
 
     // Store the event id at this point as we don't have access to it within
     // `getDerivedStateFromError`.
-    this.setState({ errorEventId })
+    this.setState({ errorEventId, hasError: true })
   }
 
   render () {
