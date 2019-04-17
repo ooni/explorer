@@ -133,9 +133,8 @@ const Overview = ({
             countryName,
             startDate: new Date(measuredSince).toLocaleDateString(),
             networkCovered: networkCount,
-            totalNetworks: 'uh....🤔 many',
-            mostBlockedASNname: 'Blocker McBlocky Inc.',
-            mostBlockedASN: 'AS5h013'
+            mostMeasuredASName: 'NA',
+            mostMeasuredASNumber: 'NA'
           }}
         />
       </SummaryText>
