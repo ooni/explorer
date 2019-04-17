@@ -22,6 +22,17 @@ const handle = app.getRequestHandler()
 
 const server = express()
 
+const sourcemapsForSentryOnly = token => (req, res, next) => {
+  // In production we only want to serve source maps for sentry
+  if (!dev && !!token && req.headers['x-sentry-token'] !== token) {
+    res
+      .status(401)
+      .send('Authentication access token is required to access the source map.')
+    return
+  }
+  next()
+}
+
 app.prepare()
   .then(() => {
     return new Promise((resolve) => {
@@ -30,6 +41,10 @@ app.prepare()
     })
   })
   .then(() => {
+    const { Sentry } = require('./utils/sentry')(app.buildId)
+    // This attaches request information to sentry errors
+    server.use(Sentry.Handlers.requestHandler())
+    server.get(/\.map$/, sourcemapsForSentryOnly(process.env.SENTRY_TOKEN))
 
     server.use('/_/world-atlas',
       express.static(__dirname + '/node_modules/world-atlas/world/'))
@@ -48,6 +63,9 @@ app.prepare()
     server.all('*', (req, res) => {
       return handle(req, res)
     })
+
+    // This handles errors if they are thrown before raching the app
+    server.use(Sentry.Handlers.errorHandler())
 
     server.listen(process.env.PORT, err => {
       if (err) {
