@@ -5,6 +5,7 @@ import SectionHeader from './section-header'
 import { SimpleBox } from './box'
 import PeriodFilter from './period-filter'
 import AppsStatsGroup from './apps-stats'
+import AppsStatsCircumvention from './apps-stats-circumvention'
 
 const AppsSection = () => (
   <React.Fragment>
@@ -24,10 +25,10 @@ const AppsSection = () => (
       title={<FormattedMessage id='Country.Overview.TestsByClass.InstantMessaging' />}
       testGroup='im'
     />
-    {/* <AppsStatGroup
+    {<AppsStatsCircumvention
       title={<FormattedMessage id='Country.Overview.TestsByClass.Circumvention'/>}
       testGroup='circumvention'
-    /> */}
+    />}
   </React.Fragment>
 )
 
