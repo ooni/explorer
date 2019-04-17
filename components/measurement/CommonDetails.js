@@ -1,7 +1,7 @@
 /* global require */
 import React from 'react'
 import PropTypes from 'prop-types'
-
+import styled from 'styled-components'
 import {
   Heading,
   Button,
@@ -22,8 +22,18 @@ class JsonViewer extends React.Component {
     const {
       src
     } = this.props
+    const StyledReactJsonContainer = styled.div`
+      .string-value {
+        text-overflow: ellipsis;
+        max-width: 800px;
+        overflow: hidden;
+        display: inline-block;
+      }
+    `
     return (
-      <ReactJson src={src} />
+      <StyledReactJsonContainer>
+        <ReactJson src={src} />
+      </StyledReactJsonContainer>
     )
   }
 }
