@@ -25,6 +25,7 @@
     "file-loader": "^1.1.11",
     "flag-icon-css": "^2.9.0",
     "immutable": "^3.8.1",
+    "lodash.debounce": "^4.0.8",
     "lodash.random": "^3.2.0",
     "moment": "^2.20.1",
     "next": "6.0.3",

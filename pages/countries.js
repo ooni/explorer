@@ -4,11 +4,11 @@ import NLink from 'next/link'
 import axios from 'axios'
 import styled from 'styled-components'
 import { FormattedMessage, FormattedNumber } from 'react-intl'
-
+import debounce from 'lodash.debounce'
 import {
   Flex, Box,
   Container,
-  Link,
+  Link, Input,
   Heading,
 } from 'ooni-components'
 import { Text } from 'rebass'
@@ -80,10 +80,9 @@ const RegionBlock = ({regionCode, countries}) => {
     <Box my={3}>
       <RegionHeaderAnchor id={regionName} />
       <Heading h={1} center py={2}>{regionName}</Heading>
-
       <Flex flexWrap='wrap' py={2}>
         {countries
-          .filter((c => ( measuredCountriesInRegion.indexOf(c.alpha_2) > 0 )))
+          .filter((c => ( measuredCountriesInRegion.indexOf(c.alpha_2) > -1 )))
           .map((country, index) => (
             <CountryBlock key={index} countryCode={country.alpha_2} msmtCount={country.count} />
           ))
@@ -104,8 +103,31 @@ const JumpToLink = styled.a`
   text-decoration: none;
   padding-right: 30px
 `
+const NoCountriesFound = ({ searchTerm }) => (
+  <Flex justifyContent='center'>
+    <Box width={1/2} m={5}>
+      <Text textAlign='center' fontSize={5}>
+        {/* TODO Add to copy */}
+        <FormattedMessage
+          id='Countries.Search.NoCountriesFound'
+          values={{ searchTerm }}
+        />
+      </Text>
+    </Box>
+  </Flex>
+)
 
-export default class Countries extends React.Component {
+class Countries extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      initial: true,
+      searchTerm: '',
+      filteredCountries: []
+    }
+    this.onSearchChange = debounce(this.onSearchChange, 300)
+  }
+
   static async getInitialProps () {
     const client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
     const result = await client.get('/api/_/countries')
@@ -114,8 +136,28 @@ export default class Countries extends React.Component {
     }
   }
 
+  onSearchChange (searchTerm) {
+    const filteredCountries = this.props.countries.filter((country) => (
+      country.name.toLowerCase().indexOf(searchTerm) > -1
+    ))
+    this.setState({
+      filteredCountries,
+      searchTerm
+    })
+  }
+
+  static getDerivedStateFromProps (props, state) {
+    if (state.filteredCountries.length === 0 && state.initial === true) {
+      return {
+        filteredCountries: props.countries,
+        initial: false
+      }
+    }
+    return state
+  }
+
   render () {
-    const { countries } = this.props
+    const { filteredCountries, searchTerm } = this.state
     // Africa Americas Asia Europe Oceania Antarctica
     const regions = ['002', '019', '142', '150', '009', 'AQ']
 
@@ -129,20 +171,33 @@ export default class Countries extends React.Component {
 
         <JumpToContainer>
           <Container>
-            <Text fontWeight='bold' pb={2}><FormattedMessage id='Countries.Heading.JumpToContinent' />:</Text>
-            <JumpToLink href="#Africa">Africa</JumpToLink>
-            <JumpToLink href="#Americas">Americas</JumpToLink>
-            <JumpToLink href="#Asia">Asia</JumpToLink>
-            <JumpToLink href="#Europe">Europe</JumpToLink>
-            <JumpToLink href="#Antartica">Antarctica</JumpToLink>
+            <Flex justifyContent='space-between'>
+              <Box>
+                <Text fontWeight='bold' pb={2}><FormattedMessage id='Countries.Heading.JumpToContinent' />:</Text>
+                <JumpToLink href="#Africa">Africa</JumpToLink>
+                <JumpToLink href="#Americas">Americas</JumpToLink>
+                <JumpToLink href="#Asia">Asia</JumpToLink>
+                <JumpToLink href="#Europe">Europe</JumpToLink>
+                <JumpToLink href="#Antartica">Antarctica</JumpToLink>
+              </Box>
+              <Box>
+                <Input
+                  onChange={(e) => this.onSearchChange(e.target.value)}
+                  placeholder='Search for Countries'
+                  error={filteredCountries.length === 0}
+                />
+              </Box>
+            </Flex>
           </Container>
         </JumpToContainer>
-
         <Container>
           {
-            regions.map((regionCode, index) => (
-              <RegionBlock key={index} regionCode={regionCode} countries={countries} />
-            ))
+            // Show a message when there are no countries to show, when search is empty
+            (filteredCountries.length === 0)
+              ? <NoCountriesFound searchTerm={searchTerm} />
+              : regions.map((regionCode, index) => (
+                <RegionBlock key={index} regionCode={regionCode} countries={filteredCountries} />
+              ))
           }
         </Container>
       </Layout>
@@ -150,3 +205,5 @@ export default class Countries extends React.Component {
   }
 
 }
+
+export default Countries
