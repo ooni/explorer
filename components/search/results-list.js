@@ -6,7 +6,7 @@ import moment from 'moment'
 
 import NLink from 'next/link'
 import styled from 'styled-components'
-
+import { FormattedMessage } from 'react-intl'
 import {
   Flex, Box,
   Link,
@@ -35,21 +35,38 @@ const ResultTagHollow = styled(StyledResultTag)`
   color: ${props => props.theme.colors.gray7};
 `
 
+const testsWithStates = [
+  'web_connectivity',
+  'whatsapp',
+  'facebook_messenger',
+  'telegram',
+  'http_header_field_manipulation',
+  'http_invalid_request_line'
+]
+
 const ResultTag = ({msmt}) => {
-  if (msmt.confirmed === true) {
-    return <ResultTagFilled>
-      Confirmed
-    </ResultTagFilled>
-  //} else if (msmt.failure === true) {
-  //  return <StyledResultTag>
-  //    Failure
-  //  </StyledResultTag>
-  } else if (msmt.anomaly === true) {
-    return <ResultTagHollow>
-      Anomaly
-    </ResultTagHollow>
+  if (testsWithStates.indexOf(msmt.test_name) > -1) {
+    const testName = msmt.testName.replace(/ /gi, '')
+    const computedMessageIdPrefix = `Search.${testName}.Results`
+    if (msmt.confirmed === true) {
+      return <ResultTagFilled>
+        <FormattedMessage id={`${computedMessageIdPrefix}.Blocked`} />
+      </ResultTagFilled>
+    } else if (msmt.failure === true) {
+      return <StyledResultTag>
+        <FormattedMessage id={`${computedMessageIdPrefix}.Error`} />
+      </StyledResultTag>
+    } else if (msmt.anomaly === true) {
+      return <ResultTagHollow>
+        <FormattedMessage id={`${computedMessageIdPrefix}.Anomaly`} />
+      </ResultTagHollow>
+    } else {
+      return <StyledResultTag>
+        <FormattedMessage id={`${computedMessageIdPrefix}.Reachable`} />
+      </StyledResultTag>
+    }
   } else {
-    return <StyledResultTag>Normal</StyledResultTag>
+    return null
   }
 }
 
@@ -66,20 +83,21 @@ ASNBox.propTypes = {
 // XXX add this to the design system
 const StyledViewDetailsLink = styled(Link)`
   cursor: pointer;
+  text-decoration: none;
   color: ${props => props.theme.colors.blue5};
   &:hover {
     color: ${props => props.theme.colors.blue9};
   }
 `
 
-const ViewDetailsLink = ({reportId, input}) => {
+const ViewDetailsLink = ({reportId, input, children}) => {
   let href = `/measurement?report_id=${reportId}`
   if (input) {
     href += `&input=${input}`
   }
   return (
     <NLink href={href}>
-      <StyledViewDetailsLink href={href}>»</StyledViewDetailsLink>
+      <StyledViewDetailsLink href={href}>{children}</StyledViewDetailsLink>
     </NLink>
   )
 }
@@ -95,12 +113,6 @@ const StyledColorCode = styled.div`
   margin-right: 10px;
 `
 
-/*
-const ColorCodeFailed = styled(StyledColorCode)`
-  background-color: ${props => props.theme.colors.orange4};
-`
-*/
-
 const colorNormal = theme.colors.green7
 const colorError = theme.colors.yellow5
 const colorConfirmed = theme.colors.red8
@@ -115,16 +127,25 @@ const ColorCodeAnomaly = styled(StyledColorCode)`
 const ColorCodeNormal = styled(StyledColorCode)`
   background-color: ${colorNormal};
 `
+const ColorCodeFailed = styled(StyledColorCode)`
+  background-color: ${colorError};
+`
+// For tests without a result
+const NoColorCode = styled(StyledColorCode)``
 
 const ColorCode = ({msmt}) => {
-  if (msmt.confirmed === true) {
-    return <ColorCodeConfirmed />
-  //} else if (msmt.failure === true) {
-  //  return <ColorCodeFailed />
-  } else if (msmt.anomaly === true) {
-    return <ColorCodeAnomaly />
+  if (testsWithStates.indexOf(msmt.test_name) > -1) {
+    if (msmt.confirmed === true) {
+      return <ColorCodeConfirmed />
+    } else if (msmt.failure === true) {
+      return <ColorCodeFailed />
+    } else if (msmt.anomaly === true) {
+      return <ColorCodeAnomaly />
+    }
+    return <ColorCodeNormal />
+  } else {
+    return <NoColorCode />
   }
-  return <ColorCodeNormal />
 }
 
 ColorCode.propTypes = {
@@ -167,50 +188,52 @@ const ResultItem = ({msmt}) => {
     }
   }
   return (
-    <ResultRow alignItems='center'>
-      <Box width={1/3}>
-        <Flex alignItems='center'>
-          <Box flex='auto' width={1/16}>
-            <ColorCode msmt={msmt} />
-          </Box>
-          <Box flex='auto' width={2/16}>
-            <Text bold color='gray8'>{msmt.probe_cc}</Text>
-          </Box>
-          <Box flex='auto' width={5/16}>
-            <Flag countryCode={msmt.probe_cc} size={32} />
-          </Box>
-          <Box flex='auto' width={8/16}>
-            <ASNBox asn={msmt.probe_asn} />
-          </Box>
-        </Flex>
-      </Box>
-      <Box width={2/3}>
-        <Flex flexDirection='column'>
-          <Box>
-            {input &&
-              <ResultInput>
-                {input}
-              </ResultInput>}
-          </Box>
-          <Box>
-            <Flex alignItems='center'>
-              <Box pr={2} width={7/16}>
-                {msmt.testName}
-              </Box>
-              <Box width={4/16}>
-                {moment(msmt.measurement_start_time).format('YYYY-MM-DD')}
-              </Box>
-              <Box width={4/16}>
-                <ResultTag msmt={msmt} />
-              </Box>
-              <Box width={1/16}>
-                <ViewDetailsLink reportId={msmt.report_id} input={msmt.input} />
-              </Box>
-            </Flex>
-          </Box>
-        </Flex>
-      </Box>
-    </ResultRow>
+    <ViewDetailsLink reportId={msmt.report_id} input={msmt.input}>
+      <ResultRow alignItems='center'>
+        <Box width={1/3}>
+          <Flex alignItems='center'>
+            <Box flex='auto' width={1/16}>
+              <ColorCode msmt={msmt} />
+            </Box>
+            <Box flex='auto' width={2/16}>
+              <Text bold color='gray8'>{msmt.probe_cc}</Text>
+            </Box>
+            <Box flex='auto' width={5/16}>
+              <Flag countryCode={msmt.probe_cc} size={32} />
+            </Box>
+            <Box flex='auto' width={8/16}>
+              <ASNBox asn={msmt.probe_asn} />
+            </Box>
+          </Flex>
+        </Box>
+        <Box width={2/3}>
+          <Flex flexDirection='column'>
+            <Box>
+              {input &&
+                <ResultInput>
+                  {input}
+                </ResultInput>}
+            </Box>
+            <Box>
+              <Flex alignItems='center'>
+                <Box pr={2} width={7/16}>
+                  {msmt.testName}
+                </Box>
+                <Box width={4/16}>
+                  {moment(msmt.measurement_start_time).format('YYYY-MM-DD')}
+                </Box>
+                <Box width={4/16}>
+                  <ResultTag msmt={msmt} />
+                </Box>
+                <Box width={1/16}>
+
+                </Box>
+              </Flex>
+            </Box>
+          </Flex>
+        </Box>
+      </ResultRow>
+    </ViewDetailsLink>
   )
 }
 
@@ -232,9 +255,9 @@ const StyledLegendItem = styled.div`
   margin-right: 20px;
 `
 
-const LegendItem = ({color, label}) => {
+const LegendItem = ({color, children}) => {
   return <StyledLegendItem>
-    <LegendColorBox color={color}/> {label}
+    <LegendColorBox color={color}/> {children}
   </StyledLegendItem>
 }
 
@@ -255,10 +278,18 @@ const ResultsList = ({results, testNamesKeyed}) => {
   return (
     <div>
       <LegendContainer>
-        <LegendItem color={colorAnomaly} label='Anomaly' />
-        <LegendItem color={colorConfirmed} label='Confirmed' />
-        <LegendItem color={colorNormal} label='OK' />
-        <LegendItem color={colorError} label='Error' />
+        <LegendItem color={colorNormal}>
+          <FormattedMessage id='Search.Bullet.Reachable' />
+        </LegendItem>
+        <LegendItem color={colorAnomaly}>
+          <FormattedMessage id='Search.Bullet.Anomaly' />
+        </LegendItem>
+        <LegendItem color={colorConfirmed}>
+          <FormattedMessage id='Search.Bullet.Blocked' />
+        </LegendItem>
+        <LegendItem color={colorError}>
+          <FormattedMessage id='Search.Bullet.Error' />
+        </LegendItem>
       </LegendContainer>
       <Divider width='100%' color='gray5'/>
       <ResultContainer mb={2}>

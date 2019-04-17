@@ -1,7 +1,7 @@
 import React from 'react'
 
 import styled from 'styled-components'
-
+import { injectIntl } from 'react-intl'
 import {
   Flex, Box,
   Button,
@@ -70,18 +70,26 @@ class FilterSidebar extends React.Component {
 
   onDateChangeFilter (filterName) {
     return ((date) => {
-      this.setState({[filterName]: date.utc().format('YYYY-MM-DD')})
+      this.setState({[filterName]: (date !== '') ? date.utc().format('YYYY-MM-DD') : date})
     })
   }
 
   isSinceValid(currentDate) {
     const { untilFilter } = this.state
-    return currentDate.isBefore(untilFilter)
+    if (untilFilter.length !== 0) {
+      return currentDate.isBefore(untilFilter)
+    } else {
+      return currentDate.isSameOrBefore(new Date())
+    }
   }
 
   isUntilValid(currentDate) {
     const { sinceFilter } = this.state
-    return currentDate.isAfter(sinceFilter) && currentDate.isSameOrBefore(new Date())
+    if (sinceFilter.length !== 0) {
+      return currentDate.isAfter(sinceFilter) && currentDate.isSameOrBefore(new Date())
+    } else {
+      return currentDate.isSameOrBefore(new Date())
+    }
   }
 
   onClickApplyFilter() {
@@ -98,7 +106,8 @@ class FilterSidebar extends React.Component {
   render() {
     const {
       testNames,
-      countries
+      countries,
+      intl
     } = this.props
 
     const {
@@ -109,21 +118,30 @@ class FilterSidebar extends React.Component {
       sinceFilter,
       untilFilter
     } = this.state
+
+    //Insert an 'Any' option to test name filter
+    const testNameOptions = [...testNames]
+    testNameOptions.unshift({name: intl.formatMessage({id: 'Search.Sidebar.TestName.AllTests'}), id: 'XX'})
+
+    const countryOptions = [...countries]
+    countryOptions.unshift({name: intl.formatMessage({id: 'Search.Sidebar.Country.AllCountries'}), id: 'XX'})
+
     return (
       <StyledFilterSidebar>
         <InputWithLabel
-          label="Input"
+          label={intl.formatMessage({id: 'Search.Sidebar.Input'})}
           name="inputFilter"
           value={inputFilter}
           onChange={this.onChangeFilter('inputFilter')}
-          placeholder="ex. torproject.org"
-          type="text" />
+          placeholder={intl.formatMessage({id: 'Search.Sidebar.Input.Placeholder'})}
+          type="text"
+        />
         <SelectWithLabel
           pt={2}
-          label="Test Name"
+          label={intl.formatMessage({id: 'Search.Sidebar.TestName'})}
           value={testNameFilter}
           onChange={this.onChangeFilter('testNameFilter')}>
-          {testNames.map((v, idx) => {
+          {testNameOptions.map((v, idx) => {
             return (
               <option key={idx} value={v.id}>{v.name}</option>
             )
@@ -132,11 +150,11 @@ class FilterSidebar extends React.Component {
 
         <SelectWithLabel
           pt={2}
-          label="Country"
+          label={intl.formatMessage({id: 'Search.Sidebar.Country'})}
           value={countryFilter}
           name="countryFilter"
           onChange={this.onChangeFilter('countryFilter')}>
-          {countries.map((v, idx) => {
+          {countryOptions.map((v, idx) => {
             return (
               <option key={idx} value={v.alpha_2}>{v.name}</option>
             )
@@ -144,15 +162,17 @@ class FilterSidebar extends React.Component {
         </SelectWithLabel>
 
         <InputWithLabel
-          label="ASN"
+          label={intl.formatMessage({id: 'Search.Sidebar.ASN'})}
           value={asnFilter}
           name="asnFilter"
-          onChange={this.onChangeFilter('asnFilter')} />
+          onChange={this.onChangeFilter('asnFilter')}
+          placeholder={intl.formatMessage({id: 'Search.Sidebar.ASN.example'})}
+        />
 
         <Flex>
           <Box width={1/2} pr={1}>
             <StyledLabel>
-        Since
+              {intl.formatMessage({id: 'Search.Sidebar.From'})}
             </StyledLabel>
             <DatePicker
               value={sinceFilter}
@@ -163,7 +183,7 @@ class FilterSidebar extends React.Component {
           </Box>
           <Box width={1/2} pl={1}>
             <StyledLabel>
-        Until
+              {intl.formatMessage({id: 'Search.Sidebar.Until'})}
             </StyledLabel>
             <DatePicker
               value={untilFilter}
@@ -175,12 +195,13 @@ class FilterSidebar extends React.Component {
         </Flex>
         <Button
           mt={3}
-          onClick={this.onClickApplyFilter}>
-        Filter Results
+          onClick={this.onClickApplyFilter}
+        >
+          {intl.formatMessage({id: 'Search.Sidebar.Button.FilterResults'})}
         </Button>
       </StyledFilterSidebar>
     )
   }
 }
 
-export default FilterSidebar
+export default injectIntl(FilterSidebar)

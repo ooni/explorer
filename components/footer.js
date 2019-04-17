@@ -1,13 +1,13 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Flex, Box, Container, Avatar } from 'ooni-components'
+import { Flex, Box, Container } from 'ooni-components'
 import ExplorerLogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochrome.svg'
 import NLink from 'next/link'
 import { injectIntl, intlShape } from 'react-intl'
 
 const StyledFooter = styled.footer`
-  background-color: ${props => props.theme.colors.gray1};
-  color: ${props => props.theme.colors.blue9};
+  background-color: #002c4b;
+  color: #ffffff;
   font-size: 0.857rem;
   margin-top: 32px;
 `
@@ -29,9 +29,9 @@ const FooterLinkItem = styled(Box)`
 
 const StyledFooterLabel = styled.a`
   text-decoration: none;
-  color: {props => props.theme.colors.blue1};
+  color: #ffffff;
   cursor: pointer;
-  opacity: 0.6;
+  opacity: 0.5;
   &:hover {
     opacity: 1;
   }
@@ -52,24 +52,14 @@ const FooterText = styled.div`
 `
 
 const StyledIcon = styled(ExplorerLogo)`
-  fill: ${props => props.theme.colors.blue9};
+  fill: #ffffff;
 `
-
-const SocialLink = ({ logo, href}) => (
-  <a href={href}>
-    <Avatar
-      size={28}
-      m={1}
-      src={logo}
-    />
-  </a>
-)
 
 const Footer = ({ intl }) => (
   <StyledFooter>
     <Container>
       <Flex flexWrap='wrap'>
-        <FooterBox width={[1, 2/6]}>
+        <FooterBox width={[1, 2/5]}>
           <Flex flexWrap='wrap' alignItems='center'>
             <Box p={[1, 0]} mb={[0, 3]} width={[1/2, 1]}>
               <StyledIcon height='32px' />
@@ -77,42 +67,26 @@ const Footer = ({ intl }) => (
             <Box p={[1, 0]} pr={[0, '50%']} width={[1/2, 1]}> <FooterText>{intl.formatMessage({ id: 'Footer.Text.Slogan' })}</FooterText> </Box>
           </Flex>
         </FooterBox>
-        <FooterBox width={[1/2, 1/6]}>
-          <FooterHead>{intl.formatMessage({ id: 'Footer.Heading.OONI' })}</FooterHead>
+        <FooterBox width={[1/2, 1/5]}>
+          <FooterHead>{intl.formatMessage({ id: 'Footer.Heading.About' })}</FooterHead>
           <FooterLink href='https://ooni.io/about/' label={intl.formatMessage({ id: 'Footer.Link.About' })} />
-          <FooterLink href='https://ooni.io/post/' label={intl.formatMessage({ id: 'Footer.Link.Blog' })} />
-          <FooterLink href='#' label={intl.formatMessage({ id: 'Footer.Link.Reports' })} />
+          <FooterLink href='https://ooni.io/about/data-policy/' label={intl.formatMessage({ id: 'Footer.Link.DataPolicy' })} />
+          <FooterLink href='#' label={intl.formatMessage({ id: 'Footer.Link.FAQ' })} />
           <FooterLink href='https://ooni.io/about/#contact' label={intl.formatMessage({ id: 'Footer.Link.Contact' })} />
         </FooterBox>
-        <FooterBox width={[1/2, 1/6]}>
-          <FooterHead>{intl.formatMessage({ id: 'Footer.Heading.Data' })}</FooterHead>
+        <FooterBox width={[1/2, 1/5]}>
+          <FooterHead>{intl.formatMessage({ id: 'Footer.Heading.OONIProbe' })}</FooterHead>
           <FooterLink href='https://ooni.io/install/' label={intl.formatMessage({ id: 'Footer.Link.Probe' })} />
-          <FooterLink href='https://explorer.ooni.io/' label={intl.formatMessage({ id: 'Footer.Link.Explorer' })} />
-          <FooterLink href='https://api.ooni.io/' label={intl.formatMessage({ id: 'Footer.Link.API' })} />
           <FooterLink href='https://ooni.io/nettest/' label={intl.formatMessage({ id: 'Footer.Link.Tests' })} />
+          <FooterLink href='https://github.com/ooni' label={intl.formatMessage({ id: 'Footer.Link.Code' })} />
+          <FooterLink href='https://api.ooni.io/' label={intl.formatMessage({ id: 'Footer.Link.API' })} />
         </FooterBox>
-        <FooterBox width={[1/2, 1/6]}>
-          <FooterHead>{intl.formatMessage({ id: 'Footer.Heading.GetInvolved' })}</FooterHead>
-          <FooterLink href='https://ooni.io/get-involved/' label={intl.formatMessage({ id: 'Footer.Link.Contribute' })} />
-          <FooterLink href='#' label={intl.formatMessage({ id: 'Footer.Link.Donate' })} />
-          <FooterLink href='https://ooni.io/get-involved/partnership-program/' label={intl.formatMessage({ id: 'Footer.Link.Partners' })} />
-          <FooterLink href='https://run.ooni.io/' label={intl.formatMessage({ id: 'Footer.Link.Run' })} />
-        </FooterBox>
-        <FooterBox width={[1/2, 1/6]}>
-          <FooterHead>{intl.formatMessage({ id: 'Footer.Heading.SocialLinks' })}</FooterHead>
-          <SocialLink
-            logo='https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=2048&q=20'
-            href='https://twitter.com/OpenObservatory'
-          />
-          <SocialLink
-            logo='https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=2048&q=20'
-          />
-          <SocialLink
-            logo='https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=2048&q=20'
-          />
-          <SocialLink
-            logo='https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=2048&q=20'
-          />
+        <FooterBox width={[1/2, 1/5]}>
+          <FooterHead>{intl.formatMessage({ id: 'Footer.Heading.Updates' })}</FooterHead>
+          <FooterLink href='https://ooni.io/post/' label={intl.formatMessage({ id: 'Footer.Link.Blog' })} />
+          <FooterLink href='https://twitter.com/OpenObservatory' label={intl.formatMessage({ id: 'Footer.Link.Twitter' })} />
+          <FooterLink href='https://lists.torproject.org/cgi-bin/mailman/listinfo/ooni-talk' label={intl.formatMessage({ id: 'Footer.Link.MailingList' })} />
+          <FooterLink href='https://openobservatory.slack.com/' label={intl.formatMessage({ id: 'Footer.Link.Slack' })} />
         </FooterBox>
       </Flex>
       <Flex flexWrap='wrap'>
@@ -121,11 +95,6 @@ const Footer = ({ intl }) => (
             <Box mb={1}>{intl.formatMessage({ id: 'Footer.Text.Copyright' })}</Box>
             <Box>{intl.formatMessage({ id: 'Footer.Text.CCommons' })}</Box>
           </small>
-        </FooterBox>
-        <FooterBox ml='auto' width={[1, 2/6]}>
-          <FooterLink horizontal href='/data-policy' label={intl.formatMessage({ id: 'Footer.Link.DataPolicy' })} />
-          <FooterLink horizontal href='/legal' label={intl.formatMessage({ id: 'Footer.Link.Legal' })} />
-          <FooterLink horizontal href='/sitemap' label={intl.formatMessage({ id: 'Footer.Link.Sitemap' })} />
         </FooterBox>
       </Flex>
     </Container>

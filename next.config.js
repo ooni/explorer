@@ -1,17 +1,18 @@
 /* global require, module, process */
 const withCSS = require('@zeit/next-css')
 const withSourceMaps = require('@zeit/next-source-maps')
-
+const child_process = require('child_process')
 const webpack = require('webpack')
 
 process.env.PORT = process.env.PORT || 3100
 
 module.exports = withSourceMaps(withCSS({
-  webpack: (config) => {
+  webpack: (config, {isServer}) => {
     config.plugins.push(
       new webpack.DefinePlugin({
-        'process.env.MEASUREMENTS_URL': JSON.stringify(process.env.MEASUREMENTS_URL || 'https://api.ooni.io'),
-        'process.env.EXPLORER_URL': JSON.stringify(process.env.EXPLORER_URL  || 'http://127.0.0.1:' + process.env.PORT)
+        'process.env.MEASUREMENTS_URL': JSON.stringify(process.env.MEASUREMENTS_URL || 'https://api.test.ooni.io'),
+        'process.env.EXPLORER_URL': JSON.stringify(process.env.EXPLORER_URL  || 'http://127.0.0.1:' + process.env.PORT),
+        'process.env.SENTRY_DSN': JSON.stringify(process.env.SENTRY_DSN || 'https://49af7fff247c445b9a7c98ee21ddfd2f@sentry.io/1427510'),
       })
     )
     config.module.rules.push({
@@ -26,6 +27,11 @@ module.exports = withSourceMaps(withCSS({
         }
       }
     })
+
+    if (!isServer) {
+      config.resolve.alias['@sentry/node'] = '@sentry/browser'
+    }
+
     return config
   }
 }))

@@ -2,17 +2,26 @@ import React from 'react'
 
 import { withRouter } from 'next/router'
 import NLink from 'next/link'
-
 import styled from 'styled-components'
 import { FormattedMessage } from 'react-intl'
+import NProgress from 'nprogress'
+import 'nprogress/nprogress.css'
+import Router from 'next/router'
 
-import ExplorerLogo from 'ooni-components/components/svgs/logos/Explorer-HorizontalMonochromeInverted.svg'
+import ExplorerLogo from '../static/images/ExplorerBeta-HorizontalMonochromeInverted.svg'
 
 import {
   Flex,
   Box,
   Container
 } from 'ooni-components'
+
+// Intercept route changes on page navigation to show top edge progress bar
+Router.onRouteChangeStart = (url) => {
+  NProgress.start()
+}
+Router.onRouteChangeComplete = () => NProgress.done()
+Router.onRouteChangeError = () => NProgress.done()
 
 const StyledNavItem = styled.a`
   text-decoration: none;
@@ -59,9 +68,12 @@ const NavItemComponent = ({router, label, href}) => {
 const NavItem = withRouter(NavItemComponent)
 
 const StyledNavBar = styled.div`
+  position: sticky;
+  top: 0;
   background-color: ${props => props.color || props.theme.colors.blue5};
   padding-top: 16px;
   padding-bottom: 20px;
+  z-index: 999;
 `
 
 export const NavBar = ({color}) => (
@@ -75,9 +87,7 @@ export const NavBar = ({color}) => (
         </Box>
         <Box ml='auto'>
           <NavItem label={<FormattedMessage id='Navbar.Search' />} href='/search' />
-          <NavItem label={<FormattedMessage id='Navbar.Results' />} href='/results' />
           <NavItem label={<FormattedMessage id='Navbar.Countries' />} href='/countries' />
-          <NavItem label={<FormattedMessage id='Navbar.About' />} href='/about' />
         </Box>
       </Flex>
     </Container>

@@ -36,7 +36,7 @@ export const testGroups = {
     'icon': <NettestGroupPerformance />
   },
   'circumvention': {
-    'color': '',
+    'color': theme.colors.pink6,
     'name': <FormattedMessage id='Tests.Groups.Circumvention.Name' />,
     'icon': <FaBeer />
   },

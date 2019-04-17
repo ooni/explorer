@@ -1,7 +1,7 @@
 import React from 'react'
 
 import styled from 'styled-components'
-
+import { FormattedMessage } from 'react-intl'
 import {
   Flex, Box
 } from 'ooni-components'
@@ -65,22 +65,25 @@ const FilterTabs = ({onClick, onlyFilter}) => (
     <Box>
       <FilterTabLeft
         onClick={() => {onClick('all')}}
-        active={onlyFilter === 'all'}>
-    All Results
+        active={onlyFilter === 'all'}
+      >
+        <FormattedMessage id='Search.FilterButton.AllResults' />
       </FilterTabLeft>
     </Box>
     <Box>
       <FilterTabCenter
         onClick={() => {onClick('confirmed')}}
-        active={onlyFilter === 'confirmed'}>
-    Confirmed
-      </FilterTabCenter >
+        active={onlyFilter === 'confirmed'}
+      >
+        <FormattedMessage id='Search.FilterButton.Confirmed' />
+      </FilterTabCenter>
     </Box>
     <Box>
       <FilterTabRight
         onClick={() => {onClick('anomalies')}}
-        active={onlyFilter === 'anomalies'}>
-    Anomalies
+        active={onlyFilter === 'anomalies'}
+      >
+        <FormattedMessage id='Search.FilterButton.Anomalies' />
       </FilterTabRight>
     </Box>
   </Flex>

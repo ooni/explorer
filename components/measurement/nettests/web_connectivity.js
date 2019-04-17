@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import bufferFrom from 'buffer-from'
 import {
   Container,
   Heading,
@@ -147,6 +148,23 @@ const QueryContainer = ({query}) => {
   )
 }
 
+const HttpResponseBody = ({request}) => {
+  let body
+
+  if (!request || !request.response || !request.response.body) {
+    return <p>Empty body</p>
+  }
+  body = request.response.body
+  if (typeof body == 'object' && body.format === 'base64') {
+    body = bufferFrom(body.data, 'base64').toString('binary')
+  }
+
+  return (
+    <HttpResponseBodyContainer>
+      {body}
+    </HttpResponseBodyContainer>
+  )
+}
 const RequestResponseContainer = ({request}) => {
   return (
     // FIXME: This sometime ends up creating empty sections with just a title
@@ -167,9 +185,7 @@ const RequestResponseContainer = ({request}) => {
           </Pre>
         </Box>
         <Box width={1}>
-          <HttpResponseBodyContainer>
-            {request.response.body}
-          </HttpResponseBodyContainer>
+          <HttpResponseBody request={request} />
         </Box>
       </Flex>
     </Box>

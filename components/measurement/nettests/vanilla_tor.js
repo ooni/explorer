@@ -2,9 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import {
   Container,
-  Text,
   Flex,
-  Box
 } from 'ooni-components'
 import { FormattedMessage } from 'react-intl'
 import MdCheckCircle from 'react-icons/lib/md/check-circle'

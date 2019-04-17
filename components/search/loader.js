@@ -7,7 +7,7 @@ import {
   Heading
 } from 'ooni-components'
 
-import BarLoader from '../bar-loader'
+import SpinLoader from '../vendor/spin-loader'
 
 const StyledLoader = styled.div`
   width: 100%;
@@ -21,7 +21,7 @@ const Loader = ({loading}) => (
       <Box>
         <Flex flexDirection='column'>
           <Box style={{height: '200px'}}>
-            <BarLoader />
+            <SpinLoader />
           </Box>
           <Box style={{textAlign: 'center'}}>
             <Heading h={3}>Loading</Heading>

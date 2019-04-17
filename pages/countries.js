@@ -1,16 +1,17 @@
 import React from 'react'
 import Head from 'next/head'
 import NLink from 'next/link'
-
+import axios from 'axios'
 import styled from 'styled-components'
-
+import { FormattedMessage, FormattedNumber } from 'react-intl'
+import debounce from 'lodash.debounce'
 import {
   Flex, Box,
   Container,
-  Link,
+  Link, Input,
   Heading,
-  Text
 } from 'ooni-components'
+import { Text } from 'rebass'
 
 import Flag from '../components/flag'
 import Layout from '../components/Layout'
@@ -21,38 +22,74 @@ import countryUtil from 'country-util'
 const CountryLink = styled(Link)`
   color: ${props => props.theme.colors.black};
   text-decoration: none;
-  text-align: center;
   &:hover {
     color: ${props => props.theme.colors.blue5};
   }
 `
 
-const CountryBlock = ({countryCode}) => {
+const StyledCountryCard = styled(Box)`
+  border: 1px solid ${props => props.theme.colors.gray3};
+`
+
+const Divider = styled.div`
+  border: 1px solid ${props => props.theme.colors.gray3};
+  margin-bottom: 12px;
+`
+
+const CountryBlock = ({countryCode, msmtCount}) => {
   const href = `/country/${countryCode}`
   return (
-    <Box width={1/6} pb={3}>
-      <NLink href={href}>
-        <CountryLink href={href}>
-          <Flex justifyContent='center'>
-            <Flag center border countryCode={countryCode} />
-          </Flex>
-          <Text pt={2}>{countryUtil.territoryNames[countryCode]}</Text>
-        </CountryLink>
-      </NLink>
+    <Box width={[1/2, 1/4]} my={4} px={3}>
+      <StyledCountryCard p={3}>
+        <NLink href={href}>
+          <CountryLink href={href}>
+            <Flex flexDirection='column'>
+              <Flag center border countryCode={countryCode} size={48} />
+              <Text py={2} fontSize={24} style={{height: '72px'}}>{countryUtil.territoryNames[countryCode]}</Text>
+              <Divider />
+              <Flex alignItems='center'>
+                <Text mr={2} fontSize={20} fontWeight={600} color='blue9'><FormattedNumber value={msmtCount} /></Text>
+                <Text>Measurments</Text>
+              </Flex>
+            </Flex>
+          </CountryLink>
+        </NLink>
+      </StyledCountryCard>
     </Box>
   )
 }
-const RegionBlock = ({regionCode}) => {
-  const regionName = countryUtil.territoryNames[regionCode]
-  return <div>
-    <Heading h={1} id={regionName} center pb={2}>{regionName}</Heading>
 
-    <Flex flexWrap='wrap' pb={5}>
-      {countryUtil.regions[regionCode].countries.map((countryCode) =>
-        <CountryBlock key={countryCode} countryCode={countryCode} />
-      )}
-    </Flex>
-  </div>
+// To compenstate for the sticky navigation bar
+const RegionHeaderAnchor = styled.div`
+  height: 48px;
+`
+
+const RegionBlock = ({regionCode, countries}) => {
+  const regionName = countryUtil.territoryNames[regionCode]
+  // Select countries in the region where we have measuremennts from
+  const measuredCountriesInRegion = countryUtil.regions[regionCode].countries.filter((countryCode) => (
+    countries.find((item) => item.alpha_2 === countryCode)
+  ))
+
+  // When there are no measurements from the region
+  if (measuredCountriesInRegion.length === 0) {
+    return null
+  }
+
+  return (
+    <Box my={3}>
+      <RegionHeaderAnchor id={regionName} />
+      <Heading h={1} center py={2}>{regionName}</Heading>
+      <Flex flexWrap='wrap' py={2}>
+        {countries
+          .filter((c => ( measuredCountriesInRegion.indexOf(c.alpha_2) > -1 )))
+          .map((country, index) => (
+            <CountryBlock key={index} countryCode={country.alpha_2} msmtCount={country.count} />
+          ))
+        }
+      </Flex>
+    </Box>
+  )
 }
 
 const JumpToContainer = styled.div`
@@ -66,9 +103,63 @@ const JumpToLink = styled.a`
   text-decoration: none;
   padding-right: 30px
 `
+const NoCountriesFound = ({ searchTerm }) => (
+  <Flex justifyContent='center'>
+    <Box width={1/2} m={5}>
+      <Text textAlign='center' fontSize={5}>
+        {/* TODO Add to copy */}
+        <FormattedMessage
+          id='Countries.Search.NoCountriesFound'
+          values={{ searchTerm }}
+        />
+      </Text>
+    </Box>
+  </Flex>
+)
 
-export default class Countries extends React.Component {
+class Countries extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      initial: true,
+      searchTerm: '',
+      filteredCountries: []
+    }
+    this.onSearchChange = debounce(this.onSearchChange, 300)
+  }
+
+  static async getInitialProps () {
+    const client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
+    const result = await client.get('/api/_/countries')
+    return {
+      countries: result.data.countries
+    }
+  }
+
+  onSearchChange (searchTerm) {
+    const filteredCountries = this.props.countries.filter((country) => (
+      country.name.toLowerCase().indexOf(searchTerm) > -1
+    ))
+    this.setState({
+      filteredCountries,
+      searchTerm
+    })
+  }
+
+  static getDerivedStateFromProps (props, state) {
+    if (state.filteredCountries.length === 0 && state.initial === true) {
+      return {
+        filteredCountries: props.countries,
+        initial: false
+      }
+    }
+    return state
+  }
+
   render () {
+    const { filteredCountries, searchTerm } = this.state
+    // Africa Americas Asia Europe Oceania Antarctica
+    const regions = ['002', '019', '142', '150', '009', 'AQ']
 
     return (
       <Layout>
@@ -80,31 +171,39 @@ export default class Countries extends React.Component {
 
         <JumpToContainer>
           <Container>
-            <Text color='gray6' pb={2}>Jump to continent:</Text>
-            <JumpToLink href="#Africa">Africa</JumpToLink>
-            <JumpToLink href="#Americas">Americas</JumpToLink>
-            <JumpToLink href="#Asia">Asia</JumpToLink>
-            <JumpToLink href="#Europe">Europe</JumpToLink>
-            <JumpToLink href="#Antartica">Antarctica</JumpToLink>
+            <Flex justifyContent='space-between'>
+              <Box>
+                <Text fontWeight='bold' pb={2}><FormattedMessage id='Countries.Heading.JumpToContinent' />:</Text>
+                <JumpToLink href="#Africa">Africa</JumpToLink>
+                <JumpToLink href="#Americas">Americas</JumpToLink>
+                <JumpToLink href="#Asia">Asia</JumpToLink>
+                <JumpToLink href="#Europe">Europe</JumpToLink>
+                <JumpToLink href="#Antartica">Antarctica</JumpToLink>
+              </Box>
+              <Box>
+                <Input
+                  onChange={(e) => this.onSearchChange(e.target.value)}
+                  placeholder='Search for Countries'
+                  error={filteredCountries.length === 0}
+                />
+              </Box>
+            </Flex>
           </Container>
         </JumpToContainer>
-
         <Container>
-          {/* Africa */}
-          <RegionBlock regionCode='002' />
-          {/* Americas */}
-          <RegionBlock regionCode='019' />
-          {/* Asia */}
-          <RegionBlock regionCode='142' />
-          {/* Europe */}
-          <RegionBlock regionCode='150' />
-          {/* Oceania */}
-          <RegionBlock regionCode='009' />
-          {/* Antarctica */}
-          <RegionBlock regionCode='AQ' />
+          {
+            // Show a message when there are no countries to show, when search is empty
+            (filteredCountries.length === 0)
+              ? <NoCountriesFound searchTerm={searchTerm} />
+              : regions.map((regionCode, index) => (
+                <RegionBlock key={index} regionCode={regionCode} countries={filteredCountries} />
+              ))
+          }
         </Container>
       </Layout>
     )
   }
 
 }
+
+export default Countries
