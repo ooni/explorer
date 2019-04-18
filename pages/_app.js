@@ -3,6 +3,14 @@
 import React from 'react'
 import App from 'next/app'
 import sentry from '../utils/sentry'
+import Router from 'next/router'
+import NProgress from 'nprogress'
+import '../static/nprogress.css'
+
+// Intercept route changes on page navigation to show top edge progress bar
+Router.onRouteChangeStart = () => NProgress.start()
+Router.onRouteChangeComplete = () => NProgress.done()
+Router.onRouteChangeError = () => NProgress.done()
 
 const { Sentry, captureException } = sentry()
 

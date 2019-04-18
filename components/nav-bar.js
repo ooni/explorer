@@ -4,10 +4,7 @@ import { withRouter } from 'next/router'
 import NLink from 'next/link'
 import styled from 'styled-components'
 import { FormattedMessage } from 'react-intl'
-import NProgress from 'nprogress'
-import Router from 'next/router'
 
-import './nprogress.css'
 import ExplorerLogo from '../static/images/ExplorerBeta-HorizontalMonochromeInverted.svg'
 
 import {
@@ -16,12 +13,7 @@ import {
   Container
 } from 'ooni-components'
 
-// Intercept route changes on page navigation to show top edge progress bar
-Router.onRouteChangeStart = () => {
-  NProgress.start()
-}
-Router.onRouteChangeComplete = () => NProgress.done()
-Router.onRouteChangeError = () => NProgress.done()
+
 
 const StyledNavItem = styled.a`
   text-decoration: none;
