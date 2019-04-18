@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import bufferFrom from 'buffer-from'
 import {
-  Container,
   Heading,
   Flex,
   Pre,
@@ -72,15 +71,19 @@ const StatusInfo = ({ url, message}) => (
   </Flex>
 )
 
+const StyledDetailsBox = styled(Box)`
+  border: 2px solid ${props => props.theme.colors.gray2};
+`
+
 const DetailsBox = ({ title, content, ...props }) => (
-  <Box width={1} {...props}>
+  <StyledDetailsBox width={1} {...props} mb={3}>
     <Flex px={3} bg='gray2'>
       <Heading h={4}>{title}</Heading>
     </Flex>
     <Flex p={3} flexWrap='wrap'>
       {content}
     </Flex>
-  </Box>
+  </StyledDetailsBox>
 )
 
 DetailsBox.propTypes = {
@@ -185,7 +188,7 @@ const RequestResponseContainer = ({request}) => {
         <Box width={1}>
           <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Label.Response' /></Heading>
         </Box>
-        <Box width={1}>
+        <Box width={1} mb={2}>
           <Pre>
             {JSON.stringify(request.response.headers, 0, 2)}
           </Pre>
@@ -229,7 +232,7 @@ const WebConnectivityDetails = ({ measurement, render }) => {
         statusInfo: <StatusInfo url={input} message={hint} />,
         summaryText: hint,
         details: (
-          <Container>
+          <React.Fragment>
             {/* Failures */}
             <Flex>
               <DetailsBox
@@ -317,7 +320,7 @@ const WebConnectivityDetails = ({ measurement, render }) => {
                 }
               />
             </Flex>
-          </Container>
+          </React.Fragment>
         )
       })}
     </React.Fragment>
