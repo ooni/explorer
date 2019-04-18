@@ -80,11 +80,13 @@ const CommonDetails = ({
   return (
     <React.Fragment>
       <Flex my={4}>
+        {/* Metadata: platform, probe, MK version etc. */}
         <DetailsBox
           items={items}
           bg={theme.colors.gray2}
         />
       </Flex>
+      {/* Raw Measurement */}
       <Box>
         <Flex px={3} alignItems='center' bg={theme.colors.gray2}>
           <Box>
