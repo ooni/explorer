@@ -2213,10 +2213,10 @@ cosmiconfig@^2.1.0, cosmiconfig@^2.1.1:
     parse-json "^2.2.0"
     require-from-string "^1.1.0"
 
-country-util@^0.0.3:
-  version "0.0.3"
-  resolved "https://registry.yarnpkg.com/country-util/-/country-util-0.0.3.tgz#6cf531b25dcbc130988613693edca6a014030e21"
-  integrity sha1-bPUxsl3LwTCYhhNpPtymoBQDDiE=
+country-util@0.1.0:
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/country-util/-/country-util-0.1.0.tgz#05b8e7b514c8c29cba1b1ae444925710a5b90964"
+  integrity sha512-zfKVHzT/dSHRQAnqr7alGBvAm495mMdFTdJHw1GqWr6piT8VkA2jQHKeaISCYfiO4GzAGXb1fnbgQBIcg55hIg==
 
 create-ecdh@^4.0.0:
   version "4.0.3"
