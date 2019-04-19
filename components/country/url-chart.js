@@ -7,10 +7,9 @@ import {
   VictoryStack,
   VictoryBar,
   VictoryAxis,
-  VictoryVoronoiContainer,
-  VictoryTooltip,
-  VictoryLabel
+  VictoryVoronoiContainer
 } from 'victory'
+
 import { theme } from 'ooni-components'
 import styled from 'styled-components'
 
@@ -20,6 +19,8 @@ import {
   colorConfirmed,
   colorAnomaly
 } from '../colors'
+
+import Tooltip from './tooltip'
 
 import SpinLoader from '../vendor/spin-loader'
 
@@ -166,20 +167,7 @@ class URLChart extends React.Component {
                         s += `\n${d.total_count} Total`
                         return s
                       }}
-                      labelComponent={
-                        <VictoryTooltip
-                          width={100}
-                          labelComponent={
-                            <VictoryLabel style={{fill: theme.colors.white}}/>
-                          }
-                          flyoutStyle={{
-                            strokeWidth: 0,
-                            fill: theme.colors.gray8,
-                            padding: 2,
-                            pointerEvents: 'none'
-                          }}
-                        />
-                      }
+                      labelComponent={<Tooltip width={100} />}
                       data={data}
                       x='test_day'
                       y={(d) => (d.total_count - d.confirmed_count - d.anomaly_count - d.failure_count)}
