@@ -70,7 +70,10 @@ export default class Measurement extends React.Component {
     let {
       measurement,
       country,
-      measurementURL
+      measurementURL,
+      isConfirmed,
+      isAnomaly,
+      isFailure
     } = this.props
 
     return (
@@ -79,6 +82,10 @@ export default class Measurement extends React.Component {
           <title>OONI Explorer</title>
         </Head>
         <MeasurementContainer
+          isConfirmed={isConfirmed}
+          isAnomaly={isAnomaly}
+          isFailure={isFailure}
+          country={country}
           measurement={measurement}
           render={({
             status = 'default',

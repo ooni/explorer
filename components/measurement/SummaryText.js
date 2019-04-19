@@ -23,7 +23,7 @@ const SummaryText = ({
   if (typeof content === 'function') {
     textToRender = content()
   } else {
-    textToRender = <Text py={4} fontSize={3}>
+    textToRender =
       <FormattedMessage id='Measurement.Details.SummaryTextTemplate'
         description='This is a multi-sentence paragraph with tokens.'
         values={{
@@ -34,10 +34,11 @@ const SummaryText = ({
           content: content
         }}
       />
-    </Text>
   }
   return (
-    textToRender
+    <Text py={4} fontSize={3}>
+      {textToRender}
+    </Text>
   )
 }
 

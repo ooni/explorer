@@ -9,7 +9,7 @@ import {
 } from 'ooni-components'
 
 import { Text } from 'rebass'
-
+import moment from 'moment'
 import { Tick, Cross } from 'ooni-components/dist/icons'
 
 import styled from 'styled-components'
@@ -201,10 +201,15 @@ const RequestResponseContainer = ({request}) => {
   )
 }
 
-const WebConnectivityDetails = ({ measurement, render }) => {
+const WebConnectivityDetails = ({ isConfirmed, isAnomaly, isFailure, country, measurement, render }) => {
   const {
     input,
+    probe_asn,
+    probe_cc,
     test_keys: {
+      accessible,
+      blocking,
+      test_start_time,
       queries,
       tcp_connect,
       requests,
@@ -229,8 +234,56 @@ const WebConnectivityDetails = ({ measurement, render }) => {
     <React.Fragment>
       {render({
         status: status ? 'anomaly' : 'reachable',
-        statusInfo: <StatusInfo url={input} message={hint} />,
-        summaryText: hint,
+        statusInfo: <StatusInfo url={input} />,
+        summaryText: () => {
+          const date = moment(test_start_time).format('lll')
+          if (accessible) {
+            return (
+              <FormattedMessage
+                id='Measurement.SummaryText.Websites.Accessible'
+                values={{
+                  date: date,
+                  WebsiteURL: input,
+                  network: probe_asn,
+                  country: country
+                }}
+              />
+            )
+          }
+          if (blocking) {
+            const reasons = {
+              'http-diff': 'HTTP',
+              'http-failure': 'HTTP',
+              'dns': 'DNS',
+              'tcp_ip': 'TCP'
+            }
+            return (
+              <FormattedMessage
+                id='Measurement.SummaryText.Websites.Anomaly'
+                values={{
+                  date: date,
+                  WebsiteURL: input,
+                  network: probe_asn,
+                  country: country,
+                  BlockingReason: <strong><FormattedMessage id={'Measurement.SummaryText.Websites.Anomaly.BlockingReason.' + reasons[blocking]} /></strong>
+                }}
+              />
+            )
+          }
+          if (isConfirmed) {
+            return (
+              <FormattedMessage
+                id='Measurement.SummaryText.Websites.ConfirmedBlocked'
+                values={{
+                  date: date,
+                  WebsiteURL: input,
+                  network: probe_asn,
+                  country: country,
+                }}
+              />
+            )
+          }
+        },
         details: (
           <React.Fragment>
             {/* Failures */}
