@@ -14,6 +14,13 @@ import {
 import { theme } from 'ooni-components'
 import styled from 'styled-components'
 
+import {
+  colorNormal,
+  colorError,
+  colorConfirmed,
+  colorAnomaly
+} from '../colors'
+
 import SpinLoader from '../vendor/spin-loader'
 
 const Circle = styled.div`
@@ -101,10 +108,10 @@ class URLChart extends React.Component {
     const { metadata } = this.props
     const { data, minimized, fetching } = this.state
     const dataColorMap = {
-      total_count: theme.colors.gray3,
-      confirmed_count: theme.colors.red8,
-      anomaly_count: theme.colors.yellow9,
-      failure_count: theme.colors.gray7
+      total_count: colorNormal,
+      confirmed_count: colorConfirmed,
+      anomaly_count: colorAnomaly,
+      failure_count: colorError
     }
 
     if (fetching) {
@@ -145,12 +152,20 @@ class URLChart extends React.Component {
                   />
                   <VictoryStack>
                     <VictoryBar
-                      labels={(d) => `${new Date(d.test_day).toLocaleDateString()}
-                        Total: ${d.total_count}
-                        Confirmed: ${d.confirmed_count}
-                        Anomalies: ${d.anomaly_count}
-                        Failures: ${d.failure_count}
-                      `}
+                      labels={(d) => {
+                        let s = `${new Date(d.test_day).toLocaleDateString()}`
+                        if (d.confirmed_count > 0) {
+                          s += `\n${d.confirmed_count} Confirmed`
+                        }
+                        if (d.anomaly_count > 0) {
+                          s += `\n${d.anomaly_count} Anomalies`
+                        }
+                        if (d.failure_count > 0) {
+                          s += `\n${d.failure_count} Failures`
+                        }
+                        s += `\n${d.total_count} Total`
+                        return s
+                      }}
                       labelComponent={
                         <VictoryTooltip
                           width={100}
