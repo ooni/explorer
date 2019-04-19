@@ -7,7 +7,9 @@ import {
   VictoryStack,
   VictoryBar,
   VictoryAxis,
-  VictoryVoronoiContainer
+  VictoryVoronoiContainer,
+  VictoryTooltip,
+  VictoryLabel
 } from 'victory'
 import { theme } from 'ooni-components'
 import styled from 'styled-components'
@@ -100,9 +102,9 @@ class URLChart extends React.Component {
     const { data, minimized, fetching } = this.state
     const dataColorMap = {
       total_count: theme.colors.gray3,
-      confirmed_count: theme.colors.green8,
+      confirmed_count: theme.colors.red8,
       anomaly_count: theme.colors.yellow9,
-      failure_count: theme.colors.red8
+      failure_count: theme.colors.gray7
     }
 
     if (fetching) {
@@ -129,17 +131,11 @@ class URLChart extends React.Component {
                 <VictoryChart
                   // theme={VictoryTheme.material}
                   scale={{x: 'time'}}
-                  height={minimized ? 150 : 400}
+                  height={150}
                   containerComponent={
                     <VictoryVoronoiContainer
                       responsive={false}
-                      labels={(d) => `
-                    Total: ${d.total_count} \n
-                    Confirmed: ${d.confirmed_count} \n
-                    Anomalies: ${d.anomaly_count} \n
-                    Failures: ${d.failure_count} \n
-                    Date: ${new Date(d.test_day).toLocaleDateString()}
-                  `}
+                      voronoiDimension='x'
                     />
                   }
                 >
@@ -148,6 +144,36 @@ class URLChart extends React.Component {
                     tickFormat={() => {}}
                   />
                   <VictoryStack>
+                    <VictoryBar
+                      labels={(d) => `${new Date(d.test_day).toLocaleDateString()}
+                        Total: ${d.total_count}
+                        Confirmed: ${d.confirmed_count}
+                        Anomalies: ${d.anomaly_count}
+                        Failures: ${d.failure_count}
+                      `}
+                      labelComponent={
+                        <VictoryTooltip
+                          width={100}
+                          labelComponent={
+                            <VictoryLabel style={{fill: theme.colors.white}}/>
+                          }
+                          flyoutStyle={{
+                            strokeWidth: 0,
+                            fill: theme.colors.gray8,
+                            padding: 2,
+                            pointerEvents: 'none'
+                          }}
+                        />
+                      }
+                      data={data}
+                      x='test_day'
+                      y={(d) => (d.total_count - d.confirmed_count - d.anomaly_count - d.failure_count)}
+                      style={{
+                        data: {
+                          fill: dataColorMap.total_count,
+                        }
+                      }}
+                    />
                     {
                       ['confirmed_count', 'anomaly_count', 'failure_count'].map((type, index) => (
                         <VictoryBar
@@ -164,16 +190,6 @@ class URLChart extends React.Component {
                         />
                       ))
                     }
-                    <VictoryBar
-                      data={data}
-                      x='test_day'
-                      y={(d) => (d.total_count - d.confirmed_count - d.anomaly_count - d.failure_count)}
-                      style={{
-                        data: {
-                          fill: dataColorMap.total_count,
-                        }
-                      }}
-                    />
                   </VictoryStack>
                 </VictoryChart>
               }
