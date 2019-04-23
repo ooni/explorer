@@ -8,7 +8,7 @@ import {
   VictoryAxis,
   VictoryTheme,
   VictoryLine,
-  VictoryVoronoiContainer,
+  VictoryVoronoiContainer
 } from 'victory'
 
 import Tooltip from './tooltip'
@@ -72,16 +72,28 @@ class TestsByGroup extends React.PureComponent {
   }
 
   render() {
+    let testCoverageMaxima, networkCoverageMaxima
+
     const { testCoverage, networkCoverage } = this.props
     const supportedTestGroups = ['websites', 'im', 'middlebox', 'performance', 'circumvention']
     const testCoverageByDay = testCoverage.reduce((prev, cur) => {
       prev[cur.test_day] = prev[cur.test_day] || {}
       prev[cur.test_day][cur.test_group] = cur.count
+      if (typeof testCoverageMaxima === 'undefined'
+          || testCoverageMaxima < cur.count) {
+        testCoverageMaxima = cur.count
+      }
       return prev
     }, {})
     const testCoverageArray = Object.keys(testCoverageByDay)
       .map(day => ({test_day: day, ...testCoverageByDay[day]}))
 
+    networkCoverage.forEach((d) => {
+      if (typeof networkCoverageMaxima === 'undefined'
+          || networkCoverageMaxima < d.count) {
+        networkCoverageMaxima = d.count
+      }
+    })
     const selectedTestGroups = Object.keys(this.state).filter(testGroup => this.state[testGroup])
     return (
       <React.Fragment>
@@ -98,87 +110,81 @@ class TestsByGroup extends React.PureComponent {
           }
         </Flex>
         {/* Bar chart */}
-        <Box>
-          <VictoryChart
-            domainPadding={20}
-            theme={VictoryTheme.material}
-            scale={{ x: 'time' }}
-            containerComponent={
-              <VictoryVoronoiContainer
-                responsive={false}
-                voronoiDimension='x'
-              />
-            }
-            width={800}
-          >
-            <VictoryAxis
-              dependentAxis
+        <VictoryChart
+          domainPadding={20}
+          theme={VictoryTheme.material}
+          containerComponent={
+            <VictoryVoronoiContainer
+              responsive={false}
+              voronoiDimension='x'
             />
-            <VictoryStack>
-              {
-                selectedTestGroups.map((testGroup, index) => {
-                  let maybeLabels = {}
-                  if (index === 0) {
-                    maybeLabels['labels'] = (d) => {
-                      let s = new Date(d.test_day).toLocaleDateString()
-                      selectedTestGroups.forEach((name) => {
-                        s += `\n${d[name]} ${name}`
-                      })
-                      return s
-                    }
-                    maybeLabels['labelComponent'] = <Tooltip />
+          }
+          domain={{ y: [0, 1] }}
+          width={800}
+          height={600}
+        >
+
+          <VictoryAxis tickCount={4} />
+          <VictoryAxis
+            dependentAxis
+            standalone={false}
+            tickFormat={(t) => t * testCoverageMaxima}
+          />
+          <VictoryStack standalone={false}>
+            {
+              selectedTestGroups.map((testGroup, index) => {
+                let maybeLabels = {}
+                if (index === 0) {
+                  maybeLabels['labels'] = (d) => {
+                    let s = new Date(d.test_day).toLocaleDateString()
+                    selectedTestGroups.forEach((name) => {
+                      s += `\n${d[name]} ${name}`
+                    })
+                    return s
                   }
-                  return (
-                    <VictoryBar
-                      {...maybeLabels}
-                      key={index}
-                      data={testCoverageArray}
-                      style={{
-                        data: {
-                          stroke: '#ffffff',
-                          strokeWidth: 1,
-                          fill: testGroups[testGroup].color
-                        }
-                      }}
-                      x='test_day'
-                      y={(d) => d[testGroup]}
-                    />
-                  )
-                })
-              }
-            </VictoryStack>
-          </VictoryChart>
-        </Box>
-        <Box>
-          <VictoryChart
-            scale={{ x: 'time' }}
-            height={120}
-            width={800}
-            containerComponent={
-              <VictoryVoronoiContainer
-                responsive={false}
-              />
-            }
-          >
-            <VictoryLine
-              data={networkCoverage}
-              x='test_day'
-              y='count'
-              labels={(d) => `${new Date(d.test_day).toLocaleDateString()}\n${d.count} networks`}
-              labelComponent={<Tooltip />}
-              style={{
-                data: {
-                  stroke: theme.colors.blue5,
+                  maybeLabels['labelComponent'] = <Tooltip />
                 }
-              }}
-            />
-            <VictoryAxis
-              dependentAxis
-              style={{ axis: { stroke: 'none'}}}
-              tickFormat={() => (null)}
-            />
-          </VictoryChart>
-        </Box>
+                return (
+                  <VictoryBar
+                    {...maybeLabels}
+                    key={index}
+                    data={testCoverageArray}
+                    standalone={false}
+                    style={{
+                      data: {
+                        stroke: '#ffffff',
+                        strokeWidth: 1,
+                        fill: testGroups[testGroup].color
+                      }
+                    }}
+                    x='test_day'
+                    y={(d) => d[testGroup] / testCoverageMaxima}
+                  />
+                )
+              })
+            }
+          </VictoryStack>
+          <VictoryAxis
+            dependentAxis
+            orientation="right"
+            standalone={false}
+            tickFormat={(t) => t * networkCoverageMaxima}
+          />
+          <VictoryLine
+            data={networkCoverage}
+            x='test_day'
+            y={(d) => d.count / networkCoverageMaxima}
+            scale={{x: 'time', y: 'linear'}}
+            labels={(d) => `${new Date(d.test_day).toLocaleDateString()}\n${d.count} networks `}
+            labelComponent={<Tooltip />}
+            standalone={false}
+            style={{
+              data: {
+                stroke: theme.colors.gray7,
+              }
+            }}
+          />
+        </VictoryChart>
       </React.Fragment>
     )
   }
