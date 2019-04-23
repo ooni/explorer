@@ -91,8 +91,16 @@ DetailsBox.propTypes = {
   content: PropTypes.element
 }
 
-const HttpResponseBodyContainer = styled(Pre)`
-  background-color: ${props => props.theme.colors.gray2};
+// From https://css-tricks.com/snippets/css/make-pre-text-wrap/
+const WrappedPre = styled(Pre)`
+  white-space: pre-wrap;       /* css-3 */
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  word-wrap: break-word;       /* Internet Explorer 5.5+ */
+`
+
+const HttpResponseBodyContainer = styled(WrappedPre)`
   max-height: 500px;
   overflow: auto;
 `
@@ -169,7 +177,7 @@ const HttpResponseBody = ({request}) => {
   }
 
   return (
-    <HttpResponseBodyContainer>
+    <HttpResponseBodyContainer fontSize={14}>
       {body}
     </HttpResponseBodyContainer>
   )
@@ -182,18 +190,38 @@ const RequestResponseContainer = ({request}) => {
     !request.failure &&
     <Box>
       <Flex flexWrap='wrap'>
-        <Box width={1} pb={2}>
-          <Pre>{request.request.method} {request.request.url}</Pre>
+        {/* Request URL */}
+        <Box width={1} mb={1} >
+          <Heading h={5}><FormattedMessage id='Request URL' /></Heading>
         </Box>
-        <Box width={1}>
-          <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Label.Response' /></Heading>
+        <Box width={1} mb={2} p={2} bg='gray2'>
+          <Pre fontSize={14}>{request.request.method} {request.request.url}</Pre>
         </Box>
-        <Box width={1} mb={2}>
-          <Pre>
-            {JSON.stringify(request.response.headers, 0, 2)}
-          </Pre>
+        {/* Response Headers */}
+        <Box width={1} mb={1} >
+          <Heading h={5}><FormattedMessage id='Response Headers' /></Heading>
         </Box>
-        <Box width={1}>
+        <Box width={1} mb={2} p={2} bg='gray2'>
+          <WrappedPre fontSize={14}>
+            {Object.keys(request.response.headers).map((header, index) => (
+              <React.Fragment key={index}>
+                <Flex mb={2}>
+                  <Box mr={1}>
+                    <Text fontWeight='bold'>{header}{header}{header}:</Text>
+                  </Box>
+                  <Box>
+                    {request.response.headers[header]}{request.response.headers[header]}{request.response.headers[header]}
+                  </Box>
+                </Flex>
+              </React.Fragment>
+            ))}
+          </WrappedPre>
+        </Box>
+        {/* Response Body (HTML) */}
+        <Box width={1} mb={1} >
+          <Heading h={5}><FormattedMessage id='Response Body' /></Heading>
+        </Box>
+        <Box width={1} p={2} bg='gray2'>
           <HttpResponseBody request={request} />
         </Box>
       </Flex>
