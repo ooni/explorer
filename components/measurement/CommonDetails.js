@@ -32,7 +32,7 @@ class JsonViewer extends React.Component {
     `
     return (
       <StyledReactJsonContainer>
-        <ReactJson src={src} />
+        <ReactJson collapsed={1} src={src} />
       </StyledReactJsonContainer>
     )
   }
