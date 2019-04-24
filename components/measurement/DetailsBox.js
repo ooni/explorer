@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Flex, Box, Text, Heading } from 'ooni-components'
+import MdArrowDropDownCircle from 'react-icons/lib/md/arrow-drop-down'
 
 const DetailBoxLabel = styled(Text)`
   font-weight: 600;
@@ -39,11 +40,19 @@ const StyledDetailsBox = styled(Box)`
   border: 2px solid ${props => props.theme.colors.gray2};
 `
 
+const CollapseTrigger = styled(MdArrowDropDownCircle)`
+  cursor: pointer;
+  background-color: white;
+  border-radius: 50%;
+  transform: ${props => props.isOpen ? 'rotate(0deg)': 'rotate(180deg)'};
+  transition: transform 0.1s linear;
+`
+
 export class DetailsBox extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      isOpen: true
+      isOpen: props.collapsed ? false :  true
     }
     this.onToggle = this.onToggle.bind(this)
   }
@@ -60,8 +69,13 @@ export class DetailsBox extends React.Component {
     return (
       <StyledDetailsBox width={1} {...rest} mb={3}>
         {title &&
-          <Flex px={3} bg='gray2'>
-            <Heading h={4}>{title}</Heading>
+          <Flex px={3} py={2} bg='gray2' alignItems='center'>
+            <Box>
+              <Heading h={4}>{title}</Heading>
+            </Box>
+            <Box ml='auto'>
+              <CollapseTrigger size={36} isOpen={isOpen} onClick={() => this.onToggle()}/>
+            </Box>
           </Flex>
         }
         {isOpen &&
