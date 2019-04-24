@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { injectIntl, intlShape } from 'react-intl'
-import DetailsBox from './DetailsBox'
+import { DetailsBoxTable } from './DetailsBox'
 
 const PerformanceDetails = ({
   averagePing,
@@ -39,7 +39,7 @@ const PerformanceDetails = ({
     }
   ]
   return (
-    <DetailsBox
+    <DetailsBoxTable
       title={intl.formatMessage({ id: 'Measurement.Details.Performance.Heading' })}
       items={items}
       bg='WHITE'

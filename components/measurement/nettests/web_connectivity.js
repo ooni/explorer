@@ -16,6 +16,8 @@ import styled from 'styled-components'
 
 import { FormattedMessage } from 'react-intl'
 
+import { DetailsBox } from '../DetailsBox'
+
 export const checkAnomaly = ( testKeys ) => {
   const {
     accessible,
@@ -70,26 +72,6 @@ const StatusInfo = ({ url, message}) => (
     </Box>
   </Flex>
 )
-
-const StyledDetailsBox = styled(Box)`
-  border: 2px solid ${props => props.theme.colors.gray2};
-`
-
-const DetailsBox = ({ title, content, ...props }) => (
-  <StyledDetailsBox width={1} {...props} mb={3}>
-    <Flex px={3} bg='gray2'>
-      <Heading h={4}>{title}</Heading>
-    </Flex>
-    <Flex p={3} flexWrap='wrap'>
-      {content}
-    </Flex>
-  </StyledDetailsBox>
-)
-
-DetailsBox.propTypes = {
-  title: PropTypes.string.isRequired,
-  content: PropTypes.element
-}
 
 // From https://css-tricks.com/snippets/css/make-pre-text-wrap/
 const WrappedPre = styled(Pre)`
@@ -364,8 +346,7 @@ const WebConnectivityDetails = ({ isConfirmed, isAnomaly, isFailure, country, me
                     </Box>
                   </Flex>
                 }
-              >
-              </DetailsBox>
+              />
             </Flex>
             {/* DNS Queries */}
             <Flex>

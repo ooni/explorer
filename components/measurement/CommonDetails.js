@@ -13,7 +13,7 @@ import {
 import NoSSR from 'react-no-ssr'
 import { injectIntl, intlShape } from 'react-intl'
 
-import DetailsBox from './DetailsBox'
+import { DetailsBoxTable } from './DetailsBox'
 
 // We wrap the json viewer so that we can render it only in client side rendering
 class JsonViewer extends React.Component {
@@ -81,7 +81,7 @@ const CommonDetails = ({
     <React.Fragment>
       <Flex my={4}>
         {/* Metadata: platform, probe, MK version etc. */}
-        <DetailsBox
+        <DetailsBoxTable
           items={items}
           bg={theme.colors.gray2}
         />
