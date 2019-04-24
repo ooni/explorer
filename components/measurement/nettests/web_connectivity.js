@@ -105,66 +105,6 @@ const HttpResponseBodyContainer = styled(WrappedPre)`
   overflow: auto;
 `
 
-const FailureString = ({failure}) => {
-  if (!failure) {
-    return (
-      <div>
-        <Tick size={20} /> <FormattedMessage id='Measurement.Details.Websites.Failures.Values.Null' />
-      </div>
-    )
-  }
-
-  return (
-    <div>
-      <Cross size={20} /> {failure}
-    </div>
-  )
-}
-const QueryContainer = ({query}) => {
-  const {
-    query_type,
-    answers,
-    hostname,
-    engine,
-    failure
-  } = query
-
-  return (
-    <Flex flexWrap='wrap'>
-      <Box width={1} mb={1}>
-        <Flex justifyContent='space-between' pr={4}>
-          <Box>
-            {hostname}
-          </Box>
-          <Box>
-            IN
-          </Box>
-          <Box>
-            {query_type}
-          </Box>
-          <Box>
-            engine: {engine}
-          </Box>
-        </Flex>
-      </Box>
-      {failure && <Box width={1}><FailureString failure={failure} /></Box>}
-      <Box width={1}>
-        {answers.map((dnsAnswer, index) => (
-          <Flex key={index} flexWrap='wrap' mb={1}>
-            <Box width={1/3}>
-              {dnsAnswer.answer_type}
-            </Box>
-            <Box width={2/3}>
-              {dnsAnswer.answer_type === 'A' && dnsAnswer.ipv4}
-              {dnsAnswer.answer_type === 'CNAME' && dnsAnswer.hostname}
-            </Box>
-          </Flex>
-        ))}
-      </Box>
-    </Flex>
-  )
-}
-
 const HttpResponseBody = ({request}) => {
   let body
 
@@ -182,6 +122,7 @@ const HttpResponseBody = ({request}) => {
     </HttpResponseBodyContainer>
   )
 }
+
 const RequestResponseContainer = ({request}) => {
   return (
     // FIXME: This sometime ends up creating empty sections with just a title
@@ -226,6 +167,89 @@ const RequestResponseContainer = ({request}) => {
         </Box>
       </Flex>
     </Box>
+  )
+}
+
+const FailureString = ({failure}) => {
+  if (!failure) {
+    return (
+      <div>
+        <Tick size={20} /> <FormattedMessage id='Measurement.Details.Websites.Failures.Values.Null' />
+      </div>
+    )
+  }
+
+  return (
+    <div>
+      <Cross size={20} /> {failure}
+    </div>
+  )
+}
+
+const DnsAnswerCell = (props) => (
+  <Box width={1/8}>{props.children}</Box>
+)
+
+DnsAnswerCell.propTypes = {
+  children: PropTypes.element
+}
+
+const FiveColRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = 'Type', data = 'DATA', header = false}) => (
+  <Text fontWeight={header && 'bold'}>
+    <Flex flexWrap='wrap' mb={2}>
+      <DnsAnswerCell>{name}</DnsAnswerCell>
+      <DnsAnswerCell>{netClass}</DnsAnswerCell>
+      <DnsAnswerCell>{ttl}</DnsAnswerCell>
+      <DnsAnswerCell>{type}</DnsAnswerCell>
+      <DnsAnswerCell>{type === 'A' ? data.ipv4 : type === 'CNAME' ? data.hostname : data}</DnsAnswerCell>
+    </Flex>
+  </Text>
+)
+
+const QueryContainer = ({query}) => {
+  const {
+    query_type,
+    answers,
+    hostname,
+    engine,
+    failure
+  } = query
+  return (
+    <Flex flexWrap='wrap'>
+      <Box width={1} mb={2}>
+        {/* Metadata */}
+        <Flex>
+          <Box mr={2}>
+            <strong>Query:</strong>
+          </Box>
+          <Box mr={2}>
+            IN {query_type} {hostname}
+          </Box>
+        </Flex>
+        <Flex>
+          <Box mr={2}>
+            <strong>Engine: </strong>
+          </Box>
+          <Box mr={2}>
+            {engine}
+          </Box>
+        </Flex>
+      </Box>
+      {failure && <Box width={1}><FailureString failure={failure} /></Box>}
+      <Box width={1}>
+        <FiveColRow header />
+        {answers.map((dnsAnswer, index) => (
+          <FiveColRow
+            key={index}
+            name='@'
+            netClass='IN'
+            ttl={dnsAnswer.ttl}
+            type={dnsAnswer.answer_type}
+            data={{ipv4: dnsAnswer.ipv4, hostname: dnsAnswer.hostname}}
+          />
+        ))}
+      </Box>
+    </Flex>
   )
 }
 
@@ -349,12 +373,14 @@ const WebConnectivityDetails = ({ isConfirmed, isAnomaly, isFailure, country, me
                 title={<FormattedMessage id='Measurement.Details.Websites.DNSQueries.Heading' />}
                 content={
                   <React.Fragment>
-                    <Box width={1/3} mb={1}>
-                      <FormattedMessage id='Measurement.Details.Websites.DNSQueries.Label.Resolver' />:
-                    </Box>
-                    <Box width={2/3}>
-                      {client_resolver || '(unknown)'}
-                    </Box>
+                    <Flex flexWrap='wrap' mb={2}>
+                      <Box mr={1}>
+                        <strong><FormattedMessage id='Measurement.Details.Websites.DNSQueries.Label.Resolver' />:</strong>
+                      </Box>
+                      <Box>
+                        {client_resolver || '(unknown)'}
+                      </Box>
+                    </Flex>
                     <Box width={1}>
                       {queries.map((query, index) => <QueryContainer key={index} query={query} />)}
                     </Box>
