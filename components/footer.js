@@ -89,7 +89,7 @@ const Footer = ({ intl }) => (
         <FooterBox width={[1, 2/6]}>
           <small>
             <Box mb={1}>{intl.formatMessage({ id: 'Footer.Text.Copyright' })}</Box>
-            <Box>{intl.formatMessage({ id: 'Footer.Text.CCommons' })}</Box>
+            <FooterLink href='https://github.com/ooni/license' label={intl.formatMessage({ id: 'Footer.Text.CCommons'})} />
           </small>
         </FooterBox>
       </Flex>
