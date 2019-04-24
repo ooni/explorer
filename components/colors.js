@@ -1,0 +1,6 @@
+import { theme } from 'ooni-components'
+
+export const colorNormal = theme.colors.green7
+export const colorError = theme.colors.yellow5
+export const colorConfirmed = theme.colors.red8
+export const colorAnomaly = theme.colors.yellow8

@@ -9,8 +9,18 @@ import {
   VictoryAxis,
   VictoryVoronoiContainer
 } from 'victory'
+
 import { theme } from 'ooni-components'
 import styled from 'styled-components'
+
+import {
+  colorNormal,
+  colorError,
+  colorConfirmed,
+  colorAnomaly
+} from '../colors'
+
+import Tooltip from './tooltip'
 
 import SpinLoader from '../vendor/spin-loader'
 
@@ -99,10 +109,10 @@ class URLChart extends React.Component {
     const { metadata } = this.props
     const { data, minimized, fetching } = this.state
     const dataColorMap = {
-      total_count: theme.colors.gray3,
-      confirmed_count: theme.colors.green8,
-      anomaly_count: theme.colors.yellow9,
-      failure_count: theme.colors.red8
+      total_count: colorNormal,
+      confirmed_count: colorConfirmed,
+      anomaly_count: colorAnomaly,
+      failure_count: colorError
     }
 
     if (fetching) {
@@ -129,17 +139,11 @@ class URLChart extends React.Component {
                 <VictoryChart
                   // theme={VictoryTheme.material}
                   scale={{x: 'time'}}
-                  height={minimized ? 150 : 400}
+                  height={150}
                   containerComponent={
                     <VictoryVoronoiContainer
                       responsive={false}
-                      labels={(d) => `
-                    Total: ${d.total_count} \n
-                    Confirmed: ${d.confirmed_count} \n
-                    Anomalies: ${d.anomaly_count} \n
-                    Failures: ${d.failure_count} \n
-                    Date: ${new Date(d.test_day).toLocaleDateString()}
-                  `}
+                      voronoiDimension='x'
                     />
                   }
                 >
@@ -148,6 +152,31 @@ class URLChart extends React.Component {
                     tickFormat={() => {}}
                   />
                   <VictoryStack>
+                    <VictoryBar
+                      labels={(d) => {
+                        let s = `${new Date(d.test_day).toLocaleDateString()}`
+                        if (d.confirmed_count > 0) {
+                          s += `\n${d.confirmed_count} Confirmed`
+                        }
+                        if (d.anomaly_count > 0) {
+                          s += `\n${d.anomaly_count} Anomalies`
+                        }
+                        if (d.failure_count > 0) {
+                          s += `\n${d.failure_count} Failures`
+                        }
+                        s += `\n${d.total_count} Total`
+                        return s
+                      }}
+                      labelComponent={<Tooltip width={100} />}
+                      data={data}
+                      x='test_day'
+                      y={(d) => (d.total_count - d.confirmed_count - d.anomaly_count - d.failure_count)}
+                      style={{
+                        data: {
+                          fill: dataColorMap.total_count,
+                        }
+                      }}
+                    />
                     {
                       ['confirmed_count', 'anomaly_count', 'failure_count'].map((type, index) => (
                         <VictoryBar
@@ -164,16 +193,6 @@ class URLChart extends React.Component {
                         />
                       ))
                     }
-                    <VictoryBar
-                      data={data}
-                      x='test_day'
-                      y={(d) => (d.total_count - d.confirmed_count - d.anomaly_count - d.failure_count)}
-                      style={{
-                        data: {
-                          fill: dataColorMap.total_count,
-                        }
-                      }}
-                    />
                   </VictoryStack>
                 </VictoryChart>
               }

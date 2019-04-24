@@ -11,9 +11,15 @@ import {
   Flex, Box,
   Link,
   Text,
-  Divider,
-  theme
+  Divider
 } from 'ooni-components'
+
+import {
+  colorNormal,
+  colorError,
+  colorConfirmed,
+  colorAnomaly
+} from '../colors'
 
 import Flag from '../flag'
 
@@ -112,11 +118,6 @@ const StyledColorCode = styled.div`
   width: 5px;
   margin-right: 10px;
 `
-
-const colorNormal = theme.colors.green7
-const colorError = theme.colors.yellow5
-const colorConfirmed = theme.colors.red8
-const colorAnomaly = theme.colors.yellow8
 
 const ColorCodeConfirmed = styled(StyledColorCode)`
   background-color: ${colorConfirmed};
