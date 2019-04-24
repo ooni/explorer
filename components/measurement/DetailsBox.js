@@ -39,18 +39,40 @@ const StyledDetailsBox = styled(Box)`
   border: 2px solid ${props => props.theme.colors.gray2};
 `
 
-export const DetailsBox = ({ title, content, ...props }) => (
-  <StyledDetailsBox width={1} {...props} mb={3}>
-    {title &&
-      <Flex px={3} bg='gray2'>
-        <Heading h={4}>{title}</Heading>
-      </Flex>
+export class DetailsBox extends React.Component {
+  constructor (props) {
+    super(props)
+    this.state = {
+      isOpen: true
     }
-    <Box p={3} flexWrap='wrap'>
-      {content}
-    </Box>
-  </StyledDetailsBox>
-)
+    this.onToggle = this.onToggle.bind(this)
+  }
+
+  onToggle () {
+    this.setState((state) => ({
+      isOpen: !state.isOpen
+    }))
+  }
+
+  render () {
+    const { title, content, ...rest } = this.props
+    const { isOpen } = this.state
+    return (
+      <StyledDetailsBox width={1} {...rest} mb={3}>
+        {title &&
+          <Flex px={3} bg='gray2'>
+            <Heading h={4}>{title}</Heading>
+          </Flex>
+        }
+        {isOpen &&
+          <Box p={3} flexWrap='wrap'>
+            {content}
+          </Box>
+        }
+      </StyledDetailsBox>
+    )
+  }
+}
 
 DetailsBox.propTypes = {
   title: PropTypes.string.isRequired,
