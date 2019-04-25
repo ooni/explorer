@@ -11,8 +11,15 @@ import { getTestMetadata } from '../utils'
 import Badge from '../badge'
 
 const TestGroupBadge = ({icon, name, color}) => (
-  <Badge bg={color} color='color'>
-    {icon} {name}
+  <Badge bg={color} color='white'>
+    <Flex alignItems='center'>
+      <Box>
+        {React.cloneElement(icon, {size: 32})}
+      </Box>
+      <Box>
+        {name}
+      </Box>
+    </Flex>
   </Badge>
 )
 
@@ -30,13 +37,12 @@ const DetailsHeader = ({testName, runtime, notice}) => {
       <Box>
         <TestGroupBadge
           icon={metadata.icon}
-          name={metadata.groupName}
-
+          name={<Text fontSize={20} is='span'>{metadata.groupName}</Text>}
           color={metadata.color}
         />
       </Box>
-      <Box ml={1}>
-        <Text fontWeight='bold'>{metadata.name}</Text>
+      <Box ml={2}>
+        <Text fontSize={20}>{metadata.name}</Text>
       </Box>
       <Box mx='auto'>
         {notice}

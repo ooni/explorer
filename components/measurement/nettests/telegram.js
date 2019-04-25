@@ -13,18 +13,7 @@ import MdPhoneAndroid from 'react-icons/lib/md/phone-android'
 import MdWebAsset from 'react-icons/lib/md/web-asset'
 
 import AccessPointStatus from '../AccessPointStatus'
-
-const DetailsBox = ({ title, content, ...props}) => (
-  <Box {...props}>
-    <Heading h={4}>{title}</Heading>
-    {content}
-  </Box>
-)
-
-DetailsBox.propTypes = {
-  title: PropTypes.string.isRequired,
-  content: PropTypes.element,
-}
+import { DetailsBox } from '../DetailsBox'
 
 const TelegramDetails = ({ measurement, render }) => {
   const testKeys = measurement.test_keys
@@ -65,7 +54,7 @@ const TelegramDetails = ({ measurement, render }) => {
         <React.Fragment>
           <Container>
             <Flex>
-              <DetailsBox width={1/2} content={
+              <DetailsBox content={
                 <React.Fragment>
                   <Flex>
                     <Box width={1/4}>

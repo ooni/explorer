@@ -13,7 +13,7 @@ import {
 import NoSSR from 'react-no-ssr'
 import { injectIntl, intlShape } from 'react-intl'
 
-import DetailsBox from './DetailsBox'
+import { DetailsBoxTable, DetailsBox } from './DetailsBox'
 
 // We wrap the json viewer so that we can render it only in client side rendering
 class JsonViewer extends React.Component {
@@ -32,7 +32,7 @@ class JsonViewer extends React.Component {
     `
     return (
       <StyledReactJsonContainer>
-        <ReactJson src={src} />
+        <ReactJson collapsed={1} src={src} />
       </StyledReactJsonContainer>
     )
   }
@@ -80,30 +80,39 @@ const CommonDetails = ({
   return (
     <React.Fragment>
       <Flex my={4}>
-        <DetailsBox
+        {/* Metadata: platform, probe, MK version etc. */}
+        <DetailsBoxTable
           items={items}
           bg={theme.colors.gray2}
         />
       </Flex>
+      {/* Raw Measurement */}
       <Box>
-        <Flex px={3} alignItems='center' bg={theme.colors.gray2}>
-          <Box>
-            <Heading h={4}>{intl.formatMessage({ id: 'Measurement.CommonDetails.RawMeasurement.Heading' })}</Heading>
-          </Box>
-          <Box >
-            <a href={measurementURL} download={downloadFilename}>
-              <Button
-                fontSize={11}
-                mx={3}
-                px={3}>{intl.formatMessage({ id: 'Measurement.CommonDetails.RawMeasurement.Download' })}</Button>
-            </a>
-          </Box>
-        </Flex>
-        <Flex bg='WHITE' p={3}>
-          <NoSSR>
-            <JsonViewer src={measurement} />
-          </NoSSR>
-        </Flex>
+        <DetailsBox
+          collapsed={true}
+          title={
+            <Flex px={3} alignItems='center' bg={theme.colors.gray2}>
+              <Box>
+                <Heading h={4}>{intl.formatMessage({ id: 'Measurement.CommonDetails.RawMeasurement.Heading' })}</Heading>
+              </Box>
+              <Box >
+                <a href={measurementURL} download={downloadFilename}>
+                  <Button
+                    fontSize={11}
+                    mx={3}
+                    px={3}>{intl.formatMessage({ id: 'Measurement.CommonDetails.RawMeasurement.Download' })}</Button>
+                </a>
+              </Box>
+            </Flex>
+          }
+          content={
+            <Flex bg='WHITE' p={3}>
+              <NoSSR>
+                <JsonViewer src={measurement} />
+              </NoSSR>
+            </Flex>
+          }
+        />
       </Box>
     </React.Fragment>
   )
