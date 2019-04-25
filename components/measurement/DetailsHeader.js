@@ -38,12 +38,11 @@ const DetailsHeader = ({testName, runtime, notice}) => {
         <TestGroupBadge
           icon={metadata.icon}
           name={<Text fontSize={20} is='span'>{metadata.groupName}</Text>}
-
           color={metadata.color}
         />
       </Box>
       <Box ml={2}>
-        <Text fontSize={20} fontWeight='bold'>{metadata.name}</Text>
+        <Text fontSize={20}>{metadata.name}</Text>
       </Box>
       <Box mx='auto'>
         {notice}
