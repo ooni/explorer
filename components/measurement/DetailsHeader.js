@@ -12,7 +12,14 @@ import Badge from '../badge'
 
 const TestGroupBadge = ({icon, name, color}) => (
   <Badge bg={color} color='white'>
-    {React.cloneElement(icon, {size: 32})}{name}
+    <Flex alignItems='center'>
+      <Box>
+        {React.cloneElement(icon, {size: 32})}
+      </Box>
+      <Box>
+        {name}
+      </Box>
+    </Flex>
   </Badge>
 )
 
