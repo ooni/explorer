@@ -91,9 +91,9 @@ const StyledViewDetailsLink = styled(Link)`
 `
 
 const ViewDetailsLink = ({reportId, input, children}) => {
-  let href = `/measurement?report_id=${reportId}`
+  let href = `/measurement/${reportId}`
   if (input) {
-    href += `&input=${input}`
+    href += `?input=${input}`
   }
   return (
     <NLink href={href}>
