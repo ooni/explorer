@@ -19,7 +19,7 @@ const StyledNavItem = styled.a`
   text-decoration: none;
   position: relative;
   display: inline;
-  padding-left: 16px;
+  margin-left: 16px;
 `
 
 const NavItemLabel = styled.span`
@@ -37,12 +37,12 @@ const Underline = styled.span`
   height: 2px;
   background: ${props => props.theme.colors.white};
   position: absolute;
-  left: 16px;
+  left: 0;
   bottom: -6px;
 
-  width: ${props => props.active ? 'calc(100% - 15px)' : '0px'};
+  width: ${props => props.active ? '100%' : '0px'};
   ${StyledNavItem}:hover & {
-    width: calc(100% - 15px);
+    width: calc(100%);
   }
 `
 

@@ -56,7 +56,8 @@ app.prepare()
     })
 
     server.get('/measurement/:report_id', (req, res) => {
-      return app.render(req, res, '/measurement', req.params)
+      const combinedQuery = {...req.params, ...req.query}
+      return app.render(req, res, '/measurement', combinedQuery)
     })
 
     // Default catch all
