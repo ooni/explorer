@@ -1,4 +1,5 @@
-//
+// Documentation for markdown-to-jsx
+// https://github.com/probablyup/markdown-to-jsx
 import React from 'react'
 import PropTypes from 'prop-types'
 import { injectIntl, intlShape } from 'react-intl'
