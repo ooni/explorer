@@ -22,7 +22,15 @@ import NavBar from '../components/nav-bar'
 import { toCompactNumberUnit } from '../utils'
 
 const HeroUnit = styled.div`
-  background: linear-gradient(326.31deg, #005A99 39.35%, #0588CB 82.69%), #0588CB;
+  background: url(/static/images/world-dots.svg);
+  background: linear-gradient(
+    319.33deg,
+    ${props => props.theme.colors.blue9} 39.35%,
+    ${props => props.theme.colors.base} 82.69%),
+    ${props => props.theme.colors.base};
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
   padding-bottom: 48px;
   padding-top: 16px;
 `
@@ -116,8 +124,8 @@ export default class LandingPage extends React.Component {
         </Head>
         <HeroUnit>
           <NavBar color='transparent' />
-          <Container>
-            <Text textAlign='center' my={120}>
+          <Container style={{'background': 'url("/static/images/world-dots.svg")'}} py={120} my={90}>
+            <Text textAlign='center'>
               <Heading h={1}>
                 <Text fontSize={64} color='#ffffff'><FormattedMessage id='Home.Banner.Title.UncoverEvidence' /></Text>
               </Heading>
