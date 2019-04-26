@@ -27,6 +27,7 @@
     "immutable": "^3.8.1",
     "lodash.debounce": "^4.0.8",
     "lodash.random": "^3.2.0",
+    "markdown-to-jsx": "^6.9.4",
     "moment": "^2.20.1",
     "next": "6.0.3",
     "nprogress": "^0.2.0",
