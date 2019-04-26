@@ -6,7 +6,6 @@ import { injectIntl, intlShape } from 'react-intl'
 import Markdown from 'markdown-to-jsx'
 
 const FormattedMarkdown = ({ intl, id }) => (
-  // <Markdown source={intl.formatMessage({ id })} />
   <Markdown>
     {intl.formatMessage({ id })}
   </Markdown>
