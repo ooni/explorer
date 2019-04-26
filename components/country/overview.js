@@ -5,6 +5,7 @@ import { Flex, Box, Heading } from 'ooni-components'
 import SectionHeader from './section-header'
 import { BoxWithTitle } from './box'
 import TestsByGroup from './overview-charts'
+import FormattedMarkdown from '../formatted-markdown'
 import {
   NettestGroupWebsites,
   NettestGroupInstantMessaging,
@@ -126,7 +127,7 @@ const Overview = ({
       {/* Highlight Box */}
       {/* <SummaryText> */}
       <SummaryText>
-        <FormattedMessage
+        <FormattedMarkdown
           id='Country.Overview.SummaryTextTemplate'
           values={{
             measurementCount,
