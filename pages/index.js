@@ -1,7 +1,6 @@
 /* global process */
 import React from 'react'
 import Head from 'next/head'
-import NLink from 'next/link'
 import FormattedMarkdown from '../components/formatted-markdown'
 import styled from 'styled-components'
 import axios from 'axios'
@@ -12,14 +11,14 @@ import {
   Container,
   Button,
   Heading,
-  Link
 } from 'ooni-components'
 import { Text } from 'rebass'
 
 import Layout from '../components/Layout'
 import NavBar from '../components/nav-bar'
-
 import { toCompactNumberUnit } from '../utils'
+import HighlightSection from '../components/landing/highlights-section'
+import highlightContent from '../components/landing/highlights.json'
 
 const HeroUnit = styled.div`
   background: url(/static/images/world-dots.svg);
@@ -90,6 +89,10 @@ const FeatureBoxTitle = styled(Text)`
 
 const ImgBox = styled.img`
   width: 100%;
+`
+
+const BorderedBox = styled(Box)`
+  border: 1px solid ${props => props.theme.colors.gray3};
 `
 
 export default class LandingPage extends React.Component {
@@ -196,6 +199,37 @@ export default class LandingPage extends React.Component {
               <FormattedMessage id='Home.Search&Filter.SummaryText' />
             </FeatureBox>
           </FeatureRow>
+          {/* Highlights */}
+          <Container>
+            <Flex flexWrap='wrap' justifyContent='center' my={3}>
+              <Heading h={2} color='blue7'><FormattedMessage id={'Home.Highlights.Title'} /></Heading>
+            </Flex>
+            <Flex flexWrap='wrap' justifyContent='center'>
+              <BorderedBox p={3} width={1/2}>
+                <Text fontSize={20}>
+                  <FormattedMarkdown
+                    id='Home.Highlights.Description'
+                  />
+                </Text>
+              </BorderedBox>
+            </Flex>
+
+            {/* Political Events */}
+            <HighlightSection
+              title='Censorship during political events'
+              highlights={highlightContent.political}
+            />
+            {/* Media */}
+            <HighlightSection
+              title='Media censorship'
+              highlights={highlightContent.media}
+            />
+            {/* LGBTQI sites */}
+            <HighlightSection
+              title='Blocking of LGBTQI sites'
+              highlights={highlightContent.lgbtqi}
+            />
+          </Container>
         </Container>
       </Layout>
     )
