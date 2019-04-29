@@ -1,7 +1,7 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Flex, Box, Container } from 'ooni-components'
-import ExplorerLogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochrome.svg'
+import ExplorerLogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochromeInverted.svg'
 import NLink from 'next/link'
 import { injectIntl, intlShape } from 'react-intl'
 
@@ -51,10 +51,6 @@ const FooterText = styled.div`
   margin-top: 0px;
 `
 
-const StyledIcon = styled(ExplorerLogo)`
-  fill: #ffffff;
-`
-
 const Footer = ({ intl }) => (
   <StyledFooter>
     <Container>
@@ -62,7 +58,7 @@ const Footer = ({ intl }) => (
         <FooterBox width={[1, 2/5]}>
           <Flex flexWrap='wrap' alignItems='center'>
             <Box p={[1, 0]} mb={[0, 3]} width={[1/2, 1]}>
-              <StyledIcon height='32px' />
+              <ExplorerLogo height='32px' />
             </Box>
             <Box p={[1, 0]} pr={[0, '50%']} width={[1/2, 1]}> <FooterText>{intl.formatMessage({ id: 'Footer.Text.Slogan' })}</FooterText> </Box>
           </Flex>
@@ -90,10 +86,10 @@ const Footer = ({ intl }) => (
         </FooterBox>
       </Flex>
       <Flex flexWrap='wrap'>
-        <FooterBox width={[1, 2/6]}>
+        <FooterBox>
           <small>
             <Box mb={1}>{intl.formatMessage({ id: 'Footer.Text.Copyright' })}</Box>
-            <Box>{intl.formatMessage({ id: 'Footer.Text.CCommons' })}</Box>
+            <FooterLink href='https://github.com/ooni/license' label={intl.formatMessage({ id: 'Footer.Text.CCommons'})} />
           </small>
         </FooterBox>
       </Flex>
