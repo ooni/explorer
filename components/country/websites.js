@@ -9,6 +9,7 @@ import { SimpleBox } from './box'
 import PeriodFilter from './period-filter'
 import ASNSelector from './asn-selector'
 import TestsByCategoryInNetwork from './websites-charts'
+import FormattedMarkdown from '../formatted-markdown'
 
 class WebsitesSection extends React.Component {
   constructor(props) {
@@ -55,7 +56,7 @@ class WebsitesSection extends React.Component {
         </Box> */}
         <SimpleBox>
           <Text>
-            <FormattedMessage id='Country.Websites.Description' />
+            <FormattedMarkdown id='Country.Websites.Description' />
           </Text>
         </SimpleBox>
 

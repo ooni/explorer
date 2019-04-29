@@ -2,7 +2,7 @@
 import React from 'react'
 import Head from 'next/head'
 import NLink from 'next/link'
-
+import FormattedMarkdown from '../components/formatted-markdown'
 import styled from 'styled-components'
 import axios from 'axios'
 import { FormattedMessage } from 'react-intl'
@@ -146,7 +146,7 @@ export default class LandingPage extends React.Component {
           <Flex justifyContent='center'>
             <Box width={[1, 2/3]}>
               <Text fontSize={20} lineHeight={1.5}>
-                <FormattedMessage id='Home.About.SummaryText' />
+                <FormattedMarkdown id='Home.About.SummaryText' />
               </Text>
             </Box>
           </Flex>

@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import { Text } from 'ooni-components'
-import { FormattedMessage } from 'react-intl'
 
 import { getTestMetadata } from '../utils'
+import FormattedMarkdown from '../formatted-markdown'
 
 const SummaryText = ({
   testName,
@@ -12,8 +12,7 @@ const SummaryText = ({
   country,
   date,
   content,
-  testUrl,
-
+  testUrl
 }) => {
   const metadata = getTestMetadata(testName)
   const formattedDate = moment(date).format('LL')
@@ -24,8 +23,7 @@ const SummaryText = ({
     textToRender = content()
   } else {
     textToRender =
-      <FormattedMessage id='Measurement.Details.SummaryTextTemplate'
-        description='This is a multi-sentence paragraph with tokens.'
+      <FormattedMarkdown id='Measurement.Details.SummaryTextTemplate'
         values={{
           testName: <a href={metadata.info}>{metadata.name}</a>,
           network: network,

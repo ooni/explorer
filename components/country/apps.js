@@ -6,6 +6,7 @@ import { SimpleBox } from './box'
 import PeriodFilter from './period-filter'
 import AppsStatsGroup from './apps-stats'
 import AppsStatsCircumvention from './apps-stats-circumvention'
+import FormattedMarkdown from '../formatted-markdown'
 
 const AppsSection = () => (
   <React.Fragment>
@@ -18,7 +19,7 @@ const AppsSection = () => (
       </Box> */}
     </SectionHeader>
     <SimpleBox>
-      <FormattedMessage id='Country.Apps.Description' />
+      <FormattedMarkdown id='Country.Apps.Description' />
     </SimpleBox>
     {/* App-wise graphs */}
     <AppsStatsGroup
