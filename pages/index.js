@@ -1,6 +1,7 @@
 /* global process */
 import React from 'react'
 import Head from 'next/head'
+import NLink from 'next/link'
 import FormattedMarkdown from '../components/formatted-markdown'
 import styled from 'styled-components'
 import axios from 'axios'
@@ -19,6 +20,7 @@ import NavBar from '../components/nav-bar'
 import { toCompactNumberUnit } from '../utils'
 import HighlightSection from '../components/landing/highlights-section'
 import highlightContent from '../components/landing/highlights.json'
+import { Flag } from '../components/flag'
 
 const HeroUnit = styled.div`
   background: url(/static/images/world-dots.svg);
@@ -229,6 +231,46 @@ export default class LandingPage extends React.Component {
               title='Blocking of LGBTQI sites'
               highlights={highlightContent.lgbtqi}
             />
+            {/* Censorship changes */}
+            <Flex alignItems='flex-start' my={5}>
+              <Box p={2} width={2/12}>
+                <Text fontSize={20}>
+                  Censorship Changes
+                </Text>
+              </Box>
+              <Box width={10/12} p={2}>
+                <Text fontSize={18}>
+                  <Box>
+                    OONI measurements have been collected on a continuous basis since 2012, enabling the identification of censorship changes around the world over the last years. Some examples include:
+                  </Box>
+                  <Flex my={3}>
+                    <Box mr={2}>
+                      <Flag countryCode='CU' size={24} />
+                    </Box>
+                    <Box>
+                      Cuba <a href='https://ooni.torproject.org/post/cuba-internet-censorship-2017/'>used to primarily serve blank block pages</a>, only blocking the HTTP version of websites. Now they censor access to sites that support HTTPS by means of IP blocking.
+                    </Box>
+                  </Flex>
+                  <Flex my={3}>
+                    <Box mr={2}>
+                      <Flag countryCode='VE' size={24} />
+                    </Box>
+                    <Box>
+                      Venezuelan ISPs used to primarily block sites by means of <a href='https://ooni.torproject.org/post/venezuela-internet-censorship/'>DNS tampering</a>. Now state-owned CANTV also implements <a href='https://ooni.torproject.org/post/venezuela-blocking-wikipedia-and-social-media-2019/'>SNI-based filtering</a>.
+                    </Box>
+                  </Flex>
+                  <Flex my={3}>
+                    <Box mr={2}>
+                      <Flag countryCode='ET' size={24} />
+                    </Box>
+                    <Box>
+                      Ethiopia <a href='https://ooni.io/post/ethiopia-report/'>used to block</a> numerous news websites, LGBTQI, political opposition, and circumvention tool sites. As part of the 2018 political reforms, most of these sites have been <a href='https://ooni.io/post/ethiopia-unblocking/'>unblocked</a>.
+                    </Box>
+                  </Flex>
+                  <Box mt={5}>We encourage you to <NLink href='/search'><a>explore OONI measurements</a></NLink> to find more highlights!</Box>
+                </Text>
+              </Box>
+            </Flex>
           </Container>
         </Container>
       </Layout>
