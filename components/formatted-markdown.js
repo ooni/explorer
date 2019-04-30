@@ -5,16 +5,17 @@ import PropTypes from 'prop-types'
 import { injectIntl, intlShape } from 'react-intl'
 import Markdown from 'markdown-to-jsx'
 
-const FormattedMarkdown = ({ intl, id, defaultMessage, ...rest }) => (
+const FormattedMarkdown = ({ intl, id, defaultMessage, values }) => (
   <Markdown>
-    {intl.formatMessage({ id, defaultMessage }, {...rest})}
+    {intl.formatMessage({ id, defaultMessage }, values)}
   </Markdown>
 )
 
 FormattedMarkdown.propTypes = {
   intl: intlShape,
   id: PropTypes.string.isRequired,
-  defaultMessage: PropTypes.string
+  defaultMessage: PropTypes.string,
+  values: PropTypes.object
 }
 
 export default injectIntl(FormattedMarkdown)
