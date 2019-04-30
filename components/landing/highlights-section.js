@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Flex, Box, Text } from 'ooni-components'
+import { Flex, Box } from 'ooni-components'
+import { Text } from 'rebass'
 
 import HighlightBox from './highlight-box'
 
@@ -8,13 +9,13 @@ const HighlightSection = ({
   title,
   highlights
 }) => (
-  <Flex alignItems='flex-start' my={5}>
-    <Box p={2} width={2/12}>
-      <Text fontSize={20}>
+  <Flex flexWrap='wrap' alignItems='flex-start' my={5}>
+    <Box p={2} width={[1, 2/12]}>
+      <Text fontSize={20} fontWeight={500} textAlign={['center', 'left']}>
         {title}
       </Text>
     </Box>
-    <Box width={10/12}>
+    <Box width={[1, 10/12]}>
       {/* HighlightBoxes */}
       <Flex flexWrap='wrap'>
         {

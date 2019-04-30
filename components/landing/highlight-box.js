@@ -22,24 +22,28 @@ const HighlightBox = ({
   report,
   explore
 }) => (
-  <Box p={2} width={1/2}>
+  <Box p={2} width={[1, 1/2]}>
     <Flex flexWrap='wrap' alignItems='center' my={1}>
       <Flag countryCode={countryCode} size={24} />
       <Text fontSize={18} fontWeight='bold' mx={1}>{countryName}</Text>
     </Flex>
     <Flex flexWrap='wrap' my={1} alignItems='center'>
-      <Box mr={2}><Text fontSize={18}>{title}</Text></Box>
-      <Box>
+      <Box mr={2} width={[1, 'unset']} order={[1, 'unset']}>
+        <Text fontSize={18}>{title}</Text>
+      </Box>
+      <Box order={[3, 'unset']} my={1}>
         <LinkButton bg='blue5' color='white' px={2} py={1}>
-          <NLink href={explore}>Explore</NLink>
+          <NLink href={explore}><a>Explore</a></NLink>
         </LinkButton>
       </Box>
-      <Box ml={2}>
-        <LinkButton bg='green8' color='white' px={2} py={1}> <a href={report}> Report </a></LinkButton>
+      <Box ml={2} order={[4, 'unset']}>
+        <LinkButton bg='green8' color='white' px={2} py={1}>
+          <a href={report}> Report </a>
+        </LinkButton>
       </Box>
-    </Flex>
-    <Flex flexWrap='wrap'>
-      <Text fontSize={16} color='gray6'>{text}</Text>
+      <Box width={1} order={[2, 'unset']}>
+        <Text fontSize={16} color='gray6'>{text}</Text>
+      </Box>
     </Flex>
   </Box>
 )

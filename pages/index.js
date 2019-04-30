@@ -50,8 +50,8 @@ const StyledStatsItem = styled(Box)`
 `
 
 const StatsItem = ({label, unit, value }) => (
-  <StyledStatsItem color='blue9' width={[1, 1/3]} p={3}>
-    <Text fontSize={48} fontWeight={300}>
+  <StyledStatsItem color='blue9' width={[1/3]} p={3}>
+    <Text fontSize={[42, 48]} fontWeight={300}>
       {value}
       <Text is='span' fontSize={32}>{unit}</Text>
     </Text>
@@ -83,11 +83,14 @@ FeatureBox.defaultProps = {
 }
 
 const FeatureBoxTitle = styled(Text)`
-  color: ${props => props.theme.colors.blue9};
-  font-size: 24px;
-  font-weight: 600;
-  margin-bottom: 12px;
 `
+FeatureBoxTitle.defaultProps = {
+  textAlign: ['center', 'left'],
+  color: 'blue9',
+  fontSize: 24,
+  fontWeight: 600,
+  mb: 2
+}
 
 const ImgBox = styled.img`
   width: 100%;
@@ -95,6 +98,12 @@ const ImgBox = styled.img`
 
 const BorderedBox = styled(Box)`
   border: 1px solid ${props => props.theme.colors.gray3};
+`
+
+const StyledContainer = styled(Container)`
+  background-image: url('/static/images/world-dots.svg');
+  background-repeat: no-repeat;
+  background-position: center;
 `
 
 export default class LandingPage extends React.Component {
@@ -129,18 +138,18 @@ export default class LandingPage extends React.Component {
         </Head>
         <HeroUnit>
           <NavBar color='transparent' />
-          <Container style={{'background': 'url("/static/images/world-dots.svg")'}} py={120} my={90}>
+          <StyledContainer py={[0, 120]} my={[0, 90]}>
             <Text textAlign='center'>
               <Heading h={1}>
-                <Text fontSize={64} color='#ffffff'><FormattedMessage id='Home.Banner.Title.UncoverEvidence' /></Text>
+                <Text fontSize={[32, 64]} color='#ffffff'><FormattedMessage id='Home.Banner.Title.UncoverEvidence' /></Text>
               </Heading>
-              <Text fontSize={24} color='blue1'><FormattedMessage id='Home.Banner.Subtitle.ExploreCensorshipEvents' /></Text>
+              <Text fontSize={[18, 24]} color='blue1'><FormattedMessage id='Home.Banner.Subtitle.ExploreCensorshipEvents' /></Text>
               <Button mt={48} inverted hollow fontSize={24}><FormattedMessage id='Home.Banner.Button.Explore' /></Button>
             </Text>
-          </Container>
+          </StyledContainer>
         </HeroUnit>
         <Container>
-          <StatsContainer px={32} py={16} mx={[1, '25%']} mt={-120} mb={48} flexWrap='wrap'>
+          <StatsContainer px={[0, 32]} py={16} mx={[0, '25%']} mt={[0, -120]} mb={48} flexWrap='wrap'>
             <StatsItem
               label={<FormattedMessage id='Home.Banner.Stats.Measurements' />}
               unit={measurementCount.unit}
@@ -156,7 +165,9 @@ export default class LandingPage extends React.Component {
               value={asnCount.value}
             />
           </StatsContainer>
-          <Flex justifyContent='center'>
+
+          {/* Intro text about Explorer */}
+          <Flex justifyContent='center' my={4}>
             <Box width={[1, 2/3]}>
               <Text fontSize={20} lineHeight={1.5}>
                 <FormattedMarkdown id='Home.About.SummaryText' />
@@ -173,7 +184,7 @@ export default class LandingPage extends React.Component {
               <FeatureBoxTitle>
                 <FormattedMessage id='Home.Websites&Apps.Title' />
               </FeatureBoxTitle>
-              <FormattedMessage id='Home.Search&Filter.SummaryText' />
+              <FormattedMessage id='Home.Websites&Apps.SummaryText' />
             </FeatureBox>
           </FeatureRow>
           {/* Search & Filter */}
@@ -207,7 +218,7 @@ export default class LandingPage extends React.Component {
               <Heading h={2} color='blue7'><FormattedMessage id={'Home.Highlights.Title'} /></Heading>
             </Flex>
             <Flex flexWrap='wrap' justifyContent='center'>
-              <BorderedBox p={3} width={1/2}>
+              <BorderedBox px={3} width={[1, 1/2]}>
                 <Text fontSize={20}>
                   <FormattedMarkdown
                     id='Home.Highlights.Description'
@@ -232,13 +243,13 @@ export default class LandingPage extends React.Component {
               highlights={highlightContent.lgbtqi}
             />
             {/* Censorship changes */}
-            <Flex alignItems='flex-start' my={5}>
-              <Box p={2} width={2/12}>
-                <Text fontSize={20}>
+            <Flex flexWrap='wrap' alignItems='flex-start' my={5}>
+              <Box p={2} width={[1, 2/12]}>
+                <Text fontSize={20} fontWeight={500} textAlign={['center', 'left']}>
                   Censorship Changes
                 </Text>
               </Box>
-              <Box width={10/12} p={2}>
+              <Box width={[1, 10/12]} p={1}>
                 <Text fontSize={18}>
                   <Box>
                     OONI measurements have been collected on a continuous basis since 2012, enabling the identification of censorship changes around the world over the last years. Some examples include:
