@@ -222,7 +222,13 @@ export default class LandingPage extends React.Component {
             </Flex>
             <Flex justifyContent='center'>
               <Text fontSize={18}>
-                <FormattedMessage id={'Home.Stats.Description'} />
+                <FormattedMarkdown id={'Home.Stats.Description'}
+                  values={{
+                    measurementCount: 0,
+                    networkCount: 0,
+                    countryCount: 0
+                  }}
+                />
               </Text>
             </Flex>
             <CoverageChart />
