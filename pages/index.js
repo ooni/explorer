@@ -21,6 +21,7 @@ import { toCompactNumberUnit } from '../utils'
 import HighlightSection from '../components/landing/highlights-section'
 import highlightContent from '../components/landing/highlights.json'
 import { Flag } from '../components/flag'
+import { CoverageChart } from '../components/landing/stats'
 
 const HeroUnit = styled.div`
   background: url(/static/images/world-dots.svg);
@@ -212,6 +213,20 @@ export default class LandingPage extends React.Component {
               <FormattedMessage id='Home.Search&Filter.SummaryText' />
             </FeatureBox>
           </FeatureRow>
+          {/* Measurement Statistics */}
+          <Container>
+            <Flex justifyContent='center' my={3}>
+              <Heading h={2} color='blue7'>
+                <FormattedMessage id={'Home.Stats.Title'} />
+              </Heading>
+            </Flex>
+            <Flex justifyContent='center'>
+              <Text fontSize={18}>
+                <FormattedMessage id={'Home.Stats.Description'} />
+              </Text>
+            </Flex>
+            <CoverageChart />
+          </Container>
           {/* Highlights */}
           <Container>
             <Flex flexWrap='wrap' justifyContent='center' my={3}>
