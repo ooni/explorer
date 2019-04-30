@@ -3,7 +3,8 @@ import {
   VictoryChart,
   VictoryLine,
   VictoryAxis,
-  VictoryVoronoiContainer
+  VictoryVoronoiContainer,
+  VictoryLegend
 } from 'victory'
 import axios from 'axios'
 import moment from 'moment'
@@ -79,6 +80,26 @@ class CoverageChart extends React.Component {
         }
         domainPadding={20}
       >
+        <VictoryLegend
+          centerTitle
+          x={300}
+          y={280}
+          orientation='horizontal'
+          gutter={40}
+          data={[
+            { name: 'Countries',
+              symbol: {
+                type: 'minus', fill: theme.colors.blue8
+              }
+            },
+            {
+              name: 'Networks',
+              symbol: {
+                type: 'minus', fill: theme.colors.blue4
+              }
+            }
+          ]}
+        />
         <VictoryAxis
           tickCount={12}
           tickFormat={(t) => moment(t).format('MMM[\']YY')}
