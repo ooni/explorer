@@ -1,7 +1,5 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import {
-  VictoryTheme,
   VictoryChart,
   VictoryLine,
   VictoryAxis,
@@ -18,7 +16,8 @@ class CoverageChart extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      data: null,
+      countryCoverage: null,
+      networkCoverage: null,
       fetching: true
     }
   }
@@ -28,38 +27,53 @@ class CoverageChart extends React.Component {
 
   async fetchCoverageStats () {
     const client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
-    const result = await client.get('/api/_/countries_by_month')
+    const [countryCoverage, networkCoverage] = await Promise.all([
+      client.get('/api/_/countries_by_month'),
+      client.get('/api/_/asn_by_month')
+    ])
 
     this.setState({
-      data: result.data,
+      countryCoverage: countryCoverage.data,
+      networkCoverage: networkCoverage.data,
       fetching: false
     })
   }
 
   render() {
-    const { data, fetching } = this.state
+    const { countryCoverage, networkCoverage, fetching } = this.state
     if (fetching) {
       return (<SpinLoader />)
     }
 
-    let countryCoverageMaxima
+    let countryCoverageMaxima, networkCoverageMaxima
 
-    data.forEach((d) => {
+    countryCoverage.forEach((d) => {
       if (typeof countryCoverageMaxima === 'undefined'
           || countryCoverageMaxima < d.value) {
         countryCoverageMaxima = d.value
       }
     })
+    networkCoverage.forEach((d) => {
+      if (typeof networkCoverageMaxima === 'undefined'
+          || networkCoverageMaxima < d.value) {
+        networkCoverageMaxima = d.value
+      }
+    })
 
     return (
       <VictoryChart
-        theme={VictoryTheme.material}
         height={300}
         width={800}
         containerComponent={
           <VictoryVoronoiContainer
             voronoiDimension='x'
-            labels={(d) => d.value}
+            labels={(d) => {
+              if (d.childName === 'countryCoverage') {
+                return `${d.date}\n \nCountries: ${d.value}`
+              } else if (d.childName === 'networkCoverage') {
+                return `Networks: ${d.value}`
+              }
+            }}
             labelComponent={<Tooltip />}
           />
         }
@@ -74,15 +88,31 @@ class CoverageChart extends React.Component {
           tickFormat={(t) => Math.floor(t * countryCoverageMaxima)}
         />
         <VictoryLine
-          data={data}
+          name='countryCoverage'
+          data={countryCoverage}
           x='date'
           y={(d) => d.value / countryCoverageMaxima}
           scale={{ x: 'time', y: 'linear' }}
-          // labels={(d) => moment(d.date).format('LL')}
-          // labelComponent={<Tooltip />}
           style={{
             data: {
               stroke: theme.colors.blue8
+            }
+          }}
+        />
+        <VictoryAxis
+          dependentAxis
+          orientation='right'
+          tickFormat={(t) => Math.floor(t * networkCoverageMaxima)}
+        />
+        <VictoryLine
+          name='networkCoverage'
+          data={networkCoverage}
+          x='date'
+          y={(d) => (d.value + 20) / networkCoverageMaxima}
+          scale={{ x: 'time', y: 'linear' }}
+          style={{
+            data: {
+              stroke: theme.colors.blue4
             }
           }}
         />
