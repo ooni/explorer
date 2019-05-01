@@ -22,7 +22,7 @@ const HighlightBox = ({
   report,
   explore
 }) => (
-  <Box p={2} width={[1, 1/2]}>
+  <Box p={2} my={3} width={[1, 1/2]}>
     <Flex flexWrap='wrap' alignItems='center' my={1}>
       <Flag countryCode={countryCode} size={24} />
       <Text fontSize={18} fontWeight='bold' mx={1}>{countryName}</Text>

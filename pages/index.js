@@ -214,7 +214,7 @@ export default class LandingPage extends React.Component {
             </FeatureBox>
           </FeatureRow>
           {/* Measurement Statistics */}
-          <Container>
+          <Container mb={5}>
             <CoverageChart />
           </Container>
           {/* Highlights */}
@@ -223,7 +223,7 @@ export default class LandingPage extends React.Component {
               <Heading h={2} color='blue7'><FormattedMessage id={'Home.Highlights.Title'} /></Heading>
             </Flex>
             <Flex flexWrap='wrap' justifyContent='center'>
-              <BorderedBox px={3} width={[1, 1/2]}>
+              <BorderedBox px={3} width={[1, 2/3]}>
                 <Text fontSize={20}>
                   <FormattedMarkdown
                     id='Home.Highlights.Description'
