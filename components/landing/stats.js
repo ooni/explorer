@@ -176,34 +176,34 @@ class CoverageChart extends React.Component {
             data={networkCoverage}
             x='date'
             y={(d) => (d.value + 20) / networkCoverageMaxima}
-          scale={{ x: 'time', y: 'linear' }}
-          style={{
-            data: {
-              stroke: theme.colors.gray7
-            }
-          }}
-        />
-        <VictoryAxis
-          dependentAxis
-          orientation='right'
-          style={{ axis: { stroke : theme.colors.yellow7 }}}
-          tickValues={[0, 0.5, 1]}
-          tickFormat={(t) => `${Math.round(t * runsMaxima/1000, 2)}k`}
-        />
-        <VictoryLine
-          name='runsByMonth'
-          data={runsByMonth}
-          x='date'
-          y={(d) => (d.value + 20) / runsMaxima}
-          scale={{ x: 'time', y: 'linear' }}
-          style={{
-            data: {
-              stroke: theme.colors.yellow7
-            }
-          }}
-        />
+            scale={{ x: 'time', y: 'linear' }}
+            style={{
+              data: {
+                stroke: theme.colors.gray7
+              }
+            }}
+          />
+          <VictoryAxis
+            dependentAxis
+            orientation='right'
+            style={{ axis: { stroke : theme.colors.yellow7 }}}
+            tickValues={[0, 0.5, 1]}
+            tickFormat={(t) => `${Math.round(t * runsMaxima/1000, 2)}k`}
+          />
+          <VictoryLine
+            name='runsByMonth'
+            data={runsByMonth}
+            x='date'
+            y={(d) => (d.value + 20) / runsMaxima}
+            scale={{ x: 'time', y: 'linear' }}
+            style={{
+              data: {
+                stroke: theme.colors.yellow7
+              }
+            }}
+          />
 
-      </VictoryChart>
+        </VictoryChart>
       </React.Fragment>
     )
   }
