@@ -42,7 +42,7 @@ const FeaturedArticle = ({link, title}) => (
 const SummaryText = styled(Box)`
   border: 1px solid ${props => props.theme.colors.gray4};
   border-left: 12px solid ${props => props.theme.colors.blue5};
-  font-size: 28px;
+  font-size: 22px;
   font-style: italic;
   line-height: 1.5;
 `
