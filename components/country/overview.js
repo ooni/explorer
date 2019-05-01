@@ -74,7 +74,7 @@ const Overview = ({
       </SectionHeader>
       <BoxWithTitle title={<FormattedMessage id='Country.Overview.Heading.NwInterference' />}>
         <Flex flexWrap='wrap'>
-          <NwInterferenceStatus width={[1, 1/2]} color={middleboxCount && 'violet8'}>
+          <NwInterferenceStatus width={[1, 1/3]} color={middleboxCount && 'violet8'}>
             <NettestGroupMiddleBoxes size={32} />
             <FormattedMessage
               id={ getStatus(middleboxCount, 'Country.Overview.NwInterference.Middleboxes') }
@@ -87,14 +87,14 @@ const Overview = ({
               values={{ circumventionTools }}
             />
           </NwInterferenceStatus> */}
-          <NwInterferenceStatus width={[1, 1/2]} color={imCount && 'yellow9'}>
+          <NwInterferenceStatus width={[1, 1/3]} color={imCount && 'yellow9'}>
             <NettestGroupInstantMessaging size={32} />
             <FormattedMessage
               id={ getStatus(imCount, 'Country.Overview.NwInterference.IM') }
               values={{ imCount }}
             />
           </NwInterferenceStatus>
-          <NwInterferenceStatus width={[1, 1/2]} color={blockedWebsitesCount && 'indigo5'}>
+          <NwInterferenceStatus width={[1, 1/3]} color={blockedWebsitesCount && 'indigo5'}>
             <NettestGroupWebsites size={32} />
             <FormattedMessage
               id={ getStatus(blockedWebsitesCount, 'Country.Overview.NwInterference.Websites') }
