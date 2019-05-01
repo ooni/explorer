@@ -20,7 +20,7 @@ const SidebarItem = ({link, children}) => (
 )
 
 const Sidebar = () => (
-  <StyledSideBar flexDirection='column'>
+  <StyledSideBar flexDirection={['row', 'column']}>
     <SidebarItem link='#overview'>
       <FormattedMessage id='Country.Heading.Overview'/>
     </SidebarItem>
