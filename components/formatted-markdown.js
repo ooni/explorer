@@ -4,11 +4,23 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import Markdown from 'markdown-to-jsx'
+import { Link, theme } from 'ooni-components'
 
 const FormattedMarkdown = (props) => (
   <FormattedMessage {...props} >
     {(msg) => (
-      <Markdown>
+      <Markdown
+        options={{
+          overrides: {
+            a: {
+              component: Link,
+              props: {
+                color: theme.colors.blue7
+              }
+            },
+          }
+        }}
+      >
         {msg}
       </Markdown>
     )}
