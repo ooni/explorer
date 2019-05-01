@@ -181,7 +181,7 @@ export default class LandingPage extends React.Component {
             <FeatureBox>
               <ImgBox src='/static/images/websites-apps.png' alt='Websites and Apps' />
             </FeatureBox>
-            <FeatureBox>
+            <FeatureBox color='gray7'>
               <FeatureBoxTitle>
                 <FormattedMessage id='Home.Websites&Apps.Title' />
               </FeatureBoxTitle>
@@ -191,7 +191,7 @@ export default class LandingPage extends React.Component {
           {/* Search & Filter */}
           {/* Arrange in {[img, para], [img, para], [img, para]} pattern on smaller screens */}
           <FeatureRow flexDirection={['column-reverse', 'row']}>
-            <FeatureBox>
+            <FeatureBox color='gray7'>
               <FeatureBoxTitle>
                 <FormattedMessage id='Home.Search&Filter.Title' />
               </FeatureBoxTitle>
@@ -206,7 +206,7 @@ export default class LandingPage extends React.Component {
             <FeatureBox>
               <ImgBox src='/static/images/network-performance.png' alt='Search and Filter' />
             </FeatureBox>
-            <FeatureBox>
+            <FeatureBox color='gray7'>
               <FeatureBoxTitle>
                 <FormattedMessage id='Home.NetworkProperties.Title' />
               </FeatureBoxTitle>
