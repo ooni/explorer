@@ -21,7 +21,6 @@ import {
 } from '../colors'
 
 import Tooltip from './tooltip'
-
 import SpinLoader from '../vendor/spin-loader'
 
 const Circle = styled.div`
@@ -44,6 +43,11 @@ const Triangle = styled.div`
   border-right: 6px solid transparent;
   border-top: ${props => props.down ? '12px solid ' + props.theme.colors.gray7 : 'none'};
   border-bottom: ${props => !props.down ? '12px solid ' + props.theme.colors.gray7 : 'none'};
+`
+
+const StyledChartRow = styled(Flex)`
+  border: 1px solid ${props => props.theme.colors.gray3};
+  border-radius: 5px;
 `
 
 const ToggleMinimizeButton = ({ minimized, onToggle }) => (
@@ -120,10 +124,10 @@ class URLChart extends React.Component {
     }
 
     return (
-      <Flex flexWrap='wrap' justifyContent='space-between'>
+      <StyledChartRow flexWrap='wrap' justifyContent='space-between' bg='gray0' my={3}>
         <Box width={15/16}>
-          <Flex alignItems='center'>
-            <Box width={1/4}>
+          <Flex alignItems='center' flexWrap='wrap'>
+            <Box width={[1, 1/4]} p={3}>
               {metadata.input}
               {/* TODO: Show percentages
                 <Flex flexDirection='column'>
@@ -133,22 +137,22 @@ class URLChart extends React.Component {
                 </Flex>
               */}
             </Box>
-            <Box width={3/4}>
+            <Box width={[1, 3/4]}>
               {
                 data &&
                 <VictoryChart
                   // theme={VictoryTheme.material}
                   scale={{x: 'time'}}
-                  height={150}
+                  width={1200}
+                  height={200}
                   containerComponent={
                     <VictoryVoronoiContainer
-                      responsive={false}
                       voronoiDimension='x'
                     />
                   }
                 >
                   <VictoryAxis
-                    style={{ axis: { stroke: 'none'}}}
+                    style={{ axis: { stroke: 'none' }}}
                     tickFormat={() => {}}
                   />
                   <VictoryStack>
@@ -204,7 +208,7 @@ class URLChart extends React.Component {
           <ToggleMinimizeButton minimized={minimized} onToggle={this.onToggleMinimize} />
           </Box>
         */}
-      </Flex>
+      </StyledChartRow>
     )
   }
 }
