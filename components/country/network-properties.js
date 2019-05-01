@@ -1,6 +1,6 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { Flex, Heading } from 'ooni-components'
+import { Flex, Heading, Text } from 'ooni-components'
 import axios from 'axios'
 
 import SectionHeader from './section-header'
@@ -117,7 +117,9 @@ class NetworkPropertiesSection extends React.Component {
           </Box> */}
         </SectionHeader>
         <SimpleBox>
-          <FormattedMessage id='Country.NetworkProperties.Description' />
+          <Text fontSize={16}>
+            <FormattedMessage id='Country.NetworkProperties.Description' />
+          </Text>
         </SimpleBox>
         {/* Country Level Summary
           <Heading h={4}><FormattedMessage id='Country.NetworkProperties.Heading.Summary' /></Heading>
