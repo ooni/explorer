@@ -8,10 +8,12 @@ import {
 } from 'victory'
 import axios from 'axios'
 import moment from 'moment'
-import { theme } from 'ooni-components'
+import { Flex, Heading, Text, theme } from 'ooni-components'
+import { FormattedMessage } from 'react-intl'
 
 import SpinLoader from '../vendor/spin-loader'
 import Tooltip from '../country/tooltip'
+import FormattedMarkdown from '../formatted-markdown'
 
 const getMaxima = (data) => {
   let maxima
@@ -60,93 +62,119 @@ class CoverageChart extends React.Component {
       return (<SpinLoader />)
     }
 
+    // API responses are ordered by date, with most recent month at the end
+    const lastMonth = {
+      countryCount: countryCoverage[countryCoverage.length - 1].value,
+      networkCount: networkCoverage[networkCoverage.length - 1].value,
+      runCount: runsByMonth[runsByMonth.length - 1].value
+    }
+
+    // Determine the maximum value for each data set
+    // Used to scale the charts on a y-axis shared with other charts
     const countryCoverageMaxima = getMaxima(countryCoverage)
     const networkCoverageMaxima = getMaxima(networkCoverage)
     const runsMaxima = getMaxima(runsByMonth)
 
     return (
-      <VictoryChart
-        height={300}
-        width={800}
-        containerComponent={
-          <VictoryVoronoiContainer
-            voronoiDimension='x'
-            labels={(d) => {
-              if (d.childName === 'countryCoverage') {
-                return `${d.date}\n \nCountries: ${d.value}`
-              } else if (d.childName === 'networkCoverage') {
-                return `Networks: ${d.value}`
-              } else if (d.childName === 'runsByMonth') {
-                return `Runs: ${d.value}`
+      <React.Fragment>
+        <Flex justifyContent='center' my={3}>
+          <Heading h={2} color='blue7'>
+            <FormattedMessage id={'Home.MonthlyStats.Title'} />
+          </Heading>
+        </Flex>
+        <Flex justifyContent='center'>
+          <Text fontSize={18}>
+            <FormattedMarkdown id={'Home.MonthlyStats.SummaryText'}
+              values={{
+                runCount: lastMonth.runCount,
+                networkCount: lastMonth.networkCount,
+                countryCount: lastMonth.countryCount
+              }}
+            />
+          </Text>
+        </Flex>
+        <VictoryChart
+          height={300}
+          width={800}
+          containerComponent={
+            <VictoryVoronoiContainer
+              voronoiDimension='x'
+              labels={(d) => {
+                if (d.childName === 'countryCoverage') {
+                  return `${d.date}\n \nCountries: ${d.value}`
+                } else if (d.childName === 'networkCoverage') {
+                  return `Networks: ${d.value}`
+                } else if (d.childName === 'runsByMonth') {
+                  return `Runs: ${d.value}`
+                }
+              }}
+              labelComponent={<Tooltip />}
+            />
+          }
+          domainPadding={{
+            x: 0, y: 10
+          }}
+        >
+          <VictoryLegend
+            centerTitle
+            x={300}
+            y={280}
+            orientation='horizontal'
+            gutter={40}
+            data={[
+              { name: 'Countries',
+                symbol: {
+                  type: 'minus', fill: theme.colors.blue8
+                }
+              },
+              {
+                name: 'Networks',
+                symbol: {
+                  type: 'minus', fill: theme.colors.gray7
+                }
+              },
+              {
+                name: 'Monthly Runs',
+                symbol: {
+                  type: 'minus', fill: theme.colors.yellow7
+                }
+              }
+            ]}
+          />
+          <VictoryAxis
+            tickCount={12}
+            tickFormat={(t) => moment(t).format('MMM[\']YY')}
+          />
+          <VictoryAxis
+            dependentAxis
+            style={{ axis: { stroke : theme.colors.blue7 }}}
+            tickValues={[0, 0.5, 1]}
+            tickFormat={(t) => Math.floor(t * countryCoverageMaxima)}
+          />
+          <VictoryLine
+            name='countryCoverage'
+            data={countryCoverage}
+            x='date'
+            y={(d) => d.value / countryCoverageMaxima}
+            scale={{ x: 'time', y: 'linear' }}
+            style={{
+              data: {
+                stroke: theme.colors.blue8
               }
             }}
-            labelComponent={<Tooltip />}
           />
-        }
-        domainPadding={{
-          x: 0, y: 10
-        }}
-      >
-        <VictoryLegend
-          centerTitle
-          x={300}
-          y={280}
-          orientation='horizontal'
-          gutter={40}
-          data={[
-            { name: 'Countries',
-              symbol: {
-                type: 'minus', fill: theme.colors.blue8
-              }
-            },
-            {
-              name: 'Networks',
-              symbol: {
-                type: 'minus', fill: theme.colors.gray7
-              }
-            },
-            {
-              name: 'Monthly Runs',
-              symbol: {
-                type: 'minus', fill: theme.colors.yellow7
-              }
-            }
-          ]}
-        />
-        <VictoryAxis
-          tickCount={12}
-          tickFormat={(t) => moment(t).format('MMM[\']YY')}
-        />
-        <VictoryAxis
-          dependentAxis
-          style={{ axis: { stroke : theme.colors.blue7 }}}
-          tickValues={[0, 0.5, 1]}
-          tickFormat={(t) => Math.floor(t * countryCoverageMaxima)}
-        />
-        <VictoryLine
-          name='countryCoverage'
-          data={countryCoverage}
-          x='date'
-          y={(d) => d.value / countryCoverageMaxima}
-          scale={{ x: 'time', y: 'linear' }}
-          style={{
-            data: {
-              stroke: theme.colors.blue8
-            }
-          }}
-        />
-        <VictoryAxis
-          dependentAxis
-          offsetX={400}
-          style={{ axis: { stroke : theme.colors.gray7 }}}
-          tickValues={[0, 0.5, 1]}
-          tickFormat={(t) => Math.floor(t * networkCoverageMaxima)}
-        />
-        <VictoryLine
-          name='networkCoverage'
-          data={networkCoverage}
-          x='date'
-          y={(d) => (d.value + 20) / networkCoverageMaxima}
+          <VictoryAxis
+            dependentAxis
+            offsetX={400}
+            style={{ axis: { stroke : theme.colors.gray7 }}}
+            tickValues={[0, 0.5, 1]}
+            tickFormat={(t) => Math.floor(t * networkCoverageMaxima)}
+          />
+          <VictoryLine
+            name='networkCoverage'
+            data={networkCoverage}
+            x='date'
+            y={(d) => (d.value + 20) / networkCoverageMaxima}
           scale={{ x: 'time', y: 'linear' }}
           style={{
             data: {
@@ -175,6 +203,7 @@ class CoverageChart extends React.Component {
         />
 
       </VictoryChart>
+      </React.Fragment>
     )
   }
 }
