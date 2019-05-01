@@ -117,8 +117,8 @@ class CoverageChart extends React.Component {
         >
           <VictoryLegend
             centerTitle
-            x={300}
-            y={280}
+            x={230}
+            y={230}
             orientation='horizontal'
             gutter={40}
             data={[
