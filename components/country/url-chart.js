@@ -17,7 +17,8 @@ import {
   colorNormal,
   colorError,
   colorConfirmed,
-  colorAnomaly
+  colorAnomaly,
+  colorEmpty
 } from '../colors'
 
 import Tooltip from './tooltip'
@@ -116,7 +117,8 @@ class URLChart extends React.Component {
       total_count: colorNormal,
       confirmed_count: colorConfirmed,
       anomaly_count: colorAnomaly,
-      failure_count: colorError
+      failure_count: colorError,
+      empty: colorEmpty
     }
 
     if (fetching) {
@@ -152,7 +154,10 @@ class URLChart extends React.Component {
                   }
                 >
                   <VictoryAxis
-                    style={{ axis: { stroke: 'none' }}}
+                    style={{
+                      axis: { stroke: 'none' },
+                      grid: { stroke: dataColorMap.empty }
+                    }}
                     tickFormat={() => {}}
                   />
                   <VictoryStack>
@@ -191,7 +196,7 @@ class URLChart extends React.Component {
                           style={{
                             data: {
                               fill: dataColorMap[type],
-                              strokeWidth: (d, active) => active ? 4 : 1
+                              strokeWidth: (d, active) => active ? 4 : 0
                             }
                           }}
                         />
