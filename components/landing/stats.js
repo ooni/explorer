@@ -168,7 +168,8 @@ class CoverageChart extends React.Component {
             offsetX={400}
             style={{ axis: { stroke : theme.colors.gray7 }}}
             tickValues={[0, 0.5, 1]}
-            tickFormat={(t) => Math.floor(t * networkCoverageMaxima)}
+            // Hide tick value 0 for the axis in the middle of the chart
+            tickFormat={(t) => t > 0 ? Math.floor(t * networkCoverageMaxima) : ''}
           />
           <VictoryLine
             name='networkCoverage'
