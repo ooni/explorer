@@ -10,7 +10,7 @@ import { theme } from 'ooni-components'
 const Tooltip = (props) => (<VictoryTooltip
   {...props}
   labelComponent={
-    <VictoryLabel style={{fill: theme.colors.white}}/>
+    <VictoryLabel style={{fill: theme.colors.white, fontFamily: 'Fira Sans'}}/>
   }
   flyoutStyle={{
     strokeWidth: 0,

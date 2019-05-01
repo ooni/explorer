@@ -144,10 +144,23 @@ class CoverageChart extends React.Component {
           <VictoryAxis
             tickCount={12}
             tickFormat={(t) => moment(t).format('MMM[\']YY')}
+            style={{
+              tickLabels: {
+                fontFamily: 'Fira Sans'
+              }
+            }}
           />
           <VictoryAxis
             dependentAxis
-            style={{ axis: { stroke : theme.colors.blue7 }}}
+            style={{
+              axis: {
+                stroke : theme.colors.blue7,
+                strokeWidth: 2
+              },
+              tickLabels: {
+                fontFamily: 'Fira Sans'
+              }
+            }}
             tickValues={[0, 0.5, 1]}
             tickFormat={(t) => Math.floor(t * countryCoverageMaxima)}
           />
@@ -166,7 +179,15 @@ class CoverageChart extends React.Component {
           <VictoryAxis
             dependentAxis
             offsetX={400}
-            style={{ axis: { stroke : theme.colors.gray7 }}}
+            style={{
+              axis: {
+                stroke : theme.colors.gray7,
+                strokeWidth: 2
+              },
+              tickLabels: {
+                fontFamily: 'Fira Sans'
+              }
+            }}
             tickValues={[0, 0.5, 1]}
             // Hide tick value 0 for the axis in the middle of the chart
             tickFormat={(t) => t > 0 ? Math.floor(t * networkCoverageMaxima) : ''}
@@ -186,7 +207,15 @@ class CoverageChart extends React.Component {
           <VictoryAxis
             dependentAxis
             orientation='right'
-            style={{ axis: { stroke : theme.colors.yellow7 }}}
+            style={{
+              axis: {
+                stroke : theme.colors.yellow7,
+                strokeWidth: 2
+              },
+              tickLabels: {
+                fontFamily: 'Fira Sans'
+              }
+            }}
             tickValues={[0, 0.5, 1]}
             tickFormat={(t) => `${Math.round(t * runsMaxima/1000, 2)}k`}
           />
@@ -202,7 +231,6 @@ class CoverageChart extends React.Component {
               }
             }}
           />
-
         </VictoryChart>
       </React.Fragment>
     )
