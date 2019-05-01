@@ -94,7 +94,7 @@ class CoverageChart extends React.Component {
           </Text>
         </Flex>
         <VictoryChart
-          height={300}
+          height={250}
           width={800}
           containerComponent={
             <VictoryVoronoiContainer
