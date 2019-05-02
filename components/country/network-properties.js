@@ -8,6 +8,7 @@ import { SimpleBox } from './box'
 import PeriodFilter from './period-filter'
 import NetworkStats from './network-stats'
 import SpinLoader from '../vendor/spin-loader'
+import FormattedMarkdown from '../formatted-markdown'
 
 const NETWORK_STATS_PER_PAGE = 4
 
@@ -118,7 +119,7 @@ class NetworkPropertiesSection extends React.Component {
         </SectionHeader>
         <SimpleBox>
           <Text fontSize={16}>
-            <FormattedMessage id='Country.NetworkProperties.Description' />
+            <FormattedMarkdown id='Country.NetworkProperties.Description' />
           </Text>
         </SimpleBox>
         {/* Country Level Summary
