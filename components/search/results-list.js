@@ -8,7 +8,7 @@ import NLink from 'next/link'
 import styled from 'styled-components'
 import { FormattedMessage } from 'react-intl'
 import {
-  Flex, Box,
+  Flex as Flux, Box as Bux,
   Link,
   Text,
   Divider
@@ -22,6 +22,14 @@ import {
 } from '../colors'
 
 import Flag from '../flag'
+
+const Box = styled(Bux)`
+  border: 0px solid black;
+`
+
+const Flex = styled(Flux)`
+  border: 0px solid red;
+`
 
 const StyledResultTag = styled.div`
   border-radius: 16px;
@@ -114,7 +122,7 @@ ViewDetailsLink.propTypes = {
 }
 
 const StyledColorCode = styled.div`
-  height: 48px;
+  height: 100%;
   width: 5px;
   margin-right: 10px;
 `
@@ -190,49 +198,48 @@ const ResultItem = ({msmt}) => {
   }
   return (
     <ViewDetailsLink reportId={msmt.report_id} input={msmt.input}>
-      <ResultRow alignItems='center'>
-        <Box width={1/3}>
-          <Flex alignItems='center'>
-            <Box flex='auto' width={1/16}>
-              <ColorCode msmt={msmt} />
-            </Box>
-            <Box flex='auto' width={2/16}>
-              <Text bold color='gray8'>{msmt.probe_cc}</Text>
-            </Box>
-            <Box flex='auto' width={5/16}>
-              <Flag countryCode={msmt.probe_cc} size={32} />
-            </Box>
-            <Box flex='auto' width={8/16}>
-              <ASNBox asn={msmt.probe_asn} />
-            </Box>
-          </Flex>
+      <ResultRow flexWrap='wrap' alignItems='stretch'>
+        <Box width={1/32}>
+          <ColorCode msmt={msmt} />
         </Box>
-        <Box width={2/3}>
-          <Flex flexDirection='column'>
-            <Box>
-              {input &&
-                <ResultInput>
-                  {input}
-                </ResultInput>}
-            </Box>
-            <Box>
+        <Box width={31/32} py={3}>
+          <Flex flexDirection={['column', 'row']}>
+            <Box width={[1, 3/5]}>
               <Flex alignItems='center'>
-                <Box pr={2} width={7/16}>
-                  {msmt.testName}
+                <Box width={1/16}>
+                  <Text bold color='gray8'>{msmt.probe_cc}</Text>
+                </Box>
+                <Box width={2/16}>
+                  <Flag countryCode={msmt.probe_cc} size={32} />
+                </Box>
+                <Box width={3/16}>
+                  <ASNBox asn={msmt.probe_asn} />
                 </Box>
                 <Box width={4/16}>
                   {moment(msmt.measurement_start_time).format('YYYY-MM-DD')}
                 </Box>
-                <Box width={4/16}>
-                  <ResultTag msmt={msmt} />
+                <Box width={6/16}>
+                  {msmt.testName}
                 </Box>
-                <Box width={1/16}>
+              </Flex>
+            </Box>
 
+            <Box width={[1, 2/5]}>
+              <Flex justifyContent='space-between' alignItems='center'>
+                <Box>
+                  {input &&
+                    <ResultInput>
+                      {input}
+                    </ResultInput>}
+                </Box>
+                <Box>
+                  <ResultTag msmt={msmt} />
                 </Box>
               </Flex>
             </Box>
           </Flex>
         </Box>
+
       </ResultRow>
     </ViewDetailsLink>
   )
