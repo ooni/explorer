@@ -133,9 +133,7 @@ const Overview = ({
             measurementCount,
             countryName,
             startDate: new Date(measuredSince).toLocaleDateString(),
-            networkCovered: networkCount,
-            mostMeasuredASName: 'NA',
-            mostMeasuredASNumber: 'NA'
+            networkCovered: networkCount
           }}
         />
       </SummaryText>
