@@ -66,7 +66,7 @@
     "mustache": "^2.3.0"
   },
   "scripts": {
-    "dev": "NODE_ENV=development MEASUREMENTS_URL=http://api.test.ooni.io SENTRY_DSN=https://49af7fff247c445b9a7c98ee21ddfd2f@sentry.io/1427510 node index.js",
+    "dev": "NODE_ENV=development MEASUREMENTS_URL=http://api.ooni.io SENTRY_DSN=https://49af7fff247c445b9a7c98ee21ddfd2f@sentry.io/1427510 node index.js",
     "build-translations": "node ./scripts/build-translations.js",
     "build": "next build",
     "export": "next export",
