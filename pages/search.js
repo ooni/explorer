@@ -284,8 +284,8 @@ class Search extends React.Component {
         <NavBar />
 
         <Container>
-          <Flex pt={3}>
-            <Box width={1/4}>
+          <Flex pt={3} flexWrap='wrap'>
+            <Box width={[1, 1/4]} px={2}>
               <FilterSidebar
                 inputFilter={inputFilter}
                 testNameFilter={testNameFilter}
@@ -299,7 +299,7 @@ class Search extends React.Component {
                 countries={countries}
               />
             </Box>
-            <Box width={3/4} ml={4}>
+            <Box width={[1, 3/4]} px={2}>
               <Flex pt={2}>
                 <Box width={1/2}>
                   <FilterTabs onClick={this.onChangeOnly} onlyFilter={onlyFilter} />
@@ -311,12 +311,12 @@ class Search extends React.Component {
 
               {!this.state.error && results.length == 0 && <h2>No results found</h2>}
               {!this.state.error && !this.state.loading
-            && <div>
-              <ResultsList results={results} testNamesKeyed={testNamesKeyed} />
-              <Flex alignItems='center' justifyContent='center'>
-                <Button onClick={this.loadMore}><FormattedMessage id='Search.Button.LoadMore' /></Button>
-              </Flex>
-            </div>
+                && <div>
+                  <ResultsList results={results} testNamesKeyed={testNamesKeyed} />
+                  <Flex alignItems='center' justifyContent='center'>
+                    <Button onClick={this.loadMore}><FormattedMessage id='Search.Button.LoadMore' /></Button>
+                  </Flex>
+                </div>
               }
             </Box>
           </Flex>
