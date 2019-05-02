@@ -74,7 +74,7 @@ export const NavBar = ({color}) => (
       <Flex alignItems='center'>
         <Box style={{zIndex: 1}}>
           <NLink href='/'>
-            <ExplorerLogo height='26px' />
+            <a><ExplorerLogo height='26px' /></a>
           </NLink>
         </Box>
         <Box ml='auto'>

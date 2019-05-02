@@ -1,0 +1,152 @@
+{
+  "political": [
+    {
+      "countryCode": "CU",
+      "countryName": "Cuba",
+      "title": "Cuba 2019 constitutional referendum: ",
+      "text": "Blocking of independent media",
+      "report": "https://ooni.io/post/cuba-referendum/",
+      "explore": "/search?probe_cc=CU&test_name=web_connectivity&until=2019-02-26&input=https%3A%2F%2Fwww.tremendanota.com%2F&since=2019-01-31"
+    },
+    {
+      "countryCode": "VE",
+      "countryName": "Venezuela",
+      "title": "Venezuela 2019 presidential crisis",
+      "text": "Blocking of Wikipedia and social media",
+      "report": "https://ooni.io/post/venezuela-blocking-wikipedia-and-social-media-2019/",
+      "explore": "/search?probe_cc=VE"
+    },
+    {
+      "countryCode": "ZW",
+      "countryName": "Zimbabwe",
+      "title": "Zimbabwe 2019 fuel protests",
+      "text": "Social media blocking and internet blackouts",
+      "report": "https://ooni.io/post/zimbabwe-protests-social-media-blocking-2019/",
+      "explore": "/search?probe_cc=ZW"
+    },
+    {
+      "countryCode": "MA",
+      "countryName": "Mali",
+      "title": "Mali 2018 presidential election",
+      "text": "Blocking of WhatsApp and Twitter",
+      "report": "https://ooni.io/post/mali-disruptions-amid-2018-election/",
+      "explore": "/search?probe_cc=MA"
+    },
+    {
+      "countryCode": "IR",
+      "countryName": "Iran",
+      "title": "Iran 2018 anti-government protests",
+      "text": "Blocking of Telegram, Instagram and Tor",
+      "report": "https://ooni.io/post/2018-iran-protests/",
+      "explore": "/search?probe_cc=IR"
+    },
+    {
+      "countryCode": "PK",
+      "countryName": "Pakistan",
+      "title": "Pakistan 2017 protests",
+      "text": "Blocking of news websites and social media",
+      "report": "https://ooni.io/post/how-pakistan-blocked-social-media/",
+      "explore": "/search?probe_cc=PK"
+    },
+    {
+      "countryCode": "EE",
+      "countryName": "Spain",
+      "title": "Catalonia 2017 independence referendum",
+      "text": "Blocking of sites related to the referendum",
+      "report": "https://ooni.io/post/internet-censorship-catalonia-independence-referendum/",
+      "explore": "/search?probe_cc=EE"
+    },
+    {
+      "countryCode": "ET",
+      "countryName": "Ethiopia",
+      "title": "Ethiopia 2016 wave of protests",
+      "text": "Blocking of news websites and social media",
+      "report": "https://ooni.io/post/ethiopia-report/",
+      "explore": "/search?probe_cc=ET"
+    },
+    {
+      "countryCode": "UG",
+      "countryName": "Uganda",
+      "title": "Uganda 2016 general elections",
+      "text": "Blocking of social media",
+      "report": "https://ooni.io/post/uganda-social-media-blocked/",
+      "explore": "/search?probe_cc=UG"
+    }
+  ],
+  "media": [
+    {
+      "countryCode": "EG",
+      "countryName": "Egypt",
+      "title": "Egypt",
+      "text": "Blocking of hundreds of media websites",
+      "report": "https://ooni.io/post/egypt-internet-censorship/",
+      "explore": "/search?probe_cc=EG"
+    },
+    {
+      "countryCode": "SS",
+      "countryName": "South Sudan",
+      "title": "South Sudan",
+      "text": "Blocking of foreign-based media accused of hostile reporting against the government",
+      "report": "https://ooni.io/post/south-sudan-censorship/#blocked-websites",
+      "explore": "/search?probe_cc=SS"
+    },
+    {
+      "countryCode": "VE",
+      "countryName": "Venezuela",
+      "title": "Venezuela",
+      "text": "Blocking of independent media websites amid economic and political crisis",
+      "report": "https://ooni.io/post/venezuela-internet-censorship/#media",
+      "explore": "/search?probe_cc=VE"
+    },
+    {
+      "countryCode": "MY",
+      "countryName": "Malaysia",
+      "title": "Malaysia",
+      "text": "Blocking of media websites that covered the 1MDB scandal",
+      "report": "https://ooni.io/post/malaysia-report/#news-media",
+      "explore": "/search?probe_cc=MY"
+    },
+    {
+      "countryCode": "IR",
+      "countryName": "Iran",
+      "title": "Iran",
+      "text": "Blocking of at least 121 news outlets",
+      "report": "https://ooni.io/post/iran-internet-censorship/#news-websites",
+      "explore": "/search?probe_cc=IR"
+    }
+  ],
+  "lgbtqi": [
+    {
+      "countryCode": "ID",
+      "countryName": "Indonesia",
+      "title": "Indonesia",
+      "text": "",
+      "report": "https://ooni.io/post/indonesia-internet-censorship/#lgbt",
+      "explore": "/search?probe_cc=ID"
+    },
+    {
+      "countryCode": "IR",
+      "countryName": "Iran",
+      "title": "Iran",
+      "text": "",
+      "report": "https://ooni.io/post/iran-internet-censorship/#human-rights-issues",
+      "explore": "/search?probe_cc=IR"
+    },
+    {
+      "countryCode": "ET",
+      "countryName": "Ethiopia",
+      "title": "Ethiopia",
+      "text": "",
+      "report": "https://ooni.io/post/ethiopia-report/#lgbti-websites",
+      "explore": "/search?probe_cc=ET"
+    },
+    {
+      "countryCode": "MY",
+      "countryName": "Malaysia",
+      "title": "Malaysia",
+      "text": "",
+      "report": "https://sinarproject.org/digital-rights/updates/online-lgbt-censorship-malaysia",
+      "explore": "/search?probe_cc=MY"
+    }
+  ]
+}
