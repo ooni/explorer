@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
-import { Flex, Box, Heading, Text } from 'ooni-components'
+import { Flex, Box, Heading, Text, Link } from 'ooni-components'
 import axios from 'axios'
 import URLChart from './url-chart'
 import SpinLoader from '../vendor/spin-loader'
@@ -122,10 +122,10 @@ class TestsByCategoryInNetwork extends React.Component {
           testedUrls.map((testedUrl, index) => (
             <URLChart key={index} metadata={testedUrl} network={network} countryCode={countryCode} />
           ))}
-        <Flex flexWrap='wrap' justifyContent='space-around' alignItems='center'>
-          <a href='javascript:void(0)' onClick={() => this.prevPage()}>{'< '}<FormattedMessage id='Country.Websites.URLCharts.Pagination.Previous' /></a>
+        <Flex flexWrap='wrap' justifyContent='space-between' alignItems='center'>
+          <Link color='blue7' href='javascript:void(0)' onClick={() => this.prevPage()}>{'< '}<FormattedMessage id='Country.Websites.URLCharts.Pagination.Previous' /></Link>
           <Text>{currentPage} of { Math.ceil(testedUrlsCount / resultsPerPage)} pages</Text>
-          <a href='javascript:void(0)' onClick={() => this.nextPage()}><FormattedMessage id='Country.Websites.URLCharts.Pagination.Next' />{' >'}</a>
+          <Link color='blue7' href='javascript:void(0)' onClick={() => this.nextPage()}><FormattedMessage id='Country.Websites.URLCharts.Pagination.Next' />{' >'}</Link>
         </Flex>
         {/* URL-wise barcharts End */}
       </React.Fragment>

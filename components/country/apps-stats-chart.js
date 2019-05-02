@@ -5,11 +5,12 @@ import {
   VictoryChart,
   VictoryBar,
   VictoryAxis,
-  VictoryTooltip
+  VictoryVoronoiContainer
 } from 'victory'
 import { theme } from 'ooni-components'
 
 import { inCountry } from './country-context'
+import Tooltip from './tooltip'
 import SpinLoader from '../vendor/spin-loader'
 
 class AppsStatChart extends React.Component {
@@ -57,7 +58,13 @@ class AppsStatChart extends React.Component {
       <React.Fragment>
         <VictoryChart
           scale={{x: 'time'}}
+          width={900}
           height={150}
+          containerComponent={
+            <VictoryVoronoiContainer
+              voronoiDimension='x'
+            />
+          }
         >
           <VictoryAxis
             style={{ axis: { stroke: 'none'}}}
@@ -82,8 +89,12 @@ class AppsStatChart extends React.Component {
                 fill: theme.colors.green8
               }
             }}
-            labels={(d) => d.total_count}
-            labelComponent={<VictoryTooltip />}
+            labels={(d) => {
+              let s = `${new Date(d.test_day).toLocaleDateString()}`
+              s += `\n${d.total_count} Total`
+              return s
+            }}
+            labelComponent={<Tooltip width={100}/>}
           />
         </VictoryChart>
       </React.Fragment>

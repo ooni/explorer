@@ -1,5 +1,6 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
+import { Text } from 'ooni-components'
 
 import SectionHeader from './section-header'
 import { SimpleBox } from './box'
@@ -19,7 +20,9 @@ const AppsSection = () => (
       </Box> */}
     </SectionHeader>
     <SimpleBox>
-      <FormattedMarkdown id='Country.Apps.Description' />
+      <Text fontSize={16}>
+        <FormattedMarkdown id='Country.Apps.Description' />
+      </Text>
     </SimpleBox>
     {/* App-wise graphs */}
     <AppsStatsGroup

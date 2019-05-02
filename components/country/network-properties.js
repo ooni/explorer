@@ -1,6 +1,6 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { Flex, Heading } from 'ooni-components'
+import { Flex, Heading, Text } from 'ooni-components'
 import axios from 'axios'
 
 import SectionHeader from './section-header'
@@ -8,6 +8,7 @@ import { SimpleBox } from './box'
 import PeriodFilter from './period-filter'
 import NetworkStats from './network-stats'
 import SpinLoader from '../vendor/spin-loader'
+import FormattedMarkdown from '../formatted-markdown'
 
 const NETWORK_STATS_PER_PAGE = 4
 
@@ -117,7 +118,9 @@ class NetworkPropertiesSection extends React.Component {
           </Box> */}
         </SectionHeader>
         <SimpleBox>
-          <FormattedMessage id='Country.NetworkProperties.Description' />
+          <Text fontSize={16}>
+            <FormattedMarkdown id='Country.NetworkProperties.Description' />
+          </Text>
         </SimpleBox>
         {/* Country Level Summary
           <Heading h={4}><FormattedMessage id='Country.NetworkProperties.Heading.Summary' /></Heading>

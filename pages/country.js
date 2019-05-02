@@ -96,7 +96,7 @@ export default class Country extends React.Component {
           </Flex>
         </Hero>
         <Container>
-          <Flex flexWrap='flex' mt={4}>
+          <Flex flexWrap='wrap' mt={4}>
             <Box width={[1, 1/4]}>
               <Sidebar />
             </Box>

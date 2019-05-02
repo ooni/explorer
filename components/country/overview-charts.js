@@ -110,81 +110,81 @@ class TestsByGroup extends React.PureComponent {
           }
         </Flex>
         {/* Bar chart */}
-        <VictoryChart
-          domainPadding={20}
-          theme={VictoryTheme.material}
-          containerComponent={
-            <VictoryVoronoiContainer
-              responsive={false}
-              voronoiDimension='x'
-            />
-          }
-          domain={{ y: [0, 1] }}
-          width={800}
-          height={600}
-        >
-
-          <VictoryAxis tickCount={4} />
-          <VictoryAxis
-            dependentAxis
-            standalone={false}
-            tickFormat={(t) => t * testCoverageMaxima}
-          />
-          <VictoryStack standalone={false}>
-            {
-              selectedTestGroups.map((testGroup, index) => {
-                let maybeLabels = {}
-                if (index === 0) {
-                  maybeLabels['labels'] = (d) => {
-                    let s = new Date(d.test_day).toLocaleDateString()
-                    selectedTestGroups.forEach((name) => {
-                      s += `\n${d[name]} ${name}`
-                    })
-                    return s
-                  }
-                  maybeLabels['labelComponent'] = <Tooltip />
-                }
-                return (
-                  <VictoryBar
-                    {...maybeLabels}
-                    key={index}
-                    data={testCoverageArray}
-                    standalone={false}
-                    style={{
-                      data: {
-                        stroke: '#ffffff',
-                        strokeWidth: 1,
-                        fill: testGroups[testGroup].color
-                      }
-                    }}
-                    x='test_day'
-                    y={(d) => d[testGroup] / testCoverageMaxima}
-                  />
-                )
-              })
-            }
-          </VictoryStack>
-          <VictoryAxis
-            dependentAxis
-            orientation="right"
-            standalone={false}
-            tickFormat={(t) => t * networkCoverageMaxima}
-          />
-          <VictoryLine
-            data={networkCoverage}
-            x='test_day'
-            y={(d) => d.count / networkCoverageMaxima}
-            scale={{x: 'time', y: 'linear'}}
-            labels={(d) => `${new Date(d.test_day).toLocaleDateString()}\n${d.count} networks `}
-            labelComponent={<Tooltip />}
-            standalone={false}
-            style={{
-              data: {
-                stroke: theme.colors.gray7,
+        <Flex justifyContent='center'>
+          <Box width={1}>
+            <VictoryChart
+              domainPadding={20}
+              theme={VictoryTheme.material}
+              containerComponent={
+                <VictoryVoronoiContainer
+                  responsive={true}
+                  voronoiDimension='x'
+                />
               }
-            }}
-          />
-        </VictoryChart>
+              domain={{ y: [0, 1] }}
+              width={600}
+              height={200}
+            >
+
+              <VictoryAxis tickCount={4} />
+              <VictoryAxis
+                dependentAxis
+                tickFormat={(t) => t * testCoverageMaxima}
+              />
+              <VictoryStack>
+                {
+                  selectedTestGroups.map((testGroup, index) => {
+                    let maybeLabels = {}
+                    if (index === 0) {
+                      maybeLabels['labels'] = (d) => {
+                        let s = new Date(d.test_day).toLocaleDateString()
+                        selectedTestGroups.forEach((name) => {
+                          s += `\n${d[name]} ${name}`
+                        })
+                        return s
+                      }
+                      maybeLabels['labelComponent'] = <Tooltip />
+                    }
+                    return (
+                      <VictoryBar
+                        {...maybeLabels}
+                        key={index}
+                        data={testCoverageArray}
+                        style={{
+                          data: {
+                            stroke: '#ffffff',
+                            strokeWidth: 1,
+                            fill: testGroups[testGroup].color
+                          }
+                        }}
+                        x='test_day'
+                        y={(d) => d[testGroup] / testCoverageMaxima}
+                      />
+                    )
+                  })
+                }
+              </VictoryStack>
+              <VictoryAxis
+                dependentAxis
+                orientation="right"
+                tickFormat={(t) => t * networkCoverageMaxima}
+              />
+              <VictoryLine
+                data={networkCoverage}
+                x='test_day'
+                y={(d) => d.count / networkCoverageMaxima}
+                scale={{x: 'time', y: 'linear'}}
+                labels={(d) => `${new Date(d.test_day).toLocaleDateString()}\n${d.count} networks `}
+                labelComponent={<Tooltip />}
+                style={{
+                  data: {
+                    stroke: theme.colors.gray7,
+                  }
+                }}
+              />
+            </VictoryChart>
+          </Box>
+        </Flex>
       </React.Fragment>
     )
   }

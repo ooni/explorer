@@ -55,7 +55,7 @@ class WebsitesSection extends React.Component {
             <PeriodFilter onChange={onPeriodChange} />
         </Box> */}
         <SimpleBox>
-          <Text>
+          <Text fontSize={16}>
             <FormattedMarkdown id='Country.Websites.Description' />
           </Text>
         </SimpleBox>
