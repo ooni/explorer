@@ -8,7 +8,7 @@ import NLink from 'next/link'
 import styled from 'styled-components'
 import { FormattedMessage } from 'react-intl'
 import {
-  Flex as Flux, Box as Bux,
+  Flex, Box,
   Link,
   Text,
   Divider
@@ -22,14 +22,6 @@ import {
 } from '../colors'
 
 import Flag from '../flag'
-
-const Box = styled(Bux)`
-  border: 0px solid black;
-`
-
-const Flex = styled(Flux)`
-  border: 0px solid red;
-`
 
 const StyledResultTag = styled.div`
   border-radius: 16px;

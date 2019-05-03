@@ -300,6 +300,7 @@ class Search extends React.Component {
               />
             </Box>
             <Box width={[1, 3/4]} px={2}>
+              <ErrorBox error={this.state.error} />
               <Loader loading={this.state.loading} />
 
               {!this.state.error && results.length == 0 && <h2>No results found</h2>}
