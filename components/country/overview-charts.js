@@ -129,7 +129,7 @@ class TestsByGroup extends React.PureComponent {
               <VictoryAxis tickCount={4} />
               <VictoryAxis
                 dependentAxis
-                tickFormat={(t) => t * testCoverageMaxima}
+                tickFormat={(t) => Math.round(t * testCoverageMaxima)}
               />
               <VictoryStack>
                 {
@@ -167,7 +167,7 @@ class TestsByGroup extends React.PureComponent {
               <VictoryAxis
                 dependentAxis
                 orientation="right"
-                tickFormat={(t) => t * networkCoverageMaxima}
+                tickFormat={(t) => Math.round(t * networkCoverageMaxima)}
               />
               <VictoryLine
                 data={networkCoverage}
