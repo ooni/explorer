@@ -2,6 +2,7 @@
 import React from 'react'
 import Head from 'next/head'
 import NLink from 'next/link'
+import Router from 'next/router';
 import FormattedMarkdown from '../components/formatted-markdown'
 import styled from 'styled-components'
 import axios from 'axios'
@@ -158,7 +159,9 @@ export default class LandingPage extends React.Component {
                 <Text fontSize={[32, 64]} color='#ffffff'><FormattedMessage id='Home.Banner.Title.UncoverEvidence' /></Text>
               </Heading>
               <Text fontSize={[18, 24]} color='blue1'><FormattedMessage id='Home.Banner.Subtitle.ExploreCensorshipEvents' /></Text>
-              <ExploreButton mt={48} hollow inverted fontSize={24}>
+              <ExploreButton mt={48} hollow inverted fontSize={24} onClick={() => (
+                Router.push('/countries')
+              )}>
                 <FormattedMessage id='Home.Banner.Button.Explore' />
               </ExploreButton>
             </Text>
