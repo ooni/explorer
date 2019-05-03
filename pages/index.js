@@ -37,6 +37,19 @@ const HeroUnit = styled.div`
   padding-top: 16px;
 `
 
+const ExploreButton = styled(Button)`
+  &:hover, &:focus {
+    background-color: white;
+    color: ${props => props.theme.colors.blue5};
+  }
+
+  &:active {
+    background-color: white;
+    color: ${props => props.theme.colors.blue5};
+    box-shadow: 0 0 0 0.2rem ${props => props.theme.colors.blue4};
+  }
+`
+
 const StatsContainer = styled(Flex)`
   border-radius: 16px;
   background-color: #ffffff;
@@ -145,7 +158,9 @@ export default class LandingPage extends React.Component {
                 <Text fontSize={[32, 64]} color='#ffffff'><FormattedMessage id='Home.Banner.Title.UncoverEvidence' /></Text>
               </Heading>
               <Text fontSize={[18, 24]} color='blue1'><FormattedMessage id='Home.Banner.Subtitle.ExploreCensorshipEvents' /></Text>
-              <Button mt={48} inverted hollow fontSize={24}><FormattedMessage id='Home.Banner.Button.Explore' /></Button>
+              <ExploreButton mt={48} hollow inverted fontSize={24}>
+                <FormattedMessage id='Home.Banner.Button.Explore' />
+              </ExploreButton>
             </Text>
           </StyledContainer>
         </HeroUnit>
