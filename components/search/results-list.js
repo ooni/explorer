@@ -291,7 +291,6 @@ const ResultsList = ({results, testNamesKeyed}) => {
           <FormattedMessage id='Search.Bullet.Error' />
         </LegendItem>
       </LegendContainer>
-      <Divider width='100%' color='gray5'/>
       <ResultContainer mb={2}>
         {results.map((msmt, idx) => {
           msmt.testName = testNamesKeyed[msmt.test_name]
