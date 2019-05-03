@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
-import { Flex, Box } from 'ooni-components'
+import { Flex, Box, Link } from 'ooni-components'
 import styled from 'styled-components'
 import MdArrowDropDownCircle from 'react-icons/lib/md/arrow-drop-down-circle'
 import {
@@ -107,9 +107,9 @@ class AppsStatRow extends React.Component {
         </Flex>
         {(visibleNetworks < totalNetworks) &&
           <Flex justifyContent='center'>
-            <a href='javascript:void(0)' onClick={() => this.showMore()}>
+            <Link color='blue7' href='javascript:void(0)' onClick={() => this.showMore()}>
               <FormattedMessage id='Country.Apps.Button.ShowMore' />
-            </a>
+            </Link>
           </Flex>
         }
       </React.Fragment>

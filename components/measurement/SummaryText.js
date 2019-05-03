@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import { Text } from 'ooni-components'
+import { Link, Text } from 'ooni-components'
 
 import { getTestMetadata } from '../utils'
 import FormattedMarkdown from '../formatted-markdown'
@@ -25,7 +25,7 @@ const SummaryText = ({
     textToRender =
       <FormattedMarkdown id='Measurement.Details.SummaryTextTemplate'
         values={{
-          testName: <a href={metadata.info}>{metadata.name}</a>,
+          testName: <Link color='blue7' href={metadata.info}>{metadata.name}</Link>,
           network: network,
           country: country,
           date: <abbr title={formattedDateTime}>{formattedDate}</abbr>,
