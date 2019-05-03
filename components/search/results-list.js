@@ -261,7 +261,7 @@ const LegendItem = ({color, children}) => {
   </StyledLegendItem>
 }
 
-const LegendContainer = styled.div`
+const LegendContainer = styled(Box)`
   padding-top: 20px;
   padding-left: 20px;
   padding-right: 20px;
@@ -276,7 +276,7 @@ const ResultContainer = styled(Box)`
 
 const ResultsList = ({results, testNamesKeyed}) => {
   return (
-    <div>
+    <Flex flexWrap='wrap'>
       <LegendContainer>
         <LegendItem color={colorNormal}>
           <FormattedMessage id='Search.Bullet.Reachable' />
@@ -291,13 +291,13 @@ const ResultsList = ({results, testNamesKeyed}) => {
           <FormattedMessage id='Search.Bullet.Error' />
         </LegendItem>
       </LegendContainer>
-      <ResultContainer mb={2}>
+      <ResultContainer my={4} width={1}>
         {results.map((msmt, idx) => {
           msmt.testName = testNamesKeyed[msmt.test_name]
           return <ResultItem key={idx} msmt={msmt} />
         })}
       </ResultContainer>
-    </div>
+    </Flex>
   )
 }
 
