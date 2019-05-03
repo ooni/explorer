@@ -41,7 +41,7 @@ const HighlightBox = ({
           <a href={report}> Report </a>
         </LinkButton>
       </Box>
-      <Box width={1} order={[2, 'unset']}>
+      <Box width={1} order={[2, 'unset']} mt={1}>
         <Text fontSize={16} color='gray6'>{text}</Text>
       </Box>
     </Flex>
