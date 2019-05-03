@@ -264,7 +264,7 @@ export default class LandingPage extends React.Component {
                       <Flag countryCode='CU' size={24} />
                     </Box>
                     <Box>
-                      Cuba <a href='https://ooni.torproject.org/post/cuba-internet-censorship-2017/'>used to primarily serve blank block pages</a>, only blocking the HTTP version of websites. Now they censor access to sites that support HTTPS by means of IP blocking.
+                      Cuba <a href='https://ooni.torproject.org/post/cuba-internet-censorship-2017/'>used to primarily serve blank block pages</a>, only blocking the HTTP version of websites. Now they censor access to sites that support HTTPS by means of <a href='https://ooni.io/post/cuba-referendum/'>IP blocking</a>.
                     </Box>
                   </Flex>
                   <Flex my={3}>

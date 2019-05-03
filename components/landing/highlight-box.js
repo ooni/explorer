@@ -28,9 +28,9 @@ const HighlightBox = ({
       <Text fontSize={18} fontWeight='bold' mx={1}>{countryName}</Text>
     </Flex>
     <Flex flexWrap='wrap' my={1} alignItems='center'>
-      <Box mr={2} width={[1, 'unset']} order={[1, 'unset']}>
+      {title && <Box mr={2} width={[1, 'unset']} order={[1, 'unset']}>
         <Text fontSize={18}>{title}</Text>
-      </Box>
+      </Box>}
       <Box order={[3, 'unset']} my={1}>
         <LinkButton bg='blue5' color='white' px={2} py={1}>
           <NLink href={explore}><a>Explore</a></NLink>
@@ -41,7 +41,7 @@ const HighlightBox = ({
           <a href={report}> Report </a>
         </LinkButton>
       </Box>
-      <Box width={1} order={[2, 'unset']}>
+      <Box width={1} order={[2, 'unset']} mt={1}>
         <Text fontSize={16} color='gray6'>{text}</Text>
       </Box>
     </Flex>
