@@ -114,7 +114,7 @@ ViewDetailsLink.propTypes = {
 }
 
 const StyledColorCode = styled.div`
-  height: 48px;
+  height: 100%;
   width: 5px;
   margin-right: 10px;
 `
@@ -190,49 +190,48 @@ const ResultItem = ({msmt}) => {
   }
   return (
     <ViewDetailsLink reportId={msmt.report_id} input={msmt.input}>
-      <ResultRow alignItems='center'>
-        <Box width={1/3}>
-          <Flex alignItems='center'>
-            <Box flex='auto' width={1/16}>
-              <ColorCode msmt={msmt} />
-            </Box>
-            <Box flex='auto' width={2/16}>
-              <Text bold color='gray8'>{msmt.probe_cc}</Text>
-            </Box>
-            <Box flex='auto' width={5/16}>
-              <Flag countryCode={msmt.probe_cc} size={32} />
-            </Box>
-            <Box flex='auto' width={8/16}>
-              <ASNBox asn={msmt.probe_asn} />
-            </Box>
-          </Flex>
+      <ResultRow flexWrap='wrap' alignItems='stretch'>
+        <Box width={1/32}>
+          <ColorCode msmt={msmt} />
         </Box>
-        <Box width={2/3}>
-          <Flex flexDirection='column'>
-            <Box>
-              {input &&
-                <ResultInput>
-                  {input}
-                </ResultInput>}
-            </Box>
-            <Box>
+        <Box width={31/32} py={3}>
+          <Flex flexDirection={['column', 'row']}>
+            <Box width={[1, 3/5]}>
               <Flex alignItems='center'>
-                <Box pr={2} width={7/16}>
-                  {msmt.testName}
+                <Box width={1/16}>
+                  <Text bold color='gray8'>{msmt.probe_cc}</Text>
+                </Box>
+                <Box width={2/16}>
+                  <Flag countryCode={msmt.probe_cc} size={32} />
+                </Box>
+                <Box width={3/16}>
+                  <ASNBox asn={msmt.probe_asn} />
                 </Box>
                 <Box width={4/16}>
                   {moment(msmt.measurement_start_time).format('YYYY-MM-DD')}
                 </Box>
-                <Box width={4/16}>
-                  <ResultTag msmt={msmt} />
+                <Box width={6/16}>
+                  {msmt.testName}
                 </Box>
-                <Box width={1/16}>
+              </Flex>
+            </Box>
 
+            <Box width={[1, 2/5]}>
+              <Flex justifyContent='space-between' alignItems='center'>
+                <Box>
+                  {input &&
+                    <ResultInput>
+                      {input}
+                    </ResultInput>}
+                </Box>
+                <Box>
+                  <ResultTag msmt={msmt} />
                 </Box>
               </Flex>
             </Box>
           </Flex>
         </Box>
+
       </ResultRow>
     </ViewDetailsLink>
   )
@@ -262,7 +261,7 @@ const LegendItem = ({color, children}) => {
   </StyledLegendItem>
 }
 
-const LegendContainer = styled.div`
+const LegendContainer = styled(Box)`
   padding-top: 20px;
   padding-left: 20px;
   padding-right: 20px;
@@ -277,7 +276,7 @@ const ResultContainer = styled(Box)`
 
 const ResultsList = ({results, testNamesKeyed}) => {
   return (
-    <div>
+    <Flex flexWrap='wrap'>
       <LegendContainer>
         <LegendItem color={colorNormal}>
           <FormattedMessage id='Search.Bullet.Reachable' />
@@ -292,14 +291,13 @@ const ResultsList = ({results, testNamesKeyed}) => {
           <FormattedMessage id='Search.Bullet.Error' />
         </LegendItem>
       </LegendContainer>
-      <Divider width='100%' color='gray5'/>
-      <ResultContainer mb={2}>
+      <ResultContainer my={4} width={1}>
         {results.map((msmt, idx) => {
           msmt.testName = testNamesKeyed[msmt.test_name]
           return <ResultItem key={idx} msmt={msmt} />
         })}
       </ResultContainer>
-    </div>
+    </Flex>
   )
 }
 

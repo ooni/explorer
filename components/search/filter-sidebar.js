@@ -8,6 +8,8 @@ import {
   Input,
   Select,
   Label,
+  RadioGroup,
+  RadioButton
 } from 'ooni-components'
 
 import DatePicker from '../date-picker'
@@ -47,6 +49,7 @@ class FilterSidebar extends React.Component {
     super(props)
     this.state = {
       inputFilter: props.inputFilter || '',
+      onlyFilter: props.onlyFilter || 'all',
       testNameFilter: props.testNameFilter || '',
       countryFilter: props.countryFilter || '',
       asnFilter: props.asnFilter || '',
@@ -74,6 +77,12 @@ class FilterSidebar extends React.Component {
     })
   }
 
+  onRadioChangeFilter (filterName) {
+    return ((value) => {
+      this.setState({[filterName]: value})
+    })
+  }
+
   isSinceValid(currentDate) {
     const { untilFilter } = this.state
     if (untilFilter.length !== 0) {
@@ -95,6 +104,7 @@ class FilterSidebar extends React.Component {
   onClickApplyFilter() {
     this.props.onApplyFilter({
       inputFilter: this.state.inputFilter,
+      onlyFilter: this.state.onlyFilter,
       testNameFilter: this.state.testNameFilter,
       countryFilter: this.state.countryFilter,
       asnFilter: this.state.asnFilter,
@@ -112,6 +122,7 @@ class FilterSidebar extends React.Component {
 
     const {
       inputFilter,
+      onlyFilter,
       testNameFilter,
       countryFilter,
       asnFilter,
@@ -136,6 +147,27 @@ class FilterSidebar extends React.Component {
           placeholder={intl.formatMessage({id: 'Search.Sidebar.Input.Placeholder'})}
           type="text"
         />
+        <StyledLabel>
+          {intl.formatMessage({id: 'Search.Sidebar.Status'})}
+        </StyledLabel>
+        <RadioGroup
+          onChange={this.onRadioChangeFilter('onlyFilter')}
+          value={onlyFilter}
+        >
+          <RadioButton
+            label={intl.formatMessage({id: 'Search.FilterButton.AllResults'}) }
+            value='all'
+            checked={onlyFilter === 'all'}
+          />
+          <RadioButton
+            label={intl.formatMessage({id: 'Search.FilterButton.Confirmed'}) }
+            value='confirmed'
+          />
+          <RadioButton
+            label={intl.formatMessage({id: 'Search.FilterButton.Anomalies'}) }
+            value='anomalies'
+          />
+        </RadioGroup>
         <SelectWithLabel
           pt={2}
           label={intl.formatMessage({id: 'Search.Sidebar.TestName'})}
