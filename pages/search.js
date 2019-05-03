@@ -262,6 +262,12 @@ class Search extends React.Component {
         if (query[m[1]]) {
           delete query[m[1]]
         }
+      } else if (m[0] === 'onlyFilter' && this.state[m[0]] == 'all') {
+        // If the onlyFilter is not set to 'confirmed' or 'anomalies'
+        // remove it from the path
+        if (query[m[1]]) {
+          delete query[m[1]]
+        }
       } else {
         query[m[1]] = this.state[m[0]]
       }
