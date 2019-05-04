@@ -1,9 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
-  Text
+  Heading,
+  Container,
+  Text,
+  Flex,
+  Box
 } from 'ooni-components'
 import { FormattedMessage, injectIntl, intlShape } from 'react-intl'
+
+import { DetailsBox } from '../DetailsBox'
+import AccessPointStatus from '../AccessPointStatus'
 
 export const FacebookMessengerDetails = ({ measurement, render, intl }) => {
   const testKeys = measurement.test_keys
@@ -17,23 +24,7 @@ export const FacebookMessengerDetails = ({ measurement, render, intl }) => {
     testKeys.facebook_dns_blocking === null &&
     testKeys.facebook_tcp_blocking === null
   )
-  // XXX consider extracting these keys too:
-  /*
-  "facebook_b_api_dns_consistent": true,
-  "facebook_b_api_reachable": true,
-  "facebook_b_graph_dns_consistent": true,
-  "facebook_b_graph_reachable": true,
-  "facebook_edge_dns_consistent": true,
-  "facebook_edge_reachable": true,
-  "facebook_external_cdn_dns_consistent": true,
-  "facebook_external_cdn_reachable": true,
-  "facebook_scontent_cdn_dns_consistent": true,
-  "facebook_scontent_cdn_reachable": true,
-  "facebook_star_dns_consistent": true,
-  "facebook_star_reachable": true,
-  "facebook_stun_dns_consistent": true,
-  "facebook_stun_reachable": null,
-  */
+  const tcpConnections = testKeys.tcp_connect
 
   let summaryText = '|'
   if (!isWorking) {
@@ -60,12 +51,53 @@ export const FacebookMessengerDetails = ({ measurement, render, intl }) => {
         : <FormattedMessage id='Measurement.Status.Hint.FacebookMessenger.Blocked' />,
       summaryText: summaryText,
       details: (
-        <div>
-          {/*<Text>dnsBlocking: {dnsBlocking.toString()}</Text>
-            <Text>tcpBlocking: {tcpBlocking.toString()}</Text>
-            <Text>isWorking: {isWorking.toString()}</Text>
-          <Text>isFailed: {isFailed.toString()}</Text>*/}
-        </div>
+        <React.Fragment>
+          <Container>
+            <Flex>
+              <DetailsBox content={
+                <React.Fragment>
+                  <Flex>
+                    <Box width={1/4}>
+                      <AccessPointStatus
+                        label={<FormattedMessage id='Measurement.Details.FacebookMessenger.DNS.Label.Title' />}
+                        ok={!dnsBlocking}
+                      />
+                    </Box>
+                    <Box width={1/4}>
+                      <AccessPointStatus
+                        label={<FormattedMessage id='Measurement.Details.FacebookMessenger.TCP.Label.Title' />}
+                        ok={!tcpBlocking}
+                      />
+                    </Box>
+                  </Flex>
+                  {tcpConnections.length > 0 &&
+                    <React.Fragment>
+                      <Heading h={4}> <FormattedMessage id='Measurement.Details.FacebookMessenger.Endpoint.Status.Heading' /> </Heading>
+                      {tcpConnections.map((connection, index) => (
+                        <Flex key={index}>
+                          <Box>
+                            <Text>
+                              {connection.status.failure &&
+                                <FormattedMessage id="Measurement.Details.FacebookMessenger.Endpoint.ConnectionTo.Failed"
+                                  values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
+                                />
+                              }
+                              {connection.status.success &&
+                                <FormattedMessage id="Measurement.Details.FacebookMessenger.Endpoint.ConnectionTo.Successful"
+                                  values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
+                                />
+                              }
+                            </Text>
+                          </Box>
+                        </Flex>
+                      ))}
+                    </React.Fragment>
+                  }
+                </React.Fragment>
+              } />
+            </Flex>
+          </Container>
+        </React.Fragment>
       )
     })
   )
