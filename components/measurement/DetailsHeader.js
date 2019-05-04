@@ -33,17 +33,19 @@ const DetailsHeader = ({testName, runtime, notice}) => {
   const metadata = getTestMetadata(testName)
 
   return (
-    <Flex py={4} alignItems='center'>
-      <Box>
-        <TestGroupBadge
-          icon={metadata.icon}
-          name={<Text fontSize={20} is='span'>{metadata.groupName}</Text>}
-          color={metadata.color}
-        />
-      </Box>
-      <Box ml={2}>
-        <Text fontSize={20}>{metadata.name}</Text>
-      </Box>
+    <Flex py={4} alignItems={['flex-end', 'center']} flexDirection={['column', 'row']}>
+      <Flex mb={[3, 0]} alignItems='center'>
+        <Box>
+          <TestGroupBadge
+            icon={metadata.icon}
+            name={<Text fontSize={20} is='span'>{metadata.groupName}</Text>}
+            color={metadata.color}
+          />
+        </Box>
+        <Box ml={2}>
+          <Text fontSize={20}>{metadata.name}</Text>
+        </Box>
+      </Flex>
       <Box mx='auto'>
         {notice}
       </Box>
