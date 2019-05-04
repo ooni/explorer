@@ -8,6 +8,10 @@ const DetailBoxLabel = styled(Text)`
   font-weight: 600;
 `
 
+const DetailBoxValue = styled(Text)`
+  overflow-wrap: break-word;
+`
+
 export const DetailsBoxTable = ({
   title,
   items,
@@ -16,11 +20,11 @@ export const DetailsBoxTable = ({
   <DetailsBox title={title} bg={bg} content={
     items.map((item, index) =>
       <Flex flexWrap='wrap' key={index}>
-        <Box width={1/4}>
+        <Box width={[1, 1/4]}>
           <DetailBoxLabel>{item.label}</DetailBoxLabel>
         </Box>
-        <Box>
-          <Text>{item.value}</Text>
+        <Box width={[1, 3/4]}>
+          <DetailBoxValue>{item.value}</DetailBoxValue>
         </Box>
       </Flex>
     )}
