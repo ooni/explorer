@@ -61,7 +61,7 @@ const TelegramDetails = ({ measurement, render }) => {
                     <Box width={1/4}>
                       <AccessPointStatus
                         icon={<MdPhoneAndroid />}
-                        label={<FormattedMessage id='Measurement.Details.Telegram.Endpoint.Label.Desktop' />}
+                        label={<FormattedMessage id='Measurement.Details.Telegram.Endpoint.Label.Mobile' />}
                         ok={telegramDesktopOK}
                       />
                     </Box>
