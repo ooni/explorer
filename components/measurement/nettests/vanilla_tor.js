@@ -38,13 +38,13 @@ const VanillaTorDetails = ({ measurement, render }) => {
                 label={<FormattedMessage id='Measurement.Details.VanillaTor.Endpoint.Label.Reachability' />}
                 ok={!isAnomaly}
               />
-              <AccessPointStatus
+              {/* <AccessPointStatus
                 width={1/4}
                 icon={<MdTimelapse />}
                 label={<FormattedMessage id='Measurement.Details.VanillaTor.Endpoint.Label.Progress' />}
                 ok={!isAnomaly}
                 content={<FormattedMessage id='Measurement.Details.VanillaTor.Endpoint.Progress' />}
-              />
+              /> */}
             </Flex>
           </Container>
         </React.Fragment>
