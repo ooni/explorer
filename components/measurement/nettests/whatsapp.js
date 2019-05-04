@@ -35,12 +35,19 @@ const WhatsAppDetails = ({ measurement, render }) => {
   const isFailed = (working === false && possibleCensorship === false)
   let status = 'reachable'
   let info = <FormattedMessage id='Measurement.Details.Hint.WhatsApp.Reachable' />
-  let summaryText = <FormattedMessage id='Measurement.Details.SummaryText.WhatsApp.Reachable' />
+  let summaryText = 'Measurement.Details.SummaryText.WhatsApp.Reachable'
   if (possibleCensorship || !working) {
     status = 'anomaly'
     info = <FormattedMessage id='Measurement.Status.Hint.WhatsApp.Blocked' />
-    summaryText = <FormattedMessage id='Measurement.Details.SummaryText.WhatsApp.Blocked' />
+    if (endpointsBlocked) {
+      summaryText = 'Measurement.Details.SummaryText.WhatsApp.AppFailure'
+    } else if (webBlocked) {
+      summaryText = 'Measurement.Details.SummaryText.WhatsApp.DesktopFailure'
+    } else if (endpointsBlocked && webBlocked) {
+      summaryText = 'Measurement.Details.SummaryText.WhatsApp.DesktopAndAppFailure'
+    }
   }
+
 
   return render({
     status: status,
