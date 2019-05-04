@@ -286,8 +286,8 @@ const WebConnectivityDetails = ({ isConfirmed, isAnomaly, isFailure, country, me
           }
           if (blocking) {
             const reasons = {
-              'http-diff': 'HTTP',
-              'http-failure': 'HTTP',
+              'http-diff': 'HTTP-diff',
+              'http-failure': 'HTTP-failure',
               'dns': 'DNS',
               'tcp_ip': 'TCP'
             }
