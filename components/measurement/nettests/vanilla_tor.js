@@ -25,9 +25,9 @@ const VanillaTorDetails = ({ measurement, render }) => {
       statusLabel: isAnomaly
         ? <FormattedMessage id='Measurement.Hero.Status.TorVanilla.Blocked' />
         : <FormattedMessage id='Measurement.Hero.Status.TorVanilla.Reachable' />,
-      statusInfo: isAnomaly
-        ? <FormattedMessage id='Measurement.Status.Hint.TorVanilla.Blocked' />
-        : <FormattedMessage id='Measurement.Status.Hint.TorVanilla.Reachable' />,
+      summaryText: isAnomaly
+        ? 'Measurement.Details.SummaryText.TorVanilla.Blocked'
+        : 'Measurement.Details.SummaryText.TorVanilla.Reachable',
       details: (
         <React.Fragment>
           <Container>
