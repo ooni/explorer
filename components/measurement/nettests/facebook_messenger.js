@@ -26,13 +26,15 @@ export const FacebookMessengerDetails = ({ measurement, render, intl }) => {
   )
   const tcpConnections = testKeys.tcp_connect
 
-  let summaryText = '|'
+  let summaryText = ''
   if (!isWorking) {
     if (tcpBlocking) {
       summaryText += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.TCPFailure'})
     } else {
       summaryText += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.TCPSuccess'})
     }
+
+    summaryText += '&nbsp;'
 
     if (dnsBlocking) {
       summaryText += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.DNSFailure'})
