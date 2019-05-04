@@ -12,7 +12,6 @@ const SummaryText = ({
   country,
   date,
   content,
-  testUrl
 }) => {
   const metadata = getTestMetadata(testName)
   const formattedDate = moment(date).format('LL')
@@ -21,17 +20,18 @@ const SummaryText = ({
   let textToRender = null
   if (typeof content === 'function') {
     textToRender = content()
-  } else {
+  } else if (typeof content === 'string') {
     textToRender =
-      <FormattedMarkdown id='Measurement.Details.SummaryTextTemplate'
+      <FormattedMarkdown id={content}
         values={{
-          testName: <a href={metadata.info}>{metadata.name}</a>,
+          testName: `[${metadata.name}](${metadata.info})`,
           network: network,
           country: country,
-          date: <abbr title={formattedDateTime}>{formattedDate}</abbr>,
-          content: content
+          date: `<abbr title='${formattedDateTime}'>${formattedDate}</abbr>`
         }}
       />
+  } else {
+    textToRender = content
   }
   return (
     <Text py={4} fontSize={3}>
@@ -47,10 +47,9 @@ SummaryText.propTypes = {
   date: PropTypes.string.isRequired,
   content: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.elem,
+    PropTypes.any,
     PropTypes.func
-  ]),
-  testUrl: PropTypes.string
+  ])
 }
 
 export default SummaryText
