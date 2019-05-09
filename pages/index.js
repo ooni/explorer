@@ -217,19 +217,19 @@ export default class LandingPage extends React.Component {
               <FormattedMessage id='Home.Search&Filter.SummaryText' />
             </FeatureBox>
             <FeatureBox>
-              <ImgBox src='/static/images/search.png' alt='Websites and Apps' />
+              <ImgBox src='/static/images/search.png' alt='Search and Filter' />
             </FeatureBox>
           </FeatureRow>
           {/* Network Properties */}
           <FeatureRow>
             <FeatureBox>
-              <ImgBox src='/static/images/network-performance.png' alt='Search and Filter' />
+              <ImgBox src='/static/images/network-performance.png' alt='Network Properties' />
             </FeatureBox>
             <FeatureBox color='gray7'>
               <FeatureBoxTitle>
                 <FormattedMessage id='Home.NetworkProperties.Title' />
               </FeatureBoxTitle>
-              <FormattedMessage id='Home.Search&Filter.SummaryText' />
+              <FormattedMessage id='Home.NetworkProperties.SummaryText' />
             </FeatureBox>
           </FeatureRow>
           {/* Measurement Statistics */}
