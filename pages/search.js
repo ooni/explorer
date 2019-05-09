@@ -78,6 +78,17 @@ const ErrorBox = ({error}) => {
   )
 }
 
+const NoResults = () => (
+  <Flex alignItems='center' px={[2, 6]} py={6} justifyContent='center' flexWrap='wrap' flexDirection='column'>
+    <Heading h={2} color='blue5'>
+      <FormattedMessage id='Search.Results.Empty.Heading' />
+    </Heading>
+    <Heading h={5} textAlign='center'>
+      <FormattedMessage id='Search.Results.Empty.Description' />
+    </Heading>
+  </Flex>
+)
+
 class Search extends React.Component {
   static async getInitialProps ({ query }) {
     let msmtR, testNamesR, countriesR
@@ -251,6 +262,12 @@ class Search extends React.Component {
         if (query[m[1]]) {
           delete query[m[1]]
         }
+      } else if (m[0] === 'onlyFilter' && this.state[m[0]] == 'all') {
+        // If the onlyFilter is not set to 'confirmed' or 'anomalies'
+        // remove it from the path
+        if (query[m[1]]) {
+          delete query[m[1]]
+        }
       } else {
         query[m[1]] = this.state[m[0]]
       }
@@ -303,8 +320,8 @@ class Search extends React.Component {
               <ErrorBox error={this.state.error} />
               <Loader loading={this.state.loading} />
 
-              {!this.state.error && results.length == 0 && <h2>No results found</h2>}
-              {!this.state.error && !this.state.loading
+              {!this.state.error && !this.state.loading && results.length === 0 && <NoResults />}
+              {!this.state.error && !this.state.loading && results.length > 0
                 && <div>
                   <ResultsList results={results} testNamesKeyed={testNamesKeyed} />
                   <Flex alignItems='center' justifyContent='center'>

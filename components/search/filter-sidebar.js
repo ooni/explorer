@@ -135,7 +135,7 @@ class FilterSidebar extends React.Component {
     testNameOptions.unshift({name: intl.formatMessage({id: 'Search.Sidebar.TestName.AllTests'}), id: 'XX'})
 
     const countryOptions = [...countries]
-    countryOptions.unshift({name: intl.formatMessage({id: 'Search.Sidebar.Country.AllCountries'}), id: 'XX'})
+    countryOptions.unshift({name: intl.formatMessage({id: 'Search.Sidebar.Country.AllCountries'}), alpha_2: 'XX'})
 
     return (
       <StyledFilterSidebar>
