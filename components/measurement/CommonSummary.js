@@ -23,7 +23,7 @@ const SummaryItemBox = ({
   label,
   content
 }) => (
-  <Box width={1/2} mx={4} my={2}>
+  <Box width={[1, 1/2]} px={4} py={2}>
     <Text fontSize={24} fontWeight={300}>
       {content}
     </Text>
@@ -51,7 +51,7 @@ const CommonSummary = ({
     <React.Fragment>
       <SummaryContainer py={4} color={color}>
         <Container>
-          <Flex>
+          <Flex flexWrap='wrap'>
             {/*<SummaryItemBox
               label='Network Name'
               content='AT&T Lorem Ipsum Name A.T.T Internationale'
@@ -60,8 +60,6 @@ const CommonSummary = ({
               label={intl.formatMessage({ id: 'Measurement.CommonSummary.Label.ASN' })}
               content={network}
             />
-          </Flex>
-          <Flex>
             <SummaryItemBox
               label={intl.formatMessage({ id: 'Measurement.CommonSummary.Label.Country' })}
               content={country}
