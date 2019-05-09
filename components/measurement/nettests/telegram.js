@@ -28,21 +28,22 @@ const TelegramDetails = ({ measurement, render }) => {
   let telegramDesktopOK = true
   let anomaly = false
   let hint = <FormattedMessage id='Measurement.Status.Hint.Telegram.Reachable' />
-  let summaryText = <FormattedMessage id='Measurement.Details.SummaryText.Telegram.Reachable' />
+  let summaryText = 'Measurement.Details.SummaryText.Telegram.Reachable'
 
   if (telegram_web_status === 'blocked') {
     telegramWebOK = false
-    summaryText = <FormattedMessage id='Measurement.Details.SummaryText.Telegram.AppFailure' />
+    summaryText = 'Measurement.Details.SummaryText.Telegram.AppFailure'
   }
 
   if (telegram_tcp_blocking === true || telegram_http_blocking === true) {
     telegramDesktopOK = false
-    summaryText = <FormattedMessage id='Measurement.Details.SummaryText.Telegram.DesktopFailure' />
+    summaryText = 'Measurement.Details.SummaryText.Telegram.DesktopFailure'
   }
 
   if (!telegramWebOK || !telegramDesktopOK) {
     anomaly = true
     hint = <FormattedMessage id='Measurement.Status.Hint.Telegram.Blocked' />
+    summaryText = 'Measurement.Details.SummaryText.Telegram.DesktopAndAppFailure'
   }
 
   return (
@@ -60,7 +61,7 @@ const TelegramDetails = ({ measurement, render }) => {
                     <Box width={1/4}>
                       <AccessPointStatus
                         icon={<MdPhoneAndroid />}
-                        label={<FormattedMessage id='Measurement.Details.Telegram.Endpoint.Label.Desktop' />}
+                        label={<FormattedMessage id='Measurement.Details.Telegram.Endpoint.Label.Mobile' />}
                         ok={telegramDesktopOK}
                       />
                     </Box>

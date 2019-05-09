@@ -257,8 +257,8 @@ const WebConnectivityDetails = ({ isConfirmed, isAnomaly, isFailure, country, me
   const { status, hint } = checkAnomaly(measurement.test_keys)
 
   const tcpConnections = tcp_connect.map((connection) => {
-    const status = (connection.status.success) ? 'successful' :
-      (connection.status.blocked) ? 'blocked' : 'failed'
+    const status = (connection.status.success) ? 'Success' :
+      (connection.status.blocked) ? 'Blocked' : 'Failed'
     return {
       destination: connection.ip + ':' + connection.port,
       status
@@ -286,8 +286,8 @@ const WebConnectivityDetails = ({ isConfirmed, isAnomaly, isFailure, country, me
           }
           if (blocking) {
             const reasons = {
-              'http-diff': 'HTTP',
-              'http-failure': 'HTTP',
+              'http-diff': 'HTTP-diff',
+              'http-failure': 'HTTP-failure',
               'dns': 'DNS',
               'tcp_ip': 'TCP'
             }
@@ -382,10 +382,9 @@ const WebConnectivityDetails = ({ isConfirmed, isAnomaly, isFailure, country, me
                           <Text>
                             <FormattedMessage
                               id='Measurement.Details.Websites.TCP.ConnectionTo'
-                              defaultMessage='Connection to {destination} was {status, select, successful {succcessful} failed {failed} blocked {blocked}}.'
                               values={{
                                 destination: <strong> {connection.destination} </strong>,
-                                status: connection.status
+                                connectionStatus: <FormattedMessage id={`Measurement.Details.Websites.TCP.ConnectionTo.${connection.status}`} />
                               }}
                             />
                           </Text>

@@ -26,7 +26,9 @@ export const HttpHeaderFieldManipulationDetails = ({ measurement, render }) => {
       statusLabel: isAnomaly
         ? <FormattedMessage id='Measurement.Hero.Status.HTTPHeaderManipulation.MiddleboxesDetected' />
         : <FormattedMessage id='Measurement.Hero.Status.HTTPHeaderManipulation.NoMiddleBoxes' />,
-      summaryText: `presented ${!isAnomaly ? 'no' : ''} signs of potential network traffic manipulation`,
+      summaryText: isAnomaly
+        ? 'Measurement.HTTPHeaderManipulation.MiddleBoxesDetected.SummaryText'
+        : 'Measurement.HTTPHeaderManipulation.NoMiddleBoxes.SummaryText',
       details: (
         <div>
           {/*<Text>isAnomaly: {isAnomaly.toString()}</Text>

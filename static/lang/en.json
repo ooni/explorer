@@ -102,6 +102,7 @@
   "Measurement.Status.Hint.FacebookMessenger.Reachable": "Facebook Messenger is accessible",
   "Measurement.Status.Hint.FacebookMessenger.Blocked": "Facebook Messenger is likely blocked",
   "Measurement.Status.Hint.FacebookMessenger.Failed": "The Facebook Messenger test failed",
+  "Measurement.Details.SummaryText.FacebookMessenger.Reachable": "On {date}, Facebook Messenger was reachable on {network} in {country}.",
   "Measurement.Details.SummaryText.FacebookMessenger.TCPFailure": "TCP connections to Facebook's endpoints failed.",
   "Measurement.Details.SummaryText.FacebookMessenger.DNSFailure": "DNS lookups did not resolve to Facebook IP addresses.",
   "Measurement.Details.SummaryText.FacebookMessenger.DNSSuccess": "DNS lookups resolved to Facebook IP addresses.",
