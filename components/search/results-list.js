@@ -43,6 +43,7 @@ const ResultTagHollow = styled(StyledResultTag)`
 
 const testsWithStates = [
   'web_connectivity',
+  'http_requests',
   'whatsapp',
   'facebook_messenger',
   'telegram',
@@ -58,10 +59,12 @@ const ResultTag = ({msmt}) => {
       return <ResultTagFilled>
         <FormattedMessage id={`${computedMessageIdPrefix}.Blocked`} />
       </ResultTagFilled>
+    /* XXX hotfix due to all measurements showing failure
     } else if (msmt.failure === true) {
       return <StyledResultTag>
         <FormattedMessage id={`${computedMessageIdPrefix}.Error`} />
       </StyledResultTag>
+    */
     } else if (msmt.anomaly === true) {
       return <ResultTagHollow>
         <FormattedMessage id={`${computedMessageIdPrefix}.Anomaly`} />
@@ -138,8 +141,10 @@ const ColorCode = ({msmt}) => {
   if (testsWithStates.indexOf(msmt.test_name) > -1) {
     if (msmt.confirmed === true) {
       return <ColorCodeConfirmed />
+    /* XXX hotfix due to all measurements showing failures
     } else if (msmt.failure === true) {
       return <ColorCodeFailed />
+    */
     } else if (msmt.anomaly === true) {
       return <ColorCodeAnomaly />
     }
@@ -287,9 +292,11 @@ const ResultsList = ({results, testNamesKeyed}) => {
         <LegendItem color={colorConfirmed}>
           <FormattedMessage id='Search.Bullet.Blocked' />
         </LegendItem>
+        {/*
         <LegendItem color={colorError}>
           <FormattedMessage id='Search.Bullet.Error' />
         </LegendItem>
+        */}
       </LegendContainer>
       <ResultContainer my={4} width={1}>
         {results.map((msmt, idx) => {
