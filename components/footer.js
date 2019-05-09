@@ -67,7 +67,7 @@ const Footer = ({ intl }) => (
           <FooterHead>{intl.formatMessage({ id: 'Footer.Heading.About' })}</FooterHead>
           <FooterLink href='https://ooni.io/about/' label={intl.formatMessage({ id: 'Footer.Link.About' })} />
           <FooterLink href='https://ooni.io/about/data-policy/' label={intl.formatMessage({ id: 'Footer.Link.DataPolicy' })} />
-          <FooterLink href='#' label={intl.formatMessage({ id: 'Footer.Link.FAQ' })} />
+          <FooterLink href='https://github.com/ooni/license/tree/master/data' label={intl.formatMessage({ id: 'Footer.Link.DataLicense' })} />
           <FooterLink href='https://ooni.io/about/#contact' label={intl.formatMessage({ id: 'Footer.Link.Contact' })} />
         </FooterBox>
         <FooterBox width={[1/2, 1/5]}>
