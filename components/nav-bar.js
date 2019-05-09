@@ -8,6 +8,7 @@ import { FormattedMessage } from 'react-intl'
 import ExplorerLogo from '../static/images/ExplorerBeta-HorizontalMonochromeInverted.svg'
 
 import {
+  Link,
   Flex,
   Box,
   Container
@@ -74,7 +75,7 @@ export const NavBar = ({color}) => (
       <Flex alignItems='center'>
         <Box style={{zIndex: 1}}>
           <NLink href='/'>
-            <a><ExplorerLogo height='26px' /></a>
+            <Link><ExplorerLogo height='26px' /></Link>
           </NLink>
         </Box>
         <Box ml='auto'>

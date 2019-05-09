@@ -1,14 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import NLink from 'next/link'
-import { Flex, Box, Text } from 'ooni-components'
+import { Flex, Box, Text, Link } from 'ooni-components'
 import styled from 'styled-components'
 
 import Flag from '../flag'
 
 const LinkButton = styled(Box)`
   border-radius: 6px;
-  a {
+  ${Link} {
     text-decoration: none;
     color: white;
   }
@@ -33,12 +33,12 @@ const HighlightBox = ({
       </Box>}
       <Box order={[3, 'unset']} my={1}>
         <LinkButton bg='blue5' color='white' px={2} py={1}>
-          <NLink href={explore}><a>Explore</a></NLink>
+          <NLink href={explore} passHref><Link color='blue7'>Explore</Link></NLink>
         </LinkButton>
       </Box>
       <Box ml={2} order={[4, 'unset']}>
         <LinkButton bg='green8' color='white' px={2} py={1}>
-          <a href={report}> Report </a>
+          <Link href={report}> Report </Link>
         </LinkButton>
       </Box>
       <Box width={1} order={[2, 'unset']} mt={1}>

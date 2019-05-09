@@ -1,7 +1,7 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
 import styled from 'styled-components'
-import { Flex, Box, Heading } from 'ooni-components'
+import { Flex, Box, Heading, Link } from 'ooni-components'
 import SectionHeader from './section-header'
 import { BoxWithTitle } from './box'
 import TestsByGroup from './overview-charts'
@@ -33,9 +33,9 @@ const getStatus = (count, formattedMessageId)=> {
 
 const FeaturedArticle = ({link, title}) => (
   <Box py={1}>
-    <a href={link} target='_blank' rel='noopener noreferrer'>
+    <Link color='blue7' href={link} target='_blank' rel='noopener noreferrer'>
       {title}
-    </a>
+    </Link>
   </Box>
 )
 

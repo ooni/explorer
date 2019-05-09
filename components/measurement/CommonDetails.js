@@ -7,6 +7,7 @@ import {
   Button,
   Flex,
   Box,
+  Link,
   theme
 } from 'ooni-components'
 
@@ -96,12 +97,12 @@ const CommonDetails = ({
                 <Heading h={4}>{intl.formatMessage({ id: 'Measurement.CommonDetails.RawMeasurement.Heading' })}</Heading>
               </Box>
               <Box >
-                <a href={measurementURL} download={downloadFilename}>
+                <Link color='blue7' href={measurementURL} download={downloadFilename}>
                   <Button
                     fontSize={11}
                     mx={3}
                     px={3}>{intl.formatMessage({ id: 'Measurement.CommonDetails.RawMeasurement.Download' })}</Button>
-                </a>
+                </Link>
               </Box>
             </Flex>
           }
