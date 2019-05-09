@@ -1,11 +1,11 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { Flex, Heading, Text } from 'ooni-components'
+import { Flex, Heading, Text, Link } from 'ooni-components'
 import axios from 'axios'
 
 import SectionHeader from './section-header'
 import { SimpleBox } from './box'
-import PeriodFilter from './period-filter'
+// import PeriodFilter from './period-filter'
 import NetworkStats from './network-stats'
 import SpinLoader from '../vendor/spin-loader'
 import FormattedMarkdown from '../formatted-markdown'
@@ -97,9 +97,9 @@ class NetworkPropertiesSection extends React.Component {
         {content}
         {(visibleNetworks < totalNetworks) &&
           <Flex justifyContent='center'>
-            <a href='javascript:void(0)' onClick={() => this.showMoreNetworks()}>
+            <Link color='blue7' href='javascript:void(0)' onClick={() => this.showMoreNetworks()}>
               <FormattedMessage id='Country.NetworkProperties.Button.ShowMore' />
-            </a>
+            </Link>
           </Flex>
         }
       </React.Fragment>

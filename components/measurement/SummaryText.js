@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import { Text } from 'ooni-components'
+import { Link, Text } from 'ooni-components'
 
 import { getTestMetadata } from '../utils'
 import FormattedMarkdown from '../formatted-markdown'

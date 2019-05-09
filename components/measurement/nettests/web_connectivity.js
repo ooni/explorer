@@ -240,10 +240,10 @@ const WebConnectivityDetails = ({ isConfirmed, isAnomaly, isFailure, country, me
     input,
     probe_asn,
     probe_cc,
+    test_start_time,
     test_keys: {
       accessible,
       blocking,
-      test_start_time,
       queries,
       tcp_connect,
       requests,

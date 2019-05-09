@@ -89,13 +89,13 @@ class TestsByCategoryInNetwork extends React.Component {
 
     return (
       <React.Fragment>
-        <Heading h={4}><FormattedMessage id='Country.Websites.Heading.BlockedByCategory' /></Heading>
-        <FormattedMessage id='Country.Websites.BlockedByCategory.Description'
+        {/* <Heading h={4}><FormattedMessage id='Country.Websites.Heading.BlockedByCategory' /></Heading> */}
+        {/* <FormattedMessage id='Country.Websites.BlockedByCategory.Description'
           defaultMessage='Websites that fall under the following categories are blocked in the {selectedASN} Network. To examine whether other types of websites are blocked as well, run OONI Probe!'
           values={{
             selectedASN: <b>{'AS'+network}</b>
           }}
-        />
+        /> */}
         {/* Category Selection */}
         <Flex justifyContent='space-between'>
           <Box my={3}>
