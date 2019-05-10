@@ -14,8 +14,6 @@ import {
   Container
 } from 'ooni-components'
 
-
-
 const StyledNavItem = styled.a`
   text-decoration: none;
   position: relative;
@@ -74,7 +72,7 @@ export const NavBar = ({color}) => (
     <Container>
       <Flex alignItems='center'>
         <Box style={{zIndex: 1}}>
-          <NLink href='/'>
+          <NLink href='/' passHref>
             <Link><ExplorerLogo height='26px' /></Link>
           </NLink>
         </Box>
