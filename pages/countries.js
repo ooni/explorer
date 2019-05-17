@@ -125,7 +125,7 @@ class Countries extends React.Component {
       searchTerm: '',
       filteredCountries: []
     }
-    this.onSearchChange = debounce(this.onSearchChange, 300)
+    this.onSearchChange = debounce(this.onSearchChange, 200)
   }
 
   static async getInitialProps () {
