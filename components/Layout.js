@@ -14,6 +14,7 @@ import 'typeface-fira-sans/index.css'
 import Header from './header'
 import Footer from './footer'
 import withIntl from './withIntl'
+import FeedbackButton from '../components/feedback-float'
 
 theme.maxWidth = 1024
 
@@ -55,6 +56,7 @@ const Layout = ({ children, disableFooter = false }) => (
       </div>
       {!disableFooter && <Footer />}
     </div>
+    <FeedbackButton />
   </Provider>
 )
 
