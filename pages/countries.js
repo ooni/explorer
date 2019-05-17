@@ -142,7 +142,7 @@ class Countries extends React.Component {
 
   onSearchChange (searchTerm) {
     const filteredCountries = this.props.countries.filter((country) => (
-      country.name.toLowerCase().indexOf(searchTerm) > -1
+      country.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
     ))
     this.setState({
       filteredCountries,
