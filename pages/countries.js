@@ -125,12 +125,16 @@ class Countries extends React.Component {
       searchTerm: '',
       filteredCountries: []
     }
-    this.onSearchChange = debounce(this.onSearchChange, 300)
+    this.onSearchChange = debounce(this.onSearchChange, 200)
   }
 
   static async getInitialProps () {
     const client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
     const result = await client.get('/api/_/countries')
+
+    // Sort countries by name (instead of by country codes)
+    result.data.countries.sort((a,b) => a.name < b.name ? -1 : 1)
+
     return {
       countries: result.data.countries
     }
@@ -138,7 +142,7 @@ class Countries extends React.Component {
 
   onSearchChange (searchTerm) {
     const filteredCountries = this.props.countries.filter((country) => (
-      country.name.toLowerCase().indexOf(searchTerm) > -1
+      country.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
     ))
     this.setState({
       filteredCountries,
@@ -203,7 +207,6 @@ class Countries extends React.Component {
       </Layout>
     )
   }
-
 }
 
 export default Countries
