@@ -130,10 +130,10 @@ const RequestResponseContainer = ({request}) => {
               <React.Fragment key={index}>
                 <Flex mb={2}>
                   <Box mr={1}>
-                    <Text fontWeight='bold'>{header}{header}{header}:</Text>
+                    <Text fontWeight='bold'>{header}:</Text>
                   </Box>
                   <Box>
-                    {request.response.headers[header]}{request.response.headers[header]}{request.response.headers[header]}
+                    {request.response.headers[header]}
                   </Box>
                 </Flex>
               </React.Fragment>
