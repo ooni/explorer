@@ -5,7 +5,10 @@ import { FormattedMessage } from 'react-intl'
 
 const StyledSideBar = styled(Flex)`
   position: sticky;
-  top: 85px;
+  top: 66px;
+  border-bottom: 1px solid ${props => props.theme.colors.gray3};
+  background-color: white;
+  z-index: 999;
 `
 
 const StyledSidebarItem = styled(Box)``
@@ -14,13 +17,13 @@ StyledSidebarItem.defaultProps = {
 }
 
 const SidebarItem = ({link, children}) => (
-  <StyledSidebarItem>
+  <StyledSidebarItem mx={5}>
     <NavLink fontWeight='normal' color='blue5' href={link}>{children}</NavLink>
   </StyledSidebarItem>
 )
 
 const Sidebar = () => (
-  <StyledSideBar flexDirection={['row', 'column']}>
+  <StyledSideBar flexDirection='row' justifyContent='flex-end' py={3}>
     <SidebarItem link='#overview'>
       <FormattedMessage id='Country.Heading.Overview'/>
     </SidebarItem>
