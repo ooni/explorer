@@ -84,9 +84,7 @@ export default class Country extends React.Component {
         </Head>
         <NavBar />
         <Hero>
-          <Flex alignItems='center' pt={5} pb={4}>
-            <Box width={1/4}>
-            </Box>
+          <Flex alignItems='center' py={4}>
             <Box>
               <Flag countryCode={countryCode} />
             </Box>
