@@ -51,11 +51,18 @@ const CommonDetails = ({
   const {
     report_id,
     software_version,
-    annotations: {
-      engine_version,
-      platform
-    }
+    annotations,
   } = measurement
+
+  let engine_version = 'none',
+      platform = 'unknown';
+
+  if (annotations && annotations.engine_version) {
+    engine_version = annotations.engine_version
+  }
+  if (annotations && annotations.platform) {
+    platform = annotations.platform;
+  }
 
   const downloadFilename = `ooni-measurement-${report_id}.json`
   const items = [
@@ -70,14 +77,12 @@ const CommonDetails = ({
     {
       label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.SoftwareVersion' }),
       value: software_version
-    }
-  ]
-  if(engine_version) {
-    items.push({
+    },
+    {
       label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.MKVersion' }),
       value: engine_version
-    })
-  }
+    }
+  ]
   return (
     <React.Fragment>
       <Flex my={4}>
