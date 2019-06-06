@@ -4,7 +4,8 @@
     ["styled-components", {"ssr": true, "displayName": true, "preprocess": false}],
     ["react-intl", {
       "messagesDir": "./static/lang/.messages",
-      "enforceDescriptions": false
+      "enforceDescriptions": false,
+      "enforceDefaultMessage": false
     }]
   ],
   "presets": [
