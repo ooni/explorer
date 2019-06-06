@@ -10,6 +10,8 @@ import { Text } from 'rebass'
 import moment from 'moment'
 import { injectIntl, intlShape } from 'react-intl'
 
+import Flag from '../flag'
+
 const SummaryContainer = styled(Box)`
   background-color: ${props => props.color};
   color: white;
@@ -46,6 +48,16 @@ const CommonSummary = ({
 }) => {
   const startTime = measurement.test_start_time
   const network = measurement.probe_asn
+  const countryCode = measurement.probe_cc
+
+  const countryBlock = <Flex alignItems='center'>
+    <Box mr={2} >
+      <Flag countryCode={countryCode} size={22} />
+    </Box>
+    <Box>
+      {country}
+    </Box>
+  </Flex>
 
   return (
     <React.Fragment>
@@ -62,7 +74,7 @@ const CommonSummary = ({
             />
             <SummaryItemBox
               label={intl.formatMessage({ id: 'Measurement.CommonSummary.Label.Country' })}
-              content={country}
+              content={countryBlock}
             />
             <SummaryItemBox
               label={intl.formatMessage({ id: 'Measurement.CommonSummary.Label.DateTime' })}
