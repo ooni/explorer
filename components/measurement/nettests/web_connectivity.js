@@ -61,6 +61,10 @@ const HttpResponseBody = ({request}) => {
   )
 }
 
+HttpResponseBody.propTypes = {
+  request: PropTypes.object.isRequired
+}
+
 const RequestResponseContainer = ({request}) => {
   return (
     // FIXME: This sometime ends up creating empty sections with just a title
@@ -124,6 +128,10 @@ const FailureString = ({failure}) => {
   )
 }
 
+FailureString.propTypes = {
+  failure: PropTypes.string
+}
+
 const DnsAnswerCell = (props) => (
   <Box width={1/8}>{props.children}</Box>
 )
@@ -143,6 +151,15 @@ const FiveColRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = 'Ty
     </Flex>
   </Text>
 )
+
+FiveColRow.propTypes = {
+  name: PropTypes.string,
+  netClass: PropTypes.string,
+  ttl: PropTypes.string,
+  type: PropTypes.string,
+  data: PropTypes.string,
+  header: PropTypes.bool
+}
 
 const QueryContainer = ({query}) => {
   const {
@@ -189,6 +206,10 @@ const QueryContainer = ({query}) => {
       </Box>
     </Flex>
   )
+}
+
+QueryContainer.propTypes = {
+  query: PropTypes.object
 }
 
 const WebConnectivityDetails = ({
