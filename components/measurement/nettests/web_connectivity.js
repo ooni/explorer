@@ -18,50 +18,6 @@ import { FormattedMessage } from 'react-intl'
 
 import { DetailsBox } from '../DetailsBox'
 
-export const checkAnomaly = ( testKeys ) => {
-  const {
-    accessible,
-    blocking,
-  } = testKeys
-
-  let anomaly = null
-  let hint = <FormattedMessage id='Measurement.Status.Hint.Websites.NoCensorship' />
-
-  if ((accessible === true || accessible === null) && blocking === null) {
-    hint = <FormattedMessage id='Measurement.Status.Hint.Websites.Error' />
-    if (accessible === true) {
-      anomaly = 'SITEUP'
-    } else if (accessible === null) {
-      anomaly = 'UNKNOWN'
-    }
-  } else if (accessible === false && (blocking === false || blocking === null)) {
-    anomaly = 'SITEDOWN'
-    hint = <FormattedMessage id='Measurement.Status.Hint.Websites.Unavailable' />
-  } else if (blocking !== null && blocking !== false) {
-    anomaly = 'CENSORSHIP'
-    hint = <FormattedMessage id='Measurement.Status.Hint.Websites.Censorship' />
-    // Further identify type of censorship
-    if (blocking === 'dns') {
-      anomaly = 'DNS'
-      hint = <FormattedMessage id='Measurement.Status.Hint.Websites.DNS' />
-    } else if (blocking === 'http-diff') {
-      anomaly = 'HTTPDIFF'
-      hint = <FormattedMessage id='Measurement.Status.Hint.Websites.HTTPdiff' />
-    } else if (blocking === 'http-failure') {
-      anomaly = 'HTTPFAILURE'
-      hint = <FormattedMessage id='Measurement.Status.Hint.Websites.HTTPfail' />
-    } else if (blocking === 'tcp-ip') {
-      anomaly = 'TCPIP'
-      hint = <FormattedMessage id='Measurement.Status.Hint.Websites.TCPBlock' />
-    }
-  }
-
-  return {
-    status: anomaly,
-    hint
-  }
-}
-
 const StatusInfo = ({ url, message}) => (
   <Flex flexDirection='column'>
     <Box>
@@ -235,11 +191,17 @@ const QueryContainer = ({query}) => {
   )
 }
 
-const WebConnectivityDetails = ({ isConfirmed, isAnomaly, isFailure, country, measurement, render }) => {
+const WebConnectivityDetails = ({
+  isConfirmed,
+  isAnomaly,
+  isFailure,
+  country,
+  measurement,
+  render
+}) => {
   const {
     input,
     probe_asn,
-    probe_cc,
     test_start_time,
     test_keys: {
       accessible,
@@ -254,7 +216,99 @@ const WebConnectivityDetails = ({ isConfirmed, isAnomaly, isFailure, country, me
     }
   } = measurement
 
-  const { status, hint } = checkAnomaly(measurement.test_keys)
+  const date = moment(test_start_time).format('lll')
+  const reasons = {
+    'http-diff': 'HTTP-diff',
+    'http-failure': 'HTTP-failure',
+    'dns': 'DNS',
+    'tcp_ip': 'TCP'
+  }
+
+  let status = 'default',
+    // XXX: `reason` will soon be used in Hero
+    reason = null,
+    summaryText = ''
+
+  // TODO: Disabled temporarily because `isFailure` is flagged incorrectly in
+  // some measurments. When fixed, this should be uncommented and the last
+  // section in the chain should be removed
+
+  // if (isFailure) {
+  //   status = 'error'
+  //   reason = null
+  //   summaryText = (
+  //     <FormattedMessage
+  //       id='Measurement.SummaryText.Websites.Failed'
+  //       values={{
+  //         date: date,
+  //         WebsiteURL: input,
+  //         network: probe_asn,
+  //         country: country,
+  //       }}
+  //     />
+  //   )
+  // } else
+  if(isConfirmed) {
+    status = 'confirmed'
+    reason = reasons[blocking]
+    summaryText = (
+      <FormattedMessage
+        id='Measurement.SummaryText.Websites.ConfirmedBlocked'
+        values={{
+          date: date,
+          WebsiteURL: input,
+          network: probe_asn,
+          country: country,
+        }}
+      />
+    )
+  } else if (isAnomaly) {
+    status = 'anomaly'
+    reason = reasons[blocking]
+    summaryText = (
+      <FormattedMessage
+        id='Measurement.SummaryText.Websites.Anomaly'
+        values={{
+          date: date,
+          WebsiteURL: input,
+          network: probe_asn,
+          country: country,
+          BlockingReason: <strong><FormattedMessage id={'Measurement.SummaryText.Websites.Anomaly.BlockingReason.' + reasons[blocking]} /></strong>
+        }}
+      />
+    )
+  } else if (accessible) {
+    status = 'reachable'
+    reason = null
+    summaryText = (
+      <FormattedMessage
+        id='Measurement.SummaryText.Websites.Accessible'
+        values={{
+          date: date,
+          WebsiteURL: input,
+          network: probe_asn,
+          country: country
+        }}
+      />
+    )
+  } else {
+    // TODO: Remove this block when the first block in this chain is enabled.
+    status = 'error'
+    reason = null
+    summaryText = (
+      <FormattedMessage
+        id='Measurement.SummaryText.Websites.Failed'
+        values={{
+          date: date,
+          WebsiteURL: input,
+          network: probe_asn,
+          country: country,
+        }}
+      />
+    )
+  }
+
+  // const { status, hint } = checkAnomaly(measurement.test_keys)
 
   const tcpConnections = tcp_connect.map((connection) => {
     const status = (connection.status.success) ? 'Success' :
@@ -264,60 +318,13 @@ const WebConnectivityDetails = ({ isConfirmed, isAnomaly, isFailure, country, me
       status
     }
   })
+
   return (
     <React.Fragment>
       {render({
-        status: status ? 'anomaly' : 'reachable',
+        status: status,
         statusInfo: <StatusInfo url={input} />,
-        summaryText: () => {
-          const date = moment(test_start_time).format('lll')
-          if (accessible) {
-            return (
-              <FormattedMessage
-                id='Measurement.SummaryText.Websites.Accessible'
-                values={{
-                  date: date,
-                  WebsiteURL: input,
-                  network: probe_asn,
-                  country: country
-                }}
-              />
-            )
-          }
-          if (blocking) {
-            const reasons = {
-              'http-diff': 'HTTP-diff',
-              'http-failure': 'HTTP-failure',
-              'dns': 'DNS',
-              'tcp_ip': 'TCP'
-            }
-            return (
-              <FormattedMessage
-                id='Measurement.SummaryText.Websites.Anomaly'
-                values={{
-                  date: date,
-                  WebsiteURL: input,
-                  network: probe_asn,
-                  country: country,
-                  BlockingReason: <strong><FormattedMessage id={'Measurement.SummaryText.Websites.Anomaly.BlockingReason.' + reasons[blocking]} /></strong>
-                }}
-              />
-            )
-          }
-          if (isConfirmed) {
-            return (
-              <FormattedMessage
-                id='Measurement.SummaryText.Websites.ConfirmedBlocked'
-                values={{
-                  date: date,
-                  WebsiteURL: input,
-                  network: probe_asn,
-                  country: country,
-                }}
-              />
-            )
-          }
-        },
+        summaryText: summaryText,
         details: (
           <React.Fragment>
             {/* Failures */}
@@ -415,6 +422,10 @@ const WebConnectivityDetails = ({ isConfirmed, isAnomaly, isFailure, country, me
 }
 
 WebConnectivityDetails.propTypes = {
+  isConfirmed: PropTypes.bool.isRequired,
+  isAnomaly: PropTypes.bool.isRequired,
+  isFailure: PropTypes.bool.isRequired,
+  country: PropTypes.string.isRequired,
   measurement: PropTypes.object.isRequired,
   render: PropTypes.func
 }

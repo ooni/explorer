@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Container, Flex, Box, Text } from 'ooni-components'
-import { Tick } from 'ooni-components/dist/icons'
+import { Tick, Cross } from 'ooni-components/dist/icons'
 import MdPriorityHigh from 'react-icons/lib/md/priority-high'
 import styled from 'styled-components'
 import { FormattedMessage } from 'react-intl'
@@ -29,14 +29,14 @@ const Hero = ({ status, color, icon, label, info }) => {
       break
     case 'error':
       computedLabel = <FormattedMessage id='Measurement.Hero.Status.Error' />
-      icon = <Tick />
+      icon = <Cross />
       break
     case 'confirmed':
       computedLabel = <FormattedMessage id='Measurement.Hero.Status.Confirmed' />
-      icon = <Tick />
+      icon = <Cross />
       break
     default:
-      icon = <div/>
+      icon = icon || <div/>
     }
   }
 
