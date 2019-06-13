@@ -381,7 +381,7 @@ const WebConnectivityDetails = ({ isConfirmed, isAnomaly, isFailure, country, me
                 title={<FormattedMessage id='Measurement.Details.Websites.TCP.Heading' />}
                 content={
                   <React.Fragment>
-                    {tcpConnections.length === 0 && <Text><FormattedMessage id='Measurement.Details.Websites.TCP.NoData' /></Text>}
+                    {tcpConnections.length === 0 && <FormattedMessage id='Measurement.Details.Websites.TCP.NoData' />}
                     {tcpConnections.map((connection, index) => (
                       <Flex key={index}>
                         <Box>
