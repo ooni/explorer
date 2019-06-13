@@ -110,45 +110,51 @@ const RequestResponseContainer = ({request}) => {
     // FIXME: This sometime ends up creating empty sections with just a title
     // when request data contains states like 'generic_timeout_error'
     // e.g ?report_id=20180709T222326Z_AS37594_FFQFSoqLJWYMgU0EnSbIK7PxicwJTFenIz9PupZYZWoXwtpCTy
-    !request.failure &&
-    <Box>
-      <Flex flexWrap='wrap'>
-        {/* Request URL */}
-        <Box width={1} mb={1} >
-          <Heading h={5}><FormattedMessage id='Request URL' /></Heading>
-        </Box>
-        <Box width={1} mb={2} p={2} bg='gray2'>
-          <Pre fontSize={14}>{request.request.method} {request.request.url}</Pre>
-        </Box>
-        {/* Response Headers */}
-        <Box width={1} mb={1} >
-          <Heading h={5}><FormattedMessage id='Response Headers' /></Heading>
-        </Box>
-        <Box width={1} mb={2} p={2} bg='gray2'>
-          <WrappedPre fontSize={14}>
-            {Object.keys(request.response.headers).map((header, index) => (
-              <React.Fragment key={index}>
-                <Flex mb={2}>
-                  <Box mr={1}>
-                    <Text fontWeight='bold'>{header}:</Text>
-                  </Box>
-                  <Box>
-                    {request.response.headers[header]}
-                  </Box>
-                </Flex>
-              </React.Fragment>
-            ))}
-          </WrappedPre>
-        </Box>
-        {/* Response Body (HTML) */}
-        <Box width={1} mb={1} >
-          <Heading h={5}><FormattedMessage id='Response Body' /></Heading>
-        </Box>
-        <Box width={1} p={2} bg='gray2'>
-          <HttpResponseBody request={request} />
-        </Box>
-      </Flex>
-    </Box>
+    request.failure ? (
+      <Box>
+        <FormattedMessage id='Measurement.Details.Websites.HTTP.NoData' />
+      </Box>
+    ) : (
+    // !request.failure &&
+      <Box>
+        <Flex flexWrap='wrap'>
+          {/* Request URL */}
+          <Box width={1} mb={1} >
+            <Heading h={5}><FormattedMessage id='Request URL' /></Heading>
+          </Box>
+          <Box width={1} mb={2} p={2} bg='gray2'>
+            <Pre fontSize={14}>{request.request.method} {request.request.url}</Pre>
+          </Box>
+          {/* Response Headers */}
+          <Box width={1} mb={1} >
+            <Heading h={5}><FormattedMessage id='Response Headers' /></Heading>
+          </Box>
+          <Box width={1} mb={2} p={2} bg='gray2'>
+            <WrappedPre fontSize={14}>
+              {Object.keys(request.response.headers).map((header, index) => (
+                <React.Fragment key={index}>
+                  <Flex mb={2}>
+                    <Box mr={1}>
+                      <Text fontWeight='bold'>{header}:</Text>
+                    </Box>
+                    <Box>
+                      {request.response.headers[header]}
+                    </Box>
+                  </Flex>
+                </React.Fragment>
+              ))}
+            </WrappedPre>
+          </Box>
+          {/* Response Body (HTML) */}
+          <Box width={1} mb={1} >
+            <Heading h={5}><FormattedMessage id='Response Body' /></Heading>
+          </Box>
+          <Box width={1} p={2} bg='gray2'>
+            <HttpResponseBody request={request} />
+          </Box>
+        </Flex>
+      </Box>
+    )
   )
 }
 
