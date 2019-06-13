@@ -46,6 +46,10 @@ const Triangle = styled.div`
   border-bottom: ${props => !props.down ? '12px solid ' + props.theme.colors.gray7 : 'none'};
 `
 
+const WrappedText = styled.span`
+  overflow-wrap: break-word;
+`
+
 const StyledChartRow = styled(Flex)`
   border: 1px solid ${props => props.theme.colors.gray3};
   border-radius: 5px;
@@ -130,7 +134,9 @@ class URLChart extends React.Component {
         <Box width={15/16}>
           <Flex alignItems='center' flexWrap='wrap'>
             <Box width={[1, 1/4]} p={3}>
-              {metadata.input}
+              <WrappedText>
+                {metadata.input}
+              </WrappedText>
               {/* TODO: Show percentages
                 <Flex flexDirection='column'>
                   <FormattedMessage id='Country.Websites.URLCharts.Legend.Label.Blocked' />
