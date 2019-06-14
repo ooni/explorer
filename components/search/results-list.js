@@ -57,7 +57,7 @@ const ResultTag = ({msmt}) => {
     const computedMessageIdPrefix = `Search.${testName}.Results`
     if (msmt.confirmed === true) {
       return <ResultTagFilled>
-        <FormattedMessage id={`${computedMessageIdPrefix}.Blocked`} />
+        {/* <FormattedMessage id={`${computedMessageIdPrefix}.Blocked`} /> */}
       </ResultTagFilled>
     /* XXX hotfix due to all measurements showing failure
     } else if (msmt.failure === true) {
@@ -67,11 +67,11 @@ const ResultTag = ({msmt}) => {
     */
     } else if (msmt.anomaly === true) {
       return <ResultTagHollow>
-        <FormattedMessage id={`${computedMessageIdPrefix}.Anomaly`} />
+        {/* <FormattedMessage id={`${computedMessageIdPrefix}.Anomaly`} /> */}
       </ResultTagHollow>
     } else {
       return <StyledResultTag>
-        <FormattedMessage id={`${computedMessageIdPrefix}.Reachable`} />
+        {/* <FormattedMessage id={`${computedMessageIdPrefix}.Reachable`} /> */}
       </StyledResultTag>
     }
   } else {
