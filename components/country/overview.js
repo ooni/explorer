@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormattedMessage } from 'react-intl'
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
 import styled from 'styled-components'
 import { Flex, Box, Heading, Link } from 'ooni-components'
 import SectionHeader from './section-header'
@@ -21,13 +21,52 @@ NwInterferenceStatus.defaultProps = {
   mb: 3
 }
 
+const messages = defineMessages({
+  middleboxNoData: {
+    id: 'Country.Overview.NwInterference.Middleboxes.NoData',
+    defaultMessage: ''
+  },
+  middleboxBlocked: {
+    id: 'Country.Overview.NwInterference.Middleboxes.Blocked',
+    defaultMessage: ''
+  },
+  middleboxNormal: {
+    id: 'Country.Overview.NwInterference.Middleboxes.Normal',
+    defaultMessage: ''
+  },
+  imNoData: {
+    id: 'Country.Overview.NwInterference.IM.NoData',
+    defaultMessage: ''
+  },
+  imBlocked: {
+    id: 'Country.Overview.NwInterference.IM.Blocked',
+    defaultMessage: ''
+  },
+  imNormal: {
+    id: 'Country.Overview.NwInterference.IM.Normal',
+    defaultMessage: ''
+  },
+  websitesNoData: {
+    id: 'Country.Overview.NwInterference.Websites.NoData',
+    defaultMessage: ''
+  },
+  websitesBlocked: {
+    id: 'Country.Overview.NwInterference.Websites.Blocked',
+    defaultMessage: ''
+  },
+  websitesNormal: {
+    id: 'Country.Overview.NwInterference.Websites.Normal',
+    defaultMessage: ''
+  }
+})
+
 const getStatus = (count, formattedMessageId)=> {
   if (count === null) {
-    return formattedMessageId + '.NoData'
+    return messages[`${formattedMessageId}NoData`]
   } else if (count > 0) {
-    return formattedMessageId + '.Blocked'
+    return messages[`${formattedMessageId}Blocked`]
   } else {
-    return formattedMessageId + '.Normal'
+    return messages[`${formattedMessageId}Normal`]
   }
 }
 
@@ -64,6 +103,7 @@ const Overview = ({
   measurementCount,
   measuredSince,
   featuredArticles = [],
+  intl
 }) => {
   return (
     <React.Fragment>
@@ -76,30 +116,21 @@ const Overview = ({
         <Flex flexWrap='wrap'>
           <NwInterferenceStatus width={[1, 1/3]} color={middleboxCount && 'violet8'}>
             <NettestGroupMiddleBoxes size={32} />
-            <FormattedMessage
-              id={ getStatus(middleboxCount, 'Country.Overview.NwInterference.Middleboxes') }
-              values={{ middleboxCount }}
-            />
+            {intl.formatMessage(getStatus(middleboxCount, 'middlebox'))}
           </NwInterferenceStatus>
           {/* <NwInterferenceStatus width={[1, 1/2]} color={circumventionTools && 'pink6'}>
-            <FormattedMessage
+            <FormattedMsg
               id={ getStatus(circumventionTools, 'Country.Overview.NwInterference.CircumventionTools') }
               values={{ circumventionTools }}
             />
           </NwInterferenceStatus> */}
           <NwInterferenceStatus width={[1, 1/3]} color={imCount && 'yellow9'}>
             <NettestGroupInstantMessaging size={32} />
-            <FormattedMessage
-              id={ getStatus(imCount, 'Country.Overview.NwInterference.IM') }
-              values={{ imCount }}
-            />
+            {intl.formatMessage(getStatus(imCount, 'im'))}
           </NwInterferenceStatus>
           <NwInterferenceStatus width={[1, 1/3]} color={blockedWebsitesCount && 'indigo5'}>
             <NettestGroupWebsites size={32} />
-            <FormattedMessage
-              id={ getStatus(blockedWebsitesCount, 'Country.Overview.NwInterference.Websites') }
-              values={{ blockedWebsitesCount }}
-            />
+            {intl.formatMessage(getStatus(blockedWebsitesCount, 'websites'))}
           </NwInterferenceStatus>
         </Flex>
       </BoxWithTitle>
@@ -141,4 +172,4 @@ const Overview = ({
     </React.Fragment>
   )
 }
-export default Overview
+export default injectIntl(Overview)
