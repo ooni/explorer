@@ -112,18 +112,16 @@ const Overview = ({
           <FormattedMessage id='Country.Heading.Overview' />
         </SectionHeader.Title>
       </SectionHeader>
+      {/*
       <BoxWithTitle title={<FormattedMessage id='Country.Overview.Heading.NwInterference' />}>
         <Flex flexWrap='wrap'>
           <NwInterferenceStatus width={[1, 1/3]} color={middleboxCount && 'violet8'}>
             <NettestGroupMiddleBoxes size={32} />
             {intl.formatMessage(getStatus(middleboxCount, 'middlebox'))}
           </NwInterferenceStatus>
-          {/* <NwInterferenceStatus width={[1, 1/2]} color={circumventionTools && 'pink6'}>
-            <FormattedMsg
-              id={ getStatus(circumventionTools, 'Country.Overview.NwInterference.CircumventionTools') }
-              values={{ circumventionTools }}
-            />
-          </NwInterferenceStatus> */}
+          <NwInterferenceStatus width={[1, 1/2]} color={circumventionTools && 'pink6'}>
+            {intl.formatMessage(getStatus(circumventionTools, 'circumvention'))}
+          </NwInterferenceStatus>
           <NwInterferenceStatus width={[1, 1/3]} color={imCount && 'yellow9'}>
             <NettestGroupInstantMessaging size={32} />
             {intl.formatMessage(getStatus(imCount, 'im'))}
@@ -134,6 +132,7 @@ const Overview = ({
           </NwInterferenceStatus>
         </Flex>
       </BoxWithTitle>
+      */}
       <Heading h={4}>
         <FormattedMessage id='Country.Overview.Heading.TestsByClass' />
       </Heading>

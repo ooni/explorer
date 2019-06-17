@@ -55,13 +55,13 @@ const CommonDetails = ({
   } = measurement
 
   let engine_version = 'none',
-      platform = 'unknown';
+    platform = 'unknown'
 
   if (annotations && annotations.engine_version) {
     engine_version = annotations.engine_version
   }
   if (annotations && annotations.platform) {
-    platform = annotations.platform;
+    platform = annotations.platform
   }
 
   const downloadFilename = `ooni-measurement-${report_id}.json`

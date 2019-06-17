@@ -39,7 +39,7 @@ const Divider = styled.div`
 const CountryBlock = ({countryCode, msmtCount}) => {
   const href = `/country/${countryCode}`
   return (
-    <Box width={[1/2, 1/4]} my={4} px={3}>
+    <Box width={[1/2, 1/4]} my={3} px={3}>
       <StyledCountryCard p={3}>
         <NLink href={href}>
           <CountryLink href={href}>
