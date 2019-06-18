@@ -151,14 +151,14 @@ const RequestResponseContainer = ({request}) => {
         <Flex flexWrap='wrap'>
           {/* Request URL */}
           <Box width={1} mb={1} >
-            <Heading h={5}><FormattedMessage id='Request URL' /></Heading>
+            <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Request.URL' /></Heading>
           </Box>
           <Box width={1} mb={2} p={2} bg='gray2'>
             <Pre fontSize={14}>{request.request.method} {request.request.url}</Pre>
           </Box>
           {/* Response Headers */}
           <Box width={1} mb={1} >
-            <Heading h={5}><FormattedMessage id='Response Headers' /></Heading>
+            <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Response.Headers' /></Heading>
           </Box>
           <Box width={1} mb={2} p={2} bg='gray2'>
             <WrappedPre fontSize={14}>
@@ -178,7 +178,7 @@ const RequestResponseContainer = ({request}) => {
           </Box>
           {/* Response Body (HTML) */}
           <Box width={1} mb={1} >
-            <Heading h={5}><FormattedMessage id='Response Body' /></Heading>
+            <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Response.Body' /></Heading>
           </Box>
           <Box width={1} p={2} bg='gray2'>
             <HttpResponseBody request={request} />
