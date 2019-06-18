@@ -43,7 +43,7 @@ const ResultTagHollow = styled(StyledResultTag)`
 
 const testsWithStates = [
   'web_connectivity',
-  // 'http_requests',
+  'http_requests',
   'whatsapp',
   'facebook_messenger',
   'telegram',
