@@ -128,38 +128,22 @@ const messages = defineMessages({
     id: 'Search.HTTPHeaderFieldManipulation.Results.Error',
     defaultMessage: ''
   },
-  'Search.Test.Results.Reachable': {
-    id: 'Search.Test.Results.Reachable',
-    defaultMessage: ''
-  },
-  'Search.Test.Results.Error': {
-    id: 'Search.Test.Results.Error',
-    defaultMessage: ''
-  },
-  'Search.NDT.Results': {
-    id: 'Search.NDT.Results',
-    defaultMessage: ''
-  },
-  'Search.DASH.Results': {
-    id: 'Search.DASH.Results',
-    defaultMessage: ''
-  },
-  'Search.VanillaTor.Results': {
-    id: 'Search.VanillaTor.Results',
-    defaultMessage: ''
-  },
-  'Search.BridgeReachability.Results': {
-    id: 'Search.BridgeReachability.Results',
-    defaultMessage: ''
-  },
   'Search.HTTPRequests.Results.Reachable': {
     id: 'Search.HTTPRequests.Results.Reachable',
     defaultMessage: ''
   },
-  'Search.LegacyTests.Results': {
-    id: 'Search.LegacyTests.Results',
+  'Search.HTTPRequests.Results.Error': {
+    id: 'Search.HTTPRequests.Results.Error',
     defaultMessage: ''
-  }
+  },
+  'Search.HTTPRequests.Results.Blocked': {
+    id: 'Search.HTTPRequests.Results.Blocked',
+    defaultMessage: ''
+  },
+  'Search.HTTPRequests.Results.Anomaly': {
+    id: 'Search.HTTPRequests.Results.Anomaly',
+    defaultMessage: ''
+  },
 })
 
 const ResultTagIntl = ({msmt, intl}) => {
