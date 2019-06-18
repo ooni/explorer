@@ -6,7 +6,7 @@ const { resolve } = require('path')
 const { readFileSync, writeFileSync } = require('fs')
 
 const LANG_DIR = './static/lang/'
-const EXTRACTED_KEYS = `${LANG_DIR}/keys.json`
+const EXTRACTED_KEYS = `${LANG_DIR}.messages/keys.json`
 
 const defaultMessages = glob.sync(`${LANG_DIR}.messages/**/*.json`)
   .map((filename) => readFileSync(filename, 'utf8'))
