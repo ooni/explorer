@@ -57,6 +57,7 @@ class FilterSidebar extends React.Component {
       untilFilter: props.untilFilter || '',
       showSinceCalendar: true,
       showUntilCalendar: false,
+      isFilterDirty: false
     }
     this.onChangeFilter = this.onChangeFilter.bind(this)
     this.onDateChangeFilter = this.onDateChangeFilter.bind(this)
@@ -67,19 +68,28 @@ class FilterSidebar extends React.Component {
 
   onChangeFilter (filterName) {
     return ((e) => {
-      this.setState({[filterName]: e.target.value})
+      this.setState({
+        [filterName]: e.target.value,
+        isFilterDirty: true
+      })
     }).bind(this)
   }
 
   onDateChangeFilter (filterName) {
     return ((date) => {
-      this.setState({[filterName]: (date !== '') ? date.utc().format('YYYY-MM-DD') : date})
+      this.setState({
+        [filterName]: (date !== '') ? date.utc().format('YYYY-MM-DD') : date,
+        isFilterDirty: true
+      })
     })
   }
 
   onRadioChangeFilter (filterName) {
     return ((value) => {
-      this.setState({[filterName]: value})
+      this.setState({
+        [filterName]: value,
+        isFilterDirty: true
+      })
     })
   }
 
@@ -110,6 +120,7 @@ class FilterSidebar extends React.Component {
       asnFilter: this.state.asnFilter,
       sinceFilter: this.state.sinceFilter,
       untilFilter: this.state.untilFilter,
+      isFilterDirty: false
     })
   }
 
@@ -127,7 +138,8 @@ class FilterSidebar extends React.Component {
       countryFilter,
       asnFilter,
       sinceFilter,
-      untilFilter
+      untilFilter,
+      isFilterDirty
     } = this.state
 
     //Insert an 'Any' option to test name filter
@@ -240,9 +252,11 @@ class FilterSidebar extends React.Component {
             />
           </Box>
         </Flex>
+
         <Button
           mt={3}
           onClick={this.onClickApplyFilter}
+          disabled={!isFilterDirty}
         >
           {intl.formatMessage({id: 'Search.Sidebar.Button.FilterResults'})}
         </Button>
