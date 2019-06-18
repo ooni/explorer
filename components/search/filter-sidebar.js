@@ -50,7 +50,7 @@ class FilterSidebar extends React.Component {
     this.state = {
       inputFilter: props.inputFilter || '',
       onlyFilter: props.onlyFilter || 'all',
-      testNameFilter: props.testNameFilter || '',
+      testNameFilter: props.testNameFilter || 'XX',
       countryFilter: props.countryFilter || '',
       asnFilter: props.asnFilter || '',
       sinceFilter: props.sinceFilter || '',
@@ -137,16 +137,42 @@ class FilterSidebar extends React.Component {
     const countryOptions = [...countries]
     countryOptions.unshift({name: intl.formatMessage({id: 'Search.Sidebar.Country.AllCountries'}), alpha_2: 'XX'})
 
+    // Show `Input` text field only for tests that support it
+    const testsWithValidInput = [
+      'XX', // We show the field by default (state initialized to 'XX')
+      'web_connectivity',
+      'http_requests',
+      'dns_consistency',
+      'tcp_connect'
+    ]
+    const showInput = testsWithValidInput.indexOf(testNameFilter) > -1
+
     return (
       <StyledFilterSidebar>
-        <InputWithLabel
-          label={intl.formatMessage({id: 'Search.Sidebar.Input'})}
-          name="inputFilter"
-          value={inputFilter}
-          onChange={this.onChangeFilter('inputFilter')}
-          placeholder={intl.formatMessage({id: 'Search.Sidebar.Input.Placeholder'})}
-          type="text"
-        />
+        <SelectWithLabel
+          pt={2}
+          label={intl.formatMessage({id: 'Search.Sidebar.TestName'})}
+          value={testNameFilter}
+          onChange={this.onChangeFilter('testNameFilter')}>
+          {testNameOptions.map((v, idx) => {
+            return (
+              <option key={idx} value={v.id}>{v.name}</option>
+            )
+          })}
+        </SelectWithLabel>
+
+        {
+          showInput &&
+          <InputWithLabel
+            label={intl.formatMessage({id: 'Search.Sidebar.Input'})}
+            name="inputFilter"
+            value={inputFilter}
+            onChange={this.onChangeFilter('inputFilter')}
+            placeholder={intl.formatMessage({id: 'Search.Sidebar.Input.Placeholder'})}
+            type="text"
+          />
+        }
+
         <StyledLabel>
           {intl.formatMessage({id: 'Search.Sidebar.Status'})}
         </StyledLabel>
@@ -168,17 +194,6 @@ class FilterSidebar extends React.Component {
             value='anomalies'
           />
         </RadioGroup>
-        <SelectWithLabel
-          pt={2}
-          label={intl.formatMessage({id: 'Search.Sidebar.TestName'})}
-          value={testNameFilter}
-          onChange={this.onChangeFilter('testNameFilter')}>
-          {testNameOptions.map((v, idx) => {
-            return (
-              <option key={idx} value={v.id}>{v.name}</option>
-            )
-          })}
-        </SelectWithLabel>
 
         <SelectWithLabel
           pt={2}
