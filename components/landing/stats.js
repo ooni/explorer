@@ -14,6 +14,7 @@ import { FormattedMessage } from 'react-intl'
 import SpinLoader from '../vendor/spin-loader'
 import Tooltip from '../country/tooltip'
 import FormattedMarkdown from '../formatted-markdown'
+import VictoryTheme from '../VictoryTheme'
 
 const getMaxima = (data) => {
   let maxima
@@ -96,6 +97,7 @@ class CoverageChart extends React.Component {
         <VictoryChart
           height={250}
           width={800}
+          theme={VictoryTheme}
           containerComponent={
             <VictoryVoronoiContainer
               voronoiDimension='x'
@@ -144,11 +146,6 @@ class CoverageChart extends React.Component {
           <VictoryAxis
             tickCount={12}
             tickFormat={(t) => moment(t).format('MMM[\']YY')}
-            style={{
-              tickLabels: {
-                fontFamily: 'Fira Sans'
-              }
-            }}
           />
           <VictoryAxis
             dependentAxis
@@ -156,9 +153,6 @@ class CoverageChart extends React.Component {
               axis: {
                 stroke : theme.colors.blue7,
                 strokeWidth: 2
-              },
-              tickLabels: {
-                fontFamily: 'Fira Sans'
               }
             }}
             tickValues={[0, 0.5, 1]}
@@ -183,9 +177,6 @@ class CoverageChart extends React.Component {
               axis: {
                 stroke : theme.colors.gray7,
                 strokeWidth: 2
-              },
-              tickLabels: {
-                fontFamily: 'Fira Sans'
               }
             }}
             tickValues={[0, 0.5, 1]}
@@ -211,9 +202,6 @@ class CoverageChart extends React.Component {
               axis: {
                 stroke : theme.colors.yellow7,
                 strokeWidth: 2
-              },
-              tickLabels: {
-                fontFamily: 'Fira Sans'
               }
             }}
             tickValues={[0, 0.5, 1]}
