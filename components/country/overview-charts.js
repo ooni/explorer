@@ -6,12 +6,12 @@ import {
   VictoryBar,
   VictoryStack,
   VictoryAxis,
-  VictoryTheme,
   VictoryLine,
   VictoryVoronoiContainer
 } from 'victory'
 
 import Tooltip from './tooltip'
+import VictoryTheme from '../VictoryTheme'
 import { testGroups } from '../test-info'
 
 const Circle = styled.span`
@@ -114,10 +114,9 @@ class TestsByGroup extends React.PureComponent {
           <Box width={1}>
             <VictoryChart
               domainPadding={20}
-              theme={VictoryTheme.material}
+              theme={VictoryTheme}
               containerComponent={
                 <VictoryVoronoiContainer
-                  responsive={true}
                   voronoiDimension='x'
                 />
               }
