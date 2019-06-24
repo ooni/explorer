@@ -3,6 +3,7 @@ import {
   VictoryChart,
   VictoryLine,
   VictoryAxis,
+  createContainer,
   VictoryVoronoiContainer,
   VictoryLegend
 } from 'victory'
@@ -76,6 +77,8 @@ class CoverageChart extends React.Component {
     const networkCoverageMaxima = getMaxima(networkCoverage)
     const runsMaxima = getMaxima(runsByMonth)
 
+    const VictoryCursorVoronoiContainer = createContainer('cursor', 'voronoi')
+
     return (
       <React.Fragment>
         <Flex justifyContent='center' my={3}>
@@ -99,7 +102,7 @@ class CoverageChart extends React.Component {
           width={800}
           theme={VictoryTheme}
           containerComponent={
-            <VictoryVoronoiContainer
+            <VictoryCursorVoronoiContainer
               voronoiDimension='x'
               labels={(d) => {
                 if (d.childName === 'countryCoverage') {
