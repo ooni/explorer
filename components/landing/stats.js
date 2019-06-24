@@ -4,7 +4,7 @@ import {
   VictoryLine,
   VictoryAxis,
   createContainer,
-  VictoryVoronoiContainer,
+  LineSegment,
   VictoryLegend
 } from 'victory'
 import axios from 'axios'
@@ -103,6 +103,11 @@ class CoverageChart extends React.Component {
           theme={VictoryTheme}
           containerComponent={
             <VictoryCursorVoronoiContainer
+              cursorComponent={
+                <LineSegment
+                  style={{ strokeDasharray: [6, 6], stroke: theme.colors.gray5}}
+                />
+              }
               voronoiDimension='x'
               labels={(d) => {
                 if (d.childName === 'countryCoverage') {
