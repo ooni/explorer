@@ -101,8 +101,7 @@ const victoryTheme = {
       data: {
         fill: primaryColor,
         padding: 8,
-        strokeWidth: 0,
-        width: 20
+        strokeWidth: 0
       },
       labels: baseLabelStyles,
     }
