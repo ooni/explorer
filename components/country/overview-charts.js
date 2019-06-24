@@ -142,7 +142,7 @@ class TestsByGroup extends React.PureComponent {
                         })
                         return s
                       }
-                      maybeLabels['labelComponent'] = <Tooltip />
+                      maybeLabels['labelComponent'] = <Tooltip orientation='right' />
                     }
                     return (
                       <VictoryBar
@@ -174,7 +174,7 @@ class TestsByGroup extends React.PureComponent {
                 y={(d) => d.count / networkCoverageMaxima}
                 scale={{x: 'time', y: 'linear'}}
                 labels={(d) => `${new Date(d.test_day).toLocaleDateString()}\n${d.count} networks `}
-                labelComponent={<Tooltip />}
+                labelComponent={<Tooltip orientation='left' />}
                 style={{
                   data: {
                     stroke: theme.colors.gray7,
