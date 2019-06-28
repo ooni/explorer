@@ -14,6 +14,7 @@ const Tooltip = (props) => (
       <VictoryLabel
         style={{
           fill: theme.colors.white,
+          fontFamily: '"Fira Sans", sans-serif',
           fontSize: 8
         }}
       />
