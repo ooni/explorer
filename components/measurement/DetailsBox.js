@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Flex, Box, Text, Heading } from 'ooni-components'
-import MdArrowDropDownCircle from 'react-icons/lib/md/arrow-drop-down'
+import { MdExpandLess } from 'react-icons/lib/md'
 
 const DetailBoxLabel = styled(Text)`
   font-weight: 600;
@@ -44,7 +44,7 @@ const StyledDetailsBox = styled(Box)`
   border: 2px solid ${props => props.theme.colors.gray2};
 `
 
-const CollapseTrigger = styled(MdArrowDropDownCircle)`
+const CollapseTrigger = styled(MdExpandLess)`
   cursor: pointer;
   background-color: white;
   border-radius: 50%;

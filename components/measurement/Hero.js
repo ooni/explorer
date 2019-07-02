@@ -55,7 +55,9 @@ const Hero = ({ status, color, icon, label, info }) => {
           </Box>
         </Flex>
         {info && <Flex flexWrap='wrap' justifyContent='center'>
-          {info}
+          <Text fontSize={28}>
+            {info}
+          </Text>
         </Flex>}
       </Container>
     </HeroContainer>
