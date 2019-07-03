@@ -12,6 +12,7 @@ import {
   Heading,
 } from 'ooni-components'
 import { Text } from 'rebass'
+import { StickyContainer, Sticky } from 'react-sticky'
 
 import Flag from '../components/flag'
 import Layout from '../components/Layout'
@@ -60,8 +61,17 @@ const CountryBlock = ({countryCode, msmtCount}) => {
 }
 
 // To compenstate for the sticky navigation bar
+// :target selector applies only the element with id that matches
+// the current URL fragment (e.g '/#Africa')
 const RegionHeaderAnchor = styled.div`
-  height: 48px;
+  :target::before {
+    content: ' ';
+    display: block;
+    width: 0;
+    /* Height of the combined header (NavBar and Regions) */
+    height: 145px;
+    margin-top: -145px;
+  }
 `
 
 const RegionBlock = ({regionCode, countries}) => {
@@ -103,6 +113,7 @@ const JumpToLink = styled.a`
   text-decoration: none;
   padding-right: 30px
 `
+
 const NoCountriesFound = ({ searchTerm }) => (
   <Flex justifyContent='center'>
     <Box width={1/2} m={5}>
@@ -171,39 +182,46 @@ class Countries extends React.Component {
           <title>Internet Censorship around the world - OONI Explorer</title>
         </Head>
 
-        <NavBar />
-
-        <JumpToContainer>
+        <StickyContainer>
+          <Sticky>
+            {({ style }) => (
+              <div style={style}>
+                <NavBar />
+                <JumpToContainer>
+                  <Container>
+                    <Flex justifyContent='space-between'>
+                      <Box>
+                        <Text fontWeight='bold' pb={2}><FormattedMessage id='Countries.Heading.JumpToContinent' />:</Text>
+                        <JumpToLink href="#Africa">Africa</JumpToLink>
+                        <JumpToLink href="#Americas">Americas</JumpToLink>
+                        <JumpToLink href="#Asia">Asia</JumpToLink>
+                        <JumpToLink href="#Europe">Europe</JumpToLink>
+                        <JumpToLink href="#Antartica">Antarctica</JumpToLink>
+                      </Box>
+                      <Box>
+                        <Input
+                          onChange={(e) => this.onSearchChange(e.target.value)}
+                          placeholder='Search for Countries'
+                          error={filteredCountries.length === 0}
+                        />
+                      </Box>
+                    </Flex>
+                  </Container>
+                </JumpToContainer>
+              </div>
+            )}
+          </Sticky>
           <Container>
-            <Flex justifyContent='space-between'>
-              <Box>
-                <Text fontWeight='bold' pb={2}><FormattedMessage id='Countries.Heading.JumpToContinent' />:</Text>
-                <JumpToLink href="#Africa">Africa</JumpToLink>
-                <JumpToLink href="#Americas">Americas</JumpToLink>
-                <JumpToLink href="#Asia">Asia</JumpToLink>
-                <JumpToLink href="#Europe">Europe</JumpToLink>
-                <JumpToLink href="#Antartica">Antarctica</JumpToLink>
-              </Box>
-              <Box>
-                <Input
-                  onChange={(e) => this.onSearchChange(e.target.value)}
-                  placeholder='Search for Countries'
-                  error={filteredCountries.length === 0}
-                />
-              </Box>
-            </Flex>
+            {
+              // Show a message when there are no countries to show, when search is empty
+              (filteredCountries.length === 0)
+                ? <NoCountriesFound searchTerm={searchTerm} />
+                : regions.map((regionCode, index) => (
+                  <RegionBlock key={index} regionCode={regionCode} countries={filteredCountries} />
+                ))
+            }
           </Container>
-        </JumpToContainer>
-        <Container>
-          {
-            // Show a message when there are no countries to show, when search is empty
-            (filteredCountries.length === 0)
-              ? <NoCountriesFound searchTerm={searchTerm} />
-              : regions.map((regionCode, index) => (
-                <RegionBlock key={index} regionCode={regionCode} countries={filteredCountries} />
-              ))
-          }
-        </Container>
+        </StickyContainer>
       </Layout>
     )
   }

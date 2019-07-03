@@ -39,6 +39,7 @@
     "react-intl": "^2.4.0",
     "react-json-view": "^1.16.0",
     "react-no-ssr": "^1.1.0",
+    "react-sticky": "^6.0.3",
     "rebass": "2.3.3",
     "sentry-testkit": "^2.2.0",
     "styled-components": "3.4.10",
