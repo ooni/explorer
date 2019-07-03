@@ -108,16 +108,23 @@ const RaisedHeader = styled.div`
 `
 
 const RegionMenu = styled.div`
-  padding-top: 20px;
-  padding-bottom: 20px;
   background-color: white;
+  border-bottom: 1px solid ${props => props.theme.colors.gray3};
 `
 
-const RegionLink = styled.a`
+const StyledRegionLink = styled.a`
   color: ${props => props.theme.colors.blue5};
   text-decoration: none;
-  padding-right: 30px
 `
+
+const RegionLink = ({ href, label }) => (
+  <Box px={3} py={4}>
+    <StyledRegionLink href={href}>
+      <Text fontSize={20}>{label}</Text>
+    </StyledRegionLink>
+  </Box>
+)
+
 
 const NoCountriesFound = ({ searchTerm }) => (
   <Flex justifyContent='center'>
@@ -194,15 +201,12 @@ class Countries extends React.Component {
                 <NavBar />
                 <RegionMenu>
                   <Container>
-                    <Flex justifyContent='space-between'>
-                      <Box>
-                        <Text fontWeight='bold' pb={2}><FormattedMessage id='Countries.Heading.JumpToContinent' />:</Text>
-                        <RegionLink href="#Africa">Africa</RegionLink>
-                        <RegionLink href="#Americas">Americas</RegionLink>
-                        <RegionLink href="#Asia">Asia</RegionLink>
-                        <RegionLink href="#Europe">Europe</RegionLink>
-                        <RegionLink href="#Antartica">Antarctica</RegionLink>
-                      </Box>
+                    <Flex justifyContent='space-around' alignItems='center'>
+                      <RegionLink href="#Africa" label='Africa' />
+                      <RegionLink href="#Americas" label='Americas' />
+                      <RegionLink href="#Asia" label='Asia' />
+                      <RegionLink href="#Europe" label='Europe' />
+                      <RegionLink href="#Antartica" label='Antarctica' />
                       <Box>
                         <Input
                           onChange={(e) => this.onSearchChange(e.target.value)}
