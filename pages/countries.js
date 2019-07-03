@@ -102,13 +102,18 @@ const RegionBlock = ({regionCode, countries}) => {
   )
 }
 
-const JumpToContainer = styled.div`
+// Raise the Sticky Header to avoid the flags getting rendered over it
+const RaisedHeader = styled.div`
+  z-index: 100;
+`
+
+const RegionMenu = styled.div`
   padding-top: 20px;
   padding-bottom: 20px;
   background-color: white;
 `
 
-const JumpToLink = styled.a`
+const RegionLink = styled.a`
   color: ${props => props.theme.colors.blue5};
   text-decoration: none;
   padding-right: 30px
@@ -185,18 +190,18 @@ class Countries extends React.Component {
         <StickyContainer>
           <Sticky>
             {({ style }) => (
-              <div style={style}>
+              <RaisedHeader style={style}>
                 <NavBar />
-                <JumpToContainer>
+                <RegionMenu>
                   <Container>
                     <Flex justifyContent='space-between'>
                       <Box>
                         <Text fontWeight='bold' pb={2}><FormattedMessage id='Countries.Heading.JumpToContinent' />:</Text>
-                        <JumpToLink href="#Africa">Africa</JumpToLink>
-                        <JumpToLink href="#Americas">Americas</JumpToLink>
-                        <JumpToLink href="#Asia">Asia</JumpToLink>
-                        <JumpToLink href="#Europe">Europe</JumpToLink>
-                        <JumpToLink href="#Antartica">Antarctica</JumpToLink>
+                        <RegionLink href="#Africa">Africa</RegionLink>
+                        <RegionLink href="#Americas">Americas</RegionLink>
+                        <RegionLink href="#Asia">Asia</RegionLink>
+                        <RegionLink href="#Europe">Europe</RegionLink>
+                        <RegionLink href="#Antartica">Antarctica</RegionLink>
                       </Box>
                       <Box>
                         <Input
@@ -207,8 +212,8 @@ class Countries extends React.Component {
                       </Box>
                     </Flex>
                   </Container>
-                </JumpToContainer>
-              </div>
+                </RegionMenu>
+              </RaisedHeader>
             )}
           </Sticky>
           <Container>
