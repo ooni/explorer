@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Flex, Box } from 'ooni-components'
 import { Text } from 'rebass'
+import Carousel from 'nuka-carousel'
 
 import HighlightBox from './highlight-box'
 
@@ -9,15 +10,20 @@ const HighlightSection = ({
   title,
   highlights
 }) => (
-  <Flex flexWrap='wrap' alignItems='flex-start' my={5}>
-    <Box p={2} width={[1, 2/12]}>
+  <React.Fragment>
+    <Box p={2}>
       <Text fontSize={20} fontWeight={500} textAlign={['center', 'left']}>
         {title}
       </Text>
     </Box>
-    <Box width={[1, 10/12]}>
+    <Box>
       {/* HighlightBoxes */}
-      <Flex flexWrap='wrap'>
+      <Carousel
+        cellSpacing={10}
+        transitionMode='scroll'
+        slidesToShow={4}
+        renderBottomCenterControls
+      >
         {
           highlights.map((item, index) => (
             <HighlightBox
@@ -26,9 +32,9 @@ const HighlightSection = ({
             />
           ))
         }
-      </Flex>
+      </Carousel>
     </Box>
-  </Flex>
+  </React.Fragment>
 )
 
 HighlightSection.propTypes = {
