@@ -52,7 +52,7 @@ const CommonSummary = ({
 
   const countryBlock = <Flex alignItems='center'>
     <Box mr={2} >
-      <Flag countryCode={countryCode} size={22} />
+      <Flag countryCode={countryCode} size={22} border />
     </Box>
     <Box>
       {country}
