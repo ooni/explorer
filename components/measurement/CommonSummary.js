@@ -50,8 +50,8 @@ const CommonSummary = ({
   const network = measurement.probe_asn
   const countryCode = measurement.probe_cc
 
-  const countryBlock = <Flex alignItems='center'>
-    <Box mr={2} >
+  const countryBlock = <Flex alignItems='center' flexWrap='wrap'>
+    <Box mr={2} width={[1, 'unset']}>
       <Flag countryCode={countryCode} size={22} border />
     </Box>
     <Box>
