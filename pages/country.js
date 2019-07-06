@@ -118,7 +118,7 @@ export default class Country extends React.Component {
                           {countryName}
                         </AnimatedHeading>
                       </Box>
-                      <PageNavMenu/>
+                      <PageNavMenu />
                     </AnimatedFlex>
                   </Container>
                 </RaisedHeader>
