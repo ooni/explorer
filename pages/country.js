@@ -28,8 +28,12 @@ const RaisedHeader = styled.div`
   z-index: 100;
 `
 
-const AnimatedFlex= styled(Flex)`
-  transition: all 0.5s ease-out;
+const AnimatedFlex = styled(Flex)`
+  transition: all 0.5s ease;
+`
+
+const AnimatedHeading = styled(Heading)`
+  transition: all 0.5s ease;
 `
 
 export default class Country extends React.Component {
@@ -107,12 +111,12 @@ export default class Country extends React.Component {
                   <Container>
                     <AnimatedFlex alignItems='center' py={ miniHeader ? 0 : 4} flexWrap='wrap'>
                       <Box>
-                        <Flag countryCode={countryCode} size={miniHeader ? 32: 60}/>
+                        <Flag countryCode={countryCode} size={miniHeader ? 32: 60} />
                       </Box>
                       <Box ml={3} mr='auto'>
-                        <Heading fontSize={miniHeader ? 2 : 4}>
+                        <AnimatedHeading fontSize={miniHeader ? 2 : 4}>
                           {countryName}
-                        </Heading>
+                        </AnimatedHeading>
                       </Box>
                       <PageNavMenu/>
                     </AnimatedFlex>
