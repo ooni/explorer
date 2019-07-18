@@ -25,7 +25,7 @@ const SummaryItemBox = ({
   label,
   content
 }) => (
-  <Box width={[1, 1/2]} px={4} py={2}>
+  <Box width={[1, 1/3]} px={4} py={2}>
     <Text fontSize={24} fontWeight={300}>
       {content}
     </Text>
@@ -50,9 +50,9 @@ const CommonSummary = ({
   const network = measurement.probe_asn
   const countryCode = measurement.probe_cc
 
-  const countryBlock = <Flex alignItems='center' flexWrap='wrap'>
-    <Box mr={2} width={[1, 'unset']}>
-      <Flag countryCode={countryCode} size={22} border />
+  const countryBlock = <Flex flexWrap='wrap'>
+    <Box mr={2} pb={1} width={1}>
+      <Flag countryCode={countryCode} size={60} border />
     </Box>
     <Box>
       {country}
@@ -63,18 +63,18 @@ const CommonSummary = ({
     <React.Fragment>
       <SummaryContainer py={4} color={color}>
         <Container>
-          <Flex flexWrap='wrap'>
+          <Flex flexWrap='wrap' alignItems='flex-end' justifyContent='space-around'>
             {/*<SummaryItemBox
               label='Network Name'
               content='AT&T Lorem Ipsum Name A.T.T Internationale'
             />*/}
             <SummaryItemBox
-              label={intl.formatMessage({ id: 'Measurement.CommonSummary.Label.ASN' })}
-              content={network}
-            />
-            <SummaryItemBox
               label={intl.formatMessage({ id: 'Measurement.CommonSummary.Label.Country' })}
               content={countryBlock}
+            />
+            <SummaryItemBox
+              label={intl.formatMessage({ id: 'Measurement.CommonSummary.Label.ASN' })}
+              content={network}
             />
             <SummaryItemBox
               label={intl.formatMessage({ id: 'Measurement.CommonSummary.Label.DateTime' })}
