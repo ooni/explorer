@@ -119,7 +119,9 @@ class FilterSidebar extends React.Component {
       countryFilter: this.state.countryFilter,
       asnFilter: this.state.asnFilter,
       sinceFilter: this.state.sinceFilter,
-      untilFilter: this.state.untilFilter,
+      untilFilter: this.state.untilFilter
+    })
+    this.setState({
       isFilterDirty: false
     })
   }
