@@ -37,24 +37,6 @@
       "tileColor": "#009A00"
     },
     {
-      "countryCode": "IR",
-      "countryName": "Iran",
-      "title": "2018 anti-government protests",
-      "text": "Blocking of Telegram, Instagram and Tor",
-      "report": "https://ooni.io/post/2018-iran-protests/",
-      "explore": "/search?input=instagram.com&probe_cc=IR&since=2017-12-30&until=2018-01-02",
-      "tileColor": "#249F40"
-    },
-    {
-      "countryCode": "PK",
-      "countryName": "Pakistan",
-      "title": "2017 protests",
-      "text": "Blocking of news websites and social media",
-      "report": "https://ooni.io/post/how-pakistan-blocked-social-media/",
-      "explore": "/search?input=facebook.com&probe_cc=PK&since=2017-11-24&until=2017-11-26",
-      "tileColor": "#0c590b"
-    },
-    {
       "countryCode": "ES",
       "countryName": "Spain",
       "title": "Catalonia 2017 independence referendum",
@@ -64,6 +46,15 @@
       "tileColor": "#c60b1e"
     },
     {
+      "countryCode": "IR",
+      "countryName": "Iran",
+      "title": "2018 anti-government protests",
+      "text": "Blocking of Telegram, Instagram and Tor",
+      "report": "https://ooni.io/post/2018-iran-protests/",
+      "explore": "/search?input=instagram.com&probe_cc=IR&since=2017-12-30&until=2018-01-02",
+      "tileColor": "#249F40"
+    },
+    {
       "countryCode": "ET",
       "countryName": "Ethiopia",
       "title": "2016 wave of protests",
@@ -71,6 +62,15 @@
       "report": "https://ooni.io/post/ethiopia-report/",
       "explore": "/search?input=ethsat.com&probe_cc=ET",
       "tileColor": "#ef2118"
+    },
+    {
+      "countryCode": "PK",
+      "countryName": "Pakistan",
+      "title": "2017 protests",
+      "text": "Blocking of news websites and social media",
+      "report": "https://ooni.io/post/how-pakistan-blocked-social-media/",
+      "explore": "/search?input=facebook.com&probe_cc=PK&since=2017-11-24&until=2017-11-26",
+      "tileColor": "#0c590b"
     },
     {
       "countryCode": "UG",
@@ -93,15 +93,6 @@
       "tileColor": "#000000"
     },
     {
-      "countryCode": "SS",
-      "countryName": "South Sudan",
-      "title": "Blocking of foreign-based media",
-      "text": "Media accused of hostile reporting against the government",
-      "report": "https://ooni.io/post/south-sudan-censorship/#blocked-websites",
-      "explore": "/search?input=sudantribune.com&probe_cc=SS",
-      "tileColor": "#000000"
-    },
-    {
       "countryCode": "VE",
       "countryName": "Venezuela",
       "title": "Blocking of independent media websites",
@@ -109,6 +100,15 @@
       "report": "https://ooni.io/post/venezuela-internet-censorship/#media",
       "explore": "/search?input=www.el-nacional.com&probe_cc=VE",
       "tileColor": "#00247D"
+    },
+    {
+      "countryCode": "SS",
+      "countryName": "South Sudan",
+      "title": "Blocking of foreign-based media",
+      "text": "Media accused of hostile reporting against the government",
+      "report": "https://ooni.io/post/south-sudan-censorship/#blocked-websites",
+      "explore": "/search?input=sudantribune.com&probe_cc=SS",
+      "tileColor": "#000000"
     },
     {
       "countryCode": "MY",
