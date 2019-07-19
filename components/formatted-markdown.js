@@ -2,29 +2,25 @@
 // https://github.com/probablyup/markdown-to-jsx
 import React from 'react'
 import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
+import { injectIntl } from 'react-intl'
 import Markdown from 'markdown-to-jsx'
 import { Link, theme } from 'ooni-components'
 
-const FormattedMarkdown = (props) => (
-  <FormattedMessage {...props} >
-    {(msg) => (
-      <Markdown
-        options={{
-          overrides: {
-            a: {
-              component: Link,
-              props: {
-                color: theme.colors.blue7
-              }
-            },
+const FormattedMarkdown = ({ id, defaultMessage, values, intl }) => (
+  <Markdown
+    options={{
+      overrides: {
+        a: {
+          component: Link,
+          props: {
+            color: theme.colors.blue7
           }
-        }}
-      >
-        {msg}
-      </Markdown>
-    )}
-  </FormattedMessage>
+        },
+      }
+    }}
+  >
+    {intl.formatMessage({id, defaultMessage}, values )}
+  </Markdown>
 )
 
 FormattedMarkdown.propTypes = {
@@ -33,4 +29,4 @@ FormattedMarkdown.propTypes = {
   values: PropTypes.object
 }
 
-export default FormattedMarkdown
+export default injectIntl(FormattedMarkdown)
