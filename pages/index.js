@@ -242,7 +242,7 @@ export default class LandingPage extends React.Component {
               <Heading h={2} color='blue7'><FormattedMessage id={'Home.Highlights.Title'} /></Heading>
             </Flex>
             <Flex flexWrap='wrap' justifyContent='center'>
-              <Box px={4} my={3}>
+              <Box px={[0, 4]} my={3}>
                 <Text textAlign='center' fontSize={26}>
                   <FormattedMarkdown
                     id='Home.Highlights.Description'

@@ -40,7 +40,7 @@ const HighlightBox = ({
   tileColor = 'black'
 }) => (
   <Box width={[1, 1/3]}>
-    <StyledFlex flexDirection='column' p={4} m={3} bg={tileColor} color='white'>
+    <StyledFlex flexDirection='column' p={4} mx={[0, 3]} my={3} bg={tileColor} color='white'>
       <Flex flexWrap='wrap' alignItems='center' my={3}>
         <Flag countryCode={countryCode} size={60} />
         <Text fontSize={22} fontWeight='bold' mx={1}>{countryName}</Text>
@@ -85,10 +85,10 @@ const HighlightBox = ({
 HighlightBox.propTypes = {
   countryCode: PropTypes.string.isRequired,
   countryName: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   text: PropTypes.string.isRequired,
-  report: PropTypes.string.isRequired,
-  explore: PropTypes.string.isRequired,
+  report: PropTypes.string,
+  explore: PropTypes.string,
   tileColor: PropTypes.string
 }
 
