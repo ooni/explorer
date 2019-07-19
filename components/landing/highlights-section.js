@@ -19,8 +19,8 @@ const HighlightSection = ({
 
   return (
     <section>
-      <Box>
-        <Text fontSize={20} fontWeight={500} textAlign={['center', 'left']}>
+      <Box mt={4} mb={3}>
+        <Text fontSize={26} fontWeight='bold' textAlign={['center', 'left']}>
           {title}
         </Text>
       </Box>
