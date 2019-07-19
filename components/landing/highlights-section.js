@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import { Flex, Box } from 'ooni-components'
 import { Text } from 'rebass'
@@ -9,14 +9,6 @@ const HighlightSection = ({
   title,
   highlights
 }) => {
-  const [isMobile, setIsMobile] = useState(false)
-
-  // Equivalent of componentDidMount and componentDidUpdate
-  // Limited to run only once by passing `[]` as second argument
-  useEffect(() => {
-    setIsMobile(window.innerWidth < 800)
-  }, [])
-
   return (
     <section>
       <Box mt={4} mb={3}>
