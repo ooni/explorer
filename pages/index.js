@@ -267,45 +267,12 @@ export default class LandingPage extends React.Component {
               highlights={highlightContent.lgbtqi}
             />
             {/* Censorship changes */}
-            <Flex flexWrap='wrap' alignItems='flex-start' my={5}>
-              <Box p={2} width={[1, 2/12]}>
-                <Text fontSize={20} fontWeight={500} textAlign={['center', 'left']}>
-                  Censorship Changes
-                </Text>
-              </Box>
-              <Box width={[1, 10/12]} p={1}>
-                <Text fontSize={18}>
-                  <Box>
-                    OONI measurements have been collected on a continuous basis since 2012, enabling the identification of censorship changes around the world over the last years. Some examples include:
-                  </Box>
-                  <Flex my={3}>
-                    <Box mr={2}>
-                      <Flag countryCode='CU' size={24} />
-                    </Box>
-                    <Box>
-                      Cuba <Link color='blue7' href='https://ooni.torproject.org/post/cuba-internet-censorship-2017/'>used to primarily serve blank block pages</Link>, only blocking the HTTP version of websites. Now they censor access to sites that support HTTPS by means of <Link color='blue7' href='https://ooni.io/post/cuba-referendum/'>IP blocking</Link>.
-                    </Box>
-                  </Flex>
-                  <Flex my={3}>
-                    <Box mr={2}>
-                      <Flag countryCode='VE' size={24} />
-                    </Box>
-                    <Box>
-                      Venezuelan ISPs used to primarily block sites by means of <Link color='blue7' href='https://ooni.torproject.org/post/venezuela-internet-censorship/'>DNS tampering</Link>. Now state-owned CANTV also implements <Link color='blue7' href='https://ooni.torproject.org/post/venezuela-blocking-wikipedia-and-social-media-2019/'>SNI-based filtering</Link>.
-                    </Box>
-                  </Flex>
-                  <Flex my={3}>
-                    <Box mr={2}>
-                      <Flag countryCode='ET' size={24} />
-                    </Box>
-                    <Box>
-                      Ethiopia <Link color='blue7' href='https://ooni.io/post/ethiopia-report/'>used to block</Link> numerous news websites, LGBTQI, political opposition, and circumvention tool sites. As part of the 2018 political reforms, most of these sites have been <Link color='blue7' href='https://ooni.io/post/ethiopia-unblocking/'>unblocked</Link>.
-                    </Box>
-                  </Flex>
-                  <Box mt={5}>We encourage you to <NLink href='/search'><Link color='blue7'>explore OONI measurements</Link></NLink> to find more highlights!</Box>
-                </Text>
-              </Box>
-            </Flex>
+            <HighlightSection
+              title='Censorship Changes'
+              description='OONI measurements have been collected on a continuous basis since 2012, enabling the identification of censorship changes around the world over the last years. Some examples include:'
+              highlights={highlightContent.changes}
+            />
+            <Box my={3}>We encourage you to <NLink href='/search'><Link color='blue7'>explore OONI measurements</Link></NLink> to find more highlights!</Box>
           </Container>
         </Container>
       </Layout>

@@ -7,7 +7,8 @@ import HighlightBox from './highlight-box'
 
 const HighlightSection = ({
   title,
-  highlights
+  highlights,
+  description
 }) => {
   return (
     <section>
@@ -16,6 +17,10 @@ const HighlightSection = ({
           {title}
         </Text>
       </Box>
+      {/* Optional Description */}
+      {description && <Box mt={4} mb={3}>
+        <Text fontSize={26} color='gray6'>{description}</Text>
+      </Box>}
       <Flex flexWrap='wrap'>
         {/* HighlightBoxes */}
         {
@@ -33,6 +38,7 @@ const HighlightSection = ({
 
 HighlightSection.propTypes = {
   title: PropTypes.string.isRequired,
+  description: PropTypes.string,
   highlights: PropTypes.arrayOf(PropTypes.shape({
     countryCode: PropTypes.string.isRequired,
     countryName: PropTypes.string.isRequired,

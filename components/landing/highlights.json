@@ -166,5 +166,25 @@
       "explore": "/search?input=gaystarnews.com&probe_cc=MY",
       "tileColor": "#010066"
     }
+  ],
+  "changes": [
+    {
+      "countryCode": "CU",
+      "countryName": "Cuba",
+      "text": "Cuba [used to primarily serve blank block pages](https://ooni.torproject.org/post/cuba-internet-censorship-2017/), only blocking the HTTP version of websites. Now they censor access to sites that support HTTPS by means of [IP blocking](https://ooni.io/post/cuba-referendum/).",
+      "tileColor": "#0050F0"
+    },
+    {
+      "countryCode": "VE",
+      "countryName": "Venezuela",
+      "text": "Venezuelan ISPs used to primarily block sites by means of [DNS tampering](https://ooni.torproject.org/post/venezuela-internet-censorship/). Now state-owned CANTV also implements [SNI-based filtering](https://ooni.torproject.org/post/venezuela-blocking-wikipedia-and-social-media-2019/).",
+      "tileColor": "#00247D"
+    },
+    {
+      "countryCode": "ET",
+      "countryName": "Ethiopia",
+      "text": "Ethiopia [used to block](https://ooni.io/post/ethiopia-report/) numerous news websites, LGBTQI, political opposition, and circumvention tool sites. As part of the 2018 political reforms, most of these sites have been [unblocked](https://ooni.io/post/ethiopia-unblocking/).",
+      "tileColor": "#ef2118"
+    }
   ]
 }

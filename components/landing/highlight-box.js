@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import NLink from 'next/link'
-import { Flex, Box, Link } from 'ooni-components'
+import { Flex, Box, Link, theme } from 'ooni-components'
 import { Text } from 'rebass'
 import styled from 'styled-components'
+import Markdown from 'markdown-to-jsx'
 
 import Flag from '../flag'
 
@@ -49,19 +50,34 @@ const HighlightBox = ({
           <Text fontSize={36}>{title}</Text>
         </Box>}
         <Box mb={3}>
-          <Text fontSize={20}>{text}</Text>
+          <Text fontSize={20}>
+            <Markdown
+              options={{
+                overrides: {
+                  a: {
+                    component: Link,
+                    props: {
+                      color: theme.colors.blue3
+                    }
+                  },
+                }
+              }}
+            >
+              {text}
+            </Markdown>
+          </Text>
         </Box>
       </FlexGrowBox>
-      <Box my={2}>
+      {explore && <Box my={2}>
         <Text fontSize={26}>
           <NLink href={explore} passHref><Link color='white'>Explore</Link></NLink>
         </Text>
-      </Box>
-      <Box my={2}>
+      </Box>}
+      {report && <Box my={2}>
         <Text fontSize={26}>
           <Link href={report} color='white'> Read Report </Link>
         </Text>
-      </Box>
+      </Box>}
     </StyledFlex>
   </Box>
 )
