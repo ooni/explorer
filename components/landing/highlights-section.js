@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Flex, Box } from 'ooni-components'
 import { Text } from 'rebass'
-import Carousel from 'nuka-carousel'
 
 import HighlightBox from './highlight-box'
 
@@ -19,31 +18,24 @@ const HighlightSection = ({
   }, [])
 
   return (
-    <React.Fragment>
-      <Box p={2}>
+    <section>
+      <Box>
         <Text fontSize={20} fontWeight={500} textAlign={['center', 'left']}>
           {title}
         </Text>
       </Box>
-      <Box>
+      <Flex flexWrap='wrap'>
         {/* HighlightBoxes */}
-        <Carousel
-          cellSpacing={10}
-          transitionMode='scroll'
-          slidesToShow={isMobile ? 1 : 4}
-          renderBottomCenterControls
-        >
-          {
-            highlights.map((item, index) => (
-              <HighlightBox
-                key={index}
-                {...item}
-              />
-            ))
-          }
-        </Carousel>
-      </Box>
-    </React.Fragment>
+        {
+          highlights.map((item, index) => (
+            <HighlightBox
+              key={index}
+              {...item}
+            />
+          ))
+        }
+      </Flex>
+    </section>
   )
 }
 
