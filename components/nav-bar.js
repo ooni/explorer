@@ -59,8 +59,6 @@ const NavItemComponent = ({router, label, href}) => {
 const NavItem = withRouter(NavItemComponent)
 
 const StyledNavBar = styled.div`
-  position: sticky;
-  top: 0;
   background-color: ${props => props.color || props.theme.colors.blue5};
   padding-top: 16px;
   padding-bottom: 20px;

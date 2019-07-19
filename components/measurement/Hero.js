@@ -54,11 +54,11 @@ const Hero = ({ status, color, icon, label, info }) => {
             </StatusLabel>
           </Box>
         </Flex>
-        {info && <Flex flexWrap='wrap' justifyContent='center'>
-          <Text fontSize={28}>
+        {info &&
+          <Text fontSize={28} textAlign='center'>
             {info}
           </Text>
-        </Flex>}
+        }
       </Container>
     </HeroContainer>
   )

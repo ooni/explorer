@@ -14,9 +14,40 @@ import { Tick, Cross } from 'ooni-components/dist/icons'
 
 import styled from 'styled-components'
 
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, defineMessages, injectIntl } from 'react-intl'
 
 import { DetailsBox } from '../DetailsBox'
+
+const messages = defineMessages({
+  'blockingReason.http-diff': {
+    id: 'Measurement.SummaryText.Websites.Anomaly.BlockingReason.HTTP-diff',
+    defaultMessage: ''
+  },
+  'blockingReason.http-failure': {
+    id: 'Measurement.SummaryText.Websites.Anomaly.BlockingReason.HTTP-failure',
+    defaultMessage: ''
+  },
+  'blockingReason.dns': {
+    id: 'Measurement.SummaryText.Websites.Anomaly.BlockingReason.DNS',
+    defaultMessage: ''
+  },
+  'blockingReason.tcp_ip': {
+    id: 'Measurement.SummaryText.Websites.Anomaly.BlockingReason.TCP',
+    defaultMessage: ''
+  },
+  'connection.Success': {
+    id: 'Measurement.Details.Websites.TCP.ConnectionTo.Success',
+    defaultMessage: ''
+  },
+  'connection.Failed': {
+    id: 'Measurement.Details.Websites.TCP.ConnectionTo.Failed',
+    defaultMessage: ''
+  },
+  'connection.Blocked': {
+    id: 'Measurement.Details.Websites.TCP.ConnectionTo.Blocked',
+    defaultMessage: ''
+  },
+})
 
 export const checkAnomaly = ( testKeys ) => {
   const {
@@ -120,14 +151,14 @@ const RequestResponseContainer = ({request}) => {
         <Flex flexWrap='wrap'>
           {/* Request URL */}
           <Box width={1} mb={1} >
-            <Heading h={5}><FormattedMessage id='Request URL' /></Heading>
+            <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Request.URL' /></Heading>
           </Box>
           <Box width={1} mb={2} p={2} bg='gray2'>
             <Pre fontSize={14}>{request.request.method} {request.request.url}</Pre>
           </Box>
           {/* Response Headers */}
           <Box width={1} mb={1} >
-            <Heading h={5}><FormattedMessage id='Response Headers' /></Heading>
+            <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Response.Headers' /></Heading>
           </Box>
           <Box width={1} mb={2} p={2} bg='gray2'>
             <WrappedPre fontSize={14}>
@@ -147,7 +178,7 @@ const RequestResponseContainer = ({request}) => {
           </Box>
           {/* Response Body (HTML) */}
           <Box width={1} mb={1} >
-            <Heading h={5}><FormattedMessage id='Response Body' /></Heading>
+            <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Response.Body' /></Heading>
           </Box>
           <Box width={1} p={2} bg='gray2'>
             <HttpResponseBody request={request} />
@@ -241,7 +272,7 @@ const QueryContainer = ({query}) => {
   )
 }
 
-const WebConnectivityDetails = ({ isConfirmed, isAnomaly, isFailure, country, measurement, render }) => {
+const WebConnectivityDetails = ({ isConfirmed, isAnomaly, isFailure, country, measurement, render, intl }) => {
   const {
     input,
     probe_asn,
@@ -305,7 +336,7 @@ const WebConnectivityDetails = ({ isConfirmed, isAnomaly, isFailure, country, me
                   WebsiteURL: input,
                   network: probe_asn,
                   country: country,
-                  BlockingReason: <strong><FormattedMessage id={'Measurement.SummaryText.Websites.Anomaly.BlockingReason.' + reasons[blocking]} /></strong>
+                  BlockingReason: <strong>{intl.formatMessage(messages[`blockingReason.${blocking}`])}</strong>
                 }}
               />
             )
@@ -390,7 +421,7 @@ const WebConnectivityDetails = ({ isConfirmed, isAnomaly, isFailure, country, me
                               id='Measurement.Details.Websites.TCP.ConnectionTo'
                               values={{
                                 destination: <strong> {connection.destination} </strong>,
-                                connectionStatus: <FormattedMessage id={`Measurement.Details.Websites.TCP.ConnectionTo.${connection.status}`} />
+                                connectionStatus: intl.formatMessage(messages[`connection.${connection.status}`])
                               }}
                             />
                           </Text>
@@ -425,4 +456,4 @@ WebConnectivityDetails.propTypes = {
   render: PropTypes.func
 }
 
-export default WebConnectivityDetails
+export default injectIntl(WebConnectivityDetails)

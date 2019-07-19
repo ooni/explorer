@@ -33,8 +33,9 @@ const SummaryText = ({
   } else {
     textToRender = content
   }
+  console.log(textToRender)
   return (
-    <Text py={4} fontSize={3}>
+    <Text py={4} fontSize={20}>
       {textToRender}
     </Text>
   )
