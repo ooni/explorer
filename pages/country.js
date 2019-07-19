@@ -9,16 +9,32 @@ import {
   Flex, Box
 } from 'ooni-components'
 import countryUtil from 'country-util'
+import styled from 'styled-components'
+import { StickyContainer, Sticky } from 'react-sticky'
 
 import NavBar from '../components/nav-bar'
 import Flag from '../components/flag'
 import Layout from '../components/Layout'
-import Sidebar from '../components/country/sidebar'
+import PageNavMenu from '../components/country/PageNavMenu'
 import Overview from '../components/country/overview'
 import WebsitesSection from '../components/country/websites'
 import AppsSection from '../components/country/apps'
 import NetworkPropertiesSection from '../components/country/network-properties'
 import { CountryContextProvider } from '../components/country/country-context'
+
+const RaisedHeader = styled.div`
+  border-bottom: 1px solid ${props => props.theme.colors.gray3};
+  background-color: white;
+  z-index: 100;
+`
+
+const AnimatedFlex = styled(Flex)`
+  transition: all 0.5s ease;
+`
+
+const AnimatedHeading = styled(Heading)`
+  transition: all 0.5s ease;
+`
 
 export default class Country extends React.Component {
   static async getInitialProps ({ query }) {
@@ -82,47 +98,59 @@ export default class Country extends React.Component {
         <Head>
           <title>Internet Censorship in {countryName} - OONI Explorer</title>
         </Head>
-        <NavBar />
-        <Hero>
-          <Flex alignItems='center' pt={5} pb={4}>
-            <Box width={1/4}>
-            </Box>
-            <Box>
-              <Flag countryCode={countryCode} />
-            </Box>
-            <Box ml={3}>
-              <Heading fontSize={4}>{countryName}</Heading>
-            </Box>
-          </Flex>
-        </Hero>
-        <Container>
-          <Flex flexWrap='wrap' mt={4}>
-            <Box width={[1, 1/4]}>
-              <Sidebar />
-            </Box>
-            <Box width={[1, 3/4]}>
-              <CountryContextProvider countryCode={countryCode} countryName={countryName}>
-                <Overview
-                  countryName={countryName}
-                  middleboxCount={overviewStats.middlebox_detected_networks}
-                  imCount={overviewStats.im_apps_blocked}
-                  circumventionTools={overviewStats.circumvention_tools_blocked}
-                  blockedWebsitesCount={overviewStats.websites_confirmed_blocked}
-                  networkCount={overviewStats.network_count}
-                  measurementCount={overviewStats.measurement_count}
-                  measuredSince={overviewStats.first_bucket_date}
-                  testCoverage={testCoverage}
-                  networkCoverage={networkCoverage}
-                  fetchTestCoverageData={this.fetchTestCoverageData}
-                  // featuredArticles={[{title: 'Title', link: 'https://ooni.nu'}]}
-                />
-                <WebsitesSection />
-                <AppsSection />
-                <NetworkPropertiesSection countryCode={countryCode} />
-              </CountryContextProvider>
-            </Box>
-          </Flex>
-        </Container>
+        <StickyContainer>
+          <Sticky>
+            {({ style, distanceFromTop }) => {
+              let miniHeader = false
+              if (distanceFromTop < -150) {
+                miniHeader = true
+              }
+              return (
+                <RaisedHeader style={style}>
+                  <NavBar />
+                  <Container>
+                    <AnimatedFlex alignItems='center' py={ miniHeader ? 0 : 4} flexWrap='wrap'>
+                      <Box>
+                        <Flag countryCode={countryCode} size={miniHeader ? 32: 60} />
+                      </Box>
+                      <Box ml={3} mr='auto'>
+                        <AnimatedHeading fontSize={miniHeader ? 2 : 4}>
+                          {countryName}
+                        </AnimatedHeading>
+                      </Box>
+                      <PageNavMenu />
+                    </AnimatedFlex>
+                  </Container>
+                </RaisedHeader>
+              )
+            }}
+          </Sticky>
+          <Container>
+            <Flex flexWrap='wrap' mt={4}>
+              <Box>
+                <CountryContextProvider countryCode={countryCode} countryName={countryName}>
+                  <Overview
+                    countryName={countryName}
+                    middleboxCount={overviewStats.middlebox_detected_networks}
+                    imCount={overviewStats.im_apps_blocked}
+                    circumventionTools={overviewStats.circumvention_tools_blocked}
+                    blockedWebsitesCount={overviewStats.websites_confirmed_blocked}
+                    networkCount={overviewStats.network_count}
+                    measurementCount={overviewStats.measurement_count}
+                    measuredSince={overviewStats.first_bucket_date}
+                    testCoverage={testCoverage}
+                    networkCoverage={networkCoverage}
+                    fetchTestCoverageData={this.fetchTestCoverageData}
+                    // featuredArticles={[{title: 'Title', link: 'https://ooni.nu'}]}
+                  />
+                  <WebsitesSection />
+                  <AppsSection />
+                  <NetworkPropertiesSection countryCode={countryCode} />
+                </CountryContextProvider>
+              </Box>
+            </Flex>
+          </Container>
+        </StickyContainer>
       </Layout>
     )
   }
