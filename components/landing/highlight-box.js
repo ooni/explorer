@@ -42,8 +42,8 @@ const HighlightBox = ({
   <Box width={[1, 1/3]}>
     <StyledFlex flexDirection='column' p={4} mx={[0, 3]} my={3} bg={tileColor} color='white'>
       <Flex flexWrap='wrap' alignItems='center' my={3}>
-        <Flag countryCode={countryCode} size={60} />
-        <Text fontSize={22} fontWeight='bold' mx={1}>{countryName}</Text>
+        <Flag countryCode={countryCode} size={60} border />
+        <Text fontSize={22} fontWeight='bold' mx={3}>{countryName}</Text>
       </Flex>
       <FlexGrowBox flexWrap='wrap' my={1}>
         {title && <Box my={2}>
