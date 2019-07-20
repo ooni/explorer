@@ -124,8 +124,8 @@ class AppsStatsCircumventionRow extends React.Component {
 
   render () {
     const { data } = this.props
-    const { minimized } = this.state
-    console.log('my props', this.props)
+    const { minimized, totalNetworks } = this.state
+
     return (
       <StyledRow px={2} py={3}>
         <Flex flexWrap='wrap' alignItems='center'>
@@ -136,14 +136,18 @@ class AppsStatsCircumventionRow extends React.Component {
           <Box width={4/12}>
             {`${data.notok_networks} / ${data.networks.length} Networks`}
           </Box>
-          <Box width={3/12}>
-            <FormattedMessage id='Country.Apps.Label.LastTested' />
-            {' '}
-            <strong>{moment(data.last_tested).fromNow()}</strong>
-          </Box>
-          <Box width={1/12}>
-            <MdArrowDropDownCircle size={19} onClick={this.toggleMinimize} />
-          </Box>
+          {totalNetworks > 0 &&
+            <React.Fragment>
+              <Box width={3/12}>
+                <FormattedMessage id='Country.Apps.Label.LastTested' />
+                {' '}
+                <strong>{moment(data.last_tested).fromNow()}</strong>
+              </Box>
+              <Box width={1/12}>
+                <MdArrowDropDownCircle size={19} onClick={this.toggleMinimize} />
+              </Box>
+            </React.Fragment>
+          }
         </Flex>
         {!minimized && this.renderCharts()}
       </StyledRow>

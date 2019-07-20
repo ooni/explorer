@@ -79,9 +79,10 @@ class TestsByGroup extends React.PureComponent {
     const testCoverageByDay = testCoverage.reduce((prev, cur) => {
       prev[cur.test_day] = prev[cur.test_day] || {}
       prev[cur.test_day][cur.test_group] = cur.count
+      const allTestCount = Object.values(prev[cur.test_day]).reduce((p,c) => p+c, 0)
       if (typeof testCoverageMaxima === 'undefined'
-          || testCoverageMaxima < cur.count) {
-        testCoverageMaxima = cur.count
+          || testCoverageMaxima < allTestCount) {
+        testCoverageMaxima = allTestCount
       }
       return prev
     }, {})
@@ -94,7 +95,16 @@ class TestsByGroup extends React.PureComponent {
         networkCoverageMaxima = d.count
       }
     })
+
     const selectedTestGroups = Object.keys(this.state).filter(testGroup => this.state[testGroup])
+    const networkCoverageTick = (t) => Math.round(t * networkCoverageMaxima)
+    const ntIncrement = Math.round(networkCoverageMaxima/4)
+    const networkCoverageTickValues = [1,2,3,4].map(i => i * ntIncrement / networkCoverageMaxima)
+
+    const testCoverageTick = (t) => Math.round(t * testCoverageMaxima)
+    const tsIncrement = Math.round(testCoverageMaxima/4)
+    const testCoverageTickValues = [1,2,3,4].map(i => i * tsIncrement / testCoverageMaxima)
+
     return (
       <React.Fragment>
         <Flex my={4} flexWrap='wrap' justifyContent='space-between'>
@@ -128,7 +138,8 @@ class TestsByGroup extends React.PureComponent {
               <VictoryAxis tickCount={4} />
               <VictoryAxis
                 dependentAxis
-                tickFormat={(t) => Math.round(t * testCoverageMaxima)}
+                tickValues={testCoverageTickValues}
+                tickFormat={testCoverageTick}
               />
               <VictoryStack>
                 {
@@ -166,7 +177,9 @@ class TestsByGroup extends React.PureComponent {
               <VictoryAxis
                 dependentAxis
                 orientation="right"
-                tickFormat={(t) => Math.round(t * networkCoverageMaxima)}
+                tickValues={networkCoverageTickValues}
+
+                tickFormat={networkCoverageTick}
               />
               <VictoryLine
                 data={networkCoverage}

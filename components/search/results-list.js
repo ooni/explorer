@@ -6,7 +6,7 @@ import moment from 'moment'
 
 import NLink from 'next/link'
 import styled from 'styled-components'
-import { FormattedMessage } from 'react-intl'
+import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
 import {
   Flex, Box,
   Link,
@@ -51,27 +51,125 @@ const testsWithStates = [
   'http_invalid_request_line'
 ]
 
-const ResultTag = ({msmt}) => {
+const messages = defineMessages({
+  'Search.WebConnectivity.Results.Reachable': {
+    id: 'Search.WebConnectivity.Results.Reachable',
+    defaultMessage: ''
+  },
+  'Search.WebConnectivity.Results.Anomaly': {
+    id: 'Search.WebConnectivity.Results.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.WebConnectivity.Results.Blocked': {
+    id: 'Search.WebConnectivity.Results.Blocked',
+    defaultMessage: ''
+  },
+  'Search.WebConnectivity.Results.Error': {
+    id: 'Search.WebConnectivity.Results.Error',
+    defaultMessage: ''
+  },
+  'Search.WhatsApp.Results.Reachable': {
+    id: 'Search.WhatsApp.Results.Reachable',
+    defaultMessage: ''
+  },
+  'Search.WhatsApp.Results.Anomaly': {
+    id: 'Search.WhatsApp.Results.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.WhatsApp.Results.Error': {
+    id: 'Search.WhatsApp.Results.Error',
+    defaultMessage: ''
+  },
+  'Search.FacebookMessenger.Results.Reachable': {
+    id: 'Search.FacebookMessenger.Results.Reachable',
+    defaultMessage: ''
+  },
+  'Search.FacebookMessenger.Results.Anomaly': {
+    id: 'Search.FacebookMessenger.Results.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.FacebookMessenger.Results.Error': {
+    id: 'Search.FacebookMessenger.Results.Error',
+    defaultMessage: ''
+  },
+  'Search.Telegram.Results.Reachable': {
+    id: 'Search.Telegram.Results.Reachable',
+    defaultMessage: ''
+  },
+  'Search.Telegram.Results.Anomaly': {
+    id: 'Search.Telegram.Results.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.Telegram.Results.Error': {
+    id: 'Search.Telegram.Results.Error',
+    defaultMessage: ''
+  },
+  'Search.HTTPInvalidRequestLine.Results.Anomaly': {
+    id: 'Search.HTTPInvalidRequestLine.Results.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.HTTPInvalidRequestLine.Results.Reachable': {
+    id: 'Search.HTTPInvalidRequestLine.Results.Reachable',
+    defaultMessage: ''
+  },
+  'Search.HTTPInvalidRequestLine.Results.Error': {
+    id: 'Search.HTTPInvalidRequestLine.Results.Error',
+    defaultMessage: ''
+  },
+  'Search.HTTPHeaderFieldManipulation.Results.Anomaly': {
+    id: 'Search.HTTPHeaderFieldManipulation.Results.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.HTTPHeaderFieldManipulation.Results.Reachable': {
+    id: 'Search.HTTPHeaderFieldManipulation.Results.Reachable',
+    defaultMessage: ''
+  },
+  'Search.HTTPHeaderFieldManipulation.Results.Error': {
+    id: 'Search.HTTPHeaderFieldManipulation.Results.Error',
+    defaultMessage: ''
+  },
+  'Search.HTTPRequests.Results.Reachable': {
+    id: 'Search.HTTPRequests.Results.Reachable',
+    defaultMessage: ''
+  },
+  'Search.HTTPRequests.Results.Error': {
+    id: 'Search.HTTPRequests.Results.Error',
+    defaultMessage: ''
+  },
+  'Search.HTTPRequests.Results.Blocked': {
+    id: 'Search.HTTPRequests.Results.Blocked',
+    defaultMessage: ''
+  },
+  'Search.HTTPRequests.Results.Anomaly': {
+    id: 'Search.HTTPRequests.Results.Anomaly',
+    defaultMessage: ''
+  },
+})
+
+const ResultTagIntl = ({msmt, intl}) => {
   if (testsWithStates.indexOf(msmt.test_name) > -1) {
-    const testName = msmt.testName.replace(/ /gi, '')
-    const computedMessageIdPrefix = `Search.${testName}.Results`
+    const testDisplayName = msmt.testName.replace(/ /gi, '')
+    const computedMessageIdPrefix = `Search.${testDisplayName}.Results`
     if (msmt.confirmed === true) {
       return <ResultTagFilled>
-        <FormattedMessage id={`${computedMessageIdPrefix}.Blocked`} />
+        {/* <FormattedMessage id={`${computedMessageIdPrefix}.Blocked`} /> */}
+        {intl.formatMessage(messages[`${computedMessageIdPrefix}.Blocked`])}
       </ResultTagFilled>
     /* XXX hotfix due to all measurements showing failure
     } else if (msmt.failure === true) {
       return <StyledResultTag>
-        <FormattedMessage id={`${computedMessageIdPrefix}.Error`} />
+        {intl.formatMessage(messages[`${computedMessageIdPrefix}.Error`])}
       </StyledResultTag>
     */
     } else if (msmt.anomaly === true) {
       return <ResultTagHollow>
-        <FormattedMessage id={`${computedMessageIdPrefix}.Anomaly`} />
+        {/* <FormattedMessage id={`${computedMessageIdPrefix}.Anomaly`} /> */}
+        {intl.formatMessage(messages[`${computedMessageIdPrefix}.Anomaly`])}
       </ResultTagHollow>
     } else {
       return <StyledResultTag>
-        <FormattedMessage id={`${computedMessageIdPrefix}.Reachable`} />
+        {/* <FormattedMessage id={`${computedMessageIdPrefix}.Reachable`} /> */}
+        {intl.formatMessage(messages[`${computedMessageIdPrefix}.Reachable`])}
       </StyledResultTag>
     }
   } else {
@@ -79,6 +177,7 @@ const ResultTag = ({msmt}) => {
   }
 }
 
+const ResultTag = injectIntl(ResultTagIntl)
 
 const ASNBox = ({asn}) => {
   const justNumber = asn.split('AS')[1]
