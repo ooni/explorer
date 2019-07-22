@@ -12,6 +12,12 @@ const LinkButton = styled(Box)`
     text-decoration: none;
     color: white;
   }
+  :hover, :focus {
+    background-color: ${props => props.theme.colors[props.hover]};
+  }
+  :active {
+    background-color: ${props => props.theme.colors[props.active]};
+  }
 `
 
 const HighlightBox = ({
@@ -32,12 +38,12 @@ const HighlightBox = ({
         <Text fontSize={18}>{title}</Text>
       </Box>}
       <Box order={[3, 'unset']} my={1}>
-        <LinkButton bg='blue5' color='white' px={2} py={1}>
-          <NLink href={explore} passHref><Link color='blue7'>Explore</Link></NLink>
+        <LinkButton bg='blue5' hover='blue4' active='blue6' color='white' px={2} py={1}>
+          <NLink href={explore} passHref><Link>Explore</Link></NLink>
         </LinkButton>
       </Box>
       <Box ml={2} order={[4, 'unset']}>
-        <LinkButton bg='green8' color='white' px={2} py={1}>
+        <LinkButton bg='green8' hover='green7' active='green9' color='white' px={2} py={1}>
           <Link href={report}> Report </Link>
         </LinkButton>
       </Box>

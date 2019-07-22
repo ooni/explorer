@@ -14,9 +14,84 @@ import { Tick, Cross } from 'ooni-components/dist/icons'
 
 import styled from 'styled-components'
 
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, defineMessages, injectIntl } from 'react-intl'
 
 import { DetailsBox } from '../DetailsBox'
+
+const messages = defineMessages({
+  'blockingReason.http-diff': {
+    id: 'Measurement.SummaryText.Websites.Anomaly.BlockingReason.HTTP-diff',
+    defaultMessage: ''
+  },
+  'blockingReason.http-failure': {
+    id: 'Measurement.SummaryText.Websites.Anomaly.BlockingReason.HTTP-failure',
+    defaultMessage: ''
+  },
+  'blockingReason.dns': {
+    id: 'Measurement.SummaryText.Websites.Anomaly.BlockingReason.DNS',
+    defaultMessage: ''
+  },
+  'blockingReason.tcp_ip': {
+    id: 'Measurement.SummaryText.Websites.Anomaly.BlockingReason.TCP',
+    defaultMessage: ''
+  },
+  'connection.Success': {
+    id: 'Measurement.Details.Websites.TCP.ConnectionTo.Success',
+    defaultMessage: ''
+  },
+  'connection.Failed': {
+    id: 'Measurement.Details.Websites.TCP.ConnectionTo.Failed',
+    defaultMessage: ''
+  },
+  'connection.Blocked': {
+    id: 'Measurement.Details.Websites.TCP.ConnectionTo.Blocked',
+    defaultMessage: ''
+  },
+})
+
+export const checkAnomaly = ( testKeys ) => {
+  const {
+    accessible,
+    blocking,
+  } = testKeys
+
+  let anomaly = null
+  let hint = <FormattedMessage id='Measurement.Status.Hint.Websites.NoCensorship' />
+
+  if ((accessible === true || accessible === null) && blocking === null) {
+    hint = <FormattedMessage id='Measurement.Status.Hint.Websites.Error' />
+    if (accessible === true) {
+      anomaly = 'SITEUP'
+    } else if (accessible === null) {
+      anomaly = 'UNKNOWN'
+    }
+  } else if (accessible === false && (blocking === false || blocking === null)) {
+    anomaly = 'SITEDOWN'
+    hint = <FormattedMessage id='Measurement.Status.Hint.Websites.Unavailable' />
+  } else if (blocking !== null && blocking !== false) {
+    anomaly = 'CENSORSHIP'
+    hint = <FormattedMessage id='Measurement.Status.Hint.Websites.Censorship' />
+    // Further identify type of censorship
+    if (blocking === 'dns') {
+      anomaly = 'DNS'
+      hint = <FormattedMessage id='Measurement.Status.Hint.Websites.DNS' />
+    } else if (blocking === 'http-diff') {
+      anomaly = 'HTTPDIFF'
+      hint = <FormattedMessage id='Measurement.Status.Hint.Websites.HTTPdiff' />
+    } else if (blocking === 'http-failure') {
+      anomaly = 'HTTPFAILURE'
+      hint = <FormattedMessage id='Measurement.Status.Hint.Websites.HTTPfail' />
+    } else if (blocking === 'tcp-ip') {
+      anomaly = 'TCPIP'
+      hint = <FormattedMessage id='Measurement.Status.Hint.Websites.TCPBlock' />
+    }
+  }
+
+  return {
+    status: anomaly,
+    hint
+  }
+}
 
 const StatusInfo = ({ url, message}) => (
   <Flex flexDirection='column'>
@@ -70,45 +145,51 @@ const RequestResponseContainer = ({request}) => {
     // FIXME: This sometime ends up creating empty sections with just a title
     // when request data contains states like 'generic_timeout_error'
     // e.g ?report_id=20180709T222326Z_AS37594_FFQFSoqLJWYMgU0EnSbIK7PxicwJTFenIz9PupZYZWoXwtpCTy
-    !request.failure &&
-    <Box>
-      <Flex flexWrap='wrap'>
-        {/* Request URL */}
-        <Box width={1} mb={1} >
-          <Heading h={5}><FormattedMessage id='Request URL' /></Heading>
-        </Box>
-        <Box width={1} mb={2} p={2} bg='gray2'>
-          <Pre fontSize={14}>{request.request.method} {request.request.url}</Pre>
-        </Box>
-        {/* Response Headers */}
-        <Box width={1} mb={1} >
-          <Heading h={5}><FormattedMessage id='Response Headers' /></Heading>
-        </Box>
-        <Box width={1} mb={2} p={2} bg='gray2'>
-          <WrappedPre fontSize={14}>
-            {Object.keys(request.response.headers).map((header, index) => (
-              <React.Fragment key={index}>
-                <Flex mb={2}>
-                  <Box mr={1}>
-                    <Text fontWeight='bold'>{header}:</Text>
-                  </Box>
-                  <Box>
-                    {request.response.headers[header]}
-                  </Box>
-                </Flex>
-              </React.Fragment>
-            ))}
-          </WrappedPre>
-        </Box>
-        {/* Response Body (HTML) */}
-        <Box width={1} mb={1} >
-          <Heading h={5}><FormattedMessage id='Response Body' /></Heading>
-        </Box>
-        <Box width={1} p={2} bg='gray2'>
-          <HttpResponseBody request={request} />
-        </Box>
-      </Flex>
-    </Box>
+    request.failure ? (
+      <Box>
+        <FormattedMessage id='Measurement.Details.Websites.HTTP.NoData' />
+      </Box>
+    ) : (
+    // !request.failure &&
+      <Box>
+        <Flex flexWrap='wrap'>
+          {/* Request URL */}
+          <Box width={1} mb={1} >
+            <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Request.URL' /></Heading>
+          </Box>
+          <Box width={1} mb={2} p={2} bg='gray2'>
+            <Pre fontSize={14}>{request.request.method} {request.request.url}</Pre>
+          </Box>
+          {/* Response Headers */}
+          <Box width={1} mb={1} >
+            <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Response.Headers' /></Heading>
+          </Box>
+          <Box width={1} mb={2} p={2} bg='gray2'>
+            <WrappedPre fontSize={14}>
+              {Object.keys(request.response.headers).map((header, index) => (
+                <React.Fragment key={index}>
+                  <Flex mb={2}>
+                    <Box mr={1}>
+                      <Text fontWeight='bold'>{header}:</Text>
+                    </Box>
+                    <Box>
+                      {request.response.headers[header]}
+                    </Box>
+                  </Flex>
+                </React.Fragment>
+              ))}
+            </WrappedPre>
+          </Box>
+          {/* Response Body (HTML) */}
+          <Box width={1} mb={1} >
+            <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Response.Body' /></Heading>
+          </Box>
+          <Box width={1} p={2} bg='gray2'>
+            <HttpResponseBody request={request} />
+          </Box>
+        </Flex>
+      </Box>
+    )
   )
 }
 
@@ -218,7 +299,8 @@ const WebConnectivityDetails = ({
   isFailure,
   country,
   measurement,
-  render
+  render,
+  intl
 }) => {
   const {
     input,
@@ -294,7 +376,7 @@ const WebConnectivityDetails = ({
           WebsiteURL: input,
           network: probe_asn,
           country: country,
-          BlockingReason: <strong><FormattedMessage id={'Measurement.SummaryText.Websites.Anomaly.BlockingReason.' + reasons[blocking]} /></strong>
+          BlockingReason: <strong>{intl.formatMessage(messages[`blockingReason.${blocking}`])}</strong>
         }}
       />
     )
@@ -328,8 +410,6 @@ const WebConnectivityDetails = ({
       />
     )
   }
-
-  // const { status, hint } = checkAnomaly(measurement.test_keys)
 
   const tcpConnections = tcp_connect.map((connection) => {
     const status = (connection.status.success) ? 'Success' :
@@ -403,7 +483,7 @@ const WebConnectivityDetails = ({
                 title={<FormattedMessage id='Measurement.Details.Websites.TCP.Heading' />}
                 content={
                   <React.Fragment>
-                    {tcpConnections.length === 0 && <Text><FormattedMessage id='Measurement.Details.Websites.TCP.NoData' /></Text>}
+                    {tcpConnections.length === 0 && <FormattedMessage id='Measurement.Details.Websites.TCP.NoData' />}
                     {tcpConnections.map((connection, index) => (
                       <Flex key={index}>
                         <Box>
@@ -412,7 +492,7 @@ const WebConnectivityDetails = ({
                               id='Measurement.Details.Websites.TCP.ConnectionTo'
                               values={{
                                 destination: <strong> {connection.destination} </strong>,
-                                connectionStatus: <FormattedMessage id={`Measurement.Details.Websites.TCP.ConnectionTo.${connection.status}`} />
+                                connectionStatus: intl.formatMessage(messages[`connection.${connection.status}`])
                               }}
                             />
                           </Text>
@@ -451,4 +531,4 @@ WebConnectivityDetails.propTypes = {
   render: PropTypes.func
 }
 
-export default WebConnectivityDetails
+export default injectIntl(WebConnectivityDetails)

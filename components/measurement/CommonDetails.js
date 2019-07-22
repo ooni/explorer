@@ -55,13 +55,13 @@ const CommonDetails = ({
   } = measurement
 
   let engine_version = 'none',
-      platform = 'unknown';
+    platform = 'unknown'
 
   if (annotations && annotations.engine_version) {
     engine_version = annotations.engine_version
   }
   if (annotations && annotations.platform) {
-    platform = annotations.platform;
+    platform = annotations.platform
   }
 
   const downloadFilename = `ooni-measurement-${report_id}.json`
@@ -104,7 +104,7 @@ const CommonDetails = ({
               <Box >
                 <Link color='blue7' href={measurementURL} download={downloadFilename}>
                   <Button
-                    fontSize={11}
+                    fontSize={13}
                     mx={3}
                     px={3}>{intl.formatMessage({ id: 'Measurement.CommonDetails.RawMeasurement.Download' })}</Button>
                 </Link>

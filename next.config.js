@@ -21,7 +21,7 @@ module.exports = withSourceMaps(withCSS({
         loader: 'file-loader',
         options: {
           limit: 10000,
-          publicPath: './',
+          publicPath: '/_next/static/',
           outputPath: 'static/',
           name: '[name].[ext]'
         }

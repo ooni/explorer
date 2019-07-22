@@ -324,9 +324,12 @@ class Search extends React.Component {
               {!this.state.error && !this.state.loading && results.length > 0
                 && <div>
                   <ResultsList results={results} testNamesKeyed={testNamesKeyed} />
-                  <Flex alignItems='center' justifyContent='center'>
-                    <Button onClick={this.loadMore}><FormattedMessage id='Search.Button.LoadMore' /></Button>
-                  </Flex>
+                  {
+                    this.state.nextURL &&
+                    <Flex alignItems='center' justifyContent='center'>
+                      <Button onClick={this.loadMore}><FormattedMessage id='Search.Button.LoadMore' /></Button>
+                    </Flex>
+                  }
                 </div>
               }
             </Box>
