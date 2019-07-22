@@ -23,7 +23,7 @@ const LinkButton = styled(Box)`
 `
 
 const StyledFlex = styled(Flex)`
-  min-height: 500px;
+  min-height: 350px;
 `
 
 const FlexGrowBox = styled(Box)`
@@ -42,12 +42,12 @@ const HighlightBox = ({
   <Box width={[1, 1/3]}>
     <StyledFlex flexDirection='column' p={4} mx={[0, 3]} my={3} bg={tileColor} color='white'>
       <Flex flexWrap='wrap' alignItems='center' my={3}>
-        <Flag countryCode={countryCode} size={60} border />
-        <Text fontSize={22} fontWeight='bold' mx={3}>{countryName}</Text>
+        <Flag countryCode={countryCode} size={40} border />
+        <Text fontSize={24} fontWeight='bold' mx={3}>{countryName}</Text>
       </Flex>
       <FlexGrowBox flexWrap='wrap' my={1}>
         {title && <Box my={2}>
-          <Text fontSize={36}>{title}</Text>
+          <Text fontSize={24} fontWeight='bold'>{title}</Text>
         </Box>}
         <Box mb={3}>
           <Text fontSize={20}>
@@ -68,16 +68,18 @@ const HighlightBox = ({
           </Text>
         </Box>
       </FlexGrowBox>
-      {explore && <Box my={2}>
-        <Text fontSize={26}>
-          <NLink href={explore} passHref><Link color='white'>Explore</Link></NLink>
-        </Text>
-      </Box>}
-      {report && <Box my={2}>
-        <Text fontSize={26}>
-          <Link href={report} color='white'> Read Report </Link>
-        </Text>
-      </Box>}
+      <Flex>
+        {explore && <Box my={2} width={1/2}>
+          <Text fontSize={20}>
+            <NLink href={explore} passHref><Link color='white'>Explore</Link></NLink>
+          </Text>
+        </Box>}
+        {report && <Box my={2} width={1/2}>
+          <Text fontSize={20}>
+            <Link href={report} color='white'> Read Report </Link>
+          </Text>
+        </Box>}
+      </Flex>
     </StyledFlex>
   </Box>
 )

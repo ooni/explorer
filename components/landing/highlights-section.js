@@ -13,13 +13,13 @@ const HighlightSection = ({
   return (
     <section>
       <Box mt={4} mb={3}>
-        <Text fontSize={26} fontWeight='bold' textAlign={['center', 'left']}>
+        <Text fontSize={24} fontWeight='bold' color='blue9' textAlign={['center', 'left']}>
           {title}
         </Text>
       </Box>
       {/* Optional Description */}
       {description && <Box mt={4} mb={3}>
-        <Text fontSize={26} color='gray6'>{description}</Text>
+        <Text fontSize={20}>{description}</Text>
       </Box>}
       <Flex flexWrap='wrap'>
         {/* HighlightBoxes */}
