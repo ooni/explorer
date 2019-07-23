@@ -70,9 +70,11 @@ const getStatus = (count, formattedMessageId)=> {
   }
 }
 
+const ooniBlogBaseURL = 'https://ooni.io'
+
 const FeaturedArticle = ({link, title}) => (
   <Box py={1}>
-    <Link color='blue7' href={link} target='_blank' rel='noopener noreferrer'>
+    <Link color='blue7' href={ooniBlogBaseURL + link} target='_blank' rel='noopener noreferrer'>
       {title}
     </Link>
   </Box>
