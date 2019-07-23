@@ -120,7 +120,7 @@ const Overview = ({
             : <ul>
               {featuredArticles.map((article, index) => (
                 <li key={index}>
-                  <FeaturedArticle link={article.link} title={article.title} />
+                  <FeaturedArticle link={article.href} title={article.title} />
                 </li>
               ))}
             </ul>
