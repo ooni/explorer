@@ -46,9 +46,9 @@ const CountryBlock = ({countryCode, msmtCount}) => {
           <CountryLink href={href}>
             <Flex flexDirection='column'>
               <Flag center border countryCode={countryCode} size={48} />
-              <Text py={2} fontSize={24} style={{height: '72px'}}>{countryUtil.territoryNames[countryCode]}</Text>
+              <Text py={2} fontSize={[20, 24]} style={{height: '80px'}}>{countryUtil.territoryNames[countryCode]}</Text>
               <Divider />
-              <Flex alignItems='center'>
+              <Flex alignItems={['flex-start', 'center']} flexDirection={['column', 'row']}>
                 <Text mr={2} fontSize={20} fontWeight={600} color='blue9'><FormattedNumber value={msmtCount} /></Text>
                 <Text>Measurements</Text>
               </Flex>
