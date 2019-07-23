@@ -394,6 +394,21 @@ const WebConnectivityDetails = ({
         }}
       />
     )
+  } if (blocking === false) {
+    // When not accessible, but also not blocking, it must be down
+    status = 'down'
+    reason = 'down'
+    summaryText = (
+      <FormattedMessage
+        id='Measurement.SummaryText.Websites.Down'
+        values={{
+          date: date,
+          WebsiteURL: input,
+          network: probe_asn,
+          country: country
+        }}
+      />
+    )
   } else {
     // TODO: Remove this block when the first block in this chain is enabled.
     status = 'error'

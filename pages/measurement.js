@@ -20,6 +20,7 @@ const pageColors = {
   anomaly: theme.colors.yellow9,
   reachable: theme.colors.green8,
   error: theme.colors.gray6,
+  down: theme.colors.green8,
   confirmed: theme.colors.red7
 }
 

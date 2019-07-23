@@ -35,6 +35,10 @@ const Hero = ({ status, color, icon, label, info }) => {
       computedLabel = <FormattedMessage id='Measurement.Hero.Status.Confirmed' />
       icon = <Cross />
       break
+    case 'down':
+      computedLabel = <FormattedMessage id='Measurement.Hero.Status.Down' />
+      icon = <MdHelp />
+      break
     default:
       icon = icon || <div/>
     }
