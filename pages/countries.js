@@ -50,7 +50,7 @@ const CountryBlock = ({countryCode, msmtCount}) => {
               <Divider />
               <Flex alignItems='center'>
                 <Text mr={2} fontSize={20} fontWeight={600} color='blue9'><FormattedNumber value={msmtCount} /></Text>
-                <Text>Measurments</Text>
+                <Text>Measurements</Text>
               </Flex>
             </Flex>
           </CountryLink>
