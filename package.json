@@ -39,6 +39,7 @@
     "react-intl": "^2.4.0",
     "react-json-view": "^1.16.0",
     "react-no-ssr": "^1.1.0",
+    "react-sticky": "^6.0.3",
     "rebass": "2.3.3",
     "sentry-testkit": "^2.2.0",
     "styled-components": "3.4.10",
@@ -56,7 +57,7 @@
     "react-icons": "2.2.7"
   },
   "devDependencies": {
-    "babel-plugin-react-intl": "3.0.1",
+    "babel-plugin-react-intl": "^3.2.0",
     "eslint": "^4.19.1",
     "eslint-plugin-react": "^7.7.0",
     "mustache": "^2.3.0"
@@ -64,6 +65,7 @@
   "scripts": {
     "dev": "NODE_ENV=development MEASUREMENTS_URL=http://api.ooni.io SENTRY_DSN=https://49af7fff247c445b9a7c98ee21ddfd2f@sentry.io/1427510 node index.js",
     "build-translations": "node ./scripts/build-translations.js",
+    "extract-i18n-keys": "yarn build && node ./scripts/extract-react-intl-keys.js",
     "build": "next build",
     "export": "next export",
     "lint": "eslint --ignore-path .gitignore --ignore-pattern components/vendor .",
