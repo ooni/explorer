@@ -104,6 +104,7 @@ const CommonDetails = ({
               <Box >
                 <Link color='blue7' href={measurementURL} download={downloadFilename}>
                   <Button
+                    onClick={(e) => e.stopPropagation()}
                     fontSize={13}
                     mx={3}
                     px={3}>{intl.formatMessage({ id: 'Measurement.CommonDetails.RawMeasurement.Download' })}</Button>
