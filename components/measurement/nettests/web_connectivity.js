@@ -394,7 +394,7 @@ const WebConnectivityDetails = ({
         }}
       />
     )
-  } if (blocking === false) {
+  } else if (blocking === false) {
     // When not accessible, but also not blocking, it must be down
     status = 'down'
     reason = 'down'
