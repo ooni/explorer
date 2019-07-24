@@ -36,7 +36,7 @@ const Hero = ({ status, color, icon, label, info }) => {
       icon = <Tick />
       break
     default:
-      icon = <div/>
+      icon = icon || <div/>
     }
   }
 
