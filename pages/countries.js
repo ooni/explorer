@@ -206,7 +206,7 @@ class Countries extends React.Component {
                       <RegionLink href="#Americas" label='Americas' />
                       <RegionLink href="#Asia" label='Asia' />
                       <RegionLink href="#Europe" label='Europe' />
-                      <RegionLink href="#Antartica" label='Antarctica' />
+                      <RegionLink href="#Oceania" label='Oceania' />
                       <Box>
                         <Input
                           onChange={(e) => this.onSearchChange(e.target.value)}
