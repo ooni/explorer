@@ -1,160 +1,1822 @@
-{
-  "acc01": "GH",
-  "acc02": "GH",
-  "akl01": "NZ",
-  "ams01": "NL",
-  "ams02": "NL",
-  "ams03": "NL",
-  "ams04": "NL",
-  "ams05": "NL",
-  "ams06": "NL",
-  "ams07": "NL",
-  "arn01": "SE",
-  "arn02": "SE",
-  "arn03": "SE",
-  "arn04": "SE",
-  "arn05": "SE",
-  "ath01": "GR",
-  "ath02": "GR",
-  "ath03": "GR",
-  "atl01": "US",
-  "atl02": "US",
-  "atl03": "US",
-  "atl04": "US",
-  "atl05": "US",
-  "atl06": "US",
-  "bcn01": "ES",
-  "beg01": "RS",
-  "bkk01": "TH",
-  "bog01": "CO",
-  "bom01": "IN",
-  "bom02": "IN",
-  "bru01": "BE",
-  "bru02": "BE",
-  "bru03": "BE",
-  "bru04": "BE",
-  "cpt01": "ZA",
-  "den01": "US",
-  "den02": "US",
-  "den03": "US",
-  "den04": "US",
-  "den05": "US",
-  "dfw01": "US",
-  "dfw02": "US",
-  "dfw03": "US",
-  "dfw04": "US",
-  "dfw05": "US",
-  "dfw06": "US",
-  "dfw07": "US",
-  "dub01": "IE",
-  "fln01": "BR",
-  "fra01": "DE",
-  "fra02": "DE",
-  "fra03": "DE",
-  "fra04": "DE",
-  "ham01": "DE",
-  "hnd01": "JP",
-  "hnd02": "JP",
-  "iad01": "US",
-  "iad02": "US",
-  "iad03": "US",
-  "iad04": "US",
-  "iad05": "US",
-  "iad06": "US",
-  "iad0t": "US",
-  "iad1t": "US",
-  "jnb01": "ZA",
-  "lax01": "US",
-  "lax02": "US",
-  "lax03": "US",
-  "lax04": "US",
-  "lax05": "US",
-  "lba01": "UK",
-  "lca01": "CY",
-  "lga01": "US",
-  "lga02": "US",
-  "lga03": "US",
-  "lga04": "US",
-  "lga05": "US",
-  "lga06": "US",
-  "lga07": "US",
-  "lga0t": "US",
-  "lga1t": "US",
-  "lhr01": "UK",
-  "lhr02": "UK",
-  "lhr03": "UK",
-  "lhr04": "UK",
-  "lhr05": "UK",
-  "lis01": "EU",
-  "lis02": "EU",
-  "lju01": "SI",
-  "los01": "NG",
-  "mad01": "ES",
-  "mad02": "ES",
-  "mad03": "ES",
-  "mad04": "ES",
-  "mia01": "US",
-  "mia02": "US",
-  "mia03": "US",
-  "mia04": "US",
-  "mia05": "US",
-  "mil01": "IT",
-  "mil02": "IT",
-  "mil03": "IT",
-  "mil04": "IT",
-  "mil05": "IT",
-  "mnl01": "PH",
-  "mpm01": "MZ",
-  "nbo01": "KE",
-  "nuq01": "US",
-  "nuq02": "US",
-  "nuq03": "US",
-  "nuq04": "US",
-  "nuq05": "US",
-  "nuq06": "US",
-  "nuq07": "US",
-  "ord01": "US",
-  "ord02": "US",
-  "ord03": "US",
-  "ord04": "US",
-  "ord05": "US",
-  "par01": "FR",
-  "par02": "FR",
-  "par03": "FR",
-  "par04": "FR",
-  "par05": "FR",
-  "prg01": "CZ",
-  "prg02": "CZ",
-  "prg03": "CZ",
-  "prg04": "CZ",
-  "prg05": "CZ",
-  "sea01": "US",
-  "sea02": "US",
-  "sea03": "US",
-  "sea04": "US",
-  "sea05": "US",
-  "sea06": "US",
-  "sea07": "US",
-  "sin01": "SG",
-  "sjc01": "US",
-  "svg01": "NO",
-  "syd01": "AU",
-  "syd02": "AU",
-  "tgd01": "ME",
-  "tnr01": "MG",
-  "tpe01": "TW",
-  "trn01": "IT",
-  "tun01": "TN",
-  "vie01": "AT",
-  "wlg01": "NZ",
-  "wlg02": "NZ",
-  "yqm01": "CA",
-  "yul01": "CA",
-  "yul02": "CA",
-  "yvr01": "CA",
-  "ywg01": "CA",
-  "yyc01": "CA",
-  "yyc02": "CA",
-  "yyz01": "CA",
-  "yyz02": "CA"
-}
+[
+   {
+      "city": "Auckland",
+      "country": "NZ",
+      "latitude": -36.85,
+      "longitude": 174.783,
+      "metro": [
+         "akl01",
+         "akl"
+      ],
+      "roundrobin": true,
+      "site": "akl01",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Amsterdam",
+      "country": "NL",
+      "latitude": 52.3086,
+      "longitude": 4.7639,
+      "metro": [
+         "ams03",
+         "ams"
+      ],
+      "roundrobin": true,
+      "site": "ams03",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Amsterdam",
+      "country": "NL",
+      "latitude": 52.3086,
+      "longitude": 4.7639,
+      "metro": [
+         "ams04",
+         "ams"
+      ],
+      "roundrobin": true,
+      "site": "ams04",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Amsterdam",
+      "country": "NL",
+      "latitude": 52.3086,
+      "longitude": 4.7639,
+      "metro": [
+         "ams05",
+         "ams"
+      ],
+      "roundrobin": true,
+      "site": "ams05",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Amsterdam",
+      "country": "NL",
+      "latitude": 52.3086,
+      "longitude": 4.7639,
+      "metro": [
+         "ams07",
+         "ams"
+      ],
+      "roundrobin": true,
+      "site": "ams07",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Amsterdam",
+      "country": "NL",
+      "latitude": 52.3086,
+      "longitude": 4.7639,
+      "metro": [
+         "ams08",
+         "ams"
+      ],
+      "roundrobin": true,
+      "site": "ams08",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Stockholm",
+      "country": "SE",
+      "latitude": 59.6519,
+      "longitude": 17.9186,
+      "metro": [
+         "arn02",
+         "arn"
+      ],
+      "roundrobin": true,
+      "site": "arn02",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Stockholm",
+      "country": "SE",
+      "latitude": 59.6519,
+      "longitude": 17.9186,
+      "metro": [
+         "arn03",
+         "arn"
+      ],
+      "roundrobin": true,
+      "site": "arn03",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Stockholm",
+      "country": "SE",
+      "latitude": 59.6519,
+      "longitude": 17.9186,
+      "metro": [
+         "arn04",
+         "arn"
+      ],
+      "roundrobin": true,
+      "site": "arn04",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Stockholm",
+      "country": "SE",
+      "latitude": 59.6519,
+      "longitude": 17.9186,
+      "metro": [
+         "arn05",
+         "arn"
+      ],
+      "roundrobin": true,
+      "site": "arn05",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Athens",
+      "country": "GR",
+      "latitude": 37.9364,
+      "longitude": 23.9444,
+      "metro": [
+         "ath03",
+         "ath"
+      ],
+      "roundrobin": true,
+      "site": "ath03",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Atlanta",
+      "country": "US",
+      "latitude": 33.6367,
+      "longitude": -84.4281,
+      "metro": [
+         "atl02",
+         "atl"
+      ],
+      "roundrobin": true,
+      "site": "atl02",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Atlanta",
+      "country": "US",
+      "latitude": 33.6367,
+      "longitude": -84.4281,
+      "metro": [
+         "atl03",
+         "atl"
+      ],
+      "roundrobin": true,
+      "site": "atl03",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Atlanta",
+      "country": "US",
+      "latitude": 33.6367,
+      "longitude": -84.4281,
+      "metro": [
+         "atl04",
+         "atl"
+      ],
+      "roundrobin": true,
+      "site": "atl04",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Atlanta",
+      "country": "US",
+      "latitude": 33.6367,
+      "longitude": -84.4281,
+      "metro": [
+         "atl06",
+         "atl"
+      ],
+      "roundrobin": true,
+      "site": "atl06",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Atlanta",
+      "country": "US",
+      "latitude": 33.6367,
+      "longitude": -84.4281,
+      "metro": [
+         "atl07",
+         "atl"
+      ],
+      "roundrobin": true,
+      "site": "atl07",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Atlanta",
+      "country": "US",
+      "latitude": 33.6367,
+      "longitude": -84.4281,
+      "metro": [
+         "atl08",
+         "atl"
+      ],
+      "roundrobin": true,
+      "site": "atl08",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Barcelona",
+      "country": "ES",
+      "latitude": 41.2974,
+      "longitude": 2.0811,
+      "metro": [
+         "bcn01",
+         "bcn"
+      ],
+      "roundrobin": true,
+      "site": "bcn01",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Belgrade",
+      "country": "RS",
+      "latitude": 44.8216,
+      "longitude": 20.2921,
+      "metro": [
+         "beg01",
+         "beg"
+      ],
+      "roundrobin": true,
+      "site": "beg01",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Mumbai",
+      "country": "IN",
+      "latitude": 19.0886,
+      "longitude": 72.8681,
+      "metro": [
+         "bom01",
+         "bom"
+      ],
+      "roundrobin": true,
+      "site": "bom01",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Mumbai",
+      "country": "IN",
+      "latitude": 19.0886,
+      "longitude": 72.8681,
+      "metro": [
+         "bom02",
+         "bom"
+      ],
+      "roundrobin": true,
+      "site": "bom02",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Brussels",
+      "country": "BE",
+      "latitude": 50.4974,
+      "longitude": 3.3528,
+      "metro": [
+         "bru01",
+         "bru"
+      ],
+      "roundrobin": true,
+      "site": "bru01",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Brussels",
+      "country": "BE",
+      "latitude": 50.4974,
+      "longitude": 3.3528,
+      "metro": [
+         "bru02",
+         "bru"
+      ],
+      "roundrobin": true,
+      "site": "bru02",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Brussels",
+      "country": "BE",
+      "latitude": 50.4974,
+      "longitude": 3.3528,
+      "metro": [
+         "bru03",
+         "bru"
+      ],
+      "roundrobin": true,
+      "site": "bru03",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Brussels",
+      "country": "BE",
+      "latitude": 50.4974,
+      "longitude": 3.3528,
+      "metro": [
+         "bru04",
+         "bru"
+      ],
+      "roundrobin": true,
+      "site": "bru04",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Charleston",
+      "country": "US",
+      "latitude": 32.896663,
+      "longitude": -80.039184,
+      "metro": [
+         "chs0c",
+         "chs"
+      ],
+      "roundrobin": true,
+      "site": "chs0c",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Cape",
+      "country": "ZA",
+      "latitude": -33.9724,
+      "longitude": 18.6018,
+      "metro": [
+         "cpt01",
+         "cpt"
+      ],
+      "roundrobin": true,
+      "site": "cpt01",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "New Delhi",
+      "country": "IN",
+      "latitude": 28.5562,
+      "longitude": 77.1,
+      "metro": [
+         "del01",
+         "del"
+      ],
+      "roundrobin": true,
+      "site": "del01",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Denver",
+      "country": "US",
+      "latitude": 39.8561,
+      "longitude": -104.6737,
+      "metro": [
+         "den02",
+         "den"
+      ],
+      "roundrobin": true,
+      "site": "den02",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Denver",
+      "country": "US",
+      "latitude": 39.8561,
+      "longitude": -104.6737,
+      "metro": [
+         "den04",
+         "den"
+      ],
+      "roundrobin": true,
+      "site": "den04",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Denver",
+      "country": "US",
+      "latitude": 39.8561,
+      "longitude": -104.6737,
+      "metro": [
+         "den05",
+         "den"
+      ],
+      "roundrobin": true,
+      "site": "den05",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Denver",
+      "country": "US",
+      "latitude": 39.8561,
+      "longitude": -104.6737,
+      "metro": [
+         "den06",
+         "den"
+      ],
+      "roundrobin": true,
+      "site": "den06",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Dallas",
+      "country": "US",
+      "latitude": 32.8969,
+      "longitude": -97.0381,
+      "metro": [
+         "dfw02",
+         "dfw"
+      ],
+      "roundrobin": true,
+      "site": "dfw02",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Dallas",
+      "country": "US",
+      "latitude": 32.8969,
+      "longitude": -97.0381,
+      "metro": [
+         "dfw03",
+         "dfw"
+      ],
+      "roundrobin": true,
+      "site": "dfw03",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Dallas",
+      "country": "US",
+      "latitude": 32.8969,
+      "longitude": -97.0381,
+      "metro": [
+         "dfw05",
+         "dfw"
+      ],
+      "roundrobin": true,
+      "site": "dfw05",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Dallas",
+      "country": "US",
+      "latitude": 32.8969,
+      "longitude": -97.0381,
+      "metro": [
+         "dfw06",
+         "dfw"
+      ],
+      "roundrobin": true,
+      "site": "dfw06",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Dallas",
+      "country": "US",
+      "latitude": 32.8969,
+      "longitude": -97.0381,
+      "metro": [
+         "dfw07",
+         "dfw"
+      ],
+      "roundrobin": true,
+      "site": "dfw07",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Dallas",
+      "country": "US",
+      "latitude": 32.8969,
+      "longitude": -97.0381,
+      "metro": [
+         "dfw08",
+         "dfw"
+      ],
+      "roundrobin": true,
+      "site": "dfw08",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Dublin",
+      "country": "IE",
+      "latitude": 53.4333,
+      "longitude": -6.25,
+      "metro": [
+         "dub01",
+         "dub"
+      ],
+      "roundrobin": true,
+      "site": "dub01",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Florianopolis",
+      "country": "BR",
+      "latitude": -27.6685,
+      "longitude": -48.546,
+      "metro": [
+         "fln01",
+         "fln"
+      ],
+      "roundrobin": true,
+      "site": "fln01",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Frankfurt",
+      "country": "DE",
+      "latitude": 50.0379,
+      "longitude": 8.5622,
+      "metro": [
+         "fra01",
+         "fra"
+      ],
+      "roundrobin": true,
+      "site": "fra01",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Frankfurt",
+      "country": "DE",
+      "latitude": 50.0379,
+      "longitude": 8.5622,
+      "metro": [
+         "fra02",
+         "fra"
+      ],
+      "roundrobin": true,
+      "site": "fra02",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Frankfurt",
+      "country": "DE",
+      "latitude": 50.0379,
+      "longitude": 8.5622,
+      "metro": [
+         "fra03",
+         "fra"
+      ],
+      "roundrobin": true,
+      "site": "fra03",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Frankfurt",
+      "country": "DE",
+      "latitude": 50.0379,
+      "longitude": 8.5622,
+      "metro": [
+         "fra04",
+         "fra"
+      ],
+      "roundrobin": true,
+      "site": "fra04",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Hamburg",
+      "country": "DE",
+      "latitude": 53.6333,
+      "longitude": 9.9833,
+      "metro": [
+         "ham02",
+         "ham"
+      ],
+      "roundrobin": true,
+      "site": "ham02",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Tokyo",
+      "country": "JP",
+      "latitude": 35.5522,
+      "longitude": 139.78,
+      "metro": [
+         "hnd01",
+         "hnd"
+      ],
+      "roundrobin": true,
+      "site": "hnd01",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Tokyo",
+      "country": "JP",
+      "latitude": 35.5522,
+      "longitude": 139.78,
+      "metro": [
+         "hnd02",
+         "hnd"
+      ],
+      "roundrobin": true,
+      "site": "hnd02",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Tokyo",
+      "country": "JP",
+      "latitude": 35.5522,
+      "longitude": 139.78,
+      "metro": [
+         "hnd03",
+         "hnd"
+      ],
+      "roundrobin": true,
+      "site": "hnd03",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Washington",
+      "country": "US",
+      "latitude": 38.9444,
+      "longitude": -77.4558,
+      "metro": [
+         "iad02",
+         "iad"
+      ],
+      "roundrobin": true,
+      "site": "iad02",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Washington",
+      "country": "US",
+      "latitude": 38.9444,
+      "longitude": -77.4558,
+      "metro": [
+         "iad03",
+         "iad"
+      ],
+      "roundrobin": true,
+      "site": "iad03",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Washington",
+      "country": "US",
+      "latitude": 38.9444,
+      "longitude": -77.4558,
+      "metro": [
+         "iad04",
+         "iad"
+      ],
+      "roundrobin": true,
+      "site": "iad04",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Washington",
+      "country": "US",
+      "latitude": 38.9444,
+      "longitude": -77.4558,
+      "metro": [
+         "iad05",
+         "iad"
+      ],
+      "roundrobin": true,
+      "site": "iad05",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Washington",
+      "country": "US",
+      "latitude": 38.9444,
+      "longitude": -77.4558,
+      "metro": [
+         "iad06",
+         "iad"
+      ],
+      "roundrobin": true,
+      "site": "iad06",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Washington",
+      "country": "US",
+      "latitude": 38.9444,
+      "longitude": -77.4558,
+      "metro": [
+         "iad0c",
+         "iad"
+      ],
+      "roundrobin": true,
+      "site": "iad0c",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Johannesburg",
+      "country": "ZA",
+      "latitude": -26.2035,
+      "longitude": 28.1335,
+      "metro": [
+         "jnb01",
+         "jnb"
+      ],
+      "roundrobin": true,
+      "site": "jnb01",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Los Angeles",
+      "country": "US",
+      "latitude": 33.9425,
+      "longitude": -118.4072,
+      "metro": [
+         "lax02",
+         "lax"
+      ],
+      "roundrobin": true,
+      "site": "lax02",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Los Angeles",
+      "country": "US",
+      "latitude": 33.9425,
+      "longitude": -118.4072,
+      "metro": [
+         "lax03",
+         "lax"
+      ],
+      "roundrobin": true,
+      "site": "lax03",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Los Angeles",
+      "country": "US",
+      "latitude": 33.9425,
+      "longitude": -118.4072,
+      "metro": [
+         "lax04",
+         "lax"
+      ],
+      "roundrobin": true,
+      "site": "lax04",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Los Angeles",
+      "country": "US",
+      "latitude": 33.9425,
+      "longitude": -118.4072,
+      "metro": [
+         "lax05",
+         "lax"
+      ],
+      "roundrobin": true,
+      "site": "lax05",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Los Angeles",
+      "country": "US",
+      "latitude": 33.9425,
+      "longitude": -118.4072,
+      "metro": [
+         "lax06",
+         "lax"
+      ],
+      "roundrobin": true,
+      "site": "lax06",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Los Angeles",
+      "country": "US",
+      "latitude": 33.9425,
+      "longitude": -118.4072,
+      "metro": [
+         "lax0c",
+         "lax"
+      ],
+      "roundrobin": true,
+      "site": "lax0c",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Larnaca",
+      "country": "CY",
+      "latitude": 34.8809,
+      "longitude": 33.626,
+      "metro": [
+         "lca01",
+         "lca"
+      ],
+      "roundrobin": true,
+      "site": "lca01",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "New York",
+      "country": "US",
+      "latitude": 40.7667,
+      "longitude": -73.8667,
+      "metro": [
+         "lga03",
+         "lga"
+      ],
+      "roundrobin": true,
+      "site": "lga03",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "New York",
+      "country": "US",
+      "latitude": 40.7667,
+      "longitude": -73.8667,
+      "metro": [
+         "lga04",
+         "lga"
+      ],
+      "roundrobin": true,
+      "site": "lga04",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "New York",
+      "country": "US",
+      "latitude": 40.7667,
+      "longitude": -73.8667,
+      "metro": [
+         "lga05",
+         "lga"
+      ],
+      "roundrobin": true,
+      "site": "lga05",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "New York",
+      "country": "US",
+      "latitude": 40.7667,
+      "longitude": -73.8667,
+      "metro": [
+         "lga06",
+         "lga"
+      ],
+      "roundrobin": true,
+      "site": "lga06",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "New York",
+      "country": "US",
+      "latitude": 40.7667,
+      "longitude": -73.8667,
+      "metro": [
+         "lga07",
+         "lga"
+      ],
+      "roundrobin": true,
+      "site": "lga07",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "New York",
+      "country": "US",
+      "latitude": 40.7667,
+      "longitude": -73.8667,
+      "metro": [
+         "lga08",
+         "lga"
+      ],
+      "roundrobin": true,
+      "site": "lga08",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "New York",
+      "country": "US",
+      "latitude": 40.7667,
+      "longitude": -73.8667,
+      "metro": [
+         "lga0t",
+         "lga"
+      ],
+      "roundrobin": true,
+      "site": "lga0t",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "New York",
+      "country": "US",
+      "latitude": 40.7667,
+      "longitude": -73.8667,
+      "metro": [
+         "lga1t",
+         "lga"
+      ],
+      "roundrobin": true,
+      "site": "lga1t",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "London",
+      "country": "GB",
+      "latitude": 51.4697,
+      "longitude": -0.4514,
+      "metro": [
+         "lhr02",
+         "lhr"
+      ],
+      "roundrobin": true,
+      "site": "lhr02",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "London",
+      "country": "GB",
+      "latitude": 51.4697,
+      "longitude": -0.4514,
+      "metro": [
+         "lhr03",
+         "lhr"
+      ],
+      "roundrobin": true,
+      "site": "lhr03",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "London",
+      "country": "GB",
+      "latitude": 51.4697,
+      "longitude": -0.4514,
+      "metro": [
+         "lhr04",
+         "lhr"
+      ],
+      "roundrobin": true,
+      "site": "lhr04",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "London",
+      "country": "GB",
+      "latitude": 51.4697,
+      "longitude": -0.4514,
+      "metro": [
+         "lhr05",
+         "lhr"
+      ],
+      "roundrobin": true,
+      "site": "lhr05",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Lisbon",
+      "country": "PT",
+      "latitude": 38.7756,
+      "longitude": -9.1354,
+      "metro": [
+         "lis01",
+         "lis"
+      ],
+      "roundrobin": true,
+      "site": "lis01",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Lisbon",
+      "country": "PT",
+      "latitude": 38.7756,
+      "longitude": -9.1354,
+      "metro": [
+         "lis02",
+         "lis"
+      ],
+      "roundrobin": true,
+      "site": "lis02",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Ljubljana",
+      "country": "SI",
+      "latitude": 46.2236,
+      "longitude": 14.4575,
+      "metro": [
+         "lju01",
+         "lju"
+      ],
+      "roundrobin": true,
+      "site": "lju01",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Chennai",
+      "country": "IN",
+      "latitude": 12.9941,
+      "longitude": 80.1709,
+      "metro": [
+         "maa01",
+         "maa"
+      ],
+      "roundrobin": true,
+      "site": "maa01",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Madrid",
+      "country": "ES",
+      "latitude": 40.4667,
+      "longitude": -3.5667,
+      "metro": [
+         "mad02",
+         "mad"
+      ],
+      "roundrobin": true,
+      "site": "mad02",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Madrid",
+      "country": "ES",
+      "latitude": 40.4667,
+      "longitude": -3.5667,
+      "metro": [
+         "mad03",
+         "mad"
+      ],
+      "roundrobin": true,
+      "site": "mad03",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Madrid",
+      "country": "ES",
+      "latitude": 40.4667,
+      "longitude": -3.5667,
+      "metro": [
+         "mad04",
+         "mad"
+      ],
+      "roundrobin": true,
+      "site": "mad04",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Miami",
+      "country": "US",
+      "latitude": 25.7833,
+      "longitude": -80.2667,
+      "metro": [
+         "mia02",
+         "mia"
+      ],
+      "roundrobin": true,
+      "site": "mia02",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Miami",
+      "country": "US",
+      "latitude": 25.7833,
+      "longitude": -80.2667,
+      "metro": [
+         "mia03",
+         "mia"
+      ],
+      "roundrobin": true,
+      "site": "mia03",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Miami",
+      "country": "US",
+      "latitude": 25.7833,
+      "longitude": -80.2667,
+      "metro": [
+         "mia04",
+         "mia"
+      ],
+      "roundrobin": true,
+      "site": "mia04",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Miami",
+      "country": "US",
+      "latitude": 25.7833,
+      "longitude": -80.2667,
+      "metro": [
+         "mia05",
+         "mia"
+      ],
+      "roundrobin": true,
+      "site": "mia05",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Miami",
+      "country": "US",
+      "latitude": 25.7833,
+      "longitude": -80.2667,
+      "metro": [
+         "mia06",
+         "mia"
+      ],
+      "roundrobin": true,
+      "site": "mia06",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Milan",
+      "country": "IT",
+      "latitude": 45.464,
+      "longitude": 9.1916,
+      "metro": [
+         "mil02",
+         "mil"
+      ],
+      "roundrobin": true,
+      "site": "mil02",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Milan",
+      "country": "IT",
+      "latitude": 45.464,
+      "longitude": 9.1916,
+      "metro": [
+         "mil03",
+         "mil"
+      ],
+      "roundrobin": true,
+      "site": "mil03",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Milan",
+      "country": "IT",
+      "latitude": 45.464,
+      "longitude": 9.1916,
+      "metro": [
+         "mil04",
+         "mil"
+      ],
+      "roundrobin": true,
+      "site": "mil04",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Milan",
+      "country": "IT",
+      "latitude": 45.464,
+      "longitude": 9.1916,
+      "metro": [
+         "mil05",
+         "mil"
+      ],
+      "roundrobin": true,
+      "site": "mil05",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Manila",
+      "country": "PH",
+      "latitude": 14.5086,
+      "longitude": 121.0194,
+      "metro": [
+         "mnl01",
+         "mnl"
+      ],
+      "roundrobin": true,
+      "site": "mnl01",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Maputo",
+      "country": "MZ",
+      "latitude": -25.9208,
+      "longitude": 32.5725,
+      "metro": [
+         "mpm01",
+         "mpm"
+      ],
+      "roundrobin": true,
+      "site": "mpm01",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Nairobi",
+      "country": "KE",
+      "latitude": -1.3192,
+      "longitude": 36.9258,
+      "metro": [
+         "nbo01",
+         "nbo"
+      ],
+      "roundrobin": true,
+      "site": "nbo01",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "San Francisco Bay Area",
+      "country": "US",
+      "latitude": 37.3833,
+      "longitude": -122.0667,
+      "metro": [
+         "nuq02",
+         "nuq"
+      ],
+      "roundrobin": true,
+      "site": "nuq02",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "San Francisco Bay Area",
+      "country": "US",
+      "latitude": 37.3833,
+      "longitude": -122.0667,
+      "metro": [
+         "nuq03",
+         "nuq"
+      ],
+      "roundrobin": true,
+      "site": "nuq03",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "San Francisco Bay Area",
+      "country": "US",
+      "latitude": 37.3833,
+      "longitude": -122.0667,
+      "metro": [
+         "nuq04",
+         "nuq"
+      ],
+      "roundrobin": true,
+      "site": "nuq04",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "San Francisco Bay Area",
+      "country": "US",
+      "latitude": 37.3833,
+      "longitude": -122.0667,
+      "metro": [
+         "nuq06",
+         "nuq"
+      ],
+      "roundrobin": true,
+      "site": "nuq06",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "San Francisco Bay Area",
+      "country": "US",
+      "latitude": 37.3833,
+      "longitude": -122.0667,
+      "metro": [
+         "nuq07",
+         "nuq"
+      ],
+      "roundrobin": true,
+      "site": "nuq07",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Omaha",
+      "country": "US",
+      "latitude": 41.30376,
+      "longitude": -95.893282,
+      "metro": [
+         "oma0c",
+         "oma"
+      ],
+      "roundrobin": true,
+      "site": "oma0c",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Chicago",
+      "country": "US",
+      "latitude": 41.9786,
+      "longitude": -87.9047,
+      "metro": [
+         "ord02",
+         "ord"
+      ],
+      "roundrobin": true,
+      "site": "ord02",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Chicago",
+      "country": "US",
+      "latitude": 41.9786,
+      "longitude": -87.9047,
+      "metro": [
+         "ord03",
+         "ord"
+      ],
+      "roundrobin": true,
+      "site": "ord03",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Chicago",
+      "country": "US",
+      "latitude": 41.9786,
+      "longitude": -87.9047,
+      "metro": [
+         "ord04",
+         "ord"
+      ],
+      "roundrobin": true,
+      "site": "ord04",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Chicago",
+      "country": "US",
+      "latitude": 41.9786,
+      "longitude": -87.9047,
+      "metro": [
+         "ord05",
+         "ord"
+      ],
+      "roundrobin": true,
+      "site": "ord05",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Chicago",
+      "country": "US",
+      "latitude": 41.9786,
+      "longitude": -87.9047,
+      "metro": [
+         "ord06",
+         "ord"
+      ],
+      "roundrobin": true,
+      "site": "ord06",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Paris",
+      "country": "FR",
+      "latitude": 48.8584,
+      "longitude": 2.349,
+      "metro": [
+         "par02",
+         "par"
+      ],
+      "roundrobin": true,
+      "site": "par02",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Paris",
+      "country": "FR",
+      "latitude": 48.8584,
+      "longitude": 2.349,
+      "metro": [
+         "par03",
+         "par"
+      ],
+      "roundrobin": true,
+      "site": "par03",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Paris",
+      "country": "FR",
+      "latitude": 48.8584,
+      "longitude": 2.349,
+      "metro": [
+         "par04",
+         "par"
+      ],
+      "roundrobin": true,
+      "site": "par04",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Paris",
+      "country": "FR",
+      "latitude": 48.8584,
+      "longitude": 2.349,
+      "metro": [
+         "par05",
+         "par"
+      ],
+      "roundrobin": true,
+      "site": "par05",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Portland",
+      "country": "US",
+      "latitude": 45.589191,
+      "longitude": -122.600228,
+      "metro": [
+         "pdx0c",
+         "pdx"
+      ],
+      "roundrobin": true,
+      "site": "pdx0c",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Prague",
+      "country": "CZ",
+      "latitude": 50.0833,
+      "longitude": 14.4167,
+      "metro": [
+         "prg02",
+         "prg"
+      ],
+      "roundrobin": true,
+      "site": "prg02",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Prague",
+      "country": "CZ",
+      "latitude": 50.0833,
+      "longitude": 14.4167,
+      "metro": [
+         "prg03",
+         "prg"
+      ],
+      "roundrobin": true,
+      "site": "prg03",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Prague",
+      "country": "CZ",
+      "latitude": 50.0833,
+      "longitude": 14.4167,
+      "metro": [
+         "prg04",
+         "prg"
+      ],
+      "roundrobin": true,
+      "site": "prg04",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Prague",
+      "country": "CZ",
+      "latitude": 50.0833,
+      "longitude": 14.4167,
+      "metro": [
+         "prg05",
+         "prg"
+      ],
+      "roundrobin": true,
+      "site": "prg05",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Seattle",
+      "country": "US",
+      "latitude": 47.4489,
+      "longitude": -122.3094,
+      "metro": [
+         "sea02",
+         "sea"
+      ],
+      "roundrobin": true,
+      "site": "sea02",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Seattle",
+      "country": "US",
+      "latitude": 47.4489,
+      "longitude": -122.3094,
+      "metro": [
+         "sea03",
+         "sea"
+      ],
+      "roundrobin": true,
+      "site": "sea03",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Seattle",
+      "country": "US",
+      "latitude": 47.4489,
+      "longitude": -122.3094,
+      "metro": [
+         "sea04",
+         "sea"
+      ],
+      "roundrobin": true,
+      "site": "sea04",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Seattle",
+      "country": "US",
+      "latitude": 47.4489,
+      "longitude": -122.3094,
+      "metro": [
+         "sea06",
+         "sea"
+      ],
+      "roundrobin": true,
+      "site": "sea06",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Seattle",
+      "country": "US",
+      "latitude": 47.4489,
+      "longitude": -122.3094,
+      "metro": [
+         "sea07",
+         "sea"
+      ],
+      "roundrobin": true,
+      "site": "sea07",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Seattle",
+      "country": "US",
+      "latitude": 47.4489,
+      "longitude": -122.3094,
+      "metro": [
+         "sea08",
+         "sea"
+      ],
+      "roundrobin": true,
+      "site": "sea08",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Singapore",
+      "country": "SG",
+      "latitude": 1.355,
+      "longitude": 103.988,
+      "metro": [
+         "sin01",
+         "sin"
+      ],
+      "roundrobin": true,
+      "site": "sin01",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "San Francisco Bay Area",
+      "country": "US",
+      "latitude": 37.3833,
+      "longitude": -122.0667,
+      "metro": [
+         "sjc01",
+         "sjc"
+      ],
+      "roundrobin": true,
+      "site": "sjc01",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Stavanger",
+      "country": "NO",
+      "latitude": 58.8767,
+      "longitude": 5.6378,
+      "metro": [
+         "svg01",
+         "svg"
+      ],
+      "roundrobin": true,
+      "site": "svg01",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Sydney",
+      "country": "AU",
+      "latitude": -33.9461,
+      "longitude": 151.177,
+      "metro": [
+         "syd02",
+         "syd"
+      ],
+      "roundrobin": true,
+      "site": "syd02",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Sydney",
+      "country": "AU",
+      "latitude": -33.9461,
+      "longitude": 151.177,
+      "metro": [
+         "syd03",
+         "syd"
+      ],
+      "roundrobin": true,
+      "site": "syd03",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Podgorica",
+      "country": "ME",
+      "latitude": 42.1078,
+      "longitude": 18.7616,
+      "metro": [
+         "tgd01",
+         "tgd"
+      ],
+      "roundrobin": true,
+      "site": "tgd01",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Antananarivo",
+      "country": "MG",
+      "latitude": -18.7969,
+      "longitude": 47.4788,
+      "metro": [
+         "tnr01",
+         "tnr"
+      ],
+      "roundrobin": true,
+      "site": "tnr01",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Taipei",
+      "country": "TW",
+      "latitude": 25.0778,
+      "longitude": 121.224,
+      "metro": [
+         "tpe01",
+         "tpe"
+      ],
+      "roundrobin": true,
+      "site": "tpe01",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Turin",
+      "country": "IT",
+      "latitude": 45.2008,
+      "longitude": 7.6497,
+      "metro": [
+         "trn01",
+         "trn"
+      ],
+      "roundrobin": true,
+      "site": "trn01",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Tunis",
+      "country": "TN",
+      "latitude": 36.8516,
+      "longitude": 10.2291,
+      "metro": [
+         "tun01",
+         "tun"
+      ],
+      "roundrobin": true,
+      "site": "tun01",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Tokyo",
+      "country": "US",
+      "latitude": 35.5522,
+      "longitude": 139.78,
+      "metro": [
+         "tyo01",
+         "tyo"
+      ],
+      "roundrobin": true,
+      "site": "tyo01",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Tokyo",
+      "country": "US",
+      "latitude": 35.5522,
+      "longitude": 139.78,
+      "metro": [
+         "tyo02",
+         "tyo"
+      ],
+      "roundrobin": true,
+      "site": "tyo02",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Tokyo",
+      "country": "US",
+      "latitude": 35.5522,
+      "longitude": 139.78,
+      "metro": [
+         "tyo03",
+         "tyo"
+      ],
+      "roundrobin": true,
+      "site": "tyo03",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Vienna",
+      "country": "AT",
+      "latitude": 48.269,
+      "longitude": 16.4107,
+      "metro": [
+         "vie01",
+         "vie"
+      ],
+      "roundrobin": true,
+      "site": "vie01",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Wellington",
+      "country": "NZ",
+      "latitude": -41.3272,
+      "longitude": 174.805,
+      "metro": [
+         "wlg02",
+         "wlg"
+      ],
+      "roundrobin": true,
+      "site": "wlg02",
+      "uplink_speed": "10g"
+   },
+   {
+      "city": "Moncton",
+      "country": "CA",
+      "latitude": 46.1073,
+      "longitude": -64.6738,
+      "metro": [
+         "yqm01",
+         "yqm"
+      ],
+      "roundrobin": true,
+      "site": "yqm01",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Montreal",
+      "country": "CA",
+      "latitude": 45.4576,
+      "longitude": -73.7497,
+      "metro": [
+         "yul02",
+         "yul"
+      ],
+      "roundrobin": true,
+      "site": "yul02",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Vancouver",
+      "country": "CA",
+      "latitude": 49.1902,
+      "longitude": -123.1837,
+      "metro": [
+         "yvr01",
+         "yvr"
+      ],
+      "roundrobin": true,
+      "site": "yvr01",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Winnipeg",
+      "country": "CA",
+      "latitude": 49.906,
+      "longitude": -97.2373,
+      "metro": [
+         "ywg01",
+         "ywg"
+      ],
+      "roundrobin": true,
+      "site": "ywg01",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Calgary",
+      "country": "CA",
+      "latitude": 51.1315,
+      "longitude": -114.0106,
+      "metro": [
+         "yyc02",
+         "yyc"
+      ],
+      "roundrobin": true,
+      "site": "yyc02",
+      "uplink_speed": "1g"
+   },
+   {
+      "city": "Toronto",
+      "country": "CA",
+      "latitude": 43.6767,
+      "longitude": -79.6306,
+      "metro": [
+         "yyz02",
+         "yyz"
+      ],
+      "roundrobin": true,
+      "site": "yyz02",
+      "uplink_speed": "1g"
+   }
+]

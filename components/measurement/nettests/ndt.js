@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import {
   Flex,
@@ -7,9 +7,8 @@ import {
 import { Text } from 'rebass'
 import { MdFlashOn } from 'react-icons/lib/md'
 import { injectIntl, intlShape } from 'react-intl'
-import axios from 'axios'
-import countryUtil from 'country-util'
 
+import { mlabServerDetails } from './mlab_utils.js'
 import PerformanceDetails from '../PerformanceDetails'
 
 const InfoBoxItem = ({
@@ -28,33 +27,12 @@ const InfoBoxItem = ({
 )
 
 const ServerLocation = ({ serverAddress }) => {
-  const [ serverCity, setServerCity ] = useState(null)
-  const [ serverCountry, setServerCountry ] = useState(null)
-
-  useEffect(() => {
-    // Since the m-lab API sever uses a strict CORS policy, we cannot directly
-    // request server locations from the API. This hack uses a CORS-proxy to
-    // bypass the policy. More info: https://github.com/Rob--W/cors-anywhere
-    const fetchLocations = async () => {
-      const proxyUrl = 'https://cors-anywhere.herokuapp.com/'
-      let client = axios.create({baseURL: proxyUrl + 'https://siteinfo.mlab-oti.measurementlab.net'}) // eslint-disable-line
-      const locations = await client.get('/v1/sites/locations.json')
-
-      // Extract country and server name
-      // e.g serverAddress = "ndt.iupui.mlab1.lis02.measurement-lab.org"
-      const serverNode = serverAddress.split('.')[3]
-      const server = locations.data.find((location) => location.site === serverNode)
-      setServerCity(server.city)
-      const countryName = countryUtil.territoryNames[server.country]
-      setServerCountry(countryName)
-    }
-    fetchLocations()
-  }, [])
+  const server = mlabServerDetails(serverAddress)
 
   return (
     <React.Fragment> {
-      serverCity
-        ? `${serverCity}, ${serverCountry}`
+      server
+        ? `${server.city}, ${server.countryName}`
         : 'N/A'
     } </React.Fragment>
   )
