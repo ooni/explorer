@@ -1,14 +1,15 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import {
   Flex,
   Box,
 } from 'ooni-components'
 import { Text } from 'rebass'
-import MdFlashOn from 'react-icons/lib/md/flash-on'
+import { MdFlashOn } from 'react-icons/lib/md'
 import { injectIntl, intlShape } from 'react-intl'
+import axios from 'axios'
+import countryUtil from 'country-util'
 
-import { mlabServerToCountry, mlabServerToName } from './mlab_utils.js'
 import PerformanceDetails from '../PerformanceDetails'
 
 const InfoBoxItem = ({
@@ -18,13 +19,46 @@ const InfoBoxItem = ({
 }) => (
   <Box>
     <Text fontSize={24}>
-      {content} <Text is='small'>{unit}</Text>
+      {content} {unit && <Text is='small'>{unit}</Text>}
     </Text>
     <Text fontWeight='bold' fontSize={16} >
       {label}
     </Text>
   </Box>
 )
+
+const ServerLocation = ({ serverAddress }) => {
+  const [ serverCity, setServerCity ] = useState(null)
+  const [ serverCountry, setServerCountry ] = useState(null)
+
+  useEffect(() => {
+    // Since the m-lab API sever uses a strict CORS policy, we cannot directly
+    // request server locations from the API. This hack uses a CORS-proxy to
+    // bypass the policy. More info: https://github.com/Rob--W/cors-anywhere
+    const fetchLocations = async () => {
+      const proxyUrl = 'https://cors-anywhere.herokuapp.com/'
+      let client = axios.create({baseURL: proxyUrl + 'https://siteinfo.mlab-oti.measurementlab.net'}) // eslint-disable-line
+      const locations = await client.get('/v1/sites/locations.json')
+
+      // Extract country and server name
+      // e.g serverAddress = "ndt.iupui.mlab1.lis02.measurement-lab.org"
+      const serverNode = serverAddress.split('.')[3]
+      const server = locations.data.find((location) => location.site === serverNode)
+      setServerCity(server.city)
+      const countryName = countryUtil.territoryNames[server.country]
+      setServerCountry(countryName)
+    }
+    fetchLocations()
+  }, [])
+
+  return (
+    <React.Fragment> {
+      serverCity
+        ? `${serverCity}, ${serverCountry}`
+        : 'N/A'
+    } </React.Fragment>
+  )
+}
 
 
 const NdtDetails = ({ measurement, render, intl }) => {
@@ -40,11 +74,6 @@ const NdtDetails = ({ measurement, render, intl }) => {
   const downloadMbit = simple.download && (simple.download / 1000).toFixed(2)
   const uploadMbit = simple.upload && (simple.upload / 1000).toFixed(2)
   const ping = simple.ping && (simple.ping).toFixed(1)
-
-
-  // XXX this doesn't actually work as expected see: #mlab channel
-  const serverCountry = testKeys.server_address && mlabServerToCountry(testKeys.server_address)
-  const serverName = testKeys.server_address && mlabServerToName(testKeys.server_address)
 
   // Advanced
   const packetLoss = advanced.packet_loss && (advanced.packet_loss * 100).toFixed(3)
@@ -70,6 +99,7 @@ const NdtDetails = ({ measurement, render, intl }) => {
               <InfoBoxItem label={intl.formatMessage({ id: 'Measurement.Status.Info.Label.Download' })} content={downloadMbit} unit='Mbps' />
               <InfoBoxItem label={intl.formatMessage({ id: 'Measurement.Status.Info.Label.Upload' })} content={uploadMbit} unit='Mbps' />
               <InfoBoxItem label={intl.formatMessage({ id: 'Measurement.Status.Info.Label.Ping' })} content={ping} unit='ms' />
+              <InfoBoxItem label={intl.formatMessage({ id: 'Measurement.Status.Info.Label.Server' })} content={<ServerLocation serverAddress={testKeys.server_address} />} />
             </Flex>
           }
         </Box>
@@ -84,20 +114,6 @@ const NdtDetails = ({ measurement, render, intl }) => {
             outOfOrder={outOfOrder}
             timeouts={timeouts}
           />}
-        {/*<Text>isFailed: {'' + isFailed}</Text>
-          <Text>failure: {failure}</Text>
-          <Text>downloadMbit: {'' + downloadMbit}</Text>
-          <Text>uploadMbit: {'' + uploadMbit}</Text>
-          <Text>ping: {'' + ping}</Text>
-
-          <Text>serverCountry: {'' + serverCountry}</Text>
-          <Text>serverName: {'' + serverName}</Text>
-          <Text>packetLoss: {'' + packetLoss}</Text>
-          <Text>outOfOrder: {'' + outOfOrder}</Text>
-          <Text>minRTT: {'' + minRTT}</Text>
-          <Text>maxRTT: {'' + maxRTT}</Text>
-          <Text>mss: {'' + mss}</Text>
-          <Text>timeouts: {'' + timeouts}</Text>*/}
         </div>
       )
     })
