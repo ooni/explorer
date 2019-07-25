@@ -163,6 +163,7 @@ class TestsByGroup extends React.PureComponent {
                       <VictoryBar
                         {...maybeLabels}
                         key={index}
+                        name={testGroup}
                         data={testCoverageArray}
                         style={{
                           data: {
@@ -190,7 +191,7 @@ class TestsByGroup extends React.PureComponent {
                 x='test_day'
                 y={(d) => d.count / networkCoverageMaxima}
                 scale={{x: 'time', y: 'linear'}}
-                labels={(d) => `${new Date(d.test_day).toLocaleDateString()}\n${d.count} networks `}
+                labels={(d) => `${new Date(d.test_day).toLocaleDateString()}\n${d.count} Networks `}
                 labelComponent={<Tooltip />}
                 style={{
                   data: {
