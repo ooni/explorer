@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import { Flex, Box, Link } from 'ooni-components'
@@ -13,6 +13,7 @@ import moment from 'moment'
 
 import { testNames } from '../test-info'
 import AppsStatChart from './apps-stats-chart'
+import { CountryContext } from './country-context'
 
 const NETWORK_STATS_PER_PAGE = 4
 
@@ -33,18 +34,32 @@ const StyledRow = styled(Box)`
   border: 1px solid ${props => props.theme.colors.gray3};
 `
 
-const NetworkRow = ({ asn, app }) => (
-  <Box width={1}>
-    <Flex alignItems='center'>
-      <Box width={1/3} pl={4}>
-        <strong>AS{ asn }</strong>
-      </Box>
-      <Box width={2/3}>
-        <AppsStatChart asn={asn} app={app} />
-      </Box>
-    </Flex>
-  </Box>
-)
+const NetworkRow = ({ asn, app }) => {
+  const { countryCode } = useContext(CountryContext)
+  const today = moment().format('YYYY-MM-DD')
+  const since = moment().subtract(30, 'days').format('YYYY-MM-DD')
+
+  const linkToMeasurements = `/search?probe_cc=${countryCode}&probe_asn=AS${asn}&test_name=${app}&since=${since}&until=${today}`
+
+  return (
+    <Box width={1}>
+      <Flex alignItems='center'>
+        <Box width={1/3} pl={4}>
+          <strong>
+            <Link
+              href={linkToMeasurements}
+            >
+              AS{ asn }
+            </Link>
+          </strong>
+        </Box>
+        <Box width={2/3}>
+          <AppsStatChart asn={asn} app={app} />
+        </Box>
+      </Flex>
+    </Box>
+  )
+}
 
 class AppsStatRow extends React.Component {
   constructor(props) {
