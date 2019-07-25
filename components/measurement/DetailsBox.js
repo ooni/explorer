@@ -2,7 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Flex, Box, Text, Heading } from 'ooni-components'
-import { MdExpandLess } from 'react-icons/lib/md'
+
+import { CollapseTrigger } from '../CollapseTrigger'
 
 const DetailBoxLabel = styled(Text)`
   font-weight: 600;
@@ -46,14 +47,6 @@ const StyledDetailsBox = styled(Box)`
 
 const StyledDetailsBoxHeader = styled(Flex)`
   cursor: pointer;
-`
-
-const CollapseTrigger = styled(MdExpandLess)`
-  cursor: pointer;
-  background-color: white;
-  border-radius: 50%;
-  transform: ${props => props.isOpen ? 'rotate(0deg)': 'rotate(180deg)'};
-  transition: transform 0.1s linear;
 `
 
 export class DetailsBox extends React.Component {
