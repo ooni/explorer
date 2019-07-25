@@ -44,6 +44,10 @@ const StyledDetailsBox = styled(Box)`
   border: 2px solid ${props => props.theme.colors.gray2};
 `
 
+const StyledDetailsBoxHeader = styled(Flex)`
+  cursor: pointer;
+`
+
 const CollapseTrigger = styled(MdExpandLess)`
   cursor: pointer;
   background-color: white;
@@ -73,14 +77,14 @@ export class DetailsBox extends React.Component {
     return (
       <StyledDetailsBox width={1} {...rest} mb={3}>
         {title &&
-          <Flex px={3} py={2} bg='gray2' alignItems='center'>
+          <StyledDetailsBoxHeader px={3} py={2} bg='gray2' alignItems='center' onClick={() => this.onToggle()}>
             <Box>
               <Heading h={4}>{title}</Heading>
             </Box>
             <Box ml='auto'>
-              <CollapseTrigger size={36} isOpen={isOpen} onClick={() => this.onToggle()}/>
+              <CollapseTrigger size={36} isOpen={isOpen} />
             </Box>
-          </Flex>
+          </StyledDetailsBoxHeader>
         }
         {isOpen &&
           <Box p={3} flexWrap='wrap'>
