@@ -5,6 +5,7 @@ import { Flex, Box, Heading, Text, Link } from 'ooni-components'
 import axios from 'axios'
 import URLChart from './url-chart'
 import SpinLoader from '../vendor/spin-loader'
+import ASNSelector from './asn-selector'
 
 const defaultState = {
   resultsPerPage: 5,
@@ -80,7 +81,7 @@ class TestsByCategoryInNetwork extends React.Component {
   }
 
   render() {
-    const { network, countryCode } = this.props
+    const { network, countryCode, networks, onNetworkChange } = this.props
     const { testedUrlsCount, testedUrls, currentPage, resultsPerPage, fetching } = this.state
 
     if (fetching) {
@@ -97,7 +98,10 @@ class TestsByCategoryInNetwork extends React.Component {
           }}
         /> */}
         {/* Category Selection */}
-        <Flex justifyContent='space-between'>
+        <Flex justifyContent='space-between' alignItems='center'>
+          <Box>
+            <ASNSelector networks={networks} onNetworkChange={onNetworkChange} />
+          </Box>
           <Box my={3}>
             <strong>{testedUrlsCount}</strong> <FormattedMessage id='Country.Websites.TestedWebsitesCount' />
           </Box>

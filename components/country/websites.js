@@ -7,7 +7,6 @@ import { Flex, Box, Heading, Text, Input } from 'ooni-components'
 import SectionHeader from './section-header'
 import { SimpleBox } from './box'
 import PeriodFilter from './period-filter'
-import ASNSelector from './asn-selector'
 import TestsByCategoryInNetwork from './websites-charts'
 import FormattedMarkdown from '../formatted-markdown'
 
@@ -61,13 +60,12 @@ class WebsitesSection extends React.Component {
         </SimpleBox>
 
         <Box my={4}>
-          {/* Select ASN */}
-          <ASNSelector onNetworkChange={this.onNetworkChange} networks={this.state.networks} />
-
           {selectedNetwork &&
             <TestsByCategoryInNetwork
               network={selectedNetwork}
               countryCode={countryCode}
+              onNetworkChange={this.onNetworkChange}
+              networks={this.state.networks}
             />
           }
         </Box>
