@@ -1,9 +1,8 @@
 import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
-import { Flex, Box, Link } from 'ooni-components'
+import { Flex, Box, Link, theme } from 'ooni-components'
 import styled from 'styled-components'
-import MdArrowDropDownCircle from 'react-icons/lib/md/arrow-drop-down-circle'
 import {
   NettestWhatsApp,
   NettestTelegram,
@@ -14,6 +13,7 @@ import moment from 'moment'
 import { testNames } from '../test-info'
 import AppsStatChart from './apps-stats-chart'
 import { CountryContext } from './country-context'
+import { CollapseTrigger } from '../CollapseTrigger'
 
 const NETWORK_STATS_PER_PAGE = 4
 
@@ -150,7 +150,12 @@ class AppsStatRow extends React.Component {
             <strong>{moment(data.last_tested).fromNow()}</strong>
           </Box>
           <Box width={1/12}>
-            <MdArrowDropDownCircle size={19} onClick={this.toggleMinimize} />
+            <CollapseTrigger
+              size={36}
+              bg={theme.colors.gray3}
+              isOpen={!minimized}
+              onClick={this.toggleMinimize}
+            />
           </Box>
         </Flex>
         {!minimized && this.renderCharts()}
