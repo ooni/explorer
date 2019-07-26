@@ -128,23 +128,25 @@ class AppsStatsCircumventionRow extends React.Component {
     const { minimized, totalNetworks } = this.state
 
     return (
-      <StyledRow px={2} py={3}>
+      <StyledRow p={3}>
         <Flex flexWrap='wrap' alignItems='center'>
-          <Box width={4/12}>
+          <Box mr={3}>
             <NettestWhatsApp size={36} />
-            Vanilla Tor
           </Box>
           <Box width={4/12}>
-            {`${data.notok_networks} / ${data.networks.length} Networks`}
+            Vanilla Tor
+          </Box>
+          <Box ml='auto' width={4/12}>
+            {`${data.networks.length} Networks Tested`}
           </Box>
           {totalNetworks > 0 &&
             <React.Fragment>
-              <Box width={3/12}>
+              <Box ml='auto'>
                 <FormattedMessage id='Country.Apps.Label.LastTested' />
                 {' '}
                 <strong>{moment(data.last_tested).fromNow()}</strong>
               </Box>
-              <Box width={1/12}>
+              <Box ml={4}>
                 <CollapseTrigger
                   size={36}
                   bg={theme.colors.gray3}

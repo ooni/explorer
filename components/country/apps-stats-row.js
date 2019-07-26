@@ -135,21 +135,23 @@ class AppsStatRow extends React.Component {
     const { app, data } = this.props
     const { minimized } = this.state
     return (
-      <StyledRow px={2} py={3}>
+      <StyledRow p={3}>
         <Flex flexWrap='wrap' alignItems='center'>
-          <Box width={4/12}>
+          <Box mr={3}>
             <AppIcon app={app} size={36} />
+          </Box>
+          <Box width={4/12}>
             {testNames[app].name}
           </Box>
-          <Box width={4/12}>
-            {`${data.anomaly_networks.length} / ${data.anomaly_networks.length + data.ok_networks.length} Networks`}
+          <Box ml='auto' width={4/12}>
+            {`${data.anomaly_networks.length + data.ok_networks.length} Networks Tested`}
           </Box>
-          <Box width={3/12}>
+          <Box ml='auto'>
             <FormattedMessage id='Country.Apps.Label.LastTested' />
             {' '}
             <strong>{moment(data.last_tested).fromNow()}</strong>
           </Box>
-          <Box width={1/12}>
+          <Box ml={4}>
             <CollapseTrigger
               size={36}
               bg={theme.colors.gray3}
