@@ -151,8 +151,8 @@ class URLChart extends React.Component {
                 <VictoryChart
                   // theme={VictoryTheme.material}
                   scale={{x: 'time'}}
-                  width={1200}
-                  height={200}
+                  width={850}
+                  height={150}
                   containerComponent={
                     <VictoryVoronoiContainer
                       voronoiDimension='x'
