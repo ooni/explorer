@@ -15,7 +15,7 @@ const Tooltip = (props) => (
         style={{
           fill: theme.colors.white,
           fontFamily: '"Fira Sans", sans-serif',
-          fontSize: 8
+          fontSize: props.fontSize || 8
         }}
       />
     }
