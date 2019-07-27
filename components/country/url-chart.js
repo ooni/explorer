@@ -182,7 +182,7 @@ class URLChart extends React.Component {
                         s += `\n${d.total_count} Total`
                         return s
                       }}
-                      labelComponent={<Tooltip width={100} />}
+                      labelComponent={<Tooltip fontSize={14} />}
                       data={data}
                       x='test_day'
                       y={(d) => (d.total_count - d.confirmed_count - d.anomaly_count - d.failure_count)}
