@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
-import { Flex, Box } from 'ooni-components'
+import { Flex, Box, Link } from 'ooni-components'
 import {
   VictoryChart,
   VictoryStack,
@@ -9,9 +9,9 @@ import {
   VictoryAxis,
   VictoryVoronoiContainer
 } from 'victory'
-
-import { theme } from 'ooni-components'
+import { FormattedMessage } from 'react-intl'
 import styled from 'styled-components'
+import moment from 'moment'
 
 import {
   colorNormal,
@@ -115,7 +115,7 @@ class URLChart extends React.Component {
   }
 
   render() {
-    const { metadata } = this.props
+    const { metadata, countryCode, network } = this.props
     const { data, minimized, fetching } = this.state
     const dataColorMap = {
       total_count: colorNormal,
@@ -129,6 +129,9 @@ class URLChart extends React.Component {
       return (<SpinLoader />)
     }
 
+    const today = moment().format('YYYY-MM-DD')
+    const since30days = moment().subtract(30, 'days').format('YYYY-MM-DD')
+
     return (
       <StyledChartRow flexWrap='wrap' justifyContent='space-between' bg='gray0' my={3}>
         <Box width={15/16}>
@@ -137,6 +140,11 @@ class URLChart extends React.Component {
               <WrappedText>
                 {metadata.input}
               </WrappedText>
+              <Link
+                href={`/search?test_name=web_connectivity&probe_cc=${countryCode}&probe_asn=${network}&input=${metadata.input}&since=${since30days}&until=${today}`}
+              >
+                <FormattedMessage id='Country.Websites.URLCharts.ViewMeasurements' />
+              </Link>
               {/* TODO: Show percentages
                 <Flex flexDirection='column'>
                   <FormattedMessage id='Country.Websites.URLCharts.Legend.Label.Blocked' />
