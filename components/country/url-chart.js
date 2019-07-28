@@ -134,7 +134,7 @@ class URLChart extends React.Component {
 
     return (
       <StyledChartRow flexWrap='wrap' justifyContent='space-between' bg='gray0' my={3}>
-        <Box width={15/16}>
+        <Box width={16/16}>
           <Flex alignItems='center' flexWrap='wrap'>
             <Box width={[1, 1/4]} p={3}>
               <WrappedText>
@@ -158,9 +158,15 @@ class URLChart extends React.Component {
                 data &&
                 <VictoryChart
                   // theme={VictoryTheme.material}
+                  width={876}
+                  height={70}
+                  padding={{
+                    left: 50,
+                    right: 50,
+                    top: 10,
+                    bottom: 10
+                  }}
                   scale={{x: 'time'}}
-                  width={850}
-                  height={150}
                   containerComponent={
                     <VictoryVoronoiContainer
                       voronoiDimension='x'

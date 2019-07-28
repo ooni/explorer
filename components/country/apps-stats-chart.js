@@ -94,7 +94,7 @@ class AppsStatChart extends React.Component {
               s += `\n${d.total_count} Total`
               return s
             }}
-            labelComponent={<Tooltip width={100}/>}
+            labelComponent={<Tooltip fontSize={14} />}
           />
         </VictoryChart>
       </React.Fragment>
