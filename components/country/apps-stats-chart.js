@@ -59,7 +59,13 @@ class AppsStatChart extends React.Component {
         <VictoryChart
           scale={{x: 'time'}}
           width={900}
-          height={150}
+          height={70}
+          padding={{
+            top: 10,
+            bottom: 10,
+            left: 40,
+            right: 40
+          }}
           containerComponent={
             <VictoryVoronoiContainer
               voronoiDimension='x'
