@@ -43,17 +43,29 @@ const NetworkRow = ({ asn, app }) => {
 
   return (
     <Box width={1}>
-      <Flex alignItems='center'>
-        <Box width={1/3} pl={4}>
-          <strong>
-            <Link
-              href={linkToMeasurements}
-            >
-              AS{ asn }
-            </Link>
-          </strong>
+      <Flex
+        my={3}
+        flexWrap='wrap'
+        flexDirection={['column', 'row']}
+        alignItems={['flex-start', 'center']}
+      >
+        <Box width={[1, 1/3]}>
+          <Flex flexWrap='wrap' flexDirection={['column']}>
+            <Box>
+              <strong>
+                AS{ asn }
+              </strong>
+            </Box>
+            <Box>
+              <Link
+                href={linkToMeasurements}
+              >
+                <FormattedMessage id='Country.Websites.URLCharts.ViewMeasurements' />
+              </Link>
+            </Box>
+          </Flex>
         </Box>
-        <Box width={2/3}>
+        <Box width={[1, 2/3]} my={1}>
           <AppsStatChart asn={asn} app={app} />
         </Box>
       </Flex>
