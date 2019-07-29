@@ -46,9 +46,34 @@ const Triangle = styled.div`
   border-bottom: ${props => !props.down ? '12px solid ' + props.theme.colors.gray7 : 'none'};
 `
 
-const WrappedText = styled.span`
+const WrappedText = styled.div`
   overflow-wrap: break-word;
+  min-height: 2em;
 `
+
+const TruncatedURL = ({ url }) => {
+  const MAX_URL_LENGTH = 60
+  try {
+    const urlObj = new URL(url)
+    const domain = urlObj.origin
+    const path = urlObj.pathname
+    let endOfPath = path.split('/').pop()
+    if (domain.length + endOfPath.length > MAX_URL_LENGTH) {
+      endOfPath = endOfPath.substring(0, MAX_URL_LENGTH - domain.length) + '...'
+    }
+    return (
+      <WrappedText>
+        <abbr title={url}>
+          {`${domain}${endOfPath.length > 5 ? '/...' : ''}/${endOfPath}`}
+        </abbr>
+      </WrappedText>
+    )
+  } catch (e) {
+    return (
+      <abbr title={url}>{url}</abbr>
+    )
+  }
+}
 
 const StyledChartRow = styled(Flex)`
   border: 1px solid ${props => props.theme.colors.gray3};
@@ -137,9 +162,7 @@ class URLChart extends React.Component {
         <Box width={16/16}>
           <Flex alignItems='center' flexWrap='wrap'>
             <Box width={[1, 1/4]} p={3}>
-              <WrappedText>
-                {metadata.input}
-              </WrappedText>
+              <TruncatedURL url={metadata.input} />
               <Link
                 href={`/search?test_name=web_connectivity&probe_cc=${countryCode}&probe_asn=${network}&input=${metadata.input}&since=${since30days}&until=${today}`}
               >
