@@ -166,7 +166,7 @@ class URLChart extends React.Component {
               <Link
                 href={`/search?test_name=web_connectivity&probe_cc=${countryCode}&probe_asn=${network}&input=${metadata.input}&since=${since30days}&until=${today}`}
               >
-                <FormattedMessage id='Country.Websites.URLCharts.ViewMeasurements' />
+                <FormattedMessage id='Country.Websites.URLCharts.ExploreMoreMeasurements' />
               </Link>
               {/* TODO: Show percentages
                 <Flex flexDirection='column'>
