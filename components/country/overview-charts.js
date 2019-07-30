@@ -76,13 +76,17 @@ class TestsByGroup extends React.PureComponent {
 
     const { testCoverage, networkCoverage } = this.props
     const supportedTestGroups = ['websites', 'im', 'middlebox', 'performance', 'circumvention']
+    const selectedTestGroups = Object.keys(this.state).filter(testGroup => this.state[testGroup])
+
     const testCoverageByDay = testCoverage.reduce((prev, cur) => {
       prev[cur.test_day] = prev[cur.test_day] || {}
-      prev[cur.test_day][cur.test_group] = cur.count
-      const allTestCount = Object.values(prev[cur.test_day]).reduce((p,c) => p+c, 0)
-      if (typeof testCoverageMaxima === 'undefined'
-          || testCoverageMaxima < allTestCount) {
-        testCoverageMaxima = allTestCount
+      if (selectedTestGroups.indexOf(cur.test_group) > -1) {
+        prev[cur.test_day][cur.test_group] = cur.count
+        const allTestCount = Object.values(prev[cur.test_day]).reduce((p,c) => p+c, 0)
+        if (typeof testCoverageMaxima === 'undefined'
+            || testCoverageMaxima < allTestCount) {
+          testCoverageMaxima = allTestCount
+        }
       }
       return prev
     }, {})
@@ -96,7 +100,6 @@ class TestsByGroup extends React.PureComponent {
       }
     })
 
-    const selectedTestGroups = Object.keys(this.state).filter(testGroup => this.state[testGroup])
     const networkCoverageTick = (t) => Math.round(t * networkCoverageMaxima)
     const ntIncrement = Math.round(networkCoverageMaxima/4)
     const networkCoverageTickValues = [1,2,3,4].map(i => i * ntIncrement / networkCoverageMaxima)
@@ -159,6 +162,7 @@ class TestsByGroup extends React.PureComponent {
                       <VictoryBar
                         {...maybeLabels}
                         key={index}
+                        name={testGroup}
                         data={testCoverageArray}
                         style={{
                           data: {
@@ -186,7 +190,7 @@ class TestsByGroup extends React.PureComponent {
                 x='test_day'
                 y={(d) => d.count / networkCoverageMaxima}
                 scale={{x: 'time', y: 'linear'}}
-                labels={(d) => `${new Date(d.test_day).toLocaleDateString()}\n${d.count} networks `}
+                labels={(d) => `${new Date(d.test_day).toLocaleDateString()}\n${d.count} Networks `}
                 labelComponent={<Tooltip dy={-8} orientation='left' />}
                 style={{
                   data: {
