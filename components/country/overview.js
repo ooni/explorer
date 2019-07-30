@@ -70,9 +70,11 @@ const getStatus = (count, formattedMessageId)=> {
   }
 }
 
+const ooniBlogBaseURL = 'https://ooni.io'
+
 const FeaturedArticle = ({link, title}) => (
   <Box py={1}>
-    <Link color='blue7' href={link} target='_blank' rel='noopener noreferrer'>
+    <Link color='blue7' href={ooniBlogBaseURL + link} target='_blank' rel='noopener noreferrer'>
       {title}
     </Link>
   </Box>
@@ -148,7 +150,7 @@ const Overview = ({
             : <ul>
               {featuredArticles.map((article, index) => (
                 <li key={index}>
-                  <FeaturedArticle link={article.link} title={article.title} />
+                  <FeaturedArticle link={article.href} title={article.title} />
                 </li>
               ))}
             </ul>

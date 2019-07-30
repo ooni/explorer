@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
-import { Flex, Box } from 'ooni-components'
+import { Flex, Box, Link } from 'ooni-components'
 import {
   VictoryChart,
   VictoryStack,
@@ -9,9 +9,9 @@ import {
   VictoryAxis,
   VictoryVoronoiContainer
 } from 'victory'
-
-import { theme } from 'ooni-components'
+import { FormattedMessage } from 'react-intl'
 import styled from 'styled-components'
+import moment from 'moment'
 
 import {
   colorNormal,
@@ -46,9 +46,34 @@ const Triangle = styled.div`
   border-bottom: ${props => !props.down ? '12px solid ' + props.theme.colors.gray7 : 'none'};
 `
 
-const WrappedText = styled.span`
+const WrappedText = styled.div`
   overflow-wrap: break-word;
+  min-height: 2em;
 `
+
+const TruncatedURL = ({ url }) => {
+  const MAX_URL_LENGTH = 60
+  try {
+    const urlObj = new URL(url)
+    const domain = urlObj.origin
+    const path = urlObj.pathname
+    let endOfPath = path.split('/').pop()
+    if (domain.length + endOfPath.length > MAX_URL_LENGTH) {
+      endOfPath = endOfPath.substring(0, MAX_URL_LENGTH - domain.length) + '...'
+    }
+    return (
+      <WrappedText>
+        <abbr title={url}>
+          {`${domain}${endOfPath.length > 5 ? '/...' : ''}/${endOfPath}`}
+        </abbr>
+      </WrappedText>
+    )
+  } catch (e) {
+    return (
+      <abbr title={url}>{url}</abbr>
+    )
+  }
+}
 
 const StyledChartRow = styled(Flex)`
   border: 1px solid ${props => props.theme.colors.gray3};
@@ -115,7 +140,7 @@ class URLChart extends React.Component {
   }
 
   render() {
-    const { metadata } = this.props
+    const { metadata, countryCode, network } = this.props
     const { data, minimized, fetching } = this.state
     const dataColorMap = {
       total_count: colorNormal,
@@ -129,14 +154,20 @@ class URLChart extends React.Component {
       return (<SpinLoader />)
     }
 
+    const today = moment().format('YYYY-MM-DD')
+    const since30days = moment().subtract(30, 'days').format('YYYY-MM-DD')
+
     return (
       <StyledChartRow flexWrap='wrap' justifyContent='space-between' bg='gray0' my={3}>
-        <Box width={15/16}>
+        <Box width={16/16}>
           <Flex alignItems='center' flexWrap='wrap'>
             <Box width={[1, 1/4]} p={3}>
-              <WrappedText>
-                {metadata.input}
-              </WrappedText>
+              <TruncatedURL url={metadata.input} />
+              <Link
+                href={`/search?test_name=web_connectivity&probe_cc=${countryCode}&probe_asn=${network}&input=${metadata.input}&since=${since30days}&until=${today}`}
+              >
+                <FormattedMessage id='Country.Websites.URLCharts.ExploreMoreMeasurements' />
+              </Link>
               {/* TODO: Show percentages
                 <Flex flexDirection='column'>
                   <FormattedMessage id='Country.Websites.URLCharts.Legend.Label.Blocked' />
@@ -150,9 +181,15 @@ class URLChart extends React.Component {
                 data &&
                 <VictoryChart
                   // theme={VictoryTheme.material}
+                  width={876}
+                  height={70}
+                  padding={{
+                    left: 50,
+                    right: 50,
+                    top: 10,
+                    bottom: 10
+                  }}
                   scale={{x: 'time'}}
-                  width={1200}
-                  height={200}
                   containerComponent={
                     <VictoryVoronoiContainer
                       voronoiDimension='x'
@@ -182,7 +219,7 @@ class URLChart extends React.Component {
                         s += `\n${d.total_count} Total`
                         return s
                       }}
-                      labelComponent={<Tooltip width={100} />}
+                      labelComponent={<Tooltip fontSize={14} />}
                       data={data}
                       x='test_day'
                       y={(d) => (d.total_count - d.confirmed_count - d.anomaly_count - d.failure_count)}

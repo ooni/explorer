@@ -1,18 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Container, Flex, Box, Text } from 'ooni-components'
-import { Tick } from 'ooni-components/dist/icons'
-import MdPriorityHigh from 'react-icons/lib/md/priority-high'
+import { Container, Flex, Box } from 'ooni-components'
+import { Text } from 'rebass'
+import { Tick, Cross } from 'ooni-components/dist/icons'
+import { MdWarning, MdPriorityHigh} from 'react-icons/lib/md'
+import { FaQuestion } from 'react-icons/lib/fa'
 import styled from 'styled-components'
 import { FormattedMessage } from 'react-intl'
 
 const HeroContainer = styled(Box)`
   background-color: ${props => props.color};
   color: white;
-`
-
-const StatusLabel = styled(Text)`
-  font-weight: 600;
 `
 
 const Hero = ({ status, color, icon, label, info }) => {
@@ -29,14 +27,18 @@ const Hero = ({ status, color, icon, label, info }) => {
       break
     case 'error':
       computedLabel = <FormattedMessage id='Measurement.Hero.Status.Error' />
-      icon = <Tick />
+      icon = <FaQuestion size={36}/>
       break
     case 'confirmed':
       computedLabel = <FormattedMessage id='Measurement.Hero.Status.Confirmed' />
-      icon = <Tick />
+      icon = <Cross />
+      break
+    case 'down':
+      computedLabel = <FormattedMessage id='Measurement.Hero.Status.Down' />
+      icon = <MdWarning />
       break
     default:
-      icon = <div/>
+      icon = icon || <div/>
     }
   }
 
@@ -47,13 +49,11 @@ const Hero = ({ status, color, icon, label, info }) => {
   return (
     <HeroContainer py={4} color={color}>
       <Container>
-        <Flex pb={4} justifyContent='center'>
-          <Box>
-            <StatusLabel fontSize={4}>
-              {icon} {label}
-            </StatusLabel>
-          </Box>
-        </Flex>
+        <Text fontWeight={600} fontSize={4} as='div'>
+          <Flex mb={4} justifyContent='center' alignItems='center'>
+            <Box mb={1}>{icon}</Box> <Box> {label} </Box>
+          </Flex>
+        </Text>
         {info &&
           <Text fontSize={28} textAlign='center'>
             {info}

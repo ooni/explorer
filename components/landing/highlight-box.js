@@ -1,8 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import NLink from 'next/link'
-import { Flex, Box, Text, Link } from 'ooni-components'
+import { Flex, Box, Link, theme } from 'ooni-components'
+import { Text } from 'rebass'
 import styled from 'styled-components'
+import Markdown from 'markdown-to-jsx'
 
 import Flag from '../flag'
 
@@ -20,47 +22,76 @@ const LinkButton = styled(Box)`
   }
 `
 
+const StyledFlex = styled(Flex)`
+  min-height: 350px;
+`
+
+const FlexGrowBox = styled(Box)`
+  flex-grow: ${props => props.grow || 1};
+`
+
 const HighlightBox = ({
   countryCode,
   countryName,
   title,
   text,
   report,
-  explore
+  explore,
+  tileColor = 'black'
 }) => (
-  <Box p={2} my={3} width={[1, 1/2]}>
-    <Flex flexWrap='wrap' alignItems='center' my={1}>
-      <Flag countryCode={countryCode} size={24} />
-      <Text fontSize={18} fontWeight='bold' mx={1}>{countryName}</Text>
-    </Flex>
-    <Flex flexWrap='wrap' my={1} alignItems='center'>
-      {title && <Box mr={2} width={[1, 'unset']} order={[1, 'unset']}>
-        <Text fontSize={18}>{title}</Text>
-      </Box>}
-      <Box order={[3, 'unset']} my={1}>
-        <LinkButton bg='blue5' hover='blue4' active='blue6' color='white' px={2} py={1}>
-          <NLink href={explore} passHref><Link>Explore</Link></NLink>
-        </LinkButton>
-      </Box>
-      <Box ml={2} order={[4, 'unset']}>
-        <LinkButton bg='green8' hover='green7' active='green9' color='white' px={2} py={1}>
-          <Link href={report}> Report </Link>
-        </LinkButton>
-      </Box>
-      <Box width={1} order={[2, 'unset']} mt={1}>
-        <Text fontSize={16} color='gray6'>{text}</Text>
-      </Box>
-    </Flex>
+  <Box width={[1, 1/3]}>
+    <StyledFlex flexDirection='column' p={4} mx={[0, 3]} my={3} bg={tileColor} color='white'>
+      <Flex flexWrap='wrap' alignItems='center' my={3}>
+        <Flag countryCode={countryCode} size={40} border />
+        <Text fontSize={24} fontWeight='bold' mx={3}>{countryName}</Text>
+      </Flex>
+      <FlexGrowBox flexWrap='wrap' my={1}>
+        {title && <Box my={2}>
+          <Text fontSize={24} fontWeight='bold'>{title}</Text>
+        </Box>}
+        <Box mb={3}>
+          <Text fontSize={20}>
+            <Markdown
+              options={{
+                overrides: {
+                  a: {
+                    component: Link,
+                    props: {
+                      color: theme.colors.blue3
+                    }
+                  },
+                }
+              }}
+            >
+              {text}
+            </Markdown>
+          </Text>
+        </Box>
+      </FlexGrowBox>
+      <Flex>
+        {explore && <Box my={2} width={1/2}>
+          <Text fontSize={20}>
+            <NLink href={explore} passHref><Link color='white'>Explore</Link></NLink>
+          </Text>
+        </Box>}
+        {report && <Box my={2} width={1/2}>
+          <Text fontSize={20}>
+            <Link href={report} color='white'> Read Report </Link>
+          </Text>
+        </Box>}
+      </Flex>
+    </StyledFlex>
   </Box>
 )
 
 HighlightBox.propTypes = {
   countryCode: PropTypes.string.isRequired,
   countryName: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   text: PropTypes.string.isRequired,
-  report: PropTypes.string.isRequired,
-  explore: PropTypes.string.isRequired
+  report: PropTypes.string,
+  explore: PropTypes.string,
+  tileColor: PropTypes.string
 }
 
 export default HighlightBox

@@ -50,13 +50,14 @@ class FilterSidebar extends React.Component {
     this.state = {
       inputFilter: props.inputFilter || '',
       onlyFilter: props.onlyFilter || 'all',
-      testNameFilter: props.testNameFilter || '',
+      testNameFilter: props.testNameFilter || 'XX',
       countryFilter: props.countryFilter || '',
       asnFilter: props.asnFilter || '',
       sinceFilter: props.sinceFilter || '',
       untilFilter: props.untilFilter || '',
       showSinceCalendar: true,
       showUntilCalendar: false,
+      isFilterDirty: false
     }
     this.onChangeFilter = this.onChangeFilter.bind(this)
     this.onDateChangeFilter = this.onDateChangeFilter.bind(this)
@@ -67,19 +68,28 @@ class FilterSidebar extends React.Component {
 
   onChangeFilter (filterName) {
     return ((e) => {
-      this.setState({[filterName]: e.target.value})
+      this.setState({
+        [filterName]: e.target.value,
+        isFilterDirty: true
+      })
     }).bind(this)
   }
 
   onDateChangeFilter (filterName) {
     return ((date) => {
-      this.setState({[filterName]: (date !== '') ? date.utc().format('YYYY-MM-DD') : date})
+      this.setState({
+        [filterName]: (date !== '') ? date.utc().format('YYYY-MM-DD') : date,
+        isFilterDirty: true
+      })
     })
   }
 
   onRadioChangeFilter (filterName) {
     return ((value) => {
-      this.setState({[filterName]: value})
+      this.setState({
+        [filterName]: value,
+        isFilterDirty: true
+      })
     })
   }
 
@@ -109,7 +119,10 @@ class FilterSidebar extends React.Component {
       countryFilter: this.state.countryFilter,
       asnFilter: this.state.asnFilter,
       sinceFilter: this.state.sinceFilter,
-      untilFilter: this.state.untilFilter,
+      untilFilter: this.state.untilFilter
+    })
+    this.setState({
+      isFilterDirty: false
     })
   }
 
@@ -127,7 +140,8 @@ class FilterSidebar extends React.Component {
       countryFilter,
       asnFilter,
       sinceFilter,
-      untilFilter
+      untilFilter,
+      isFilterDirty
     } = this.state
 
     //Insert an 'Any' option to test name filter
@@ -137,16 +151,42 @@ class FilterSidebar extends React.Component {
     const countryOptions = [...countries]
     countryOptions.unshift({name: intl.formatMessage({id: 'Search.Sidebar.Country.AllCountries'}), alpha_2: 'XX'})
 
+    // Show `Input` text field only for tests that support it
+    const testsWithValidInput = [
+      'XX', // We show the field by default (state initialized to 'XX')
+      'web_connectivity',
+      'http_requests',
+      'dns_consistency',
+      'tcp_connect'
+    ]
+    const showInput = testsWithValidInput.indexOf(testNameFilter) > -1
+
     return (
       <StyledFilterSidebar>
-        <InputWithLabel
-          label={intl.formatMessage({id: 'Search.Sidebar.Input'})}
-          name="inputFilter"
-          value={inputFilter}
-          onChange={this.onChangeFilter('inputFilter')}
-          placeholder={intl.formatMessage({id: 'Search.Sidebar.Input.Placeholder'})}
-          type="text"
-        />
+        <SelectWithLabel
+          pt={2}
+          label={intl.formatMessage({id: 'Search.Sidebar.TestName'})}
+          value={testNameFilter}
+          onChange={this.onChangeFilter('testNameFilter')}>
+          {testNameOptions.map((v, idx) => {
+            return (
+              <option key={idx} value={v.id}>{v.name}</option>
+            )
+          })}
+        </SelectWithLabel>
+
+        {
+          showInput &&
+          <InputWithLabel
+            label={intl.formatMessage({id: 'Search.Sidebar.Input'})}
+            name="inputFilter"
+            value={inputFilter}
+            onChange={this.onChangeFilter('inputFilter')}
+            placeholder={intl.formatMessage({id: 'Search.Sidebar.Input.Placeholder'})}
+            type="text"
+          />
+        }
+
         <StyledLabel>
           {intl.formatMessage({id: 'Search.Sidebar.Status'})}
         </StyledLabel>
@@ -168,17 +208,6 @@ class FilterSidebar extends React.Component {
             value='anomalies'
           />
         </RadioGroup>
-        <SelectWithLabel
-          pt={2}
-          label={intl.formatMessage({id: 'Search.Sidebar.TestName'})}
-          value={testNameFilter}
-          onChange={this.onChangeFilter('testNameFilter')}>
-          {testNameOptions.map((v, idx) => {
-            return (
-              <option key={idx} value={v.id}>{v.name}</option>
-            )
-          })}
-        </SelectWithLabel>
 
         <SelectWithLabel
           pt={2}
@@ -225,9 +254,11 @@ class FilterSidebar extends React.Component {
             />
           </Box>
         </Flex>
+
         <Button
           mt={3}
           onClick={this.onClickApplyFilter}
+          disabled={!isFilterDirty}
         >
           {intl.formatMessage({id: 'Search.Sidebar.Button.FilterResults'})}
         </Button>

@@ -3017,6 +3017,14 @@ fs.realpath@^1.0.0:
   resolved "https://registry.yarnpkg.com/fs.realpath/-/fs.realpath-1.0.0.tgz#1504ad2523158caa40db4a2787cb01411994ea4f"
   integrity sha1-FQStJSMVjKpA20onh8sBQRmU6k8=
 
+fsevents@1.2.9, fsevents@^1.2.7:
+  version "1.2.9"
+  resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-1.2.9.tgz#3f5ed66583ccd6f400b5a00db6f7e861363e388f"
+  integrity sha512-oeyj2H3EjjonWcFjD5NvZNE9Rqe4UW+nQBU2HNeKw0koVLEFIhtyETyAakeAM3de7Z/SW5kcA+fZUait9EApnw==
+  dependencies:
+    nan "^2.12.1"
+    node-pre-gyp "^0.12.0"
+
 fsevents@^1.2.2:
   version "1.2.4"
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-1.2.4.tgz#f41dcb1af2582af3692da36fc55cbd8e1041c426"
@@ -3024,14 +3032,6 @@ fsevents@^1.2.2:
   dependencies:
     nan "^2.9.2"
     node-pre-gyp "^0.10.0"
-
-fsevents@^1.2.7:
-  version "1.2.9"
-  resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-1.2.9.tgz#3f5ed66583ccd6f400b5a00db6f7e861363e388f"
-  integrity sha512-oeyj2H3EjjonWcFjD5NvZNE9Rqe4UW+nQBU2HNeKw0koVLEFIhtyETyAakeAM3de7Z/SW5kcA+fZUait9EApnw==
-  dependencies:
-    nan "^2.12.1"
-    node-pre-gyp "^0.12.0"
 
 function-bind@^1.1.1:
   version "1.1.1"
@@ -4566,10 +4566,10 @@ onetime@^2.0.0:
   dependencies:
     mimic-fn "^1.0.0"
 
-ooni-components@^0.2.5:
-  version "0.2.5"
-  resolved "https://registry.yarnpkg.com/ooni-components/-/ooni-components-0.2.5.tgz#b31c57ec2db83b289f546c5215c93a048ac2bdcd"
-  integrity sha512-hUoAlDKN5ob1tYKuNhGYKmObvws6myoXeViuT6f17UI3d/0QC/QFO/MQo/MpbpmAplmanjKbwM/aSgxLNMmYjg==
+ooni-components@0.2.8:
+  version "0.2.8"
+  resolved "https://registry.yarnpkg.com/ooni-components/-/ooni-components-0.2.8.tgz#d302c248ca0dcbf5cb5b22c470f3eedc5fbd4cf0"
+  integrity sha512-iMdLNwmXrG2RgxHHaLhW0PY6pUIXeZwcRU+Mv1EvavLyicFqfk5kFLAiuLDa6lcPI/yOOLnfPZuMNOU+MaudQg==
   dependencies:
     "@rebass/grid" "^6.0.0-3"
     palx "^1.0.2"
@@ -4582,6 +4582,8 @@ ooni-components@^0.2.5:
     styled-components "^3.4.9"
     styled-system "^3.1.3"
     victory "^0.22.1"
+  optionalDependencies:
+    fsevents "1.2.9"
 
 optionator@^0.8.2:
   version "0.8.2"
