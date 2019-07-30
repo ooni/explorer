@@ -1,8 +1,14 @@
 /* global require */
 const MLAB_SERVERS = require('./mlab_servers.json')
+import countryUtil from 'country-util'
 
-export const mlabServerToCountry = (serverAddress) => {
-  return MLAB_SERVERS[serverAddress.split('.')[3]] || 'ZZ'
+export const mlabServerDetails = (serverAddress) => {
+  const serverNode = serverAddress.split('.')[3]
+  const server = MLAB_SERVERS.find((node) => node.site === serverNode)
+  if (server) {
+    server.countryName = countryUtil.territoryNames[server.country]
+  }
+  return server || null
 }
 
 export const mlabServerToName = (serverAddress) => {
