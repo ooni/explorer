@@ -6,7 +6,6 @@ import {
   VictoryBar,
   VictoryStack,
   VictoryAxis,
-  VictoryTheme,
   VictoryLine,
   VictoryVoronoiContainer
 } from 'victory'
@@ -101,7 +100,6 @@ class TestsByGroup extends React.PureComponent {
       }
     })
 
-    const selectedTestGroups = Object.keys(this.state).filter(testGroup => this.state[testGroup])
     const networkCoverageTick = (t) => Math.round(t * networkCoverageMaxima)
     const ntIncrement = Math.round(networkCoverageMaxima/4)
     const networkCoverageTickValues = [1,2,3,4].map(i => i * ntIncrement / networkCoverageMaxima)
