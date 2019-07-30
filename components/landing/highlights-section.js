@@ -7,17 +7,22 @@ import HighlightBox from './highlight-box'
 
 const HighlightSection = ({
   title,
-  highlights
-}) => (
-  <Flex flexWrap='wrap' alignItems='flex-start' my={5}>
-    <Box p={2} width={[1, 2/12]}>
-      <Text fontSize={20} fontWeight={500} textAlign={['center', 'left']}>
-        {title}
-      </Text>
-    </Box>
-    <Box width={[1, 10/12]}>
-      {/* HighlightBoxes */}
+  highlights,
+  description
+}) => {
+  return (
+    <section>
+      <Box mt={4} mb={3}>
+        <Text fontSize={24} fontWeight='bold' color='blue9' textAlign={['center', 'left']}>
+          {title}
+        </Text>
+      </Box>
+      {/* Optional Description */}
+      {description && <Box mt={4} mb={3}>
+        <Text fontSize={20}>{description}</Text>
+      </Box>}
       <Flex flexWrap='wrap'>
+        {/* HighlightBoxes */}
         {
           highlights.map((item, index) => (
             <HighlightBox
@@ -27,12 +32,13 @@ const HighlightSection = ({
           ))
         }
       </Flex>
-    </Box>
-  </Flex>
-)
+    </section>
+  )
+}
 
 HighlightSection.propTypes = {
   title: PropTypes.string.isRequired,
+  description: PropTypes.string,
   highlights: PropTypes.arrayOf(PropTypes.shape({
     countryCode: PropTypes.string.isRequired,
     countryName: PropTypes.string.isRequired,
