@@ -19,7 +19,8 @@ const pageColors = {
   default: theme.colors.base,
   anomaly: theme.colors.yellow9,
   reachable: theme.colors.green8,
-  error: theme.colors.yellow5,
+  error: theme.colors.gray6,
+  down: theme.colors.gray6,
   confirmed: theme.colors.red7
 }
 
