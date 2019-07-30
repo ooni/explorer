@@ -6,12 +6,12 @@ import {
   VictoryBar,
   VictoryStack,
   VictoryAxis,
-  VictoryTheme,
   VictoryLine,
   VictoryVoronoiContainer
 } from 'victory'
 
 import Tooltip from './tooltip'
+import VictoryTheme from '../VictoryTheme'
 import { testGroups } from '../test-info'
 
 const Circle = styled.span`
@@ -124,10 +124,9 @@ class TestsByGroup extends React.PureComponent {
           <Box width={1}>
             <VictoryChart
               domainPadding={20}
-              theme={VictoryTheme.material}
+              theme={VictoryTheme}
               containerComponent={
                 <VictoryVoronoiContainer
-                  responsive={true}
                   voronoiDimension='x'
                 />
               }
@@ -154,7 +153,7 @@ class TestsByGroup extends React.PureComponent {
                         })
                         return s
                       }
-                      maybeLabels['labelComponent'] = <Tooltip />
+                      maybeLabels['labelComponent'] = <Tooltip dy={-1} orientation='right' />
                     }
                     return (
                       <VictoryBar
@@ -188,7 +187,7 @@ class TestsByGroup extends React.PureComponent {
                 y={(d) => d.count / networkCoverageMaxima}
                 scale={{x: 'time', y: 'linear'}}
                 labels={(d) => `${new Date(d.test_day).toLocaleDateString()}\n${d.count} networks `}
-                labelComponent={<Tooltip />}
+                labelComponent={<Tooltip dy={-8} orientation='left' />}
                 style={{
                   data: {
                     stroke: theme.colors.gray7,

@@ -1,9 +1,8 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
-import { Flex, Box, Link } from 'ooni-components'
+import { Flex, Box, Link, theme } from 'ooni-components'
 import styled from 'styled-components'
-import MdArrowDropDownCircle from 'react-icons/lib/md/arrow-drop-down-circle'
 import {
   NettestWhatsApp,
   NettestTelegram,
@@ -13,6 +12,8 @@ import moment from 'moment'
 
 import { testNames } from '../test-info'
 import AppsStatChart from './apps-stats-chart'
+import { CountryContext } from './country-context'
+import { CollapseTrigger } from '../CollapseTrigger'
 
 const NETWORK_STATS_PER_PAGE = 4
 
@@ -33,18 +34,44 @@ const StyledRow = styled(Box)`
   border: 1px solid ${props => props.theme.colors.gray3};
 `
 
-const NetworkRow = ({ asn, app }) => (
-  <Box width={1}>
-    <Flex alignItems='center'>
-      <Box width={1/3} pl={4}>
-        <strong>AS{ asn }</strong>
-      </Box>
-      <Box width={2/3}>
-        <AppsStatChart asn={asn} app={app} />
-      </Box>
-    </Flex>
-  </Box>
-)
+const NetworkRow = ({ asn, app }) => {
+  const { countryCode } = useContext(CountryContext)
+  const today = moment().format('YYYY-MM-DD')
+  const since = moment().subtract(30, 'days').format('YYYY-MM-DD')
+
+  const linkToMeasurements = `/search?probe_cc=${countryCode}&probe_asn=AS${asn}&test_name=${app}&since=${since}&until=${today}`
+
+  return (
+    <Box width={1}>
+      <Flex
+        my={3}
+        flexWrap='wrap'
+        flexDirection={['column', 'row']}
+        alignItems={['flex-start', 'center']}
+      >
+        <Box width={[1, 1/3]}>
+          <Flex flexWrap='wrap' flexDirection={['column']}>
+            <Box>
+              <strong>
+                AS{ asn }
+              </strong>
+            </Box>
+            <Box>
+              <Link
+                href={linkToMeasurements}
+              >
+                <FormattedMessage id='Country.Websites.URLCharts.ExploreMoreMeasurements' />
+              </Link>
+            </Box>
+          </Flex>
+        </Box>
+        <Box width={[1, 2/3]} my={1}>
+          <AppsStatChart asn={asn} app={app} />
+        </Box>
+      </Flex>
+    </Box>
+  )
+}
 
 class AppsStatRow extends React.Component {
   constructor(props) {
@@ -120,22 +147,29 @@ class AppsStatRow extends React.Component {
     const { app, data } = this.props
     const { minimized } = this.state
     return (
-      <StyledRow px={2} py={3}>
+      <StyledRow p={3}>
         <Flex flexWrap='wrap' alignItems='center'>
-          <Box width={4/12}>
+          <Box mr={3}>
             <AppIcon app={app} size={36} />
+          </Box>
+          <Box width={4/12}>
             {testNames[app].name}
           </Box>
-          <Box width={4/12}>
-            {`${data.anomaly_networks.length} / ${data.anomaly_networks.length + data.ok_networks.length} Networks`}
+          <Box ml='auto' width={4/12}>
+            {`${data.anomaly_networks.length + data.ok_networks.length} Networks Tested`}
           </Box>
-          <Box width={3/12}>
+          <Box ml='auto'>
             <FormattedMessage id='Country.Apps.Label.LastTested' />
             {' '}
             <strong>{moment(data.last_tested).fromNow()}</strong>
           </Box>
-          <Box width={1/12}>
-            <MdArrowDropDownCircle size={19} onClick={this.toggleMinimize} />
+          <Box ml={4}>
+            <CollapseTrigger
+              size={36}
+              bg={theme.colors.gray3}
+              isOpen={!minimized}
+              onClick={this.toggleMinimize}
+            />
           </Box>
         </Flex>
         {!minimized && this.renderCharts()}
