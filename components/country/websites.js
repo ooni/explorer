@@ -36,7 +36,7 @@ class WebsitesSection extends React.Component {
     })
     this.setState({
       networks: result.data.results,
-      selectedNetwork: result.data.results[0].probe_asn
+      selectedNetwork: Number(result.data.results[0].probe_asn)
     })
   }
 
