@@ -234,6 +234,11 @@ export default class LandingPage extends React.Component {
           </FeatureRow>
           {/* Measurement Statistics */}
           <Container mb={5}>
+            <Flex justifyContent='center' my={3}>
+              <Heading h={2} color='blue7'>
+                <FormattedMessage id={'Home.MonthlyStats.Title'} />
+              </Heading>
+            </Flex>
             <CoverageChart />
           </Container>
           {/* Highlights */}

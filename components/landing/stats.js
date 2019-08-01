@@ -82,11 +82,6 @@ class CoverageChart extends React.Component {
 
     return (
       <React.Fragment>
-        <Flex justifyContent='center' my={3}>
-          <Heading h={2} color='blue7'>
-            <FormattedMessage id={'Home.MonthlyStats.Title'} />
-          </Heading>
-        </Flex>
         <Flex justifyContent='center'>
           <Text fontSize={18}>
             <FormattedMarkdown id={'Home.MonthlyStats.SummaryText'}
