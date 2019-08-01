@@ -93,7 +93,7 @@ const CommonDetails = ({
         />
       </Flex>
       {/* Raw Measurement */}
-      <Box>
+      <Flex>
         <DetailsBox
           collapsed={true}
           title={
@@ -120,7 +120,7 @@ const CommonDetails = ({
             </Flex>
           }
         />
-      </Box>
+      </Flex>
     </React.Fragment>
   )
 }
