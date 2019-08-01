@@ -95,7 +95,7 @@ const CommonDetails = ({
       {/* Raw Measurement */}
       <Flex>
         <DetailsBox
-          collapsed={false}
+          collapsed={true}
           title={
             <Flex px={3} alignItems='center' bg={theme.colors.gray2}>
               <Box>
