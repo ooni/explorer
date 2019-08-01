@@ -100,7 +100,7 @@ class TestsByCategoryInNetwork extends React.Component {
         {/* Category Selection */}
         <Flex justifyContent='space-between' alignItems='center'>
           <Box>
-            <ASNSelector networks={networks} onNetworkChange={onNetworkChange} />
+            <ASNSelector selectedNetwork={network} networks={networks} onNetworkChange={onNetworkChange} />
           </Box>
           <Box my={3}>
             <strong>{testedUrlsCount}</strong> <FormattedMessage id='Country.Websites.TestedWebsitesCount' />
