@@ -1,7 +1,7 @@
 import React from 'react'
 import Head from 'next/head'
 import { withRouter } from 'next/router'
-
+import moment from 'moment'
 import axios from 'axios'
 
 import {
@@ -93,6 +93,15 @@ class Search extends React.Component {
   static async getInitialProps ({ query }) {
     let msmtR, testNamesR, countriesR
     let client = axios.create({baseURL: process.env.MEASUREMENTS_URL})  // eslint-disable-line
+
+    // By default, on '/search' show measurements published until today
+    // This prevents the search page from showing time-travelling future
+    // measurements from showing up
+    const today = moment().format('YYYY-MM-DD')
+    if (!query.until) {
+      query.until = today
+    }
+
     try {
       [msmtR, testNamesR, countriesR] = await Promise.all([
         getMeasurements(query),
