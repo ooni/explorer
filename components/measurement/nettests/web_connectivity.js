@@ -309,7 +309,7 @@ const WebConnectivityDetails = ({
   // } else
   if(isConfirmed) {
     status = 'confirmed'
-    reason = reasons[blocking]
+    reason = blocking && intl.formatMessage(messages[`blockingReason.${blocking}`])
     summaryText = (
       <FormattedMessage
         id='Measurement.SummaryText.Websites.ConfirmedBlocked'
