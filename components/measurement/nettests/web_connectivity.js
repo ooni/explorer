@@ -95,7 +95,7 @@ export const checkAnomaly = ( testKeys ) => {
 
 const StatusInfo = ({ url, message}) => (
   <Flex flexDirection='column'>
-    <Box>
+    <Box mb={3}>
       <Text textAlign='center' fontSize={28}> {url} </Text>
     </Box>
     <Box>
