@@ -367,7 +367,7 @@ const WebConnectivityDetails = ({
     )
   } else if (isAnomaly) {
     status = 'anomaly'
-    reason = reasons[blocking]
+    reason = intl.formatMessage(messages[`blockingReason.${blocking}`])
     summaryText = (
       <FormattedMessage
         id='Measurement.SummaryText.Websites.Anomaly'
@@ -439,7 +439,7 @@ const WebConnectivityDetails = ({
     <React.Fragment>
       {render({
         status: status,
-        statusInfo: <StatusInfo url={input} />,
+        statusInfo: <StatusInfo url={input} message={reason || null} />,
         summaryText: summaryText,
         details: (
           <React.Fragment>
