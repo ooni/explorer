@@ -93,6 +93,13 @@ const DashDetails = ({ measurement, render, intl }) => {
   const testKeys = measurement.test_keys
   // const isFailed = testKeys.failure !== null
   // const failure = testKeys.failure
+
+  if (typeof testKeys.simple === 'undefined' || typeof testKeys.receiver_data === 'undefined') {
+    return render({
+      status: 'error'
+    })
+  }
+
   const optimalVideoRate = getOptimalQualityForBitrate(testKeys).type
   const medianBitrate = (testKeys.simple.median_bitrate / 1000).toFixed(2)
   const playoutDelay = (testKeys.simple.min_playout_delay).toFixed(2)
