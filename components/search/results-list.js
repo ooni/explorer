@@ -42,13 +42,7 @@ const ResultTagHollow = styled(StyledResultTag)`
 `
 
 const testsWithStates = [
-  'web_connectivity',
-  'http_requests',
-  'whatsapp',
-  'facebook_messenger',
-  'telegram',
-  'http_header_field_manipulation',
-  'http_invalid_request_line'
+  'web_connectivity'
 ]
 
 const messages = defineMessages({
