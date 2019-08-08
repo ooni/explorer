@@ -22,7 +22,7 @@ class WebsitesSection extends React.Component {
 
   onNetworkChange(asn) {
     this.setState({
-      selectedNetwork: asn
+      selectedNetwork: Number(asn)
     })
   }
 
