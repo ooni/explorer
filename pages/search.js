@@ -163,6 +163,11 @@ class Search extends React.Component {
   }
 
   componentDidMount () {
+    const { query, replace } = this.props.router
+    replace({
+      pathname: '/search',
+      query
+    })
     this.setState({
       loading: false
     })
