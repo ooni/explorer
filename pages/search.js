@@ -239,7 +239,7 @@ class Search extends React.Component {
       ['untilFilter', 'until'],
       ['onlyFilter', 'only']
     ]
-    let query = {...this.props.url.query}
+    let query = {...this.props.router.query}
     mappings.forEach((m) => {
       if (!this.state[m[0]] || this.state[m[0]] === 'XX') {
         // If it's unset or marked as XX, let's be sure the path is clean
