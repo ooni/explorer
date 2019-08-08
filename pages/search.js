@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Head from 'next/head'
 import { withRouter } from 'next/router'
 import moment from 'moment'
@@ -65,7 +66,7 @@ const formatError = (error) => {
   return errorString
 }
 
-const ErrorBox = ({error}) => {
+const ErrorBox = ({ error }) => {
   if (!error) {
     return <div></div>
   }
@@ -76,6 +77,10 @@ const ErrorBox = ({error}) => {
       <p>{formatError(error)}</p>
     </div>
   )
+}
+
+ErrorBox.propTypes = {
+  error: PropTypes.object.isRequired
 }
 
 const NoResults = () => (
@@ -322,6 +327,16 @@ class Search extends React.Component {
       </Layout>
     )
   }
+}
+
+Search.propTypes = {
+  router: PropTypes.object,
+  results: PropTypes.array,
+  testNamesKeyed: PropTypes.object,
+  testNames: PropTypes.array,
+  countries: PropTypes.array,
+  nextURL: PropTypes.string,
+  error: PropTypes.object
 }
 
 export default withRouter(Search)
