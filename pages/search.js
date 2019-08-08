@@ -158,8 +158,6 @@ class Search extends React.Component {
     this.getFilterQuery = this.getFilterQuery.bind(this)
     this.onApplyFilter = this.onApplyFilter.bind(this)
     this.loadMore = this.loadMore.bind(this)
-
-    this.onChangeOnly = this.onChangeOnly.bind(this)
   }
 
   componentDidMount () {
@@ -228,34 +226,6 @@ class Search extends React.Component {
             })
           })
       })
-    })
-  }
-
-  onChangeOnly (value) {
-    this.setState({
-      onlyFilter: value
-    })
-    this.setState({
-      loading: true
-    })
-    const query = {...this.props.url.query, only: value}
-    this.props.router.push({
-      pathname: '/search',
-      query
-    }).then(() => {
-      getMeasurements(query)
-        .then((res) => {
-          this.setState({
-            loading: false,
-            results: res.data.results,
-            nextURL: res.data.metadata.next_url
-          })
-        })
-        .catch((err) => {
-          this.setState({
-            error: err
-          })
-        })
     })
   }
 
