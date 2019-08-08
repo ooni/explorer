@@ -1,17 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
 import url from 'url'
 import moment from 'moment'
-
 import NLink from 'next/link'
 import styled from 'styled-components'
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
 import {
   Flex, Box,
   Link,
-  Text,
-  Divider
+  Text
 } from 'ooni-components'
 
 import {
@@ -20,7 +17,6 @@ import {
   colorConfirmed,
   colorAnomaly
 } from '../colors'
-
 import Flag from '../flag'
 
 const StyledResultTag = styled.div`
@@ -207,6 +203,7 @@ const ViewDetailsLink = ({reportId, input, children}) => {
 ViewDetailsLink.propTypes = {
   reportId: PropTypes.string,
   input: PropTypes.string,
+  children: PropTypes.element.isRequired
 }
 
 const StyledColorCode = styled.div`
@@ -357,6 +354,11 @@ const LegendItem = ({color, children}) => {
   return <StyledLegendItem>
     <LegendColorBox color={color}/> {children}
   </StyledLegendItem>
+}
+
+LegendItem.propTypes = {
+  color: PropTypes.string,
+  children: PropTypes.element
 }
 
 const LegendContainer = styled(Box)`
