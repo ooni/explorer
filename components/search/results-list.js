@@ -336,38 +336,6 @@ ResultItem.propTypes = {
   msmt: PropTypes.object
 }
 
-const LegendColorBox = styled.div`
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: ${props => props.color};
-  float: left;
-  margin-right: 10px;
-`
-
-const StyledLegendItem = styled.div`
-  float: left;
-  margin-right: 20px;
-`
-
-const LegendItem = ({color, children}) => {
-  return <StyledLegendItem>
-    <LegendColorBox color={color}/> {children}
-  </StyledLegendItem>
-}
-
-LegendItem.propTypes = {
-  color: PropTypes.string,
-  children: PropTypes.element
-}
-
-const LegendContainer = styled(Box)`
-  padding-top: 20px;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 10px;
-`
-
 const ResultContainer = styled(Box)`
   border: 1px solid ${props => props.theme.colors.gray4};
   border-radius: 5px;
@@ -377,22 +345,6 @@ const ResultContainer = styled(Box)`
 const ResultsList = ({results, testNamesKeyed}) => {
   return (
     <Flex flexWrap='wrap'>
-      <LegendContainer>
-        <LegendItem color={colorNormal}>
-          <FormattedMessage id='Search.Bullet.Reachable' />
-        </LegendItem>
-        <LegendItem color={colorAnomaly}>
-          <FormattedMessage id='Search.Bullet.Anomaly' />
-        </LegendItem>
-        <LegendItem color={colorConfirmed}>
-          <FormattedMessage id='Search.Bullet.Blocked' />
-        </LegendItem>
-        {/*
-        <LegendItem color={colorError}>
-          <FormattedMessage id='Search.Bullet.Error' />
-        </LegendItem>
-        */}
-      </LegendContainer>
       <ResultContainer my={4} width={1}>
         {results.map((msmt, idx) => {
           msmt.testName = testNamesKeyed[msmt.test_name]
