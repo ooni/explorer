@@ -327,7 +327,7 @@ const ResultItem = ({msmt}) => {
               <Flex justifyContent='space-between' alignItems='center'>
                 <Box>
                   {input &&
-                    <ResultInput>
+                    <ResultInput title={msmt.input}>
                       {input}
                     </ResultInput>}
                 </Box>
