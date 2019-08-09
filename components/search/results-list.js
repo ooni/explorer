@@ -266,9 +266,7 @@ const ResultRow = styled(Flex)`
   border-bottom: 1px solid ${props => props.theme.colors.gray4};
   cursor: pointer;
 `
-const HTTPSPrefix = styled.span`
-  color: ${props => props.theme.colors.green8};
-`
+
 const Hostname = styled.span`
   color: ${props => props.theme.colors.black};
 `
@@ -282,15 +280,20 @@ const ResultItem = ({msmt}) => {
   let input = msmt.input
   if (input) {
     const p = url.parse(input)
+
+    // Truncate the path part of the URL to ${pathMaxLen}
     let path = p.path
     if (path && path.length > pathMaxLen) {
       path = `${path.substr(0, pathMaxLen)}…`
     }
-    if (p.protocol && p.protocol === 'http:') {
-      input = <span><Hostname>{p.host}</Hostname>{path}</span>
-    } else if (p.protocol && p.protocol === 'https:') {
-      input = <span><HTTPSPrefix>https</HTTPSPrefix>{'://'}<Hostname>{p.host}</Hostname>{path}</span>
+
+    // Truncate the domain to ${domainMaxLen}
+    const domainMaxLen = 25
+    if (p.host && p.host.length > domainMaxLen) {
+      p.host = `${p.host.substr(0, domainMaxLen)}…`
     }
+
+    input = <span><Hostname>{`${p.protocol}//${p.host}`}</Hostname>{path}</span>
   }
   return (
     <ViewDetailsLink reportId={msmt.report_id} input={msmt.input}>
