@@ -319,7 +319,7 @@ const ResultItem = ({msmt}) => {
                       {input}
                     </ResultInput>}
                 </Box>
-                <Box>
+                <Box mr={3}>
                   <ResultTag msmt={msmt} />
                 </Box>
               </Flex>
