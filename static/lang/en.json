@@ -369,5 +369,10 @@
   "Home.Highlights.Description": "OONI Explorer hosts millions of network measurements collected from more than 200 countries since 2012. Every day, OONI Explorer is updated with new measurements!\n\nWe share some highlights through OONI data.",
   "Countries.Heading.JumpToContinent": "Jump to continent",
   "Countries.Search.NoCountriesFound": "No countries found with '{searchTerm}'",
-  "Countries.Search.Placeholder": "Search for countries"
+  "Countries.Search.Placeholder": "Search for countries",
+  "Error.404.GoBack": "Go back",
+  "Error.404.Heading": "The requested page does not exist",
+  "Error.404.Message": "We could not find the content you were looking for. Maybe try {measurmentLink} or look at {homePageLink}.",
+  "Error.404.MeasurmentLinkText": "exploring some measurement",
+  "Error.404.HomepageLinkText": "the homepage"
 }
