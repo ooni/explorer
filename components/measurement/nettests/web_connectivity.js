@@ -49,53 +49,9 @@ const messages = defineMessages({
   },
 })
 
-export const checkAnomaly = ( testKeys ) => {
-  const {
-    accessible,
-    blocking,
-  } = testKeys
-
-  let anomaly = null
-  let hint = <FormattedMessage id='Measurement.Status.Hint.Websites.NoCensorship' />
-
-  if ((accessible === true || accessible === null) && blocking === null) {
-    hint = <FormattedMessage id='Measurement.Status.Hint.Websites.Error' />
-    if (accessible === true) {
-      anomaly = 'SITEUP'
-    } else if (accessible === null) {
-      anomaly = 'UNKNOWN'
-    }
-  } else if (accessible === false && (blocking === false || blocking === null)) {
-    anomaly = 'SITEDOWN'
-    hint = <FormattedMessage id='Measurement.Status.Hint.Websites.Unavailable' />
-  } else if (blocking !== null && blocking !== false) {
-    anomaly = 'CENSORSHIP'
-    hint = <FormattedMessage id='Measurement.Status.Hint.Websites.Censorship' />
-    // Further identify type of censorship
-    if (blocking === 'dns') {
-      anomaly = 'DNS'
-      hint = <FormattedMessage id='Measurement.Status.Hint.Websites.DNS' />
-    } else if (blocking === 'http-diff') {
-      anomaly = 'HTTPDIFF'
-      hint = <FormattedMessage id='Measurement.Status.Hint.Websites.HTTPdiff' />
-    } else if (blocking === 'http-failure') {
-      anomaly = 'HTTPFAILURE'
-      hint = <FormattedMessage id='Measurement.Status.Hint.Websites.HTTPfail' />
-    } else if (blocking === 'tcp-ip') {
-      anomaly = 'TCPIP'
-      hint = <FormattedMessage id='Measurement.Status.Hint.Websites.TCPBlock' />
-    }
-  }
-
-  return {
-    status: anomaly,
-    hint
-  }
-}
-
 const StatusInfo = ({ url, message}) => (
   <Flex flexDirection='column'>
-    <Box>
+    <Box mb={3}>
       <Text textAlign='center' fontSize={28}> {url} </Text>
     </Box>
     <Box>
@@ -353,7 +309,7 @@ const WebConnectivityDetails = ({
   // } else
   if(isConfirmed) {
     status = 'confirmed'
-    reason = reasons[blocking]
+    reason = blocking && intl.formatMessage(messages[`blockingReason.${blocking}`])
     summaryText = (
       <FormattedMessage
         id='Measurement.SummaryText.Websites.ConfirmedBlocked'
@@ -367,7 +323,7 @@ const WebConnectivityDetails = ({
     )
   } else if (isAnomaly) {
     status = 'anomaly'
-    reason = reasons[blocking]
+    reason = intl.formatMessage(messages[`blockingReason.${blocking}`])
     summaryText = (
       <FormattedMessage
         id='Measurement.SummaryText.Websites.Anomaly'
@@ -439,7 +395,7 @@ const WebConnectivityDetails = ({
     <React.Fragment>
       {render({
         status: status,
-        statusInfo: <StatusInfo url={input} />,
+        statusInfo: <StatusInfo url={input} message={reason || null} />,
         summaryText: summaryText,
         details: (
           <React.Fragment>
