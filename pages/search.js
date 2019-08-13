@@ -1,7 +1,8 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import Head from 'next/head'
 import { withRouter } from 'next/router'
-
+import moment from 'moment'
 import axios from 'axios'
 
 import {
@@ -65,7 +66,7 @@ const formatError = (error) => {
   return errorString
 }
 
-const ErrorBox = ({error}) => {
+const ErrorBox = ({ error }) => {
   if (!error) {
     return <div></div>
   }
@@ -76,6 +77,10 @@ const ErrorBox = ({error}) => {
       <p>{formatError(error)}</p>
     </div>
   )
+}
+
+ErrorBox.propTypes = {
+  error: PropTypes.object.isRequired
 }
 
 const NoResults = () => (
@@ -93,6 +98,15 @@ class Search extends React.Component {
   static async getInitialProps ({ query }) {
     let msmtR, testNamesR, countriesR
     let client = axios.create({baseURL: process.env.MEASUREMENTS_URL})  // eslint-disable-line
+
+    // By default, on '/search' show measurements published until today
+    // This prevents the search page from showing time-travelling future
+    // measurements from showing up
+    const today = moment().format('YYYY-MM-DD')
+    if (!query.until) {
+      query.until = today
+    }
+
     try {
       [msmtR, testNamesR, countriesR] = await Promise.all([
         getMeasurements(query),
@@ -149,11 +163,14 @@ class Search extends React.Component {
     this.getFilterQuery = this.getFilterQuery.bind(this)
     this.onApplyFilter = this.onApplyFilter.bind(this)
     this.loadMore = this.loadMore.bind(this)
-
-    this.onChangeOnly = this.onChangeOnly.bind(this)
   }
 
   componentDidMount () {
+    const { query, replace } = this.props.router
+    replace({
+      pathname: '/search',
+      query
+    })
     this.setState({
       loading: false
     })
@@ -217,34 +234,6 @@ class Search extends React.Component {
     })
   }
 
-  onChangeOnly (value) {
-    this.setState({
-      onlyFilter: value
-    })
-    this.setState({
-      loading: true
-    })
-    const query = {...this.props.url.query, only: value}
-    this.props.router.push({
-      pathname: '/search',
-      query
-    }).then(() => {
-      getMeasurements(query)
-        .then((res) => {
-          this.setState({
-            loading: false,
-            results: res.data.results,
-            nextURL: res.data.metadata.next_url
-          })
-        })
-        .catch((err) => {
-          this.setState({
-            error: err
-          })
-        })
-    })
-  }
-
   getFilterQuery () {
     const mappings = [
       ['inputFilter', 'input'],
@@ -255,7 +244,7 @@ class Search extends React.Component {
       ['untilFilter', 'until'],
       ['onlyFilter', 'only']
     ]
-    let query = {...this.props.url.query}
+    let query = {...this.props.router.query}
     mappings.forEach((m) => {
       if (!this.state[m[0]] || this.state[m[0]] === 'XX') {
         // If it's unset or marked as XX, let's be sure the path is clean
@@ -338,6 +327,16 @@ class Search extends React.Component {
       </Layout>
     )
   }
+}
+
+Search.propTypes = {
+  router: PropTypes.object,
+  results: PropTypes.array,
+  testNamesKeyed: PropTypes.object,
+  testNames: PropTypes.array,
+  countries: PropTypes.array,
+  nextURL: PropTypes.string,
+  error: PropTypes.object
 }
 
 export default withRouter(Search)

@@ -11,6 +11,7 @@ import {
   RadioGroup,
   RadioButton
 } from 'ooni-components'
+import moment from 'moment'
 
 import DatePicker from '../date-picker'
 
@@ -47,6 +48,10 @@ const StyledFilterSidebar = styled.div`
 class FilterSidebar extends React.Component {
   constructor(props) {
     super(props)
+
+    // Display `${today}` as the end date for default search
+    const today = moment().format('YYYY-MM-DD')
+
     this.state = {
       inputFilter: props.inputFilter || '',
       onlyFilter: props.onlyFilter || 'all',
@@ -54,7 +59,7 @@ class FilterSidebar extends React.Component {
       countryFilter: props.countryFilter || '',
       asnFilter: props.asnFilter || '',
       sinceFilter: props.sinceFilter || '',
-      untilFilter: props.untilFilter || '',
+      untilFilter: props.untilFilter || today,
       showSinceCalendar: true,
       showUntilCalendar: false,
       isFilterDirty: false

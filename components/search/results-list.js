@@ -1,17 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-
 import url from 'url'
 import moment from 'moment'
-
 import NLink from 'next/link'
 import styled from 'styled-components'
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
 import {
   Flex, Box,
   Link,
-  Text,
-  Divider
+  Text
 } from 'ooni-components'
 
 import {
@@ -20,7 +17,6 @@ import {
   colorConfirmed,
   colorAnomaly
 } from '../colors'
-
 import Flag from '../flag'
 
 const StyledResultTag = styled.div`
@@ -42,13 +38,7 @@ const ResultTagHollow = styled(StyledResultTag)`
 `
 
 const testsWithStates = [
-  'web_connectivity',
-  'http_requests',
-  'whatsapp',
-  'facebook_messenger',
-  'telegram',
-  'http_header_field_manipulation',
-  'http_invalid_request_line'
+  'web_connectivity'
 ]
 
 const messages = defineMessages({
@@ -213,6 +203,7 @@ const ViewDetailsLink = ({reportId, input, children}) => {
 ViewDetailsLink.propTypes = {
   reportId: PropTypes.string,
   input: PropTypes.string,
+  children: PropTypes.element.isRequired
 }
 
 const StyledColorCode = styled.div`
@@ -266,9 +257,7 @@ const ResultRow = styled(Flex)`
   border-bottom: 1px solid ${props => props.theme.colors.gray4};
   cursor: pointer;
 `
-const HTTPSPrefix = styled.span`
-  color: ${props => props.theme.colors.green8};
-`
+
 const Hostname = styled.span`
   color: ${props => props.theme.colors.black};
 `
@@ -282,15 +271,20 @@ const ResultItem = ({msmt}) => {
   let input = msmt.input
   if (input) {
     const p = url.parse(input)
+
+    // Truncate the path part of the URL to ${pathMaxLen}
     let path = p.path
     if (path && path.length > pathMaxLen) {
       path = `${path.substr(0, pathMaxLen)}…`
     }
-    if (p.protocol && p.protocol === 'http:') {
-      input = <span><Hostname>{p.host}</Hostname>{path}</span>
-    } else if (p.protocol && p.protocol === 'https:') {
-      input = <span><HTTPSPrefix>https</HTTPSPrefix>{'://'}<Hostname>{p.host}</Hostname>{path}</span>
+
+    // Truncate the domain to ${domainMaxLen}
+    const domainMaxLen = 25
+    if (p.host && p.host.length > domainMaxLen) {
+      p.host = `${p.host.substr(0, domainMaxLen)}…`
     }
+
+    input = <span><Hostname>{`${p.protocol}//${p.host}`}</Hostname>{path}</span>
   }
   return (
     <ViewDetailsLink reportId={msmt.report_id} input={msmt.input}>
@@ -324,11 +318,11 @@ const ResultItem = ({msmt}) => {
               <Flex justifyContent='space-between' alignItems='center'>
                 <Box>
                   {input &&
-                    <ResultInput>
+                    <ResultInput title={msmt.input}>
                       {input}
                     </ResultInput>}
                 </Box>
-                <Box>
+                <Box mr={3}>
                   <ResultTag msmt={msmt} />
                 </Box>
               </Flex>
@@ -345,33 +339,6 @@ ResultItem.propTypes = {
   msmt: PropTypes.object
 }
 
-const LegendColorBox = styled.div`
-  width: 20px;
-  height: 20px;
-  border-radius: 50%;
-  background-color: ${props => props.color};
-  float: left;
-  margin-right: 10px;
-`
-
-const StyledLegendItem = styled.div`
-  float: left;
-  margin-right: 20px;
-`
-
-const LegendItem = ({color, children}) => {
-  return <StyledLegendItem>
-    <LegendColorBox color={color}/> {children}
-  </StyledLegendItem>
-}
-
-const LegendContainer = styled(Box)`
-  padding-top: 20px;
-  padding-left: 20px;
-  padding-right: 20px;
-  padding-bottom: 10px;
-`
-
 const ResultContainer = styled(Box)`
   border: 1px solid ${props => props.theme.colors.gray4};
   border-radius: 5px;
@@ -381,22 +348,6 @@ const ResultContainer = styled(Box)`
 const ResultsList = ({results, testNamesKeyed}) => {
   return (
     <Flex flexWrap='wrap'>
-      <LegendContainer>
-        <LegendItem color={colorNormal}>
-          <FormattedMessage id='Search.Bullet.Reachable' />
-        </LegendItem>
-        <LegendItem color={colorAnomaly}>
-          <FormattedMessage id='Search.Bullet.Anomaly' />
-        </LegendItem>
-        <LegendItem color={colorConfirmed}>
-          <FormattedMessage id='Search.Bullet.Blocked' />
-        </LegendItem>
-        {/*
-        <LegendItem color={colorError}>
-          <FormattedMessage id='Search.Bullet.Error' />
-        </LegendItem>
-        */}
-      </LegendContainer>
       <ResultContainer my={4} width={1}>
         {results.map((msmt, idx) => {
           msmt.testName = testNamesKeyed[msmt.test_name]
