@@ -95,13 +95,10 @@ class ErrorPage extends React.Component {
 
   render () {
     const { errorCode } = this.props
-    let content = null
     if (errorCode === 404) {
-      content = this.render404()
-    } else {
-      content = this.render500()
+      return this.render404()
     }
-    return content
+    return this.render500()
   }
 }
 
