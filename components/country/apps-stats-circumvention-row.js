@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
-import { Flex, Box, Link, theme } from 'ooni-components'
+import { Flex, Box, Link, Text, theme } from 'ooni-components'
 import styled from 'styled-components'
 import {
   NettestWhatsApp
@@ -137,7 +137,12 @@ class AppsStatsCircumventionRow extends React.Component {
             Vanilla Tor
           </Box>
           <Box ml='auto' width={4/12}>
-            {`${data.networks.length} Networks Tested`}
+            {data.networks.length === 0 &&
+              <Text color='gray6'>
+                <FormattedMessage id='Country.Label.NoData' />
+              </Text>
+            }
+            {data.networks.length > 0 && `${data.networks.length} Networks Tested`}
           </Box>
           {totalNetworks > 0 &&
             <React.Fragment>

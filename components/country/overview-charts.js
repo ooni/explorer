@@ -7,6 +7,7 @@ import {
   VictoryStack,
   VictoryAxis,
   VictoryLine,
+  VictoryLabel,
   VictoryVoronoiContainer
 } from 'victory'
 
@@ -143,6 +144,14 @@ class TestsByGroup extends React.PureComponent {
                 dependentAxis
                 tickValues={testCoverageTickValues}
                 tickFormat={testCoverageTick}
+              />
+              <VictoryLabel
+                x={300} y={75}
+                text='No Data Available'
+                textAnchor='middle'
+                style={{
+                  fill: theme.colors.gray6
+                }}
               />
               <VictoryStack>
                 {
