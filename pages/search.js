@@ -52,6 +52,20 @@ const getMeasurements = (query) => {
   return client.get('/api/v1/measurements', {params})
 }
 
+// Handle circular structures when stringifying
+const getCircularReplacer = () => {
+  const seen = new WeakSet()
+  return (key, value) => {
+    if (typeof value === 'object' && value !== null) {
+      if (seen.has(value)) {
+        return
+      }
+      seen.add(value)
+    }
+    return value
+  }
+}
+
 const formatError = (error) => {
   let errorString = ''
   if (error.code) {
@@ -61,7 +75,7 @@ const formatError = (error) => {
     errorString += ` (${error.errno})`
   }
   if (errorString === '') {
-    errorString = JSON.stringify(error)
+    errorString = JSON.stringify(error, getCircularReplacer())
   }
   return errorString
 }
