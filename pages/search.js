@@ -121,23 +121,13 @@ class Search extends React.Component {
       query.until = today
     }
 
-    try {
-      [msmtR, testNamesR, countriesR] = await Promise.all([
-        getMeasurements(query),
-        client.get('/api/_/test_names'),
-        client.get('/api/_/countries')
-      ])
-    } catch (err) {
-      return {
-        error: err,
-        results: [],
-        testNamesKeyed: {},
-        testNames: [],
-        countries: [],
-      }
-    }
-    const measurements = msmtR.data
+    [msmtR, testNamesR, countriesR] = await Promise.all([
+      getMeasurements(query),
+      client.get('/api/_/test_names'),
+      client.get('/api/_/countries')
+    ])
 
+    const measurements = msmtR.data
     let countries = countriesR.data.countries
     countries.sort(sortByKey('name'))
 
