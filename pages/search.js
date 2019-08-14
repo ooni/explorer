@@ -52,7 +52,8 @@ const getMeasurements = (query) => {
   return client.get('/api/v1/measurements', {params})
 }
 
-// Handle circular structures when stringifying
+// Handle circular structures when stringifying error responses
+// From: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/Cyclic_object_value#Examples
 const getCircularReplacer = () => {
   const seen = new WeakSet()
   return (key, value) => {
