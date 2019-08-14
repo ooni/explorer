@@ -85,7 +85,7 @@ class ErrorPage extends React.Component {
               There was an unexpected error from our end.
             </Heading>
             <Text my={4}>
-              Maybe try <Link href='/countried'><a>exploring some measurements</a></Link> or go to our <Link href='/'><a>homepage</a></Link>.
+              Maybe try <Link href='/countries'><a>exploring some measurements</a></Link> or go to our <Link href='/'><a>homepage</a></Link>.
             </Text>
           </FullHeightFlex>
         </Container>
