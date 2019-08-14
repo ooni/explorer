@@ -80,11 +80,11 @@ class ErrorPage extends React.Component {
         </Head>
         <NavBar />
         <Container>
-          <FullHeightFlex alignItems='center' justifyContent='center'>
+          <FullHeightFlex alignItems='center' justifyContent='center' flexDirection='column'>
             <Heading h={4}>
-              There was an unknown error from our end.
+              There was an unexpected error from our end.
             </Heading>
-            <Text p={6}>
+            <Text my={4}>
               Maybe try <Link href='/countried'><a>exploring some measurements</a></Link> or go to our <Link href='/'><a>homepage</a></Link>.
             </Text>
           </FullHeightFlex>
