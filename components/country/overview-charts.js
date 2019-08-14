@@ -75,7 +75,7 @@ class TestsByGroup extends React.PureComponent {
   render() {
     let testCoverageMaxima, networkCoverageMaxima
 
-    const { testCoverage, networkCoverage } = this.props
+    const { testCoverage, networkCoverage, notEnoughData } = this.props
     const supportedTestGroups = ['websites', 'im', 'middlebox', 'performance', 'circumvention']
     const selectedTestGroups = Object.keys(this.state).filter(testGroup => this.state[testGroup])
 
@@ -145,14 +145,16 @@ class TestsByGroup extends React.PureComponent {
                 tickValues={testCoverageTickValues}
                 tickFormat={testCoverageTick}
               />
-              <VictoryLabel
-                x={300} y={75}
-                text='No Data Available'
-                textAnchor='middle'
-                style={{
-                  fill: theme.colors.gray6
-                }}
-              />
+              {notEnoughData &&
+                <VictoryLabel
+                  x={300} y={75}
+                  text='No Data Available'
+                  textAnchor='middle'
+                  style={{
+                    fill: theme.colors.gray6
+                  }}
+                />
+              }
               <VictoryStack>
                 {
                   selectedTestGroups.map((testGroup, index) => {
