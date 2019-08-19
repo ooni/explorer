@@ -141,7 +141,6 @@ const Overview = ({
         <FormattedMessage id='Country.Overview.Heading.TestsByClass' />
       </Heading>
       <TestsByGroup
-        notEnoughData={measurementCount < LOW_DATA_THRESHOLD}
         fetchTestCoverageData={fetchTestCoverageData}
         testCoverage={testCoverage}
         networkCoverage={networkCoverage}
