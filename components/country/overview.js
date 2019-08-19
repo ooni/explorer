@@ -92,6 +92,8 @@ SummaryText.defaultProps = {
   p: 3,
 }
 
+const LOW_DATA_THRESHOLD = 10
+
 const Overview = ({
   countryName,
   testCoverage,
@@ -139,7 +141,7 @@ const Overview = ({
         <FormattedMessage id='Country.Overview.Heading.TestsByClass' />
       </Heading>
       <TestsByGroup
-        notEnoughData={measurementCount < 10}
+        notEnoughData={measurementCount < LOW_DATA_THRESHOLD}
         fetchTestCoverageData={fetchTestCoverageData}
         testCoverage={testCoverage}
         networkCoverage={networkCoverage}
