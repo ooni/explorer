@@ -50,12 +50,12 @@ const Hero = ({ status, color, icon, label, info }) => {
     <HeroContainer py={4} color={color}>
       <Container>
         <Text fontWeight={600} fontSize={4} as='div'>
-          <Flex mb={4} justifyContent='center' alignItems='center'>
-            <Box mb={1}>{icon}</Box> <Box> {label} </Box>
+          <Flex my={2} justifyContent='center' alignItems='center'>
+            <Box>{icon}</Box> <Box>{label}</Box>
           </Flex>
         </Text>
         {info &&
-          <Text fontSize={28} textAlign='center'>
+          <Text fontSize={28} textAlign='center' as='div'>
             {info}
           </Text>
         }
