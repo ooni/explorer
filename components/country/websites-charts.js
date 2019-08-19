@@ -122,7 +122,14 @@ class TestsByCategoryInNetwork extends React.Component {
           </FormattedMessage>
         */}
         {/* URL-wise barcharts Start */}
-        {testedUrls &&
+        {testedUrls && testedUrls.length === 0 &&
+          <Flex my={4}>
+            <Text color='gray6'>
+              <FormattedMessage id='Country.Label.NoData' />
+            </Text>
+          </Flex>
+        }
+        {testedUrls && testedUrls.length > 0 &&
           testedUrls.map((testedUrl, index) => (
             <URLChart key={index} metadata={testedUrl} network={network} countryCode={countryCode} />
           ))}
