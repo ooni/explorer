@@ -68,8 +68,12 @@ class WebsitesSection extends React.Component {
 
 
         <Box my={4}>
-          {err && <Text color='gray6'> <FormattedMessage id='Country.Label.NoData' /></Text>}
-          {!err && selectedNetwork &&
+          {err &&
+            <Text color='gray6'>
+              <FormattedMessage id='Country.Label.NoData' />
+            </Text>
+          }
+          {selectedNetwork !== null &&
             <TestsByCategoryInNetwork
               network={selectedNetwork}
               countryCode={countryCode}
