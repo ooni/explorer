@@ -70,7 +70,9 @@ const TruncatedURL = ({ url }) => {
     )
   } catch (e) {
     return (
-      <abbr title={url}>{url}</abbr>
+      <WrappedText>
+        <abbr title={url}>{url}</abbr>
+      </WrappedText>
     )
   }
 }
