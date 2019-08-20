@@ -4,8 +4,8 @@ import { FormattedMessage } from 'react-intl'
 import { Flex, Box, Heading, Text, Link } from 'ooni-components'
 import axios from 'axios'
 import URLChart from './url-chart'
-import SpinLoader from '../vendor/spin-loader'
 import ASNSelector from './asn-selector'
+import { WebsiteSectionLoader } from './WebsiteChartLoader'
 
 const defaultState = {
   resultsPerPage: 5,
@@ -85,7 +85,13 @@ class TestsByCategoryInNetwork extends React.Component {
     const { testedUrlsCount, testedUrls, currentPage, resultsPerPage, fetching } = this.state
 
     if (fetching) {
-      return (<SpinLoader />)
+      return (
+        <Flex px={4} pt={5}>
+          <Box>
+            <WebsiteSectionLoader />
+          </Box>
+        </Flex>
+      )
     }
 
     return (
