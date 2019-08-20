@@ -1,4 +1,5 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import ContentLoader from 'react-content-loader'
 import { theme } from 'ooni-components'
 
@@ -23,12 +24,16 @@ export const LoaderRow = (props) => {
 }
 
 
-export const Loader = () => (
+export const Loader = ({ rows = 10 }) => (
   <React.Fragment>
-  {Array(10)
+  {Array(rows)
   .fill('')
   .map((e, i) => (
     <LoaderRow key={i} style={{ opacity: Number(2 / i).toFixed(1) }} />
   ))}
   </React.Fragment>
 )
+
+Loader.propTypes = {
+  rows: PropTypes.number
+}
