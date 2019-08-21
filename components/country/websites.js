@@ -60,14 +60,12 @@ class WebsitesSection extends React.Component {
         </SimpleBox>
 
         <Box my={4}>
-          {selectedNetwork &&
-            <TestsByCategoryInNetwork
-              network={selectedNetwork}
-              countryCode={countryCode}
-              onNetworkChange={this.onNetworkChange}
-              networks={this.state.networks}
-            />
-          }
+          <TestsByCategoryInNetwork
+            network={selectedNetwork}
+            countryCode={countryCode}
+            onNetworkChange={this.onNetworkChange}
+            networks={this.state.networks}
+          />
         </Box>
       </React.Fragment>
     )
