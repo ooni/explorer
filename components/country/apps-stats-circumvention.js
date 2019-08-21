@@ -5,7 +5,7 @@ import axios from 'axios'
 
 import { inCountry } from './country-context'
 import AppsStatsRowCircumvention from './apps-stats-circumvention-row'
-import SpinLoader from '../vendor/spin-loader'
+import { AppSectionLoader } from './WebsiteChartLoader'
 
 const AppGroupHeading = styled(Box)`
   border: 1px solid ${props => props.theme.colors.gray3};
@@ -53,13 +53,18 @@ class AppsStatsCircumvention extends React.Component {
     const { title } = this.props
     const { data, fetching } = this.state
 
+    if (fetching) {
+      return (
+        <AppSectionLoader rows={1} />
+      )
+    }
+
     return (
       <Box my={4}>
         <AppGroupHeading mt={4} px={2}>
           <Heading h={5}>{title}</Heading>
         </AppGroupHeading>
-        {fetching && <SpinLoader />}
-        {!fetching && <AppsStatsRowCircumvention data={data}/>}
+        <AppsStatsRowCircumvention data={data}/>
       </Box>
     )
   }
