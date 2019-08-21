@@ -65,7 +65,9 @@ class AppsStatsGroup extends React.Component {
         </AppGroupHeading>
         {data && Object.keys(data).length === 0 &&
           <Box my={4}>
-            <Text color='gray6'><FormattedMessage id='Country.Label.NoData' /></Text>
+            <Text fontSize={18} color='gray6'>
+              <FormattedMessage id='Country.Label.NoData' />
+            </Text>
           </Box>
         }
         {Object.keys(data).map((im, index) => (

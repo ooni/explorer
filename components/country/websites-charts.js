@@ -124,7 +124,7 @@ class TestsByCategoryInNetwork extends React.Component {
         {/* URL-wise barcharts Start */}
         {testedUrls && testedUrls.length === 0 &&
           <Flex my={4}>
-            <Text color='gray6'>
+            <Text fontSize={18} color='gray6'>
               <FormattedMessage id='Country.Label.NoData' />
             </Text>
           </Flex>

@@ -69,7 +69,7 @@ class WebsitesSection extends React.Component {
 
         <Box my={4}>
           {err &&
-            <Text color='gray6'>
+            <Text fontSize={18} color='gray6'>
               <FormattedMessage id='Country.Label.NoData' />
             </Text>
           }

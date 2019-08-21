@@ -138,7 +138,7 @@ class AppsStatsCircumventionRow extends React.Component {
           </Box>
           <Box ml='auto' width={4/12}>
             {data.networks.length === 0 &&
-              <Text color='gray6'>
+              <Text fontSize={18} color='gray6'>
                 <FormattedMessage id='Country.Label.NoData' />
               </Text>
             }
