@@ -92,6 +92,8 @@ SummaryText.defaultProps = {
   p: 3,
 }
 
+const LOW_DATA_THRESHOLD = 10
+
 const Overview = ({
   countryName,
   testCoverage,
