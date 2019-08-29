@@ -64,7 +64,6 @@ class FilterSidebar extends React.Component {
       showUntilCalendar: false,
       isFilterDirty: false,
       asnError: false,
-      inputError: false,
     }
     this.onChangeFilter = this.onChangeFilter.bind(this)
     this.onDateChangeFilter = this.onDateChangeFilter.bind(this)
@@ -83,32 +82,13 @@ class FilterSidebar extends React.Component {
         if (asnValue && asnValue.match(asnRegEx) === null) {
           this.setState({
             asnError: 'Valid formats: AS1234, 1234',
-            [filterName]: asnValue,
+            [filterName]: e.target.value,
             isFilterDirty: false
           })
           return
         } else {
           this.setState({
             asnError: false
-          })
-        }
-        break
-
-      case 'inputFilter':
-        var inputValue = e.target.value
-        // Regex from: https://www.regexpal.com/93652
-        // eslint-disable-next-line no-useless-escape
-        var inputRegex = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/
-        if (inputValue && inputValue.match(inputRegex) === null) {
-          this.setState({
-            inputError: 'Enter a valid website address',
-            [filterName]: inputValue,
-            isFilterDirty: false
-          })
-          return
-        } else {
-          this.setState({
-            inputError: false
           })
         }
         break
@@ -188,8 +168,7 @@ class FilterSidebar extends React.Component {
       sinceFilter,
       untilFilter,
       isFilterDirty,
-      asnError,
-      inputError
+      asnError
     } = this.state
 
     //Insert an 'Any' option to test name filter
@@ -229,7 +208,6 @@ class FilterSidebar extends React.Component {
             label={intl.formatMessage({id: 'Search.Sidebar.Input'})}
             name="inputFilter"
             value={inputFilter}
-            error={inputError}
             onChange={this.onChangeFilter('inputFilter')}
             placeholder={intl.formatMessage({id: 'Search.Sidebar.Input.Placeholder'})}
             type="text"
