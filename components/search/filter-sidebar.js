@@ -120,21 +120,40 @@ class FilterSidebar extends React.Component {
         if (asnValue && asnValue.match(asnRegEx) === null) {
           this.setState({
             asnError: 'Valid formats: AS1234, 1234',
-            [filterName]: e.target.value,
             isFilterDirty: false
           })
-          return
         } else {
           this.setState({
-            asnError: false
+            asnError: false,
+            isFilterDirty: true
           })
         }
         break
+      case 'domainFilter':
+        var domainValue = e.target.value
+        // eslint-disable-next-line no-useless-escape
+        var domainRegEx = /^(http:\/\/www\.|https:\/\/www\.|http:\/\/|https:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/)?$/
+        if (domainValue && domainValue.match(domainRegEx) === null) {
+          this.setState({
+            domainError: 'Please enter a valid domain name',
+            isFilterDirty: false
+          })
+        } else {
+          this.setState({
+            domainError: false,
+            isFilterDirty: true
+          })
+        }
+        break
+
+      default:
+        this.setState({
+          isFilterDirty: true
+        })
       }
 
       this.setState({
         [filterName]: e.target.value,
-        isFilterDirty: true,
         ...stateChangesByTestName
       })
     }).bind(this)
