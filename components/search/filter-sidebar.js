@@ -64,6 +64,7 @@ class FilterSidebar extends React.Component {
       showUntilCalendar: false,
       isFilterDirty: false,
       asnError: false,
+      showInput: true
     }
 
     this.getStateForFilterChange = this.getStateForFilterChange.bind(this)
