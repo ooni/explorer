@@ -5,7 +5,7 @@ import { Flex, Box, Heading, Text, Link } from 'ooni-components'
 import axios from 'axios'
 import URLChart from './url-chart'
 import ASNSelector from './asn-selector'
-import { WebsiteSectionLoader } from './WebsiteChartLoader'
+import { WebsiteSectionLoader, WebsiteChartLoader } from './WebsiteChartLoader'
 
 const defaultState = {
   resultsPerPage: 5,
@@ -92,11 +92,7 @@ class TestsByCategoryInNetwork extends React.Component {
     const { testedUrlsCount, testedUrls, currentPage, resultsPerPage, fetching } = this.state
 
     const renderLoader = () => (
-      <Flex my={3}>
-        <Box>
-          <WebsiteSectionLoader />
-        </Box>
-      </Flex>
+      <WebsiteSectionLoader />
     )
 
     return (
@@ -119,13 +115,13 @@ class TestsByCategoryInNetwork extends React.Component {
                 <strong>{testedUrlsCount}</strong> <FormattedMessage id='Country.Websites.TestedWebsitesCount' />
               </Box>
             </React.Fragment>
-          :
-          <Box my={2}></Box>
+            :
+            <Box my={2}></Box>
           }
           {/* Results per page dropdown
-              <Box>
+            <Box>
               <FormattedMessage id='Country.Websites.Labels.ResultsPerPage' />
-              </Box>
+            </Box>
           */}
         </Flex>
         {/* Hide until API is available
@@ -140,7 +136,14 @@ class TestsByCategoryInNetwork extends React.Component {
         */}
         {/* URL-wise barcharts Start */}
         {fetching && renderLoader()}
-        {(!fetching && testedUrls) &&
+        {(!fetching && testedUrls && testedUrls.length === 0) &&
+          <Flex my={4}>
+            <Text fontSize={18} color='gray6'>
+              <FormattedMessage id='Country.Label.NoData' />
+            </Text>
+          </Flex>
+        }
+        {(!fetching && testedUrls && testedUrls.length > 0) &&
           testedUrls.map((testedUrl, index) => (
             <URLChart key={index} metadata={testedUrl} network={network} countryCode={countryCode} />
           ))}

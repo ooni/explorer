@@ -92,7 +92,7 @@ class AppsStatChart extends React.Component {
             y='total_count'
             style={{
               data: {
-                fill: theme.colors.green8
+                fill: theme.colors.gray8
               }
             }}
             labels={(d) => {

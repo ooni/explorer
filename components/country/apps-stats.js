@@ -1,7 +1,8 @@
 import React from 'react'
-import { Box, Heading } from 'ooni-components'
+import { Box, Heading, Text } from 'ooni-components'
 import styled from 'styled-components'
 import axios from 'axios'
+import { FormattedMessage } from 'react-intl'
 
 import { inCountry } from './country-context'
 import AppsStatRow from './apps-stats-row'
@@ -62,6 +63,13 @@ class AppsStatsGroup extends React.Component {
         <AppGroupHeading mt={4} px={2}>
           <Heading h={5}>{title}</Heading>
         </AppGroupHeading>
+        {data && Object.keys(data).length === 0 &&
+          <Box my={4}>
+            <Text fontSize={18} color='gray6'>
+              <FormattedMessage id='Country.Label.NoData' />
+            </Text>
+          </Box>
+        }
         {Object.keys(data).map((im, index) => (
           <AppsStatRow key={index} data={data[im]} app={im} />
         ))}
