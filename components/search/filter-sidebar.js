@@ -62,7 +62,8 @@ class FilterSidebar extends React.Component {
       untilFilter: props.untilFilter || today,
       showSinceCalendar: true,
       showUntilCalendar: false,
-      isFilterDirty: false
+      isFilterDirty: false,
+      asnError: false,
     }
 
     this.getStateForFilterChange = this.getStateForFilterChange.bind(this)
@@ -103,6 +104,26 @@ class FilterSidebar extends React.Component {
     return ((e) => {
       // Get updates to state based on test name change
       const stateChangesByTestName = this.getStateForFilterChange(filterName, e.target.value)
+      // Input Validations
+      switch(filterName) {
+      case 'asnFilter':
+        var asnValue = e.target.value
+        var asnRegEx = /^(^AS|as)?[0-9]+$/
+        if (asnValue && asnValue.match(asnRegEx) === null) {
+          this.setState({
+            asnError: 'Valid formats: AS1234, 1234',
+            [filterName]: e.target.value,
+            isFilterDirty: false
+          })
+          return
+        } else {
+          this.setState({
+            asnError: false
+          })
+        }
+        break
+      }
+
       this.setState({
         [filterName]: e.target.value,
         isFilterDirty: true,
@@ -178,7 +199,8 @@ class FilterSidebar extends React.Component {
       asnFilter,
       sinceFilter,
       untilFilter,
-      isFilterDirty
+      isFilterDirty,
+      asnError
     } = this.state
 
     //Insert an 'Any' option to test name filter
@@ -252,6 +274,7 @@ class FilterSidebar extends React.Component {
         <InputWithLabel
           label={intl.formatMessage({id: 'Search.Sidebar.ASN'})}
           value={asnFilter}
+          error={asnError}
           name="asnFilter"
           onChange={this.onChangeFilter('asnFilter')}
           placeholder={intl.formatMessage({id: 'Search.Sidebar.ASN.example'})}
