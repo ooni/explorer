@@ -64,7 +64,7 @@ class FilterSidebar extends React.Component {
       showUntilCalendar: false,
       isFilterDirty: false,
       asnError: false,
-      showInput: true
+      showInput: this.showInputField(props.testNameFilter || 'XX')
     }
 
     this.getStateForFilterChange = this.getStateForFilterChange.bind(this)
@@ -75,22 +75,28 @@ class FilterSidebar extends React.Component {
     this.isUntilValid = this.isUntilValid.bind(this)
   }
 
+  showInputField(testName) {
+    const testsWithValidInput = [
+      'XX', // We show the field by default (state initialized to 'XX')
+      'web_connectivity',
+      'http_requests',
+      'dns_consistency',
+      'tcp_connect'
+    ]
+
+    // Should input filter be shown for `testsWithValidInput`?
+    return testsWithValidInput.indexOf(testName) > -1
+  }
+
   getStateForFilterChange (filterName, newValue) {
     const newState = {}
     // Calculate changes when test name changes
     if (filterName === 'testNameFilter') {
-      const testsWithValidInput = [
-        'XX', // We show the field by default (state initialized to 'XX')
-        'web_connectivity',
-        'http_requests',
-        'dns_consistency',
-        'tcp_connect'
-      ]
+      const isTestWithValidInput = this.showInputField(newValue)
+      newState['showInput'] = isTestWithValidInput
 
-      // Should input filter be shown for `testsWithValidInput`?
-      newState['showInput'] = testsWithValidInput.indexOf(newValue) > -1
       // If not, then blank out the `input` parameter to avoid bad queries
-      if (testsWithValidInput.indexOf(newValue) === -1) {
+      if (!isTestWithValidInput) {
         newState['inputFilter'] = ''
       }
     }
