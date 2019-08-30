@@ -64,7 +64,10 @@ class FilterSidebar extends React.Component {
       showUntilCalendar: false,
       isFilterDirty: false,
       asnError: false,
+      showInput: this.showInputField(props.testNameFilter || 'XX')
     }
+
+    this.getStateForFilterChange = this.getStateForFilterChange.bind(this)
     this.onChangeFilter = this.onChangeFilter.bind(this)
     this.onDateChangeFilter = this.onDateChangeFilter.bind(this)
     this.onClickApplyFilter = this.onClickApplyFilter.bind(this)
@@ -72,8 +75,42 @@ class FilterSidebar extends React.Component {
     this.isUntilValid = this.isUntilValid.bind(this)
   }
 
+  showInputField(testName) {
+    const testsWithValidInput = [
+      'XX', // We show the field by default (state initialized to 'XX')
+      'web_connectivity',
+      'http_requests',
+      'dns_consistency',
+      'tcp_connect'
+    ]
+
+    // Should input filter be shown for `testsWithValidInput`?
+    return testsWithValidInput.indexOf(testName) > -1
+  }
+
+  getStateForFilterChange (filterName, newValue) {
+    const newState = {}
+    // Calculate changes when test name changes
+    if (filterName === 'testNameFilter') {
+      const isTestWithValidInput = this.showInputField(newValue)
+      newState['showInput'] = isTestWithValidInput
+
+      // If not, then blank out the `input` parameter to avoid bad queries
+      if (!isTestWithValidInput) {
+        newState['inputFilter'] = ''
+      }
+    }
+
+    // In future, calculate changes when country changes
+    // if (filterName === 'countryFilter') {}
+
+    return newState
+  }
+
   onChangeFilter (filterName) {
     return ((e) => {
+      // Get updates to state based on test name change
+      const stateChangesByTestName = this.getStateForFilterChange(filterName, e.target.value)
       // Input Validations
       switch(filterName) {
       case 'asnFilter':
@@ -96,7 +133,8 @@ class FilterSidebar extends React.Component {
 
       this.setState({
         [filterName]: e.target.value,
-        isFilterDirty: true
+        isFilterDirty: true,
+        ...stateChangesByTestName
       })
     }).bind(this)
   }
@@ -160,6 +198,7 @@ class FilterSidebar extends React.Component {
     } = this.props
 
     const {
+      showInput,
       inputFilter,
       onlyFilter,
       testNameFilter,
@@ -177,16 +216,6 @@ class FilterSidebar extends React.Component {
 
     const countryOptions = [...countries]
     countryOptions.unshift({name: intl.formatMessage({id: 'Search.Sidebar.Country.AllCountries'}), alpha_2: 'XX'})
-
-    // Show `Input` text field only for tests that support it
-    const testsWithValidInput = [
-      'XX', // We show the field by default (state initialized to 'XX')
-      'web_connectivity',
-      'http_requests',
-      'dns_consistency',
-      'tcp_connect'
-    ]
-    const showInput = testsWithValidInput.indexOf(testNameFilter) > -1
 
     return (
       <StyledFilterSidebar>
