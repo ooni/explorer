@@ -10,6 +10,7 @@ import {
   VictoryLabel,
   VictoryVoronoiContainer
 } from 'victory'
+import { injectIntl } from 'react-intl'
 
 import Tooltip from './tooltip'
 import VictoryTheme from '../VictoryTheme'
@@ -74,8 +75,17 @@ class TestsByGroup extends React.PureComponent {
 
 
   render() {
-    const { testCoverage, networkCoverage } = this.props
-    
+    const { testCoverage, networkCoverage, intl } = this.props
+
+    // Use react-intl's imperative API to render localized test names in chart tooltips
+    const testGroupNames = {
+      'websites': intl.formatMessage({id: 'Tests.Groups.Webistes.Name'}),
+      'im': intl.formatMessage({id: 'Tests.Groups.Instant Messagging.Name'}),
+      'middlebox': intl.formatMessage({id: 'Tests.Groups.Middlebox.Name'}),
+      'performance': intl.formatMessage({id: 'Tests.Groups.Performance.Name'}),
+      'circumvention': intl.formatMessage({id: 'Tests.Groups.Circumvention.Name'})
+    }
+
     // Check if there is enough data to plot the charts
     const testCoverageCount = testCoverage.reduce((count, item) => count + item.count, 0)
     const networkCoverageCount = networkCoverage.reduce((count, item) => count + item.count, 0)
@@ -171,7 +181,7 @@ class TestsByGroup extends React.PureComponent {
                   maybeLabels['labels'] = (d) => {
                     let s = new Date(d.test_day).toLocaleDateString()
                     selectedTestGroups.forEach((name) => {
-                      s += `\n${d[name]} ${name}`
+                      s += `\n${d[name]} ${testGroupNames[name]}`
                     })
                     return s
                   }
@@ -246,4 +256,4 @@ class TestsByGroup extends React.PureComponent {
   }
 }
 
-export default TestsByGroup
+export default injectIntl(TestsByGroup)
