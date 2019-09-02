@@ -6,7 +6,7 @@ import { FormattedMessage } from 'react-intl'
 
 import { inCountry } from './country-context'
 import AppsStatRow from './apps-stats-row'
-import SpinLoader from '../vendor/spin-loader'
+import { AppSectionLoader } from './WebsiteChartLoader'
 
 const AppGroupHeading = styled(Box)`
   border: 1px solid ${props => props.theme.colors.gray3};
@@ -55,7 +55,7 @@ class AppsStatsGroup extends React.Component {
     const { data, fetching } = this.state
     if (fetching) {
       return (
-        <SpinLoader />
+        <AppSectionLoader rows={3} />
       )
     }
     return (

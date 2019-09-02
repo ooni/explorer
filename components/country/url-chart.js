@@ -22,7 +22,7 @@ import {
 } from '../colors'
 
 import Tooltip from './tooltip'
-import SpinLoader from '../vendor/spin-loader'
+import { WebsiteChartLoader } from './WebsiteChartLoader'
 
 const Circle = styled.div`
   position: relative;
@@ -70,7 +70,9 @@ const TruncatedURL = ({ url }) => {
     )
   } catch (e) {
     return (
-      <abbr title={url}>{url}</abbr>
+      <WrappedText>
+        <abbr title={url}>{url}</abbr>
+      </WrappedText>
     )
   }
 }
@@ -151,7 +153,9 @@ class URLChart extends React.Component {
     }
 
     if (fetching) {
-      return (<SpinLoader />)
+      return (
+        <WebsiteChartLoader />
+      )
     }
 
     const today = moment().format('YYYY-MM-DD')

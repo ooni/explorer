@@ -4,8 +4,8 @@ import { FormattedMessage } from 'react-intl'
 import { Flex, Box, Heading, Text, Link } from 'ooni-components'
 import axios from 'axios'
 import URLChart from './url-chart'
-import SpinLoader from '../vendor/spin-loader'
 import ASNSelector from './asn-selector'
+import { WebsiteSectionLoader, WebsiteChartLoader } from './WebsiteChartLoader'
 
 const defaultState = {
   resultsPerPage: 5,
@@ -20,9 +20,16 @@ class TestsByCategoryInNetwork extends React.Component {
     this.state = defaultState
   }
 
-  componentDidMount() {
-    this.fetchUrlsInNetwork()
-  }
+  // This is dead code now. Made so to ensure the loader
+  // is rendered even when <ASNSelector> is not ready to render because
+  // list of networks is still being fetched by the parent component.
+  // This prevents the jump in the layout.
+  //
+  // componentDidMount() {
+  //   if (this.props.network !== null) {
+  //     this.fetchUrlsInNetwork()
+  //   }
+  // }
 
   componentDidUpdate() {
     if (this.state.testedUrls === null) {
@@ -84,9 +91,9 @@ class TestsByCategoryInNetwork extends React.Component {
     const { network, countryCode, networks, onNetworkChange } = this.props
     const { testedUrlsCount, testedUrls, currentPage, resultsPerPage, fetching } = this.state
 
-    if (fetching) {
-      return (<SpinLoader />)
-    }
+    const renderLoader = () => (
+      <WebsiteSectionLoader />
+    )
 
     return (
       <React.Fragment>
@@ -98,16 +105,22 @@ class TestsByCategoryInNetwork extends React.Component {
           }}
         /> */}
         {/* Category Selection */}
-        <Flex justifyContent='space-between' alignItems='center'>
-          <Box>
-            <ASNSelector selectedNetwork={network} networks={networks} onNetworkChange={onNetworkChange} />
-          </Box>
-          <Box my={3}>
-            <strong>{testedUrlsCount}</strong> <FormattedMessage id='Country.Websites.TestedWebsitesCount' />
-          </Box>
+        <Flex justifyContent='space-between' alignItems='center' my={3}>
+          {(network !== null && networks !== null) ?
+            <React.Fragment>
+              <Box>
+                <ASNSelector selectedNetwork={network} networks={networks} onNetworkChange={onNetworkChange} />
+              </Box>
+              <Box>
+                <strong>{testedUrlsCount}</strong> <FormattedMessage id='Country.Websites.TestedWebsitesCount' />
+              </Box>
+            </React.Fragment>
+            :
+            <Box my={2}></Box>
+          }
           {/* Results per page dropdown
             <Box>
-            <FormattedMessage id='Country.Websites.Labels.ResultsPerPage' />
+              <FormattedMessage id='Country.Websites.Labels.ResultsPerPage' />
             </Box>
           */}
         </Flex>
@@ -122,22 +135,23 @@ class TestsByCategoryInNetwork extends React.Component {
           </FormattedMessage>
         */}
         {/* URL-wise barcharts Start */}
-        {testedUrls && testedUrls.length === 0 &&
+        {fetching && renderLoader()}
+        {(!fetching && testedUrls && testedUrls.length === 0) &&
           <Flex my={4}>
             <Text fontSize={18} color='gray6'>
               <FormattedMessage id='Country.Label.NoData' />
             </Text>
           </Flex>
         }
-        {testedUrls && testedUrls.length > 0 &&
+        {(!fetching && testedUrls && testedUrls.length > 0) &&
           testedUrls.map((testedUrl, index) => (
             <URLChart key={index} metadata={testedUrl} network={network} countryCode={countryCode} />
           ))}
-        <Flex flexWrap='wrap' justifyContent='space-between' alignItems='center'>
+        {(!fetching && testedUrlsCount > 0) && <Flex flexWrap='wrap' justifyContent='space-between' alignItems='center'>
           <Link color='blue7' href='javascript:void(0)' onClick={() => this.prevPage()}>{'< '}<FormattedMessage id='Country.Websites.URLCharts.Pagination.Previous' /></Link>
           <Text>{currentPage} of { Math.ceil(testedUrlsCount / resultsPerPage)} pages</Text>
           <Link color='blue7' href='javascript:void(0)' onClick={() => this.nextPage()}><FormattedMessage id='Country.Websites.URLCharts.Pagination.Next' />{' >'}</Link>
-        </Flex>
+        </Flex>}
         {/* URL-wise barcharts End */}
       </React.Fragment>
     )

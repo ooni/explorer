@@ -16,6 +16,7 @@ import SpinLoader from '../vendor/spin-loader'
 import Tooltip from '../country/tooltip'
 import FormattedMarkdown from '../formatted-markdown'
 import VictoryTheme from '../VictoryTheme'
+import { ChartLoader } from './ChartLoader'
 
 const getMaxima = (data) => {
   let maxima
@@ -61,7 +62,7 @@ class CoverageChart extends React.Component {
   render() {
     const { countryCoverage, networkCoverage, runsByMonth, fetching } = this.state
     if (fetching) {
-      return (<SpinLoader />)
+      return (<ChartLoader />)
     }
 
     // API responses are ordered by date, with most recent month at the end
@@ -81,11 +82,6 @@ class CoverageChart extends React.Component {
 
     return (
       <React.Fragment>
-        <Flex justifyContent='center' my={3}>
-          <Heading h={2} color='blue7'>
-            <FormattedMessage id={'Home.MonthlyStats.Title'} />
-          </Heading>
-        </Flex>
         <Flex justifyContent='center'>
           <Text fontSize={18}>
             <FormattedMarkdown id={'Home.MonthlyStats.SummaryText'}

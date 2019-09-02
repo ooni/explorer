@@ -18,7 +18,7 @@ import Layout from '../components/Layout'
 
 import ResultsList from '../components/search/results-list'
 import FilterSidebar from '../components/search/filter-sidebar'
-import Loader from '../components/search/loader'
+import { Loader } from '../components/search/loader'
 
 import { sortByKey } from '../utils'
 
@@ -270,7 +270,10 @@ class Search extends React.Component {
       testNamesKeyed,
       countries
     } = this.props
+
     const {
+      loading,
+      error,
       results,
       onlyFilter,
       inputFilter,
@@ -306,11 +309,11 @@ class Search extends React.Component {
               />
             </Box>
             <Box width={[1, 3/4]} px={2}>
-              <ErrorBox error={this.state.error} />
-              <Loader loading={this.state.loading} />
+              {error && <ErrorBox error={error} />}
+              {loading && <Loader />}
 
-              {!this.state.error && !this.state.loading && results.length === 0 && <NoResults />}
-              {!this.state.error && !this.state.loading && results.length > 0
+              {!error && !loading && results.length === 0 && <NoResults />}
+              {!error && !loading && results.length > 0
                 && <div>
                   <ResultsList results={results} testNamesKeyed={testNamesKeyed} />
                   {

@@ -11,7 +11,7 @@ import { theme } from 'ooni-components'
 
 import { inCountry } from './country-context'
 import Tooltip from './tooltip'
-import SpinLoader from '../vendor/spin-loader'
+import { AppsChartLoader } from './WebsiteChartLoader'
 
 class AppsStatChart extends React.Component {
   constructor(props) {
@@ -47,7 +47,7 @@ class AppsStatChart extends React.Component {
     const { data, fetching } = this.state
 
     if (fetching) {
-      return (<SpinLoader />)
+      return (<AppsChartLoader />)
     }
 
     const yMax = data.reduce((max, item) => (
