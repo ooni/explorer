@@ -110,6 +110,7 @@ class FilterSidebar extends React.Component {
 
   onChangeFilter (filterName) {
     return ((e) => {
+      const { intl } = this.props
       // Get updates to state based on test name change
       const stateChangesByTestName = this.getStateForFilterChange(filterName, e.target.value)
       // Input Validations
@@ -119,7 +120,7 @@ class FilterSidebar extends React.Component {
         var asnRegEx = /^(^AS|as)?[0-9]+$/
         if (asnValue && asnValue.match(asnRegEx) === null) {
           this.setState({
-            asnError: 'Valid formats: AS1234, 1234',
+            asnError: intl.formatMessage({id: 'Search.Sidebar.ASN.Error'}),
             isFilterDirty: false
           })
         } else {
@@ -135,7 +136,7 @@ class FilterSidebar extends React.Component {
         var domainRegEx = /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/)?$/
         if (domainValue && domainValue.match(domainRegEx) === null) {
           this.setState({
-            domainError: 'Please enter a valid domain name',
+            domainError: intl.formatMessage({id: 'Search.Sidebar.Domain.Error'}),
             isFilterDirty: false
           })
         } else {
@@ -255,12 +256,12 @@ class FilterSidebar extends React.Component {
         {
           showDomain &&
           <InputWithLabel
-            label={intl.formatMessage({id: 'Search.Sidebar.Input'})}
+            label={intl.formatMessage({id: 'Search.Sidebar.Domain'})}
             name="domainFilter"
             value={domainFilter}
             error={domainError}
             onChange={this.onChangeFilter('domainFilter')}
-            placeholder={intl.formatMessage({id: 'Search.Sidebar.Input.Placeholder'})}
+            placeholder={intl.formatMessage({id: 'Search.Sidebar.Domain.Placeholder'})}
             type="text"
           />
         }
