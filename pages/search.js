@@ -26,7 +26,7 @@ const queryToParams = ({ query }) => {
   // XXX do better validation
   let params = {},
     show = 50
-  const supportedParams = ['probe_cc', 'input', 'probe_asn', 'test_name', 'since', 'until']
+  const supportedParams = ['probe_cc', 'domain', 'probe_asn', 'test_name', 'since', 'until']
   if (query.show) {
     show = parseInt(query.show)
   }
@@ -145,7 +145,7 @@ class Search extends React.Component {
     super(props)
     this.state = {
       testNameFilter: props.router.query.test_name,
-      inputFilter: props.router.query.input,
+      domainFilter: props.router.query.domain,
       countryFilter: props.router.query.probe_cc,
       asnFilter: props.router.query.probe_asn,
       sinceFilter: props.router.query.since,
@@ -236,7 +236,7 @@ class Search extends React.Component {
 
   getFilterQuery () {
     const mappings = [
-      ['inputFilter', 'input'],
+      ['domainFilter', 'domain'],
       ['countryFilter', 'probe_cc'],
       ['asnFilter', 'probe_asn'],
       ['testNameFilter', 'test_name'],
@@ -276,7 +276,7 @@ class Search extends React.Component {
       error,
       results,
       onlyFilter,
-      inputFilter,
+      domainFilter,
       testNameFilter,
       countryFilter,
       asnFilter,
@@ -296,7 +296,7 @@ class Search extends React.Component {
           <Flex pt={3} flexWrap='wrap'>
             <Box width={[1, 1/4]} px={2}>
               <FilterSidebar
-                inputFilter={inputFilter}
+                domainFilter={domainFilter}
                 testNameFilter={testNameFilter}
                 countryFilter={countryFilter}
                 asnFilter={asnFilter}

@@ -53,7 +53,7 @@ class FilterSidebar extends React.Component {
     const today = moment().format('YYYY-MM-DD')
 
     this.state = {
-      inputFilter: props.inputFilter || '',
+      domainFilter: props.domainFilter || '',
       onlyFilter: props.onlyFilter || 'all',
       testNameFilter: props.testNameFilter || 'XX',
       countryFilter: props.countryFilter || '',
@@ -64,7 +64,8 @@ class FilterSidebar extends React.Component {
       showUntilCalendar: false,
       isFilterDirty: false,
       asnError: false,
-      showInput: this.showInputField(props.testNameFilter || 'XX')
+      domainError: false,
+      showDomain: this.showDomainField(props.testNameFilter || 'XX')
     }
 
     this.getStateForFilterChange = this.getStateForFilterChange.bind(this)
@@ -75,8 +76,8 @@ class FilterSidebar extends React.Component {
     this.isUntilValid = this.isUntilValid.bind(this)
   }
 
-  showInputField(testName) {
-    const testsWithValidInput = [
+  showDomainField(testName) {
+    const testsWithValidDomain = [
       'XX', // We show the field by default (state initialized to 'XX')
       'web_connectivity',
       'http_requests',
@@ -84,20 +85,20 @@ class FilterSidebar extends React.Component {
       'tcp_connect'
     ]
 
-    // Should input filter be shown for `testsWithValidInput`?
-    return testsWithValidInput.indexOf(testName) > -1
+    // Should domain filter be shown for `testsWithValidDomain`?
+    return testsWithValidDomain.indexOf(testName) > -1
   }
 
   getStateForFilterChange (filterName, newValue) {
     const newState = {}
     // Calculate changes when test name changes
     if (filterName === 'testNameFilter') {
-      const isTestWithValidInput = this.showInputField(newValue)
-      newState['showInput'] = isTestWithValidInput
+      const isTestWithValidDomain = this.showDomainField(newValue)
+      newState['showDomain'] = isTestWithValidDomain
 
-      // If not, then blank out the `input` parameter to avoid bad queries
-      if (!isTestWithValidInput) {
-        newState['inputFilter'] = ''
+      // If not, then blank out the `domain` parameter to avoid bad queries
+      if (!isTestWithValidDomain) {
+        newState['domainFilter'] = ''
       }
     }
 
@@ -109,6 +110,7 @@ class FilterSidebar extends React.Component {
 
   onChangeFilter (filterName) {
     return ((e) => {
+      const { intl } = this.props
       // Get updates to state based on test name change
       const stateChangesByTestName = this.getStateForFilterChange(filterName, e.target.value)
       // Input Validations
@@ -118,22 +120,41 @@ class FilterSidebar extends React.Component {
         var asnRegEx = /^(^AS|as)?[0-9]+$/
         if (asnValue && asnValue.match(asnRegEx) === null) {
           this.setState({
-            asnError: 'Valid formats: AS1234, 1234',
-            [filterName]: e.target.value,
+            asnError: intl.formatMessage({id: 'Search.Sidebar.ASN.Error'}),
             isFilterDirty: false
           })
-          return
         } else {
           this.setState({
-            asnError: false
+            asnError: false,
+            isFilterDirty: true
           })
         }
         break
+      case 'domainFilter':
+        var domainValue = e.target.value
+        // eslint-disable-next-line no-useless-escape
+        var domainRegEx = /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/)?$/
+        if (domainValue && domainValue.match(domainRegEx) === null) {
+          this.setState({
+            domainError: intl.formatMessage({id: 'Search.Sidebar.Domain.Error'}),
+            isFilterDirty: false
+          })
+        } else {
+          this.setState({
+            domainError: false,
+            isFilterDirty: true
+          })
+        }
+        break
+
+      default:
+        this.setState({
+          isFilterDirty: true
+        })
       }
 
       this.setState({
         [filterName]: e.target.value,
-        isFilterDirty: true,
         ...stateChangesByTestName
       })
     }).bind(this)
@@ -177,7 +198,7 @@ class FilterSidebar extends React.Component {
 
   onClickApplyFilter() {
     this.props.onApplyFilter({
-      inputFilter: this.state.inputFilter,
+      domainFilter: this.state.domainFilter,
       onlyFilter: this.state.onlyFilter,
       testNameFilter: this.state.testNameFilter,
       countryFilter: this.state.countryFilter,
@@ -198,8 +219,8 @@ class FilterSidebar extends React.Component {
     } = this.props
 
     const {
-      showInput,
-      inputFilter,
+      showDomain,
+      domainFilter,
       onlyFilter,
       testNameFilter,
       countryFilter,
@@ -207,7 +228,8 @@ class FilterSidebar extends React.Component {
       sinceFilter,
       untilFilter,
       isFilterDirty,
-      asnError
+      asnError,
+      domainError
     } = this.state
 
     //Insert an 'Any' option to test name filter
@@ -232,13 +254,14 @@ class FilterSidebar extends React.Component {
         </SelectWithLabel>
 
         {
-          showInput &&
+          showDomain &&
           <InputWithLabel
-            label={intl.formatMessage({id: 'Search.Sidebar.Input'})}
-            name="inputFilter"
-            value={inputFilter}
-            onChange={this.onChangeFilter('inputFilter')}
-            placeholder={intl.formatMessage({id: 'Search.Sidebar.Input.Placeholder'})}
+            label={intl.formatMessage({id: 'Search.Sidebar.Domain'})}
+            name="domainFilter"
+            value={domainFilter}
+            error={domainError}
+            onChange={this.onChangeFilter('domainFilter')}
+            placeholder={intl.formatMessage({id: 'Search.Sidebar.Domain.Placeholder'})}
             type="text"
           />
         }
