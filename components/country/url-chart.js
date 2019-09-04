@@ -161,6 +161,8 @@ class URLChart extends React.Component {
       (item.total_count > max) ? item.total_count : max
     ), 0)
 
+    const domainToExplore = new URL(metadata.input).hostname
+
     return (
       <StyledChartRow flexWrap='wrap' justifyContent='space-between' bg='gray0' my={3}>
         <Box width={16/16}>
@@ -168,7 +170,7 @@ class URLChart extends React.Component {
             <Box width={[1, 1/4]} p={3}>
               <TruncatedURL url={metadata.input} />
               <Link
-                href={`/search?test_name=web_connectivity&probe_cc=${countryCode}&probe_asn=${network}&input=${metadata.input}&since=${since30days}&until=${today}`}
+                href={`/search?test_name=web_connectivity&probe_cc=${countryCode}&probe_asn=${network}&domain=${domainToExplore}&since=${since30days}&until=${today}`}
               >
                 <FormattedMessage id='Country.Websites.URLCharts.ExploreMoreMeasurements' />
               </Link>
