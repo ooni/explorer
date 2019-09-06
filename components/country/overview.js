@@ -121,10 +121,10 @@ const Overview = ({
         <FormattedMarkdown
           id='Country.Overview.SummaryTextTemplate'
           values={{
-            measurementCount,
+            measurementCount: intl.formatNumber(measurementCount),
             countryName,
-            startDate: new Date(measuredSince).toLocaleDateString(),
-            networkCovered: networkCount
+            startDate: intl.formatDate(measuredSince),
+            networkCovered: intl.formatNumber(networkCount)
           }}
         />
       </SummaryText>
