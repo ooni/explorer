@@ -243,6 +243,53 @@ class FilterSidebar extends React.Component {
       <StyledFilterSidebar>
         <SelectWithLabel
           pt={2}
+          label={intl.formatMessage({id: 'Search.Sidebar.Country'})}
+          value={countryFilter}
+          name="countryFilter"
+          onChange={this.onChangeFilter('countryFilter')}>
+          {countryOptions.map((v, idx) => {
+            return (
+              <option key={idx} value={v.alpha_2}>{v.name}</option>
+            )
+          })}
+        </SelectWithLabel>
+        
+        <InputWithLabel
+          label={intl.formatMessage({id: 'Search.Sidebar.ASN'})}
+          value={asnFilter}
+          error={asnError}
+          name="asnFilter"
+          onChange={this.onChangeFilter('asnFilter')}
+          placeholder={intl.formatMessage({id: 'Search.Sidebar.ASN.example'})}
+        />
+
+        <Flex>
+          <Box width={1/2} pr={1}>
+            <StyledLabel>
+              {intl.formatMessage({id: 'Search.Sidebar.From'})}
+            </StyledLabel>
+            <DatePicker
+              value={sinceFilter}
+              onChange={this.onDateChangeFilter('sinceFilter')}
+              timeFormat={false}
+              isValidDate={this.isSinceValid}
+            />
+          </Box>
+          <Box width={1/2} pl={1}>
+            <StyledLabel>
+              {intl.formatMessage({id: 'Search.Sidebar.Until'})}
+            </StyledLabel>
+            <DatePicker
+              value={untilFilter}
+              onChange={this.onDateChangeFilter('untilFilter')}
+              timeFormat={false}
+              isValidDate={this.isUntilValid}
+            />
+          </Box>
+        </Flex>
+
+        <SelectWithLabel
+          pt={2}
           label={intl.formatMessage({id: 'Search.Sidebar.TestName'})}
           value={testNameFilter}
           onChange={this.onChangeFilter('testNameFilter')}>
@@ -287,53 +334,6 @@ class FilterSidebar extends React.Component {
             value='anomalies'
           />
         </RadioGroup>
-
-        <SelectWithLabel
-          pt={2}
-          label={intl.formatMessage({id: 'Search.Sidebar.Country'})}
-          value={countryFilter}
-          name="countryFilter"
-          onChange={this.onChangeFilter('countryFilter')}>
-          {countryOptions.map((v, idx) => {
-            return (
-              <option key={idx} value={v.alpha_2}>{v.name}</option>
-            )
-          })}
-        </SelectWithLabel>
-
-        <InputWithLabel
-          label={intl.formatMessage({id: 'Search.Sidebar.ASN'})}
-          value={asnFilter}
-          error={asnError}
-          name="asnFilter"
-          onChange={this.onChangeFilter('asnFilter')}
-          placeholder={intl.formatMessage({id: 'Search.Sidebar.ASN.example'})}
-        />
-
-        <Flex>
-          <Box width={1/2} pr={1}>
-            <StyledLabel>
-              {intl.formatMessage({id: 'Search.Sidebar.From'})}
-            </StyledLabel>
-            <DatePicker
-              value={sinceFilter}
-              onChange={this.onDateChangeFilter('sinceFilter')}
-              timeFormat={false}
-              isValidDate={this.isSinceValid}
-            />
-          </Box>
-          <Box width={1/2} pl={1}>
-            <StyledLabel>
-              {intl.formatMessage({id: 'Search.Sidebar.Until'})}
-            </StyledLabel>
-            <DatePicker
-              value={untilFilter}
-              onChange={this.onDateChangeFilter('untilFilter')}
-              timeFormat={false}
-              isValidDate={this.isUntilValid}
-            />
-          </Box>
-        </Flex>
 
         <Button
           mt={3}
