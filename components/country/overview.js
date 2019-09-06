@@ -116,6 +116,20 @@ const Overview = ({
           <FormattedMessage id='Country.Heading.Overview' />
         </SectionHeader.Title>
       </SectionHeader>
+      {/* <SummaryText> */}
+      <SummaryText my={3}>
+        <FormattedMarkdown
+          id='Country.Overview.SummaryTextTemplate'
+          values={{
+            measurementCount,
+            countryName,
+            startDate: new Date(measuredSince).toLocaleDateString(),
+            networkCovered: networkCount
+          }}
+        />
+      </SummaryText>
+      {/* </SummaryText> */}
+
       {/*
       <BoxWithTitle title={<FormattedMessage id='Country.Overview.Heading.NwInterference' />}>
         <Flex flexWrap='wrap'>
@@ -159,19 +173,6 @@ const Overview = ({
         }
       </BoxWithTitle>
       {/* Highlight Box */}
-      {/* <SummaryText> */}
-      <SummaryText>
-        <FormattedMarkdown
-          id='Country.Overview.SummaryTextTemplate'
-          values={{
-            measurementCount,
-            countryName,
-            startDate: new Date(measuredSince).toLocaleDateString(),
-            networkCovered: networkCount
-          }}
-        />
-      </SummaryText>
-      {/* </SummaryText> */}
     </React.Fragment>
   )
 }
