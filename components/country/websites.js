@@ -42,7 +42,8 @@ class WebsitesSection extends React.Component {
       })
     } else {
       this.setState({
-        err: 'No Data'
+        err: 'No Data',
+        networks: null
       })
     }
   }
