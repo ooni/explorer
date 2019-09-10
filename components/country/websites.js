@@ -14,7 +14,7 @@ class WebsitesSection extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      err: null,
+      noData: false,
       selectedNetwork: null,
       networks: []
     }
@@ -42,14 +42,15 @@ class WebsitesSection extends React.Component {
       })
     } else {
       this.setState({
-        err: 'No Data'
+        noData: true,
+        networks: null
       })
     }
   }
 
   render () {
     const { onPeriodChange, countryCode } = this.props
-    const { err, selectedNetwork } = this.state
+    const { noData, selectedNetwork } = this.state
     return (
       <React.Fragment>
         <SectionHeader>
@@ -67,7 +68,7 @@ class WebsitesSection extends React.Component {
         </SimpleBox>
 
         <Box my={4}>
-          {err &&
+          {noData &&
             <Text fontSize={18} color='gray6'>
               <FormattedMessage id='Country.Label.NoData' />
             </Text>
