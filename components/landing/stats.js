@@ -10,7 +10,7 @@ import {
 import axios from 'axios'
 import moment from 'moment'
 import { Flex, Heading, Text, theme } from 'ooni-components'
-import { FormattedMessage } from 'react-intl'
+import { injectIntl } from 'react-intl'
 
 import SpinLoader from '../vendor/spin-loader'
 import Tooltip from '../country/tooltip'
@@ -57,6 +57,8 @@ class CoverageChart extends React.Component {
 
   render() {
     const { countryCoverage, networkCoverage, measurementsByMonth, fetching } = this.state
+    const { intl } = this.props
+
     if (fetching) {
       return (<ChartLoader />)
     }
@@ -82,9 +84,9 @@ class CoverageChart extends React.Component {
           <Text fontSize={18}>
             <FormattedMarkdown id={'Home.MonthlyStats.SummaryText'}
               values={{
-                measurementCount: lastMonth.measurementCount,
-                networkCount: lastMonth.networkCount,
-                countryCount: lastMonth.countryCount
+                measurementCount: intl.formatNumber(lastMonth.measurementCount),
+                networkCount: intl.formatNumber(lastMonth.networkCount),
+                countryCount: intl.formatNumber(lastMonth.countryCount)
               }}
             />
           </Text>
@@ -225,4 +227,4 @@ class CoverageChart extends React.Component {
   }
 }
 
-export { CoverageChart }
+export default injectIntl(CoverageChart)

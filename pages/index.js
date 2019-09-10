@@ -23,7 +23,7 @@ import { toCompactNumberUnit } from '../utils'
 import HighlightSection from '../components/landing/highlights-section'
 import highlightContent from '../components/landing/highlights.json'
 import { Flag } from '../components/flag'
-import { CoverageChart } from '../components/landing/stats'
+import CoverageChart from '../components/landing/stats'
 
 const HeroUnit = styled.div`
   background: url(/static/images/world-dots.svg);

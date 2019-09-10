@@ -366,7 +366,7 @@
   "Home.NetworkProperties.Title": "Network Performance",
   "Home.NetworkProperties.SummaryText": "Check the speed and performance of thousands of networks around the world. Explore data on video streaming performance, and check whether middleboxes are present.",
   "Home.MonthlyStats.Title": "Monthly coverage worldwide",
-  "Home.MonthlyStats.SummaryText": "Last month, [OONI Probe](https://ooni.io/install/) was run {runCount} times on {networkCount} networks in {countryCount} countries. Explore the monthly usage of OONI Probe through the stats below.",
+  "Home.MonthlyStats.SummaryText": "Last month, [OONI Probe](https://ooni.io/install/) was run **{measurementCount}** times on **{networkCount}** networks in **{countryCount}** countries. Explore the monthly usage of OONI Probe through the stats below.",
   "Home.Highlights.Title": "Highlights",
   "Home.Highlights.Description": "OONI Explorer hosts millions of network measurements collected from more than 200 countries since 2012. Every day, OONI Explorer is updated with new measurements!\n\nWe share some highlights through OONI data.",
   "Countries.Heading.JumpToContinent": "Jump to continent",
