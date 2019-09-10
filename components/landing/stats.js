@@ -45,16 +45,12 @@ class CoverageChart extends React.Component {
 
   async fetchCoverageStats () {
     const client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
-    const [countryCoverage, networkCoverage, runsByMonth] = await Promise.all([
-      client.get('/api/_/countries_by_month'),
-      client.get('/api/_/asn_by_month'),
-      client.get('/api/_/runs_by_month')
-    ])
+    const result = await client.get('/api/_/global_overview_by_month')
 
     this.setState({
-      countryCoverage: countryCoverage.data,
-      networkCoverage: networkCoverage.data,
-      runsByMonth: runsByMonth.data,
+      countryCoverage: result.data.countries_by_month,
+      networkCoverage: result.data.networks_by_month,
+      runsByMonth: result.data.measurements_by_month,
       fetching: false
     })
   }
