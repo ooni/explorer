@@ -15,7 +15,7 @@
       "title": "2019 presidential crisis",
       "text": "Blocking of Wikipedia and social media",
       "report": "https://ooni.io/post/venezuela-blocking-wikipedia-and-social-media-2019/",
-      "explore": "/search?domain=www.wikipedia.org&probe_cc=VE&since=2019-01-13&until=2019-01-17",
+      "explore": "/search?domain=www.wikipedia.org&probe_cc=VE&test_name=web_connectivity&since=2019-01-13&until=2019-01-17",
       "tileColor": "#00247D"
     },
     {
@@ -42,7 +42,7 @@
       "title": "Catalonia 2017 independence referendum",
       "text": "Blocking of sites related to the referendum",
       "report": "https://ooni.io/post/internet-censorship-catalonia-independence-referendum/",
-      "explore": "/search?domain=www.referendum.legal&probe_cc=ES&since=2017-09-30&until=2017-10-02",
+      "explore": "/search?domain=www.referendum.legal&probe_cc=ES&test_name=web_connectivity&since=2017-09-30&until=2017-10-02",
       "tileColor": "#c60b1e"
     },
     {
@@ -51,7 +51,7 @@
       "title": "2018 anti-government protests",
       "text": "Blocking of Telegram, Instagram and Tor",
       "report": "https://ooni.io/post/2018-iran-protests/",
-      "explore": "/search?domain=www.instagram.com&probe_cc=IR&since=2017-12-30&until=2018-01-02",
+      "explore": "/search?domain=www.instagram.com&probe_cc=IR&test_name=web_connectivity&since=2017-12-30&until=2018-01-02",
       "tileColor": "#249F40"
     },
     {
@@ -60,7 +60,7 @@
       "title": "2016 wave of protests",
       "text": "Blocking of news websites and social media",
       "report": "https://ooni.io/post/ethiopia-report/",
-      "explore": "/search?domain=ethsat.com&probe_cc=ET",
+      "explore": "/search?domain=ethsat.com&probe_cc=ET&test_name=web_connectivity&since=2016-06-15&until=2016-10-07",
       "tileColor": "#ef2118"
     },
     {
@@ -69,7 +69,7 @@
       "title": "2017 protests",
       "text": "Blocking of news websites and social media",
       "report": "https://ooni.io/post/how-pakistan-blocked-social-media/",
-      "explore": "/search?domain=www.facebook.com&probe_cc=PK&since=2017-11-24&until=2017-11-26",
+      "explore": "/search?domain=www.facebook.com&probe_cc=PK&test_name=web_connectivity&since=2017-11-24&until=2017-11-26",
       "tileColor": "#0c590b"
     },
     {
@@ -78,7 +78,7 @@
       "title": "2016 general elections",
       "text": "Blocking of social media",
       "report": "https://ooni.io/post/uganda-social-media-blocked/",
-      "explore": "/search?domain=www.facebook.com&probe_cc=UG&since=2016-02-01&until=2016-05-13",
+      "explore": "/search?domain=www.facebook.com&probe_cc=UG&test_name=web_connectivity&since=2016-02-01&until=2016-05-13",
       "tileColor": "#000000"
     }
   ],
@@ -89,7 +89,7 @@
       "title": "Pervasive media censorship",
       "text": "Blocking of hundreds of media websites",
       "report": "https://ooni.io/post/egypt-internet-censorship/",
-      "explore": "/search?domain=madamasr.com&probe_cc=EG",
+      "explore": "/search?domain=madamasr.com&probe_cc=EG&test_name=web_connectivity&since=2018-04-01&until=2018-07-02",
       "tileColor": "#000000"
     },
     {
@@ -98,7 +98,7 @@
       "title": "Blocking of independent media websites",
       "text": "Venezuela's economic and political crisis",
       "report": "https://ooni.io/post/venezuela-internet-censorship/#media",
-      "explore": "/search?domain=www.el-nacional.com&probe_cc=VE",
+      "explore": "/search?domain=www.el-nacional.com&probe_cc=VE&test_name=web_connectivity&since=2018-01-01&until=2018-08-16",
       "tileColor": "#00247D"
     },
     {
@@ -107,7 +107,7 @@
       "title": "Blocking of foreign-based media",
       "text": "Media accused of hostile reporting against the government",
       "report": "https://ooni.io/post/south-sudan-censorship/#blocked-websites",
-      "explore": "/search?domain=sudantribune.com&probe_cc=SS",
+      "explore": "/search?domain=www.sudantribune.com&probe_cc=SS&test_name=web_connectivity&since=2018-04-01&until=2018-08-01",
       "tileColor": "#000000"
     },
     {
@@ -116,7 +116,7 @@
       "title": "Blocking of media",
       "text": "1MDB scandal",
       "report": "https://ooni.io/post/malaysia-report/#news-media",
-      "explore": "/search?domain=www.sarawakreport.org&probe_cc=MY&since=2016-09-30&until=2016-12-14",
+      "explore": "/search?domain=www.sarawakreport.org&probe_cc=MY&test_name=web_connectivity&since=2016-09-30&until=2016-12-14",
       "tileColor": "#010066"
     },
     {
@@ -125,7 +125,7 @@
       "title": "Pervasive media censorship",
       "text": "Blocking of at least 121 news outlets",
       "report": "https://ooni.io/post/iran-internet-censorship/#news-websites",
-      "explore": "/search?domain=bbc.co.uk&probe_cc=IR&test_name=web_connectivity",
+      "explore": "/search?domain=bbc.co.uk&probe_cc=IR&test_name=web_connectivity&since=2017-01-01&until=2017-09-04",
       "tileColor": "#249F40"
     }
   ],
@@ -136,7 +136,7 @@
       "title": "",
       "text": "Blocking of LGBTQI sites",
       "report": "https://ooni.io/post/indonesia-internet-censorship/#lgbt",
-      "explore": "/search?domain=www.queernet.org&probe_cc=ID",
+      "explore": "/search?domain=www.queernet.org&probe_cc=ID&test_name=web_connectivity&since=2017-01-01&until=2017-03-01",
       "tileColor": "#e70011"
     },
     {
@@ -145,7 +145,7 @@
       "title": "",
       "text": "Blocking of Grindr",
       "report": "https://ooni.io/post/iran-internet-censorship/#human-rights-issues",
-      "explore": "/search?domain=www.grindr.com&probe_cc=IR",
+      "explore": "/search?domain=www.grindr.com&probe_cc=IR&test_name=web_connectivity&since=2017-01-01&until=2017-09-04",
       "tileColor": "#249F40"
     },
     {
@@ -154,7 +154,7 @@
       "title": "",
       "text": "Blocking of QueerNet",
       "report": "https://ooni.io/post/ethiopia-report/#lgbti-websites",
-      "explore": "/search?domain=www.queernet.org&probe_cc=ET",
+      "explore": "/search?domain=www.queernet.org&probe_cc=ET&test_name=web_connectivity&since=2016-06-15&until=2016-10-07",
       "tileColor": "#ef2118"
     },
     {
@@ -163,7 +163,7 @@
       "title": "",
       "text": "Blocking of LGBT community and news websites",
       "report": "https://sinarproject.org/digital-rights/updates/online-lgbt-censorship-malaysia",
-      "explore": "/search?domain=gaystarnews.com&probe_cc=MY",
+      "explore": "/search?domain=gaystarnews.com&probe_cc=MY&test_name=web_connectivity&since=2018-01-01&until=2018-08-10",
       "tileColor": "#010066"
     }
   ],
