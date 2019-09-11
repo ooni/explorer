@@ -98,7 +98,7 @@
       "title": "Blocking of independent media websites",
       "text": "Venezuela's economic and political crisis",
       "report": "https://ooni.io/post/venezuela-internet-censorship/#media",
-      "explore": "/search?domain=www.el-nacional.com&probe_cc=VE&test_name=web_connectivity&since=2018-01-01&until=2018-08-16",
+      "explore": "/search?domain=elpitazo.com&probe_cc=VE&test_name=web_connectivity&since=2018-01-01&until=2018-08-16",
       "tileColor": "#00247D"
     },
     {
