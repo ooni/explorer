@@ -125,7 +125,7 @@
       "title": "Pervasive media censorship",
       "text": "Blocking of at least 121 news outlets",
       "report": "https://ooni.io/post/iran-internet-censorship/#news-websites",
-      "explore": "/search?domain=bbc.co.uk&probe_cc=IR&test_name=web_connectivity&since=2017-01-01&until=2017-09-04",
+      "explore": "/search?domain=iranshahrnewsagency.com&probe_cc=IR&test_name=web_connectivity&since=2017-01-01&until=2017-09-04",
       "tileColor": "#249F40"
     }
   ],
