@@ -78,7 +78,7 @@ const CommonSummary = ({
             />
             <SummaryItemBox
               label={intl.formatMessage({ id: 'Measurement.CommonSummary.Label.DateTime' })}
-              content={moment(startTime).format('lll')}
+              content={moment.utc(startTime).format('lll')}
             />
           </Flex>
         </Container>
