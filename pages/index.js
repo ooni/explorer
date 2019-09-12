@@ -277,7 +277,9 @@ export default class LandingPage extends React.Component {
               description='OONI measurements have been collected on a continuous basis since 2012, enabling the identification of censorship changes around the world over the last years. Some examples include:'
               highlights={highlightContent.changes}
             />
-            <Box my={3}>We encourage you to <NLink href='/search'><Link color='blue7'>explore OONI measurements</Link></NLink> to find more highlights!</Box>
+            <Box my={3}>
+              <Text fontSize={20}>We encourage you to <NLink href='/search'><Link color='blue7'>explore OONI measurements</Link></NLink> to find more highlights!</Text>
+            </Box>
           </Container>
         </Container>
       </Layout>
