@@ -84,9 +84,10 @@ class CoverageChart extends React.Component {
           <Text fontSize={18}>
             <FormattedMarkdown id={'Home.MonthlyStats.SummaryText'}
               values={{
-                measurementCount: intl.formatNumber(lastMonth.measurementCount),
-                networkCount: intl.formatNumber(lastMonth.networkCount),
-                countryCount: intl.formatNumber(lastMonth.countryCount)
+                // Added **'s to format the variables in bold text
+                measurementCount: `**${intl.formatNumber(lastMonth.measurementCount)}**`,
+                networkCount: `**${intl.formatNumber(lastMonth.networkCount)}**`,
+                countryCount: `**${intl.formatNumber(lastMonth.countryCount)}**`
               }}
             />
           </Text>
