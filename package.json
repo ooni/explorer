@@ -1,10 +1,10 @@
 {
   "name": "ooni-explorer",
-  "version": "2.0.0-dev0",
-  "author": "",
+  "version": "2.0.0",
+  "author": "Open Observatory of Network Interference (OONI) <contact@openobservatory.org>",
   "license": "BSD-3-Clause",
   "main": "index.js",
-  "repository": {},
+  "repository": "https://github.com/ooni/explorer",
   "dependencies": {
     "@babel/cli": "7.4.4",
     "@babel/core": "7.4.4",
