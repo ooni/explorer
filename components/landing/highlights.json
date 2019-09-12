@@ -147,15 +147,6 @@
       "report": "https://ooni.io/post/ethiopia-report/#lgbti-websites",
       "explore": "/search?domain=www.queernet.org&probe_cc=ET&test_name=web_connectivity&since=2016-06-15&until=2016-10-07",
       "tileColor": "#ef2118"
-    },
-    {
-      "countryCode": "MY",
-      "countryName": "Malaysia",
-      "title": "",
-      "text": "Blocking of LGBT community and news websites",
-      "report": "https://sinarproject.org/digital-rights/updates/online-lgbt-censorship-malaysia",
-      "explore": "/search?domain=www.planetromeo.com&probe_cc=MY&test_name=web_connectivity&since=2018-01-01&until=2018-08-10",
-      "tileColor": "#010066"
     }
   ],
   "changes": [
