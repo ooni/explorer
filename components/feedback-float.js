@@ -28,7 +28,7 @@ const StyledFeedbackButton = styled.div`
 `
 
 const dialogOptions = {
-  title: 'Feedback for OONI Explorer Beta',
+  title: 'Feedback for OONI Explorer',
   subtitle: 'Our developers would love to know what you think.',
   // suppress the additional default subtitle
   subtitle2: '',
