@@ -258,26 +258,31 @@ export default class LandingPage extends React.Component {
 
             {/* Political Events */}
             <HighlightSection
-              title='Censorship during political events'
+              title={<FormattedMessage id='Home.Highlights.Political' />}
+              description={<FormattedMessage id='Home.Highlights.Political.Description' />}
               highlights={highlightContent.political}
             />
             {/* Media */}
             <HighlightSection
-              title='Media censorship'
+              title={<FormattedMessage id='Home.Highlights.Media' />}
+              description={<FormattedMessage id='Home.Highlights.Media.Description' />}
               highlights={highlightContent.media}
             />
             {/* LGBTQI sites */}
             <HighlightSection
-              title='Blocking of LGBTQI sites'
+              title={<FormattedMessage id='Home.Highlights.LGBTQI' />}
+              description={<FormattedMessage id='Home.Highlights.LGBTQI.Description' />}
               highlights={highlightContent.lgbtqi}
             />
             {/* Censorship changes */}
             <HighlightSection
-              title='Censorship Changes'
-              description='OONI measurements have been collected on a continuous basis since 2012, enabling the identification of censorship changes around the world over the last years. Some examples include:'
+              title={<FormattedMessage id='Home.Highlights.Changes' />}
+              description={<FormattedMessage id='Home.Highlights.Changes.Description' />}
               highlights={highlightContent.changes}
             />
-            <Box my={3}>We encourage you to <NLink href='/search'><Link color='blue7'>explore OONI measurements</Link></NLink> to find more highlights!</Box>
+            <Box my={3}>
+              <Text fontSize={20}>We encourage you to <NLink href='/search'><Link color='blue7'>explore OONI measurements</Link></NLink> to find more highlights!</Text>
+            </Box>
           </Container>
         </Container>
       </Layout>
