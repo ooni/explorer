@@ -4,6 +4,7 @@ const express = require('express')
 const next = require('next')
 const axios = require('axios')
 const favicon = require('serve-favicon')
+const path = require('path')
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'production'
 process.env.PORT = process.env.PORT || 3100
