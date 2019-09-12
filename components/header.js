@@ -19,7 +19,7 @@ export default class Header extends React.Component {
           <link rel="icon" type="image/png" sizes="96x96" href="/static/images/favicons/favicon-96x96.png" />
           <link rel="icon" type="image/png" sizes="16x16" href="/static/images/favicons/favicon-16x16.png" />
 
-          <link rel="canonical" href="https://explorer.ooni.io/" />
+          <link rel="canonical" href="https://explorer.ooni.org/" />
           <meta name="twitter:card" content="summary_large_image" />
           <meta name="twitter:title" content="OONI Explorer" />
           <meta name="twitter:site" content="@openobservatory" />
