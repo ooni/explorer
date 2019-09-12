@@ -52,8 +52,6 @@ app.prepare()
 
     server.use('/_/world-atlas',
       express.static(__dirname + '/node_modules/world-atlas/world/'))
-    server.use('/_/data',
-      express.static(__dirname + '/data/'))
 
     server.get('/country/:countryCode', (req, res) => {
       return app.render(req, res, '/country', req.params)
