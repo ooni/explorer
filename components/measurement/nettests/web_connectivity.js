@@ -275,7 +275,7 @@ const WebConnectivityDetails = ({
     }
   } = measurement
 
-  const date = moment(test_start_time).format('lll')
+  const date = moment.utc(test_start_time).format('lll')
   const reasons = {
     'http-diff': 'HTTP-diff',
     'http-failure': 'HTTP-failure',

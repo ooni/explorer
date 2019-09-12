@@ -10,12 +10,13 @@ import {
 import axios from 'axios'
 import moment from 'moment'
 import { Flex, Heading, Text, theme } from 'ooni-components'
-import { FormattedMessage } from 'react-intl'
+import { injectIntl } from 'react-intl'
 
 import SpinLoader from '../vendor/spin-loader'
 import Tooltip from '../country/tooltip'
 import FormattedMarkdown from '../formatted-markdown'
 import VictoryTheme from '../VictoryTheme'
+import { ChartLoader } from './ChartLoader'
 
 const getMaxima = (data) => {
   let maxima
@@ -34,7 +35,7 @@ class CoverageChart extends React.Component {
     this.state = {
       countryCoverage: null,
       networkCoverage: null,
-      runsByMonth: null,
+      measurementsByMonth: null,
       fetching: true
     }
   }
@@ -44,55 +45,48 @@ class CoverageChart extends React.Component {
 
   async fetchCoverageStats () {
     const client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
-    const [countryCoverage, networkCoverage, runsByMonth] = await Promise.all([
-      client.get('/api/_/countries_by_month'),
-      client.get('/api/_/asn_by_month'),
-      client.get('/api/_/runs_by_month')
-    ])
+    const result = await client.get('/api/_/global_overview_by_month')
 
     this.setState({
-      countryCoverage: countryCoverage.data,
-      networkCoverage: networkCoverage.data,
-      runsByMonth: runsByMonth.data,
+      countryCoverage: result.data.countries_by_month,
+      networkCoverage: result.data.networks_by_month,
+      measurementsByMonth: result.data.measurements_by_month,
       fetching: false
     })
   }
 
   render() {
-    const { countryCoverage, networkCoverage, runsByMonth, fetching } = this.state
+    const { countryCoverage, networkCoverage, measurementsByMonth, fetching } = this.state
+    const { intl } = this.props
+
     if (fetching) {
-      return (<SpinLoader />)
+      return (<ChartLoader />)
     }
 
     // API responses are ordered by date, with most recent month at the end
     const lastMonth = {
       countryCount: countryCoverage[countryCoverage.length - 1].value,
       networkCount: networkCoverage[networkCoverage.length - 1].value,
-      runCount: runsByMonth[runsByMonth.length - 1].value
+      measurementCount: measurementsByMonth[measurementsByMonth.length - 1].value
     }
 
     // Determine the maximum value for each data set
     // Used to scale the charts on a y-axis shared with other charts
     const countryCoverageMaxima = getMaxima(countryCoverage)
     const networkCoverageMaxima = getMaxima(networkCoverage)
-    const runsMaxima = getMaxima(runsByMonth)
+    const measurementMaxima = getMaxima(measurementsByMonth)
 
     const VictoryCursorVoronoiContainer = createContainer('cursor', 'voronoi')
 
     return (
       <React.Fragment>
-        <Flex justifyContent='center' my={3}>
-          <Heading h={2} color='blue7'>
-            <FormattedMessage id={'Home.MonthlyStats.Title'} />
-          </Heading>
-        </Flex>
         <Flex justifyContent='center'>
           <Text fontSize={18}>
             <FormattedMarkdown id={'Home.MonthlyStats.SummaryText'}
               values={{
-                runCount: lastMonth.runCount,
-                networkCount: lastMonth.networkCount,
-                countryCount: lastMonth.countryCount
+                measurementCount: intl.formatNumber(lastMonth.measurementCount),
+                networkCount: intl.formatNumber(lastMonth.networkCount),
+                countryCount: intl.formatNumber(lastMonth.countryCount)
               }}
             />
           </Text>
@@ -114,8 +108,8 @@ class CoverageChart extends React.Component {
                   return `${d.date}\n \nCountries: ${d.value}`
                 } else if (d.childName === 'networkCoverage') {
                   return `Networks: ${d.value}`
-                } else if (d.childName === 'runsByMonth') {
-                  return `Runs: ${d.value}`
+                } else if (d.childName === 'measurementsByMonth') {
+                  return `Measurements: ${d.value}`
                 }
               }}
               labelComponent={<Tooltip />}
@@ -144,7 +138,7 @@ class CoverageChart extends React.Component {
                 }
               },
               {
-                name: 'Monthly Runs',
+                name: 'Monthly Measurements',
                 symbol: {
                   type: 'minus', fill: theme.colors.yellow7
                 }
@@ -213,13 +207,13 @@ class CoverageChart extends React.Component {
               }
             }}
             tickValues={[0, 0.5, 1]}
-            tickFormat={(t) => `${Math.round(t * runsMaxima/1000, 2)}k`}
+            tickFormat={(t) => `${Math.round(t * measurementMaxima/1000, 2)}k`}
           />
           <VictoryLine
-            name='runsByMonth'
-            data={runsByMonth}
+            name='measurementsByMonth'
+            data={measurementsByMonth}
             x='date'
-            y={(d) => (d.value + 20) / runsMaxima}
+            y={(d) => (d.value + 20) / measurementMaxima}
             scale={{ x: 'time', y: 'linear' }}
             style={{
               data: {
@@ -233,4 +227,4 @@ class CoverageChart extends React.Component {
   }
 }
 
-export { CoverageChart }
+export default injectIntl(CoverageChart)

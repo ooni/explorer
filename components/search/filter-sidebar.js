@@ -53,7 +53,7 @@ class FilterSidebar extends React.Component {
     const today = moment().format('YYYY-MM-DD')
 
     this.state = {
-      inputFilter: props.inputFilter || '',
+      domainFilter: props.domainFilter || '',
       onlyFilter: props.onlyFilter || 'all',
       testNameFilter: props.testNameFilter || 'XX',
       countryFilter: props.countryFilter || '',
@@ -62,8 +62,13 @@ class FilterSidebar extends React.Component {
       untilFilter: props.untilFilter || today,
       showSinceCalendar: true,
       showUntilCalendar: false,
-      isFilterDirty: false
+      isFilterDirty: false,
+      asnError: false,
+      domainError: false,
+      showDomain: this.showDomainField(props.testNameFilter || 'XX')
     }
+
+    this.getStateForFilterChange = this.getStateForFilterChange.bind(this)
     this.onChangeFilter = this.onChangeFilter.bind(this)
     this.onDateChangeFilter = this.onDateChangeFilter.bind(this)
     this.onClickApplyFilter = this.onClickApplyFilter.bind(this)
@@ -71,11 +76,86 @@ class FilterSidebar extends React.Component {
     this.isUntilValid = this.isUntilValid.bind(this)
   }
 
+  showDomainField(testName) {
+    const testsWithValidDomain = [
+      'XX', // We show the field by default (state initialized to 'XX')
+      'web_connectivity',
+      'http_requests',
+      'dns_consistency',
+      'tcp_connect'
+    ]
+
+    // Should domain filter be shown for `testsWithValidDomain`?
+    return testsWithValidDomain.indexOf(testName) > -1
+  }
+
+  getStateForFilterChange (filterName, newValue) {
+    const newState = {}
+    // Calculate changes when test name changes
+    if (filterName === 'testNameFilter') {
+      const isTestWithValidDomain = this.showDomainField(newValue)
+      newState['showDomain'] = isTestWithValidDomain
+
+      // If not, then blank out the `domain` parameter to avoid bad queries
+      if (!isTestWithValidDomain) {
+        newState['domainFilter'] = ''
+      }
+    }
+
+    // In future, calculate changes when country changes
+    // if (filterName === 'countryFilter') {}
+
+    return newState
+  }
+
   onChangeFilter (filterName) {
     return ((e) => {
+      const { intl } = this.props
+      // Get updates to state based on test name change
+      const stateChangesByTestName = this.getStateForFilterChange(filterName, e.target.value)
+      // Input Validations
+      switch(filterName) {
+      case 'asnFilter':
+        var asnValue = e.target.value
+        var asnRegEx = /^(^AS|as)?[0-9]+$/
+        if (asnValue && asnValue.match(asnRegEx) === null) {
+          this.setState({
+            asnError: intl.formatMessage({id: 'Search.Sidebar.ASN.Error'}),
+            isFilterDirty: false
+          })
+        } else {
+          this.setState({
+            asnError: false,
+            isFilterDirty: true
+          })
+        }
+        break
+      case 'domainFilter':
+        var domainValue = e.target.value
+        // eslint-disable-next-line no-useless-escape
+        var domainRegEx = /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/)?$/
+        if (domainValue && domainValue.match(domainRegEx) === null) {
+          this.setState({
+            domainError: intl.formatMessage({id: 'Search.Sidebar.Domain.Error'}),
+            isFilterDirty: false
+          })
+        } else {
+          this.setState({
+            domainError: false,
+            isFilterDirty: true
+          })
+        }
+        break
+
+      default:
+        this.setState({
+          isFilterDirty: true
+        })
+      }
+
       this.setState({
         [filterName]: e.target.value,
-        isFilterDirty: true
+        ...stateChangesByTestName
       })
     }).bind(this)
   }
@@ -118,7 +198,7 @@ class FilterSidebar extends React.Component {
 
   onClickApplyFilter() {
     this.props.onApplyFilter({
-      inputFilter: this.state.inputFilter,
+      domainFilter: this.state.domainFilter,
       onlyFilter: this.state.onlyFilter,
       testNameFilter: this.state.testNameFilter,
       countryFilter: this.state.countryFilter,
@@ -139,14 +219,17 @@ class FilterSidebar extends React.Component {
     } = this.props
 
     const {
-      inputFilter,
+      showDomain,
+      domainFilter,
       onlyFilter,
       testNameFilter,
       countryFilter,
       asnFilter,
       sinceFilter,
       untilFilter,
-      isFilterDirty
+      isFilterDirty,
+      asnError,
+      domainError
     } = this.state
 
     //Insert an 'Any' option to test name filter
@@ -156,64 +239,8 @@ class FilterSidebar extends React.Component {
     const countryOptions = [...countries]
     countryOptions.unshift({name: intl.formatMessage({id: 'Search.Sidebar.Country.AllCountries'}), alpha_2: 'XX'})
 
-    // Show `Input` text field only for tests that support it
-    const testsWithValidInput = [
-      'XX', // We show the field by default (state initialized to 'XX')
-      'web_connectivity',
-      'http_requests',
-      'dns_consistency',
-      'tcp_connect'
-    ]
-    const showInput = testsWithValidInput.indexOf(testNameFilter) > -1
-
     return (
       <StyledFilterSidebar>
-        <SelectWithLabel
-          pt={2}
-          label={intl.formatMessage({id: 'Search.Sidebar.TestName'})}
-          value={testNameFilter}
-          onChange={this.onChangeFilter('testNameFilter')}>
-          {testNameOptions.map((v, idx) => {
-            return (
-              <option key={idx} value={v.id}>{v.name}</option>
-            )
-          })}
-        </SelectWithLabel>
-
-        {
-          showInput &&
-          <InputWithLabel
-            label={intl.formatMessage({id: 'Search.Sidebar.Input'})}
-            name="inputFilter"
-            value={inputFilter}
-            onChange={this.onChangeFilter('inputFilter')}
-            placeholder={intl.formatMessage({id: 'Search.Sidebar.Input.Placeholder'})}
-            type="text"
-          />
-        }
-
-        <StyledLabel>
-          {intl.formatMessage({id: 'Search.Sidebar.Status'})}
-        </StyledLabel>
-        <RadioGroup
-          onChange={this.onRadioChangeFilter('onlyFilter')}
-          value={onlyFilter}
-        >
-          <RadioButton
-            label={intl.formatMessage({id: 'Search.FilterButton.AllResults'}) }
-            value='all'
-            checked={onlyFilter === 'all'}
-          />
-          <RadioButton
-            label={intl.formatMessage({id: 'Search.FilterButton.Confirmed'}) }
-            value='confirmed'
-          />
-          <RadioButton
-            label={intl.formatMessage({id: 'Search.FilterButton.Anomalies'}) }
-            value='anomalies'
-          />
-        </RadioGroup>
-
         <SelectWithLabel
           pt={2}
           label={intl.formatMessage({id: 'Search.Sidebar.Country'})}
@@ -226,10 +253,11 @@ class FilterSidebar extends React.Component {
             )
           })}
         </SelectWithLabel>
-
+        
         <InputWithLabel
           label={intl.formatMessage({id: 'Search.Sidebar.ASN'})}
           value={asnFilter}
+          error={asnError}
           name="asnFilter"
           onChange={this.onChangeFilter('asnFilter')}
           placeholder={intl.formatMessage({id: 'Search.Sidebar.ASN.example'})}
@@ -259,6 +287,53 @@ class FilterSidebar extends React.Component {
             />
           </Box>
         </Flex>
+
+        <SelectWithLabel
+          pt={2}
+          label={intl.formatMessage({id: 'Search.Sidebar.TestName'})}
+          value={testNameFilter}
+          onChange={this.onChangeFilter('testNameFilter')}>
+          {testNameOptions.map((v, idx) => {
+            return (
+              <option key={idx} value={v.id}>{v.name}</option>
+            )
+          })}
+        </SelectWithLabel>
+
+        {
+          showDomain &&
+          <InputWithLabel
+            label={intl.formatMessage({id: 'Search.Sidebar.Domain'})}
+            name="domainFilter"
+            value={domainFilter}
+            error={domainError}
+            onChange={this.onChangeFilter('domainFilter')}
+            placeholder={intl.formatMessage({id: 'Search.Sidebar.Domain.Placeholder'})}
+            type="text"
+          />
+        }
+
+        <StyledLabel>
+          {intl.formatMessage({id: 'Search.Sidebar.Status'})}
+        </StyledLabel>
+        <RadioGroup
+          onChange={this.onRadioChangeFilter('onlyFilter')}
+          value={onlyFilter}
+        >
+          <RadioButton
+            label={intl.formatMessage({id: 'Search.FilterButton.AllResults'}) }
+            value='all'
+            checked={onlyFilter === 'all'}
+          />
+          <RadioButton
+            label={intl.formatMessage({id: 'Search.FilterButton.Confirmed'}) }
+            value='confirmed'
+          />
+          <RadioButton
+            label={intl.formatMessage({id: 'Search.FilterButton.Anomalies'}) }
+            value='anomalies'
+          />
+        </RadioGroup>
 
         <Button
           mt={3}

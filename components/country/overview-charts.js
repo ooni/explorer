@@ -7,8 +7,10 @@ import {
   VictoryStack,
   VictoryAxis,
   VictoryLine,
+  VictoryLabel,
   VictoryVoronoiContainer
 } from 'victory'
+import { injectIntl } from 'react-intl'
 
 import Tooltip from './tooltip'
 import VictoryTheme from '../VictoryTheme'
@@ -71,42 +73,163 @@ class TestsByGroup extends React.PureComponent {
     }))
   }
 
+
   render() {
-    let testCoverageMaxima, networkCoverageMaxima
+    const { testCoverage, networkCoverage, intl } = this.props
 
-    const { testCoverage, networkCoverage } = this.props
+    // Use react-intl's imperative API to render localized test names in chart tooltips
+    const testGroupNames = {
+      'websites': intl.formatMessage({id: 'Tests.Groups.Webistes.Name'}),
+      'im': intl.formatMessage({id: 'Tests.Groups.Instant Messagging.Name'}),
+      'middlebox': intl.formatMessage({id: 'Tests.Groups.Middlebox.Name'}),
+      'performance': intl.formatMessage({id: 'Tests.Groups.Performance.Name'}),
+      'circumvention': intl.formatMessage({id: 'Tests.Groups.Circumvention.Name'})
+    }
+
+    // Check if there is enough data to plot the charts
+    const testCoverageCount = testCoverage.reduce((count, item) => count + item.count, 0)
+    const networkCoverageCount = networkCoverage.reduce((count, item) => count + item.count, 0)
+    const notEnoughData = (testCoverageCount === 0 && networkCoverageCount === 0)
+
     const supportedTestGroups = ['websites', 'im', 'middlebox', 'performance', 'circumvention']
-    const selectedTestGroups = Object.keys(this.state).filter(testGroup => this.state[testGroup])
 
-    const testCoverageByDay = testCoverage.reduce((prev, cur) => {
-      prev[cur.test_day] = prev[cur.test_day] || {}
-      if (selectedTestGroups.indexOf(cur.test_group) > -1) {
-        prev[cur.test_day][cur.test_group] = cur.count
-        const allTestCount = Object.values(prev[cur.test_day]).reduce((p,c) => p+c, 0)
-        if (typeof testCoverageMaxima === 'undefined'
-            || testCoverageMaxima < allTestCount) {
-          testCoverageMaxima = allTestCount
+    const renderEmptyChart = () => (
+      <VictoryChart
+        domainPadding={20}
+        theme={VictoryTheme}
+        containerComponent={
+          <VictoryVoronoiContainer
+            voronoiDimension='x'
+          />
         }
-      }
-      return prev
-    }, {})
-    const testCoverageArray = Object.keys(testCoverageByDay)
-      .map(day => ({test_day: day, ...testCoverageByDay[day]}))
+        domain={{ y: [0, 1] }}
+        width={600}
+        height={200}
+      >
+        <VictoryAxis tickCount={4} tickFormat={() => {}} />
+        <VictoryAxis dependentAxis tickCount={4} tickFormat={() => {}} />
+        <VictoryAxis dependentAxis orientation='right' tickCount={4} tickFormat={() => {}} />
+        <VictoryLabel
+          x={300} y={75}
+          text='No Data Available'
+          textAnchor='middle'
+          style={{
+            fill: theme.colors.gray6
+          }}
+        />
+      </VictoryChart>
+    )
 
-    networkCoverage.forEach((d) => {
-      if (typeof networkCoverageMaxima === 'undefined'
-          || networkCoverageMaxima < d.count) {
-        networkCoverageMaxima = d.count
-      }
-    })
+    const renderCharts = () => {
+      let testCoverageMaxima, networkCoverageMaxima
+      const selectedTestGroups = Object.keys(this.state).filter(testGroup => this.state[testGroup])
 
-    const networkCoverageTick = (t) => Math.round(t * networkCoverageMaxima)
-    const ntIncrement = Math.round(networkCoverageMaxima/4)
-    const networkCoverageTickValues = [1,2,3,4].map(i => i * ntIncrement / networkCoverageMaxima)
+      const testCoverageByDay = testCoverage.reduce((prev, cur) => {
+        prev[cur.test_day] = prev[cur.test_day] || {}
+        if (selectedTestGroups.indexOf(cur.test_group) > -1) {
+          prev[cur.test_day][cur.test_group] = cur.count
+          const allTestCount = Object.values(prev[cur.test_day]).reduce((p,c) => p+c, 0)
+          if (typeof testCoverageMaxima === 'undefined'
+              || testCoverageMaxima < allTestCount) {
+            testCoverageMaxima = allTestCount
+          }
+        }
+        return prev
+      }, {})
+      const testCoverageArray = Object.keys(testCoverageByDay)
+        .map(day => ({test_day: day, ...testCoverageByDay[day]}))
 
-    const testCoverageTick = (t) => Math.round(t * testCoverageMaxima)
-    const tsIncrement = Math.round(testCoverageMaxima/4)
-    const testCoverageTickValues = [1,2,3,4].map(i => i * tsIncrement / testCoverageMaxima)
+      networkCoverage.forEach((d) => {
+        if (typeof networkCoverageMaxima === 'undefined'
+            || networkCoverageMaxima < d.count) {
+          networkCoverageMaxima = d.count
+        }
+      })
+
+      const networkCoverageTick = (t) => Math.round(t * networkCoverageMaxima)
+      const ntIncrement = Math.round(networkCoverageMaxima/4)
+      const networkCoverageTickValues = [1,2,3,4].map(i => i * ntIncrement / networkCoverageMaxima)
+
+      const testCoverageTick = (t) => Math.round(t * testCoverageMaxima)
+      const tsIncrement = Math.round(testCoverageMaxima/4)
+      const testCoverageTickValues = [1,2,3,4].map(i => i * tsIncrement / testCoverageMaxima)
+
+      return (
+        <VictoryChart
+          domainPadding={20}
+          theme={VictoryTheme}
+          containerComponent={
+            <VictoryVoronoiContainer
+              voronoiDimension='x'
+            />
+          }
+          domain={{ y: [0, 1] }}
+          width={600}
+          height={200}
+        >
+          <VictoryAxis tickCount={4} />
+          <VictoryAxis
+            dependentAxis
+            tickValues={testCoverageTickValues}
+            tickFormat={testCoverageTick}
+          />
+          <VictoryStack>
+            {
+              selectedTestGroups.map((testGroup, index) => {
+                let maybeLabels = {}
+                if (index === 0) {
+                  maybeLabels['labels'] = (d) => {
+                    let s = new Date(d.test_day).toLocaleDateString()
+                    selectedTestGroups.forEach((name) => {
+                      s += `\n${d[name]} ${testGroupNames[name]}`
+                    })
+                    return s
+                  }
+                  maybeLabels['labelComponent'] = <Tooltip dy={-1} orientation='right' />
+                }
+                return (
+                  <VictoryBar
+                    {...maybeLabels}
+                    key={index}
+                    name={testGroup}
+                    data={testCoverageArray}
+                    style={{
+                      data: {
+                        stroke: '#ffffff',
+                        strokeWidth: 1,
+                        fill: testGroups[testGroup].color
+                      }
+                    }}
+                    x='test_day'
+                    y={(d) => d[testGroup] / testCoverageMaxima}
+                  />
+                )
+              })
+            }
+          </VictoryStack>
+          <VictoryAxis
+            dependentAxis
+            orientation="right"
+            tickValues={networkCoverageTickValues}
+
+            tickFormat={networkCoverageTick}
+          />
+          <VictoryLine
+            data={networkCoverage}
+            x='test_day'
+            y={(d) => d.count / networkCoverageMaxima}
+            scale={{x: 'time', y: 'linear'}}
+            labels={(d) => `${new Date(d.test_day).toLocaleDateString()}\n${d.count} Networks `}
+            labelComponent={<Tooltip dy={-8} orientation='left' />}
+            style={{
+              data: {
+                stroke: theme.colors.gray7,
+              }
+            }}
+          />
+        </VictoryChart>
+      )
+    }
 
     return (
       <React.Fragment>
@@ -125,80 +248,7 @@ class TestsByGroup extends React.PureComponent {
         {/* Bar chart */}
         <Flex justifyContent='center'>
           <Box width={1}>
-            <VictoryChart
-              domainPadding={20}
-              theme={VictoryTheme}
-              containerComponent={
-                <VictoryVoronoiContainer
-                  voronoiDimension='x'
-                />
-              }
-              domain={{ y: [0, 1] }}
-              width={600}
-              height={200}
-            >
-
-              <VictoryAxis tickCount={4} />
-              <VictoryAxis
-                dependentAxis
-                tickValues={testCoverageTickValues}
-                tickFormat={testCoverageTick}
-              />
-              <VictoryStack>
-                {
-                  selectedTestGroups.map((testGroup, index) => {
-                    let maybeLabels = {}
-                    if (index === 0) {
-                      maybeLabels['labels'] = (d) => {
-                        let s = new Date(d.test_day).toLocaleDateString()
-                        selectedTestGroups.forEach((name) => {
-                          s += `\n${d[name]} ${name}`
-                        })
-                        return s
-                      }
-                      maybeLabels['labelComponent'] = <Tooltip dy={-1} orientation='right' />
-                    }
-                    return (
-                      <VictoryBar
-                        {...maybeLabels}
-                        key={index}
-                        name={testGroup}
-                        data={testCoverageArray}
-                        style={{
-                          data: {
-                            stroke: '#ffffff',
-                            strokeWidth: 1,
-                            fill: testGroups[testGroup].color
-                          }
-                        }}
-                        x='test_day'
-                        y={(d) => d[testGroup] / testCoverageMaxima}
-                      />
-                    )
-                  })
-                }
-              </VictoryStack>
-              <VictoryAxis
-                dependentAxis
-                orientation="right"
-                tickValues={networkCoverageTickValues}
-
-                tickFormat={networkCoverageTick}
-              />
-              <VictoryLine
-                data={networkCoverage}
-                x='test_day'
-                y={(d) => d.count / networkCoverageMaxima}
-                scale={{x: 'time', y: 'linear'}}
-                labels={(d) => `${new Date(d.test_day).toLocaleDateString()}\n${d.count} Networks `}
-                labelComponent={<Tooltip dy={-8} orientation='left' />}
-                style={{
-                  data: {
-                    stroke: theme.colors.gray7,
-                  }
-                }}
-              />
-            </VictoryChart>
+            {notEnoughData ? renderEmptyChart() : renderCharts()}
           </Box>
         </Flex>
       </React.Fragment>
@@ -206,4 +256,4 @@ class TestsByGroup extends React.PureComponent {
   }
 }
 
-export default TestsByGroup
+export default injectIntl(TestsByGroup)

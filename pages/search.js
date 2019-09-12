@@ -18,7 +18,7 @@ import Layout from '../components/Layout'
 
 import ResultsList from '../components/search/results-list'
 import FilterSidebar from '../components/search/filter-sidebar'
-import Loader from '../components/search/loader'
+import { Loader } from '../components/search/loader'
 
 import { sortByKey } from '../utils'
 
@@ -26,7 +26,7 @@ const queryToParams = ({ query }) => {
   // XXX do better validation
   let params = {},
     show = 50
-  const supportedParams = ['probe_cc', 'input', 'probe_asn', 'test_name', 'since', 'until']
+  const supportedParams = ['probe_cc', 'domain', 'probe_asn', 'test_name', 'since', 'until']
   if (query.show) {
     show = parseInt(query.show)
   }
@@ -150,7 +150,7 @@ class Search extends React.Component {
     super(props)
     this.state = {
       testNameFilter: props.router.query.test_name,
-      inputFilter: props.router.query.input,
+      domainFilter: props.router.query.domain,
       countryFilter: props.router.query.probe_cc,
       asnFilter: props.router.query.probe_asn,
       sinceFilter: props.router.query.since,
@@ -241,7 +241,7 @@ class Search extends React.Component {
 
   getFilterQuery () {
     const mappings = [
-      ['inputFilter', 'input'],
+      ['domainFilter', 'domain'],
       ['countryFilter', 'probe_cc'],
       ['asnFilter', 'probe_asn'],
       ['testNameFilter', 'test_name'],
@@ -275,10 +275,13 @@ class Search extends React.Component {
       testNamesKeyed,
       countries
     } = this.props
+
     const {
+      loading,
+      error,
       results,
       onlyFilter,
-      inputFilter,
+      domainFilter,
       testNameFilter,
       countryFilter,
       asnFilter,
@@ -298,7 +301,7 @@ class Search extends React.Component {
           <Flex pt={3} flexWrap='wrap'>
             <Box width={[1, 1/4]} px={2}>
               <FilterSidebar
-                inputFilter={inputFilter}
+                domainFilter={domainFilter}
                 testNameFilter={testNameFilter}
                 countryFilter={countryFilter}
                 asnFilter={asnFilter}
@@ -311,11 +314,11 @@ class Search extends React.Component {
               />
             </Box>
             <Box width={[1, 3/4]} px={2}>
-              <ErrorBox error={this.state.error} />
-              <Loader loading={this.state.loading} />
+              {error && <ErrorBox error={error} />}
+              {loading && <Loader />}
 
-              {!this.state.error && !this.state.loading && results.length === 0 && <NoResults />}
-              {!this.state.error && !this.state.loading && results.length > 0
+              {!error && !loading && results.length === 0 && <NoResults />}
+              {!error && !loading && results.length > 0
                 && <div>
                   <ResultsList results={results} testNamesKeyed={testNamesKeyed} />
                   {

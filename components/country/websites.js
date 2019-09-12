@@ -14,6 +14,7 @@ class WebsitesSection extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
+      noData: false,
       selectedNetwork: null,
       networks: []
     }
@@ -34,15 +35,22 @@ class WebsitesSection extends React.Component {
         probe_cc: countryCode
       }
     })
-    this.setState({
-      networks: result.data.results,
-      selectedNetwork: Number(result.data.results[0].probe_asn)
-    })
+    if (result.data.results.length > 0) {
+      this.setState({
+        networks: result.data.results,
+        selectedNetwork: Number(result.data.results[0].probe_asn)
+      })
+    } else {
+      this.setState({
+        noData: true,
+        networks: null
+      })
+    }
   }
 
   render () {
     const { onPeriodChange, countryCode } = this.props
-    const { selectedNetwork } = this.state
+    const { noData, selectedNetwork } = this.state
     return (
       <React.Fragment>
         <SectionHeader>
@@ -60,14 +68,17 @@ class WebsitesSection extends React.Component {
         </SimpleBox>
 
         <Box my={4}>
-          {selectedNetwork &&
-            <TestsByCategoryInNetwork
-              network={selectedNetwork}
-              countryCode={countryCode}
-              onNetworkChange={this.onNetworkChange}
-              networks={this.state.networks}
-            />
+          {noData &&
+            <Text fontSize={18} color='gray6'>
+              <FormattedMessage id='Country.Label.NoData' />
+            </Text>
           }
+          <TestsByCategoryInNetwork
+            network={selectedNetwork}
+            countryCode={countryCode}
+            onNetworkChange={this.onNetworkChange}
+            networks={this.state.networks}
+          />
         </Box>
       </React.Fragment>
     )

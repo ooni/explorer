@@ -22,7 +22,7 @@ import {
 } from '../colors'
 
 import Tooltip from './tooltip'
-import SpinLoader from '../vendor/spin-loader'
+import { WebsiteChartLoader } from './WebsiteChartLoader'
 
 const Circle = styled.div`
   position: relative;
@@ -70,7 +70,9 @@ const TruncatedURL = ({ url }) => {
     )
   } catch (e) {
     return (
-      <abbr title={url}>{url}</abbr>
+      <WrappedText>
+        <abbr title={url}>{url}</abbr>
+      </WrappedText>
     )
   }
 }
@@ -151,11 +153,19 @@ class URLChart extends React.Component {
     }
 
     if (fetching) {
-      return (<SpinLoader />)
+      return (
+        <WebsiteChartLoader />
+      )
     }
 
     const today = moment().format('YYYY-MM-DD')
     const since30days = moment().subtract(30, 'days').format('YYYY-MM-DD')
+
+    const yMax = data.reduce((max, item) => (
+      (item.total_count > max) ? item.total_count : max
+    ), 0)
+
+    const domainToExplore = new URL(metadata.input).hostname
 
     return (
       <StyledChartRow flexWrap='wrap' justifyContent='space-between' bg='gray0' my={3}>
@@ -164,7 +174,7 @@ class URLChart extends React.Component {
             <Box width={[1, 1/4]} p={3}>
               <TruncatedURL url={metadata.input} />
               <Link
-                href={`/search?test_name=web_connectivity&probe_cc=${countryCode}&probe_asn=${network}&input=${metadata.input}&since=${since30days}&until=${today}`}
+                href={`/search?test_name=web_connectivity&probe_cc=${countryCode}&probe_asn=${network}&domain=${domainToExplore}&since=${since30days}&until=${today}`}
               >
                 <FormattedMessage id='Country.Websites.URLCharts.ExploreMoreMeasurements' />
               </Link>
@@ -199,9 +209,18 @@ class URLChart extends React.Component {
                   <VictoryAxis
                     style={{
                       axis: { stroke: 'none' },
-                      grid: { stroke: dataColorMap.empty }
                     }}
                     tickFormat={() => {}}
+                  />
+                  <VictoryBar
+                    data={data}
+                    x='test_day'
+                    y={() => yMax}
+                    style={{
+                      data: {
+                        fill: dataColorMap.empty
+                      }
+                    }}
                   />
                   <VictoryStack>
                     <VictoryBar
@@ -239,7 +258,6 @@ class URLChart extends React.Component {
                           style={{
                             data: {
                               fill: dataColorMap[type],
-                              strokeWidth: (d, active) => active ? 4 : 0
                             }
                           }}
                         />

@@ -1,6 +1,6 @@
 import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { Flex, Heading, Text, Link } from 'ooni-components'
+import { Flex, Box, Heading, Text, Link } from 'ooni-components'
 import axios from 'axios'
 
 import SectionHeader from './section-header'
@@ -77,6 +77,17 @@ class NetworkPropertiesSection extends React.Component {
     if (fetching) {
       return (<SpinLoader />)
     }
+
+    if (data.length === 0) {
+      return (
+        <Box my={4}>
+          <Text fontSize={18} color='gray6'>
+            <FormattedMessage id='Country.Label.NoData' />
+          </Text>
+        </Box>
+      )
+    }
+
     const content = []
 
     for ( let i = 0; i < data.length && i < visibleNetworks; i++) {
