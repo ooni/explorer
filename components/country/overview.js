@@ -152,10 +152,10 @@ const Overview = ({
         </Flex>
       </BoxWithTitle>
       */}
-      <Heading h={4} my={4}>
+      <Heading h={4} my={2}>
         <FormattedMessage id='Country.Overview.Heading.TestsByClass' />
       </Heading>
-      <Text fontSize={16} my={4}>
+      <Text fontSize={16}>
         <FormattedMarkdown id='Country.Overview.Heading.TestsByClass.Description' />
       </Text>
       <TestsByGroup
