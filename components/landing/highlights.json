@@ -71,15 +71,6 @@
       "report": "https://ooni.io/post/how-pakistan-blocked-social-media/",
       "explore": "/search?domain=www.facebook.com&probe_cc=PK&test_name=web_connectivity&since=2017-11-24&until=2017-11-26",
       "tileColor": "#0c590b"
-    },
-    {
-      "countryCode": "UG",
-      "countryName": "Uganda",
-      "title": "2016 general elections",
-      "text": "Blocking of social media",
-      "report": "https://ooni.io/post/uganda-social-media-blocked/",
-      "explore": "/search?domain=facebook.com&probe_cc=UG&test_name=web_connectivity&since=2016-02-01&until=2016-05-13",
-      "tileColor": "#000000"
     }
   ],
   "media": [
