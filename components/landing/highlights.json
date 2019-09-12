@@ -154,7 +154,7 @@
       "title": "",
       "text": "Blocking of LGBT community and news websites",
       "report": "https://sinarproject.org/digital-rights/updates/online-lgbt-censorship-malaysia",
-      "explore": "/search?domain=gaystarnews.com&probe_cc=MY&test_name=web_connectivity&since=2018-01-01&until=2018-08-10",
+      "explore": "/search?domain=www.gaystarnews.com&probe_cc=MY&test_name=web_connectivity&since=2018-01-01&until=2018-08-10",
       "tileColor": "#010066"
     }
   ],
