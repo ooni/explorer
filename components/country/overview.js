@@ -2,6 +2,7 @@ import React from 'react'
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
 import styled from 'styled-components'
 import { Flex, Box, Heading, Link } from 'ooni-components'
+import { Text } from 'rebass'
 import SectionHeader from './section-header'
 import { BoxWithTitle } from './box'
 import TestsByGroup from './overview-charts'
@@ -151,9 +152,12 @@ const Overview = ({
         </Flex>
       </BoxWithTitle>
       */}
-      <Heading h={4}>
+      <Heading h={4} my={4}>
         <FormattedMessage id='Country.Overview.Heading.TestsByClass' />
       </Heading>
+      <Text fontSize={16} my={4}>
+        <FormattedMarkdown id='Country.Overview.Heading.TestsByClass.Description' />
+      </Text>
       <TestsByGroup
         fetchTestCoverageData={fetchTestCoverageData}
         testCoverage={testCoverage}
