@@ -52,6 +52,21 @@ const getMeasurements = (query) => {
   return client.get('/api/v1/measurements', {params})
 }
 
+// Handle circular structures when stringifying error responses
+// From: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/Cyclic_object_value#Examples
+const getCircularReplacer = () => {
+  const seen = new WeakSet()
+  return (key, value) => {
+    if (typeof value === 'object' && value !== null) {
+      if (seen.has(value)) {
+        return
+      }
+      seen.add(value)
+    }
+    return value
+  }
+}
+
 const formatError = (error) => {
   let errorString = ''
   if (error.code) {
@@ -61,7 +76,7 @@ const formatError = (error) => {
     errorString += ` (${error.errno})`
   }
   if (errorString === '') {
-    errorString = JSON.stringify(error)
+    errorString = JSON.stringify(error, getCircularReplacer())
   }
   return errorString
 }
@@ -107,23 +122,13 @@ class Search extends React.Component {
       query.until = today
     }
 
-    try {
-      [msmtR, testNamesR, countriesR] = await Promise.all([
-        getMeasurements(query),
-        client.get('/api/_/test_names'),
-        client.get('/api/_/countries')
-      ])
-    } catch (err) {
-      return {
-        error: err,
-        results: [],
-        testNamesKeyed: {},
-        testNames: [],
-        countries: [],
-      }
-    }
-    const measurements = msmtR.data
+    [msmtR, testNamesR, countriesR] = await Promise.all([
+      getMeasurements(query),
+      client.get('/api/_/test_names'),
+      client.get('/api/_/countries')
+    ])
 
+    const measurements = msmtR.data
     let countries = countriesR.data.countries
     countries.sort(sortByKey('name'))
 

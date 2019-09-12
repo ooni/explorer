@@ -6,6 +6,7 @@ import sentry from '../utils/sentry'
 import Router from 'next/router'
 import NProgress from 'nprogress'
 import '../static/nprogress.css'
+import ErrorPage from './_error'
 
 // Intercept route changes on page navigation to show top edge progress bar
 Router.onRouteChangeStart = () => NProgress.start()
@@ -68,29 +69,7 @@ export default class MyApp extends App {
 
   render () {
     return this.state.hasError ? (
-      <section>
-        <h1>There was an error!</h1>
-        <p>
-          <a
-            href='#'
-            onClick={() =>
-              Sentry.showReportDialog({ eventId: this.state.errorEventId })
-            }
-          >
-            📣 Report this error
-          </a>
-        </p>
-        <p>
-          <a
-            href='#'
-            onClick={() => {
-              window.location.reload(true)
-            }}
-          >
-            Or, try reloading the page
-          </a>
-        </p>
-      </section>
+      <ErrorPage errorCode={500} />
     ) : (
       // Render the normal Next.js page
       super.render()
