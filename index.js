@@ -42,7 +42,7 @@ app.prepare()
     })
   })
   .then(() => {
-    server.use(favicon(path.join(__dirname, 'static', 'images', 'favicons' 'favicon.ico')))
+    server.use(favicon(path.join(__dirname, 'static', 'images', 'favicons', 'favicon.ico')))
 
     const { Sentry } = require('./utils/sentry')(app.buildId)
     // This attaches request information to sentry errors
