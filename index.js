@@ -3,6 +3,7 @@
 const express = require('express')
 const next = require('next')
 const axios = require('axios')
+const favicon = require('serve-favicon')
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'production'
 process.env.PORT = process.env.PORT || 3100
@@ -41,6 +42,8 @@ app.prepare()
     })
   })
   .then(() => {
+    server.use(favicon(path.join(__dirname, 'static', 'images', 'favicons' 'favicon.ico')))
+
     const { Sentry } = require('./utils/sentry')(app.buildId)
     // This attaches request information to sentry errors
     server.use(Sentry.Handlers.requestHandler())
