@@ -162,10 +162,18 @@ class FilterSidebar extends React.Component {
 
   onDateChangeFilter (filterName) {
     return ((date) => {
-      this.setState({
-        [filterName]: (date !== '') ? date.utc().format('YYYY-MM-DD') : date,
-        isFilterDirty: true
-      })
+      if (moment(new Date(date)).isValid()) {
+        const newDate = moment.isMoment(date) ? date.format('YYYY-MM-DD') : date
+        this.setState({
+          [filterName]: newDate,
+          isFilterDirty: true
+        })
+      } else {
+        this.setState({
+          [filterName]: date,
+          isFilterDirty: false
+        })
+      }
     })
   }
 
@@ -253,7 +261,7 @@ class FilterSidebar extends React.Component {
             )
           })}
         </SelectWithLabel>
-        
+
         <InputWithLabel
           label={intl.formatMessage({id: 'Search.Sidebar.ASN'})}
           value={asnFilter}
@@ -271,6 +279,7 @@ class FilterSidebar extends React.Component {
             <DatePicker
               value={sinceFilter}
               onChange={this.onDateChangeFilter('sinceFilter')}
+              dateFormat='YYYY-MM-DD'
               timeFormat={false}
               isValidDate={this.isSinceValid}
             />
@@ -282,6 +291,7 @@ class FilterSidebar extends React.Component {
             <DatePicker
               value={untilFilter}
               onChange={this.onDateChangeFilter('untilFilter')}
+              dateFormat='YYYY-MM-DD'
               timeFormat={false}
               isValidDate={this.isUntilValid}
             />
