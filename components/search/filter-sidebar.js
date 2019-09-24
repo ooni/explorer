@@ -162,7 +162,7 @@ class FilterSidebar extends React.Component {
 
   onDateChangeFilter (filterName) {
     return ((date) => {
-      if (moment(new Date(date)).isValid()) {
+      if (moment(new Date(date)).isValid() || date === '') {
         const newDate = moment.isMoment(date) ? date.format('YYYY-MM-DD') : date
         this.setState({
           [filterName]: newDate,
