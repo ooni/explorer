@@ -95,7 +95,7 @@ const ErrorBox = ({ error }) => {
         </Box>
       </Flex>
       <Flex justifyContent='center'>
-        <Box  px={[1, 4]}>
+        <Box>
           <Heading h={4} my={4}>
             We encountered an error. Please try again or change the filters to get different results.
           </Heading>
@@ -156,7 +156,8 @@ class Search extends React.Component {
     try {
       msmtR = await getMeasurements(query)
     } catch (error) {
-      if (error.response) {
+      // Remove `error.response.request` which has a circular reference to `response`
+      if (error.response && error.response.request) {
         delete error.response['request']
       }
       return {
