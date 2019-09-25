@@ -19,6 +19,7 @@ import Layout from '../components/Layout'
 import ResultsList from '../components/search/results-list'
 import FilterSidebar from '../components/search/filter-sidebar'
 import { Loader } from '../components/search/loader'
+import OONI404 from '../static/images/OONI_404.svg'
 
 import { sortByKey } from '../utils'
 
@@ -88,8 +89,23 @@ const ErrorBox = ({ error }) => {
 
   return (
     <div>
-      <Heading h={2}>Error</Heading>
-      <p>{formatError(error)}</p>
+      <Flex justifyContent='center'>
+        <Box width={[1, 1/4]} my={5}>
+          <OONI404 />
+        </Box>
+      </Flex>
+      <Flex justifyContent='center'>
+        <Box  px={[1, 4]}>
+          <Heading h={4} my={4}>
+            We encountered an error. Please try again or change the filters to get different results.
+          </Heading>
+          <Box p={[1, 3]} bg='gray3'>
+            <pre>
+              {JSON.stringify(error, null, '  ')}
+            </pre>
+          </Box>
+        </Box>
+      </Flex>
     </div>
   )
 }
@@ -122,20 +138,38 @@ class Search extends React.Component {
       query.until = today
     }
 
-    [msmtR, testNamesR, countriesR] = await Promise.all([
-      getMeasurements(query),
+    [testNamesR, countriesR] = await Promise.all([
       client.get('/api/_/test_names'),
       client.get('/api/_/countries')
     ])
 
-    const measurements = msmtR.data
+    let testNames = testNamesR.data.test_names
+    testNames.sort(sortByKey('name'))
+
+    let testNamesKeyed = {}
+    testNames.forEach(v => testNamesKeyed[v.id] = v.name)
+
     let countries = countriesR.data.countries
     countries.sort(sortByKey('name'))
 
-    let testNames = testNamesR.data.test_names
-    let testNamesKeyed = {}
-    testNames.forEach(v => testNamesKeyed[v.id] = v.name)
-    testNames.sort(sortByKey('name'))
+
+    try {
+      msmtR = await getMeasurements(query)
+    } catch (error) {
+      if (error.response) {
+        delete error.response['request']
+      }
+      return {
+        error,
+        results: [],
+        nextURL: null,
+        testNamesKeyed,
+        testNames,
+        countries
+      }
+    }
+
+    const measurements = msmtR.data
 
     return {
       results: measurements.results,
@@ -232,7 +266,8 @@ class Search extends React.Component {
           })
           .catch((err) => {
             this.setState({
-              error: err
+              error: err,
+              loading: false
             })
           })
       })
