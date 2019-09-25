@@ -172,6 +172,7 @@ class Search extends React.Component {
     const measurements = msmtR.data
 
     return {
+      error: null,
       results: measurements.results,
       nextURL: measurements.metadata.next_url,
       testNamesKeyed,
@@ -247,6 +248,7 @@ class Search extends React.Component {
 
   onApplyFilter (state) {
     this.setState({
+      error: null,
       loading: true,
       ...state
     }, () => {
