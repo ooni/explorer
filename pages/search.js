@@ -155,10 +155,12 @@ class Search extends React.Component {
 
     try {
       msmtR = await getMeasurements(query)
-    } catch (error) {
-      // Remove `error.response.request` which has a circular reference to `response`
-      if (error.response && error.response.request) {
-        delete error.response['request']
+    } catch (err) {
+      let error
+      if (err.response) {
+        error = err.response.data
+      } else {
+        error = err.message
       }
       return {
         error,
