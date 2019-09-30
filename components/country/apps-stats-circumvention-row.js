@@ -4,7 +4,7 @@ import { FormattedMessage } from 'react-intl'
 import { Flex, Box, Link, Text, theme } from 'ooni-components'
 import styled from 'styled-components'
 import {
-  NettestWhatsApp
+  NettestVanillaTor
 } from 'ooni-components/dist/icons'
 import moment from 'moment'
 
@@ -131,7 +131,7 @@ class AppsStatsCircumventionRow extends React.Component {
       <StyledRow p={3}>
         <Flex flexWrap='wrap' alignItems='center'>
           <Box mr={3}>
-            <NettestWhatsApp size={36} />
+            <NettestVanillaTor size={36} />
           </Box>
           <Box width={4/12}>
             Vanilla Tor
