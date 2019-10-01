@@ -23,11 +23,12 @@ const StyledSummaryItemLabel = styled(Text)`
 
 const SummaryItemBox = ({
   label,
-  content
+  content,
+  timezone
 }) => (
   <Box width={[1, 1/3]} px={4} py={2}>
     <Text fontSize={24} fontWeight={300}>
-      {content}
+      {content} {timezone}
     </Text>
     <StyledSummaryItemLabel fontSize={16} >
       {label}
@@ -78,6 +79,7 @@ const CommonSummary = ({
             />
             <SummaryItemBox
               label={intl.formatMessage({ id: 'Measurement.CommonSummary.Label.DateTime' })}
+              timezone={intl.formatMessage({ id: 'Measurement.CommonSummary.Label.UTC' })}
               content={moment.utc(startTime).format('lll')}
             />
           </Flex>
