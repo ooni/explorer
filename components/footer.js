@@ -86,7 +86,7 @@ const Footer = ({ intl }) => (
           <FooterLink href='https://openobservatory.slack.com/' label={intl.formatMessage({ id: 'Footer.Link.Slack' })} />
         </FooterBox>
       </Flex>
-      <Flex flexWrap='wrap' justifyContent='space-between'>
+      <Flex flexWrap='wrap'>
         <FooterBox>
           <small>
             <Box mb={1}>{intl.formatMessage({ id: 'Footer.Text.Copyright' })}</Box>
