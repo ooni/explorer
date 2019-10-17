@@ -8,7 +8,7 @@ import { MdFileDownload, MdFileUpload } from 'react-icons/lib/md'
 import { FormattedMessage } from 'react-intl'
 import styled from 'styled-components'
 
-import { testGroups } from '../TestInfo'
+import { testGroups } from '../test-info'
 
 
 const BorderedBox = styled(Flex)`

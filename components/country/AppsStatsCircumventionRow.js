@@ -8,7 +8,7 @@ import {
 } from 'ooni-components/dist/icons'
 import moment from 'moment'
 
-import { testNames } from '../TestInfo'
+import { testNames } from '../test-info'
 import { CountryContext } from './CountryContext'
 import { CollapseTrigger } from '../CollapseTrigger'
 

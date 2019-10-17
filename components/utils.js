@@ -1,4 +1,4 @@
-import { testGroups, testNames } from './TestInfo'
+import { testGroups, testNames } from './test-info'
 
 export const getTestMetadata = (testName) => {
   let metadata = {

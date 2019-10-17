@@ -14,7 +14,7 @@ import { injectIntl } from 'react-intl'
 
 import Tooltip from './Tooltip'
 import VictoryTheme from '../VictoryTheme'
-import { testGroups } from '../TestInfo'
+import { testGroups } from '../test-info'
 
 const Circle = styled.span`
   height: 16px;
