@@ -4,7 +4,7 @@ import { Flex, Box, Heading, Text, Link } from 'ooni-components'
 import axios from 'axios'
 
 import SectionHeader from './SectionHeader'
-import { SimpleBox } from './Box'
+import { SimpleBox } from './boxes'
 // import PeriodFilter from './PeriodFilter'
 import NetworkStats from './NetworkStats'
 import SpinLoader from '../vendor/SpinLoader'

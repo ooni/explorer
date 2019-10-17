@@ -13,7 +13,7 @@ import 'typeface-fira-sans/index.css'
 
 import Header from './Header'
 import Footer from './Footer'
-import withIntl from './WithIntl'
+import withIntl from './withIntl'
 import FeedbackButton from '../components/FeedbackFloat'
 
 theme.maxWidth = 1024

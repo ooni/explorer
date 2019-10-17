@@ -4,7 +4,7 @@ import styled from 'styled-components'
 import { Flex, Box, Heading, Link } from 'ooni-components'
 import { Text } from 'rebass'
 import SectionHeader from './SectionHeader'
-import { BoxWithTitle } from './Box'
+import { BoxWithTitle } from './boxes'
 import TestsByGroup from './OverviewCharts'
 import FormattedMarkdown from '../FormattedMarkdown'
 import {

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import { Flex, Box, Heading, Text, Link } from 'ooni-components'
 import axios from 'axios'
-import URLChart from './UrlChart'
+import URLChart from './URLChart'
 import ASNSelector from './ASNSelector'
 import { WebsiteSectionLoader, WebsiteChartLoader } from './WebsiteChartLoader'
 

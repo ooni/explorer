@@ -3,7 +3,7 @@ import { FormattedMessage } from 'react-intl'
 import { Text } from 'ooni-components'
 
 import SectionHeader from './SectionHeader'
-import { SimpleBox } from './Box'
+import { SimpleBox } from './boxes'
 import PeriodFilter from './PeriodFilter'
 import AppsStatsGroup from './AppsStats'
 import AppsStatsCircumvention from './AppsStatsCircumvention'

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import moment from 'moment'
 import { Link, Text } from 'ooni-components'
 
-import { getTestMetadata } from '../Utils'
+import { getTestMetadata } from '../utils'
 import FormattedMarkdown from '../FormattedMarkdown'
 
 const SummaryText = ({
