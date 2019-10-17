@@ -12,7 +12,7 @@ import moment from 'moment'
 import { Flex, Heading, Text, theme } from 'ooni-components'
 import { injectIntl } from 'react-intl'
 
-import SpinLoader from '../vendor/spin-loader'
+import SpinLoader from '../vendor/SpinLoader'
 import Tooltip from '../country/tooltip'
 import FormattedMarkdown from '../formatted-markdown'
 import VictoryTheme from '../VictoryTheme'

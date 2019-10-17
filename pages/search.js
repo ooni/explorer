@@ -13,12 +13,12 @@ import {
 } from 'ooni-components'
 import { FormattedMessage } from 'react-intl'
 
-import NavBar from '../components/nav-bar'
+import NavBar from '../components/NavBar'
 import Layout from '../components/Layout'
 
-import ResultsList from '../components/search/results-list'
-import FilterSidebar from '../components/search/filter-sidebar'
-import { Loader } from '../components/search/loader'
+import ResultsList from '../components/search/ResultsList'
+import FilterSidebar from '../components/search/FilterSidebar'
+import { Loader } from '../components/search/Loader'
 import OONI404 from '../static/images/OONI_404.svg'
 
 import { sortByKey } from '../utils'

@@ -14,9 +14,9 @@ import {
 import { Text } from 'rebass'
 import { StickyContainer, Sticky } from 'react-sticky'
 
-import Flag from '../components/flag'
+import Flag from '../components/Flag'
 import Layout from '../components/Layout'
-import NavBar from '../components/nav-bar'
+import NavBar from '../components/NavBar'
 
 import countryUtil from 'country-util'
 

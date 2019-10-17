@@ -14,7 +14,7 @@ import 'typeface-fira-sans/index.css'
 import Header from './header'
 import Footer from './footer'
 import withIntl from './withIntl'
-import FeedbackButton from '../components/feedback-float'
+import FeedbackButton from '../components/FeedbackFloat'
 
 theme.maxWidth = 1024
 

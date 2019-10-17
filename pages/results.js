@@ -8,7 +8,7 @@ import {
 } from 'ooni-components'
 
 import Layout from '../components/Layout'
-import NavBar from '../components/nav-bar'
+import NavBar from '../components/NavBar'
 
 export default class Results extends React.Component {
   render () {

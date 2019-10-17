@@ -3,7 +3,7 @@ import React from 'react'
 import Head from 'next/head'
 import NLink from 'next/link'
 import Router from 'next/router';
-import FormattedMarkdown from '../components/formatted-markdown'
+import FormattedMarkdown from '../components/FormattedMarkdown'
 import styled from 'styled-components'
 import axios from 'axios'
 import { FormattedMessage } from 'react-intl'
@@ -18,12 +18,12 @@ import {
 import { Text } from 'rebass'
 
 import Layout from '../components/Layout'
-import NavBar from '../components/nav-bar'
+import NavBar from '../components/NavBar'
 import { toCompactNumberUnit } from '../utils'
-import HighlightSection from '../components/landing/highlights-section'
-import highlightContent from '../components/landing/highlights.json'
-import { Flag } from '../components/flag'
-import CoverageChart from '../components/landing/stats'
+import HighlightSection from '../components/landing/HighlightsSection'
+import highlightContent from '../components/landing/Highlights.json'
+import { Flag } from '../components/Flag'
+import CoverageChart from '../components/landing/Stats'
 
 const HeroUnit = styled.div`
   background: url(/static/images/world-dots.svg);
