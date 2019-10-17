@@ -16,8 +16,8 @@ import {
   colorError,
   colorConfirmed,
   colorAnomaly
-} from '../colors'
-import Flag from '../flag'
+} from '../Colors'
+import Flag from '../Flag'
 
 const StyledResultTag = styled.div`
   border-radius: 16px;

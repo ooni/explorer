@@ -4,8 +4,8 @@ import styled from 'styled-components'
 import axios from 'axios'
 import { FormattedMessage } from 'react-intl'
 
-import { inCountry } from './country-context'
-import AppsStatRow from './apps-stats-row'
+import { inCountry } from './CountryContext'
+import AppsStatRow from './AppsStatsRow'
 import { AppSectionLoader } from './WebsiteChartLoader'
 
 const AppGroupHeading = styled(Box)`

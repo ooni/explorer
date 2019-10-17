@@ -7,8 +7,8 @@ import { Flex, Box } from 'ooni-components'
 import { Text } from 'rebass'
 import { FormattedMessage } from 'react-intl'
 
-import { getTestMetadata } from '../utils'
-import Badge from '../badge'
+import { getTestMetadata } from '../Utils'
+import Badge from '../Badge'
 
 const TestGroupBadge = ({icon, name, color}) => (
   <Badge bg={color} color='white'>

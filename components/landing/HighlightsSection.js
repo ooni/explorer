@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Flex, Box } from 'ooni-components'
 import { Text } from 'rebass'
 
-import HighlightBox from './highlight-box'
+import HighlightBox from './HighlightBox'
 
 const HighlightSection = ({
   title,

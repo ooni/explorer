@@ -3,8 +3,8 @@ import { Box, Heading } from 'ooni-components'
 import styled from 'styled-components'
 import axios from 'axios'
 
-import { inCountry } from './country-context'
-import AppsStatsRowCircumvention from './apps-stats-circumvention-row'
+import { inCountry } from './CountryContext'
+import AppsStatsRowCircumvention from './AppsStatsCircumventionRow'
 import { AppSectionLoader } from './WebsiteChartLoader'
 
 const AppGroupHeading = styled(Box)`

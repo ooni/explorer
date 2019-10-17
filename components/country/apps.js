@@ -2,12 +2,12 @@ import React from 'react'
 import { FormattedMessage } from 'react-intl'
 import { Text } from 'ooni-components'
 
-import SectionHeader from './section-header'
-import { SimpleBox } from './box'
-import PeriodFilter from './period-filter'
-import AppsStatsGroup from './apps-stats'
-import AppsStatsCircumvention from './apps-stats-circumvention'
-import FormattedMarkdown from '../formatted-markdown'
+import SectionHeader from './SectionHeader'
+import { SimpleBox } from './Box'
+import PeriodFilter from './PeriodFilter'
+import AppsStatsGroup from './AppsStats'
+import AppsStatsCircumvention from './AppsStatsCircumvention'
+import FormattedMarkdown from '../FormattedMarkdown'
 
 const AppsSection = () => (
   <React.Fragment>

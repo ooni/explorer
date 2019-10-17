@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import { Flex, Box, Heading, Text, Link } from 'ooni-components'
 import axios from 'axios'
-import URLChart from './url-chart'
-import ASNSelector from './asn-selector'
+import URLChart from './UrlChart'
+import ASNSelector from './ASNSelector'
 import { WebsiteSectionLoader, WebsiteChartLoader } from './WebsiteChartLoader'
 
 const defaultState = {

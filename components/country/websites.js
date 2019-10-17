@@ -4,11 +4,11 @@ import { FormattedMessage } from 'react-intl'
 import axios from 'axios'
 import { Flex, Box, Heading, Text, Input } from 'ooni-components'
 
-import SectionHeader from './section-header'
-import { SimpleBox } from './box'
-import PeriodFilter from './period-filter'
-import TestsByCategoryInNetwork from './websites-charts'
-import FormattedMarkdown from '../formatted-markdown'
+import SectionHeader from './SectionHeader'
+import { SimpleBox } from './Box'
+import PeriodFilter from './PeriodFilter'
+import TestsByCategoryInNetwork from './WebsitesCharts'
+import FormattedMarkdown from '../FormattedMarkdown'
 
 class WebsitesSection extends React.Component {
   constructor(props) {

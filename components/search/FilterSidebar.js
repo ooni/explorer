@@ -13,7 +13,7 @@ import {
 } from 'ooni-components'
 import moment from 'moment'
 
-import DatePicker from '../date-picker'
+import DatePicker from '../DatePicker'
 
 const StyledInputWithLabel = styled.div``
 const StyledLabel = styled(Label)`

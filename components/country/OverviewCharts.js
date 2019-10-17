@@ -12,9 +12,9 @@ import {
 } from 'victory'
 import { injectIntl } from 'react-intl'
 
-import Tooltip from './tooltip'
+import Tooltip from './Tooltip'
 import VictoryTheme from '../VictoryTheme'
-import { testGroups } from '../test-info'
+import { testGroups } from '../TestInfo'
 
 const Circle = styled.span`
   height: 16px;

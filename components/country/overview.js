@@ -3,10 +3,10 @@ import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
 import styled from 'styled-components'
 import { Flex, Box, Heading, Link } from 'ooni-components'
 import { Text } from 'rebass'
-import SectionHeader from './section-header'
-import { BoxWithTitle } from './box'
-import TestsByGroup from './overview-charts'
-import FormattedMarkdown from '../formatted-markdown'
+import SectionHeader from './SectionHeader'
+import { BoxWithTitle } from './Box'
+import TestsByGroup from './OverviewCharts'
+import FormattedMarkdown from '../FormattedMarkdown'
 import {
   NettestGroupWebsites,
   NettestGroupInstantMessaging,

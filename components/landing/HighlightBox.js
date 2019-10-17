@@ -6,7 +6,7 @@ import { Text } from 'rebass'
 import styled from 'styled-components'
 import Markdown from 'markdown-to-jsx'
 
-import Flag from '../flag'
+import Flag from '../Flag'
 
 const LinkButton = styled(Box)`
   border-radius: 6px;
