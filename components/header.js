@@ -13,6 +13,7 @@ export default class Header extends React.Component {
           <meta charSet='utf-8'/>
           <meta name='viewport' content='initial-scale=1.0, width=device-width'/>
           <meta name='description' content={description} />
+          <link rel="alternate" title="Events Detected by OONI" href="https://explorer.ooni.org/rss/global.xml" type="application/rss+xml" />
           <link rel="apple-touch-icon" sizes="180x180" href="/static/images/favicons/apple-icon-180x180.png" />
           <link rel="icon" type="image/png" sizes="192x192"  href="/static/images/favicons/android-icon-192x192.png" />
           <link rel="icon" type="image/png" sizes="32x32" href="/static/images/favicons/favicon-32x32.png" />

@@ -109,6 +109,7 @@ export default class Country extends React.Component {
       <Layout>
         <Head>
           <title>Internet Censorship in {countryName} - OONI Explorer</title>
+          <link rel="alternate" title={`Events Detected in ${countryName} by OONI`} href={`https://explorer.ooni.org/rss/by-country/${countryCode}.xml`} type="application/rss+xml" />
         </Head>
         <StickyContainer>
           <Sticky>
