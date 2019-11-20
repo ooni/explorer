@@ -12,15 +12,15 @@ import countryUtil from 'country-util'
 import styled from 'styled-components'
 import { StickyContainer, Sticky } from 'react-sticky'
 
-import NavBar from '../components/nav-bar'
-import Flag from '../components/flag'
+import NavBar from '../components/NavBar'
+import Flag from '../components/Flag'
 import Layout from '../components/Layout'
 import PageNavMenu from '../components/country/PageNavMenu'
-import Overview from '../components/country/overview'
-import WebsitesSection from '../components/country/websites'
-import AppsSection from '../components/country/apps'
-import NetworkPropertiesSection from '../components/country/network-properties'
-import { CountryContextProvider } from '../components/country/country-context'
+import Overview from '../components/country/Overview'
+import WebsitesSection from '../components/country/Websites'
+import AppsSection from '../components/country/Apps'
+import NetworkPropertiesSection from '../components/country/NetworkProperties'
+import { CountryContextProvider } from '../components/country/CountryContext'
 
 const getCountryReports = (countryCode, data) => {
   const reports = data.filter((article) => (

@@ -8,7 +8,7 @@ import { Text } from 'rebass'
 import { MdFlashOn } from 'react-icons/lib/md'
 import { injectIntl, intlShape } from 'react-intl'
 
-import { mlabServerDetails } from './mlab_utils.js'
+import { mlabServerDetails } from './mlab_utils'
 import PerformanceDetails from '../PerformanceDetails'
 
 const InfoBoxItem = ({

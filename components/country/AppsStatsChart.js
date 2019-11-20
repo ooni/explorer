@@ -9,8 +9,8 @@ import {
 } from 'victory'
 import { theme } from 'ooni-components'
 
-import { inCountry } from './country-context'
-import Tooltip from './tooltip'
+import { inCountry } from './CountryContext'
+import Tooltip from './Tooltip'
 import { AppsChartLoader } from './WebsiteChartLoader'
 
 class AppsStatChart extends React.Component {

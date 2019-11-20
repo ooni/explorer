@@ -8,7 +8,7 @@ import { Text } from 'rebass'
 import { FormattedMessage } from 'react-intl'
 
 import { getTestMetadata } from '../utils'
-import Badge from '../badge'
+import Badge from '../Badge'
 
 const TestGroupBadge = ({icon, name, color}) => (
   <Badge bg={color} color='white'>

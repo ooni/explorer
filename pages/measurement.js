@@ -13,7 +13,7 @@ import CommonDetails from '../components/measurement/CommonDetails'
 import MeasurementContainer from '../components/measurement/MeasurementContainer'
 
 import Layout from '../components/Layout'
-import NavBar from '../components/nav-bar'
+import NavBar from '../components/NavBar'
 
 const pageColors = {
   default: theme.colors.base,

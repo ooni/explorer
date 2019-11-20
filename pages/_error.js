@@ -13,7 +13,7 @@ import {
 import styled from 'styled-components'
 import { FormattedMessage } from 'react-intl'
 
-import NavBar from '../components/nav-bar'
+import NavBar from '../components/NavBar'
 import Layout from '../components/Layout'
 import OONI404 from '../static/images/OONI_404.svg'
 

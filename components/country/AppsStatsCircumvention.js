@@ -1,11 +1,10 @@
 import React from 'react'
-import { Box, Heading, Text } from 'ooni-components'
+import { Box, Heading } from 'ooni-components'
 import styled from 'styled-components'
 import axios from 'axios'
-import { FormattedMessage } from 'react-intl'
 
-import { inCountry } from './country-context'
-import AppsStatRow from './apps-stats-row'
+import { inCountry } from './CountryContext'
+import AppsStatsRowCircumvention from './AppsStatsCircumventionRow'
 import { AppSectionLoader } from './WebsiteChartLoader'
 
 const AppGroupHeading = styled(Box)`
@@ -18,7 +17,7 @@ const defaultState = {
   fetching: true
 }
 
-class AppsStatsGroup extends React.Component {
+class AppsStatsCircumvention extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -28,13 +27,13 @@ class AppsStatsGroup extends React.Component {
   }
 
   componentDidMount() {
-    this.fetchIMNetworks()
+    this.fetchCircumventionStats()
   }
 
-  async fetchIMNetworks() {
+  async fetchCircumventionStats() {
     const { countryCode } = this.props
     const client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
-    const result = await client.get('/api/_/im_networks', {
+    const result = await client.get('/api/_/vanilla_tor_stats', {
       params: {
         probe_cc: countryCode
       }
@@ -46,32 +45,29 @@ class AppsStatsGroup extends React.Component {
     })
   }
 
+  static getDerivedStateFromprops() {
+    return defaultState
+  }
+
   render() {
     const { title } = this.props
     const { data, fetching } = this.state
+
     if (fetching) {
       return (
-        <AppSectionLoader rows={3} />
+        <AppSectionLoader rows={1} />
       )
     }
+
     return (
       <Box my={4}>
         <AppGroupHeading mt={4} px={2}>
           <Heading h={5}>{title}</Heading>
         </AppGroupHeading>
-        {data && Object.keys(data).length === 0 &&
-          <Box my={4}>
-            <Text fontSize={18} color='gray6'>
-              <FormattedMessage id='Country.Label.NoData' />
-            </Text>
-          </Box>
-        }
-        {Object.keys(data).map((im, index) => (
-          <AppsStatRow key={index} data={data[im]} app={im} />
-        ))}
+        <AppsStatsRowCircumvention data={data}/>
       </Box>
     )
   }
 }
 
-export default inCountry(AppsStatsGroup)
+export default inCountry(AppsStatsCircumvention)

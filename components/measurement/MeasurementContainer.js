@@ -1,18 +1,18 @@
 import React from 'react'
 
-import WebConnectivityDetails from './nettests/web_connectivity'
-import TelegramDetails from './nettests/telegram'
-import WhatsAppDetails from './nettests/whatsapp'
-import DashDetails from './nettests/dash'
-import NdtDetails from './nettests/ndt'
+import WebConnectivityDetails from './nettests/WebConnectivity'
+import TelegramDetails from './nettests/Telegram'
+import WhatsAppDetails from './nettests/WhatsApp'
+import DashDetails from './nettests/Dash'
+import NdtDetails from './nettests/Ndt'
 
-import FacebookMessengerDetails from './nettests/facebook_messenger'
-import HttpHeaderFieldManipulationDetails from './nettests/http_header_field_manipulation'
-import HttpInvalidRequestLine from './nettests/http_invalid_request_line'
+import FacebookMessengerDetails from './nettests/FacebookMessenger'
+import HttpHeaderFieldManipulationDetails from './nettests/HTTPHeaderFieldManipulation'
+import HttpInvalidRequestLine from './nettests/HTTPInvalidRequestLine'
 
-import VanillaTorDetails from './nettests/vanilla_tor'
+import VanillaTorDetails from './nettests/VanillaTor'
 
-import DefaultTestDetails from './nettests/default'
+import DefaultTestDetails from './nettests/Default'
 
 const mapTestDetails = {
   web_connectivity: WebConnectivityDetails,

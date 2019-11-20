@@ -9,7 +9,7 @@ import {
 import moment from 'moment'
 
 import { testNames } from '../test-info'
-import { CountryContext } from './country-context'
+import { CountryContext } from './CountryContext'
 import { CollapseTrigger } from '../CollapseTrigger'
 
 const NETWORK_STATS_PER_PAGE = 4

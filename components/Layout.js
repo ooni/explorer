@@ -11,10 +11,10 @@ import {
 // the upgrade to `next@latest`
 import 'typeface-fira-sans/index.css'
 
-import Header from './header'
-import Footer from './footer'
+import Header from './Header'
+import Footer from './Footer'
 import withIntl from './withIntl'
-import FeedbackButton from '../components/feedback-float'
+import FeedbackButton from '../components/FeedbackFloat'
 
 theme.maxWidth = 1024
 

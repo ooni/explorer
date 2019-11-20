@@ -10,7 +10,7 @@ import { Text } from 'rebass'
 import moment from 'moment'
 import { injectIntl, intlShape } from 'react-intl'
 
-import Flag from '../flag'
+import Flag from '../Flag'
 
 const SummaryContainer = styled(Box)`
   background-color: ${props => props.color};

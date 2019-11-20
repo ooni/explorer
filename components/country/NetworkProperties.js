@@ -3,12 +3,12 @@ import { FormattedMessage } from 'react-intl'
 import { Flex, Box, Heading, Text, Link } from 'ooni-components'
 import axios from 'axios'
 
-import SectionHeader from './section-header'
-import { SimpleBox } from './box'
-// import PeriodFilter from './period-filter'
-import NetworkStats from './network-stats'
-import SpinLoader from '../vendor/spin-loader'
-import FormattedMarkdown from '../formatted-markdown'
+import SectionHeader from './SectionHeader'
+import { SimpleBox } from './boxes'
+// import PeriodFilter from './PeriodFilter'
+import NetworkStats from './NetworkStats'
+import SpinLoader from '../vendor/SpinLoader'
+import FormattedMarkdown from '../FormattedMarkdown'
 
 const NETWORK_STATS_PER_PAGE = 4
 

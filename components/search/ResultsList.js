@@ -17,7 +17,7 @@ import {
   colorConfirmed,
   colorAnomaly
 } from '../colors'
-import Flag from '../flag'
+import Flag from '../Flag'
 
 const StyledResultTag = styled.div`
   border-radius: 16px;

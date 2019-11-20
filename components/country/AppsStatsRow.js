@@ -11,8 +11,8 @@ import {
 import moment from 'moment'
 
 import { testNames } from '../test-info'
-import AppsStatChart from './apps-stats-chart'
-import { CountryContext } from './country-context'
+import AppsStatChart from './AppsStatsChart'
+import { CountryContext } from './CountryContext'
 import { CollapseTrigger } from '../CollapseTrigger'
 
 const NETWORK_STATS_PER_PAGE = 4

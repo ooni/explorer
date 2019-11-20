@@ -21,7 +21,7 @@ import {
   colorEmpty
 } from '../colors'
 
-import Tooltip from './tooltip'
+import Tooltip from './Tooltip'
 import { WebsiteChartLoader } from './WebsiteChartLoader'
 
 const Circle = styled.div`
