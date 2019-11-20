@@ -21,7 +21,7 @@ import Layout from '../components/Layout'
 import NavBar from '../components/NavBar'
 import { toCompactNumberUnit } from '../utils'
 import HighlightSection from '../components/landing/HighlightsSection'
-import highlightContent from '../components/landing/Highlights.json'
+import highlightContent from '../components/landing/highlights.json'
 import { Flag } from '../components/Flag'
 import CoverageChart from '../components/landing/Stats'
 

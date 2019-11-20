@@ -16,7 +16,7 @@ import {
   colorError,
   colorConfirmed,
   colorAnomaly
-} from '../Colors'
+} from '../colors'
 import Flag from '../Flag'
 
 const StyledResultTag = styled.div`

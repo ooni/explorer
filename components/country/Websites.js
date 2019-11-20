@@ -1,5 +1,5 @@
 import React from 'react'
-import { inCountry } from './country-context'
+import { inCountry } from './CountryContext'
 import { FormattedMessage } from 'react-intl'
 import axios from 'axios'
 import { Flex, Box, Heading, Text, Input } from 'ooni-components'
