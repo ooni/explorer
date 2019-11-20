@@ -1,10 +1,6 @@
 # OONI Explorer
 
-**Attention** This is currently under active development and is not the
-currently deployed version of https://explorer.ooni.io.
-
-For the current OONI Explorer codebase see:
-[thetorproject/ooni-explorer](https://github.com/thetorproject/ooni-explorer).
+For the live website see: https://explorer.ooni.org.
 
 ## Setup
 
