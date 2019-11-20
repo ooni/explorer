@@ -31,7 +31,7 @@ export const testGroups = {
     'icon': <NettestGroupMiddleBoxes />
   },
   'performance': {
-    'color': theme.colors.fuschia6,
+    'color': theme.colors.fuchsia6,
     'name': <FormattedMessage id='Tests.Groups.Performance.Name' />,
     'icon': <NettestGroupPerformance />
   },

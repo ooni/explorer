@@ -46,10 +46,6 @@ class AppsStatsGroup extends React.Component {
     })
   }
 
-  static getDerivedStateFromprops() {
-    return defaultState
-  }
-
   render() {
     const { title } = this.props
     const { data, fetching } = this.state
