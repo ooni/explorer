@@ -208,6 +208,15 @@ class Search extends React.Component {
     this.loadMore = this.loadMore.bind(this)
   }
 
+  componentDidMount () {
+    const { query, replace } = this.props.router
+    const href = {
+      pathname: '/search',
+      query
+    }
+    replace(href, href, { shallow: true })
+  }
+
   shouldComponentUpdate (nextProps, nextState) {
     if (this.props != nextProps) {
       return true
