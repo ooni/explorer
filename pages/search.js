@@ -245,10 +245,11 @@ class Search extends React.Component {
       ...state
     }, () => {
       const query = this.getFilterQuery()
-      this.props.router.push({
+      const href = {
         pathname: '/search',
         query
-      }).then(() => {
+      }
+      this.props.router.push(href, href, { shallow: true }).then(() => {
         // XXX do error handling
         getMeasurements(query)
           .then((res) => {
