@@ -201,22 +201,11 @@ class Search extends React.Component {
       search: null,
       error: props.error,
 
-      loading: true
+      loading: false
     }
     this.getFilterQuery = this.getFilterQuery.bind(this)
     this.onApplyFilter = this.onApplyFilter.bind(this)
     this.loadMore = this.loadMore.bind(this)
-  }
-
-  componentDidMount () {
-    const { query, replace } = this.props.router
-    replace({
-      pathname: '/search',
-      query
-    })
-    this.setState({
-      loading: false
-    })
   }
 
   shouldComponentUpdate (nextProps, nextState) {
