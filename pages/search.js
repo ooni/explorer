@@ -201,7 +201,7 @@ class Search extends React.Component {
       search: null,
       error: props.error,
 
-      loading: true
+      loading: false
     }
     this.getFilterQuery = this.getFilterQuery.bind(this)
     this.onApplyFilter = this.onApplyFilter.bind(this)
@@ -210,13 +210,11 @@ class Search extends React.Component {
 
   componentDidMount () {
     const { query, replace } = this.props.router
-    replace({
+    const href = {
       pathname: '/search',
       query
-    })
-    this.setState({
-      loading: false
-    })
+    }
+    replace(href, href, { shallow: true })
   }
 
   shouldComponentUpdate (nextProps, nextState) {
@@ -256,10 +254,11 @@ class Search extends React.Component {
       ...state
     }, () => {
       const query = this.getFilterQuery()
-      this.props.router.push({
+      const href = {
         pathname: '/search',
         query
-      }).then(() => {
+      }
+      this.props.router.push(href, href, { shallow: true }).then(() => {
         // XXX do error handling
         getMeasurements(query)
           .then((res) => {
