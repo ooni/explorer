@@ -442,7 +442,7 @@ const WebConnectivityDetails = ({
                       </Box>
                     </Flex>
                     <Box width={1}>
-                      {queries.map((query, index) => <QueryContainer key={index} query={query} />)}
+                      {queries && queries.map((query, index) => <QueryContainer key={index} query={query} />)}
                     </Box>
                   </React.Fragment>
                 }
