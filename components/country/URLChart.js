@@ -158,7 +158,7 @@ class URLChart extends React.Component {
       )
     }
 
-    const today = moment().format('YYYY-MM-DD')
+    const until = moment().add(1, 'day').format('YYYY-MM-DD')
     const since30days = moment().subtract(30, 'days').format('YYYY-MM-DD')
 
     const yMax = data.reduce((max, item) => (
@@ -174,7 +174,7 @@ class URLChart extends React.Component {
             <Box width={[1, 1/4]} p={3}>
               <TruncatedURL url={metadata.input} />
               <Link
-                href={`/search?test_name=web_connectivity&probe_cc=${countryCode}&probe_asn=${network}&domain=${domainToExplore}&since=${since30days}&until=${today}`}
+                href={`/search?test_name=web_connectivity&probe_cc=${countryCode}&probe_asn=${network}&domain=${domainToExplore}&since=${since30days}&until=${until}`}
               >
                 <FormattedMessage id='Country.Websites.URLCharts.ExploreMoreMeasurements' />
               </Link>

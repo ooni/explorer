@@ -36,10 +36,10 @@ const StyledRow = styled(Box)`
 
 const NetworkRow = ({ asn, app }) => {
   const { countryCode } = useContext(CountryContext)
-  const today = moment().format('YYYY-MM-DD')
+  const until = moment().add(1, 'day').format('YYYY-MM-DD')
   const since = moment().subtract(30, 'days').format('YYYY-MM-DD')
 
-  const linkToMeasurements = `/search?probe_cc=${countryCode}&probe_asn=AS${asn}&test_name=${app}&since=${since}&until=${today}`
+  const linkToMeasurements = `/search?probe_cc=${countryCode}&probe_asn=AS${asn}&test_name=${app}&since=${since}&until=${until}`
 
   return (
     <Box width={1}>
