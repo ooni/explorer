@@ -49,8 +49,9 @@ class FilterSidebar extends React.Component {
   constructor(props) {
     super(props)
 
-    // Display `${today}` as the end date for default search
-    const today = moment().format('YYYY-MM-DD')
+    // Display `${tomorrow}` as the end date for default search
+    // to include the measurements of `${today}` as well.
+    const until = moment().add(1, 'day').format('YYYY-MM-DD')
 
     this.state = {
       domainFilter: props.domainFilter || '',
@@ -59,7 +60,7 @@ class FilterSidebar extends React.Component {
       countryFilter: props.countryFilter || '',
       asnFilter: props.asnFilter || '',
       sinceFilter: props.sinceFilter || '',
-      untilFilter: props.untilFilter || today,
+      untilFilter: props.untilFilter || until,
       showSinceCalendar: true,
       showUntilCalendar: false,
       isFilterDirty: false,

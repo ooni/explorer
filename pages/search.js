@@ -131,11 +131,12 @@ class Search extends React.Component {
     let client = axios.create({baseURL: process.env.MEASUREMENTS_URL})  // eslint-disable-line
 
     // By default, on '/search' show measurements published until today
+    // including the measurements of today (so the date of tomorrow).
     // This prevents the search page from showing time-travelling future
     // measurements from showing up
-    const today = moment().format('YYYY-MM-DD')
+    const until = moment().add(1, 'day').format('YYYY-MM-DD')
     if (!query.until) {
-      query.until = today
+      query.until = until
     }
 
     [testNamesR, countriesR] = await Promise.all([
