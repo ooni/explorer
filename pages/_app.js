@@ -5,6 +5,8 @@ import App from 'next/app'
 import sentry from '../utils/sentry'
 import Router from 'next/router'
 import NProgress from 'nprogress'
+import MatomoTracker from '@datapunt/matomo-tracker-js'
+
 import '../static/nprogress.css'
 import ErrorPage from './_error'
 
@@ -65,6 +67,16 @@ export default class MyApp extends App {
     // Store the event id at this point as we don't have access to it within
     // `getDerivedStateFromError`.
     this.setState({ errorEventId, hasError: true })
+  }
+
+  componentDidMount() {
+    const MatomoInstance = new window.MatomoTracker({
+      urlBase: 'https://matomo.ooni.org/',
+      siteId: 2,
+      trackerUrl: 'https://matomo.ooni.org/matomo.php',
+      srcUrl: 'https://matomo.ooni.org/matomo.js',
+    })
+    MatomoInstance.trackPageView()
   }
 
   render () {
