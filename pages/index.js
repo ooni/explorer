@@ -281,7 +281,7 @@ export default class LandingPage extends React.Component {
               highlights={highlightContent.changes}
             />
             <Box my={3}>
-              <Text fontSize={20}>We encourage you to <NLink href='/search'><Link color='blue7'>explore OONI measurements</Link></NLink> to find more highlights!</Text>
+              <Text fontSize={20}>We encourage you to <NLink href='/search' passHref><Link color='blue7'>explore OONI measurements</Link></NLink> to find more highlights!</Text>
             </Box>
           </Container>
         </Container>
