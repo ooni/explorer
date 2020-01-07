@@ -244,7 +244,11 @@ export default class LandingPage extends React.Component {
           {/* Highlights */}
           <Container>
             <Flex flexWrap='wrap' justifyContent='center' my={3}>
-              <Heading h={2} color='blue7'><FormattedMessage id={'Home.Highlights.Title'} /></Heading>
+              <Heading h={2} color='blue7'>
+                <a id='highlights'>
+                  <FormattedMessage id={'Home.Highlights.Title'} />
+                </a>
+              </Heading>
             </Flex>
             <Flex flexWrap='wrap' justifyContent='center'>
               <Box px={[0, 4]} my={3}>
