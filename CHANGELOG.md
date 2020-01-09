@@ -1,5 +1,16 @@
 # Changelog
 
+## [2.0.5] - 2020-01-09
+
+### Added
+- Added regex to allow search by IP address in the domain field (#367)
+- Added matomo based analytics (#369)
+
+### Fixed
+- Fixed bug where duplicate API requests were made for search queries (#353)
+- Fixed bug in rendering DNS queries on WebConnectivity measurement pages (#363)
+- Fixed 'until today' logic in search to include today's measurement (#364)
+
 ## [2.0.4] - 2019-11-27
 
 ### Added
@@ -53,6 +64,7 @@
 ### Added
 - First public release ([Blog post](https://ooni.org/post/next-generation-ooni-explorer/))
 
+[2.0.5]: (https://github.com/ooni/explorer/compare/v2.0.4...v2.0.5)
 [2.0.4]: (https://github.com/ooni/explorer/compare/v2.0.3...v2.0.4)
 [2.0.3]: (https://github.com/ooni/explorer/compare/v2.0.2...v2.0.3)
 [2.0.2]: (https://github.com/ooni/explorer/compare/v2.0.1...v2.0.2)
