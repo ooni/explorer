@@ -112,6 +112,11 @@ export const testNames = {
     name: <FormattedMessage id='Tests.BridgeReachability.Name' />,
     info: 'https://ooni.io/nettest/tor-bridge-reachability/'
   },
+  'psiphon': {
+    group: 'circumvention',
+    name: <FormattedMessage id='Tests.Psiphon.Name' />,
+    info: 'https://ooni.io/nettest/psiphon/'
+  },
 
   /* Legacy tests */
   'tcp_connect': {
