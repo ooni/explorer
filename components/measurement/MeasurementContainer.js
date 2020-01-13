@@ -11,7 +11,7 @@ import HttpHeaderFieldManipulationDetails from './nettests/HTTPHeaderFieldManipu
 import HttpInvalidRequestLine from './nettests/HTTPInvalidRequestLine'
 
 import VanillaTorDetails from './nettests/VanillaTor'
-import PsiphonDetails from './nettsts/Psiphon'
+import PsiphonDetails from './nettests/Psiphon'
 
 import DefaultTestDetails from './nettests/Default'
 
