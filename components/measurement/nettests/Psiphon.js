@@ -25,8 +25,8 @@ const PsiphonDetails = ({
     status = 'blocked'
     if (bootstrap_time === 0) {
       // Unable to bootstrap
-      hint = <FormattedMessage id='Measurement.Status.Hint.Psiphon.BootstrapingError' />
-      summaryText = 'Measurement.Details.SummaryText.Psiphon.BootstrapingError'
+      hint = <FormattedMessage id='Measurement.Status.Hint.Psiphon.BootstrappingError' />
+      summaryText = 'Measurement.Details.SummaryText.Psiphon.BootstrappingError'
     } else {
       // Unable to use Psiphon to reach https://google.com/humans.txt
       hint = <FormattedMessage id='Measurement.Status.Hint.Psiphon.Blocked' />
