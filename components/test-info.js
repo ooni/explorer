@@ -9,7 +9,8 @@ import {
   NettestGroupWebsites,
   NettestGroupInstantMessaging,
   NettestGroupMiddleBoxes,
-  NettestGroupPerformance
+  NettestGroupPerformance,
+  NettestGroupCircumvention
 } from 'ooni-components/dist/icons'
 import { FormattedMessage } from 'react-intl'
 
@@ -38,7 +39,7 @@ export const testGroups = {
   'circumvention': {
     'color': theme.colors.pink6,
     'name': <FormattedMessage id='Tests.Groups.Circumvention.Name' />,
-    'icon': <FaBeer />
+    'icon': <NettestGroupCircumvention />
   },
   'legacy': {
     'color': theme.colors.gray5,
