@@ -158,8 +158,8 @@ class URLChart extends React.Component {
       )
     }
 
-    const until = moment().add(1, 'day').format('YYYY-MM-DD')
-    const since30days = moment().subtract(30, 'days').format('YYYY-MM-DD')
+    const until = moment().utc().add(1, 'day').format('YYYY-MM-DD')
+    const since30days = moment().utc().subtract(30, 'days').format('YYYY-MM-DD')
 
     const yMax = data.reduce((max, item) => (
       (item.total_count > max) ? item.total_count : max

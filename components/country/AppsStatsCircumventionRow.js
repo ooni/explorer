@@ -149,7 +149,7 @@ class AppsStatsCircumventionRow extends React.Component {
               <Box ml='auto'>
                 <FormattedMessage id='Country.Apps.Label.LastTested' />
                 {' '}
-                <strong>{moment(data.last_tested).fromNow()}</strong>
+                <strong>{moment.utc(data.last_tested).fromNow()}</strong>
               </Box>
               <Box ml={4}>
                 <CollapseTrigger
