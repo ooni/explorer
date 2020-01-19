@@ -14,8 +14,16 @@ const SummaryText = ({
   content,
 }) => {
   const metadata = getTestMetadata(testName)
-  const formattedDate = moment.utc(date).format('LL')
-  const formattedDateTime = moment.utc(date).format('lll')
+  const formattedDate = moment(date).format('LL')
+  const formattedDateTime = intl.formatDate(moment.utc(date).toDate(), {
+    year: 'numeric',
+    month: 'long',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: 'numeric',
+    timeZone: 'UTC',
+    timeZoneName: 'short'
+  })
 
   let textToRender = null
   if (typeof content === 'function') {

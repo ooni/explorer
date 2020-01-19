@@ -275,7 +275,15 @@ const WebConnectivityDetails = ({
     }
   } = measurement
 
-  const date = moment.utc(test_start_time).format('lll')
+  const date = intl.formatDate(moment.utc(test_start_time).toDate(), {
+    year: 'numeric',
+    month: 'long',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: 'numeric',
+    timeZone: 'UTC',
+    timeZoneName: 'short'
+  })
   const reasons = {
     'http-diff': 'HTTP-diff',
     'http-failure': 'HTTP-failure',
