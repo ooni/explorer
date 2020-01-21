@@ -251,7 +251,11 @@ QueryContainer.propTypes = {
 
 const WebConnectivityDetails = ({
   isConfirmed,
-  isAnomaly,
+  // NOTE: We stop using the `isAnomaly` flag coming from `/api/v1/measurements`
+  // because it causes this bug https://github.com/ooni/explorer/issues/374
+  // where measurements are marked anomaly despite `accessible: true, blocking: false`
+  //
+  // isAnomaly,
   isFailure,
   country,
   measurement,
@@ -321,7 +325,9 @@ const WebConnectivityDetails = ({
         }}
       />
     )
-  } else if (isAnomaly) {
+  } else if (/* isAnomaly */ blocking !== false) {
+    // We ignore the isAnomaly value from the API to work around
+    // https://github.com/ooni/explorer/issues/374
     status = 'anomaly'
     reason = intl.formatMessage(messages[`blockingReason.${blocking}`])
     summaryText = (
@@ -495,7 +501,7 @@ const WebConnectivityDetails = ({
 
 WebConnectivityDetails.propTypes = {
   isConfirmed: PropTypes.bool.isRequired,
-  isAnomaly: PropTypes.bool.isRequired,
+  // isAnomaly: PropTypes.bool.isRequired,
   isFailure: PropTypes.bool.isRequired,
   country: PropTypes.string.isRequired,
   measurement: PropTypes.object.isRequired,
