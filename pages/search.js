@@ -139,7 +139,7 @@ class Search extends React.Component {
     // including the measurements of today (so the date of tomorrow).
     // This prevents the search page from showing time-travelling future
     // measurements from showing up
-    const until = moment().utc().add(1, 'day').format('YYYY-MM-DD')
+    const until = moment.utc().add(1, 'day').format('YYYY-MM-DD')
     if (!query.until) {
       query.until = until
     }
