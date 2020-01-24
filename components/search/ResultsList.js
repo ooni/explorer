@@ -4,7 +4,7 @@ import url from 'url'
 import moment from 'moment'
 import NLink from 'next/link'
 import styled from 'styled-components'
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import { defineMessages, FormattedMessage, injectIntl, useIntl } from 'react-intl'
 import {
   Flex, Box,
   Link,
@@ -267,6 +267,7 @@ const ResultInput = styled.div`
 `
 
 const ResultItem = ({msmt}) => {
+  const intl = useIntl()
   const pathMaxLen = 10
   let input = msmt.input
   if (input) {
