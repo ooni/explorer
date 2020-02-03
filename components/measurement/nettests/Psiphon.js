@@ -22,7 +22,7 @@ const PsiphonDetails = ({
   // https://github.com/ooni/spec/blob/master/nettests/ts-015-psiphon.md#possible-conclusions
   // Determine if psiphon is blocked and if the probe could bootstrap psiphon
   if (failure) {
-    status = 'blocked'
+    status = 'anomaly'
     if (bootstrap_time === 0) {
       // Unable to bootstrap
       hint = <FormattedMessage id='Measurement.Status.Hint.Psiphon.BootstrappingError' />
