@@ -4,12 +4,13 @@ import Head from 'next/head'
 import { withRouter } from 'next/router'
 import moment from 'moment'
 import axios from 'axios'
-
+import styled from 'styled-components'
 import {
   Flex, Box,
   Container,
   Button,
-  Heading
+  Heading,
+  Text
 } from 'ooni-components'
 import { FormattedMessage } from 'react-intl'
 
@@ -19,7 +20,7 @@ import Layout from '../components/Layout'
 import ResultsList from '../components/search/ResultsList'
 import FilterSidebar from '../components/search/FilterSidebar'
 import { Loader } from '../components/search/Loader'
-import OONI404 from '../static/images/OONI_404.svg'
+import FormattedMarkdown from '../components/FormattedMarkdown'
 
 import { sortByKey } from '../utils'
 
@@ -82,31 +83,35 @@ const formatError = (error) => {
   return errorString
 }
 
+const StyledPre = styled.pre`
+  white-space: pre-wrap;       /* css-3 */
+  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
+  white-space: -pre-wrap;      /* Opera 4-6 */
+  white-space: -o-pre-wrap;    /* Opera 7 */
+  word-wrap: break-word;       /* Internet Explorer 5.5+ */
+`
+
 const ErrorBox = ({ error }) => {
   if (!error) {
     return <div></div>
   }
 
   return (
-    <div>
-      <Flex justifyContent='center'>
-        <Box width={[1, 1/4]} my={5}>
-          <OONI404 />
+    <Box width={[1, 2/3]} mx='auto'>
+      <Flex justifyContent='center' flexDirection='column'>
+        <Text my={4}>
+          <FormattedMarkdown id='Search.Error.Message' />
+        </Text>
+        <Heading h={5}>
+          <FormattedMessage id='Search.Error.Details.Label' />
+        </Heading>
+        <Box p={[1, 3]} bg='gray3'>
+          <StyledPre>
+            {JSON.stringify(error, null, '  ')}
+          </StyledPre>
         </Box>
       </Flex>
-      <Flex justifyContent='center'>
-        <Box>
-          <Heading h={4} my={4}>
-            We encountered an error. Please try again or change the filters to get different results.
-          </Heading>
-          <Box p={[1, 3]} bg='gray3'>
-            <pre>
-              {JSON.stringify(error, null, '  ')}
-            </pre>
-          </Box>
-        </Box>
-      </Flex>
-    </div>
+    </Box>
   )
 }
 
