@@ -71,7 +71,7 @@ const getStatus = (count, formattedMessageId)=> {
   }
 }
 
-const ooniBlogBaseURL = 'https://ooni.io'
+const ooniBlogBaseURL = 'https://ooni.org'
 
 const FeaturedArticle = ({link, title}) => (
   <Box py={1}>

@@ -11,6 +11,7 @@ import HttpHeaderFieldManipulationDetails from './nettests/HTTPHeaderFieldManipu
 import HttpInvalidRequestLine from './nettests/HTTPInvalidRequestLine'
 
 import VanillaTorDetails from './nettests/VanillaTor'
+import PsiphonDetails from './nettests/Psiphon'
 
 import DefaultTestDetails from './nettests/Default'
 
@@ -23,7 +24,8 @@ const mapTestDetails = {
   telegram: TelegramDetails,
   http_header_field_manipulation: HttpHeaderFieldManipulationDetails,
   http_invalid_request_line: HttpInvalidRequestLine,
-  vanilla_tor: VanillaTorDetails
+  vanilla_tor: VanillaTorDetails,
+  psiphon: PsiphonDetails
 }
 
 // FIXME to have header and stuff

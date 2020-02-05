@@ -52,7 +52,7 @@ export default class Country extends React.Component {
       // XXX cc @darkk we should ideally have better dedicated daily dumps for this view
       client.get('/api/_/test_coverage', {params: {'probe_cc': countryCode}}),
       client.get('/api/_/country_overview', { params: {'probe_cc': countryCode}}),
-      client.get('https://ooni.io/pageindex.json')
+      client.get('https://ooni.org/pageindex.json')
     ])
 
     const testCoverage = results[0].data.test_coverage

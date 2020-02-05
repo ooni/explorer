@@ -6,7 +6,7 @@ export const getTestMetadata = (testName) => {
     'groupName': testGroups.default.name,
     'color': testGroups.default.color,
     'icon': testGroups.default.icon,
-    'info': 'https://ooni.io/nettests/'
+    'info': 'https://ooni.org/nettest/'
   }
 
   const test = testNames[testName]
