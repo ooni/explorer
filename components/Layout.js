@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { injectGlobal } from 'styled-components'
+import { createGlobalStyle } from 'styled-components'
 import {
   Provider,
   theme
@@ -18,7 +18,7 @@ import FeedbackButton from '../components/FeedbackFloat'
 
 theme.maxWidth = 1024
 
-injectGlobal`
+const GlobalStyle = createGlobalStyle`
   * {
     text-rendering: geometricPrecision;
     box-sizing: border-box;
@@ -49,6 +49,7 @@ injectGlobal`
 
 const Layout = ({ children, disableFooter = false }) => (
   <Provider theme={theme}>
+    <GlobalStyle />
     <div className="site">
       <Header />
       <div className="content">
