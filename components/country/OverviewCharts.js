@@ -16,7 +16,7 @@ import Tooltip from './Tooltip'
 import VictoryTheme from '../VictoryTheme'
 import { testGroups } from '../test-info'
 import FormattedMarkdown from '../FormattedMarkdown'
-import { inCountry } from './CountryContext'
+import { useCountry } from './CountryContext'
 
 const Circle = styled.span`
   height: 16px;
@@ -35,20 +35,23 @@ const StyledCallToActionBox = styled(Box)`
   border: 2px solid ${props => props.theme.colors.blue5};
 `
 
-const CallToActionBox = inCountry(({ countryName }) => (
-  <Flex my={4}>
-    <StyledCallToActionBox mx='auto' px={4}>
-      <Text fontSize={2}>
-        <FormattedMarkdown
-          id='Country.Overview.CallToAction'
-          values={{
-            country: countryName
-          }}
-        />
-      </Text>
-    </StyledCallToActionBox>
-  </Flex>
-))
+const CallToActionBox = () => {
+  const { countryName } = useCountry()
+  return (
+    <Flex my={4}>
+      <StyledCallToActionBox mx='auto' px={4}>
+        <Text fontSize={2}>
+          <FormattedMarkdown
+            id='Country.Overview.CallToAction'
+            values={{
+              country: countryName
+            }}
+          />
+        </Text>
+      </StyledCallToActionBox>
+    </Flex>
+  )
+}
 
 const TestGroupSelector = ({ testGroup, active, onClick }) => (
   <StyledTestGroupSelector m={2} onClick={() => onClick(testGroup)}>
