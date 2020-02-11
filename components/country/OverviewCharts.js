@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Flex, Box, theme } from 'ooni-components'
+import { Flex, Box, Text, theme } from 'ooni-components'
 import {
   VictoryChart,
   VictoryBar,
@@ -15,6 +15,8 @@ import { injectIntl } from 'react-intl'
 import Tooltip from './Tooltip'
 import VictoryTheme from '../VictoryTheme'
 import { testGroups } from '../test-info'
+import FormattedMarkdown from '../FormattedMarkdown'
+import { inCountry } from './CountryContext'
 
 const Circle = styled.span`
   height: 16px;
@@ -28,6 +30,26 @@ const StyledTestGroupSelector = styled(Flex)`
     text-shadow: 1px 1px 1px black;
   }
 `
+
+const StyledCallToActionBox = styled(Box)`
+  border: 2px solid ${props => props.theme.colors.blue5};
+`
+
+const CallToActionBox = inCountry(({ countryName }) => (
+  <Flex my={4}>
+    <StyledCallToActionBox mx='auto' px={4}>
+      <Text fontSize={2}>
+        <FormattedMarkdown
+          id='Country.Overview.CallToAction'
+          values={{
+            country: countryName
+          }}
+        />
+      </Text>
+    </StyledCallToActionBox>
+  </Flex>
+))
+
 const TestGroupSelector = ({ testGroup, active, onClick }) => (
   <StyledTestGroupSelector m={2} onClick={() => onClick(testGroup)}>
     <Circle color={active ? testGroups[testGroup].color : theme.colors.gray4} />
@@ -233,6 +255,7 @@ class TestsByGroup extends React.PureComponent {
 
     return (
       <React.Fragment>
+        {notEnoughData && <CallToActionBox />}
         <Flex my={4} flexWrap='wrap' justifyContent='space-between'>
           {
             supportedTestGroups.map((testGroup, index) => (
