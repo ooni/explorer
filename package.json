@@ -57,7 +57,9 @@
     "rebass": "2.3.3",
     "styled-components": "^4.4.1",
     "styled-system": "3.1.6",
-    "react-icons": "2.2.7"
+    "react-icons": "2.2.7",
+    "js-yaml": "^3.13.1",
+    "serialize-javascript": "^2.1.1"
   },
   "devDependencies": {
     "babel-plugin-react-intl": "^3.2.0",
