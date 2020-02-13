@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Flex, Box, Text, theme } from 'ooni-components'
+import { Heading, Button, Flex, Box, Text, theme } from 'ooni-components'
 import {
   VictoryChart,
   VictoryBar,
@@ -10,7 +10,8 @@ import {
   VictoryLabel,
   VictoryVoronoiContainer
 } from 'victory'
-import { injectIntl } from 'react-intl'
+import { FormattedMessage, injectIntl } from 'react-intl'
+import NLink from 'next/link'
 
 import Tooltip from './Tooltip'
 import VictoryTheme from '../VictoryTheme'
@@ -31,24 +32,33 @@ const StyledTestGroupSelector = styled(Flex)`
   }
 `
 
-const StyledCallToActionBox = styled(Box)`
-  border: 2px solid ${props => props.theme.colors.blue5};
-`
-
 const CallToActionBox = () => {
   const { countryName } = useCountry()
   return (
-    <Flex my={4}>
-      <StyledCallToActionBox mx='auto' px={4}>
+    <Flex my={4} bg='gray3' flexWrap='wrap'>
+      <Box width={1} mx={4} my={2}>
+        <Heading h={4}>
+          <FormattedMessage id='Country.Overview.NoData.Title' />
+        </Heading>
         <Text fontSize={2}>
           <FormattedMarkdown
-            id='Country.Overview.CallToAction'
+            id='Country.Overview.NoData.CallToAction'
             values={{
               country: countryName
             }}
           />
         </Text>
-      </StyledCallToActionBox>
+      </Box>
+      <Flex alignItems='center' mx={4} my={4} flexDirection={['column', 'row']}>
+        <Box mr={4} mb={[3, 0]}>
+          <NLink href='https://ooni.org/install'><a>
+            <Button><FormattedMessage id='Country.Overview.NoData.Button.InstallProbe' /></Button>
+          </a></NLink>
+        </Box>
+        <Box>
+          <Button hollow><FormattedMessage id='Country.Overview.NoData.Button.OoniRunLink' /></Button>
+        </Box>
+      </Flex>
     </Flex>
   )
 }
