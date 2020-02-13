@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
-
+import countryUtil from 'country-util'
 import axios from 'axios'
 import { Container, theme } from 'ooni-components'
 
@@ -35,12 +35,9 @@ export default class Measurement extends React.Component {
     if (query.input) {
       params['input'] = query.input
     }
-    let [msmtResult, countriesR] = await Promise.all([
-      client.get('/api/v1/measurements', {
-        params
-      }),
-      client.get('/api/_/countries')
-    ])
+    let msmtResult = await client.get('/api/v1/measurements', {
+      params
+    })
     if (msmtResult.data.results.length > 0) {
       const results = msmtResult.data.results
       const measurementURL = results[0].measurement_url
@@ -54,11 +51,11 @@ export default class Measurement extends React.Component {
       initialProps['isFailure'] = results[0].failure
       initialProps['isConfirmed'] = results[0].confirmed
 
-      let countries = countriesR.data.countries
-      const countryObj = countries.find(c =>
-        c.alpha_2 === msmtContent.data.probe_cc
-      )
-      initialProps['country'] = (countryObj) ? countryObj.name : 'Unknown'
+      const countryObj = countryUtil.countryList.find(country => (
+        country.iso3166_alpha2 === msmtContent.data.probe_cc
+      ))
+
+      initialProps['country'] = countryObj ? countryObj.name : 'Unknown'
     }
     return initialProps
   }
