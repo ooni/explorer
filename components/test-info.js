@@ -118,6 +118,11 @@ export const testNames = {
     name: <FormattedMessage id='Tests.Psiphon.Name' />,
     info: 'https://ooni.org/nettest/psiphon/'
   },
+  'tor': {
+    group: 'circumvention',
+    name: <FormattedMessage id='Tests.Tor.Name' />,
+    info: 'https://ooni.org/nettest/tor/'
+  },
 
   /* Legacy tests */
   'tcp_connect': {

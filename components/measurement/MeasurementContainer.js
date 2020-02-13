@@ -12,6 +12,7 @@ import HttpInvalidRequestLine from './nettests/HTTPInvalidRequestLine'
 
 import VanillaTorDetails from './nettests/VanillaTor'
 import PsiphonDetails from './nettests/Psiphon'
+import TorDetails from './nettests/Tor'
 
 import DefaultTestDetails from './nettests/Default'
 
@@ -25,7 +26,8 @@ const mapTestDetails = {
   http_header_field_manipulation: HttpHeaderFieldManipulationDetails,
   http_invalid_request_line: HttpInvalidRequestLine,
   vanilla_tor: VanillaTorDetails,
-  psiphon: PsiphonDetails
+  psiphon: PsiphonDetails,
+  tor: TorDetails
 }
 
 // FIXME to have header and stuff

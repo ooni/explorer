@@ -9,7 +9,7 @@ const StatusText = styled(Text)`
   color: ${props => props.ok && props.theme.colors.yellow9}
 `
 
-const AccessPointStatus = ({ icon, label, ok , content, ...props}) => {
+const AccessPointStatus = ({ icon, label, ok , content, color, ...props}) => {
   if (content === undefined) {
     if (ok) {
       content = <FormattedMessage id='Measurement.Details.Endpoint.Status.Okay' />
@@ -26,6 +26,7 @@ const AccessPointStatus = ({ icon, label, ok , content, ...props}) => {
         ok={!ok}
         fontSize={3}
         fontWeight={200}
+        color={color}
       >
         {content}
       </StatusText>

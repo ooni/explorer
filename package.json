@@ -42,6 +42,7 @@
     "react-json-view": "^1.16.0",
     "react-no-ssr": "^1.1.0",
     "react-sticky": "^6.0.3",
+    "react-table": "^7.0.0-rc.15",
     "rebass": "2.3.3",
     "sentry-testkit": "^2.2.0",
     "serve-favicon": "^2.5.0",
@@ -50,6 +51,7 @@
     "typeface-fira-sans": "^0.0.54",
     "url": "^0.11.0",
     "url-loader": "1.1.2",
+    "use-clipboard-copy": "^0.1.2",
     "victory": "^32.0.2"
   },
   "resolutions": {
