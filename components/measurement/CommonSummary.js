@@ -8,7 +8,7 @@ import {
 } from 'ooni-components'
 import { Text } from 'rebass'
 import moment from 'moment'
-import { injectIntl, intlShape } from 'react-intl'
+import { useIntl } from 'react-intl'
 
 import Flag from '../Flag'
 
@@ -43,9 +43,9 @@ SummaryItemBox.propTypes = {
 const CommonSummary = ({
   color,
   measurement,
-  country,
-  intl
+  country
 }) => {
+  const intl = useIntl()
   const startTime = measurement.test_start_time
   const network = measurement.probe_asn
   const countryCode = measurement.probe_cc
@@ -100,8 +100,7 @@ const CommonSummary = ({
 CommonSummary.propTypes = {
   measurement: PropTypes.object.isRequired,
   country: PropTypes.string.isRequired,
-  color: PropTypes.string.isRequired,
-  intl: intlShape.isRequired
+  color: PropTypes.string.isRequired
 }
 
-export default injectIntl(CommonSummary)
+export default CommonSummary

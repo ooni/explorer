@@ -12,7 +12,7 @@ import {
 } from 'ooni-components'
 
 import NoSSR from 'react-no-ssr'
-import { injectIntl, intlShape } from 'react-intl'
+import { useIntl } from 'react-intl'
 
 import { DetailsBoxTable, DetailsBox } from './DetailsBox'
 
@@ -45,14 +45,14 @@ JsonViewer.propTypes = {
 
 const CommonDetails = ({
   measurement,
-  measurementURL,
-  intl
+  measurementURL
 }) => {
   const {
     report_id,
     software_version,
     annotations,
   } = measurement
+  const intl = useIntl()
 
   let engine_version = 'none',
     platform = 'unknown'
@@ -127,8 +127,7 @@ const CommonDetails = ({
 
 CommonDetails.propTypes = {
   measurement: PropTypes.object.isRequired,
-  measurementURL: PropTypes.string.isRequired,
-  intl: intlShape.isRequired
+  measurementURL: PropTypes.string.isRequired
 }
 
-export default injectIntl(CommonDetails)
+export default CommonDetails

@@ -6,7 +6,7 @@ import {
 } from 'ooni-components'
 import { Text } from 'rebass'
 import { MdFlashOn } from 'react-icons/lib/md'
-import { injectIntl, intlShape } from 'react-intl'
+import { useIntl } from 'react-intl'
 
 import { mlabServerDetails } from './mlab_utils'
 import PerformanceDetails from '../PerformanceDetails'
@@ -39,7 +39,8 @@ const ServerLocation = ({ serverAddress }) => {
 }
 
 
-const NdtDetails = ({ measurement, render, intl }) => {
+const NdtDetails = ({ measurement, render }) => {
+  const intl = useIntl()
   const testKeys = measurement.test_keys
   const isFailed = testKeys.failure !== null
   const failure = testKeys.failure
@@ -99,8 +100,7 @@ const NdtDetails = ({ measurement, render, intl }) => {
 }
 
 NdtDetails.propTypes = {
-  testKeys: PropTypes.object,
-  intl: intlShape.isRequired
+  testKeys: PropTypes.object
 }
 
-export default injectIntl(NdtDetails)
+export default NdtDetails

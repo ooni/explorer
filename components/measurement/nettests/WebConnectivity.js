@@ -14,7 +14,7 @@ import { Tick, Cross } from 'ooni-components/dist/icons'
 
 import styled from 'styled-components'
 
-import { FormattedMessage, defineMessages, injectIntl } from 'react-intl'
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 
 import { DetailsBox } from '../DetailsBox'
 
@@ -255,8 +255,7 @@ const WebConnectivityDetails = ({
   isFailure,
   country,
   measurement,
-  render,
-  intl
+  render
 }) => {
   const {
     input,
@@ -275,6 +274,7 @@ const WebConnectivityDetails = ({
     }
   } = measurement
 
+  const intl = useIntl()
   const date = intl.formatDate(moment.utc(test_start_time).toDate(), {
     year: 'numeric',
     month: 'long',
@@ -510,4 +510,4 @@ WebConnectivityDetails.propTypes = {
   render: PropTypes.func
 }
 
-export default injectIntl(WebConnectivityDetails)
+export default WebConnectivityDetails
