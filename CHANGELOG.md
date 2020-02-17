@@ -1,5 +1,11 @@
 # Changelog
 
+## [2.0.6] - 2020-01-24
+
+### Fixed
+- Fixed bug in rendering measurements with misaligned anomaly flag (#374)
+- Fixed error message copy for search page failures (#370)
+
 ## [2.0.5] - 2020-01-09
 
 ### Added
@@ -64,6 +70,7 @@
 ### Added
 - First public release ([Blog post](https://ooni.org/post/next-generation-ooni-explorer/))
 
+[2.0.6]: (https://github.com/ooni/explorer/compare/v2.0.5...v2.0.6)
 [2.0.5]: (https://github.com/ooni/explorer/compare/v2.0.4...v2.0.5)
 [2.0.4]: (https://github.com/ooni/explorer/compare/v2.0.3...v2.0.4)
 [2.0.3]: (https://github.com/ooni/explorer/compare/v2.0.2...v2.0.3)

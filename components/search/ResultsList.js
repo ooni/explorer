@@ -272,19 +272,23 @@ const ResultItem = ({msmt}) => {
   if (input) {
     const p = url.parse(input)
 
-    // Truncate the path part of the URL to ${pathMaxLen}
-    let path = p.path
-    if (path && path.length > pathMaxLen) {
-      path = `${path.substr(0, pathMaxLen)}…`
-    }
+    if (p.protocol !== null) {
+      // Truncate the path part of the URL to ${pathMaxLen}
+      let path = p.path
+      if (path && path.length > pathMaxLen) {
+        path = `${path.substr(0, pathMaxLen)}…`
+      }
 
-    // Truncate the domain to ${domainMaxLen}
-    const domainMaxLen = 25
-    if (p.host && p.host.length > domainMaxLen) {
-      p.host = `${p.host.substr(0, domainMaxLen)}…`
-    }
+      // Truncate the domain to ${domainMaxLen}
+      const domainMaxLen = 25
+      if (p.host && p.host.length > domainMaxLen) {
+        p.host = `${p.host.substr(0, domainMaxLen)}…`
+      }
 
-    input = <span><Hostname>{`${p.protocol}//${p.host}`}</Hostname>{path}</span>
+      input = <span><Hostname>{`${p.protocol}//${p.host}`}</Hostname>{path}</span>
+    } else {
+      input = <Hostname>{p.path}</Hostname>
+    }
   }
   return (
     <ViewDetailsLink reportId={msmt.report_id} input={msmt.input}>
@@ -293,7 +297,7 @@ const ResultItem = ({msmt}) => {
           <ColorCode msmt={msmt} />
         </Box>
         <Box width={31/32} py={3}>
-          <Flex flexDirection={['column', 'row']}>
+          <Flex flexDirection={['column', 'row']} alignItems='center'>
             <Box width={[1, 3/5]}>
               <Flex alignItems='center'>
                 <Box width={1/16}>

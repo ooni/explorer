@@ -9,7 +9,8 @@ import {
   NettestGroupWebsites,
   NettestGroupInstantMessaging,
   NettestGroupMiddleBoxes,
-  NettestGroupPerformance
+  NettestGroupPerformance,
+  NettestGroupCircumvention
 } from 'ooni-components/dist/icons'
 import { FormattedMessage } from 'react-intl'
 
@@ -38,7 +39,7 @@ export const testGroups = {
   'circumvention': {
     'color': theme.colors.pink6,
     'name': <FormattedMessage id='Tests.Groups.Circumvention.Name' />,
-    'icon': <FaBeer />
+    'icon': <NettestGroupCircumvention />
   },
   'legacy': {
     'color': theme.colors.gray5,
@@ -57,60 +58,70 @@ export const testNames = {
   'web_connectivity': {
     group: 'websites',
     name: <FormattedMessage id='Tests.WebConnectivity.Name' />,
-    info: 'https://ooni.io/nettest/web-connectivity/'
+    info: 'https://ooni.org/nettest/web-connectivity/'
   },
 
   /* Middlebox tests */
   'http_invalid_request_line': {
     group: 'middlebox',
     name: <FormattedMessage id='Tests.HTTPInvalidReqLine.Name' />,
-    info: 'https://ooni.io/nettest/http-invalid-request-line/'
+    info: 'https://ooni.org/nettest/http-invalid-request-line/'
   },
   'http_header_field_manipulation': {
     group: 'middlebox',
     name: <FormattedMessage id='Tests.HTTPHeaderManipulation.Name' />,
-    info: 'https://ooni.io/nettest/http-header-field-manipulation/'
+    info: 'https://ooni.org/nettest/http-header-field-manipulation/'
   },
 
   /* IM Tests */
   'facebook_messenger': {
     group: 'im',
     name: <FormattedMessage id='Tests.Facebook.Name' />,
-    info: 'https://ooni.io/nettest/facebook-messenger/'
+    info: 'https://ooni.org/nettest/facebook-messenger/'
   },
   'telegram': {
     group: 'im',
     name: <FormattedMessage id='Tests.Telegram.Name' />,
-    info: 'https://ooni.io/nettest/telegram/'
+    info: 'https://ooni.org/nettest/telegram/'
   },
   'whatsapp': {
     group: 'im',
     name: <FormattedMessage id='Tests.WhatsApp.Name' />,
-    info: 'https://ooni.io/nettest/whatsapp/'
+    info: 'https://ooni.org/nettest/whatsapp/'
   },
 
   /* Performance */
   'ndt': {
     group: 'performance',
     name: <FormattedMessage id='Tests.NDT.Name' />,
-    info: 'https://ooni.io/nettest/ndt/'
+    info: 'https://ooni.org/nettest/ndt/'
   },
   'dash': {
     group: 'performance',
     name: <FormattedMessage id='Tests.Dash.Name' />,
-    info: 'https://ooni.io/nettest/dash/'
+    info: 'https://ooni.org/nettest/dash/'
   },
 
   /* Censorship circumvention */
   'vanilla_tor': {
     group: 'circumvention',
     name: <FormattedMessage id='Tests.TorVanilla.Name' />,
-    info: 'https://ooni.io/nettest/vanilla-tor/'
+    info: 'https://ooni.org/nettest/vanilla-tor/'
   },
   'bridge_reachability': {
     group: 'circumvention',
     name: <FormattedMessage id='Tests.BridgeReachability.Name' />,
-    info: 'https://ooni.io/nettest/tor-bridge-reachability/'
+    info: 'https://ooni.org/nettest/tor-bridge-reachability/'
+  },
+  'psiphon': {
+    group: 'circumvention',
+    name: <FormattedMessage id='Tests.Psiphon.Name' />,
+    info: 'https://ooni.org/nettest/psiphon/'
+  },
+  'tor': {
+    group: 'circumvention',
+    name: <FormattedMessage id='Tests.Tor.Name' />,
+    info: 'https://ooni.org/nettest/tor/'
   },
 
   /* Legacy tests */
@@ -118,16 +129,16 @@ export const testNames = {
     group: 'legacy',
     name: <FormattedMessage id='Tests.TCPConnect.Name' />,
     // FIXME: Use a more relevant link
-    info: 'https://ooni.io/nettest/'
+    info: 'https://ooni.org/nettest/'
   },
   'dns_consistency': {
     group: 'legacy',
     name: <FormattedMessage id='Tests.DNSConsistency.Name' />,
-    info: 'https://ooni.io/nettest/dns-consistency/'
+    info: 'https://ooni.org/nettest/dns-consistency/'
   },
   'http_requests': {
     group: 'legacy',
     name: <FormattedMessage id='Tests.HTTPRequests.Name' />,
-    info: 'https://ooni.io/nettest/http-requests/'
+    info: 'https://ooni.org/nettest/http-requests/'
   },
 }

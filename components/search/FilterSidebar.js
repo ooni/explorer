@@ -136,7 +136,7 @@ class FilterSidebar extends React.Component {
         // eslint-disable-next-line no-useless-escape
         var domainRegEx = /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,7}(:[0-9]{1,5})?(\/)?$/
         var ipRegEx = /^(([0-9]{1,3})\.){3}([0-9]{1,3})/
-        if (domainValue && domainValue.match(domainRegEx) === null 
+        if (domainValue && domainValue.match(domainRegEx) === null
           && domainValue.match(ipRegEx) === null) {
           this.setState({
             domainError: intl.formatMessage({id: 'Search.Sidebar.Domain.Error'}),
@@ -190,20 +190,25 @@ class FilterSidebar extends React.Component {
   }
 
   isSinceValid(currentDate) {
+    // Valid dates for start of date range
+    // 1. Before the end of date range (untilFilter), if provided
+    // 2. Until tomorrow
+    const tomorrow = moment.utc().add(1, 'day')
     const { untilFilter } = this.state
     if (untilFilter.length !== 0) {
       return currentDate.isBefore(untilFilter)
     } else {
-      return currentDate.isSameOrBefore(new Date())
+      return currentDate.isSameOrBefore(tomorrow)
     }
   }
 
   isUntilValid(currentDate) {
+    const tomorrow = moment.utc().add(1, 'day')
     const { sinceFilter } = this.state
     if (sinceFilter.length !== 0) {
-      return currentDate.isAfter(sinceFilter) && currentDate.isSameOrBefore(new Date())
+      return currentDate.isAfter(sinceFilter) && currentDate.isSameOrBefore(tomorrow)
     } else {
-      return currentDate.isSameOrBefore(new Date())
+      return currentDate.isSameOrBefore(tomorrow)
     }
   }
 
@@ -283,6 +288,7 @@ class FilterSidebar extends React.Component {
               value={sinceFilter}
               onChange={this.onDateChangeFilter('sinceFilter')}
               dateFormat='YYYY-MM-DD'
+              utc={true}
               timeFormat={false}
               isValidDate={this.isSinceValid}
             />
@@ -295,6 +301,7 @@ class FilterSidebar extends React.Component {
               value={untilFilter}
               onChange={this.onDateChangeFilter('untilFilter')}
               dateFormat='YYYY-MM-DD'
+              utc={true}
               timeFormat={false}
               isValidDate={this.isUntilValid}
             />

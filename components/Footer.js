@@ -68,21 +68,21 @@ const Footer = () => {
           </FooterBox>
           <FooterBox width={[1/2, 1/5]}>
             <FooterHead>{intl.formatMessage({ id: 'Footer.Heading.About' })}</FooterHead>
-            <FooterLink href='https://ooni.io/about/' label={intl.formatMessage({ id: 'Footer.Link.About' })} />
-            <FooterLink href='https://ooni.io/about/data-policy/' label={intl.formatMessage({ id: 'Footer.Link.DataPolicy' })} />
+            <FooterLink href='https://ooni.org/about/' label={intl.formatMessage({ id: 'Footer.Link.About' })} />
+            <FooterLink href='https://ooni.org/about/data-policy/' label={intl.formatMessage({ id: 'Footer.Link.DataPolicy' })} />
             <FooterLink href='https://github.com/ooni/license/tree/master/data' label={intl.formatMessage({ id: 'Footer.Link.DataLicense' })} />
-            <FooterLink href='https://ooni.io/about/#contact' label={intl.formatMessage({ id: 'Footer.Link.Contact' })} />
+            <FooterLink href='https://ooni.org/about/#contact' label={intl.formatMessage({ id: 'Footer.Link.Contact' })} />
           </FooterBox>
           <FooterBox width={[1/2, 1/5]}>
             <FooterHead>{intl.formatMessage({ id: 'Footer.Heading.OONIProbe' })}</FooterHead>
-            <FooterLink href='https://ooni.io/install/' label={intl.formatMessage({ id: 'Footer.Link.Probe' })} />
-            <FooterLink href='https://ooni.io/nettest/' label={intl.formatMessage({ id: 'Footer.Link.Tests' })} />
+            <FooterLink href='https://ooni.org/install/' label={intl.formatMessage({ id: 'Footer.Link.Probe' })} />
+            <FooterLink href='https://ooni.org/nettest/' label={intl.formatMessage({ id: 'Footer.Link.Tests' })} />
             <FooterLink href='https://github.com/ooni' label={intl.formatMessage({ id: 'Footer.Link.Code' })} />
             <FooterLink href='https://api.ooni.io/' label={intl.formatMessage({ id: 'Footer.Link.API' })} />
           </FooterBox>
           <FooterBox width={[1/2, 1/5]}>
             <FooterHead>{intl.formatMessage({ id: 'Footer.Heading.Updates' })}</FooterHead>
-            <FooterLink href='https://ooni.io/post/' label={intl.formatMessage({ id: 'Footer.Link.Blog' })} />
+            <FooterLink href='https://ooni.org/post/' label={intl.formatMessage({ id: 'Footer.Link.Blog' })} />
             <FooterLink href='https://twitter.com/OpenObservatory' label={intl.formatMessage({ id: 'Footer.Link.Twitter' })} />
             <FooterLink href='https://lists.torproject.org/cgi-bin/mailman/listinfo/ooni-talk' label={intl.formatMessage({ id: 'Footer.Link.MailingList' })} />
             <FooterLink href='https://openobservatory.slack.com/' label={intl.formatMessage({ id: 'Footer.Link.Slack' })} />
