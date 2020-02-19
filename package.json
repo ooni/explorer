@@ -65,6 +65,7 @@
   },
   "devDependencies": {
     "babel-plugin-react-intl": "^3.2.0",
+    "cypress": "^4.0.2",
     "eslint": "^4.19.1",
     "eslint-plugin-react": "^7.7.0",
     "mustache": "^2.3.0"
@@ -76,6 +77,8 @@
     "build": "next build",
     "export": "next export",
     "lint": "eslint --ignore-path .gitignore --ignore-pattern components/vendor .",
+    "test:e2e": "start-server-and-test dev http://localhost:3100 cypress:run",
+    "cypress:run": "cypress run",
     "test": "echo nothing interesting",
     "start": "node index.js"
   }
