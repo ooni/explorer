@@ -329,7 +329,7 @@ const WebConnectivityDetails = ({
     // We ignore the isAnomaly value from the API to work around
     // https://github.com/ooni/explorer/issues/374
     status = 'anomaly'
-    reason = intl.formatMessage(messages[`blockingReason.${blocking}`])
+    reason = messages[`blockingReason.${blocking}`] && intl.formatMessage(messages[`blockingReason.${blocking}`])
     summaryText = (
       <FormattedMessage
         id='Measurement.SummaryText.Websites.Anomaly'
@@ -338,7 +338,7 @@ const WebConnectivityDetails = ({
           WebsiteURL: input,
           network: probe_asn,
           country: country,
-          BlockingReason: <strong>{intl.formatMessage(messages[`blockingReason.${blocking}`])}</strong>
+          BlockingReason: <strong>{messages[`blockingReason.${blocking}`] && intl.formatMessage(messages[`blockingReason.${blocking}`])}</strong>
         }}
       />
     )
