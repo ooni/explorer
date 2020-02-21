@@ -50,7 +50,7 @@ export default class Measurement extends React.Component {
       initialProps['isAnomaly'] = results[0].anomaly
       initialProps['isFailure'] = results[0].failure
       initialProps['isConfirmed'] = results[0].confirmed
-
+      initialProps['scores'] = results[0].scores || null
       const countryObj = countryUtil.countryList.find(country => (
         country.iso3166_alpha2 === msmtContent.data.probe_cc
       ))
@@ -67,6 +67,7 @@ export default class Measurement extends React.Component {
   render () {
     let {
       measurement,
+      scores,
       country,
       measurementURL,
       isConfirmed,
@@ -85,6 +86,7 @@ export default class Measurement extends React.Component {
           isFailure={isFailure}
           country={country}
           measurement={measurement}
+          scores={scores}
           render={({
             status = 'default',
             statusIcon,

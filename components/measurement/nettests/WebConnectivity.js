@@ -251,11 +251,7 @@ QueryContainer.propTypes = {
 
 const WebConnectivityDetails = ({
   isConfirmed,
-  // NOTE: We stop using the `isAnomaly` flag coming from `/api/v1/measurements`
-  // because it causes this bug https://github.com/ooni/explorer/issues/374
-  // where measurements are marked anomaly despite `accessible: true, blocking: false`
-  //
-  // isAnomaly,
+  isAnomaly,
   isFailure,
   country,
   measurement,
@@ -287,10 +283,10 @@ const WebConnectivityDetails = ({
     'tcp_ip': 'TCP'
   }
 
-  let status = 'default',
-    // XXX: `reason` will soon be used in Hero
-    reason = null,
-    summaryText = ''
+  let status = 'default'
+  let summaryText = ''
+
+  const reason = messages[`blockingReason.${blocking}`] && intl.formatMessage(messages[`blockingReason.${blocking}`])
 
   // TODO: Disabled temporarily because `isFailure` is flagged incorrectly in
   // some measurments. When fixed, this should be uncommented and the last
@@ -313,7 +309,6 @@ const WebConnectivityDetails = ({
   // } else
   if(isConfirmed) {
     status = 'confirmed'
-    reason = blocking && intl.formatMessage(messages[`blockingReason.${blocking}`])
     summaryText = (
       <FormattedMessage
         id='Measurement.SummaryText.Websites.ConfirmedBlocked'
@@ -325,11 +320,8 @@ const WebConnectivityDetails = ({
         }}
       />
     )
-  } else if (/* isAnomaly */ blocking !== false) {
-    // We ignore the isAnomaly value from the API to work around
-    // https://github.com/ooni/explorer/issues/374
+  } else if (isAnomaly) {
     status = 'anomaly'
-    reason = messages[`blockingReason.${blocking}`] && intl.formatMessage(messages[`blockingReason.${blocking}`])
     summaryText = (
       <FormattedMessage
         id='Measurement.SummaryText.Websites.Anomaly'
@@ -338,13 +330,12 @@ const WebConnectivityDetails = ({
           WebsiteURL: input,
           network: probe_asn,
           country: country,
-          BlockingReason: <strong>{messages[`blockingReason.${blocking}`] && intl.formatMessage(messages[`blockingReason.${blocking}`])}</strong>
+          BlockingReason: reason && <strong>{reason}</strong>
         }}
       />
     )
   } else if (accessible) {
     status = 'reachable'
-    reason = null
     summaryText = (
       <FormattedMessage
         id='Measurement.SummaryText.Websites.Accessible'
@@ -359,7 +350,6 @@ const WebConnectivityDetails = ({
   } else if (blocking === false) {
     // When not accessible, but also not blocking, it must be down
     status = 'down'
-    reason = 'down'
     summaryText = (
       <FormattedMessage
         id='Measurement.SummaryText.Websites.Down'
@@ -374,7 +364,6 @@ const WebConnectivityDetails = ({
   } else {
     // TODO: Remove this block when the first block in this chain is enabled.
     status = 'error'
-    reason = null
     summaryText = (
       <FormattedMessage
         id='Measurement.SummaryText.Websites.Failed'
@@ -501,7 +490,7 @@ const WebConnectivityDetails = ({
 
 WebConnectivityDetails.propTypes = {
   isConfirmed: PropTypes.bool.isRequired,
-  // isAnomaly: PropTypes.bool.isRequired,
+  isAnomaly: PropTypes.bool.isRequired,
   isFailure: PropTypes.bool.isRequired,
   country: PropTypes.string.isRequired,
   measurement: PropTypes.object.isRequired,
