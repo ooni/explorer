@@ -20,19 +20,11 @@ const WhatsAppDetails = ({ isAnomaly, scores, measurement, render }) => {
   const webAccessible = scores.analysis.whatsapp_web_accessible
   const endpointsAccessible = scores.analysis.whatsapp_endpoints_accessible
 
-  const possibleCensorship = !(
-    registrationServerAccessible &&
-    webAccessible &&
-    endpointsAccessible
-  )
-
-  // const isFailed = (working === false && possibleCensorship === false)
-
   let status = 'reachable'
   let info = <FormattedMessage id='Measurement.Details.Hint.WhatsApp.Reachable' />
   let summaryText = 'Measurement.Details.SummaryText.WhatsApp.Reachable'
 
-  if (possibleCensorship) {
+  if (isAnomaly) {
     status = 'anomaly'
     info = <FormattedMessage id='Measurement.Status.Hint.WhatsApp.Blocked' />
     if (!endpointsAccessible) {

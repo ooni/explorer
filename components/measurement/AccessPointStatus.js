@@ -6,15 +6,17 @@ import { FormattedMessage } from 'react-intl'
 import styled from 'styled-components'
 
 const StatusText = styled(Text)`
-  color: ${props => props.ok && props.theme.colors.yellow9}
+  color: ${props => props.ok === false ? props.theme.colors.yellow9 : 'unset'}
 `
 
 const AccessPointStatus = ({ icon, label, ok , content, color, ...props}) => {
   if (content === undefined) {
-    if (ok) {
+    if (ok === true) {
       content = <FormattedMessage id='Measurement.Details.Endpoint.Status.Okay' />
-    } else {
+    } else if (ok === false){
       content = <FormattedMessage id='Measurement.Details.Endpoint.Status.Failed' />
+    } else {
+      content = <FormattedMessage id='Measurement.Details.Endpoint.Status.Unknown' />
     }
   }
 
@@ -23,7 +25,7 @@ const AccessPointStatus = ({ icon, label, ok , content, color, ...props}) => {
       {icon}
       <Text fontWeight='bold' fontSize={0}>{label}</Text>
       <StatusText
-        ok={!ok}
+        ok={ok}
         fontSize={3}
         fontWeight={200}
         color={color}
