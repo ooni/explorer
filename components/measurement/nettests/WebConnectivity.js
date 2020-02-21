@@ -287,10 +287,10 @@ const WebConnectivityDetails = ({
     'tcp_ip': 'TCP'
   }
 
-  let status = 'default',
-    // XXX: `reason` will soon be used in Hero
-    reason = null,
-    summaryText = ''
+  let status = 'default'
+  let summaryText = ''
+
+  const reason = messages[`blockingReason.${blocking}`] && intl.formatMessage(messages[`blockingReason.${blocking}`])
 
   // TODO: Disabled temporarily because `isFailure` is flagged incorrectly in
   // some measurments. When fixed, this should be uncommented and the last
@@ -313,7 +313,6 @@ const WebConnectivityDetails = ({
   // } else
   if(isConfirmed) {
     status = 'confirmed'
-    reason = blocking && intl.formatMessage(messages[`blockingReason.${blocking}`])
     summaryText = (
       <FormattedMessage
         id='Measurement.SummaryText.Websites.ConfirmedBlocked'
@@ -329,7 +328,6 @@ const WebConnectivityDetails = ({
     // We ignore the isAnomaly value from the API to work around
     // https://github.com/ooni/explorer/issues/374
     status = 'anomaly'
-    reason = messages[`blockingReason.${blocking}`] && intl.formatMessage(messages[`blockingReason.${blocking}`])
     summaryText = (
       <FormattedMessage
         id='Measurement.SummaryText.Websites.Anomaly'
@@ -338,13 +336,12 @@ const WebConnectivityDetails = ({
           WebsiteURL: input,
           network: probe_asn,
           country: country,
-          BlockingReason: <strong>{messages[`blockingReason.${blocking}`] && intl.formatMessage(messages[`blockingReason.${blocking}`])}</strong>
+          BlockingReason: reason && <strong>{reason}</strong>
         }}
       />
     )
   } else if (accessible) {
     status = 'reachable'
-    reason = null
     summaryText = (
       <FormattedMessage
         id='Measurement.SummaryText.Websites.Accessible'
@@ -359,7 +356,6 @@ const WebConnectivityDetails = ({
   } else if (blocking === false) {
     // When not accessible, but also not blocking, it must be down
     status = 'down'
-    reason = 'down'
     summaryText = (
       <FormattedMessage
         id='Measurement.SummaryText.Websites.Down'
@@ -374,7 +370,6 @@ const WebConnectivityDetails = ({
   } else {
     // TODO: Remove this block when the first block in this chain is enabled.
     status = 'error'
-    reason = null
     summaryText = (
       <FormattedMessage
         id='Measurement.SummaryText.Websites.Failed'
