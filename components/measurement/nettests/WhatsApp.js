@@ -13,37 +13,33 @@ import MdPersonAdd from 'react-icons/lib/md/person-add'
 
 import AccessPointStatus from '../AccessPointStatus'
 
-const WhatsAppDetails = ({ measurement, render }) => {
+const WhatsAppDetails = ({ isAnomaly, scores, measurement, render }) => {
   const testKeys = measurement.test_keys
   const tcp_connect = testKeys.tcp_connect
-  const registrationServerBlocked = testKeys.registration_server_status === 'blocked'
-  const webBlocked = testKeys.whatsapp_web_status === 'blocked'
-  const endpointsBlocked = testKeys.whatsapp_endpoints_status === 'blocked'
+  const registrationServerAccessible = scores.analysis.registration_server_accessible
+  const webAccessible = scores.analysis.whatsapp_web_accessible
+  const endpointsAccessible = scores.analysis.whatsapp_endpoints_accessible
 
-  const possibleCensorship = (
-    testKeys.whatsapp_endpoints_status === 'blocked' ||
-    testKeys.whatsapp_web_status === 'blocked' ||
-    testKeys.facebook_tcp_blocking === true ||
-    testKeys.registration_server_status === 'blocked')
-
-  const working = (
-    testKeys.registration_server_status === 'ok' &&
-    testKeys.whatsapp_web_status === 'ok' &&
-    testKeys.registration_server_status === 'ok'
+  const possibleCensorship = !(
+    registrationServerAccessible &&
+    webAccessible &&
+    endpointsAccessible
   )
 
-  const isFailed = (working === false && possibleCensorship === false)
+  // const isFailed = (working === false && possibleCensorship === false)
+
   let status = 'reachable'
   let info = <FormattedMessage id='Measurement.Details.Hint.WhatsApp.Reachable' />
   let summaryText = 'Measurement.Details.SummaryText.WhatsApp.Reachable'
-  if (possibleCensorship || !working) {
+
+  if (possibleCensorship) {
     status = 'anomaly'
     info = <FormattedMessage id='Measurement.Status.Hint.WhatsApp.Blocked' />
-    if (endpointsBlocked) {
+    if (!endpointsAccessible) {
       summaryText = 'Measurement.Details.SummaryText.WhatsApp.AppFailure'
-    } else if (webBlocked) {
+    } else if (!webAccessible) {
       summaryText = 'Measurement.Details.SummaryText.WhatsApp.DesktopFailure'
-    } else if (endpointsBlocked && webBlocked) {
+    } else if (!endpointsAccessible && !webAccessible) {
       summaryText = 'Measurement.Details.SummaryText.WhatsApp.DesktopAndAppFailure'
     }
   }
@@ -61,21 +57,21 @@ const WhatsAppDetails = ({ measurement, render }) => {
               <AccessPointStatus
                 icon={<MdPhoneAndroid />}
                 label={<FormattedMessage id='Measurement.Details.WhatsApp.Endpoint.Label.Mobile' />}
-                ok={!endpointsBlocked}
+                ok={endpointsAccessible}
               />
             </Box>
             <Box width={1/3}>
               <AccessPointStatus
                 icon={<MdWebAsset />}
                 label={<FormattedMessage id='Measurement.Details.WhatsApp.Endpoint.Label.Web' />}
-                ok={!webBlocked}
+                ok={webAccessible}
               />
             </Box>
             <Box width={1/3}>
               <AccessPointStatus
                 icon={<MdPersonAdd />}
                 label={<FormattedMessage id='Measurement.Details.WhatsApp.Endpoint.Label.Registration' />}
-                ok={!registrationServerBlocked}
+                ok={registrationServerAccessible}
               />
             </Box>
           </Flex>
