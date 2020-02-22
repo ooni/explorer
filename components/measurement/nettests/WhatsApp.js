@@ -10,8 +10,16 @@ import { FormattedMessage } from 'react-intl'
 import MdPhoneAndroid from 'react-icons/lib/md/phone-android'
 import MdWebAsset from 'react-icons/lib/md/web-asset'
 import MdPersonAdd from 'react-icons/lib/md/person-add'
+import styled from 'styled-components'
 
 import AccessPointStatus from '../AccessPointStatus'
+
+const BugBox = styled(Box)`
+  margin-bottom: 30px;
+  background-color: ${props => props.theme.colors.yellow2};
+  border: 1px solid ${props => props.theme.colors.yellow8};
+  padding: 20px;
+`
 
 const WhatsAppDetails = ({ isAnomaly, scores, measurement, render }) => {
   const testKeys = measurement.test_keys
@@ -50,6 +58,9 @@ const WhatsAppDetails = ({ isAnomaly, scores, measurement, render }) => {
     summaryText: summaryText,
     details: (
       <React.Fragment>
+        { !scores.analysis && <BugBox>
+        <Text>Attention! This test result may not be accurate as it may be affected by a <a href="https://github.com/ooni/explorer/issues/406">known data processing issue</a> that we are working on fixing. If in doubt on how to interpret this particular result, feel free to <a href="https://ooni.org/about">reach out to the OONI team</a>.</Text>
+        </BugBox>}
         <Box width={1/2}>
           <Flex>
             <Box width={1/3}>
