@@ -39,7 +39,7 @@ const AccessPointStatus = ({ icon, label, ok , content, color, ...props}) => {
 AccessPointStatus.propTypes = {
   icon: PropTypes.element.isRequired,
   label: PropTypes.string.isRequired,
-  ok: PropTypes.bool.isRequired,
+  ok: PropTypes.oneOf([true, false, undefined]),
   content: PropTypes.element
 }
 

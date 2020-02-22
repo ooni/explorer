@@ -16,9 +16,16 @@ import AccessPointStatus from '../AccessPointStatus'
 const WhatsAppDetails = ({ isAnomaly, scores, measurement, render }) => {
   const testKeys = measurement.test_keys
   const tcp_connect = testKeys.tcp_connect
-  const registrationServerAccessible = scores.analysis.registration_server_accessible
-  const webAccessible = scores.analysis.whatsapp_web_accessible
-  const endpointsAccessible = scores.analysis.whatsapp_endpoints_accessible
+  let registrationServerAccessible, webAccessible, endpointsAccessible
+  try {
+    registrationServerAccessible = scores.analysis.registration_server_accessible
+    endpointsAccessible = scores.analysis.whatsapp_endpoints_accessible
+    webAccessible = scores.analysis.whatsapp_web_accessible
+  } catch (e) {
+    registrationServerAccessible = testKeys.registration_server_status === 'ok'
+    endpointsAccessible = testKeys.whatsapp_endpoints_status === 'ok'
+    webAccessible = testKeys.whatsapp_web_status === 'ok'
+  }
 
   let status = 'reachable'
   let info = <FormattedMessage id='Measurement.Details.Hint.WhatsApp.Reachable' />
