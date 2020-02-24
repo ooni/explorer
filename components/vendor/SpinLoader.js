@@ -1,7 +1,7 @@
 // From: https://github.com/LucasBassetti/react-css-loaders/tree/master/lib/spin
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled, { keyframes } from 'styled-components'
+import styled, { css, keyframes } from 'styled-components'
 import { theme } from 'ooni-components'
 
 const loading = keyframes`
@@ -13,8 +13,13 @@ const loading = keyframes`
   }
 `
 
+const spinnerAnimation = props =>
+  css`
+    ${loading} ${props.duration}s infinite linear;
+  `
+
 const Spin = styled.div`
-  animation: ${props => `${loading} ${props.duration}s infinite linear;`};
+  animation: ${spinnerAnimation};
   background: ${props => props.color};
   background: ${props => `linear-gradient(to right, ${props.color} 10%, rgba(255, 255, 255, 0) 42%);`};
   border-radius: 50%;
