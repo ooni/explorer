@@ -55,9 +55,6 @@ const CallToActionBox = () => {
             <Button><FormattedMessage id='Country.Overview.NoData.Button.InstallProbe' /></Button>
           </a></NLink>
         </Box>
-        <Box>
-          <Button hollow><FormattedMessage id='Country.Overview.NoData.Button.OoniRunLink' /></Button>
-        </Box>
       </Flex>
     </Flex>
   )
@@ -124,7 +121,7 @@ class TestsByGroup extends React.PureComponent {
     // Check if there is enough data to plot the charts
     const testCoverageCount = testCoverage.reduce((count, item) => count + item.count, 0)
     const networkCoverageCount = networkCoverage.reduce((count, item) => count + item.count, 0)
-    const notEnoughData = (testCoverageCount === 0 && networkCoverageCount === 0)
+    const notEnoughData = !(testCoverageCount === 0 && networkCoverageCount === 0)
 
     const supportedTestGroups = ['websites', 'im', 'middlebox', 'performance', 'circumvention']
 

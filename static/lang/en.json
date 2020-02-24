@@ -101,6 +101,7 @@
   "Measurement.Details.Telegram.Endpoint.Label.Web": "Telegram Web",
   "Measurement.Details.Endpoint.Status.Okay": "Okay",
   "Measurement.Details.Endpoint.Status.Failed": "Failed",
+  "Measurement.Details.Endpoint.Status.Unknown": "Unknown",
   "Measurement.Details.Telegram.Endpoint.Status.Heading": "Endpoint Status",
   "Measurement.Details.Telegram.Endpoint.ConnectionTo.Failed": "Connection to {destination} failed.",
   "Measurement.Details.Telegram.Endpoint.ConnectionTo.Successful": "Connection to {destination} was successful.",
