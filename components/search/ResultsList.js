@@ -191,7 +191,7 @@ const StyledViewDetailsLink = styled(Link)`
 const ViewDetailsLink = ({reportId, input, children}) => {
   let href = `/measurement/${reportId}`
   if (input) {
-    href += `?input=${input}`
+    href += `?input=${input.replace('#', '%23')}`
   }
   return (
     <NLink href={href}>
