@@ -1,5 +1,25 @@
 # Changelog
 
+## [2.0.7] - 2020-02-24
+
+### Added
+- Circumvention test group containing the new psiphon and tor tests (#372, #393)
+- Use `scores` key from `fastpath` to show endpoint status for WhatsApp test (#405)
+- Added disclaimer for older measurements (ca95266)
+
+### Fixed
+- Fixed alignment of search result rows for dns_consistency tests (#387)
+- Fixed bug in selecting the correct date range in search (#397)
+- Made usage of blocking reason test_key more robust (#401)
+- Fixed spin loader crash by upgrading it to styled-components v4 (#408)
+- Fix for bug in search results with `#` in `input` field (#409)
+
+### Changed
+- Changed ooni.io links to ooni.org (#372)
+- Upgraded styled-components to v4 (#398)
+- Use `country-util` package instead of API call to fetch countries list (#394)
+- Switch back to using `anomaly` flag from API instead of determining from test_keys(#404)
+
 ## [2.0.6] - 2020-01-24
 
 ### Fixed
