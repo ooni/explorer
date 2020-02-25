@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 
 // TODO: Maybe add period information to update data in all sections when
@@ -41,4 +41,9 @@ export const inCountry = (WrappedComponent) => {
       </CountryContext.Consumer>
     )
   }
+}
+
+/* Custom Hook to use CountryContext */
+export const useCountry = () => {
+  return useContext(CountryContext)
 }

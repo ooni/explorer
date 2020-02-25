@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Flex, Box, theme } from 'ooni-components'
+import { Heading, Button, Flex, Box, Text, theme } from 'ooni-components'
 import {
   VictoryChart,
   VictoryBar,
@@ -10,11 +10,14 @@ import {
   VictoryLabel,
   VictoryVoronoiContainer
 } from 'victory'
-import { injectIntl } from 'react-intl'
+import { FormattedMessage, injectIntl } from 'react-intl'
+import NLink from 'next/link'
 
 import Tooltip from './Tooltip'
 import VictoryTheme from '../VictoryTheme'
 import { testGroups } from '../test-info'
+import FormattedMarkdown from '../FormattedMarkdown'
+import { useCountry } from './CountryContext'
 
 const Circle = styled.span`
   height: 16px;
@@ -28,6 +31,35 @@ const StyledTestGroupSelector = styled(Flex)`
     text-shadow: 1px 1px 1px black;
   }
 `
+
+const CallToActionBox = () => {
+  const { countryName } = useCountry()
+  return (
+    <Flex my={4} bg='gray3' flexWrap='wrap'>
+      <Box width={1} mx={4} my={2}>
+        <Heading h={4}>
+          <FormattedMessage id='Country.Overview.NoData.Title' />
+        </Heading>
+        <Text fontSize={2}>
+          <FormattedMarkdown
+            id='Country.Overview.NoData.CallToAction'
+            values={{
+              country: countryName
+            }}
+          />
+        </Text>
+      </Box>
+      <Flex alignItems='center' mx={4} my={4} flexDirection={['column', 'row']}>
+        <Box mr={4} mb={[3, 0]}>
+          <NLink href='https://ooni.org/install'><a>
+            <Button><FormattedMessage id='Country.Overview.NoData.Button.InstallProbe' /></Button>
+          </a></NLink>
+        </Box>
+      </Flex>
+    </Flex>
+  )
+}
+
 const TestGroupSelector = ({ testGroup, active, onClick }) => (
   <StyledTestGroupSelector m={2} onClick={() => onClick(testGroup)}>
     <Circle color={active ? testGroups[testGroup].color : theme.colors.gray4} />
@@ -89,7 +121,7 @@ class TestsByGroup extends React.PureComponent {
     // Check if there is enough data to plot the charts
     const testCoverageCount = testCoverage.reduce((count, item) => count + item.count, 0)
     const networkCoverageCount = networkCoverage.reduce((count, item) => count + item.count, 0)
-    const notEnoughData = (testCoverageCount === 0 && networkCoverageCount === 0)
+    const notEnoughData = !(testCoverageCount === 0 && networkCoverageCount === 0)
 
     const supportedTestGroups = ['websites', 'im', 'middlebox', 'performance', 'circumvention']
 
@@ -233,6 +265,7 @@ class TestsByGroup extends React.PureComponent {
 
     return (
       <React.Fragment>
+        {notEnoughData && <CallToActionBox />}
         <Flex my={4} flexWrap='wrap' justifyContent='space-between'>
           {
             supportedTestGroups.map((testGroup, index) => (
