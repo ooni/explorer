@@ -266,7 +266,7 @@ const WebConnectivityDetails = ({
       accessible,
       blocking,
       queries,
-      tcp_connect,
+      tcp_connect = [],
       requests,
       client_resolver,
       http_experiment_failure,
