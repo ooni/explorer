@@ -309,16 +309,10 @@ const ResultItem = ({msmt}) => {
                 <Box width={3/16}>
                   <ASNBox asn={msmt.probe_asn} />
                 </Box>
-                <Box width={4/16} title={moment.utc(msmt.measurement_start_time).format('YYYY-MM-DD HH:mm [UTC]')}>
-                  {intl.formatDate(moment.utc(msmt.measurement_start_time).toDate(), {
-                    year: 'numeric',
-                    month: 'long',
-                    day: '2-digit',
-                    hour: '2-digit',
-                    minute: 'numeric'
-                  })}
+                <Box width={5/16} title={moment.utc(msmt.measurement_start_time).format('YYYY-MM-DD HH:mm [UTC]')}>
+                  {moment.utc(msmt.measurement_start_time).format('YYYY-MM-DD HH:mm [UTC]')}
                 </Box>
-                <Box width={6/16}>
+                <Box width={5/16}>
                   {msmt.testName}
                 </Box>
               </Flex>
