@@ -7,7 +7,7 @@ import { injectIntl, intlShape } from 'react-intl'
 import { version } from '../package.json'
 
 const StyledFooter = styled.footer`
-  background-color: #002c4b;
+  background-color: ${props => props.theme.colors.blue9};
   color: #ffffff;
   font-size: 0.857rem;
   margin-top: 32px;
