@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
+import { useIntl } from 'react-intl'
 import { Link, Text } from 'ooni-components'
 
 import { getTestMetadata } from '../utils'
@@ -13,9 +14,18 @@ const SummaryText = ({
   date,
   content,
 }) => {
+  const intl = useIntl()
   const metadata = getTestMetadata(testName)
-  const formattedDate = moment.utc(date).format('LL')
-  const formattedDateTime = moment.utc(date).format('lll')
+  const formattedDate = moment(date).format('LL')
+  const formattedDateTime = intl.formatDate(moment.utc(date).toDate(), {
+    year: 'numeric',
+    month: 'long',
+    day: '2-digit',
+    hour: '2-digit',
+    minute: 'numeric',
+    timeZone: 'UTC',
+    timeZoneName: 'short'
+  })
 
   let textToRender = null
   if (typeof content === 'function') {

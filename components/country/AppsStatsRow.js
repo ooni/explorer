@@ -36,8 +36,8 @@ const StyledRow = styled(Box)`
 
 const NetworkRow = ({ asn, app }) => {
   const { countryCode } = useContext(CountryContext)
-  const until = moment().add(1, 'day').format('YYYY-MM-DD')
-  const since = moment().subtract(30, 'days').format('YYYY-MM-DD')
+  const until = moment.utc().add(1, 'day').format('YYYY-MM-DD')
+  const since = moment.utc().subtract(30, 'days').format('YYYY-MM-DD')
 
   const linkToMeasurements = `/search?probe_cc=${countryCode}&probe_asn=AS${asn}&test_name=${app}&since=${since}&until=${until}`
 
@@ -161,7 +161,7 @@ class AppsStatRow extends React.Component {
           <Box ml='auto'>
             <FormattedMessage id='Country.Apps.Label.LastTested' />
             {' '}
-            <strong>{moment(data.last_tested).fromNow()}</strong>
+            <strong>{moment.utc(data.last_tested).fromNow()}</strong>
           </Box>
           <Box ml={4}>
             <CollapseTrigger

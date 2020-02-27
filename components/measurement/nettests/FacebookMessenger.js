@@ -7,12 +7,13 @@ import {
   Flex,
   Box
 } from 'ooni-components'
-import { FormattedMessage, injectIntl, intlShape } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import { DetailsBox } from '../DetailsBox'
 import AccessPointStatus from '../AccessPointStatus'
 
-export const FacebookMessengerDetails = ({ measurement, render, intl }) => {
+export const FacebookMessengerDetails = ({ measurement, render }) => {
+  const intl = useIntl()
   const testKeys = measurement.test_keys
   const isWorking = (
     testKeys.facebook_dns_blocking === false &&
@@ -106,8 +107,7 @@ export const FacebookMessengerDetails = ({ measurement, render, intl }) => {
 }
 FacebookMessengerDetails.propTypes = {
   measurement: PropTypes.object,
-  render: PropTypes.func,
-  intl: intlShape.isRequired
+  render: PropTypes.func
 }
 
-export default injectIntl(FacebookMessengerDetails)
+export default FacebookMessengerDetails

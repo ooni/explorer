@@ -9,7 +9,7 @@ import {
 } from 'ooni-components'
 
 import { Text } from 'rebass'
-import { injectIntl, intlShape } from 'react-intl'
+import { useIntl } from 'react-intl'
 
 import {
   VictoryChart,
@@ -89,7 +89,8 @@ const getOptimalQualityForBitrate = (testKeys) => {
   return optimalQuality
 }
 
-const DashDetails = ({ measurement, render, intl }) => {
+const DashDetails = ({ measurement, render }) => {
+  const intl = useIntl()
   const testKeys = measurement.test_keys
   // const isFailed = testKeys.failure !== null
   // const failure = testKeys.failure
@@ -187,8 +188,7 @@ const DashDetails = ({ measurement, render, intl }) => {
 }
 
 DashDetails.propTypes = {
-  testKeys: PropTypes.object.isRequired,
-  intl: intlShape.isRequired
+  testKeys: PropTypes.object.isRequired
 }
 
-export default injectIntl(DashDetails)
+export default DashDetails

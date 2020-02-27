@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { injectIntl, intlShape } from 'react-intl'
+import { useIntl } from 'react-intl'
 import { DetailsBoxTable } from './DetailsBox'
 
 const PerformanceDetails = ({
@@ -9,9 +9,9 @@ const PerformanceDetails = ({
   mss,
   packetLoss,
   outOfOrder,
-  timeouts,
-  intl
+  timeouts
 }) => {
+  const intl = useIntl()
   const items = [
     {
       label: intl.formatMessage({ id: 'Measurement.Details.Performance.Label.AvgPing' }),
@@ -53,8 +53,7 @@ PerformanceDetails.propTypes = {
   mss: PropTypes.number.isRequired,
   packetLoss: PropTypes.number.isRequired,
   outOfOrder: PropTypes.number.isRequired,
-  timeouts: PropTypes.number.isRequired,
-  intl: intlShape.isRequired
+  timeouts: PropTypes.number.isRequired
 }
 
-export default injectIntl(PerformanceDetails)
+export default PerformanceDetails

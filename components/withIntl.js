@@ -1,6 +1,6 @@
 /* global require */
 import React, {Component} from 'react'
-import { IntlProvider, addLocaleData, injectIntl } from 'react-intl'
+import { IntlProvider } from 'react-intl'
 
 let messages = {
   en: require('../static/lang/en.json')
@@ -14,18 +14,11 @@ const getLocale = () => {
   return navigatorLang.split('-')[0]
 }
 
-if (typeof window !== 'undefined' && window.ReactIntlLocaleData) {
-  Object.keys(window.ReactIntlLocaleData).forEach((lang) => {
-    addLocaleData(window.ReactIntlLocaleData[lang])
-  })
-}
-
 if (typeof window !== 'undefined' && window.OONITranslations) {
   messages = window.OONITranslations
 }
 
 const withIntl = (Page) => {
-  const IntlPage = injectIntl(Page)
 
   return class PageWithIntl extends Component {
     render () {
@@ -38,7 +31,7 @@ const withIntl = (Page) => {
       const messagesToLoad = Object.assign({}, messages[locale], messages['en'])
       return (
         <IntlProvider locale={locale} messages={messagesToLoad} initialNow={now}>
-          <IntlPage {...this.props} />
+          <Page {...this.props} />
         </IntlProvider>
       )
     }

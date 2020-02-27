@@ -4,7 +4,7 @@ import url from 'url'
 import moment from 'moment'
 import NLink from 'next/link'
 import styled from 'styled-components'
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl'
 import {
   Flex, Box,
   Link,
@@ -136,7 +136,8 @@ const messages = defineMessages({
   },
 })
 
-const ResultTagIntl = ({msmt, intl}) => {
+const ResultTag = ({msmt}) => {
+  const intl = useIntl()
   if (testsWithStates.indexOf(msmt.test_name) > -1) {
     const testDisplayName = msmt.testName.replace(/ /gi, '')
     const computedMessageIdPrefix = `Search.${testDisplayName}.Results`
@@ -166,8 +167,6 @@ const ResultTagIntl = ({msmt, intl}) => {
     return null
   }
 }
-
-const ResultTag = injectIntl(ResultTagIntl)
 
 const ASNBox = ({asn}) => {
   const justNumber = asn.split('AS')[1]
@@ -267,6 +266,7 @@ const ResultInput = styled.div`
 `
 
 const ResultItem = ({msmt}) => {
+  const intl = useIntl()
   const pathMaxLen = 10
   let input = msmt.input
   if (input) {
@@ -309,10 +309,10 @@ const ResultItem = ({msmt}) => {
                 <Box width={3/16}>
                   <ASNBox asn={msmt.probe_asn} />
                 </Box>
-                <Box width={4/16} title={moment.utc(msmt.measurement_start_time).format('YYYY-MM-DD HH:mm [UTC]')}>
-                  {moment.utc(msmt.measurement_start_time).format('YYYY-MM-DD HH:mm')}
+                <Box width={5/16}>
+                  {moment.utc(msmt.measurement_start_time).format('YYYY-MM-DD HH:mm [UTC]')}
                 </Box>
-                <Box width={6/16}>
+                <Box width={5/16}>
                   {msmt.testName}
                 </Box>
               </Flex>

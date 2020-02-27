@@ -1,5 +1,5 @@
 import React from 'react'
-import { defineMessages, FormattedMessage, injectIntl } from 'react-intl'
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl'
 import styled from 'styled-components'
 import { Flex, Box, Heading, Link } from 'ooni-components'
 import { Text } from 'rebass'
@@ -107,9 +107,9 @@ const Overview = ({
   networkCount,
   measurementCount,
   measuredSince,
-  featuredArticles = [],
-  intl
+  featuredArticles = []
 }) => {
+  const intl = useIntl()
   return (
     <React.Fragment>
       <SectionHeader>
@@ -180,4 +180,4 @@ const Overview = ({
     </React.Fragment>
   )
 }
-export default injectIntl(Overview)
+export default Overview
