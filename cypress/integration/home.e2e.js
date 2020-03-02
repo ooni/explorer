@@ -1,8 +1,17 @@
-/* global describe, it, cy */
+/* global describe, it, cy, before */
 
-describe('Home Page', () => {
-  it('explore button works', () => {
+describe('Home Page Tests', () => {
+  
+  before(() => {
     cy.visit('/')
+  })
+
+  // TODO: Check if stats appear
+  // TODO: Check if monthly coverage graph loads
+  // TODO: Check if Highlights cards are displayed
+
+  it('explore button works', () => {
+    // Check if explore button
     cy.get('button').contains('Explore').click()
     cy.url().should('include', '/countries')
   })

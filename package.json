@@ -68,7 +68,8 @@
     "cypress": "^4.0.2",
     "eslint": "^4.19.1",
     "eslint-plugin-react": "^7.7.0",
-    "mustache": "^2.3.0"
+    "mustache": "^2.3.0",
+    "start-server-and-test": "^1.10.8"
   },
   "scripts": {
     "dev": "NODE_ENV=development MEASUREMENTS_URL=http://api.ooni.io SENTRY_DSN=https://49af7fff247c445b9a7c98ee21ddfd2f@sentry.io/1427510 node index.js",
