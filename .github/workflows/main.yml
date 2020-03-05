@@ -1,8 +1,13 @@
-name: Explorer End-to-End
+name: OONI Explorer End-to-End Tests
 on: [push]
 jobs:
-  cypress-run:
+  cypress-e2e:
+    strategy:
+      matrix:
+        # maybe drop `edge` if it fails too often
+        browser: [firefox, chrome, edge]
     runs-on: ubuntu-latest
+    name: E2E test on ${{ matrix.browser }}
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -12,4 +17,12 @@ jobs:
         with:
           build: npm run build
           start: npm start
-          wait-on: http://localhost:3100
+          wait-on: 'http://localhost:3100'
+          browser: ${{ matrix.browser }}
+
+      - name: Upload screenshots on failure
+        uses: actions/upload-artifact@v1
+        if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
