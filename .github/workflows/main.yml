@@ -4,8 +4,7 @@ jobs:
   cypress-e2e:
     strategy:
       matrix:
-        # maybe drop `edge` if it fails too often
-        browser: [firefox, chrome, edge]
+        browser: [firefox, chrome]
     runs-on: ubuntu-latest
     name: E2E test on ${{ matrix.browser }}
     steps:
