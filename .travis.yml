@@ -1,9 +1,0 @@
-language: node_js
-env:
-  - REPO_NAME=explorer
-node_js:
-  - "node"
-cache:
-  directories:
-    - "node_modules"
-script: npm test
