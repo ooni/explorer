@@ -73,8 +73,8 @@ const TelegramDetails = ({ measurement, render }) => {
                       />
                     </Box>
                   </Flex>
-                  {tcp_connect.length > 0 &&
-                    <React.Fragment>
+                  {tcp_connect && tcp_connect.length > 0 &&
+                    <div>
                       <Heading h={4}> <FormattedMessage id='Measurement.Details.Telegram.Endpoint.Status.Heading' /> </Heading>
                       {tcp_connect.map((connection, index) => (
                         <Flex key={index}>
@@ -94,7 +94,7 @@ const TelegramDetails = ({ measurement, render }) => {
                           </Box>
                         </Flex>
                       ))}
-                    </React.Fragment>
+                    </div>
                   }
                 </React.Fragment>
               } />
