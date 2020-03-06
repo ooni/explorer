@@ -483,9 +483,13 @@ const WebConnectivityDetails = ({
               <DetailsBox
                 title={<FormattedMessage id='Measurement.Details.Websites.HTTP.Heading' />}
                 content={
-                  <Box width={1}>
-                    {requests.map((request, index) => <RequestResponseContainer key={index} request={request} />)}
-                  </Box>
+                  requests ? (
+                    <Box width={1}>
+                      {requests.map((request, index) => <RequestResponseContainer key={index} request={request} />)}
+                    </Box>
+                  ) : (
+                    <FormattedMessage id='Measurement.Details.Websites.HTTP.NoData' />
+                  )
                 }
               />
             </Flex>
