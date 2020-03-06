@@ -14,10 +14,11 @@ jobs:
           build: npm run build
           start: npm start
           wait-on: 'http://localhost:3100'
+          browser: chrome
 
       - name: Upload screenshots on failure
         uses: actions/upload-artifact@v1
-        if: failure()
+        if: always()
         with:
           name: cypress-screenshots
           path: cypress/screenshots
