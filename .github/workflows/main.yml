@@ -2,11 +2,8 @@ name: OONI Explorer End-to-End Tests
 on: [push]
 jobs:
   cypress-e2e:
-    strategy:
-      matrix:
-        browser: [firefox, chrome]
+    name: E2E Test
     runs-on: ubuntu-latest
-    name: E2E test on ${{ matrix.browser }}
     steps:
       - name: Checkout
         uses: actions/checkout@v1
@@ -17,7 +14,6 @@ jobs:
           build: npm run build
           start: npm start
           wait-on: 'http://localhost:3100'
-          browser: ${{ matrix.browser }}
 
       - name: Upload screenshots on failure
         uses: actions/upload-artifact@v1
