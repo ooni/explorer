@@ -294,27 +294,23 @@ const WebConnectivityDetails = ({
   let status = 'default'
   let summaryText = ''
 
-  const reason = messages[`blockingReason.${blocking}`] && intl.formatMessage(messages[`blockingReason.${blocking}`])
+  let reason = messages[`blockingReason.${blocking}`] && intl.formatMessage(messages[`blockingReason.${blocking}`])
 
-  // TODO: Disabled temporarily because `isFailure` is flagged incorrectly in
-  // some measurments. When fixed, this should be uncommented and the last
-  // section in the chain should be removed
-
-  // if (isFailure) {
-  //   status = 'error'
-  //   reason = null
-  //   summaryText = (
-  //     <FormattedMessage
-  //       id='Measurement.SummaryText.Websites.Failed'
-  //       values={{
-  //         date: date,
-  //         WebsiteURL: input,
-  //         network: probe_asn,
-  //         country: country,
-  //       }}
-  //     />
-  //   )
-  // } else
+  if (isFailure) {
+    status = 'error'
+    reason = null
+    summaryText = (
+      <FormattedMessage
+        id='Measurement.SummaryText.Websites.Failed'
+        values={{
+          date: date,
+          WebsiteURL: input,
+          network: probe_asn,
+          country: country,
+        }}
+      />
+    )
+  } else
   if(isConfirmed) {
     status = 'confirmed'
     summaryText = (
@@ -366,20 +362,6 @@ const WebConnectivityDetails = ({
           WebsiteURL: input,
           network: probe_asn,
           country: country
-        }}
-      />
-    )
-  } else {
-    // TODO: Remove this block when the first block in this chain is enabled.
-    status = 'error'
-    summaryText = (
-      <FormattedMessage
-        id='Measurement.SummaryText.Websites.Failed'
-        values={{
-          date: date,
-          WebsiteURL: input,
-          network: probe_asn,
-          country: country,
         }}
       />
     )
