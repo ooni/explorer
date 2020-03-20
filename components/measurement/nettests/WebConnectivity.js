@@ -310,8 +310,7 @@ const WebConnectivityDetails = ({
         }}
       />
     )
-  } else
-  if(isConfirmed) {
+  } else if(isConfirmed) {
     status = 'confirmed'
     summaryText = (
       <FormattedMessage
