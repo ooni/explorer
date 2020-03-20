@@ -65,9 +65,11 @@
   },
   "devDependencies": {
     "babel-plugin-react-intl": "^3.2.0",
+    "cypress": "^4.1.0",
     "eslint": "^4.19.1",
     "eslint-plugin-react": "^7.7.0",
-    "mustache": "^2.3.0"
+    "mustache": "^2.3.0",
+    "start-server-and-test": "^1.10.8"
   },
   "scripts": {
     "dev": "NODE_ENV=development MEASUREMENTS_URL=http://api.ooni.io SENTRY_DSN=https://49af7fff247c445b9a7c98ee21ddfd2f@sentry.io/1427510 node index.js",
@@ -76,6 +78,8 @@
     "build": "next build",
     "export": "next export",
     "lint": "eslint --ignore-path .gitignore --ignore-pattern components/vendor .",
+    "test:e2e": "start-server-and-test dev http://localhost:3100 cypress:run",
+    "cypress:run": "cypress run",
     "test": "echo nothing interesting",
     "start": "node index.js"
   }

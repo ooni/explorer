@@ -352,7 +352,7 @@ const ResultContainer = styled(Box)`
 const ResultsList = ({results, testNamesKeyed}) => {
   return (
     <Flex flexWrap='wrap'>
-      <ResultContainer my={4} width={1}>
+      <ResultContainer my={4} width={1} data-test-id='results-list'>
         {results.map((msmt, idx) => {
           msmt.testName = testNamesKeyed[msmt.test_name]
           return <ResultItem key={idx} msmt={msmt} />
