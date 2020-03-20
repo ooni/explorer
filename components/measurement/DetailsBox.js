@@ -49,6 +49,10 @@ const StyledDetailsBoxHeader = styled(Flex)`
   cursor: pointer;
 `
 
+const StyledDetailsBoxContent = styled(Box)`
+  overflow-x: auto;
+`
+
 export class DetailsBox extends React.Component {
   constructor (props) {
     super(props)
@@ -80,9 +84,11 @@ export class DetailsBox extends React.Component {
           </StyledDetailsBoxHeader>
         }
         {isOpen &&
-          <Box p={3} flexWrap='wrap'>
-            {content}
-          </Box>
+          <StyledDetailsBoxContent>
+            <Box p={3} flexWrap='wrap'>
+              {content}
+            </Box>
+          </StyledDetailsBoxContent>
         }
       </StyledDetailsBox>
     )
