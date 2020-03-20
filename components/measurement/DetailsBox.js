@@ -84,10 +84,8 @@ export class DetailsBox extends React.Component {
           </StyledDetailsBoxHeader>
         }
         {isOpen &&
-          <StyledDetailsBoxContent>
-            <Box p={3} flexWrap='wrap'>
-              {content}
-            </Box>
+          <StyledDetailsBoxContent p={3} flexWrap='wrap'>
+            {content}
           </StyledDetailsBoxContent>
         }
       </StyledDetailsBox>
