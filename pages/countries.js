@@ -155,9 +155,8 @@ class Countries extends React.Component {
     const client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
     const result = await client.get('/api/_/countries')
 
-    // Sort countries by name (instead of by country codes)
-    result.data.countries.sort((a,b) => a.name < b.name ? -1 : 1)
-
+    // Sort countries by measurements
+    result.data.countries.sort((c1,c2)=>c2.count-c1.count)
     return {
       countries: result.data.countries
     }
