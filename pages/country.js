@@ -22,6 +22,7 @@ import AppsSection from '../components/country/Apps'
 import NetworkPropertiesSection from '../components/country/NetworkProperties'
 import { CountryContextProvider } from '../components/country/CountryContext'
 
+
 const getCountryReports = (countryCode, data) => {
   const reports = data.filter((article) => (
     article.tags && article.tags.indexOf(`country-${countryCode.toLowerCase()}`) > -1
@@ -45,8 +46,19 @@ const AnimatedHeading = styled(Heading)`
 `
 
 export default class Country extends React.Component {
-  static async getInitialProps ({ query }) {
+  static async getInitialProps ({ req, res, query } ) {
     const { countryCode } = query
+
+    if (res && (countryCode !== countryCode.toUpperCase())) {
+      res.writeHead(301, {
+        Location: `/country/${countryCode.toUpperCase()}`
+      });
+
+      res.end();
+      return {};
+    }
+
+
     let client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
     let results = await Promise.all([
       // XXX cc @darkk we should ideally have better dedicated daily dumps for this view
