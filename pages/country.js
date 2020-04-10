@@ -1,6 +1,5 @@
 /* global process */
 import React from 'react'
-import Head from 'next/head'
 import axios from 'axios'
 import {
   Container,
@@ -21,7 +20,7 @@ import WebsitesSection from '../components/country/Websites'
 import AppsSection from '../components/country/Apps'
 import NetworkPropertiesSection from '../components/country/NetworkProperties'
 import { CountryContextProvider } from '../components/country/CountryContext'
-import { useIntl } from 'react-intl'
+import IntlHead from '../components/country/IntlHead'
 
 const getCountryReports = (countryCode, data) => {
   const reports = data.filter((article) => (
@@ -44,50 +43,6 @@ const AnimatedFlex = styled(Flex)`
 const AnimatedHeading = styled(Heading)`
   transition: all 0.5s ease;
 `
-const IntlHead = ({
-  countryName,
-  measurementCount,
-  measuredSince,
-  networkCount
-}) => {
-  const intl = useIntl()
-  return (
-    <Head>
-      <title>Internet Censorship in {countryName} - OONI Explorer</title>
-      <meta
-        key="og:title"
-        property="og:title"
-        content={intl.formatMessage(
-          {
-            id: 'Country.Overview.MetaTitle',
-            defaultMessage: 'Internet Censorship in {countryName} - OONI Explorer'
-          },
-          {
-            countryName
-          }
-        )}
-      />
-      <meta
-        key="og:description"
-        property="og:description"
-        content={intl.formatMessage(
-          {
-            id: 'Country.Overview.MetaDescription',
-            defaultMessage:
-            'Since {startDate}, OONI Probe users in {countryName} have collected {measurementCount} measurements from {networkCount} local networks. Explore the data on OONI Explorer'
-          },
-          {
-            measurementCount: intl.formatNumber(measurementCount),
-            countryName,
-            startDate: intl.formatDate(measuredSince),
-            networkCount: intl.formatNumber(networkCount)
-          }
-        )}
-      />
-    </Head>
-  )
-}
-
 export default class Country extends React.Component {
   static async getInitialProps ({ query }) {
     const { countryCode } = query
@@ -144,7 +99,7 @@ export default class Country extends React.Component {
       countryCode,
       countryName,
       overviewStats,
-      reports,
+      reports
     } = this.props
 
     const { testCoverage, networkCoverage } = this.state.newData ? this.state.newData : this.props
