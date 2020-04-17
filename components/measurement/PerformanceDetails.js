@@ -8,8 +8,6 @@ const PerformanceDetails = ({
   maxPing,
   mss,
   packetLoss,
-  outOfOrder,
-  timeouts
 }) => {
   const intl = useIntl()
   const items = [
@@ -19,7 +17,7 @@ const PerformanceDetails = ({
     },
     {
       label: intl.formatMessage({ id: 'Measurement.Details.Performance.Label.MaxPing' }),
-      value: maxPing.toString() + ' ms'
+      value: '~' + maxPing.toString() + ' ms'
     },
     {
       label: intl.formatMessage({ id: 'Measurement.Details.Performance.Label.MSS' }),
@@ -29,14 +27,6 @@ const PerformanceDetails = ({
       label: intl.formatMessage({ id: 'Measurement.Details.Performance.Label.PktLoss' }),
       value: packetLoss.toString() + '%'
     },
-    {
-      label: intl.formatMessage({ id: 'Measurement.Details.Performance.Label.OutOfOrder' }),
-      value: outOfOrder.toString() + '%'
-    },
-    {
-      label: intl.formatMessage({ id: 'Measurement.Details.Performance.Label.Timeouts' }),
-      value: timeouts.toString()
-    }
   ]
   return (
     <DetailsBoxTable
@@ -52,8 +42,6 @@ PerformanceDetails.propTypes = {
   maxPing: PropTypes.number.isRequired,
   mss: PropTypes.number.isRequired,
   packetLoss: PropTypes.number.isRequired,
-  outOfOrder: PropTypes.number.isRequired,
-  timeouts: PropTypes.number.isRequired
 }
 
 export default PerformanceDetails

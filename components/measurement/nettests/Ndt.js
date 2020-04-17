@@ -56,11 +56,9 @@ const NdtDetails = ({ measurement, render }) => {
 
   // Advanced
   const packetLoss = advanced.packet_loss && (advanced.packet_loss * 100).toFixed(3)
-  const outOfOrder = advanced.out_of_order && (advanced.out_of_order * 100).toFixed(1)
   const minRTT = advanced.min_rtt && (advanced.min_rtt).toFixed(0)
   const maxRTT = advanced.max_rtt && (advanced.max_rtt).toFixed(0)
   const mss = advanced.mss
-  const timeouts = advanced.timeouts
 
   // FIXME we need to style the failed test case properly
   return (
@@ -90,8 +88,6 @@ const NdtDetails = ({ measurement, render }) => {
             maxPing={maxRTT}
             mss={mss}
             packetLoss={packetLoss}
-            outOfOrder={outOfOrder}
-            timeouts={timeouts}
           />}
         </div>
       )
