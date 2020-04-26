@@ -19,6 +19,7 @@ const StyledNavItem = styled.a`
   position: relative;
   display: inline;
   margin-left: 16px;
+  padding-top: 4px;
 `
 
 const NavItemLabel = styled.span`
@@ -68,15 +69,20 @@ const StyledNavBar = styled.div`
 export const NavBar = ({color}) => (
   <StyledNavBar color={color}>
     <Container>
-      <Flex alignItems='center'>
+      <Flex 
+        flexDirection={['column', 'row']} 
+        justifyContent={['flex-start', 'space-around']} 
+        alignItems={['flex-start', 'center']} >
         <Box style={{zIndex: 1}}>
           <NLink href='/' passHref>
             <Link><ExplorerLogo height='26px' /></Link>
           </NLink>
         </Box>
-        <Box ml='auto'>
-          <NavItem label={<FormattedMessage id='Navbar.Search' />} href='/search' />
-          <NavItem label={<FormattedMessage id='Navbar.Countries' />} href='/countries' />
+        <Box ml={[0,'auto']} py={[2, 0]}>
+          <Flex flexDirection={['column', 'row']} >
+            <NavItem label={<FormattedMessage id='Navbar.Search' />} href='/search' />
+            <NavItem label={<FormattedMessage id='Navbar.Countries' />} href='/countries' />
+          </Flex>
         </Box>
       </Flex>
     </Container>

@@ -118,9 +118,9 @@ const StyledRegionLink = styled.a`
 `
 
 const RegionLink = ({ href, label }) => (
-  <Box px={3} py={4}>
+  <Box px={[1,3]} py={[2,4]}>
     <StyledRegionLink href={href}>
-      <Text fontSize={20}>{label}</Text>
+      <Text fontSize={[16, 20]}>{label}</Text>
     </StyledRegionLink>
   </Box>
 )
@@ -201,20 +201,26 @@ class Countries extends React.Component {
                 <NavBar />
                 <RegionMenu>
                   <Container>
-                    <Flex justifyContent='space-around' alignItems='center'>
-                      <RegionLink href="#Africa" label='Africa' />
-                      <RegionLink href="#Americas" label='Americas' />
-                      <RegionLink href="#Asia" label='Asia' />
-                      <RegionLink href="#Europe" label='Europe' />
-                      <RegionLink href="#Oceania" label='Oceania' />
-                      <Box>
-                        <Input
-                          onChange={(e) => this.onSearchChange(e.target.value)}
-                          placeholder='Search for Countries'
-                          error={filteredCountries.length === 0}
-                        />
-                      </Box>
-                    </Flex>
+                    <Box width={[1, 'unset']}>
+                      <Flex 
+                        flexDirection={['column', 'row']} 
+                        justifyContent={['flex-start', 'space-around']} 
+                        alignItems={['flex-start', 'center']}>
+
+                        <RegionLink href="#Africa" label='Africa' />
+                        <RegionLink href="#Americas" label='Americas' />
+                        <RegionLink href="#Asia" label='Asia' />
+                        <RegionLink href="#Europe" label='Europe' />
+                        <RegionLink href="#Oceania" label='Oceania' /> 
+                        <Box>
+                          <Input
+                            onChange={(e) => this.onSearchChange(e.target.value)}
+                            placeholder='Search for Countries'
+                            error={filteredCountries.length === 0}
+                          />
+                        </Box>
+                      </Flex>
+                    </Box>
                   </Container>
                 </RegionMenu>
               </RaisedHeader>
