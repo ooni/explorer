@@ -18,7 +18,7 @@ const StyledNavItem = styled.a`
   text-decoration: none;
   position: relative;
   display: inline;
-  margin-left: 16px;
+  margin-left: 23px;
   padding-top: 4px;
 `
 
@@ -73,7 +73,7 @@ export const NavBar = ({color}) => (
         flexDirection={['column', 'row']} 
         justifyContent={['flex-start', 'space-around']} 
         alignItems={['flex-start', 'center']} >
-        <Box style={{zIndex: 1}}>
+        <Box ml={23} style={{zIndex: 1}}>
           <NLink href='/' passHref>
             <Link><ExplorerLogo height='26px' /></Link>
           </NLink>

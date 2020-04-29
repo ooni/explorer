@@ -201,17 +201,11 @@ class Countries extends React.Component {
                 <NavBar />
                 <RegionMenu>
                   <Container>
-                    <Box width={[1, 'unset']}>
+                    <Box ml={23} width={1}>
                       <Flex 
                         flexDirection={['column', 'row']} 
-                        justifyContent={['flex-start', 'space-around']} 
+                        justifyContent={['flex-start', 'flex-end']} 
                         alignItems={['flex-start', 'center']}>
-
-                        <RegionLink href="#Africa" label='Africa' />
-                        <RegionLink href="#Americas" label='Americas' />
-                        <RegionLink href="#Asia" label='Asia' />
-                        <RegionLink href="#Europe" label='Europe' />
-                        <RegionLink href="#Oceania" label='Oceania' /> 
                         <Box>
                           <Input
                             onChange={(e) => this.onSearchChange(e.target.value)}
@@ -219,6 +213,11 @@ class Countries extends React.Component {
                             error={filteredCountries.length === 0}
                           />
                         </Box>
+                        <RegionLink href="#Africa" label='Africa' />
+                        <RegionLink href="#Americas" label='Americas' />
+                        <RegionLink href="#Asia" label='Asia' />
+                        <RegionLink href="#Europe" label='Europe' />
+                        <RegionLink href="#Oceania" label='Oceania' /> 
                       </Flex>
                     </Box>
                   </Container>
