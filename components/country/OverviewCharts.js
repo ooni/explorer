@@ -121,7 +121,7 @@ class TestsByGroup extends React.PureComponent {
     // Check if there is enough data to plot the charts
     const testCoverageCount = testCoverage.reduce((count, item) => count + item.count, 0)
     const networkCoverageCount = networkCoverage.reduce((count, item) => count + item.count, 0)
-    const notEnoughData = !(testCoverageCount === 0 && networkCoverageCount === 0)
+    const notEnoughData = (testCoverageCount === 0 && networkCoverageCount === 0)
 
     const supportedTestGroups = ['websites', 'im', 'middlebox', 'performance', 'circumvention']
 
