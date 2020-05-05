@@ -1,9 +1,10 @@
 /* global describe, it, cy, before */
 
 describe('Home Page Tests', () => {
-  
+
   before(() => {
     cy.visit('/')
+    cy.screenshot('home-page')
   })
 
   // TODO: Check if stats appear
