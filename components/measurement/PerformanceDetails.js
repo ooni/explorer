@@ -13,14 +13,14 @@ const PerformanceDetails = ({
   timeouts
 }) => {
   const intl = useIntl()
-  const items = [
+  let items = [
     {
       label: intl.formatMessage({ id: 'Measurement.Details.Performance.Label.AvgPing' }),
       value: averagePing.toString() + ' ms'
     },
     {
       label: intl.formatMessage({ id: 'Measurement.Details.Performance.Label.MaxPing' }),
-      value: isNdt7 ? `~${maxPing.toString()} ms` : `${maxPing.toString()}ms`
+      value: `${isNdt7 ? '~' : ''}${maxPing.toString()} ms`
     },
     {
       label: intl.formatMessage({ id: 'Measurement.Details.Performance.Label.MSS' }),
@@ -28,22 +28,27 @@ const PerformanceDetails = ({
     },
     {
       label: isNdt7 ? intl.formatMessage({
-          id: 'Measurement.Details.Performance.Label.RetransmitRate',
-          defaultMessage: 'RetransmitRate'
+        id: 'Measurement.Details.Performance.Label.RetransmitRate',
+        defaultMessage: 'Retransmit Rate'
       }): intl.formatMessage({ id: 'Measurement.Details.Performance.Label.PktLoss' }),
       value: packetLoss.toString() + '%'
     },
-    ...(isNdt7 ? [] : //only adds outOfOrder and  timeouts if isNdt7 is false
-      [{
-          label: intl.formatMessage({ id: 'Measurement.Details.Performance.Label.OutOfOrder' }),
+  ]
+
+  //Only add outOfOrder and timeouts if NDT4/5 measurement
+  if(!isNdt7){
+    items = items.concat([
+      {
+        label: intl.formatMessage({ id: 'Measurement.Details.Performance.Label.OutOfOrder' }),
         value: outOfOrder.toString() + '%'
       },
       {
         label: intl.formatMessage({ id: 'Measurement.Details.Performance.Label.Timeouts' }),
         value: timeouts.toString()
-      }]
-    )
-  ]
+      }
+    ])
+  }
+
   return (
     <DetailsBoxTable
       title={intl.formatMessage({ id: 'Measurement.Details.Performance.Heading' })}
