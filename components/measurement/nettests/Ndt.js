@@ -37,7 +37,7 @@ const ServerLocation = ({ serverAddress, isNdt7 }) => {
 }
 
 // NdtDetails is implemented differently for Ndt4/5 and for Ndt7 hence
-// the use of isNdt7.See https://github.com/ooni/explorer/issues/452
+// the use of isNdt7. See https://github.com/ooni/explorer/issues/452
 const NdtDetails = ({ measurement, render }) => {
   const intl = useIntl()
   const testKeys = measurement.test_keys
