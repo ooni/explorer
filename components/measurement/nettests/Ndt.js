@@ -30,14 +30,14 @@ const ServerLocation = ({ serverAddress, isNdt7 }) => {
   const server = mlabServerDetails(serverAddress, isNdt7)
 
   return (
-    <React.Fragment> {
-      server
-        ? `${server.city}, ${server.countryName}`
-        : 'N/A'
-    } </React.Fragment>
+    <React.Fragment>
+      {server ? `${server.city}, ${server.countryName}` : 'N/A'}
+    </React.Fragment>
   )
 }
 
+// NdtDetails is implemented differently for Ndt4/5 and for Ndt7 hence
+// the use of isNdt7.See https://github.com/ooni/explorer/issues/452
 const NdtDetails = ({ measurement, render }) => {
   const intl = useIntl()
   const testKeys = measurement.test_keys
@@ -97,9 +97,9 @@ const NdtDetails = ({ measurement, render }) => {
               <InfoBoxItem
                 label={intl.formatMessage({ id: 'Measurement.Status.Info.Label.Server' })}
                 content={<ServerLocation
-                    serverAddress={isNdt7 ? testKeys.server.hostname : testKeys.server_address}
-                    isNdt7={isNdt7}
-                  />}
+                  serverAddress={isNdt7 ? testKeys.server.hostname : testKeys.server_address}
+                  isNdt7={isNdt7}
+                />}
               />
             </Flex>
           }
