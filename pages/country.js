@@ -1,6 +1,5 @@
 /* global process */
 import React from 'react'
-import Head from 'next/head'
 import axios from 'axios'
 import {
   Container,
@@ -21,6 +20,7 @@ import WebsitesSection from '../components/country/Websites'
 import AppsSection from '../components/country/Apps'
 import NetworkPropertiesSection from '../components/country/NetworkProperties'
 import { CountryContextProvider } from '../components/country/CountryContext'
+import IntlHead from '../components/country/IntlHead'
 
 const getCountryReports = (countryCode, data) => {
   const reports = data.filter((article) => (
@@ -43,7 +43,6 @@ const AnimatedFlex = styled(Flex)`
 const AnimatedHeading = styled(Heading)`
   transition: all 0.5s ease;
 `
-
 export default class Country extends React.Component {
   static async getInitialProps ({ req, res, query }) {
     const { countryCode } = query
@@ -118,10 +117,7 @@ export default class Country extends React.Component {
 
     return (
       <Layout>
-        <Head>
-          <title>Internet Censorship in {countryName} - OONI Explorer</title>
-          <link rel="alternate" title={`Events Detected in ${countryName} by OONI`} href={`https://explorer.ooni.org/rss/by-country/${countryCode}.xml`} type="application/rss+xml" />
-        </Head>
+        <IntlHead countryName={countryName} measurementCount={overviewStats.network_count} measuredSince={overviewStats.first_bucket_date} networkCount={overviewStats.network_count} />
         <StickyContainer>
           <Sticky>
             {({ style, distanceFromTop }) => {
@@ -179,3 +175,4 @@ export default class Country extends React.Component {
     )
   }
 }
+

@@ -1,5 +1,31 @@
 # Changelog
 
+## [2.0.8] - 2020-05-07
+
+### Added
+- Support for ndt7 measurements (#456)
+- Meta tags for country pages (#430)
+- End-to-end tests with Cypress (#417)
+
+### Fixed
+- Missing overview charts in country page (#459)
+- Country codes in URL for country pages are not case sensitive anymore (#449)
+- Raw measurement data content overflow in smaller screens (#429)
+- Handle cases where `test_keys.tcp_connect` is missing (#412)
+- Handle cases where `test_keys.requests` is missing (#412)
+
+### Changed
+- `nextjs` dependecy upgraded to 9.3.2 (#448)
+- Upgrade base docker image to `node:12` as required by `next@9.x.x`
+- Use `blue9` color from theme for footer background (#411)
+- Updated copy
+
+### Removed
+- Dropped usage of locale-data from `react-intl`; deprecated (in v3)
+
+### Security
+- Pinned version for `https-proxy-agent` to `^2.2.3` as per github security advisory
+
 ## [2.0.7] - 2020-02-24
 
 ### Added
@@ -90,6 +116,8 @@
 ### Added
 - First public release ([Blog post](https://ooni.org/post/next-generation-ooni-explorer/))
 
+[2.0.8]: (https://github.com/ooni/explorer/compare/v2.0.7...v2.0.8)
+[2.0.7]: (https://github.com/ooni/explorer/compare/v2.0.6...v2.0.7)
 [2.0.6]: (https://github.com/ooni/explorer/compare/v2.0.5...v2.0.6)
 [2.0.5]: (https://github.com/ooni/explorer/compare/v2.0.4...v2.0.5)
 [2.0.4]: (https://github.com/ooni/explorer/compare/v2.0.3...v2.0.4)

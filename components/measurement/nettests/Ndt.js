@@ -26,27 +26,28 @@ const InfoBoxItem = ({
   </Box>
 )
 
-const ServerLocation = ({ serverAddress }) => {
-  const server = mlabServerDetails(serverAddress)
+const ServerLocation = ({ serverAddress, isNdt7 }) => {
+  const server = mlabServerDetails(serverAddress, isNdt7)
 
   return (
-    <React.Fragment> {
-      server
-        ? `${server.city}, ${server.countryName}`
-        : 'N/A'
-    } </React.Fragment>
+    <React.Fragment>
+      {server ? `${server.city}, ${server.countryName}` : 'N/A'}
+    </React.Fragment>
   )
 }
 
-
+// NdtDetails is implemented differently for Ndt4/5 and for Ndt7 hence
+// the use of isNdt7. See https://github.com/ooni/explorer/issues/452
 const NdtDetails = ({ measurement, render }) => {
   const intl = useIntl()
   const testKeys = measurement.test_keys
   const isFailed = testKeys.failure !== null
   const failure = testKeys.failure
+  const isNdt7 = testKeys.protocol === 7
 
-  const simple = testKeys.simple || {}
-  const advanced = testKeys.advanced || {}
+  let packetLoss, minRTT, maxRTT, mss, outOfOrder, timeouts
+
+  const simple = (isNdt7 ? testKeys.summary : testKeys.simple) || {}
 
   // XXX we probably want to use a utility function to convert to other units,
   // ex. use kbit/s if the speed is low and gbit/s if it's high
@@ -54,13 +55,28 @@ const NdtDetails = ({ measurement, render }) => {
   const uploadMbit = simple.upload && (simple.upload / 1000).toFixed(2)
   const ping = simple.ping && (simple.ping).toFixed(1)
 
-  // Advanced
-  const packetLoss = advanced.packet_loss && (advanced.packet_loss * 100).toFixed(3)
-  const outOfOrder = advanced.out_of_order && (advanced.out_of_order * 100).toFixed(1)
-  const minRTT = advanced.min_rtt && (advanced.min_rtt).toFixed(0)
-  const maxRTT = advanced.max_rtt && (advanced.max_rtt).toFixed(0)
-  const mss = advanced.mss
-  const timeouts = advanced.timeouts
+  if (isNdt7) {
+    const summary = testKeys.summary || {}
+
+    // Summary
+    packetLoss = summary.retransmit_rate && (summary.retransmit_rate * 100).toFixed(3)
+    minRTT = summary.min_rtt && (summary.min_rtt).toFixed(0)
+    maxRTT = summary.max_rtt && (summary.max_rtt).toFixed(0)
+    mss = summary.mss
+    outOfOrder = null
+    timeouts = null
+  }
+  else {
+    const advanced = testKeys.advanced || {}
+
+    // Advanced
+    packetLoss = advanced.packet_loss && (advanced.packet_loss * 100).toFixed(3)
+    outOfOrder = advanced.out_of_order && (advanced.out_of_order * 100).toFixed(1)
+    minRTT = advanced.min_rtt && (advanced.min_rtt).toFixed(0)
+    maxRTT = advanced.max_rtt && (advanced.max_rtt).toFixed(0)
+    mss = advanced.mss
+    timeouts = advanced.timeouts
+  }
 
   // FIXME we need to style the failed test case properly
   return (
@@ -78,7 +94,13 @@ const NdtDetails = ({ measurement, render }) => {
               <InfoBoxItem label={intl.formatMessage({ id: 'Measurement.Status.Info.Label.Download' })} content={downloadMbit} unit='Mbps' />
               <InfoBoxItem label={intl.formatMessage({ id: 'Measurement.Status.Info.Label.Upload' })} content={uploadMbit} unit='Mbps' />
               <InfoBoxItem label={intl.formatMessage({ id: 'Measurement.Status.Info.Label.Ping' })} content={ping} unit='ms' />
-              <InfoBoxItem label={intl.formatMessage({ id: 'Measurement.Status.Info.Label.Server' })} content={<ServerLocation serverAddress={testKeys.server_address} />} />
+              <InfoBoxItem
+                label={intl.formatMessage({ id: 'Measurement.Status.Info.Label.Server' })}
+                content={<ServerLocation
+                  serverAddress={isNdt7 ? testKeys.server.hostname : testKeys.server_address}
+                  isNdt7={isNdt7}
+                />}
+              />
             </Flex>
           }
         </Box>
@@ -86,6 +108,7 @@ const NdtDetails = ({ measurement, render }) => {
       details: (
         <div> {!isFailed &&
           <PerformanceDetails
+            isNdt7={isNdt7}
             averagePing={ping}
             maxPing={maxRTT}
             mss={mss}

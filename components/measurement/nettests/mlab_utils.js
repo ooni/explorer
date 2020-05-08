@@ -2,8 +2,9 @@
 const MLAB_SERVERS = require('./mlab_servers.json')
 import countryUtil from 'country-util'
 
-export const mlabServerDetails = (serverAddress) => {
-  const serverNode = serverAddress.split('.')[3]
+export const mlabServerDetails = (serverAddress, isNdt7) => {
+  const serverNode = isNdt7 ? serverAddress.split('-')[3].split('.')[0] : serverAddress.split('.')[3]
+
   const server = MLAB_SERVERS.find((node) => node.site === serverNode)
   if (server) {
     server.countryName = countryUtil.territoryNames[server.country]
