@@ -16,17 +16,11 @@ supportedLanguages.forEach((lang) => {
   console.log('> Getting latest translations for langugae ✨', lang)
   writeFileSync(`${LANG_DIR}/${lang}.json`, readFileSync(`${TRANSLATED_STRINGS_DIR}/${lang}/strings.json`))
 })
-const localeDataFilesContent = supportedLanguages
-  .map(lang => require.resolve(`react-intl/locale-data/${lang}`))
-  .map(path => readFileSync(path, 'utf8'))
-
-writeFileSync('./static/locale-data.js', localeDataFilesContent.join('\n'))
-console.log('> Wrote locale-data to: ./static/locale-data.js')
 
 // Build the locale files to be sent to the browser
 const translationsMap = supportedLanguages
   .reduce((t, lang) => {
-    t[lang] = JSON.parse(readFileSync(`./static/lang/${lang}.json`))
+    t[lang] = JSON.parse(readFileSync(`${LANG_DIR}/${lang}.json`))
     return t
   }, {})
 
