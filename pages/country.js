@@ -117,7 +117,7 @@ export default class Country extends React.Component {
 
     return (
       <Layout>
-        <IntlHead countryName={countryName} measurementCount={overviewStats.network_count} measuredSince={overviewStats.first_bucket_date} networkCount={overviewStats.network_count} />
+        <IntlHead countryName={countryName} measurementCount={overviewStats.measurement_count} measuredSince={overviewStats.first_bucket_date} networkCount={overviewStats.network_count} />
         <StickyContainer>
           <Sticky>
             {({ style, distanceFromTop }) => {
@@ -175,4 +175,3 @@ export default class Country extends React.Component {
     )
   }
 }
-
