@@ -311,6 +311,7 @@ class FilterSidebar extends React.Component {
         <SelectWithLabel
           pt={2}
           label={intl.formatMessage({id: 'Search.Sidebar.TestName'})}
+          name='testNameFilter'
           value={testNameFilter}
           onChange={this.onChangeFilter('testNameFilter')}>
           {testNameOptions.map((v, idx) => {
