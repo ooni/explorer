@@ -1,5 +1,18 @@
 # Changelog
 
+## [2.0.9] - 2020-05-09
+
+### Fixed
+- Country page meta tag now correctly shows the measurement count for the
+country
+
+### Changed
+- Search filter test case uses test name filter to test search function
+instead of domain name filter. Avoids timeouts when API is slow.
+
+### Security
+- Pinned version for `kind-of` to `^6.0.3` as per github security advisory
+
 ## [2.0.8] - 2020-05-07
 
 ### Added
@@ -116,6 +129,7 @@
 ### Added
 - First public release ([Blog post](https://ooni.org/post/next-generation-ooni-explorer/))
 
+[2.0.9]: (https://github.com/ooni/explorer/compare/v2.0.8...v2.0.9)
 [2.0.8]: (https://github.com/ooni/explorer/compare/v2.0.7...v2.0.8)
 [2.0.7]: (https://github.com/ooni/explorer/compare/v2.0.6...v2.0.7)
 [2.0.6]: (https://github.com/ooni/explorer/compare/v2.0.5...v2.0.6)
