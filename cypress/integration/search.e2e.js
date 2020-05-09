@@ -8,7 +8,7 @@ describe('Seearch Page Tests', () => {
 
   // TODO: Check if all form elements are actionable
   // TODO: Check if conditional form elements render (or not) correctly
-  
+
   it('default filter shows 50 results', () => {
     // Check if search results appear upon page load
     cy.get('[data-test-id="results-list"]').children('a').should('have.length.above', 1)
@@ -19,15 +19,15 @@ describe('Seearch Page Tests', () => {
       })
   })
 
-  it('shows search results when filter changes', () => {
-    cy.get('input[name="domainFilter"]').type('twitter.com')
-    cy.get('button').contains('Filter Results').click()
-    cy.get('[data-test-id="results-list"]')
+  it.only('shows search results when filter changes', () => {
+    cy.get('select[name="testNameFilter"]').select('web_connectivity')
+    cy.get('button').contains('Filter Results').should('not.be.disabled').click()
+    cy.get('[data-test-id="results-list"]', { timeout: 10000 })
       .children('a')
       .should('have.length.above', 1)
       .each(($el) => {
         cy.wrap($el)
-          .contains('twitter.com')
+          .contains('Web Connectivity')
       })
   })
 })
