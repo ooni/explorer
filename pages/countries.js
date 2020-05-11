@@ -111,10 +111,14 @@ const RegionMenu = styled.div`
   background-color: white;
   border-bottom: 1px solid ${props => props.theme.colors.gray3};
 `
-
 const StyledRegionLink = styled.a`
-  color: ${props => props.theme.colors.blue5};
+  display: block;
+  color: ${(props) => props.theme.colors.blue5};
   text-decoration: none;
+  :hover {
+    border-bottom: 2px solid ${(props) => props.theme.colors.blue5};
+    width: 100%;
+  }
 `
 
 const RegionLink = ({ href, label }) => (
@@ -201,25 +205,23 @@ class Countries extends React.Component {
                 <NavBar />
                 <RegionMenu>
                   <Container>
-                    <Box ml={23} width={1}>
-                      <Flex 
-                        flexDirection={['column', 'row']} 
-                        justifyContent={['flex-start', 'flex-end']} 
-                        alignItems={['flex-start', 'center']}>
-                        <Box>
-                          <Input
-                            onChange={(e) => this.onSearchChange(e.target.value)}
-                            placeholder='Search for Countries'
-                            error={filteredCountries.length === 0}
-                          />
-                        </Box>
-                        <RegionLink href="#Africa" label='Africa' />
-                        <RegionLink href="#Americas" label='Americas' />
-                        <RegionLink href="#Asia" label='Asia' />
-                        <RegionLink href="#Europe" label='Europe' />
-                        <RegionLink href="#Oceania" label='Oceania' /> 
-                      </Flex>
-                    </Box>
+                    <Flex 
+                      flexDirection={['column', 'row']} 
+                      justifyContent={['flex-start', 'flex-end']} 
+                      alignItems={['flex-start', 'center']}>
+                      <Box>
+                        <Input
+                          onChange={(e) => this.onSearchChange(e.target.value)}
+                          placeholder='Search for Countries'
+                          error={filteredCountries.length === 0}
+                        />
+                      </Box>
+                      <RegionLink href="#Africa" label='Africa' />
+                      <RegionLink href="#Americas" label='Americas' />
+                      <RegionLink href="#Asia" label='Asia' />
+                      <RegionLink href="#Europe" label='Europe' />
+                      <RegionLink href="#Oceania" label='Oceania' /> 
+                    </Flex>
                   </Container>
                 </RegionMenu>
               </RaisedHeader>

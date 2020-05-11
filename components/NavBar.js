@@ -18,7 +18,6 @@ const StyledNavItem = styled.a`
   text-decoration: none;
   position: relative;
   display: inline;
-  margin-left: 23px;
   padding-top: 4px;
 `
 
@@ -50,10 +49,12 @@ const NavItemComponent = ({router, label, href}) => {
   const active = router.pathname === href
   return (
     <NLink href={href} passHref>
-      <StyledNavItem>
-        <NavItemLabel active={active} >{label}</NavItemLabel>
-        <Underline active={active} />
-      </StyledNavItem>
+      <Box ml={[0, 4]}>
+        <StyledNavItem>
+          <NavItemLabel active={active} >{label}</NavItemLabel>
+          <Underline active={active} />
+        </StyledNavItem>
+      </Box>
     </NLink>
   )
 }
@@ -73,7 +74,7 @@ export const NavBar = ({color}) => (
         flexDirection={['column', 'row']} 
         justifyContent={['flex-start', 'space-around']} 
         alignItems={['flex-start', 'center']} >
-        <Box ml={23} style={{zIndex: 1}}>
+        <Box style={{zIndex: 1}}>
           <NLink href='/' passHref>
             <Link><ExplorerLogo height='26px' /></Link>
           </NLink>
