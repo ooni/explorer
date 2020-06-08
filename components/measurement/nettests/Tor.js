@@ -216,12 +216,23 @@ const TorDetails = ({
     })
   ), [targets])
 
+  const messages = defineMessages({
+    tor: {
+      id: 'Measurement.Metadata.Tor',
+      defaultMessage: 'See results of Tor Test on {date} in {country} and other measurements on OONI Explorer.'
+    }
+  })
+
   return (
     <React.Fragment>
       {render({
         status: status,
         statusInfo: hint,
         summaryText: summaryText,
+        headMetadata: {
+          message: messages.tor,
+          formatted: false
+        },
         details: (
           <React.Fragment>
             <Container>

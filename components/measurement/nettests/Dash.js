@@ -1,4 +1,3 @@
-
 import React from 'react'
 import PropTypes from 'prop-types'
 import {
@@ -9,7 +8,7 @@ import {
 } from 'ooni-components'
 
 import { Text } from 'rebass'
-import { useIntl } from 'react-intl'
+import { useIntl, defineMessages } from 'react-intl'
 
 import {
   VictoryChart,
@@ -112,10 +111,21 @@ const DashDetails = ({ measurement, render }) => {
     y: iteration.rate / 1000,
   }))
 
+  const messages = defineMessages({
+    dash: {
+      id: 'Measurement.Metadata.Dash',
+      defaultMessage: 'See results of Dash Test on {date} in {country} and other measurements on OONI Explorer.'
+    }
+  })
+
   return (
     render({
       statusIcon: <MdFlashOn />,
       statusLabel: intl.formatMessage({ id: 'Measurement.Hero.Status.Dash.Title' }),
+      headMetadata: {
+        message: messages.dash,
+        formatted: false
+      },
       statusInfo: (
         <Box width={1}>
           <Flex justifyContent='space-around'>

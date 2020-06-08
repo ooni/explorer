@@ -11,6 +11,7 @@ import DetailsHeader from '../components/measurement/DetailsHeader'
 import SummaryText from '../components/measurement/SummaryText'
 import CommonDetails from '../components/measurement/CommonDetails'
 import MeasurementContainer from '../components/measurement/MeasurementContainer'
+import HeadMetadata from '../components/measurement/HeadMetadata'
 
 import Layout from '../components/Layout'
 import NavBar from '../components/NavBar'
@@ -77,9 +78,7 @@ export default class Measurement extends React.Component {
 
     return (
       <Layout>
-        <Head>
-          <title>OONI Explorer</title>
-        </Head>
+        <MeasurementHead testName={measurement.test_name} testDateTime={measurement.measurement_start_time} country={country}/>
         <MeasurementContainer
           isConfirmed={isConfirmed}
           isAnomaly={isAnomaly}
@@ -94,9 +93,18 @@ export default class Measurement extends React.Component {
             statusInfo,
             legacy = false,
             summaryText,
+            headMetadata,
             details }) => (
 
             <React.Fragment>
+              {headMetadata && <HeadMetadata
+                content={headMetadata}
+                testName={measurement.test_name}
+                testUrl={measurement.input}
+                network={measurement.probe_asn}
+                country={country}
+                date={measurement.test_start_time}
+              />}
               <NavBar color={pageColors[status]} />
               <Hero
                 color={pageColors[status]}

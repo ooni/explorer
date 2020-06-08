@@ -6,7 +6,7 @@ import {
   Flex,
   Box
 } from 'ooni-components'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, defineMessages } from 'react-intl'
 import MdPhoneAndroid from 'react-icons/lib/md/phone-android'
 import MdWebAsset from 'react-icons/lib/md/web-asset'
 import MdPersonAdd from 'react-icons/lib/md/person-add'
@@ -35,19 +35,33 @@ const WhatsAppDetails = ({ isAnomaly, scores, measurement, render }) => {
     webAccessible = testKeys.whatsapp_web_status === 'ok'
   }
 
+  const messages = defineMessages({
+    reachable: {
+      id: 'Measurement.Metadata.Whatsapp.Reachable',
+      defaultMessage: 'On {date}, Whatsapp was reachable in {country}, explore more details and other measurements on OONI Explorer.'
+    },
+    unReachable: {
+      id: 'Measurement.Metadata.VanillaTor.UnReachable',
+      defaultMessage: 'On {date}, Whatsapp was NOT reachable in {country}, explore more details and other measurements on OONI Explorer.'
+    }
+  })
+
   let status = 'reachable'
   let info = <FormattedMessage id='Measurement.Details.Hint.WhatsApp.Reachable' />
-  let summaryText = 'Measurement.Details.SummaryText.WhatsApp.Reachable'
+  let summaryText = {
+    message: 'Measurement.Details.SummaryText.WhatsApp.Reachable',
+    formatted: false
+  }
 
   if (isAnomaly) {
     status = 'anomaly'
     info = <FormattedMessage id='Measurement.Status.Hint.WhatsApp.Blocked' />
     if (!endpointsAccessible) {
-      summaryText = 'Measurement.Details.SummaryText.WhatsApp.AppFailure'
+      summaryText.message = 'Measurement.Details.SummaryText.WhatsApp.AppFailure'
     } else if (!webAccessible) {
-      summaryText = 'Measurement.Details.SummaryText.WhatsApp.DesktopFailure'
+      summaryText.message = 'Measurement.Details.SummaryText.WhatsApp.DesktopFailure'
     } else if (!endpointsAccessible && !webAccessible) {
-      summaryText = 'Measurement.Details.SummaryText.WhatsApp.DesktopAndAppFailure'
+      summaryText.message = 'Measurement.Details.SummaryText.WhatsApp.DesktopAndAppFailure'
     }
   }
 
@@ -56,6 +70,10 @@ const WhatsAppDetails = ({ isAnomaly, scores, measurement, render }) => {
     status: status,
     statusInfo: info,
     summaryText: summaryText,
+    headMetadata: {
+      message: isAnomaly ? messages.unReachable : messages.reachable,
+      formatted: false
+    },
     details: (
       <React.Fragment>
         { !scores.analysis && <BugBox>

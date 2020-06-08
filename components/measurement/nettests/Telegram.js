@@ -11,6 +11,7 @@ import {
 import { FormattedMessage } from 'react-intl'
 import MdPhoneAndroid from 'react-icons/lib/md/phone-android'
 import MdWebAsset from 'react-icons/lib/md/web-asset'
+import { defineMessages } from 'react-intl'
 
 import AccessPointStatus from '../AccessPointStatus'
 import { DetailsBox } from '../DetailsBox'
@@ -24,26 +25,41 @@ const TelegramDetails = ({ measurement, render }) => {
     tcp_connect
   } = testKeys
 
+  const message = defineMessages({
+    reachable: {
+      id: 'Measurement.Metadata.Telegram.Reachable',
+      defaultMessage: 'On {date}, Telegram was reachable in {country}, explore more details and other measurements on OONI Explorer.'
+    },
+    unReachable: {
+      id: 'Measurement.Metadata.Telegram.UnReachable',
+      defaultMessage: 'On {date}, Telegram was NOT reachable in {country}, explore more details and other measurements on OONI Explorer.'
+    }
+  })
+
   let telegramWebOK = true
   let telegramDesktopOK = true
   let anomaly = false
   let hint = <FormattedMessage id='Measurement.Status.Hint.Telegram.Reachable' />
   let summaryText = 'Measurement.Details.SummaryText.Telegram.Reachable'
+  let headMetadata = message.reachable
 
   if (telegram_web_status === 'blocked') {
     telegramWebOK = false
     summaryText = 'Measurement.Details.SummaryText.Telegram.AppFailure'
+    headMetadata = message.unReachable
   }
 
   if (telegram_tcp_blocking === true || telegram_http_blocking === true) {
     telegramDesktopOK = false
     summaryText = 'Measurement.Details.SummaryText.Telegram.DesktopFailure'
+    headMetadata = message.unReachable
   }
 
   if (!telegramWebOK || !telegramDesktopOK) {
     anomaly = true
     hint = <FormattedMessage id='Measurement.Status.Hint.Telegram.Blocked' />
     summaryText = 'Measurement.Details.SummaryText.Telegram.DesktopAndAppFailure'
+    headMetadata = message.unReachable
   }
 
   return (

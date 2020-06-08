@@ -7,7 +7,7 @@ import {
   Flex,
   Box
 } from 'ooni-components'
-import { FormattedMessage, useIntl } from 'react-intl'
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl'
 
 import { DetailsBox } from '../DetailsBox'
 import AccessPointStatus from '../AccessPointStatus'
@@ -27,23 +27,38 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
   )
   const tcpConnections = testKeys.tcp_connect
 
+  let headMetadata = { message: '', formatted: false }
+  const messages = defineMessages({
+    notReachable: {
+      id: 'Measurement.Metadata.FacebookMessenger.NotReachable',
+      defaultMessage: 'On {date}, Facebook Messenger was NOT reachable in {country}, explore more details and other measurements on OONI Explorer.',
+    },
+    reachable: {
+      id: 'Measurement.Metadata.FacebookMessenger.Reachable',
+      defaultMessage:  'On {date}, Facebook Messenger was reachable in {country}, explore more details and other measurements on OONI Explorer.'
+    }
+  })
+
   let summaryText = ''
   if (!isWorking) {
     if (tcpBlocking) {
-      summaryText += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.TCPFailure'})
+      summaryText.message += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.TCPFailure'})
     } else {
-      summaryText += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.TCPSuccess'})
+      summaryText.message += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.TCPSuccess'})
     }
 
-    summaryText += '&nbsp;'
+    summaryText.message += ' '
 
     if (dnsBlocking) {
-      summaryText += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.DNSFailure'})
+      summaryText.message += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.DNSFailure'})
     } else {
-      summaryText += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.DNSSuccess'})
+      summaryText.message += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.DNSSuccess'})
     }
+
+    headMetadata = { message: messages.notReachable }
   } else {
     summaryText = 'Measurement.Details.SummaryText.FacebookMessenger.Reachable'
+    headMetadata = { message: messages.reachable }
   }
 
   return (
@@ -53,6 +68,7 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
         ? <FormattedMessage id='Measurement.Status.Hint.FacebookMessenger.Reachable' />
         : <FormattedMessage id='Measurement.Status.Hint.FacebookMessenger.Blocked' />,
       summaryText: summaryText,
+      headMetadata: headMetadata,
       details: (
         <React.Fragment>
           <Container>

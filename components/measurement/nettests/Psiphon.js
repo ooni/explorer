@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import { Flex, Container } from 'ooni-components'
 import { MdTimer } from 'react-icons/lib/md'
+import { defineMessages } from 'react-intl'
 
 import AccessPointStatus from '../AccessPointStatus'
 
@@ -17,6 +18,17 @@ const PsiphonDetails = ({
     }
   } = measurement
 
+  const messages = defineMessages({
+    reachable: {
+      id: 'Measurement.Metadata.Psiphon.Reachable',
+      defaultMessage: 'On {date}, Psiphon was reachable in {country}, explore more details and other measurements on OONI Explorer.'
+    },
+    unReachable: {
+      id: 'Measurement.Metadata.Psiphon.UnReachable',
+      defaultMessage: 'On {date}, Psiphon was NOT reachable in {country}, explore more details and other measurements on OONI Explorer.'
+    }
+  })
+
   let status, hint, summaryText
 
   // https://github.com/ooni/spec/blob/master/nettests/ts-015-psiphon.md#possible-conclusions
@@ -26,16 +38,16 @@ const PsiphonDetails = ({
     if (bootstrap_time === 0) {
       // Unable to bootstrap
       hint = <FormattedMessage id='Measurement.Status.Hint.Psiphon.BootstrappingError' />
-      summaryText = 'Measurement.Details.SummaryText.Psiphon.BootstrappingError'
+      summaryText.message = 'Measurement.Details.SummaryText.Psiphon.BootstrappingError'
     } else {
       // Unable to use Psiphon to reach https://google.com/humans.txt
       hint = <FormattedMessage id='Measurement.Status.Hint.Psiphon.Blocked' />
-      summaryText = 'Measurement.Details.SummaryText.Psiphon.Blocked'
+      summaryText.message = 'Measurement.Details.SummaryText.Psiphon.Blocked'
     }
   } else {
     status = 'reachable'
     hint = <FormattedMessage id='Measurement.Status.Hint.Psiphon.Reachable' />
-    summaryText = 'Measurement.Details.SummaryText.Psiphon.OK'
+    summaryText.message = 'Measurement.Details.SummaryText.Psiphon.OK'
   }
 
   return (
@@ -44,6 +56,10 @@ const PsiphonDetails = ({
         status: status,
         statusInfo: hint,
         summaryText: summaryText,
+        headMetadata: {
+          message: failure ? messages.unReachable : messages.reachable,
+          formatted: false
+        },
         details: (
           <React.Fragment>
             <Container>
