@@ -1,11 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import prettyMs from 'pretty-ms'
-import { Flex, Box } from 'ooni-components'
+import { Flex, Box, Link } from 'ooni-components'
 // FIXME: Include 'fontWeight' to ooni-components/atoms/Text
 // Using Text from rebass directly for now
 import { Text } from 'rebass'
 import { FormattedMessage } from 'react-intl'
+import { MdOpenInNew } from 'react-icons/lib/md'
 
 import { getTestMetadata } from '../utils'
 import Badge from '../Badge'
@@ -43,7 +44,13 @@ const DetailsHeader = ({testName, runtime, notice}) => {
           />
         </Box>
         <Box ml={2}>
-          <Text fontSize={20}>{metadata.name}</Text>
+          <Link href={metadata.info} target='_blank'>
+            <Text fontSize={20}>
+              {metadata.name}
+              &nbsp;
+              <small><MdOpenInNew /></small>
+            </Text>
+          </Link>
         </Box>
       </Flex>
       <Box mx='auto'>
