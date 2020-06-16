@@ -28,22 +28,22 @@ const TelegramDetails = ({ measurement, render }) => {
   let telegramDesktopOK = true
   let anomaly = false
   let hint = <FormattedMessage id='Measurement.Status.Hint.Telegram.Reachable' />
-  let summaryText = 'Measurement.Details.SummaryText.Telegram.Reachable'
+  let summaryText = {message: 'Measurement.Details.SummaryText.Telegram.Reachable', formatted: false}
 
   if (telegram_web_status === 'blocked') {
     telegramWebOK = false
-    summaryText = 'Measurement.Details.SummaryText.Telegram.AppFailure'
+    summaryText.message = 'Measurement.Details.SummaryText.Telegram.AppFailure'
   }
 
   if (telegram_tcp_blocking === true || telegram_http_blocking === true) {
     telegramDesktopOK = false
-    summaryText = 'Measurement.Details.SummaryText.Telegram.DesktopFailure'
+    summaryText.message = 'Measurement.Details.SummaryText.Telegram.DesktopFailure'
   }
 
   if (!telegramWebOK || !telegramDesktopOK) {
     anomaly = true
     hint = <FormattedMessage id='Measurement.Status.Hint.Telegram.Blocked' />
-    summaryText = 'Measurement.Details.SummaryText.Telegram.DesktopAndAppFailure'
+    summaryText.message = 'Measurement.Details.SummaryText.Telegram.DesktopAndAppFailure'
   }
 
   return (

@@ -11,7 +11,7 @@ import DetailsHeader from '../components/measurement/DetailsHeader'
 import SummaryText from '../components/measurement/SummaryText'
 import CommonDetails from '../components/measurement/CommonDetails'
 import MeasurementContainer from '../components/measurement/MeasurementContainer'
-import MesHead from '../components/measurement/MesHead'
+import MeasurementHead from '../components/measurement/MeasurementHead'
 
 import Layout from '../components/Layout'
 import NavBar from '../components/NavBar'
@@ -78,7 +78,7 @@ export default class Measurement extends React.Component {
 
     return (
       <Layout>
-        <MesHead testName={measurement.test_name} testDateTime={measurement.measurement_start_time} country={country}/>
+        <MeasurementHead testName={measurement.test_name} testDateTime={measurement.measurement_start_time} country={country}/>
         <MeasurementContainer
           isConfirmed={isConfirmed}
           isAnomaly={isAnomaly}

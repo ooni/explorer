@@ -37,17 +37,20 @@ const WhatsAppDetails = ({ isAnomaly, scores, measurement, render }) => {
 
   let status = 'reachable'
   let info = <FormattedMessage id='Measurement.Details.Hint.WhatsApp.Reachable' />
-  let summaryText = 'Measurement.Details.SummaryText.WhatsApp.Reachable'
+  let summaryText = {
+    message: 'Measurement.Details.SummaryText.WhatsApp.Reachable',
+    formatted: false
+  }
 
   if (isAnomaly) {
     status = 'anomaly'
     info = <FormattedMessage id='Measurement.Status.Hint.WhatsApp.Blocked' />
     if (!endpointsAccessible) {
-      summaryText = 'Measurement.Details.SummaryText.WhatsApp.AppFailure'
+      summaryText.message = 'Measurement.Details.SummaryText.WhatsApp.AppFailure'
     } else if (!webAccessible) {
-      summaryText = 'Measurement.Details.SummaryText.WhatsApp.DesktopFailure'
+      summaryText.message = 'Measurement.Details.SummaryText.WhatsApp.DesktopFailure'
     } else if (!endpointsAccessible && !webAccessible) {
-      summaryText = 'Measurement.Details.SummaryText.WhatsApp.DesktopAndAppFailure'
+      summaryText.message = 'Measurement.Details.SummaryText.WhatsApp.DesktopAndAppFailure'
     }
   }
 

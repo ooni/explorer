@@ -106,45 +106,45 @@ const RequestResponseContainer = ({request}) => {
         <FormattedMessage id='Measurement.Details.Websites.HTTP.NoData' />
       </Box>
     ) : (
-    // !request.failure &&
-      <Box>
-        <Flex flexWrap='wrap'>
-          {/* Request URL */}
-          <Box width={1} mb={1} >
-            <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Request.URL' /></Heading>
-          </Box>
-          <Box width={1} mb={2} p={2} bg='gray2'>
-            <Pre fontSize={14}>{request.request.method} {request.request.url}</Pre>
-          </Box>
-          {/* Response Headers */}
-          <Box width={1} mb={1} >
-            <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Response.Headers' /></Heading>
-          </Box>
-          <Box width={1} mb={2} p={2} bg='gray2'>
-            <WrappedPre fontSize={14}>
-              {Object.keys(request.response.headers).map((header, index) => (
-                <React.Fragment key={index}>
-                  <Flex mb={2}>
-                    <Box mr={1}>
-                      <Text fontWeight='bold'>{header}:</Text>
-                    </Box>
-                    <Box>
-                      {request.response.headers[header]}
-                    </Box>
-                  </Flex>
-                </React.Fragment>
-              ))}
-            </WrappedPre>
-          </Box>
-          {/* Response Body (HTML) */}
-          <Box width={1} mb={1} >
-            <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Response.Body' /></Heading>
-          </Box>
-          <Box width={1} p={2} bg='gray2'>
-            <HttpResponseBody request={request} />
-          </Box>
-        </Flex>
-      </Box>
+      // !request.failure &&
+        <Box>
+          <Flex flexWrap='wrap'>
+            {/* Request URL */}
+            <Box width={1} mb={1} >
+              <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Request.URL' /></Heading>
+            </Box>
+            <Box width={1} mb={2} p={2} bg='gray2'>
+              <Pre fontSize={14}>{request.request.method} {request.request.url}</Pre>
+            </Box>
+            {/* Response Headers */}
+            <Box width={1} mb={1} >
+              <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Response.Headers' /></Heading>
+            </Box>
+            <Box width={1} mb={2} p={2} bg='gray2'>
+              <WrappedPre fontSize={14}>
+                {Object.keys(request.response.headers).map((header, index) => (
+                  <React.Fragment key={index}>
+                    <Flex mb={2}>
+                      <Box mr={1}>
+                        <Text fontWeight='bold'>{header}:</Text>
+                      </Box>
+                      <Box>
+                        {request.response.headers[header]}
+                      </Box>
+                    </Flex>
+                  </React.Fragment>
+                ))}
+              </WrappedPre>
+            </Box>
+            {/* Response Body (HTML) */}
+            <Box width={1} mb={1} >
+              <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Response.Body' /></Heading>
+            </Box>
+            <Box width={1} p={2} bg='gray2'>
+              <HttpResponseBody request={request} />
+            </Box>
+          </Flex>
+        </Box>
     )
   )
 }
@@ -292,7 +292,7 @@ const WebConnectivityDetails = ({
   }
 
   let status = 'default'
-  let summaryText = ''
+  let summaryText = { message: '', formatted: true } 
 
   const reason = messages[`blockingReason.${blocking}`] && intl.formatMessage(messages[`blockingReason.${blocking}`])
 
@@ -317,71 +317,70 @@ const WebConnectivityDetails = ({
   // } else
   if(isConfirmed) {
     status = 'confirmed'
-    summaryText = (
-      <FormattedMessage
-        id='Measurement.SummaryText.Websites.ConfirmedBlocked'
-        values={{
-          date: date,
-          WebsiteURL: input,
-          network: probe_asn,
-          country: country,
-        }}
-      />
+    summaryText.message = intl.formatMessage(
+      {
+        id: 'Measurement.SummaryText.Websites.ConfirmedBlocked'
+      },
+      {
+        date: date,
+        WebsiteURL: input,
+        network: probe_asn,
+        country: country
+      }
     )
   } else if (isAnomaly) {
     status = 'anomaly'
-    summaryText = (
-      <FormattedMessage
-        id='Measurement.SummaryText.Websites.Anomaly'
-        values={{
-          date: date,
-          WebsiteURL: input,
-          network: probe_asn,
-          country: country,
-          BlockingReason: reason && <strong>{reason}</strong>
-        }}
-      />
+    summaryText.message = intl.formatMessage(
+      {
+        id: 'Measurement.SummaryText.Websites.Anomaly'
+      },
+      {
+        date: date,
+        WebsiteURL: input,
+        network: probe_asn,
+        country: country
+      }
     )
-  } else if (accessible) {
+ } else if (accessible) {
     status = 'reachable'
-    summaryText = (
-      <FormattedMessage
-        id='Measurement.SummaryText.Websites.Accessible'
-        values={{
-          date: date,
-          WebsiteURL: input,
-          network: probe_asn,
-          country: country
-        }}
-      />
+    summaryText.message = intl.formatMessage(
+      {
+        id: 'Measurement.SummaryText.Websites.Accessible'
+      },
+      {
+        date: date,
+        WebsiteURL: input,
+        network: probe_asn,
+        country: country
+      }
     )
   } else if (blocking === false) {
     // When not accessible, but also not blocking, it must be down
     status = 'down'
-    summaryText = (
-      <FormattedMessage
-        id='Measurement.SummaryText.Websites.Down'
-        values={{
-          date: date,
-          WebsiteURL: input,
-          network: probe_asn,
-          country: country
-        }}
-      />
+    summaryText.message = intl.formatMessage(
+      {
+        id: 'Measurement.SummaryText.Websites.Down'
+      },
+      {
+        date: date,
+        WebsiteURL: input,
+        network: probe_asn,
+        country: country
+      }
     )
   } else {
     // TODO: Remove this block when the first block in this chain is enabled.
     status = 'error'
-    summaryText = (
-      <FormattedMessage
-        id='Measurement.SummaryText.Websites.Failed'
-        values={{
-          date: date,
-          WebsiteURL: input,
-          network: probe_asn,
-          country: country,
-        }}
-      />
+    summaryText.message = intl.formatMessage(
+      {
+        id: 'Measurement.SummaryText.Websites.Failed'
+      },
+      {
+        date: date,
+        WebsiteURL: input,
+        network: probe_asn,
+        country: country
+      }
     )
   }
 

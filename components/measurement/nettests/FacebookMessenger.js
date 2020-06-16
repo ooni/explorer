@@ -27,23 +27,24 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
   )
   const tcpConnections = testKeys.tcp_connect
 
-  let summaryText = ''
+  let summaryText = { message: '', formatted: true } 
   if (!isWorking) {
     if (tcpBlocking) {
-      summaryText += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.TCPFailure'})
+      summaryText.message += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.TCPFailure'})
     } else {
-      summaryText += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.TCPSuccess'})
+      summaryText.message += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.TCPSuccess'})
     }
 
-    summaryText += '&nbsp;'
+    summaryText.message += ' '
 
     if (dnsBlocking) {
-      summaryText += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.DNSFailure'})
+      summaryText.message += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.DNSFailure'})
     } else {
-      summaryText += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.DNSSuccess'})
+      summaryText.message += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.DNSSuccess'})
     }
   } else {
-    summaryText = 'Measurement.Details.SummaryText.FacebookMessenger.Reachable'
+    summaryText.message = 'Measurement.Details.SummaryText.FacebookMessenger.Reachable'
+    summaryText.formatted = false
   }
 
   return (

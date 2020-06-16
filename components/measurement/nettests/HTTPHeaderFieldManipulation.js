@@ -24,11 +24,11 @@ export const HttpHeaderFieldManipulationDetails = ({ measurement, render }) => {
     render({
       status: isAnomaly ? 'anomaly' : 'reachable',
       statusLabel: isAnomaly
-        ? <FormattedMessage id='Measurement.Hero.Status.HTTPHeaderManipulation.MiddleboxesDetected' />
-        : <FormattedMessage id='Measurement.Hero.Status.HTTPHeaderManipulation.NoMiddleBoxes' />,
+      ? <FormattedMessage id='Measurement.Hero.Status.HTTPHeaderManipulation.MiddleboxesDetected' />
+      : <FormattedMessage id='Measurement.Hero.Status.HTTPHeaderManipulation.NoMiddleBoxes' />,
       summaryText: isAnomaly
-        ? 'Measurement.HTTPHeaderManipulation.MiddleBoxesDetected.SummaryText'
-        : 'Measurement.HTTPHeaderManipulation.NoMiddleBoxes.SummaryText',
+      ? { message: 'Measurement.HTTPHeaderManipulation.MiddleBoxesDetected.SummaryText', formatted: false }
+      : { message: 'Measurement.HTTPHeaderManipulation.NoMiddleBoxes.SummaryText', formatted: false },
       details: (
         <div>
           {/*<Text>isAnomaly: {isAnomaly.toString()}</Text>
