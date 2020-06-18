@@ -44,7 +44,7 @@ const DetailsHeader = ({testName, runtime, notice}) => {
           />
         </Box>
         <Box ml={2}>
-          <Link href={metadata.info} target='_blank'>
+          <Link href={metadata.info}>
             <Text fontSize={20}>
               {metadata.name}
               &nbsp;
