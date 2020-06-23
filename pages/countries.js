@@ -71,6 +71,10 @@ const RegionHeaderAnchor = styled.div`
     /* Height of the combined header (NavBar and Regions) */
     height: 145px;
     margin-top: -145px;
+    @media(max-width: 768px) {
+      height: 325px;
+      margin-top: -325px;
+    }
   }
 `
 
@@ -205,11 +209,12 @@ class Countries extends React.Component {
                 <NavBar />
                 <RegionMenu>
                   <Container>
-                    <Flex 
-                      flexDirection={['column', 'row']} 
-                      justifyContent={['flex-start', 'flex-end']} 
-                      alignItems={['flex-start', 'center']}>
-                      <Box>
+                    <Flex
+                      flexDirection={['column', 'row']}
+                      justifyContent={['flex-start', 'flex-end']}
+                      alignItems={['flex-start', 'center']}
+                    >
+                      <Box my={2}>
                         <Input
                           onChange={(e) => this.onSearchChange(e.target.value)}
                           placeholder='Search for Countries'
@@ -220,7 +225,7 @@ class Countries extends React.Component {
                       <RegionLink href="#Americas" label='Americas' />
                       <RegionLink href="#Asia" label='Asia' />
                       <RegionLink href="#Europe" label='Europe' />
-                      <RegionLink href="#Oceania" label='Oceania' /> 
+                      <RegionLink href="#Oceania" label='Oceania' />
                     </Flex>
                   </Container>
                 </RegionMenu>

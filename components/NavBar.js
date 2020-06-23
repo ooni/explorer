@@ -70,16 +70,17 @@ const StyledNavBar = styled.div`
 export const NavBar = ({color}) => (
   <StyledNavBar color={color}>
     <Container>
-      <Flex 
-        flexDirection={['column', 'row']} 
-        justifyContent={['flex-start', 'space-around']} 
-        alignItems={['flex-start', 'center']} >
+      <Flex
+        flexDirection={['column', 'row']}
+        justifyContent={['flex-start', 'space-around']}
+        alignItems={['flex-start', 'center']}
+      >
         <Box style={{zIndex: 1}}>
           <NLink href='/' passHref>
             <Link><ExplorerLogo height='26px' /></Link>
           </NLink>
         </Box>
-        <Box ml={[0,'auto']} py={[2, 0]}>
+        <Box ml={[0,'auto']} mt={[2, 0]}>
           <Flex flexDirection={['column', 'row']} >
             <NavItem label={<FormattedMessage id='Navbar.Search' />} href='/search' />
             <NavItem label={<FormattedMessage id='Navbar.Countries' />} href='/countries' />
