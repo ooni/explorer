@@ -48,14 +48,14 @@ const Underline = styled.span`
 const NavItemComponent = ({router, label, href}) => {
   const active = router.pathname === href
   return (
-    <NLink href={href} passHref>
-      <Box ml={[0, 4]}>
+    <Box ml={[0, 4]} my={[2, 0]}>
+      <NLink href={href} passHref>
         <StyledNavItem>
           <NavItemLabel active={active} >{label}</NavItemLabel>
           <Underline active={active} />
         </StyledNavItem>
-      </Box>
-    </NLink>
+      </NLink>
+    </Box>
   )
 }
 const NavItem = withRouter(NavItemComponent)
