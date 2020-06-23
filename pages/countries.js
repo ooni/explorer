@@ -119,6 +119,7 @@ const StyledRegionLink = styled.a`
   display: block;
   color: ${(props) => props.theme.colors.blue5};
   text-decoration: none;
+  border-bottom: 2px solid transparent;
   :hover {
     border-bottom: 2px solid ${(props) => props.theme.colors.blue5};
     width: 100%;
