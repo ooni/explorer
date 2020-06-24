@@ -69,11 +69,15 @@ const RegionHeaderAnchor = styled.div`
     display: block;
     width: 0;
     /* Height of the combined header (NavBar and Regions) */
+    /* This is needed to compensate the for the sticky navbar and region
+       links bar when scrolling to the selected region. And the height of these
+       bars changes in the mobile layout. This has evolved to be a bad design
+       that needs to be replaced. */
     height: 145px;
     margin-top: -145px;
     @media(max-width: 768px) {
-      height: 325px;
-      margin-top: -325px;
+      height: 375px;
+      margin-top: -375px;
     }
   }
 `
