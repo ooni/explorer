@@ -57,9 +57,7 @@ const NetworkRow = ({ asn, app }) => {
               </strong>
             </Box>
             <Box>
-              <Link
-                href={linkToMeasurements}
-              >
+              <Link href={linkToMeasurements} color='blue7'>
                 <FormattedMessage id='Country.Websites.URLCharts.ExploreMoreMeasurements' />
               </Link>
             </Box>
