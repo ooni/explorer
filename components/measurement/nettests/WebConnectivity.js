@@ -106,45 +106,45 @@ const RequestResponseContainer = ({request}) => {
         <FormattedMessage id='Measurement.Details.Websites.HTTP.NoData' />
       </Box>
     ) : (
-    // !request.failure &&
-      <Box>
-        <Flex flexWrap='wrap'>
-          {/* Request URL */}
-          <Box width={1} mb={1} >
-            <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Request.URL' /></Heading>
-          </Box>
-          <Box width={1} mb={2} p={2} bg='gray2'>
-            <Pre fontSize={14}>{request.request.method} {request.request.url}</Pre>
-          </Box>
-          {/* Response Headers */}
-          <Box width={1} mb={1} >
-            <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Response.Headers' /></Heading>
-          </Box>
-          <Box width={1} mb={2} p={2} bg='gray2'>
-            <WrappedPre fontSize={14}>
-              {Object.keys(request.response.headers).map((header, index) => (
-                <React.Fragment key={index}>
-                  <Flex mb={2}>
-                    <Box mr={1}>
-                      <Text fontWeight='bold'>{header}:</Text>
-                    </Box>
-                    <Box>
-                      {request.response.headers[header]}
-                    </Box>
-                  </Flex>
-                </React.Fragment>
-              ))}
-            </WrappedPre>
-          </Box>
-          {/* Response Body (HTML) */}
-          <Box width={1} mb={1} >
-            <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Response.Body' /></Heading>
-          </Box>
-          <Box width={1} p={2} bg='gray2'>
-            <HttpResponseBody request={request} />
-          </Box>
-        </Flex>
-      </Box>
+      // !request.failure &&
+        <Box>
+          <Flex flexWrap='wrap'>
+            {/* Request URL */}
+            <Box width={1} mb={1} >
+              <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Request.URL' /></Heading>
+            </Box>
+            <Box width={1} mb={2} p={2} bg='gray2'>
+              <Pre fontSize={14}>{request.request.method} {request.request.url}</Pre>
+            </Box>
+            {/* Response Headers */}
+            <Box width={1} mb={1} >
+              <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Response.Headers' /></Heading>
+            </Box>
+            <Box width={1} mb={2} p={2} bg='gray2'>
+              <WrappedPre fontSize={14}>
+                {Object.keys(request.response.headers).map((header, index) => (
+                  <React.Fragment key={index}>
+                    <Flex mb={2}>
+                      <Box mr={1}>
+                        <Text fontWeight='bold'>{header}:</Text>
+                      </Box>
+                      <Box>
+                        {request.response.headers[header]}
+                      </Box>
+                    </Flex>
+                  </React.Fragment>
+                ))}
+              </WrappedPre>
+            </Box>
+            {/* Response Body (HTML) */}
+            <Box width={1} mb={1} >
+              <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Response.Body' /></Heading>
+            </Box>
+            <Box width={1} p={2} bg='gray2'>
+              <HttpResponseBody request={request} />
+            </Box>
+          </Flex>
+        </Box>
     )
   )
 }
@@ -323,10 +323,10 @@ const WebConnectivityDetails = ({
         id: 'Measurement.SummaryText.Websites.ConfirmedBlocked'
       },
       {
-          date: date,
-          WebsiteURL: input,
-          network: probe_asn,
-          country: country,
+        date: date,
+        WebsiteURL: input,
+        network: probe_asn,
+        country: country,
       }
     )
     headMetadata.message = intl.formatMessage(
@@ -373,10 +373,10 @@ const WebConnectivityDetails = ({
         id: 'Measurement.SummaryText.Websites.Accessible'
       },
       {
-          date: date,
-          WebsiteURL: input,
-          network: probe_asn,
-          country: country
+        date: date,
+        WebsiteURL: input,
+        network: probe_asn,
+        country: country
       }
     )
     headMetadata.message = intl.formatMessage(
@@ -398,10 +398,10 @@ const WebConnectivityDetails = ({
         id: 'Measurement.SummaryText.Websites.Down'
       },
       {
-          date: date,
-          WebsiteURL: input,
-          network: probe_asn,
-          country: country
+        date: date,
+        WebsiteURL: input,
+        network: probe_asn,
+        country: country
       }
     )
     headmetadata.message = intl.formatmessage(
@@ -423,10 +423,10 @@ const WebConnectivityDetails = ({
         id: 'Measurement.SummaryText.Websites.Failed'
       },
       {
-          date: date,
-          WebsiteURL: input,
-          network: probe_asn,
-          country: country
+        date: date,
+        WebsiteURL: input,
+        network: probe_asn,
+        country: country
       }
     )
     headmetadata.message = intl.formatmessage(

@@ -88,58 +88,58 @@ export default class Measurement extends React.Component {
           scores={scores}
           render={({
             status = 'default',
-            statusIcon,
-            statusLabel,
-            statusInfo,
-            legacy = false,
-            summaryText,
-            headMetadata,
-            details }) => (
+              statusIcon,
+              statusLabel,
+              statusInfo,
+              legacy = false,
+              summaryText,
+              headMetadata,
+              details }) => (
 
-            <React.Fragment>
-              {headMetadata && <HeadMetadata
-                content={headMetadata}
-                testName={measurement.test_name}
-                testUrl={measurement.input}
-                network={measurement.probe_asn}
-                country={country}
-                date={measurement.test_start_time}
-              />}
-              <NavBar color={pageColors[status]} />
-              <Hero
-                color={pageColors[status]}
-                status={status}
-                icon={statusIcon}
-                label={statusLabel}
-                info={statusInfo}
-              />
-              <CommonSummary
-                color={pageColors[status]}
-                measurement={measurement}
-                country={country} />
+                <React.Fragment>
+                  {headMetadata && <HeadMetadata
+                    content={headMetadata}
+                    testName={measurement.test_name}
+                    testUrl={measurement.input}
+                    network={measurement.probe_asn}
+                    country={country}
+                    date={measurement.test_start_time}
+                  />}
+                  <NavBar color={pageColors[status]} />
+                  <Hero
+                    color={pageColors[status]}
+                    status={status}
+                    icon={statusIcon}
+                    label={statusLabel}
+                    info={statusInfo}
+                  />
+                  <CommonSummary
+                    color={pageColors[status]}
+                    measurement={measurement}
+                    country={country} />
 
-              <Container>
-                <DetailsHeader
-                  testName={measurement.test_name}
-                  runtime={measurement.test_runtime}
-                  notice={legacy}
-                />
+                  <Container>
+                    <DetailsHeader
+                      testName={measurement.test_name}
+                      runtime={measurement.test_runtime}
+                      notice={legacy}
+                    />
 
-                {summaryText && <SummaryText
-                  testName={measurement.test_name}
-                  testUrl={measurement.input}
-                  network={measurement.probe_asn}
-                  country={country}
-                  date={measurement.test_start_time}
-                  content={summaryText}
-                />}
-                {details}
-                <CommonDetails
-                  measurementURL={measurementURL}
-                  measurement={measurement} />
-              </Container>
-            </React.Fragment>
-          )} />
+                    {summaryText && <SummaryText
+                      testName={measurement.test_name}
+                      testUrl={measurement.input}
+                      network={measurement.probe_asn}
+                      country={country}
+                      date={measurement.test_start_time}
+                      content={summaryText}
+                    />}
+                    {details}
+                    <CommonDetails
+                      measurementURL={measurementURL}
+                      measurement={measurement} />
+                  </Container>
+                </React.Fragment>
+              )} />
       </Layout>
     )
   }

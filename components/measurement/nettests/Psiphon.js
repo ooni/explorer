@@ -38,16 +38,16 @@ const PsiphonDetails = ({
     if (bootstrap_time === 0) {
       // Unable to bootstrap
       hint = <FormattedMessage id='Measurement.Status.Hint.Psiphon.BootstrappingError' />
-      summaryText.message = 'Measurement.Details.SummaryText.Psiphon.BootstrappingError'
+        summaryText.message = 'Measurement.Details.SummaryText.Psiphon.BootstrappingError'
     } else {
       // Unable to use Psiphon to reach https://google.com/humans.txt
       hint = <FormattedMessage id='Measurement.Status.Hint.Psiphon.Blocked' />
-      summaryText.message = 'Measurement.Details.SummaryText.Psiphon.Blocked'
+        summaryText.message = 'Measurement.Details.SummaryText.Psiphon.Blocked'
     }
   } else {
     status = 'reachable'
     hint = <FormattedMessage id='Measurement.Status.Hint.Psiphon.Reachable' />
-    summaryText.message = 'Measurement.Details.SummaryText.Psiphon.OK'
+      summaryText.message = 'Measurement.Details.SummaryText.Psiphon.OK'
   }
 
   return (
@@ -66,12 +66,12 @@ const PsiphonDetails = ({
               <Flex>
                 {
                   bootstrap_time &&
-                  <AccessPointStatus
-                    icon={<MdTimer />}
-                    label={<FormattedMessage id='Measurement.Details.Psiphon.BootstrapTime.Label' />}
-                    content={bootstrap_time.toFixed(2)}
-                    ok={true}
-                  />
+                    <AccessPointStatus
+                      icon={<MdTimer />}
+                      label={<FormattedMessage id='Measurement.Details.Psiphon.BootstrapTime.Label' />}
+                      content={bootstrap_time.toFixed(2)}
+                      ok={true}
+                    />
                 }
               </Flex>
             </Container>

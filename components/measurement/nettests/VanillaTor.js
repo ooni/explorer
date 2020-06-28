@@ -35,11 +35,11 @@ const VanillaTorDetails = ({ measurement, render }) => {
     render({
       status: isAnomaly ? 'anomaly' : 'reachable',
       statusLabel: isAnomaly
-        ? <FormattedMessage id='Measurement.Hero.Status.TorVanilla.Blocked' />
-        : <FormattedMessage id='Measurement.Hero.Status.TorVanilla.Reachable' />,
+      ? <FormattedMessage id='Measurement.Hero.Status.TorVanilla.Blocked' />
+      : <FormattedMessage id='Measurement.Hero.Status.TorVanilla.Reachable' />,
       summaryText: isAnomaly
-        ? 'Measurement.Details.SummaryText.TorVanilla.Blocked'
-        : 'Measurement.Details.SummaryText.TorVanilla.Reachable',
+      ? 'Measurement.Details.SummaryText.TorVanilla.Blocked'
+      : 'Measurement.Details.SummaryText.TorVanilla.Reachable',
       headMetadata: {
         message: isAnomaly ? messages.unReachable : messages.reachable,
         formatted: false

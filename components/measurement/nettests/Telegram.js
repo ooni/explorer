@@ -40,7 +40,7 @@ const TelegramDetails = ({ measurement, render }) => {
   let telegramDesktopOK = true
   let anomaly = false
   let hint = <FormattedMessage id='Measurement.Status.Hint.Telegram.Reachable' />
-  let summaryText = 'Measurement.Details.SummaryText.Telegram.Reachable'
+    let summaryText = 'Measurement.Details.SummaryText.Telegram.Reachable'
   let headMetadata = message.reachable
 
   if (telegram_web_status === 'blocked') {
@@ -58,7 +58,7 @@ const TelegramDetails = ({ measurement, render }) => {
   if (!telegramWebOK || !telegramDesktopOK) {
     anomaly = true
     hint = <FormattedMessage id='Measurement.Status.Hint.Telegram.Blocked' />
-    summaryText = 'Measurement.Details.SummaryText.Telegram.DesktopAndAppFailure'
+      summaryText = 'Measurement.Details.SummaryText.Telegram.DesktopAndAppFailure'
     headMetadata = message.unReachable
   }
 
@@ -90,30 +90,30 @@ const TelegramDetails = ({ measurement, render }) => {
                     </Box>
                   </Flex>
                   {tcp_connect && tcp_connect.length > 0 &&
-                    <div>
-                      <Heading h={4}> <FormattedMessage id='Measurement.Details.Telegram.Endpoint.Status.Heading' /> </Heading>
-                      {tcp_connect.map((connection, index) => (
-                        <Flex key={index}>
-                          <Box>
-                            <Text>
-                              {connection.status.failure &&
-                                <FormattedMessage id="Measurement.Details.Telegram.Endpoint.ConnectionTo.Failed"
-                                  values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
-                                />
-                              }
-                              {connection.status.success &&
-                                <FormattedMessage id="Measurement.Details.Telegram.Endpoint.ConnectionTo.Successful"
-                                  values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
-                                />
-                              }
-                            </Text>
-                          </Box>
-                        </Flex>
-                      ))}
-                    </div>
+                  <div>
+                    <Heading h={4}> <FormattedMessage id='Measurement.Details.Telegram.Endpoint.Status.Heading' /> </Heading>
+                    {tcp_connect.map((connection, index) => (
+                      <Flex key={index}>
+                        <Box>
+                          <Text>
+                            {connection.status.failure &&
+                            <FormattedMessage id="Measurement.Details.Telegram.Endpoint.ConnectionTo.Failed"
+                              values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
+                            />
+                            }
+                            {connection.status.success &&
+                              <FormattedMessage id="Measurement.Details.Telegram.Endpoint.ConnectionTo.Successful"
+                                values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
+                              />
+                            }
+                          </Text>
+                        </Box>
+                      </Flex>
+                    ))}
+                  </div>
                   }
                 </React.Fragment>
-              } />
+                } />
             </Flex>
           </Container>
         </React.Fragment>

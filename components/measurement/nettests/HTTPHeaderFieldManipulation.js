@@ -38,8 +38,8 @@ export const HttpHeaderFieldManipulationDetails = ({ measurement, render }) => {
       ? <FormattedMessage id='Measurement.Hero.Status.HTTPHeaderManipulation.MiddleboxesDetected' />
       : <FormattedMessage id='Measurement.Hero.Status.HTTPHeaderManipulation.NoMiddleBoxes' />,
       summaryText: isAnomaly
-        ? 'Measurement.HTTPHeaderManipulation.MiddleBoxesDetected.SummaryText'
-        : 'Measurement.HTTPHeaderManipulation.NoMiddleBoxes.SummaryText',
+      ? 'Measurement.HTTPHeaderManipulation.MiddleBoxesDetected.SummaryText'
+      : 'Measurement.HTTPHeaderManipulation.NoMiddleBoxes.SummaryText',
       headMetadata: {
         message: isAnomaly ? messages.middleboxes : messages.noMiddleboxes,
         formatted: false
