@@ -1,11 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
-import { useIntl } from 'react-intl'
-import { Link, Text } from 'ooni-components'
-import Head from 'next/head'
+import { useIntl   } from 'react-intl'
+import { Link, Text   } from 'ooni-components'
 
-import { getTestMetadata } from '../utils'
+import { getTestMetadata   } from '../utils'
 import FormattedMarkdown from '../FormattedMarkdown'
 
 const SummaryText = ({
@@ -29,13 +28,11 @@ const SummaryText = ({
   })
 
   let textToRender = null
-  let headDescription = null
-  if (content.formatted === true) {
-    textToRender = content.message
-    headDescription = content.message
-  } else {
+  if (typeof content === 'function') {
+    textToRender = content()
+  } else if (typeof content === 'string') {
     textToRender =
-      <FormattedMarkdown id={content.message}
+      <FormattedMarkdown id={content}
         values={{
           testName: `[${metadata.name}](${metadata.info})`,
           network: network,
@@ -43,38 +40,14 @@ const SummaryText = ({
           date: `<abbr title='${formattedDateTime}'>${formattedDate}</abbr>`
         }}
       />
-      headDescription = intl.formatMessage(
-        {
-          id: content.message
-        },
-        {
-          testName: `[${metadata.name}](${metadata.info})`,
-          network: network,
-          country: country,
-          date: formattedDate
-        }
-      )
+  } else {
+    textToRender = content
   }
-  console.log(typeof headDescription) 
-  // headDescription = headDescription.split('\n')[0]
-  headDescription += " " + intl.formatMessage({
-    id: 'SummaryText.HeadDescription.MoreDetails',
-    defaultMessage: 'Check out OONI Explorer for more details and measurements'
-  })
-
+  
   return (
-    <>
-      <Head>
-        <meta
-          key="og:description"
-          property="og:description"
-          content={headDescription}
-        />
-      </Head>
-      <Text py={4} fontSize={20}>
-        {textToRender}
-      </Text>
-    </>
+    <Text py={4} fontSize={20}>
+      {textToRender}
+    </Text>
   )
 }
 
@@ -83,10 +56,11 @@ SummaryText.propTypes = {
   network: PropTypes.string.isRequired,
   country: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
-  content: PropTypes.shape({
-    message: PropTypes.string.isRequired,
-    formatted: PropTypes.bool.isRequired
-  })
+  content: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.any,
+    PropTypes.func
+  ])
 }
 
 export default SummaryText

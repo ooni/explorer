@@ -38,16 +38,16 @@ const PsiphonDetails = ({
     if (bootstrap_time === 0) {
       // Unable to bootstrap
       hint = <FormattedMessage id='Measurement.Status.Hint.Psiphon.BootstrappingError' />
-        summaryText.message = 'Measurement.Details.SummaryText.Psiphon.BootstrappingError'
+        summaryText = 'Measurement.Details.SummaryText.Psiphon.BootstrappingError'
     } else {
       // Unable to use Psiphon to reach https://google.com/humans.txt
       hint = <FormattedMessage id='Measurement.Status.Hint.Psiphon.Blocked' />
-        summaryText.message = 'Measurement.Details.SummaryText.Psiphon.Blocked'
+        summaryText = 'Measurement.Details.SummaryText.Psiphon.Blocked'
     }
   } else {
     status = 'reachable'
     hint = <FormattedMessage id='Measurement.Status.Hint.Psiphon.Reachable' />
-      summaryText.message = 'Measurement.Details.SummaryText.Psiphon.OK'
+      summaryText = 'Measurement.Details.SummaryText.Psiphon.OK'
   }
 
   return (

@@ -342,7 +342,7 @@ const WebConnectivityDetails = ({
     )
   } else if (isAnomaly) {
     status = 'anomaly'
-    summaryText.message = intl.formatMessage(
+    summaryText = intl.formatMessage(
       {
         id: 'Measurement.SummaryText.Websites.Anomaly'
       },
@@ -368,7 +368,7 @@ const WebConnectivityDetails = ({
     )
   } else if (accessible) {
     status = 'reachable'
-    summaryText.message = intl.formatMessage(
+    summaryText = intl.formatMessage(
       {
         id: 'Measurement.SummaryText.Websites.Accessible'
       },
@@ -393,7 +393,7 @@ const WebConnectivityDetails = ({
   } else if (blocking === false) {
     // When not accessible, but also not blocking, it must be down
     status = 'down'
-    summaryText.message = intl.formatMessage(
+    summaryText = intl.formatMessage(
       {
         id: 'Measurement.SummaryText.Websites.Down'
       },
@@ -404,7 +404,7 @@ const WebConnectivityDetails = ({
         country: country
       }
     )
-    headmetadata.message = intl.formatmessage(
+    headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Down',
         defaultmessage: 'on {date}, {websiteurl} was down in {country}, explore more details and other measurements on ooni explorer.'
@@ -418,7 +418,7 @@ const WebConnectivityDetails = ({
   } else {
     // TODO: Remove this block when the first block in this chain is enabled.
     status = 'error'
-    summaryText.message = intl.formatMessage(
+    summaryText = intl.formatMessage(
       {
         id: 'Measurement.SummaryText.Websites.Failed'
       },
@@ -429,7 +429,7 @@ const WebConnectivityDetails = ({
         country: country
       }
     )
-    headmetadata.message = intl.formatmessage(
+    headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Failed',
         defaultmessage: 'on {date}, Web Connectivity test for {websiteurl} failed in {country}, explore more details and other measurements on ooni explorer.'

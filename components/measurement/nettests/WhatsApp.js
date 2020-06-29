@@ -48,10 +48,7 @@ const WhatsAppDetails = ({ isAnomaly, scores, measurement, render }) => {
 
   let status = 'reachable'
   let info = <FormattedMessage id='Measurement.Details.Hint.WhatsApp.Reachable' />
-  let summaryText = {
-    message: 'Measurement.Details.SummaryText.WhatsApp.Reachable',
-    formatted: false
-  }
+  let summaryText = 'Measurement.Details.SummaryText.WhatsApp.Reachable'
 
   if (isAnomaly) {
     status = 'anomaly'
@@ -64,7 +61,6 @@ const WhatsAppDetails = ({ isAnomaly, scores, measurement, render }) => {
       summaryText.message = 'Measurement.Details.SummaryText.WhatsApp.DesktopAndAppFailure'
     }
   }
-
 
   return render({
     status: status,

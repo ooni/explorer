@@ -24,7 +24,6 @@ const HeadMetadata = ({
       content.message,
       {
         testName: metadata.name,
-        network: network,
         country: country,
         date: formattedDate
       }

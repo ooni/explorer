@@ -67,6 +67,10 @@ const TelegramDetails = ({ measurement, render }) => {
       status: anomaly ? 'anomaly': 'reachable',
       statusInfo: hint,
       summaryText: summaryText,
+      headMetadata: {
+        message: headMetadata,
+        formatted: false
+      },
       details: (
         <React.Fragment>
           <Container>

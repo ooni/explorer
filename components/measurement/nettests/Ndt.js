@@ -93,7 +93,7 @@ const NdtDetails = ({ measurement, render }) => {
       headMetadata: {
         message: messages.Ndt,
         formatted: false
-      }
+      },
       statusInfo: (
         <Box width={1}>
           {isFailed ?

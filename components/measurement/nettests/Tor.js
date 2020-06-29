@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback } from 'react'
 import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, defineMessages } from 'react-intl'
 import { Flex, Text, Container, theme } from 'ooni-components'
 import styled from 'styled-components'
 import { useTable, useSortBy } from 'react-table'

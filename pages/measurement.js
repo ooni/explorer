@@ -78,7 +78,6 @@ export default class Measurement extends React.Component {
 
     return (
       <Layout>
-        <MeasurementHead testName={measurement.test_name} testDateTime={measurement.measurement_start_time} country={country}/>
         <MeasurementContainer
           isConfirmed={isConfirmed}
           isAnomaly={isAnomaly}
@@ -101,7 +100,6 @@ export default class Measurement extends React.Component {
                     content={headMetadata}
                     testName={measurement.test_name}
                     testUrl={measurement.input}
-                    network={measurement.probe_asn}
                     country={country}
                     date={measurement.test_start_time}
                   />}
