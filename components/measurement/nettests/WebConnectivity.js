@@ -318,7 +318,7 @@ const WebConnectivityDetails = ({
   // } else
   if(isConfirmed) {
     status = 'confirmed'
-    summaryText.message = intl.formatMessage(
+    summaryText = intl.formatMessage(
       {
         id: 'Measurement.SummaryText.Websites.ConfirmedBlocked'
       },

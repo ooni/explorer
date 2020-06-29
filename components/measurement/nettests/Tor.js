@@ -147,7 +147,7 @@ const TorDetails = ({
   render
 }) => {
   // https://github.com/ooni/spec/blob/master/nettests/ts-023-tor.md#possible-conclusions
-  let status, hint, summaryText
+  let status, hint 
 
   const {
     or_port_accessible,
@@ -228,7 +228,6 @@ const TorDetails = ({
       {render({
         status: status,
         statusInfo: hint,
-        summaryText: summaryText,
         headMetadata: {
           message: messages.tor,
           formatted: false

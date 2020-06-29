@@ -27,7 +27,6 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
   )
   const tcpConnections = testKeys.tcp_connect
 
-  let headMetadata = { message: '', formatted: false }
   const messages = defineMessages({
     notReachable: {
       id: 'Measurement.Metadata.FacebookMessenger.NotReachable',
@@ -42,23 +41,20 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
   let summaryText = ''
   if (!isWorking) {
     if (tcpBlocking) {
-      summaryText.message += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.TCPFailure'})
+      summaryText += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.TCPFailure'})
     } else {
-      summaryText.message += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.TCPSuccess'})
+      summaryText += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.TCPSuccess'})
     }
 
-    summaryText.message += ' '
+    summaryText += ' '
 
     if (dnsBlocking) {
-      summaryText.message += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.DNSFailure'})
+      summaryText += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.DNSFailure'})
     } else {
-      summaryText.message += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.DNSSuccess'})
+      summaryText += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.DNSSuccess'})
     }
-
-    headMetadata = { message: messages.notReachable }
   } else {
     summaryText = 'Measurement.Details.SummaryText.FacebookMessenger.Reachable'
-    headMetadata = { message: messages.reachable }
   }
 
   return (
@@ -68,7 +64,10 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
       ? <FormattedMessage id='Measurement.Status.Hint.FacebookMessenger.Reachable' />
       : <FormattedMessage id='Measurement.Status.Hint.FacebookMessenger.Blocked' />,
       summaryText: summaryText,
-      headMetadata: headMetadata,
+      headMetadata: {
+        message: isWorking ? messages.reachable : messages.notReachable,
+        formatted: false
+      },
       details: (
         <React.Fragment>
           <Container>
