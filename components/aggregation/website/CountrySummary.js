@@ -2,9 +2,9 @@ import React, { useMemo } from 'react'
 import { Flex, Box, Heading, Text, theme } from 'ooni-components'
 import { VictoryChart, VictoryBar } from 'victory'
 import styled from 'styled-components'
-import { IoCloseCircled as Close } from 'react-icons/lib/io'
-import { FaBarChart } from 'react-icons/lib/fa'
-
+import { IoCloseCircled } from 'react-icons/lib/io'
+import { FaBarChart, FaExclamationCircle } from 'react-icons/lib/fa'
+import { MdCheckCircle, MdClose } from 'react-icons/lib/md'
 import {
   colorNormal,
   colorAnomaly,
@@ -13,20 +13,26 @@ import {
   colorEmpty
 } from '../../colors'
 
+const ICON_SIZE = 30
+
 const BorderedBox = styled(Box)`
   border: 1px solid ${props => props.theme.colors.gray4};
+`
+
+const Clickable = styled.div`
   cursor: pointer;
   &:hover {
-    border: 1px solid ${props => props.theme.colors.gray6};
+    transform: translateY(1px);
   }
 `
 
-const CountrySummary = ({ data }) => {
+const CountrySummary = ({ data, onOpenDetail }) => {
   const {
     anomaly_count,
     confirmed_count,
     failure_count,
-    measurement_count
+    measurement_count,
+    probe_cc
   } = data
 
   const ok_count = measurement_count - (anomaly_count + confirmed_count + failure_count)
@@ -34,14 +40,16 @@ const CountrySummary = ({ data }) => {
   let outcome = {
     color: colorNormal,
     subtext: 'not blocked',
-    percent: Number(ok_count / measurement_count * 100).toFixed(0)
+    percent: Number(ok_count / measurement_count * 100).toFixed(0),
+    icon: <MdCheckCircle size={ICON_SIZE} />
   }
 
   if (anomaly_count > ok_count) {
     outcome = {
       color: colorAnomaly,
       subtext: 'high anomaly count',
-      percent: Number(anomaly_count / measurement_count * 100).toFixed(0)
+      percent: Number(anomaly_count / measurement_count * 100).toFixed(0),
+      icon: <FaExclamationCircle size={ICON_SIZE} />
     }
   }
 
@@ -49,7 +57,8 @@ const CountrySummary = ({ data }) => {
     outcome = {
       color: colorConfirmed,
       subtext: 'confirmed blocked',
-      percent: Number(confirmed_count / measurement_count * 100).toFixed(0)
+      percent: Number(confirmed_count / measurement_count * 100).toFixed(0),
+      icon: <IoCloseCircled size={ICON_SIZE} />
     }
   }
 
@@ -57,12 +66,12 @@ const CountrySummary = ({ data }) => {
     <BorderedBox>
       <Flex bg={outcome.color} color='white' px={2}>
         <Box my='auto'>
-          <Close size={30} color='white' />
+          {outcome.icon}
         </Box>
         <Box ml={2}>
           <Flex flexDirection='column'>
             <Heading h={4} my={0}>
-              {data.probe_cc}
+              {probe_cc}
             </Heading>
             <Text>
               {outcome.subtext}
@@ -70,12 +79,14 @@ const CountrySummary = ({ data }) => {
           </Flex>
         </Box>
         <Box my='auto' ml='auto'>
-          <FaBarChart size={36} />
+          <Clickable>
+            <FaBarChart size={36} onClick={() => onOpenDetail(probe_cc)} />
+          </Clickable>
         </Box>
       </Flex>
       <Flex justifyContent='space-between' p={2}>
         <Box width={4/5} style={{
-          'word-wrap': 'break-word'
+          'wordWrap': 'break-word'
         }}>
           <p>
             {JSON.stringify(data)}

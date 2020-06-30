@@ -8,10 +8,10 @@ import useSWR from 'swr'
 import Layout from '../../components/Layout'
 import NavBar from '../../components/NavBar'
 // import wdata from '../../components/aggregation/website/website-data'
-// import gdata from './global-data'
+// import gdata from '../../components/aggregation/website/global-data'
 import Global from '../../components/aggregation/website/Global'
-import WebsiteInCountry from '../../components/aggregation/website/WebsiteInCountry'
 import Form from '../../components/aggregation/website/form'
+import { buildQuery } from '../../components/aggregation/website/buildQuery'
 
 const AGGREGATION_API = `${process.env.MEASUREMENTS_URL}/api/v1/aggregation?`
 
@@ -27,14 +27,6 @@ const defaultParams = {
     'test_name': 'web_connectivity',
     'input': 'thepiratebay.org',
   }
-}
-
-const buildQuery = (params) => {
-  const query = new URLSearchParams()
-  for (const [key, value] of Object.entries(params)) {
-    query.append(key, value)
-  }
-  return query.toString()
 }
 
 const WebsiteAnalytics = () => {
@@ -68,7 +60,6 @@ const WebsiteAnalytics = () => {
           {data && <React.Fragment>
             <Box>
               <Global data={data.result} />
-              {/* <WebsiteInCountry data={data.result} /> */}
             </Box>
             {/* <Box>
               {JSON.stringify(data)}

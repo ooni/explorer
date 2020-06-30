@@ -1,8 +1,21 @@
+/* global process */
+
 import React from 'react'
 import { VictoryChart, VictoryStack, VictoryBar, VictoryAxis, VictoryLabel } from 'victory'
 import { theme } from 'ooni-components'
+import useSWR from 'swr'
 
+// import wdata from './website-data'
+
+import { buildQuery } from './buildQuery'
 import VictoryTheme from '../../VictoryTheme'
+
+
+const AGGREGATION_API = `${process.env.MEASUREMENTS_URL}/api/v1/aggregation?`
+
+const dataFetcher = url => (
+  fetch(AGGREGATION_API + url).then(r => r.json())
+)
 
 const colorScale = [
   theme.colors.green8,
@@ -15,7 +28,22 @@ const themeOverride = Object.assign({}, VictoryTheme, {})
 themeOverride.axis.style.axis.strokeWidth = 0
 themeOverride.axis.style.ticks.size = 0
 
-const WebsiteInCountry = ({ data }) => {
+const WebsiteInCountry = ({ probe_cc = 'IT' }) => {
+
+  const params = {
+    'since': '2020-05-26',
+    'until': '2020-06-26',
+    'axis_x': 'measurement_start_day',
+    'test_name': 'web_connectivity',
+    'input': 'thepiratebay.org',
+    'probe_cc': probe_cc
+  }
+
+  const query = buildQuery(params)
+
+  const { data, error } = useSWR(query, dataFetcher)
+  // const data = wdata, error = null
+
   return (
     <VictoryChart
       width={800}
@@ -28,7 +56,7 @@ const WebsiteInCountry = ({ data }) => {
           <VictoryBar
             key={key}
             name={key}
-            data={data}
+            data={data.result}
             x='measurement_start_day'
             y={d => {
               if (key === 'measurement_count') {
