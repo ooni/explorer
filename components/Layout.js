@@ -47,7 +47,7 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-const Layout = ({ children, disableFooter = false }) => (
+const Layout = ({ children, disableSentryPopup, disableFooter = false }) => (
   <Provider theme={theme}>
     <GlobalStyle />
     <div className="site">
@@ -57,7 +57,7 @@ const Layout = ({ children, disableFooter = false }) => (
       </div>
       {!disableFooter && <Footer />}
     </div>
-    <FeedbackButton />
+    {!disableSentryPopup && <FeedbackButton />}
   </Provider>
 )
 

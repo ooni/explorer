@@ -65,7 +65,7 @@ const StyledNavBar = styled.div`
   z-index: 999;
 `
 
-export const NavBar = ({color}) => (
+export const NavBar = ({color, isScreenshot}) => (
   <StyledNavBar color={color}>
     <Container>
       <Flex alignItems='center'>
@@ -74,10 +74,14 @@ export const NavBar = ({color}) => (
             <Link><ExplorerLogo height='26px' /></Link>
           </NLink>
         </Box>
-        <Box ml='auto'>
+        {!isScreenshot ?
+        (<Box ml='auto'>
           <NavItem label={<FormattedMessage id='Navbar.Search' />} href='/search' />
           <NavItem label={<FormattedMessage id='Navbar.Countries' />} href='/countries' />
-        </Box>
+        </Box>):
+        (<Box ml='auto' color='white'>
+          For more details and measurements visit www.explorer.ooni.org
+        </Box>)}
       </Flex>
     </Container>
   </StyledNavBar>

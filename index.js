@@ -5,6 +5,7 @@ const next = require('next')
 const axios = require('axios')
 const favicon = require('serve-favicon')
 const path = require('path')
+const nodeHtmlToImage = require('node-html-to-image')
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'production'
 process.env.PORT = process.env.PORT || 3100
@@ -57,6 +58,22 @@ app.prepare()
     server.get('/measurement/:report_id', (req, res) => {
       const combinedQuery = {...req.params, ...req.query}
       return app.render(req, res, '/measurement', combinedQuery)
+    })
+    
+    server.get('/screenshot/measurement/:report_id', async (req, res) => {
+      const combinedQuery = {screenshot: true, ...req.params, ...req.query}
+      const result = await app.renderToHTML(req, res, '/measurement', combinedQuery)
+      const image = await nodeHtmlToImage({
+        html: result,
+        puppeteerArgs: {
+          defaultViewport: { // maintain a recommended ratio of 1.91:1
+            width: 1024,
+            height: 536
+          }
+        }
+      })
+      res.writeHead(200, { 'Content-Type': 'image/png' })
+      res.end(image, 'binary')
     })
 
     // Default catch all

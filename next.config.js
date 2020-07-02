@@ -33,5 +33,8 @@ module.exports = withSourceMaps(withCSS({
     }
 
     return config
+  },
+  experimental: {
+    css: false
   }
 }))

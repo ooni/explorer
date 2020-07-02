@@ -57,6 +57,7 @@ export default class Measurement extends React.Component {
 
       initialProps['country'] = countryObj ? countryObj.name : 'Unknown'
     }
+    initialProps['screenshot'] = query.screenshot || false
     return initialProps
   }
 
@@ -72,8 +73,50 @@ export default class Measurement extends React.Component {
       measurementURL,
       isConfirmed,
       isAnomaly,
-      isFailure
+      isFailure,
+      screenshot
     } = this.props
+
+    if (screenshot) {
+      return (
+        <Layout disableFooter="true" disableSentryPopup="true">
+          <MeasurementContainer
+            isConfirmed={isConfirmed}
+            isAnomaly={isAnomaly}
+            isFailure={isFailure}
+            country={country}
+            measurement={measurement}
+            scores={scores}
+            render={({
+              status = 'default',
+                statusIcon,
+                statusLabel,
+                statusInfo,
+                legacy = false,
+                summaryText,
+                details }) => (
+                  <React.Fragment>
+                    <div style={{display: 'flex', height: '100vh', backgroundColor: pageColors[status], flexDirection: 'column', justifyContent: 'space-between'}} >
+                    <NavBar isScreenshot={true} color={pageColors[status]} />
+                    <Hero
+                      color={pageColors[status]}
+                      status={status}
+                      icon={statusIcon}
+                      label={statusLabel}
+                      info={statusInfo}
+                      isScreenshot={true}
+                    />
+                    <CommonSummary
+                      color={pageColors[status]}
+                      measurement={measurement}
+                      country={country} />
+                    </div>
+
+                  </React.Fragment>
+                )} />
+        </Layout>
+      )
+    }
 
     return (
       <Layout>
@@ -89,49 +132,56 @@ export default class Measurement extends React.Component {
           scores={scores}
           render={({
             status = 'default',
-            statusIcon,
-            statusLabel,
-            statusInfo,
-            legacy = false,
-            summaryText,
-            details }) => (
+              statusIcon,
+              statusLabel,
+              statusInfo,
+              legacy = false,
+              summaryText,
+              details }) => (
 
-            <React.Fragment>
-              <NavBar color={pageColors[status]} />
-              <Hero
-                color={pageColors[status]}
-                status={status}
-                icon={statusIcon}
-                label={statusLabel}
-                info={statusInfo}
-              />
-              <CommonSummary
-                color={pageColors[status]}
-                measurement={measurement}
-                country={country} />
+                <React.Fragment>
+                  <Head>
+                    <meta
+                    key='og:image'
+                    property='og:image'
+                    content={`http:\/\/localhost:3100/screenshot/measurement/${measurement.report_id}`}
+                    />
+                  </Head>
+                  <NavBar color={pageColors[status]} />
+                  <Hero
+                    color={pageColors[status]}
+                    status={status}
+                    icon={statusIcon}
+                    label={statusLabel}
+                    info={statusInfo}
+                  />
+                  <CommonSummary
+                    color={pageColors[status]}
+                    measurement={measurement}
+                    country={country} />
 
-              <Container>
-                <DetailsHeader
-                  testName={measurement.test_name}
-                  runtime={measurement.test_runtime}
-                  notice={legacy}
-                />
+                  <Container>
+                    <DetailsHeader
+                      testName={measurement.test_name}
+                      runtime={measurement.test_runtime}
+                      notice={legacy}
+                    />
 
-                {summaryText && <SummaryText
-                  testName={measurement.test_name}
-                  testUrl={measurement.input}
-                  network={measurement.probe_asn}
-                  country={country}
-                  date={measurement.test_start_time}
-                  content={summaryText}
-                />}
-                {details}
-                <CommonDetails
-                  measurementURL={measurementURL}
-                  measurement={measurement} />
-              </Container>
-            </React.Fragment>
-          )} />
+                    {summaryText && <SummaryText
+                      testName={measurement.test_name}
+                      testUrl={measurement.input}
+                      network={measurement.probe_asn}
+                      country={country}
+                      date={measurement.test_start_time}
+                      content={summaryText}
+                    />}
+                    {details}
+                    <CommonDetails
+                      measurementURL={measurementURL}
+                      measurement={measurement} />
+                  </Container>
+                </React.Fragment>
+              )} />
       </Layout>
     )
   }

@@ -42,6 +42,11 @@ const IntlHead = ({
           }
         )}
       />
+      {/* <meta */}
+      {/*   key="og:image" */}
+      {/*   property="og:image" */}
+      {/*   content="http://localhost:3100/api/imgGen?color=green" */}
+      {/* /> */}
     </Head>
   )
 }

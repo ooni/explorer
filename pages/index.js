@@ -169,7 +169,7 @@ export default class LandingPage extends React.Component {
           </StyledContainer>
         </HeroUnit>
         <Container>
-          <StatsContainer px={[0, 32]} py={16} mx={[0, '25%']} mt={[0, -120]} mb={48} flexWrap='wrap'>
+          <StatsContainer id="Hello" px={[0, 32]} py={16} mx={[0, '25%']} mt={[0, -120]} mb={48} flexWrap='wrap'>
             <StatsItem
               label={<FormattedMessage id='Home.Banner.Stats.Measurements' />}
               unit={measurementCount.unit}
