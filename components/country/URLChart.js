@@ -173,7 +173,7 @@ class URLChart extends React.Component {
           <Flex alignItems='center' flexWrap='wrap'>
             <Box width={[1, 1/4]} p={3}>
               <TruncatedURL url={metadata.input} />
-              <Link
+              <Link color='blue7'
                 href={`/search?test_name=web_connectivity&probe_cc=${countryCode}&probe_asn=${network}&domain=${domainToExplore}&since=${since30days}&until=${until}`}
               >
                 <FormattedMessage id='Country.Websites.URLCharts.ExploreMoreMeasurements' />
