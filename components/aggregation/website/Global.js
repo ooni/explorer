@@ -15,7 +15,7 @@ const Global = ({ data }) => {
 
   return (
     <Flex flexWrap='wrap'>
-      {data.map((item, key) => (
+      {data && data.map((item, key) => (
         countryActive === item.probe_cc ? (
           <Box key={key} p={2} width={1}>
             <WebsiteInCountry probe_cc={item.probe_cc} />

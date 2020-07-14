@@ -7,11 +7,12 @@ import useSWR from 'swr'
 
 import Layout from '../../components/Layout'
 import NavBar from '../../components/NavBar'
-// import wdata from '../../components/aggregation/website/website-data'
-// import gdata from '../../components/aggregation/website/global-data'
+
+// import gdata from '../../components/aggregation/website/global-data'  // static data for offline mode
 import Global from '../../components/aggregation/website/Global'
 import Form from '../../components/aggregation/website/form'
 import { buildQuery } from '../../components/aggregation/website/buildQuery'
+import { Debug } from '../../components/aggregation/website/Debug'
 
 const AGGREGATION_API = `${process.env.MEASUREMENTS_URL}/api/v1/aggregation?`
 
@@ -52,19 +53,19 @@ const WebsiteAnalytics = () => {
       <Container>
         <Flex flexDirection='column'>
           <Form onSubmit={updateParams} />
-          <Box my={2}>
-            {query}
+          <Box my={2} width={1}>
+            <Debug
+              params={params}
+              query={query}
+            />
           </Box>
           {error && <div> {JSON.stringify(error)} </div>}
           {!data && <Box> Loading ... </Box>}
-          {data && <React.Fragment>
+          {data && data.result && (
             <Box>
               <Global data={data.result} />
             </Box>
-            {/* <Box>
-              {JSON.stringify(data)}
-            </Box> */}
-          </React.Fragment>}
+          )}
         </Flex>
       </Container>
     </Layout>

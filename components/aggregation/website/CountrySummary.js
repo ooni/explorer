@@ -84,7 +84,7 @@ const CountrySummary = ({ data, onOpenDetail }) => {
           </Clickable>
         </Box>
       </Flex>
-      <Flex justifyContent='space-between' p={2}>
+      <Flex justifyContent='space-between' p={2} alignItems='center'>
         <Box width={4/5} style={{
           'wordWrap': 'break-word'
         }}>

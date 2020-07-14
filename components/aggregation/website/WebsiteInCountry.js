@@ -1,11 +1,12 @@
 /* global process */
 
 import React from 'react'
+import { Flex, Box } from 'ooni-components'
 import { VictoryChart, VictoryStack, VictoryBar, VictoryAxis, VictoryLabel } from 'victory'
 import { theme } from 'ooni-components'
 import useSWR from 'swr'
 
-// import wdata from './website-data'
+// import wdata from './website-data'  // static data for offline mode
 
 import { buildQuery } from './buildQuery'
 import VictoryTheme from '../../VictoryTheme'
@@ -45,37 +46,40 @@ const WebsiteInCountry = ({ probe_cc = 'IT' }) => {
   // const data = wdata, error = null
 
   return (
-    <VictoryChart
-      width={800}
-      height={200}
-      domainPadding={{ x: 30, y: 20 }}
-      theme={themeOverride}
-    >
-      <VictoryStack colorScale={colorScale}>
-        {[ 'measurement_count', 'failure_count', 'anomaly_count', 'confirmed_count'].map(key =>
-          <VictoryBar
-            key={key}
-            name={key}
-            data={data.result}
-            x='measurement_start_day'
-            y={d => {
-              if (key === 'measurement_count') {
-                return d.measurement_count - (d.anomaly_count + d.failure_count + d.confirmed_count)
-              } else {
-                return d[key]
-              }
-            }}
-          />
-        )}
-      </VictoryStack>
-      <VictoryAxis
-        scale={{ x: 'time' }}
-        fixLabelOverlap
-        tickLabelComponent={
-          <VictoryLabel angle={270} dy={0} textAnchor='end' verticalAnchor='middle' />
-        }
-      />
-    </VictoryChart>
+    <Flex>
+      {data &&
+      <VictoryChart
+        width={800}
+        height={200}
+        domainPadding={{ x: 30, y: 20 }}
+        theme={themeOverride}
+      >
+        <VictoryStack colorScale={colorScale}>
+          {[ 'measurement_count', 'failure_count', 'anomaly_count', 'confirmed_count'].map(key =>
+            <VictoryBar
+              key={key}
+              name={key}
+              data={data.result}
+              x='measurement_start_day'
+              y={d => {
+                if (key === 'measurement_count') {
+                  return d.measurement_count - (d.anomaly_count + d.failure_count + d.confirmed_count)
+                } else {
+                  return d[key]
+                }
+              }}
+            />
+          )}
+        </VictoryStack>
+        <VictoryAxis
+          scale={{ x: 'time' }}
+          fixLabelOverlap
+          tickLabelComponent={
+            <VictoryLabel angle={270} dy={0} textAnchor='end' verticalAnchor='middle' />
+          }
+        />
+      </VictoryChart>}
+    </Flex>
   )
 }
 
