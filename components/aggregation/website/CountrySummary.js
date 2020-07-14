@@ -12,6 +12,7 @@ import {
   colorError,
   colorEmpty
 } from '../../colors'
+import BoxChart from './BoxChart'
 
 const ICON_SIZE = 30
 
@@ -88,9 +89,12 @@ const CountrySummary = ({ data, onOpenDetail }) => {
         <Box width={4/5} style={{
           'wordWrap': 'break-word'
         }}>
-          <p>
-            {JSON.stringify(data)}
-          </p>
+          <BoxChart
+            anomaly_count={anomaly_count}
+            confirmed_count={confirmed_count}
+            failure_count={failure_count}
+            measurement_count={measurement_count}
+          />
         </Box>
         <Box>
           <Text fontSize={20} fontWeight='bold'>{outcome.percent}%</Text>
