@@ -7685,6 +7685,11 @@ react-onclickoutside@^6.5.0:
   resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-6.7.1.tgz#6a5b5b8b4eae6b776259712c89c8a2b36b17be93"
   integrity sha512-p84kBqGaMoa7VYT0vZ/aOYRfJB+gw34yjpda1Z5KeLflg70HipZOT+MXQenEhdkPAABuE2Astq4zEPdMqUQxcg==
 
+react-portal-tooltip@^2.4.7:
+  version "2.4.7"
+  resolved "https://registry.yarnpkg.com/react-portal-tooltip/-/react-portal-tooltip-2.4.7.tgz#77fd4a75760afecd116736c480485aa22cbbb740"
+  integrity sha512-ZOuCKpvu8rr6aS6nNjckd78qEgWyHZnKidZ9Yqrd0HR5K9NYJ7csb4duc0kEXeG8DiCWsLPU70o1EVP+MxlINg==
+
 react-sticky@^6.0.3:
   version "6.0.3"
   resolved "https://registry.yarnpkg.com/react-sticky/-/react-sticky-6.0.3.tgz#7a18b643e1863da113d7f7036118d2a75d9ecde4"

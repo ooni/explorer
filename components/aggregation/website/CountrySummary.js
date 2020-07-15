@@ -65,7 +65,7 @@ const CountrySummary = ({ data, onOpenDetail }) => {
 
   return (
     <BorderedBox>
-      <Flex bg={outcome.color} color='white' px={2}>
+      <Flex bg={outcome.color} color='white' p={2}>
         <Box my='auto'>
           {outcome.icon}
         </Box>
@@ -85,7 +85,7 @@ const CountrySummary = ({ data, onOpenDetail }) => {
           </Clickable>
         </Box>
       </Flex>
-      <Flex justifyContent='space-between' p={2} alignItems='center'>
+      <Flex justifyContent='space-between' p={2} alignItems='center' px={3}>
         <Box width={4/5} style={{
           'wordWrap': 'break-word'
         }}>
@@ -97,7 +97,7 @@ const CountrySummary = ({ data, onOpenDetail }) => {
           />
         </Box>
         <Box>
-          <Text fontSize={20} fontWeight='bold'>{outcome.percent}%</Text>
+          <Text fontSize={3} fontWeight='bold'>{outcome.percent}%</Text>
         </Box>
       </Flex>
     </BorderedBox>

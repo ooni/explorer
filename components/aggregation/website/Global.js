@@ -21,7 +21,7 @@ const Global = ({ data }) => {
             <WebsiteInCountry probe_cc={item.probe_cc} />
           </Box>
         ) : (
-          <Box key={key} p={2} width={[1, 1/2, 1/3, 1/4]}>
+          <Box key={key} p={2} width={[1, 1/2]}>
             <CountrySummary data={item} onOpenDetail={onOpenDetail} />
           </Box>
         )
