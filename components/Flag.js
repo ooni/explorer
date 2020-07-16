@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import dynamic from 'next/dynamic'
 
 var supportedCountryCodes = [
   'ad', 'ae', 'af', 'ag', 'ai', 'al', 'am', 'ao', 'aq', 'ar', 'as', 'at', 'au',
@@ -37,7 +38,12 @@ const FlagContainer = styled.div`
   width: ${props => props.size + 6}px;
   height: ${props => props.size + 6}px;
   border: ${props => props.border ? '3px solid white' : 'none'};
+  overflow: hidden;
 `
+const flagList = {
+  'ru': dynamic(() => import(`./flags/ru`)),
+  'us': dynamic(() => import(`./flags/us`))
+}
 
 export const Flag = ({countryCode, size, border}) => {
   countryCode = countryCode.toLowerCase()
@@ -45,10 +51,12 @@ export const Flag = ({countryCode, size, border}) => {
     // Map unsupported country codes to ZZ
     countryCode = 'zz'
   }
+
+  const Flag = flagList[countryCode]
   const src = `/static/flags/1x1/${countryCode}.svg`
   return (
     <FlagContainer className='country-flag' size={size} border={border}>
-      <FlagImg src={src} size={size} />
+      <Flag size={size} />
     </FlagContainer>
   )
 }

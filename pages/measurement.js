@@ -11,6 +11,8 @@ import DetailsHeader from '../components/measurement/DetailsHeader'
 import SummaryText from '../components/measurement/SummaryText'
 import CommonDetails from '../components/measurement/CommonDetails'
 import MeasurementContainer from '../components/measurement/MeasurementContainer'
+import { useScreenshot, ScreenshotProvider } from '../components/ScreenshotContext'
+import ScreenshotWrapper from '../components/ScreenshotWrapper'
 
 import Layout from '../components/Layout'
 import NavBar from '../components/NavBar'
@@ -24,129 +26,81 @@ const pageColors = {
   confirmed: theme.colors.red7
 }
 
-export default class Measurement extends React.Component {
-
-  static async getInitialProps ({ query }) {
-    let initialProps = {}
-    let client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
-    let params = {
-      report_id: query.report_id
-    }
-    if (query.input) {
-      params['input'] = query.input
-    }
-    let msmtResult = await client.get('/api/v1/measurements', {
-      params
-    })
-    if (msmtResult.data.results.length > 0) {
-      const results = msmtResult.data.results
-      const measurementURL = results[0].measurement_url
-      if (results.length > 1) {
-        initialProps['warning'] = 'dupes'
-      }
-      let msmtContent = await client.get(measurementURL)
-      initialProps['measurement'] = msmtContent.data
-      initialProps['measurementURL'] = measurementURL
-      initialProps['isAnomaly'] = results[0].anomaly
-      initialProps['isFailure'] = results[0].failure
-      initialProps['isConfirmed'] = results[0].confirmed
-      initialProps['scores'] = results[0].scores || null
-      const countryObj = countryUtil.countryList.find(country => (
-        country.iso3166_alpha2 === msmtContent.data.probe_cc
-      ))
-
-      initialProps['country'] = countryObj ? countryObj.name : 'Unknown'
-    }
-    initialProps['screenshot'] = query.screenshot || false
-    return initialProps
+Measurement.getInitialProps = async ({query}) => {
+  let initialProps = {}
+  let client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
+  let params = {
+    report_id: query.report_id
   }
-
-  constructor(props) {
-    super(props)
+  if (query.input) {
+    params['input'] = query.input
   }
-
-  render () {
-    let {
-      measurement,
-      scores,
-      country,
-      measurementURL,
-      isConfirmed,
-      isAnomaly,
-      isFailure,
-      screenshot
-    } = this.props
-
-    if (screenshot) {
-      return (
-        <Layout disableFooter="true" disableSentryPopup="true">
-          <MeasurementContainer
-            isConfirmed={isConfirmed}
-            isAnomaly={isAnomaly}
-            isFailure={isFailure}
-            country={country}
-            measurement={measurement}
-            scores={scores}
-            render={({
-              status = 'default',
-                statusIcon,
-                statusLabel,
-                statusInfo,
-                legacy = false,
-                summaryText,
-                details }) => (
-                  <React.Fragment>
-                    <div style={{display: 'flex', height: '100vh', backgroundColor: pageColors[status], flexDirection: 'column', justifyContent: 'space-between'}} >
-                    <NavBar isScreenshot={true} color={pageColors[status]} />
-                    <Hero
-                      color={pageColors[status]}
-                      status={status}
-                      icon={statusIcon}
-                      label={statusLabel}
-                      info={statusInfo}
-                      isScreenshot={true}
-                    />
-                    <CommonSummary
-                      color={pageColors[status]}
-                      measurement={measurement}
-                      country={country} />
-                    </div>
-
-                  </React.Fragment>
-                )} />
-        </Layout>
-      )
+  let msmtResult = await client.get('/api/v1/measurements', {
+    params
+  })
+  if (msmtResult.data.results.length > 0) {
+    const results = msmtResult.data.results
+    const measurementURL = results[0].measurement_url
+    if (results.length > 1) {
+      initialProps['warning'] = 'dupes'
     }
+    let msmtContent = await client.get(measurementURL)
+    initialProps['measurement'] = msmtContent.data
+    initialProps['measurementURL'] = measurementURL
+    initialProps['isAnomaly'] = results[0].anomaly
+    initialProps['isFailure'] = results[0].failure
+    initialProps['isConfirmed'] = results[0].confirmed
+    initialProps['scores'] = results[0].scores || null
+    const countryObj = countryUtil.countryList.find(country => (
+      country.iso3166_alpha2 === msmtContent.data.probe_cc
+    ))
 
-    return (
-      <Layout>
-        <Head>
-          <title>OONI Explorer</title>
-        </Head>
-        <MeasurementContainer
-          isConfirmed={isConfirmed}
-          isAnomaly={isAnomaly}
-          isFailure={isFailure}
-          country={country}
-          measurement={measurement}
-          scores={scores}
-          render={({
-            status = 'default',
-              statusIcon,
-              statusLabel,
-              statusInfo,
-              legacy = false,
-              summaryText,
-              details }) => (
+    initialProps['country'] = countryObj ? countryObj.name : 'Unknown'
+  }
+  initialProps['screenshot'] = query.screenshot || false
+  return initialProps
+}
 
-                <React.Fragment>
-                  <Head>
-                    <meta
-                    key='og:image'
-                    property='og:image'
-                    content={`http:\/\/localhost:3100/screenshot/measurement/${measurement.report_id}`}
-                    />
-                  </Head>
+export default function Measurement({
+  measurement,
+  scores,
+  country,
+  measurementURL,
+  isConfirmed,
+  isAnomaly,
+  isFailure,
+  screenshot
+}){
+  const [isScreenshot, setIsScreenshot] = useScreenshot(screenshot)
+
+  console.log(isScreenshot)
+  return (
+    <Layout disableFooter={isScreenshot} disableSentryPopup={isScreenshot}>
+      <Head>
+        <title>OONI Explorer</title>
+        <meta
+          key='og:image'
+          property='og:image'
+          content={`/screenshot/measurement/${measurement.report_id}`}
+        />
+      </Head>
+      <MeasurementContainer
+        isConfirmed={isConfirmed}
+        isAnomaly={isAnomaly}
+        isFailure={isFailure}
+        country={country}
+        measurement={measurement}
+        scores={scores}
+        render={({
+          status = 'default',
+            statusIcon,
+            statusLabel,
+            statusInfo,
+            legacy = false,
+            summaryText,
+            details }) => (
+              <React.Fragment>
+                <ScreenshotWrapper color={pageColors[status]}>
                   <NavBar color={pageColors[status]} />
                   <Hero
                     color={pageColors[status]}
@@ -159,32 +113,32 @@ export default class Measurement extends React.Component {
                     color={pageColors[status]}
                     measurement={measurement}
                     country={country} />
+                </ScreenshotWrapper>
 
-                  <Container>
-                    <DetailsHeader
-                      testName={measurement.test_name}
-                      runtime={measurement.test_runtime}
-                      notice={legacy}
-                    />
+                {!isScreenshot && <Container>
+                  <DetailsHeader
+                    testName={measurement.test_name}
+                    runtime={measurement.test_runtime}
+                    notice={legacy}
+                  />
 
-                    {summaryText && <SummaryText
-                      testName={measurement.test_name}
-                      testUrl={measurement.input}
-                      network={measurement.probe_asn}
-                      country={country}
-                      date={measurement.test_start_time}
-                      content={summaryText}
-                    />}
-                    {details}
-                    <CommonDetails
-                      measurementURL={measurementURL}
-                      measurement={measurement} />
-                  </Container>
-                </React.Fragment>
-              )} />
-      </Layout>
-    )
-  }
+                  {summaryText && <SummaryText
+                    testName={measurement.test_name}
+                    testUrl={measurement.input}
+                    network={measurement.probe_asn}
+                    country={country}
+                    date={measurement.test_start_time}
+                    content={summaryText}
+                  />}
+                  {details}
+                  <CommonDetails
+                    measurementURL={measurementURL}
+                    measurement={measurement} />
+                </Container>}
+              </React.Fragment>
+            )} />
+    </Layout>
+  )
 }
 
 Measurement.propTypes = {

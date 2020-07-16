@@ -4,6 +4,7 @@ import { withRouter } from 'next/router'
 import NLink from 'next/link'
 import styled from 'styled-components'
 import { FormattedMessage } from 'react-intl'
+import { useScreenshot } from '../components/ScreenshotContext'
 
 import ExplorerLogo from 'ooni-components/components/svgs/logos/Explorer-HorizontalMonochromeInverted.svg'
 
@@ -65,26 +66,30 @@ const StyledNavBar = styled.div`
   z-index: 999;
 `
 
-export const NavBar = ({color, isScreenshot}) => (
-  <StyledNavBar color={color}>
-    <Container>
-      <Flex alignItems='center'>
-        <Box style={{zIndex: 1}}>
-          <NLink href='/' passHref>
-            <Link><ExplorerLogo height='26px' /></Link>
-          </NLink>
-        </Box>
-        {!isScreenshot ?
-        (<Box ml='auto'>
-          <NavItem label={<FormattedMessage id='Navbar.Search' />} href='/search' />
-          <NavItem label={<FormattedMessage id='Navbar.Countries' />} href='/countries' />
-        </Box>):
-        (<Box ml='auto' color='white'>
-          For more details and measurements visit www.explorer.ooni.org
-        </Box>)}
-      </Flex>
-    </Container>
-  </StyledNavBar>
-)
+export const NavBar = ({color}) => {
+  const [isScreenshot, setIsScreenshot] = useScreenshot()
+
+  return (
+    <StyledNavBar color={color}>
+      <Container>
+        <Flex alignItems='center'>
+          <Box style={{zIndex: 1}}>
+            <NLink href='/' passHref>
+              <Link><ExplorerLogo height='26px' /></Link>
+            </NLink>
+          </Box>
+          {!isScreenshot ?
+              (<Box ml='auto'>
+                <NavItem label={<FormattedMessage id='Navbar.Search' />} href='/search' />
+                <NavItem label={<FormattedMessage id='Navbar.Countries' />} href='/countries' />
+              </Box>):
+              (<Box ml='auto' color='white'>
+                For more details and measurements visit www.explorer.ooni.org
+              </Box>)}
+        </Flex>
+      </Container>
+    </StyledNavBar>
+  )
+}
 
 export default NavBar

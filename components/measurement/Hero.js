@@ -13,7 +13,7 @@ const HeroContainer = styled(Box)`
   color: white;
 `
 
-const Hero = ({ status, color, icon, label, info, isScreenshot }) => {
+const Hero = ({ status, color, icon, label, info }) => {
   let computedLabel = ''
   if (status) {
     switch (status) {
@@ -47,7 +47,7 @@ const Hero = ({ status, color, icon, label, info, isScreenshot }) => {
   }
 
   return (
-    <HeroContainer py={4} color={color} isScreenshot={isScreenshot}>
+    <HeroContainer py={4} color={color}>
       <Container>
         <Text fontWeight={600} fontSize={4} as='div'>
           <Flex my={2} justifyContent='center' alignItems='center'>
