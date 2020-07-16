@@ -7,10 +7,10 @@ import { theme } from 'ooni-components'
 import useSWR from 'swr'
 
 // import wdata from './website-data'  // static data for offline mode
-
-import { buildQuery } from './buildQuery'
+import { Debug } from './Debug'
+import { paramsToQuery } from './queryUtils'
 import VictoryTheme from '../../VictoryTheme'
-
+import { AppsChartLoader } from '../../country/WebsiteChartLoader'
 
 const AGGREGATION_API = `${process.env.MEASUREMENTS_URL}/api/v1/aggregation?`
 
@@ -29,24 +29,16 @@ const themeOverride = Object.assign({}, VictoryTheme, {})
 themeOverride.axis.style.axis.strokeWidth = 0
 themeOverride.axis.style.ticks.size = 0
 
-const WebsiteInCountry = ({ probe_cc = 'IT' }) => {
+const WebsiteInCountry = ({ params }) => {
 
-  const params = {
-    'since': '2020-05-26',
-    'until': '2020-06-26',
-    'axis_x': 'measurement_start_day',
-    'test_name': 'web_connectivity',
-    'input': 'thepiratebay.org',
-    'probe_cc': probe_cc
-  }
-
-  const query = buildQuery(params)
+  const query = paramsToQuery(params)
 
   const { data, error } = useSWR(query, dataFetcher)
   // const data = wdata, error = null
 
   return (
-    <Flex>
+    <Flex flexDirection='column'>
+      {!data && !error && <AppsChartLoader height={200} width={800} xOffset={70} barWidth={13} barHeight={90} />}
       {data &&
       <VictoryChart
         width={800}
@@ -79,6 +71,13 @@ const WebsiteInCountry = ({ probe_cc = 'IT' }) => {
           }
         />
       </VictoryChart>}
+      <Debug params={params}>
+        <pre>
+          {error && <p>{error}</p>}
+          {!data && !error && <p> Loading data... </p>}
+          {data && JSON.stringify(data, null, 2)}
+        </pre>
+      </Debug>
     </Flex>
   )
 }

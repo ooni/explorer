@@ -1,18 +1,19 @@
 import React, { useMemo } from 'react'
-import { Flex, Box, Heading, Text, theme } from 'ooni-components'
-import { VictoryChart, VictoryBar } from 'victory'
+import { Flex, Box, Heading, Text, Link } from 'ooni-components'
 import styled from 'styled-components'
 import { IoCloseCircled } from 'react-icons/lib/io'
 import { FaBarChart, FaExclamationCircle } from 'react-icons/lib/fa'
-import { MdCheckCircle, MdClose } from 'react-icons/lib/md'
+import { MdCheckCircle } from 'react-icons/lib/md'
+import NLink from 'next/link'
+import { useRouter } from 'next/router'
+
 import {
   colorNormal,
   colorAnomaly,
   colorConfirmed,
-  colorError,
-  colorEmpty
 } from '../../colors'
 import BoxChart from './BoxChart'
+import { paramsToQuery } from '../../../components/aggregation/website/queryUtils'
 
 const ICON_SIZE = 30
 
@@ -20,14 +21,7 @@ const BorderedBox = styled(Box)`
   border: 1px solid ${props => props.theme.colors.gray4};
 `
 
-const Clickable = styled.div`
-  cursor: pointer;
-  &:hover {
-    transform: translateY(1px);
-  }
-`
-
-const CountrySummary = ({ data, onOpenDetail }) => {
+const CountrySummary = ({ data }) => {
   const {
     anomaly_count,
     confirmed_count,
@@ -63,6 +57,10 @@ const CountrySummary = ({ data, onOpenDetail }) => {
     }
   }
 
+  const router = useRouter()
+  const paramsForCountryLink = Object.assign({}, router.query, { probe_cc: probe_cc})
+  const query = paramsToQuery(paramsForCountryLink)
+
   return (
     <BorderedBox>
       <Flex bg={outcome.color} color='white' p={2}>
@@ -80,9 +78,11 @@ const CountrySummary = ({ data, onOpenDetail }) => {
           </Flex>
         </Box>
         <Box my='auto' ml='auto'>
-          <Clickable>
-            <FaBarChart size={36} onClick={() => onOpenDetail(probe_cc)} />
-          </Clickable>
+          <NLink href={`/experimental/website/${probe_cc}?${query}`} passHref>
+            <Link color='white'>
+              <FaBarChart size={36} />
+            </Link>
+          </NLink>
         </Box>
       </Flex>
       <Flex justifyContent='space-between' p={2} alignItems='center' px={3}>

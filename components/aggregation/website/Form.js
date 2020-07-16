@@ -6,8 +6,10 @@ import moment from  'moment'
 import DatePicker from '../../DatePicker'
 
 
-const Form = ({ onSubmit }) => {
-  const { handleSubmit, register, control, errors } = useForm()
+const Form = ({ onSubmit, initialValues }) => {
+  const { handleSubmit, register, control, errors } = useForm({
+    defaultValues: initialValues
+  })
 
   const beforeSubmit = (values) => {
     const ret = Object.assign({}, values)
@@ -25,10 +27,16 @@ const Form = ({ onSubmit }) => {
     <form onSubmit={handleSubmit(beforeSubmit)}>
       <Flex justifyContent='space-around' mt={3}>
         <Box width={1/2} px={2}>
-          <input
+          <Controller
+            as={
+              <Input
+                name='input'
+                placeholder='e.g ooni.org'
+                ref={register({ required: true })}
+              />
+            }
             name='input'
-            placeholder='thepiratebay.org'
-            ref={register}
+            control={control}
           />
         </Box>
         <Box width={1/2} px={2}>
