@@ -2,7 +2,7 @@
 
 import React from 'react'
 import { Flex, Box } from 'ooni-components'
-import { VictoryChart, VictoryStack, VictoryBar, VictoryAxis, VictoryLabel } from 'victory'
+import { VictoryChart, VictoryStack, VictoryBar, VictoryAxis, VictoryLabel, VictoryTooltip, VictoryVoronoiContainer } from 'victory'
 import { theme } from 'ooni-components'
 import useSWR from 'swr'
 
@@ -33,44 +33,57 @@ const WebsiteInCountry = ({ params }) => {
 
   const query = paramsToQuery(params)
 
-  const { data, error } = useSWR(query, dataFetcher)
-  // const data = wdata, error = null
+  // const { data, error } = useSWR(query, dataFetcher)
+  const data = wdata, error = null
 
   return (
     <Flex flexDirection='column'>
       {!data && !error && <AppsChartLoader height={200} width={800} xOffset={70} barWidth={13} barHeight={90} />}
       {data &&
-      <VictoryChart
-        width={800}
-        height={200}
-        domainPadding={{ x: 30, y: 20 }}
-        theme={themeOverride}
-      >
-        <VictoryStack colorScale={colorScale}>
-          {[ 'measurement_count', 'failure_count', 'anomaly_count', 'confirmed_count'].map(key =>
-            <VictoryBar
-              key={key}
-              name={key}
-              data={data.result}
-              x='measurement_start_day'
-              y={d => {
-                if (key === 'measurement_count') {
-                  return d.measurement_count - (d.anomaly_count + d.failure_count + d.confirmed_count)
-                } else {
-                  return d[key]
-                }
-              }}
+        <VictoryChart
+          width={800}
+          height={200}
+          domainPadding={{ x: 30, y: 20 }}
+          theme={themeOverride}
+          containerComponent={
+            <VictoryVoronoiContainer
+              voronoiDimension='x'
             />
-          )}
-        </VictoryStack>
-        <VictoryAxis
-          scale={{ x: 'time' }}
-          fixLabelOverlap
-          tickLabelComponent={
-            <VictoryLabel angle={270} dy={0} textAnchor='end' verticalAnchor='middle' />
           }
-        />
-      </VictoryChart>}
+        >
+          <VictoryStack colorScale={colorScale}
+            labels={(d) => '' + d.measurement_start_day + '\n \n'
+              + 'ok count - ' + d.measurement_count + '\n'
+              + 'anomaly count - ' + d.anomaly_count + '\n'
+              + 'confirmed count - ' + d.confirmed_count + '\n'
+              + 'failure count - ' + d.failure_count
+            }
+            labelComponent={<VictoryTooltip />}
+          >
+            {[ 'measurement_count', 'failure_count', 'anomaly_count', 'confirmed_count'].map(key =>
+              <VictoryBar
+                key={key}
+                name={key}
+                data={data.result}
+                x='measurement_start_day'
+                y={d => {
+                  if (key === 'measurement_count') {
+                    return d.measurement_count - (d.anomaly_count + d.failure_count + d.confirmed_count)
+                  } else {
+                    return d[key]
+                  }
+                }}
+              />
+            )}
+          </VictoryStack>
+          <VictoryAxis
+            scale={{ x: 'time' }}
+            fixLabelOverlap
+            tickLabelComponent={
+              <VictoryLabel angle={270} dy={0} textAnchor='end' verticalAnchor='middle' />
+            }
+          />
+        </VictoryChart>}
       <Debug params={params}>
         <pre>
           {error && <p>{error}</p>}
