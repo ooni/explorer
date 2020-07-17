@@ -43,16 +43,11 @@ const WebsiteAnalytics = () => {
     const oldParams = queryToParams(query)
     const newParams = Object.assign({}, oldParams, values)
     setQuery(paramsToQuery(newParams))
-    console.log('oldParams')
-    console.log(oldParams)
-    console.log('newParams')
-    console.log(values)
   }
 
   useEffect(() => {
     const url = `${router.pathname}?${query}`
     router.push( url, url, { shallow: true })
-    console.log(`Updated router: ${url}`)
   }, [query])
 
   return (
