@@ -33,8 +33,8 @@ const WebsiteInCountry = ({ params }) => {
 
   const query = paramsToQuery(params)
 
-  // const { data, error } = useSWR(query, dataFetcher)
-  const data = wdata, error = null
+  const { data, error } = useSWR(query, dataFetcher)
+  // const data = wdata, error = null
 
   return (
     <Flex flexDirection='column'>
