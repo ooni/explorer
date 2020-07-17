@@ -13,12 +13,12 @@ const ErrorMessage = styled(Text)`
   padding-top: 4px;
 `
 const Form = ({ onSubmit, initialValues }) => {
-  const { handleSubmit, control, errors, getValues, formState } = useForm({
+  const { handleSubmit, control, errors, watch, formState } = useForm({
     defaultValues: initialValues,
     mode: 'onBlur'
   })
 
-  const { since, until } = getValues(['since', 'until'])
+  const { since, until } = watch(['since', 'until'])
   const { dirty, isValid, isSubmitting } = formState
 
   const beforeSubmit = (values) => {
