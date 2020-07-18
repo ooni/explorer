@@ -2,7 +2,7 @@ import React from 'react'
 
 import SvgFlagES from 'flag-icon-css/flags/1x1/es.svg'
 
-export const FlagES = () => (
-  <SvgFlagES viewBox='0 0 512 512' />
+export const FlagES = ({size = 512}) => (
+  <SvgFlagES viewBox='0 0 512 512' height={size} width={size}/>
 )
 export default FlagES

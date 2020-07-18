@@ -34,7 +34,6 @@
     "ooni-components": "^0.3.0",
     "pretty-ms": "^3.2.0",
     "prop-types": "15.7.2",
-    "puppeteer": "^3.1.0",
     "react": "^16.12.0",
     "react-content-loader": "^4.2.2",
     "react-datetime": "2.16.3",
@@ -73,6 +72,7 @@
     "eslint": "^4.19.1",
     "eslint-plugin-react": "^7.7.0",
     "mustache": "^2.3.0",
+    "puppeteer": "^5.0.0",
     "start-server-and-test": "^1.10.8"
   },
   "scripts": {

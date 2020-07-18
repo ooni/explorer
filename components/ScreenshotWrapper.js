@@ -1,14 +1,16 @@
 import React from 'react'
-import { useScreenshot } from './ScreenshotContext'
+import { ScreenshotContext } from './ScreenshotContext'
 
-export default function ScreenshotWrapper ({ color, children }) { 
-  const [isScreenshot, setIsScreenshot] = useScreenshot()
+export default function ScreenshotWrapper ({ color, screenshot, children }) { 
+  const [isScreenshot, setIsScreenshot] = React.useContext(ScreenshotContext)
+  setIsScreenshot(screenshot)
+
   return (
-    isScreenshot ? (
+    screenshot ? (
       <div style={{
         display: 'flex',
         height: '100vh', 
-        backgroundColor: color, 
+        backgroundColor: color,
         flexDirection: 'column', 
         justifyContent: 'space-between'
       }} >

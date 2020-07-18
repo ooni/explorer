@@ -65,7 +65,13 @@ app.prepare()
       const combinedQuery = {screenshot: true, ...req.params, ...req.query}
       const result = await app.renderToHTML(req, res, '/measurement', combinedQuery)
       
-      const browser = await puppeteer.launch({ headless: false })
+      const browser = await puppeteer.launch({
+        headless: false,
+        defaultViewport: {
+          width: 1024,
+          height: 536
+        }
+      })
       const page = await browser.newPage()
       await page.setContent(result)
       const element = await page.$('body')

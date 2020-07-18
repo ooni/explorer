@@ -11,7 +11,7 @@ import DetailsHeader from '../components/measurement/DetailsHeader'
 import SummaryText from '../components/measurement/SummaryText'
 import CommonDetails from '../components/measurement/CommonDetails'
 import MeasurementContainer from '../components/measurement/MeasurementContainer'
-import { useScreenshot, ScreenshotProvider } from '../components/ScreenshotContext'
+import { ScreenshotProvider } from '../components/ScreenshotContext'
 import ScreenshotWrapper from '../components/ScreenshotWrapper'
 
 import Layout from '../components/Layout'
@@ -57,7 +57,7 @@ Measurement.getInitialProps = async ({query}) => {
 
     initialProps['country'] = countryObj ? countryObj.name : 'Unknown'
   }
-  initialProps['screenshot'] = query.screenshot || false
+  initialProps['screenshot'] = query.screenshot ? true : false
   return initialProps
 }
 
@@ -71,73 +71,74 @@ export default function Measurement({
   isFailure,
   screenshot
 }){
-  const [isScreenshot, setIsScreenshot] = useScreenshot(screenshot)
-
-  console.log(isScreenshot)
   return (
-    <Layout disableFooter={isScreenshot} disableSentryPopup={isScreenshot}>
-      <Head>
-        <title>OONI Explorer</title>
-        <meta
-          key='og:image'
-          property='og:image'
-          content={`/screenshot/measurement/${measurement.report_id}`}
-        />
-      </Head>
-      <MeasurementContainer
-        isConfirmed={isConfirmed}
-        isAnomaly={isAnomaly}
-        isFailure={isFailure}
-        country={country}
-        measurement={measurement}
-        scores={scores}
-        render={({
-          status = 'default',
-            statusIcon,
-            statusLabel,
-            statusInfo,
-            legacy = false,
-            summaryText,
-            details }) => (
-              <React.Fragment>
-                <ScreenshotWrapper color={pageColors[status]}>
-                  <NavBar color={pageColors[status]} />
-                  <Hero
+    <ScreenshotProvider>
+      <Layout disableFooter={screenshot} disableSentryPopup={screenshot}>
+        <Head>
+          <title>OONI Explorer</title>
+          <meta
+            key='og:image'
+            property='og:image'
+            content={`/screenshot/measurement/${measurement.report_id}`}
+          />
+        </Head>
+        <MeasurementContainer
+          isConfirmed={isConfirmed}
+          isAnomaly={isAnomaly}
+          isFailure={isFailure}
+          country={country}
+          measurement={measurement}
+          scores={scores}
+          render={({
+            status = 'default',
+              statusIcon,
+              statusLabel,
+              statusInfo,
+              legacy = false,
+              summaryText,
+              details }) => (
+                <React.Fragment>
+                  <ScreenshotWrapper 
                     color={pageColors[status]}
-                    status={status}
-                    icon={statusIcon}
-                    label={statusLabel}
-                    info={statusInfo}
-                  />
-                  <CommonSummary
-                    color={pageColors[status]}
-                    measurement={measurement}
-                    country={country} />
-                </ScreenshotWrapper>
+                    screenshot={screenshot}
+                  > 
+                    <NavBar color={pageColors[status]} />
+                    <Hero
+                      color={pageColors[status]}
+                      status={status}
+                      icon={statusIcon}
+                      label={statusLabel}
+                      info={statusInfo}
+                    />
+                    <CommonSummary
+                      color={pageColors[status]}
+                      measurement={measurement}
+                      country={country} />
+                  </ScreenshotWrapper>
 
-                {!isScreenshot && <Container>
-                  <DetailsHeader
-                    testName={measurement.test_name}
-                    runtime={measurement.test_runtime}
-                    notice={legacy}
-                  />
-
-                  {summaryText && <SummaryText
-                    testName={measurement.test_name}
-                    testUrl={measurement.input}
-                    network={measurement.probe_asn}
-                    country={country}
-                    date={measurement.test_start_time}
-                    content={summaryText}
-                  />}
-                  {details}
-                  <CommonDetails
-                    measurementURL={measurementURL}
-                    measurement={measurement} />
-                </Container>}
-              </React.Fragment>
-            )} />
-    </Layout>
+                  {!screenshot && <Container>
+                    <DetailsHeader
+                      testName={measurement.test_name}
+                      runtime={measurement.test_runtime}
+                      notice={legacy}
+                    />
+                    {summaryText && <SummaryText
+                      testName={measurement.test_name}
+                      testUrl={measurement.input}
+                      network={measurement.probe_asn}
+                      country={country}
+                      date={measurement.test_start_time}
+                      content={summaryText}
+                    />}
+                    {details}
+                    <CommonDetails
+                      measurementURL={measurementURL}
+                      measurement={measurement} />
+                  </Container>}
+                </React.Fragment>
+              )} />
+      </Layout>
+    </ScreenshotProvider>
   )
 }
 

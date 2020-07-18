@@ -47,7 +47,11 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-const Layout = ({ children, disableSentryPopup, disableFooter = false }) => (
+const Layout = ({ 
+  children,
+  disableSentryPopup = false,
+  disableFooter = false 
+}) => (
   <Provider theme={theme}>
     <GlobalStyle />
     <div className="site">

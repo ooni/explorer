@@ -2,7 +2,7 @@ import React from 'react'
 
 import SvgFlagUG from 'flag-icon-css/flags/1x1/ug.svg'
 
-export const FlagUG = () => (
-  <SvgFlagUG viewBox='0 0 512 512' />
+export const FlagUG = ({size = 512}) => (
+  <SvgFlagUG viewBox='0 0 512 512' height={size} width={size}/>
 )
 export default FlagUG
