@@ -115,6 +115,7 @@ export default class Measurement extends React.Component {
                   testName={measurement.test_name}
                   runtime={measurement.test_runtime}
                   notice={legacy}
+                  url={`measurement/${measurement.report_id}`}
                 />
 
                 {summaryText && <SummaryText

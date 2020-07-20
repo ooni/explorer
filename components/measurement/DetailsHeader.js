@@ -10,6 +10,7 @@ import { MdOpenInNew } from 'react-icons/lib/md'
 
 import { getTestMetadata } from '../utils'
 import Badge from '../Badge'
+import SocialButtons from '../SocialButtons'
 
 const TestGroupBadge = ({icon, name, color}) => (
   <Badge bg={color} color='white'>
@@ -30,7 +31,7 @@ TestGroupBadge.propTypes = {
   color: PropTypes.string
 }
 
-const DetailsHeader = ({testName, runtime, notice}) => {
+const DetailsHeader = ({testName, runtime, notice, url}) => {
   const metadata = getTestMetadata(testName)
 
   return (
@@ -52,6 +53,7 @@ const DetailsHeader = ({testName, runtime, notice}) => {
             </Text>
           </Link>
         </Box>
+        <SocialButtons fontSize={24} color='blue7' url={url}/>
       </Flex>
       <Box mx='auto'>
         {notice}
@@ -68,7 +70,8 @@ const DetailsHeader = ({testName, runtime, notice}) => {
 DetailsHeader.propTypes = {
   testName: PropTypes.string.isRequired,
   runtime: PropTypes.number.isRequired,
-  notice: PropTypes.any
+  notice: PropTypes.any,
+  url: PropTypes.string
 }
 
 export default DetailsHeader

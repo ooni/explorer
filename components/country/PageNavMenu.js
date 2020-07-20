@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
+import PropTypes from 'prop-types'
 import { Flex, Box, NavLink } from 'ooni-components'
 import styled from 'styled-components'
 import { FormattedMessage } from 'react-intl'
 import { MdExpandLess } from 'react-icons/lib/md'
 import { Hide } from 'rebass'
+import SocialButtons from '../SocialButtons'
 
 const PageNavItem = ({ link, children }) => (
   <Box mx={3} my={1}>
@@ -19,7 +21,7 @@ const ToggleIcon = styled(MdExpandLess)`
   transition: transform 0.1s linear;
 `
 
-const PageNavMenu = () => {
+const PageNavMenu = ({ countryCode }) => {
   const [isOpen, setOpen] = useState(true)
 
   return (
@@ -42,10 +44,17 @@ const PageNavMenu = () => {
           <PageNavItem link='#network-properties'>
             <FormattedMessage id='Country.Heading.NetworkProperties' />
           </PageNavItem>
+          <PageNavItem link='#'>
+            <SocialButtons color='blue7' fontSize={20} url={`country/${countryCode}`}/>
+          </PageNavItem>
         </Flex>}
       </Box>
     </React.Fragment>
   )
+}
+
+PageNavMenu.propTypes = {
+  countryCode: PropTypes.string
 }
 
 export default PageNavMenu
