@@ -66,7 +66,7 @@ app.prepare()
       const result = await app.renderToHTML(req, res, '/measurement', combinedQuery)
       
       const browser = await puppeteer.launch({
-        headless: false,
+        headless: true,
         defaultViewport: {
           width: 1024,
           height: 536

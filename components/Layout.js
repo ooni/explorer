@@ -5,6 +5,7 @@ import {
   Provider,
   theme
 } from 'ooni-components'
+import { useScreenshot } from './ScreenshotContext'
 
 // Moved this from `_document.js` because `next-css` fails to extract
 // imported css from `_document.js`. `next-css` should be upgraded along with
@@ -47,23 +48,24 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-const Layout = ({ 
-  children,
-  disableSentryPopup = false,
-  disableFooter = false 
-}) => (
-  <Provider theme={theme}>
-    <GlobalStyle />
-    <div className="site">
-      <Header />
-      <div className="content">
-        { children }
+const Layout = ({ children, disableFooter = false }) => {
+  const { isScreenshot } = useScreenshot() 
+
+  return(
+    <Provider theme={theme}>
+      <GlobalStyle />
+      <div className="site">
+        <Header />
+        <div className="content">
+          { children }
+        </div>
+        {!isScreenshot && <Footer />}
       </div>
-      {!disableFooter && <Footer />}
-    </div>
-    {!disableSentryPopup && <FeedbackButton />}
-  </Provider>
-)
+      {!isScreenshot && <FeedbackButton />}
+    </Provider>
+  )
+}
+
 
 Layout.propTypes = {
   children: PropTypes.array.isRequired,

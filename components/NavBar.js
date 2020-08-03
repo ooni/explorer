@@ -4,7 +4,7 @@ import { withRouter } from 'next/router'
 import NLink from 'next/link'
 import styled from 'styled-components'
 import { FormattedMessage } from 'react-intl'
-import { ScreenshotContext } from '../components/ScreenshotContext'
+import { useScreenshot } from '../components/ScreenshotContext'
 
 import ExplorerLogo from 'ooni-components/components/svgs/logos/Explorer-HorizontalMonochromeInverted.svg'
 
@@ -67,8 +67,8 @@ const StyledNavBar = styled.div`
 `
 
 export const NavBar = ({color}) => {
-  const [isScreenshot, setIsScreenshot] = React.useContext(ScreenshotContext)
-  console.log(isScreenshot)
+  const { isScreenshot } = useScreenshot() 
+
   return (
     <StyledNavBar color={color}>
       <Container>

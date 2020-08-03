@@ -2,13 +2,18 @@ import React, { useContext } from 'react'
 
 const ScreenshotContext = React.createContext([false, () => {}])
 
-const ScreenshotProvider = props => {
-  const [isScreenshot, setIsScreenshot] = React.useState()
+const ScreenshotProvider = ({screenshot, children}) => {
+  const [isScreenshot, setIsScreenshot] = React.useState(screenshot)
   return (
     <ScreenshotContext.Provider value={[isScreenshot, setIsScreenshot]}>
-      {props.children}
+      {children}
     </ScreenshotContext.Provider>
   )
 }
 
-export { ScreenshotContext, ScreenshotProvider }
+const useScreenshot = () => {
+  const [isScreenshot, setIsScreenshot] = useContext(ScreenshotContext)
+  return { isScreenshot }
+}
+
+export { useScreenshot, ScreenshotProvider }

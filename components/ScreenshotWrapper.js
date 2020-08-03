@@ -1,21 +1,17 @@
 import React from 'react'
-import { ScreenshotContext } from './ScreenshotContext'
+import { useScreenshot } from './ScreenshotContext'
+import styled from 'styled-components'
 
-export default function ScreenshotWrapper ({ color, screenshot, children }) { 
-  const [isScreenshot, setIsScreenshot] = React.useContext(ScreenshotContext)
-  setIsScreenshot(screenshot)
+const Wrapper = styled.div`
+display: flex;
+height: 100vh;
+background-color: ${props => props.inputColor};
+flex-direction: column;
+justify-content: space-between;
+`
 
+export default function ScreenshotWrapper ({ color, children }) { 
   return (
-    screenshot ? (
-      <div style={{
-        display: 'flex',
-        height: '100vh', 
-        backgroundColor: color,
-        flexDirection: 'column', 
-        justifyContent: 'space-between'
-      }} >
-        {children}
-      </div>
-    ) : children
+    <Wrapper inputColor={color}>{children}</Wrapper>
   )
 }

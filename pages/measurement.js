@@ -72,8 +72,8 @@ export default function Measurement({
   screenshot
 }){
   return (
-    <ScreenshotProvider>
-      <Layout disableFooter={screenshot} disableSentryPopup={screenshot}>
+    <ScreenshotProvider screenshot={screenshot}>
+      <Layout>
         <Head>
           <title>OONI Explorer</title>
           <meta
@@ -98,23 +98,40 @@ export default function Measurement({
               summaryText,
               details }) => (
                 <React.Fragment>
-                  <ScreenshotWrapper 
-                    color={pageColors[status]}
-                    screenshot={screenshot}
-                  > 
-                    <NavBar color={pageColors[status]} />
-                    <Hero
-                      color={pageColors[status]}
-                      status={status}
-                      icon={statusIcon}
-                      label={statusLabel}
-                      info={statusInfo}
-                    />
-                    <CommonSummary
-                      color={pageColors[status]}
-                      measurement={measurement}
-                      country={country} />
-                  </ScreenshotWrapper>
+                  {screenshot ?
+                      (<React.Fragment>
+                        <ScreenshotWrapper
+                          color={pageColors[status]}
+                        >
+                          <NavBar color={pageColors[status]} />
+                          <Hero
+                            color={pageColors[status]}
+                            status={status}
+                            icon={statusIcon}
+                            label={statusLabel}
+                            info={statusInfo}
+                          />
+                          <CommonSummary
+                            color={pageColors[status]}
+                            measurement={measurement}
+                            country={country} />
+                        </ScreenshotWrapper>
+                      </React.Fragment>) :
+                      (<React.Fragment>
+                        <NavBar color={pageColors[status]} />
+                        <Hero
+                          color={pageColors[status]}
+                          status={status}
+                          icon={statusIcon}
+                          label={statusLabel}
+                          info={statusInfo}
+                        />
+                        <CommonSummary
+                          color={pageColors[status]}
+                          measurement={measurement}
+                          country={country} />
+                      </React.Fragment>)
+                  }
 
                   {!screenshot && <Container>
                     <DetailsHeader
