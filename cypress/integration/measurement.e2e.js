@@ -8,6 +8,30 @@ describe('Measurement Page Tests', () => {
   const ooniBlue = 'rgb(5, 136, 203)'
 
   describe('Web Connectivity tests', () => {
+    it('renders a valid accessible og:description', () => {
+      cy.visit('/measurement/20200807T220702Z_AS9009_VDIirQFXzvVZXGTDXrRKAd7oQB3CpnKGISOZLs7kQFV6RJNR7n')
+      cy.get('head meta[property="og:description"]')
+        .should('have.attr', 'content', 'On August 07, 2020, 10:42 PM UTC, https://www.theguardian.com/ was accessible in United States, explore more details and other measurements on OONI Explorer.')
+    })
+
+    it('renders a valid blocked og:description', () => {
+      cy.visit('/measurement/20200807T220532Z_AS4788_2LHmYburP47k1z4qy9KxfZiKkxBJKITPfATIsgLkY6FRWw165o')
+      cy.get('head meta[property="og:description"]')
+        .should('have.attr', 'content', 'On August 07, 2020, 10:15 PM UTC, https://icao.maps.arcgis.com/apps/opsdashboard/index.html#/977dde48256b489fb48fa98e724721e8 was accessible in Malaysia, explore more details and other measurements on OONI Explorer.')
+    })
+
+    it('renders a valid anomaly og:description', () => {
+      cy.visit('/measurement/20200807T223513Z_AS27364_QJdsvFRG6B98MqqWR3QTey9WheksI7757sefWWMwAe0OHU8hWT')
+      cy.get('head meta[property="og:description"]')
+        .should('have.attr', 'content', 'On August 07, 2020, 10:35 PM UTC, http://www.google.com/search?q=lesbian was accessible in United States, explore more details and other measurements on OONI Explorer.')
+    })
+
+    // it('renders a valid website down og:description', () => {
+    //   cy.visit('')
+    //   cy.get('head meta[property="og:description"]')
+    //     .should('have.attr', 'content', '')
+    // })
+
     it('an accessible measurement is green and says "OK"', () => {
       cy.visit('/measurement/20200302T211741Z_AS15751_NUQUoAz71ZjhsimkNDy53r62AlfjEWUtoQRag9tnRM0oxZtoWl?input=http%3A%2F%2Fprachatai.com')
       cy.heroHasColor(normalColor)
@@ -40,6 +64,18 @@ describe('Measurement Page Tests', () => {
   })
 
   describe('Telegram Tests', () => {
+    it('renders a reachable og:description', () => {
+      cy.visit('/measurement/20200807T220134Z_AS9009_SOmXTa7NLwrzRniaVS0yxlJ3TbKTDJJxrfaIJkpURTn3GBHiA2')
+      cy.get('head meta[property="og:description"]')
+        .should('have.attr', 'content', 'On August 7, 2020, Telegram was reachable in United States, explore more details and other measurements on OONI Explorer.')
+    })
+
+    it('renders a unreachable og:description', () => {
+      cy.visit('/measurement/20200304T183801Z_AS42610_uehNyFJgkAJBCaq5thzAovFEODIQ1u5vlTTk3D6GDvbaYeoJY8')
+      cy.get('head meta[property="og:description"]')
+        .should('have.attr', 'content', 'On March 4, 2020, Telegram was NOT reachable in Russia, explore more details and other measurements on OONI Explorer.')
+    })
+
     it('renders an accessible measurement', () => {
       cy.visit('/measurement/20200304T195916Z_AS266124_UpLURJOzEXr2S6YmH4aecNYWt40TkcFatX25Xu8dKOtTnkaiZt')
       cy.heroHasColor(normalColor)
@@ -54,6 +90,18 @@ describe('Measurement Page Tests', () => {
   })
 
   describe('WhatsApp Tests', () => {
+    it('renders a reachable og:description', () => {
+      cy.visit('/measurement/20200807T220116Z_AS9009_JaRyaMzjdCq5JA89mE1nl8VCZltDv4vAaNhUqi193SFCcwR8av')
+      cy.get('head meta[property="og:description"]')
+        .should('have.attr', 'content', 'On August 7, 2020, Whatsapp was reachable in United States, explore more details and other measurements on OONI Explorer.')
+    })
+
+    // it('renders a unreachable og:description', () => {
+    //   cy.visit('')
+    //   cy.get('head meta[property="og:description"]')
+    //     .should('have.attr', 'content', '')
+    // })
+
     it('renders an accessible measurement', () => {
       cy.visit('/measurement/20200304T203936Z_AS44869_bVdV4B2HXylbIS8nFmdYbXDsDa5gwmkJbF38uWEfus1MMpS5b6')
       cy.heroHasColor(normalColor)
@@ -86,6 +134,18 @@ describe('Measurement Page Tests', () => {
       cy.heroHasColor(anomalyColor)
         .contains('Anomaly')
     })
+
+    it('renders a reachable og:description', () => {
+      cy.visit('/measurement/20200807T220152Z_AS9009_K9rqQAfaNssMkVbX1uhfdORk0w49f1sk14vCMs0ZuzUrBgg0Te')
+      cy.get('head meta[property="og:description"]')
+        .should('have.attr', 'content', 'On August 7, 2020, Facebook Messenger was reachable in United States, explore more details and other measurements on OONI Explorer.')
+    })
+
+    it('renders a unreachable og:description', () => {
+      cy.visit('/measurement/20200304T191012Z_AS42610_fqDY31xiRoWEdKd4GWtV84UYpXG2RlpjBK7kd8rTLHIItqMnej')
+      cy.get('head meta[property="og:description"]')
+        .should('have.attr', 'content', 'On March 4, 2020, Facebook Messenger was NOT reachable in Russia, explore more details and other measurements on OONI Explorer.')
+    })
   })
 
   describe('HTTP Header Field Manipulation Tests', () => {
@@ -99,6 +159,11 @@ describe('Measurement Page Tests', () => {
       cy.heroHasColor(anomalyColor)
         .contains('Network tampering')
     })
+    it('renders a valid og:description', () => {
+      cy.visit('/measurement/20200807T222222Z_AS37168_CdrDnfRHdhGBU3n5sjhbTJtR3B3IlOejPlsq3WBf1si6bhRlo0')
+      cy.get('head meta[property="og:description"]')
+        .should('have.attr', 'content', 'On August 7, 2020, NO HTTP header manipulation was detected in South Africa, explore more details and other measurements on OONI Explorer.')
+    })
   })
 
   describe('HTTP Invalid Request Line Tests', () => {
@@ -111,6 +176,11 @@ describe('Measurement Page Tests', () => {
       cy.visit('/measurement/20170213T160709Z_AS8452_M5qSjOZgYwFrkQYVfdrYmYw2tLc3dzJB7mVbtjVoR1qCdbcEOA')
       cy.heroHasColor(anomalyColor)
         .contains('Network tampering')
+    })
+    it('renders a valid og:description', () => {
+      cy.visit('/measurement/20200807T222629Z_AS31334_YNx9EqZSwRVEzVLN3TowlkW0a8pw1PYzJSI8yxHKDhVa7a2han')
+      cy.get('head meta[property="og:description"]')
+        .should('have.attr', 'content', 'On August 7, 2020, NO network traffic manipulation was detected in Germany, explore more details and other measurements on OONI Explorer.')
     })
   })
 
@@ -126,6 +196,12 @@ describe('Measurement Page Tests', () => {
       cy.heroHasColor(ooniBlue)
         .contains('Failed')
     })
+
+    it('renders a valid og:description', () => {
+      cy.visit('/measurement/20200807T222629Z_AS31334_YNx9EqZSwRVEzVLN3TowlkW0a8pw1PYzJSI8yxHKDhVa7a2han')
+      cy.get('head meta[property="og:description"]')
+        .should('have.attr', 'content', 'On August 7, 2020, NO network traffic manipulation was detected in Germany, explore more details and other measurements on OONI Explorer.')
+    })
   })
 
   describe('DASH Tests', () => {
@@ -138,6 +214,11 @@ describe('Measurement Page Tests', () => {
       cy.visit('/measurement/20190930T212715Z_AS17380_2W4uXDAWAckWTGI5TRep5hw5j5gSS31wKlbO2RHlV0v4fudSXW')
       cy.heroHasColor(errorColor)
         .contains('Error')
+    })
+    it('renders a valid og:description', () => {
+      cy.visit('/measurement/20200807T222018Z_AS33363_FTKkox83LnAxEXkK8hJQuuqzBjZu2nyTl87aLXQ7MbCPvZIEgW')
+      cy.get('head meta[property="og:description"]')
+        .should('have.attr', 'content', 'See results of Dash Test on August 7, 2020 in United States and other measurements on OONI Explorer.')
     })
   })
 
@@ -152,6 +233,11 @@ describe('Measurement Page Tests', () => {
       cy.heroHasColor(anomalyColor)
         .contains('Psiphon is likely blocked')
     })
+    it('renders a reachable og:description', () => {
+      cy.visit('/measurement/20200807T220939Z_AS9009_kBQ0oHp4qmji2gRJdiirDac5lYoSXxMDg5qe72r0NP4rW2q7ee')
+      cy.get('head meta[property="og:description"]')
+        .should('have.attr', 'content', 'On August 7, 2020, Psiphon was reachable in United States, explore more details and other measurements on OONI Explorer.')
+    })
   })
 
   describe('Tor Tests', () => {
@@ -164,6 +250,11 @@ describe('Measurement Page Tests', () => {
       cy.visit('/measurement/20201203T024400Z_tor_CN_4134_n1_XtHDEW5iIBzbErYo')
       cy.heroHasColor(anomalyColor)
         .contains('Tor is likely blocked')
+    })
+    it('renders a valid og:description', () => {
+      cy.visit('/measurement/20200807T220959Z_AS9009_BKXGtNm91coGhmT6iRzvveeGGKvvebMpRONk1qv3DAMvxDPQwV')
+      cy.get('head meta[property="og:description"]')
+        .should('have.attr', 'content', 'See results of Tor Test on August 7, 2020 in United States and other measurements on OONI Explorer.')
     })
   })
 
