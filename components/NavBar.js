@@ -4,7 +4,7 @@ import { withRouter } from 'next/router'
 import NLink from 'next/link'
 import styled from 'styled-components'
 import { FormattedMessage } from 'react-intl'
-import { useScreenshot } from '../components/ScreenshotContext'
+import { useScreenshot } from './ScreenshotContext'
 
 import ExplorerLogo from 'ooni-components/components/svgs/logos/Explorer-HorizontalMonochromeInverted.svg'
 
