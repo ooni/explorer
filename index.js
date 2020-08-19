@@ -5,7 +5,6 @@ const next = require('next')
 const axios = require('axios')
 const favicon = require('serve-favicon')
 const path = require('path')
-const nodeHtmlToImage = require('node-html-to-image')
 const puppeteer = require('puppeteer')
 
 process.env.NODE_ENV = process.env.NODE_ENV || 'production'
@@ -76,7 +75,7 @@ app.prepare()
       await page.setContent(result)
       const element = await page.$('body')
       const buffer = await element.screenshot()
-      // await browser.close()
+      await browser.close()
 
       res.writeHead(200, { 'Content-Type': 'image/png' })
       res.end(buffer, 'binary')

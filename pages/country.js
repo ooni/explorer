@@ -148,7 +148,6 @@ export default class Country extends React.Component {
           <Container>
             <Flex flexWrap='wrap' mt={4}>
               <Box>
-                <img src="http://localhost:3100/api/imgGen?color=red" />
                 <CountryContextProvider countryCode={countryCode} countryName={countryName}>
                   <Overview
                     countryName={countryName}
