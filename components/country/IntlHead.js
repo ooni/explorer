@@ -42,11 +42,6 @@ const IntlHead = ({
           }
         )}
       />
-      <meta
-        key='og:image'
-        property='og:image'
-        content={`/screenshot/measurement/${measurement.report_id}`}
-      />
     </Head>
   )
 }

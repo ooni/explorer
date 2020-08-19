@@ -76,6 +76,11 @@ export default function Measurement({
       <Layout>
         <Head>
           <title>OONI Explorer</title>
+          <meta
+            key='og:image'
+            property='og:image'
+            content={`/screenshot/measurement/${measurement.report_id}`}
+          />
         </Head>
         <MeasurementContainer
           isConfirmed={isConfirmed}
