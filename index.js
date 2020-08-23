@@ -55,6 +55,27 @@ app.prepare()
       return app.render(req, res, '/country', req.params)
     })
 
+    server.get('/screenshot/country/:countryCode', async (req, res) => {
+      const combinedQuery = {screenshot: true, ...req.params, ...req.query}
+      const result = await app.renderToHTML(req, res, '/country', combinedQuery)
+
+      const browser = await puppeteer.launch({
+        headless: true,
+        defaultViewport: {
+          width: 1024,
+          height: 536
+        }
+      })
+      const page = await browser.newPage()
+      await page.setContent(result)
+      const element = await page.$('body')
+      const buffer = await element.screenshot()
+      await browser.close()
+
+      res.writeHead(200, { 'Content-Type': 'image/png' })
+      res.end(buffer, 'binary')
+    })
+
     server.get('/measurement/:report_id', (req, res) => {
       const combinedQuery = {...req.params, ...req.query}
       return app.render(req, res, '/measurement', combinedQuery)

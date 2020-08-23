@@ -71,15 +71,19 @@ export default function Measurement({
   isFailure,
   screenshot
 }){
+  const origin =
+    typeof window === 'undefined'
+    ? 'https://explorer.ooni.com'
+    : window.location.origin
+
   return (
     <ScreenshotProvider screenshot={screenshot}>
       <Layout>
         <Head>
           <title>OONI Explorer</title>
           <meta
-            key='og:image'
             property='og:image'
-            content={`/screenshot/measurement/${measurement.report_id}`}
+            content={`${origin}/screenshot/measurement/${measurement.report_id}`}
           />
         </Head>
         <MeasurementContainer
