@@ -1,9 +1,9 @@
 /* global process */
 
-import React, { useState, useEffect, useCallback } from 'react'
+import React, { useState, useEffect } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { Container, Flex, Box, Text } from 'ooni-components'
+import { Container, Flex, Box } from 'ooni-components'
 import useSWR from 'swr'
 import moment from 'moment'
 import axios from 'axios'
@@ -16,6 +16,7 @@ import Global from '../../../components/aggregation/website/Global'
 import Form from '../../../components/aggregation/website/Form'
 import { paramsToQuery, queryToParams } from '../../../components/aggregation/website/queryUtils'
 import { Debug } from '../../../components/aggregation/website/Debug'
+import { GlobalLoader } from '../../../components/aggregation/website/GlobalLoader'
 
 const AGGREGATION_API = `${process.env.MEASUREMENTS_URL}/api/v1/aggregation?`
 
@@ -67,11 +68,7 @@ const WebsiteAnalytics = () => {
               {data && JSON.stringify(data, null, 2)}
             </pre>
           </Debug>
-          {!data && !error &&
-            <Flex style={{ height: '300px' }} alignItems='center'>
-              <Text width={1} fontSize={[1, 3]} textAlign='center' color='gray5'> Fetching data ... </Text>
-            </Flex>
-          }
+          {!data && !error && <GlobalLoader />}
           {data && data.result && (
             <Box>
               <Global data={data.result} />
