@@ -1,8 +1,8 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Flex, Box, Container } from 'ooni-components'
+import { Flex, Box, Container, Link } from 'ooni-components'
 import ExplorerLogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochromeInverted.svg'
-import NLink from 'next/link'
 import { useIntl } from 'react-intl'
 import { version } from '../package.json'
 
@@ -23,16 +23,13 @@ const FooterHead = styled.div`
   margin-bottom: 10px;
 `
 
-const FooterLinkItem = styled(Box)`
-  display: ${props => (props.horizontal === 'true') ? 'inline' : 'block'};
-  margin-left: ${props => (props.horizontal === 'true') ? '1rem' : 0};
-`
-
-const StyledFooterLabel = styled.a`
+const StyledFooterItem = styled(Link)`
   text-decoration: none;
   color: #ffffff;
   cursor: pointer;
   opacity: 0.5;
+  display: ${props => (props.horizontal === 'true') ? 'inline' : 'block'};
+  margin-left: ${props => (props.horizontal === 'true') ? '1rem' : 0};
   &:hover {
     opacity: 1;
   }
@@ -41,12 +38,16 @@ const StyledFooterLabel = styled.a`
 const FooterLink = ({ label, href, horizontal = false}) => (
   // Use non-boolean value for props sent to non-DOM styled components
   // https://www.styled-components.com/docs/faqs#why-am-i-getting-html-attribute-warnings
-  <FooterLinkItem mb={2} horizontal={horizontal.toString()}>
-    <NLink href={href} passHref>
-      <StyledFooterLabel>{label}</StyledFooterLabel>
-    </NLink>
-  </FooterLinkItem>
+  <StyledFooterItem mb={2} horizontal={horizontal.toString()} href={href}>
+    {label}
+  </StyledFooterItem>
 )
+
+FooterLink.propTypes = {
+  label: PropTypes.node,
+  href: PropTypes.string.isRequired,
+  horizontal: PropTypes.bool
+}
 
 const FooterText = styled.div`
   margin-top: 0px;
@@ -100,9 +101,6 @@ const Footer = () => {
       </Container>
     </StyledFooter>
   )
-}
-
-Footer.propTypes = {
 }
 
 export default Footer
