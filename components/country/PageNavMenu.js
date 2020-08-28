@@ -30,8 +30,8 @@ const PageNavMenu = ({ countryCode }) => {
       <Hide large xlarge>
         <ToggleIcon size={36} isOpen={isOpen} onClick={() => setOpen(!isOpen)} />
       </Hide>
-      <Box width={[1, 'unset']}>
-        {isOpen && <Flex flexDirection={['column', 'row']} justifyContent='center' py={3}>
+      <Box width={[1, 'unset']} py={2}>
+        {isOpen && <Flex flexDirection={['column', 'row']} justifyContent='center' py={1}>
           <PageNavItem link='#overview'>
             <FormattedMessage id='Country.Heading.Overview'/>
           </PageNavItem>
@@ -44,10 +44,10 @@ const PageNavMenu = ({ countryCode }) => {
           <PageNavItem link='#network-properties'>
             <FormattedMessage id='Country.Heading.NetworkProperties' />
           </PageNavItem>
-          <PageNavItem link='#'>
-            <SocialButtons color='blue7' fontSize={20} url={`country/${countryCode}`}/>
-          </PageNavItem>
         </Flex>}
+        <Flex justifyContent={['flex-start', 'flex-end']} px={[0, 3]} py={1}>
+          <SocialButtons url={`country/${countryCode}`}/>
+        </Flex>
       </Box>
     </React.Fragment>
   )

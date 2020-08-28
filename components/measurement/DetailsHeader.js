@@ -35,35 +35,39 @@ const DetailsHeader = ({testName, runtime, notice, url}) => {
   const metadata = getTestMetadata(testName)
 
   return (
-    <Flex py={4} alignItems={['flex-end', 'center']} flexDirection={['column', 'row']}>
-      <Flex mb={[3, 0]} alignItems='center'>
+    <React.Fragment>
+      <Flex pt={4} pb={2} alignItems={['flex-end', 'center']} flexDirection={['column', 'row']}>
+        <Flex mb={[3, 0]} alignItems='center'>
+          <Box>
+            <TestGroupBadge
+              icon={metadata.icon}
+              name={<Text fontSize={20} is='span'>{metadata.groupName}</Text>}
+              color={metadata.color}
+            />
+          </Box>
+          <Box ml={2}>
+            <Link color='blue7' href={metadata.info}>
+              <Text fontSize={20}>
+                {metadata.name}
+                &nbsp;
+                <small><MdOpenInNew /></small>
+              </Text>
+            </Link>
+          </Box>
+        </Flex>
+        <Box mx='auto'>
+          {notice}
+        </Box>
         <Box>
-          <TestGroupBadge
-            icon={metadata.icon}
-            name={<Text fontSize={20} is='span'>{metadata.groupName}</Text>}
-            color={metadata.color}
-          />
+          <Text fontSize={20}>
+            <FormattedMessage id='Measurement.DetailsHeader.Runtime' />: <Text is='span' fontWeight='bold'>{prettyMs(runtime * 1000)}</Text>
+          </Text>
         </Box>
-        <Box ml={2}>
-          <Link color='blue7' href={metadata.info}>
-            <Text fontSize={20}>
-              {metadata.name}
-              &nbsp;
-              <small><MdOpenInNew /></small>
-            </Text>
-          </Link>
-        </Box>
-        <SocialButtons fontSize={24} color='blue7' url={url}/>
       </Flex>
-      <Box mx='auto'>
-        {notice}
-      </Box>
-      <Box>
-        <Text fontSize={20}>
-          <FormattedMessage id='Measurement.DetailsHeader.Runtime' />: <Text is='span' fontWeight='bold'>{prettyMs(runtime * 1000)}</Text>
-        </Text>
-      </Box>
-    </Flex>
+      <Flex pb={4} pt={2} alignItems={['flex-start', 'flex-end']}>
+        <SocialButtons url={url}/>
+      </Flex>
+    </React.Fragment>
   )
 }
 
