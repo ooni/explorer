@@ -5,7 +5,6 @@ import { useIntl } from 'react-intl'
 const IntlHead = ({
   countryName,
   measurementCount,
-  measuredSince,
   networkCount
 }) => {
   const intl = useIntl()
@@ -15,32 +14,22 @@ const IntlHead = ({
       <meta
         key="og:title"
         property="og:title"
-        content={intl.formatMessage(
-          {
-            id: 'Country.Overview.MetaTitle',
-            defaultMessage: 'Internet Censorship in {countryName} - OONI Explorer'
-          },
-          {
-            countryName
-          }
-        )}
+        content={intl.formatMessage({
+          id: 'Country.Overview.MetaTitle',
+        },{
+          countryName
+        })}
       />
       <meta
         key="og:description"
         property="og:description"
-        content={intl.formatMessage(
-          {
-            id: 'Country.Overview.MetaDescription',
-            defaultMessage:
-            'Since {startDate}, OONI Probe users in {countryName} have collected {measurementCount} measurements from {networkCount} local networks. Explore the data on OONI Explorer'
-          },
-          {
-            measurementCount: intl.formatNumber(measurementCount),
-            countryName,
-            startDate: intl.formatDate(measuredSince),
-            networkCount: intl.formatNumber(networkCount)
-          }
-        )}
+        content={intl.formatMessage({
+          id: 'Country.Overview.MetaDescription',
+        },{
+          measurementCount: intl.formatNumber(measurementCount),
+          countryName,
+          networkCount: intl.formatNumber(networkCount)
+        })}
       />
     </Head>
   )
