@@ -282,7 +282,7 @@
   "Country.Overview.TestsByClass.Circumvention": "Circumvention Tools",
   "Country.Overview.FeaturedResearch": "Research Reports",
   "Country.Overview.FeaturedResearch.None": "We haven't published a research report based on OONI data from this country yet. \n\nWe encourage you to use OONI data for your research!",
-  "Country.Overview.SummaryTextTemplate": "Since **{startDate}**, OONI Probe users in **{countryName}** have collected **{measurementCount}** measurements from **{networkCovered}** local networks.\n\nExplore the data below to check the accessibility and/or blocking of sites and services.",
+  "Country.Overview.SummaryTextTemplate": "OONI Probe users in **{countryName}** have collected **{measurementCount}** measurements from **{networkCovered}** local networks.\n\nExplore the data below to check the accessibility and/or blocking of sites and services.",
   "Country.Overview.NoData.Title": "Let's collect more data!",
   "Country.Overview.NoData.CallToAction": "We don\u2019t have enough measurements for **{country}** to show a chart. If you are in {country} or know people there, tell them to run OONI Probe to collect more measurements.",
   "Country.Overview.NoData.Button.InstallProbe": "Install OONI Probe",
