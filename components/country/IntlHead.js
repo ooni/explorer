@@ -15,7 +15,7 @@ const IntlHead = ({
         key="og:title"
         property="og:title"
         content={intl.formatMessage({
-          id: 'Country.Overview.MetaTitle',
+          id: 'Country.Meta.Title',
         },{
           countryName
         })}
@@ -24,7 +24,7 @@ const IntlHead = ({
         key="og:description"
         property="og:description"
         content={intl.formatMessage({
-          id: 'Country.Overview.MetaDescription',
+          id: 'Country.Meta.Description',
         },{
           measurementCount: intl.formatNumber(measurementCount),
           countryName,
