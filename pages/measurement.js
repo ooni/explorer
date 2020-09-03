@@ -24,117 +24,112 @@ const pageColors = {
   confirmed: theme.colors.red7
 }
 
-export default class Measurement extends React.Component {
-
-  static async getInitialProps ({ query }) {
-    let initialProps = {}
-    let client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
-    let params = {
-      report_id: query.report_id
-    }
-    if (query.input) {
-      params['input'] = query.input
-    }
-    let msmtResult = await client.get('/api/v1/measurements', {
-      params
-    })
-    if (msmtResult.data.results.length > 0) {
-      const results = msmtResult.data.results
-      const measurementURL = results[0].measurement_url
-      if (results.length > 1) {
-        initialProps['warning'] = 'dupes'
-      }
-      let msmtContent = await client.get(measurementURL)
-      initialProps['measurement'] = msmtContent.data
-      initialProps['measurementURL'] = measurementURL
-      initialProps['isAnomaly'] = results[0].anomaly
-      initialProps['isFailure'] = results[0].failure
-      initialProps['isConfirmed'] = results[0].confirmed
-      initialProps['scores'] = results[0].scores || null
-      const countryObj = countryUtil.countryList.find(country => (
-        country.iso3166_alpha2 === msmtContent.data.probe_cc
-      ))
-
-      initialProps['country'] = countryObj ? countryObj.name : 'Unknown'
-    }
-    return initialProps
+export async function getServerSideProps({ query }) {
+  let initialProps = {}
+  let client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
+  let params = {
+    report_id: query.report_id
   }
-
-  constructor(props) {
-    super(props)
+  if (query.input) {
+    params['input'] = query.input
   }
+  let msmtResult = await client.get('/api/v1/measurements', {
+    params
+  })
+  if (msmtResult.data.results.length > 0) {
+    const results = msmtResult.data.results
+    const measurementURL = results[0].measurement_url
+    if (results.length > 1) {
+      initialProps['warning'] = 'dupes'
+    }
+    let msmtContent = await client.get(measurementURL)
+    initialProps['measurement'] = msmtContent.data
+    initialProps['measurementURL'] = measurementURL
+    initialProps['isAnomaly'] = results[0].anomaly
+    initialProps['isFailure'] = results[0].failure
+    initialProps['isConfirmed'] = results[0].confirmed
+    initialProps['scores'] = results[0].scores || null
+    const countryObj = countryUtil.countryList.find(country => (
+      country.iso3166_alpha2 === msmtContent.data.probe_cc
+    ))
 
-  render () {
-    let {
-      measurement,
-      scores,
-      country,
-      measurementURL,
-      isConfirmed,
-      isAnomaly,
-      isFailure
-    } = this.props
+    initialProps['country'] = countryObj ? countryObj.name : 'Unknown'
+  }
+  return {
+    props: initialProps
+  }
+}
 
-    return (
-      <Layout>
-        <Head>
-          <title>OONI Explorer</title>
-        </Head>
-        <MeasurementContainer
-          isConfirmed={isConfirmed}
-          isAnomaly={isAnomaly}
-          isFailure={isFailure}
-          country={country}
-          measurement={measurement}
-          scores={scores}
-          render={({
-            status = 'default',
-            statusIcon,
-            statusLabel,
-            statusInfo,
-            legacy = false,
-            summaryText,
-            details }) => (
 
-            <React.Fragment>
-              <NavBar color={pageColors[status]} />
-              <Hero
-                color={pageColors[status]}
-                status={status}
-                icon={statusIcon}
-                label={statusLabel}
-                info={statusInfo}
+const Measurement = ({
+  measurement,
+  scores,
+  country,
+  measurementURL,
+  isConfirmed,
+  isAnomaly,
+  isFailure
+}) => {
+
+  return (
+    <Layout>
+      <Head>
+        <title>OONI Explorer</title>
+      </Head>
+      <MeasurementContainer
+        isConfirmed={isConfirmed}
+        isAnomaly={isAnomaly}
+        isFailure={isFailure}
+        country={country}
+        measurement={measurement}
+        scores={scores}
+        render={({
+          status = 'default',
+          statusIcon,
+          statusLabel,
+          statusInfo,
+          legacy = false,
+          summaryText,
+          details }) => (
+
+          <React.Fragment>
+            <NavBar color={pageColors[status]} />
+            <Hero
+              color={pageColors[status]}
+              status={status}
+              icon={statusIcon}
+              label={statusLabel}
+              info={statusInfo}
+            />
+            <CommonSummary
+              color={pageColors[status]}
+              measurement={measurement}
+              country={country} />
+
+            <Container>
+              <DetailsHeader
+                testName={measurement.test_name}
+                runtime={measurement.test_runtime}
+                notice={legacy}
               />
-              <CommonSummary
-                color={pageColors[status]}
-                measurement={measurement}
-                country={country} />
 
-              <Container>
-                <DetailsHeader
-                  testName={measurement.test_name}
-                  runtime={measurement.test_runtime}
-                  notice={legacy}
-                />
-
-                {summaryText && <SummaryText
-                  testName={measurement.test_name}
-                  testUrl={measurement.input}
-                  network={measurement.probe_asn}
-                  country={country}
-                  date={measurement.test_start_time}
-                  content={summaryText}
-                />}
-                {details}
-                <CommonDetails
-                  measurementURL={measurementURL}
-                  measurement={measurement} />
-              </Container>
-            </React.Fragment>
-          )} />
-      </Layout>
-    )
-  }
+              {summaryText && <SummaryText
+                testName={measurement.test_name}
+                testUrl={measurement.input}
+                network={measurement.probe_asn}
+                country={country}
+                date={measurement.test_start_time}
+                content={summaryText}
+              />}
+              {details}
+              <CommonDetails
+                measurementURL={measurementURL}
+                measurement={measurement} />
+            </Container>
+          </React.Fragment>
+        )} />
+    </Layout>
+  )
 }
 
 Measurement.propTypes = {
@@ -145,3 +140,5 @@ Measurement.propTypes = {
   isConfirmed: PropTypes.bool,
   country: PropTypes.string
 }
+
+export default Measurement
