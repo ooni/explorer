@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import countryUtil from 'country-util'
 import axios from 'axios'
 import { Container, theme } from 'ooni-components'
@@ -15,7 +16,6 @@ import MeasurementNotFound from '../components/measurement/MeasurementNotFound'
 
 import Layout from '../components/Layout'
 import NavBar from '../components/NavBar'
-import mockApiResponse from '../static/mock-measurement.json'
 
 const pageColors = {
   default: theme.colors.base,
@@ -31,21 +31,16 @@ export async function getServerSideProps({ query }) {
 
   let client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
   let params = {
-    report_id: query.report_id
+    report_id: query.report_id,
+    full: true
   }
   if (query.input) {
     params['input'] = query.input
   }
-  let msmtResult = {}
-  // let msmtResult = await client.get('/api/v1/measurement_meta', {
-  //   params
-  // }).catch(e => { })
 
-  msmtResult = { data: {}}
-
-  // XXX: Delete this
-  msmtResult.data = mockApiResponse
-
+  let msmtResult = await client.get('/api/v1/measurement_meta', {
+    params
+  })
 
   if (msmtResult?.data) {
     initialProps = Object.assign({}, msmtResult.data)
@@ -53,6 +48,7 @@ export async function getServerSideProps({ query }) {
     if (typeof initialProps['scores'] === 'string') {
       try {
         initialProps['scores'] = JSON.parse(initialProps['scores'])
+        initialProps['raw_measurement'] = JSON.parse(initialProps['raw_measurement'])
       } catch (e) {
         console.error(`Failed to parse JSON in scores: ${e.toString()}`)
       }
@@ -85,9 +81,13 @@ const Measurement = ({
   probe_asn,
   notFound = false,
   input,
-  measurement,
+  raw_measurement,
   ...rest
 }) => {
+  const { query } = useRouter()
+  const queryString = new URLSearchParams(query);
+  const rawMsmtDownloadURL = `${process.env.MEASUREMENTS_URL}/api/v1/raw_measurement?${queryString}`
+
   return (
     <Layout>
       <Head>
@@ -101,7 +101,9 @@ const Measurement = ({
           isAnomaly={anomaly}
           isFailure={failure}
           testName={test_name}
-          measurement={measurement}
+          country={country}
+          measurement={raw_measurement}
+          input={input}
           {...rest}
 
           render={({
@@ -133,7 +135,7 @@ const Measurement = ({
               <Container>
                 <DetailsHeader
                   testName={test_name}
-                  runtime={measurement?.test_runtime}
+                  runtime={raw_measurement?.test_runtime}
                   notice={legacy}
                 />
                 {summaryText &&
@@ -148,8 +150,8 @@ const Measurement = ({
                 }
                 {details}
                 <CommonDetails
-                  measurementURL={''}
-                  measurement={measurement}
+                  measurementURL={rawMsmtDownloadURL}
+                  measurement={raw_measurement}
                 />
               </Container>
             </React.Fragment>
