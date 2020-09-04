@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 import countryUtil from 'country-util'
@@ -15,6 +15,7 @@ import MeasurementNotFound from '../components/measurement/MeasurementNotFound'
 
 import Layout from '../components/Layout'
 import NavBar from '../components/NavBar'
+import mockApiResponse from '../static/mock-measurement.json'
 
 const pageColors = {
   default: theme.colors.base,
@@ -42,38 +43,12 @@ export async function getServerSideProps({ query }) {
 
   msmtResult = { data: {}}
 
-  msmtResult.data = {
-    anomaly: false,
-    confirmed: false,
-    failure: false,
-    input: 'inp',
-    measurement_start_time: '2020-02-09T23:57:26Z',
-    probe_asn: 22773,
-    probe_cc: 'US',
-    report_id: 'rid',
-    scores: '{"blocking_general":0.0,"blocking_global":0.0,"blocking_country":0.0,"blocking_isp":0.0,"blocking_local":0.0}',
-    test_name: 'web_connectivity',
-    test_start_time: '2020-02-09T23:56:06Z',
-    category_code: 'CULTR',
-  }
+  // XXX: Delete this
+  msmtResult.data = mockApiResponse
 
 
   if (msmtResult?.data) {
     initialProps = Object.assign({}, msmtResult.data)
-    const {
-      // anomaly,
-      // confirmed,
-      // failure,
-      // input,
-      // measurement_start_time,
-      // probe_asn,
-      probe_cc,
-      // report_id,
-      // scores,
-      // test_name,
-      // test_start_time,
-      // category_code
-    } = msmtResult.data
 
     if (typeof initialProps['scores'] === 'string') {
       try {
@@ -83,6 +58,7 @@ export async function getServerSideProps({ query }) {
       }
     }
 
+    const { probe_cc } = msmtResult.data
     const countryObj = countryUtil.countryList.find(country => (
       country.iso3166_alpha2 === probe_cc
     ))
@@ -98,21 +74,6 @@ export async function getServerSideProps({ query }) {
   }
 }
 
-const mock = {
-  test_runtime: 10,
-  test_keys: {
-    accessible: true,
-    blocking: 'http-diff',
-    queries: [],
-    tcp_connect: [],
-    requests: [],
-    client_resolver: null,
-    http_experiment_failure: false,
-    dns_experiment_failure: false,
-    control_failure: false
-  }
-}
-
 const Measurement = ({
   country,
   confirmed,
@@ -124,17 +85,9 @@ const Measurement = ({
   probe_asn,
   notFound = false,
   input,
+  measurement,
   ...rest
 }) => {
-  const [measurement, setMeasurement] = useState(null)
-
-  // Fetch full measurement here `&full=1`
-  useEffect(() => {
-    setTimeout(() => {
-      setMeasurement(mock)
-    }, 1000)
-  }, [])
-
   return (
     <Layout>
       <Head>
@@ -194,10 +147,10 @@ const Measurement = ({
                   />
                 }
                 {details}
-                {/* <CommonDetails
+                <CommonDetails
                   measurementURL={''}
                   measurement={measurement}
-                /> */}
+                />
               </Container>
             </React.Fragment>
           )} />
