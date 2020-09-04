@@ -57,9 +57,9 @@ const DetailsHeader = ({testName, runtime, notice}) => {
         {notice}
       </Box>
       <Box>
-        <Text fontSize={20}>
+        {runtime && <Text fontSize={20}>
           <FormattedMessage id='Measurement.DetailsHeader.Runtime' />: <Text is='span' fontWeight='bold'>{prettyMs(runtime * 1000)}</Text>
-        </Text>
+        </Text>}
       </Box>
     </Flex>
   )
