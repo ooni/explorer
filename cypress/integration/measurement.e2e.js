@@ -43,15 +43,15 @@ describe('Measurement Page Tests', () => {
       cy.visit('/measurement/20200304T203936Z_AS44869_bVdV4B2HXylbIS8nFmdYbXDsDa5gwmkJbF38uWEfus1MMpS5b6')
     })
 
-    // it('renders an anomaly measurement', () => {
-    //   cy.visit('')
-    // })
+    it('renders an anomaly measurement', () => {
+      cy.visit('/measurement/20200407T024309Z_AS4713_xA9Wh81DQrIFqRe46zwKeyJw4DJQwjyTLBIi2zSQqWUBsfQMJS')
+    })
   })
 
   describe('Facebook Messenger Tests', () => {
-    // it('renders an accessible measurement', () => {
-    //   cy.visit('')
-    // })
+    it('renders an accessible measurement', () => {
+      cy.visit('/measurement/20200407T235214Z_AS3269_EIlT6478yDwpzYNO8f54Xl12aN4AbkK82OuCUZSYHh3cTKNoYF')
+    })
 
     it('renders an anomaly measurement', () => {
       cy.visit('/measurement/20200304T191012Z_AS42610_fqDY31xiRoWEdKd4GWtV84UYpXG2RlpjBK7kd8rTLHIItqMnej')
