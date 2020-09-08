@@ -26,7 +26,7 @@
     "flag-icon-css": "^2.9.0",
     "lodash.debounce": "^4.0.8",
     "lodash.random": "^3.2.0",
-    "markdown-to-jsx": "^6.9.4",
+    "markdown-to-jsx": "^6.11.4",
     "moment": "^2.20.1",
     "next": "9.3.2",
     "nprogress": "^0.2.0",
