@@ -372,17 +372,14 @@ class Search extends React.Component {
               {loading && <Loader />}
 
               {!error && !loading && results.length === 0 && <NoResults />}
-              {!error && !loading && results.length > 0
-                && <div>
-                  <ResultsList results={results} testNamesKeyed={testNamesKeyed} />
-                  {
-                    this.state.nextURL &&
-                    <Flex alignItems='center' justifyContent='center'>
-                      <Button onClick={this.loadMore}><FormattedMessage id='Search.Button.LoadMore' /></Button>
-                    </Flex>
-                  }
-                </div>
-              }
+              {!error && !loading && results.length > 0 && <React.Fragment>
+                <ResultsList results={results} testNamesKeyed={testNamesKeyed} />
+                {this.state.nextURL &&
+                  <Flex alignItems='center' justifyContent='center'>
+                    <Button onClick={this.loadMore}><FormattedMessage id='Search.Button.LoadMore' /></Button>
+                  </Flex>
+                }
+              </React.Fragment>}
             </Box>
           </Flex>
         </Container>
