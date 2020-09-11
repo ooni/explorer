@@ -1,6 +1,5 @@
 /* global process */
-
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback, useMemo } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { Container, Flex, Box } from 'ooni-components'
@@ -13,12 +12,19 @@ import NavBar from '../../../components/NavBar'
 
 // import gdata from '../../../components/aggregation/website/global-data'  // static data for offline mode
 import Global from '../../../components/aggregation/website/Global'
-import Form from '../../../components/aggregation/website/Form'
+import FForm from '../../../components/aggregation/website/Form'
 import { paramsToQuery, queryToParams } from '../../../components/aggregation/website/queryUtils'
 import { Debug } from '../../../components/aggregation/website/Debug'
 import { GlobalLoader } from '../../../components/aggregation/website/GlobalLoader'
 
+const Form = React.memo(FForm)
+
 const AGGREGATION_API = `${process.env.MEASUREMENTS_URL}/api/v1/aggregation?`
+
+const swrOptions = {
+  revalidateOnFocus: false,
+  loadingTimeout: 59000. // wait 59 seconds before giving up
+}
 
 const dataFetcher = url => (
   axios.get(AGGREGATION_API + url).then(r => r.data)
@@ -36,19 +42,30 @@ const WebsiteAnalytics = () => {
   const router = useRouter()
 
   const [query, setQuery] = useState(paramsToQuery(Object.assign({}, defaultParams, router.query)))
+  const [globalData, setData] = useState(null)
 
-  const { data, error } = useSWR(query, dataFetcher)
-  // const data = gdata, error = null
+  const { data, error, isValidating } = useSWR(query, dataFetcher, swrOptions)
+  // const data = gdata, error = null, isValidating = false
 
-  const updateQuery = (values) => {
+  useEffect(() => {
+    if(data?.result) {
+      setData(data.result)
+    }
+  }, [data, error])
+
+  const updateQuery = useCallback((values) => {
     const oldParams = queryToParams(query)
     const newParams = Object.assign({}, oldParams, values)
     setQuery(paramsToQuery(newParams))
-  }
+  }, [query])
 
   useEffect(() => {
     const url = `${router.pathname}?${query}`
     router.push( url, url, { shallow: true })
+  }, [query])
+
+  const derivedParams = useMemo(() => {
+    return queryToParams(query)
   }, [query])
 
   return (
@@ -59,21 +76,17 @@ const WebsiteAnalytics = () => {
       <NavBar />
       <Container>
         <Flex flexDirection='column'>
-          <Form onSubmit={updateQuery} initialValues={queryToParams(query)} />
-          {error && <div> {JSON.stringify(error)} </div>}
+          <Form onSubmit={updateQuery} initialValues={derivedParams} />
           <Debug params={query}>
             <pre>
-              {error && <p>{error}</p>}
-              {!data && !error && <p> Loading data... </p>}
-              {data && JSON.stringify(data, null, 2)}
+              {error && <pre>{JSON.stringify(error, null, 2)}</pre>}
+              {!globalData && !error && <p> Loading data... </p>}
+              {globalData && JSON.stringify(globalData, null, 2)}
             </pre>
           </Debug>
-          {!data && !error && <GlobalLoader />}
-          {data && data.result && (
-            <Box>
-              <Global data={data.result} />
-            </Box>
-          )}
+          <Box>
+            <Global data={globalData} error={error} loading={isValidating} />
+          </Box>
         </Flex>
       </Container>
     </Layout>

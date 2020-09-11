@@ -13,15 +13,16 @@ export const GlobalLoader = (props) => (
           viewBox="0 0 624 160"
           primaryColor={theme.colors.gray3}
           secondaryColor={theme.colors.gray5}
+          style={{margin: '0px 16px', backgroundColor: 'white'}}
           {...props}
         >
-          <rect x="70" y="8" rx="3" ry="3" width="32" height="24" />
-          <rect x="70" y="40" rx="3" ry="3" width="56" height="6" />
-          <circle cx="25" cy="25" r="25" />
+          <circle cx="35" cy="30" r="20" />
+          <rect x="70" y="12" rx="3" ry="3" width="32" height="24" />
+          <rect x="70" y="42" rx="3" ry="3" width="56" height="6" />
 
-          <rect x="3" y="108" rx="0" ry="0" width="200" height="32" />
-          <rect x="205" y="108" rx="0" ry="0" width="60" height="32" />
-          <rect x="267" y="108" rx="0" ry="0" width="32" height="32" />
+          <rect x="20" y="108" rx="0" ry="0" width="200" height="32" />
+          <rect x="222" y="108" rx="0" ry="0" width="60" height="32" />
+          <rect x="284" y="108" rx="0" ry="0" width="32" height="32" />
 
           <rect x="551" y="108" rx="0" ry="0" width="32" height="32" />
           <rect x="526" y="13" rx="0" ry="0" width="56" height="32" />
