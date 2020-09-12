@@ -1,16 +1,18 @@
 /* global process */
 
 import React from 'react'
-import { Flex, Box } from 'ooni-components'
+import { Flex, Box, Text, Heading } from 'ooni-components'
 import { VictoryChart, VictoryStack, VictoryBar, VictoryAxis, VictoryLabel, VictoryTooltip, VictoryVoronoiContainer } from 'victory'
 import { theme } from 'ooni-components'
 import useSWR from 'swr'
+import countryUtil from 'country-util'
+import styled from 'styled-components'
 
 // import wdata from './website-data'  // static data for offline mode
 import { Debug } from './Debug'
 import { paramsToQuery } from './queryUtils'
 import VictoryTheme from '../../VictoryTheme'
-import { AppsChartLoader } from '../../country/WebsiteChartLoader'
+import WebsiteStatsChartLoader from './ChartLoader'
 
 const AGGREGATION_API = `${process.env.MEASUREMENTS_URL}/api/v1/aggregation?`
 
@@ -29,6 +31,10 @@ const themeOverride = Object.assign({}, VictoryTheme, {})
 themeOverride.axis.style.axis.strokeWidth = 0
 themeOverride.axis.style.ticks.size = 0
 
+const Bold = styled.span`
+  font-weight: bold
+`
+
 const WebsiteInCountry = ({ params }) => {
 
   const query = paramsToQuery(params)
@@ -38,7 +44,13 @@ const WebsiteInCountry = ({ params }) => {
 
   return (
     <Flex flexDirection='column'>
-      {!data && !error && <AppsChartLoader height={200} width={800} xOffset={70} barWidth={13} barHeight={90} />}
+      <Text fontSize={36} my={3}>
+        <Bold>{params.input}</Bold> in <Bold>{countryUtil.territoryNames[params.probe_cc]}</Bold>
+      </Text>
+      <Text fontSize={24}>
+        from <Bold>{params.since}</Bold> to <Bold>{params.until}</Bold>
+      </Text>
+      {!data && !error && <Box m={5}><WebsiteStatsChartLoader /></Box>}
       {data &&
         <VictoryChart
           width={800}
