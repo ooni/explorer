@@ -23,7 +23,6 @@ const AGGREGATION_API = `${process.env.MEASUREMENTS_URL}/api/v1/aggregation?`
 
 const swrOptions = {
   revalidateOnFocus: false,
-  loadingTimeout: 59000. // wait 59 seconds before giving up
 }
 
 const dataFetcher = url => (

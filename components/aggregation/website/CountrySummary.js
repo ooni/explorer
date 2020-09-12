@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { Flex, Box, Heading, Text, Link } from 'ooni-components'
 import styled from 'styled-components'
 import { IoCloseCircled } from 'react-icons/lib/io'
@@ -6,6 +6,7 @@ import { FaBarChart, FaExclamationCircle } from 'react-icons/lib/fa'
 import { MdCheckCircle } from 'react-icons/lib/md'
 import NLink from 'next/link'
 import { useRouter } from 'next/router'
+import countryUtil from 'country-util'
 
 import {
   colorNormal,
@@ -27,32 +28,29 @@ const CountrySummary = ({ data }) => {
     confirmed_count,
     failure_count,
     measurement_count,
-    probe_cc
+    probe_cc,
+    percent
   } = data
-
-  const ok_count = measurement_count - (anomaly_count + confirmed_count + failure_count)
 
   let outcome = {
     color: colorNormal,
     subtext: 'not blocked',
-    percent: Number(ok_count / measurement_count * 100).toFixed(0),
     icon: <MdCheckCircle size={ICON_SIZE} />
   }
 
-  if (anomaly_count > ok_count) {
+
+  if (anomaly_count > 0) {
     outcome = {
       color: colorAnomaly,
       subtext: 'high anomaly count',
-      percent: Number(anomaly_count / measurement_count * 100).toFixed(0),
       icon: <FaExclamationCircle size={ICON_SIZE} />
     }
   }
 
-  if (confirmed_count > ok_count) {
+  if (confirmed_count > 0) {
     outcome = {
       color: colorConfirmed,
       subtext: 'confirmed blocked',
-      percent: Number(confirmed_count / measurement_count * 100).toFixed(0),
       icon: <IoCloseCircled size={ICON_SIZE} />
     }
   }
@@ -70,7 +68,7 @@ const CountrySummary = ({ data }) => {
         <Box ml={2}>
           <Flex flexDirection='column'>
             <Heading h={4} my={0}>
-              {probe_cc}
+              {countryUtil.territoryNames[probe_cc]}
             </Heading>
             <Text>
               {outcome.subtext}
@@ -97,7 +95,7 @@ const CountrySummary = ({ data }) => {
           />
         </Box>
         <Box>
-          <Text fontSize={3} fontWeight='bold'>{outcome.percent}%</Text>
+          <Text fontSize={3} fontWeight='bold'>{percent.toFixed(0)}%</Text>
         </Box>
       </Flex>
     </BorderedBox>
