@@ -124,7 +124,6 @@ const Overview = ({
           values={{
             measurementCount: intl.formatNumber(measurementCount),
             countryName,
-            startDate: intl.formatDate(measuredSince),
             networkCovered: intl.formatNumber(networkCount)
           }}
         />
