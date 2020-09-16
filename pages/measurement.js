@@ -38,12 +38,14 @@ export async function getServerSideProps({ query }) {
     params['input'] = query.input
   }
 
-  let msmtResult = await client.get('/api/v1/measurement_meta', {
+  let response = await client.get('/api/v1/measurement_meta', {
     params
   })
 
-  if (msmtResult?.data) {
-    initialProps = Object.assign({}, msmtResult.data)
+  // If response `data` is an empty object, the measurement was
+  // probably not found
+  if (response.hasOwnProperty('data') && Object.keys(response.data).length !== 0) {
+    initialProps = Object.assign({}, response.data)
 
     if (typeof initialProps['scores'] === 'string') {
       try {
@@ -54,7 +56,7 @@ export async function getServerSideProps({ query }) {
       }
     }
 
-    const { probe_cc } = msmtResult.data
+    const { probe_cc } = response.data
     const countryObj = countryUtil.countryList.find(country => (
       country.iso3166_alpha2 === probe_cc
     ))
