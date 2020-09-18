@@ -26,7 +26,7 @@ const InfoBoxItem = ({
   </Box>
 )
 
-const ServerLocation = ({ serverAddress, isNdt7 }) => {
+const ServerLocation = ({ serverAddress = '', isNdt7 }) => {
   const server = mlabServerDetails(serverAddress, isNdt7)
 
   return (
@@ -41,6 +41,7 @@ const ServerLocation = ({ serverAddress, isNdt7 }) => {
 const NdtDetails = ({ measurement, render }) => {
   const intl = useIntl()
   const testKeys = measurement.test_keys
+
   const isFailed = testKeys.failure !== null
   const failure = testKeys.failure
   const isNdt7 = testKeys.protocol === 7
@@ -55,27 +56,44 @@ const NdtDetails = ({ measurement, render }) => {
   const uploadMbit = simple.upload && (simple.upload / 1000).toFixed(2)
   const ping = simple.ping && (simple.ping).toFixed(1)
 
-  if (isNdt7) {
-    const summary = testKeys.summary || {}
-
-    // Summary
-    packetLoss = summary.retransmit_rate && (summary.retransmit_rate * 100).toFixed(3)
-    minRTT = summary.min_rtt && (summary.min_rtt).toFixed(0)
-    maxRTT = summary.max_rtt && (summary.max_rtt).toFixed(0)
-    mss = summary.mss
-    outOfOrder = null
-    timeouts = null
-  }
-  else {
-    const advanced = testKeys.advanced || {}
-
-    // Advanced
-    packetLoss = advanced.packet_loss && (advanced.packet_loss * 100).toFixed(3)
-    outOfOrder = advanced.out_of_order && (advanced.out_of_order * 100).toFixed(1)
-    minRTT = advanced.min_rtt && (advanced.min_rtt).toFixed(0)
-    maxRTT = advanced.max_rtt && (advanced.max_rtt).toFixed(0)
-    mss = advanced.mss
-    timeouts = advanced.timeouts
+  let performanceDetails = null
+  try {
+    if (isNdt7) {
+      const summary = testKeys.summary || {}
+      // Summary
+      packetLoss = summary.retransmit_rate && (summary.retransmit_rate * 100).toFixed(3)
+      minRTT = summary.min_rtt && (summary.min_rtt).toFixed(0)
+      maxRTT = summary.max_rtt && (summary.max_rtt).toFixed(0)
+      mss = summary.mss
+      outOfOrder = null
+      timeouts = null
+    }
+    else {
+      const advanced = testKeys.advanced || null
+      // Advanced
+      delete advanced['out_of_order']
+      packetLoss = advanced.packet_loss && (advanced.packet_loss * 100).toFixed(3)
+      outOfOrder = advanced.out_of_order && (advanced.out_of_order * 100).toFixed(1)
+      minRTT = advanced.min_rtt && (advanced.min_rtt).toFixed(0)
+      maxRTT = advanced.max_rtt && (advanced.max_rtt).toFixed(0)
+      mss = advanced?.mss
+      timeouts = advanced?.timeouts
+    }
+    performanceDetails = (
+      <PerformanceDetails
+        isNdt7={isNdt7}
+        averagePing={ping}
+        maxPing={maxRTT}
+        mss={mss}
+        packetLoss={packetLoss}
+        outOfOrder={outOfOrder}
+        timeouts={timeouts}
+      />
+    )
+  } catch (e) {
+    console.error(`Error in parsing test_keys for ${measurement.test_name}`)
+    console.error(e)
+    // Leaves performanceDetails `null` and thus isn't rendered
   }
 
   // FIXME we need to style the failed test case properly
@@ -85,38 +103,30 @@ const NdtDetails = ({ measurement, render }) => {
       statusLabel: intl.formatMessage({id: 'Measurement.Hero.Status.NDT.Title'}),
       statusInfo: (
         <Box width={1}>
-          {isFailed ?
+          {isFailed ? (
             <Flex justifyContent='space-around'>
               <h4>Failed Test</h4>
             </Flex>
-            :
+          ) : (
             <Flex justifyContent='space-around'>
               <InfoBoxItem label={intl.formatMessage({ id: 'Measurement.Status.Info.Label.Download' })} content={downloadMbit} unit='Mbps' />
               <InfoBoxItem label={intl.formatMessage({ id: 'Measurement.Status.Info.Label.Upload' })} content={uploadMbit} unit='Mbps' />
               <InfoBoxItem label={intl.formatMessage({ id: 'Measurement.Status.Info.Label.Ping' })} content={ping} unit='ms' />
               <InfoBoxItem
                 label={intl.formatMessage({ id: 'Measurement.Status.Info.Label.Server' })}
-                content={<ServerLocation
-                  serverAddress={isNdt7 ? testKeys.server.hostname : testKeys.server_address}
-                  isNdt7={isNdt7}
-                />}
+                content={
+                  <ServerLocation
+                    serverAddress={isNdt7 ? testKeys.server.hostname : testKeys.server_address}
+                    isNdt7={isNdt7}
+                  />
+                }
               />
             </Flex>
-          }
+          )}
         </Box>
       ),
       details: (
-        <div> {!isFailed &&
-          <PerformanceDetails
-            isNdt7={isNdt7}
-            averagePing={ping}
-            maxPing={maxRTT}
-            mss={mss}
-            packetLoss={packetLoss}
-            outOfOrder={outOfOrder}
-            timeouts={timeouts}
-          />}
-        </div>
+        <div>{!isFailed && performanceDetails}</div>
       )
     })
   )
