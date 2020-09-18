@@ -150,6 +150,9 @@ const RequestResponseContainer = ({request}) => {
 }
 
 const FailureString = ({failure}) => {
+  if (typeof failure === 'undefined') {
+    return (<FormattedMessage id='Measurement.Details.Endpoint.Status.Unknown' />)
+  }
   if (!failure) {
     return (
       <div>
