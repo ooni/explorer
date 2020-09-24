@@ -79,8 +79,8 @@ const WebsiteAnalytics = () => {
           <Debug params={query}>
             <pre>
               {error && <pre>{JSON.stringify(error, null, 2)}</pre>}
-              {!globalData && !error && <p> Loading data... </p>}
-              {globalData && JSON.stringify(globalData, null, 2)}
+              {isValidating && <p> Loading data... </p>}
+              {!isValidating && globalData && JSON.stringify(globalData, null, 2)}
             </pre>
           </Debug>
           <Box>
