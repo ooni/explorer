@@ -230,12 +230,12 @@ input.form-control {
 }
 `
 
-export default class DatePicker extends React.Component {
-  render() {
-    return (
-      <StyledDatetime>
-        <Datetime {...this.props} closeOnSelect={true} />
-      </StyledDatetime>
-    )
-  }
+const DatePicker = (props) => {
+  return (
+    <StyledDatetime>
+      <Datetime {...props} closeOnSelect={true} />
+    </StyledDatetime>
+  )
 }
+
+export default DatePicker
