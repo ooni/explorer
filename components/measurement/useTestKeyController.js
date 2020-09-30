@@ -1,8 +1,6 @@
-import React, { useState, useCallback } from 'react'
-import { Flex } from 'ooni-components'
-
-// Custom hook to render a toolbar to enable/disable parts of `testKeys`
-// Usage: Add this to the MeasurementContainer
+// This file contains a custom hook to render a toolbar
+// that can be used to enable/disable parts of `testKeys`
+// To use it, add the below code in components/measurement/MeasurementContainer.js
 /*
 import { useTestKeyController } from './useTestKeyController'
 ...
@@ -18,7 +16,12 @@ return (
 )
 */
 
+import React, { useState, useCallback } from 'react'
+import { Flex } from 'ooni-components'
+
+
 const setValues = (input, value = true) => {
+  // Maps each key in `test_keys` to a boolean value, by default true
   return Object.keys(input).reduce((o, k) => {
     o[k] = value
     return o
@@ -36,23 +39,21 @@ export const useTestKeyController = (testKeysInitial) => {
       if (name === 'all') {
         setTestKeys(checked ? testKeysInitial : {})
         setKeysMap(setValues(testKeysInitial, checked))
-        return
       } else {
         const newTestKeys = {...testKeys}
-
+        // add or delete the original entry from `test_keys`
         if (checked) {
           newTestKeys[name] = testKeysInitial[name]
         } else {
           delete newTestKeys[name]
         }
         setTestKeys(newTestKeys)
+        setKeysMap(keysMap => {
+          const newKeysMap = {...keysMap}
+          newKeysMap[name] = checked
+          return newKeysMap
+        })
       }
-
-      setKeysMap(keysMap => {
-        const newKeysMap = {...keysMap}
-        newKeysMap[name] = checked
-        return newKeysMap
-      })
     }, [keysMap, testKeys, setKeysMap, setTestKeys])
 
     return (
