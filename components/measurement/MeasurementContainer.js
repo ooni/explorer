@@ -39,7 +39,12 @@ const MeasurementContainer = ({ measurement, ...props }) => {
   }
 
   const TestDetails = mapTestDetails[measurement.test_name] || DefaultTestDetails
-  return <TestDetails measurement={measurement} {...props} />
+
+  return (
+    <React.Fragment>
+      <TestDetails measurement={measurement} {...props} />
+    </React.Fragment>
+  )
 }
 
 export default MeasurementContainer
