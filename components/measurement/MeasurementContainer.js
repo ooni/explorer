@@ -30,16 +30,9 @@ const mapTestDetails = {
   tor: TorDetails
 }
 
-// FIXME to have header and stuff
-const MeasurementNotFound = () => <h4>Measurement not Found</h4>
 
-const MeasurementContainer = ({ measurement, ...props }) => {
-  if (measurement === undefined) {
-    return <MeasurementNotFound />
-  }
-
-  const TestDetails = mapTestDetails[measurement.test_name] || DefaultTestDetails
-
+const MeasurementContainer = ({ testName, measurement, ...props }) => {
+  const TestDetails = measurement ? mapTestDetails[testName] : DefaultTestDetails
   return (
     <React.Fragment>
       <TestDetails measurement={measurement} {...props} />

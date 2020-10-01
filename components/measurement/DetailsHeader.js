@@ -59,9 +59,11 @@ const DetailsHeader = ({testName, runtime, notice, url}) => {
           {notice}
         </Box>
         <Box>
-          <Text fontSize={20}>
-            <FormattedMessage id='Measurement.DetailsHeader.Runtime' />: <Text is='span' fontWeight='bold'>{prettyMs(runtime * 1000)}</Text>
-          </Text>
+          {runtime &&
+            <Text fontSize={20}>
+              <FormattedMessage id='Measurement.DetailsHeader.Runtime' />: <Text is='span' fontWeight='bold'>{prettyMs(runtime * 1000)}</Text>
+            </Text>
+          }
         </Box>
       </Flex>
       <Flex pb={4} pt={2} alignItems={['flex-start', 'flex-end']}>
@@ -74,8 +76,7 @@ const DetailsHeader = ({testName, runtime, notice, url}) => {
 DetailsHeader.propTypes = {
   testName: PropTypes.string.isRequired,
   runtime: PropTypes.number.isRequired,
-  notice: PropTypes.any,
-  url: PropTypes.string
+  notice: PropTypes.any
 }
 
 export default DetailsHeader
