@@ -9,7 +9,7 @@ export const HttpHeaderFieldManipulationDetails = ({ measurement, render }) => {
   const testKeys = measurement.test_keys
   let isAnomaly = false
   let isFailed = true
-  const tampering = testKeys.tampering
+  const tampering = testKeys?.tampering || {}
   Object.keys(tampering).forEach((key) => {
     if (tampering[key] === true) {
       isAnomaly = true
@@ -18,7 +18,6 @@ export const HttpHeaderFieldManipulationDetails = ({ measurement, render }) => {
       isFailed = false
     }
   })
-  const headerDiff = testKeys.tampering.header_name_diff
 
   return (
     render({
@@ -29,13 +28,6 @@ export const HttpHeaderFieldManipulationDetails = ({ measurement, render }) => {
       summaryText: isAnomaly
         ? 'Measurement.HTTPHeaderManipulation.MiddleBoxesDetected.SummaryText'
         : 'Measurement.HTTPHeaderManipulation.NoMiddleBoxes.SummaryText',
-      details: (
-        <div>
-          {/*<Text>isAnomaly: {isAnomaly.toString()}</Text>
-          <Text>isFailed: {isFailed.toString()}</Text>
-          <Text>headerDiff: {headerDiff.toString()}</Text>*/}
-        </div>
-      )
     })
   )
 }

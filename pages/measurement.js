@@ -84,6 +84,7 @@ const Measurement = ({
   notFound = false,
   input,
   raw_measurement,
+  report_id,
   ...rest
 }) => {
   const { query } = useRouter()
@@ -139,6 +140,7 @@ const Measurement = ({
                   testName={test_name}
                   runtime={raw_measurement?.test_runtime}
                   notice={legacy}
+                  url={`measurement/${report_id}`}
                 />
                 {summaryText &&
                   <SummaryText
