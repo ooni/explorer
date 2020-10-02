@@ -58,11 +58,11 @@ describe('Seearch Page Tests', () => {
 
     // click in the until date filter and select a day before today
     cy.get('#until-filter').click()
-    cy.get('.rdt.rdtOpen .rdtToday').prev().click()
+    cy.get('.rdt.rdtOpen .rdtToday').click()
     cy.get('#until-filter').should(($untilDate) => {
       const firstOfMonth = Cypress.moment().startOf('month')
       const selectedUntilDate = $untilDate.val()
-      expect(firstOfMonth.isBefore(selectedUntilDate)).to.be.true
+      expect(firstOfMonth.isSameOrBefore(selectedUntilDate)).to.be.true
     })
 
     cy.get('[data-test-id="testname-filter"]').select('Telegram')
