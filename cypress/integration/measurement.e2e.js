@@ -1,29 +1,27 @@
 /* global describe, it, cy, before */
-
+import { theme } from 'ooni-components'
 describe('Measurement Page Tests', () => {
 
-  describe('Web Connectivity tests', () => {
+  const normalColor = 'rgb(47, 158, 68)'
+  const anomalyColor = 'rgb(230, 119, 0)'
+  const confirmedColor = 'rgb(240, 62, 62)'
+
+  describe.only('Web Connectivity tests', () => {
     it('an accessible measurement is green and says "OK"', () => {
       cy.visit('/measurement/20200302T211741Z_AS15751_NUQUoAz71ZjhsimkNDy53r62AlfjEWUtoQRag9tnRM0oxZtoWl?input=http%3A%2F%2Fprachatai.com')
-      cy.get('.content > div')
-        .eq(1)
-        .should('have.css', 'background-color', 'rgb(47, 158, 68)')
+      cy.heroHasColor(normalColor)
         .contains('OK')
     })
 
     it('an anomaly measurement is orange and says "Anomaly"', () => {
       cy.visit('/measurement/20200303T073101Z_AS6830_ritWNm1FDBJJCm0SzcLhucF1wrRJM5zQVVssPXwxhwRitw949v?input=http%3A%2F%2Fwww.efindlove.com%2F')
-      cy.get('.content > div')
-        .eq(1)
-        .should('have.css', 'background-color', 'rgb(230, 119, 0)')
+      cy.heroHasColor(anomalyColor)
         .contains('Anomaly')
     })
 
     it('a blocked measurement is red and says "Blocked"', () => {
       cy.visit('/measurement/20200303T085244Z_AS42668_UThI3Fdoo0IZ6610604dd0CGkhd7oQV6QLWWzZDVLJ35oGxBO4?input=http%3A%2F%2Frutor.org%2F')
-      cy.get('.content > div')
-        .eq(1)
-        .should('have.css', 'background-color', 'rgb(240, 62, 62)')
+      cy.heroHasColor(confirmedColor)
         .contains('Blocked')
     })
   })
