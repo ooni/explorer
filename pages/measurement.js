@@ -28,6 +28,11 @@ export default class Measurement extends React.Component {
 
   static async getInitialProps ({ query }) {
     let initialProps = {}
+
+    if (query.report_id.includes('AS0')) {
+      return initialProps
+    }
+
     let client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
     let params = {
       report_id: query.report_id

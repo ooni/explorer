@@ -15,6 +15,7 @@ import PsiphonDetails from './nettests/Psiphon'
 import TorDetails from './nettests/Tor'
 
 import DefaultTestDetails from './nettests/Default'
+import MeasurementNotFound from './MeasurementNotFound'
 
 const mapTestDetails = {
   web_connectivity: WebConnectivityDetails,
@@ -29,9 +30,6 @@ const mapTestDetails = {
   psiphon: PsiphonDetails,
   tor: TorDetails
 }
-
-// FIXME to have header and stuff
-const MeasurementNotFound = () => <h4>Measurement not Found</h4>
 
 const MeasurementContainer = ({ measurement, ...props }) => {
   if (measurement === undefined) {
