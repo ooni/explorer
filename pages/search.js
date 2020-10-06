@@ -179,10 +179,12 @@ class Search extends React.Component {
     }
 
     const measurements = msmtR.data
+    // drop results with probe_asn === 'AS0'
+    const results = measurements.results.filter(item => item.probe_asn !== 'AS0')
 
     return {
       error: null,
-      results: measurements.results,
+      results,
       nextURL: measurements.metadata.next_url,
       testNamesKeyed,
       testNames,
@@ -240,8 +242,9 @@ class Search extends React.Component {
     axios.get(this.state.nextURL)
       .then((res) => {
         // XXX update the query
+        const nextPageResults = res.data.results.filter(item => item.probe_asn !== 'AS0')
         this.setState({
-          results: this.state.results.concat(res.data.results),
+          results: this.state.results.concat(nextPageResults),
           nextURL: res.data.metadata.next_url,
           show: this.state.show + 50
         })
@@ -268,9 +271,10 @@ class Search extends React.Component {
         // XXX do error handling
         getMeasurements(query)
           .then((res) => {
+            const results = res.data.results.filter(item => item.probe_asn !== 'AS0')
             this.setState({
               loading: false,
-              results: res.data.results,
+              results,
               nextURL: res.data.metadata.next_url
             })
           })
