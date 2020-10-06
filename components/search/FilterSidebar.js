@@ -118,16 +118,21 @@ class FilterSidebar extends React.Component {
       switch(filterName) {
       case 'asnFilter':
         var asnValue = e.target.value
-        var asnRegEx = /^(^AS|as)?[0-9]+$/
-        if (asnValue && asnValue.match(asnRegEx) === null) {
-          this.setState({
-            asnError: intl.formatMessage({id: 'Search.Sidebar.ASN.Error'}),
-            isFilterDirty: false
-          })
-        } else {
+        // Accepts only formats like AS1234 or 1234
+        // https://regex101.com/r/DnkspD/latest
+        var asnRegEx = /^(AS)?([1-9][0-9]*)$/
+        if (
+          typeof asnValue === 'string' &&
+          (asnValue === '' || asnValue.match(asnRegEx) !== null)
+        ) {
           this.setState({
             asnError: false,
             isFilterDirty: true
+          })
+        } else {
+          this.setState({
+            asnError: intl.formatMessage({id: 'Search.Sidebar.ASN.Error'}),
+            isFilterDirty: false
           })
         }
         break
