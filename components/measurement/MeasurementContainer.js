@@ -15,7 +15,6 @@ import PsiphonDetails from './nettests/Psiphon'
 import TorDetails from './nettests/Tor'
 
 import DefaultTestDetails from './nettests/Default'
-import MeasurementNotFound from './MeasurementNotFound'
 
 const mapTestDetails = {
   web_connectivity: WebConnectivityDetails,
