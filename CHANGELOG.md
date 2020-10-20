@@ -1,5 +1,33 @@
 # Changelog
 
+## [2.1.0] - 2020-10-15
+
+### Changed
+* **Uses the new refactored API**. Incompatible with 2.0.x because the endpoints to fetch measurement data has changed. (#486)
+
+### Fixed
+* Fix link colors to use `blue7` from the theme (#473)
+* Address warnings about using `next/link` for external links (#484)
+* Ensure that measurment pages don't crash when missing test keys (#491)
+
+### Added
+* Responsive header and nav menu in countries page (#454)
+* Links to test descriptions on measurement pages (#469)
+* Social media sharing buttons on measurement and country pages. This was done by our awesome [GSoC 2020 student](https://medium.com/@kronaemmanuel/anxious-to-excitement-my-gsoc-story-begins-c83041900f35) @kronaemmanuel (#476)
+* Dev tool to toggle parts of `test_keys` in measurement data (#491)
+
+### Removed
+* Remove tested since date on country pages (#483)
+
+### Security
+- Bump elliptic from 6.4.1 to 6.5.3 (#477)
+- Bump markdown-to-jsx from 6.9.4 to 6.11.4 (#485)
+
+## [2.0.10] - 2020-10-07
+
+### Fixed
+- Address the OONI Probe ASN Incident reported [here](https://ooni.org/post/2020-ooni-probe-asn-incident-report/) by making it harder to lookup and access measurements with AS0 (#495)
+
 ## [2.0.9] - 2020-05-09
 
 ### Fixed
@@ -129,13 +157,15 @@ instead of domain name filter. Avoids timeouts when API is slow.
 ### Added
 - First public release ([Blog post](https://ooni.org/post/next-generation-ooni-explorer/))
 
-[2.0.9]: (https://github.com/ooni/explorer/compare/v2.0.8...v2.0.9)
-[2.0.8]: (https://github.com/ooni/explorer/compare/v2.0.7...v2.0.8)
-[2.0.7]: (https://github.com/ooni/explorer/compare/v2.0.6...v2.0.7)
-[2.0.6]: (https://github.com/ooni/explorer/compare/v2.0.5...v2.0.6)
-[2.0.5]: (https://github.com/ooni/explorer/compare/v2.0.4...v2.0.5)
-[2.0.4]: (https://github.com/ooni/explorer/compare/v2.0.3...v2.0.4)
-[2.0.3]: (https://github.com/ooni/explorer/compare/v2.0.2...v2.0.3)
-[2.0.2]: (https://github.com/ooni/explorer/compare/v2.0.1...v2.0.2)
-[2.0.1]: (https://github.com/ooni/explorer/compare/v2.0.0...v2.0.1)
-[2.0.0]: (https://github.com/ooni/explorer/releases/tag/v2.0.0)
+[2.1.0]: https://github.com/ooni/explorer/compare/v2.0.10...v2.1.0
+[2.0.10]: https://github.com/ooni/explorer/compare/v2.0.9...v2.0.10
+[2.0.9]: https://github.com/ooni/explorer/compare/v2.0.8...v2.0.9
+[2.0.8]: https://github.com/ooni/explorer/compare/v2.0.7...v2.0.8
+[2.0.7]: https://github.com/ooni/explorer/compare/v2.0.6...v2.0.7
+[2.0.6]: https://github.com/ooni/explorer/compare/v2.0.5...v2.0.6
+[2.0.5]: https://github.com/ooni/explorer/compare/v2.0.4...v2.0.5
+[2.0.4]: https://github.com/ooni/explorer/compare/v2.0.3...v2.0.4
+[2.0.3]: https://github.com/ooni/explorer/compare/v2.0.2...v2.0.3
+[2.0.2]: https://github.com/ooni/explorer/compare/v2.0.1...v2.0.2
+[2.0.1]: https://github.com/ooni/explorer/compare/v2.0.0...v2.0.1
+[2.0.0]: https://github.com/ooni/explorer/releases/tag/v2.0.0
