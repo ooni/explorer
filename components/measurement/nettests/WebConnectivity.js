@@ -60,6 +60,11 @@ const StatusInfo = ({ url, message}) => (
   </Flex>
 )
 
+StatusInfo.propTypes = {
+  url: PropTypes.string,
+  message: PropTypes.string
+}
+
 // From https://css-tricks.com/snippets/css/make-pre-text-wrap/
 const WrappedPre = styled(Pre)`
   white-space: pre-wrap;       /* css-3 */
@@ -149,6 +154,10 @@ const RequestResponseContainer = ({request}) => {
   )
 }
 
+RequestResponseContainer.propTypes = {
+  request: PropTypes.object.isRequired
+}
+
 const FailureString = ({failure}) => {
   if (typeof failure === 'undefined') {
     return (<FormattedMessage id='Measurement.Details.Endpoint.Status.Unknown' />)
@@ -177,7 +186,7 @@ const DnsAnswerCell = (props) => (
 )
 
 DnsAnswerCell.propTypes = {
-  children: PropTypes.element
+  children: PropTypes.any
 }
 
 const FiveColRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = 'Type', data = 'DATA', header = false}) => (
@@ -295,12 +304,6 @@ const WebConnectivityDetails = ({
     timeZone: 'UTC',
     timeZoneName: 'short'
   })
-  const reasons = {
-    'http-diff': 'HTTP-diff',
-    'http-failure': 'HTTP-failure',
-    'dns': 'DNS',
-    'tcp_ip': 'TCP'
-  }
 
   let status = 'default'
   let summaryText = ''
