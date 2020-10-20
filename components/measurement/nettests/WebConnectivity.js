@@ -60,6 +60,11 @@ const StatusInfo = ({ url, message}) => (
   </Flex>
 )
 
+StatusInfo.propTypes = {
+  url: PropTypes.string,
+  message: PropTypes.string
+}
+
 // From https://css-tricks.com/snippets/css/make-pre-text-wrap/
 const WrappedPre = styled(Pre)`
   white-space: pre-wrap;       /* css-3 */
@@ -149,6 +154,10 @@ const RequestResponseContainer = ({request}) => {
   )
 }
 
+RequestResponseContainer.propTypes = {
+  request: PropTypes.object.isRequired
+}
+
 const FailureString = ({failure}) => {
   if (typeof failure === 'undefined') {
     return (<FormattedMessage id='Measurement.Details.Endpoint.Status.Unknown' />)
@@ -177,7 +186,7 @@ const DnsAnswerCell = (props) => (
 )
 
 DnsAnswerCell.propTypes = {
-  children: PropTypes.element
+  children: PropTypes.any
 }
 
 const FiveColRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = 'Type', data = 'DATA', header = false}) => (
@@ -187,7 +196,7 @@ const FiveColRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = 'Ty
       <DnsAnswerCell>{netClass}</DnsAnswerCell>
       <DnsAnswerCell>{ttl}</DnsAnswerCell>
       <DnsAnswerCell>{type}</DnsAnswerCell>
-      <DnsAnswerCell>{type === 'A' ? data.ipv4 : type === 'CNAME' ? data.hostname : data}</DnsAnswerCell>
+      <DnsAnswerCell>{data}</DnsAnswerCell>
     </Flex>
   </Text>
 )
@@ -240,11 +249,19 @@ const QueryContainer = ({query}) => {
             netClass='IN'
             ttl={dnsAnswer.ttl}
             type={dnsAnswer.answer_type}
-            data={{ipv4: dnsAnswer.ipv4, hostname: dnsAnswer.hostname}}
+            data={dnsAnswer.answer_type === 'A'
+              ? dnsAnswer.ipv4
+              : dnsAnswer.answer_type === 'AAAA'
+                ? dnsAnswer.ipv6
+                : dnsAnswer.answer_type === 'CNAME'
+                  ? dnsAnswer.hostname
+                  : null // for any other answer_type, DATA column will be empty
+            }
           />
         ))}
       </Box>
     </Flex>
+
   )
 }
 
@@ -287,12 +304,6 @@ const WebConnectivityDetails = ({
     timeZone: 'UTC',
     timeZoneName: 'short'
   })
-  const reasons = {
-    'http-diff': 'HTTP-diff',
-    'http-failure': 'HTTP-failure',
-    'dns': 'DNS',
-    'tcp_ip': 'TCP'
-  }
 
   let status = 'default'
   let summaryText = ''
