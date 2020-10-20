@@ -187,7 +187,7 @@ const FiveColRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = 'Ty
       <DnsAnswerCell>{netClass}</DnsAnswerCell>
       <DnsAnswerCell>{ttl}</DnsAnswerCell>
       <DnsAnswerCell>{type}</DnsAnswerCell>
-      <DnsAnswerCell>{type === 'A' ? data.ipv4 : type === 'CNAME' ? data.hostname : data}</DnsAnswerCell>
+      <DnsAnswerCell>{data}</DnsAnswerCell>
     </Flex>
   </Text>
 )
@@ -240,11 +240,19 @@ const QueryContainer = ({query}) => {
             netClass='IN'
             ttl={dnsAnswer.ttl}
             type={dnsAnswer.answer_type}
-            data={{ipv4: dnsAnswer.ipv4, hostname: dnsAnswer.hostname}}
+            data={dnsAnswer.answer_type === 'A'
+              ? dnsAnswer.ipv4
+              : dnsAnswer.answer_type === 'AAAA'
+                ? dnsAnswer.ipv6
+                : dnsAnswer.answer_type === 'CNAME'
+                  ? dnsAnswer.hostname
+                  : null // for any other answer_type, DATA column will be empty
+            }
           />
         ))}
       </Box>
     </Flex>
+
   )
 }
 
