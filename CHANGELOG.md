@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.1.1] - 2020-10-27
+
+### Changed
+* Date filters in search will default to a 30 day range unless manually changed.
+  This is to align with the new default in the `/api/v1/measurements` API. (#512)
+
+### Fixed
+* Fix DNS Queries box by handling AAAA answer types correctly (#505)
+
 ## [2.1.0] - 2020-10-15
 
 ### Changed
@@ -157,6 +166,7 @@ instead of domain name filter. Avoids timeouts when API is slow.
 ### Added
 - First public release ([Blog post](https://ooni.org/post/next-generation-ooni-explorer/))
 
+[2.1.1]: https://github.com/ooni/explorer/compare/v2.1.0...v2.1.1
 [2.1.0]: https://github.com/ooni/explorer/compare/v2.0.10...v2.1.0
 [2.0.10]: https://github.com/ooni/explorer/compare/v2.0.9...v2.0.10
 [2.0.9]: https://github.com/ooni/explorer/compare/v2.0.8...v2.0.9
