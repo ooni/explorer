@@ -49,17 +49,23 @@ const CommonDetails = ({
 }) => {
   const {
     report_id,
+    software_name,
     software_version,
     annotations,
   } = measurement
   const intl = useIntl()
 
-  let engine_version = 'none',
-    platform = 'unknown'
+  let engine = 'none',
+    platform = 'Unavailable'
 
-  if (annotations && annotations.engine_version) {
-    engine_version = annotations.engine_version
+  if (annotations && annotations.engine_name) {
+    engine = annotations.engine_name
+
+    if (annotations.engine_version) {
+      engine = `${engine} (${annotations.engine_version})`
+    }
   }
+
   if (annotations && annotations.platform) {
     platform = annotations.platform
   }
@@ -75,12 +81,12 @@ const CommonDetails = ({
       value: platform ? platform : 'unknown'
     },
     {
-      label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.SoftwareVersion' }),
-      value: software_version
+      label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.Software' }),
+      value: `${software_name} (${software_version})`
     },
     {
-      label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.MKVersion' }),
-      value: engine_version
+      label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.Engine' }),
+      value: engine
     }
   ]
   return (
