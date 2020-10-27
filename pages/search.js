@@ -144,6 +144,11 @@ class Search extends React.Component {
       query.until = until
     }
 
+    const since = moment(query.until).utc().subtract(30, 'day').format('YYYY-MM-DD')
+    if (!query.since) {
+      query.since = since
+    }
+
     [testNamesR, countriesR] = await Promise.all([
       client.get('/api/_/test_names'),
       client.get('/api/_/countries')
