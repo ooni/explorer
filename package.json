@@ -1,6 +1,6 @@
 {
   "name": "ooni-explorer",
-  "version": "2.1.1-dev",
+  "version": "2.1.1",
   "author": "Open Observatory of Network Interference (OONI) <contact@openobservatory.org>",
   "license": "BSD-3-Clause",
   "main": "index.js",
