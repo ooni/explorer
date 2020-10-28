@@ -70,7 +70,7 @@
   "Measurement.Details.Websites.HTTP.Response.Headers": "Response Headers",
   "Measurement.CommonDetails.Label.MsmtID": "Report ID",
   "Measurement.CommonDetails.Label.Platform": "Platform",
-  "Measurement.CommonDetails.Label.Software": "OONI Probe",
+  "Measurement.CommonDetails.Label.Software": "Software Name",
   "Measurement.CommonDetails.Label.Engine": "Measurement Engine",
   "Measurement.CommonDetails.RawMeasurement.Heading": "Raw Measurement Data",
   "Measurement.CommonDetails.RawMeasurement.Download": "Download JSON",
