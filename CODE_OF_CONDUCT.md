@@ -1,14 +1,16 @@
-# Tor Project Code of Conduct
+# OONI Code of Conduct
+
+This is Adapted from The Tor Project code of conduct.
 
 Statement of Intent:
 
-The Tor Project is committed to fostering an inclusive environment and
+OONI is committed to fostering an inclusive environment and
 community. Tor is a place where people should feel safe to engage, share their
 point of view, and participate.
 
-This code of conduct applies to The Tor Project as a whole. It is intended to
-provide guidelines for contributors. Employees and contractors of The Tor
-Project, Inc. (TPI) are also subject to company policies and procedures. Those
+This code of conduct applies to OONI as a whole. It is intended to
+provide guidelines for contributors. Employees and contractors of OONI
+are also subject to company policies and procedures. Those
 people should feel free to contact HR with questions or concerns.
 
 This code of conduct is not exhaustive or complete. It is an ongoing effort to
@@ -21,7 +23,7 @@ effort.
 
 0. Summary: Don't be a jerk. Be awesome instead.
 
-The Tor community should be a good place where people are glad to be.
+The OONI community should be a good place where people are glad to be.
 
   DO: Be kind, thoughtful, and considerate.
 
@@ -63,7 +65,7 @@ developers, and users at risk.
 This code of conduct outlines our expectations for all those who participate in
 our community, as well as the consequences for unacceptable behavior.
 
-We invite all those who participate in The Tor Project to help us create safe
+We invite all those who participate in OONI to help us create safe
 and positive experiences for everyone.
 
 2. Be your best self
