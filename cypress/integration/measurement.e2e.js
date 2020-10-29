@@ -1,12 +1,11 @@
 /* global describe, it, cy, before */
-import { theme } from 'ooni-components'
 describe('Measurement Page Tests', () => {
 
   const normalColor = 'rgb(47, 158, 68)'
   const anomalyColor = 'rgb(230, 119, 0)'
   const confirmedColor = 'rgb(240, 62, 62)'
 
-  describe.only('Web Connectivity tests', () => {
+  describe('Web Connectivity tests', () => {
     it('an accessible measurement is green and says "OK"', () => {
       cy.visit('/measurement/20200302T211741Z_AS15751_NUQUoAz71ZjhsimkNDy53r62AlfjEWUtoQRag9tnRM0oxZtoWl?input=http%3A%2F%2Fprachatai.com')
       cy.heroHasColor(normalColor)
@@ -91,4 +90,19 @@ describe('Measurement Page Tests', () => {
       cy.visit('/measurement/20200304T185533Z_AS30722_H9in1I9RdujJM8lLfCz01SXDoKFRvvdeb519BpHzGk2uYUArkx')
     })
   })
+
+  describe('Invalid Measurements', () => {
+    it('URL with invalid report_id says measurement was not found', () => {
+      const reportIdNotInDB = 'this-measurement-does-not-exist'
+      cy.visit(`/measurement/${reportIdNotInDB}`)
+      cy.get('h4').contains('Measurement Not Found')
+        .siblings('p').contains(reportIdNotInDB)
+    })
+
+    it('Missing report_id in URL says the page cannot be found', () => {
+      cy.visit('/measurement/', {failOnStatusCode: false}) // bypasss 4xx errors
+      cy.get('h4').contains('The requested page does not exist')
+    })
+  })
+
 })
