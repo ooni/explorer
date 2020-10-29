@@ -5,7 +5,7 @@ This is Adapted from The Tor Project code of conduct.
 Statement of Intent:
 
 OONI is committed to fostering an inclusive environment and
-community. Tor is a place where people should feel safe to engage, share their
+community. OONI is a place where people should feel safe to engage, share their
 point of view, and participate.
 
 This code of conduct applies to OONI as a whole. It is intended to
@@ -27,7 +27,7 @@ The OONI community should be a good place where people are glad to be.
 
   DO: Be kind, thoughtful, and considerate.
 
-  DO: Make Tor a place where people are happy and comfortable.
+  DO: Make OONI a place where people are happy and comfortable.
 
   DO: Remember: We are all contributing; we are all learning. Nobody was born
     an expert.
@@ -42,13 +42,12 @@ The OONI community should be a good place where people are glad to be.
   DON'T: Hunt for ways to uphold the letter of this code while violating its
     spirit.
 
-  AND DO: Eagerly email: tor-community-council@lists.torproject.org with
-    questions or concerns. Public key:
-    [https://trac.torproject.org/projects/tor/wiki/org/CommunityCouncil#Contact](https://trac.torproject.org/projects/tor/wiki/org/CommunityCouncil#Contact)
+  AND DO: Eagerly email: contact@openobservatory.org with
+    questions or concerns.
 
 1. Purpose
 
-A primary goal of the Tor community is to be inclusive of many different
+A primary goal of the OONI community is to be inclusive of many different
 contributors. We want to include contributors from the most varied and diverse
 backgrounds possible. As such, we are committed to providing a friendly, safe
 and welcoming environment for all, regardless of their experience, gender
@@ -109,7 +108,7 @@ The following behaviors are unacceptable within our community:
 
   * Spontaneously posting or displaying sexually explicit or violent
     material. (If it is necessary to share such material when working on
-    Tor's mission, do so with sensitivity. Be aware that many people don't
+    OONI's mission, do so with sensitivity. Be aware that many people don't
     want to see it.)
 
   * Posting or threatening to post other people’s personally identifying
@@ -182,59 +181,47 @@ without their consent.
 
 5. Where to go for help
 
-The Community Council is an elected body of Tor Core Contributors who can
-assist with intra-community conflict resolution. Community Council policies and
-information can be found on the [Community Council wiki]( https://trac.torproject.org/projects/tor/wiki/org/CommunityCouncil).  You can contact
-the whole Community council:
+The OONI team can assist with intra-community conflict resolution. You can contact
+the whole OONI team:
 
   - if you have questions or concerns about the code of conduct, or
 
   - if you feel that you have witnessed a code of conduct violation
 
-However, if you feel that there is a conflict of interest with any council
-member, you may contact members individually. Council members' GPG keys are
-listed on the Community Council wiki. If there is a conflict of interest, the
-affected council member will recuse themselves. They will not be involved in
-any discussion or documentation of the incident. More about the Community
-Council can be found in the [guidelines](https://gitweb.torproject.org/community/policies.git/tree/community_council.txt).
+However, if you feel that there is a conflict of interest with any team
+member, you may contact members individually. See: https://ooni.org/about/.
 
 6. What to do if you witness unacceptable behavior
 
 If you are subject to or witness unacceptable behavior, or have any other
-concerns, please notify the Community Council as soon as possible. You can
-contact the community council in person, or at
-tor-community-council@lists.torproject.org. Current councilmembers are listed
-on the [wiki](https://trac.torproject.org/projects/tor/wiki/org/CommunityCouncil). The Community Council's incident response will vary on a
-case-by-case basis. The council will make every effort to respond to the
-incident immediately. The council will prioritize the safety of the person who
+concerns, please notify the OONI team as soon as possible. You can
+contact the OONI team in person, or at
+team@openobservatory.org. Current team members are listed
+on the [about page](https://ooni.org/about/). The OONI team's incident response will vary on a
+case-by-case basis. We will make every effort to respond to the
+incident immediately. We will prioritize the safety of the person who
 has been harmed, or is at risk of harm. Person(s) who have been harmed or are
 at risk of harm can withdraw the incident report at any time. We will never do
 anything without the consent of the person who has been harmed or is at risk of
 harm, except in situations where there is a threat of imminent danger or harm
-to anyone. More information about the Community Council's incident reporting
-and response policies can be found on their [wiki](https://trac.torproject.org/projects/tor/wiki/org/CommunityCouncil).
+to anyone.
 
 7. What the person reporting a violation can expect
 
-The Community Council prioritizes the safety and well-being of any person who
+The OONI team prioritizes the safety and well-being of any person who
 feels that they have been harmed or may be in danger of being harmed. Anyone
-reporting an issue to the Community Council can expect that their report will
-be taken seriously. Initial reports can be taken in written or verbal form. If
-the incident does not require an immediate resolution, then a written report
-can be shared with the Community Council in an encrypted format. The next steps
-in an incident response will vary on a case-by-case basis.
+reporting an issue to the OONI team can expect that their report will
+be taken seriously. Initial reports can be taken in written or verbal form.
+The next steps in an incident response will vary on a case-by-case basis.
 
-8. How the Community Council responds to incidents
+8. How the OONI team responds to incidents
 
-If a community member engages in unacceptable behavior, the Community Council
+If a community member engages in unacceptable behavior, the OONI team
 may take any action they deem appropriate, including but not limited to a
 warning, informal mediation, temporary ban or permanent expulsion from the
-community. Any actions and decisions by the Community Council may be appealed
-by following the appeals process in the [Community Council Guidelines](https://trac.torproject.org/projects/tor/wiki/org/CommunityCouncil).
-
+community. 
 
 9. Scope of this document
-
 
 This code of conduct covers all community participants:
 
@@ -253,8 +240,8 @@ when interacting:
 This code of conduct and its related procedures also applies to unacceptable
 behavior occurring outside the scope of community activities when such behavior
 has the potential to adversely affect the safety and well-being of community
-members. As members of the Tor community, we support and follow this Code while
-we are working on Tor, and take care not to undermine it in the rest of our
+members. As members of the OONI community, we support and follow this Code while
+we are working on OONI, and take care not to undermine it in the rest of our
 time.
 
 
