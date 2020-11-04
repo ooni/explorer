@@ -37,12 +37,18 @@ const HighlightSection = ({
 }
 
 HighlightSection.propTypes = {
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string,
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element
+  ]),
+  description: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element
+  ]),
   highlights: PropTypes.arrayOf(PropTypes.shape({
     countryCode: PropTypes.string.isRequired,
     countryName: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
+    title: PropTypes.string,
     text: PropTypes.string,
     report: PropTypes.string,
     explore: PropTypes.string

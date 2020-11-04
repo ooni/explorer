@@ -1,11 +1,8 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { createGlobalStyle } from 'styled-components'
-import {
-  Provider,
-  theme
-} from 'ooni-components'
 import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react'
+import { createGlobalStyle, ThemeProvider } from 'styled-components'
+import { theme } from 'ooni-components'
 
 // Moved this from `_document.js` because `next-css` fails to extract
 // imported css from `_document.js`. `next-css` should be upgraded along with
@@ -65,7 +62,7 @@ const Layout = ({ children, disableFooter = false }) => {
 
   return (
     <MatomoProvider value={matomoInstance}>
-      <Provider theme={theme}>
+      <ThemeProvider theme={theme}>
         <GlobalStyle />
         <div className="site">
           <Header />
@@ -75,7 +72,7 @@ const Layout = ({ children, disableFooter = false }) => {
           {!disableFooter && <Footer />}
         </div>
         <FeedbackButton />
-      </Provider>
+      </ThemeProvider>
     </MatomoProvider>
   )
 }

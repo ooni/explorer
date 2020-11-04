@@ -8,20 +8,6 @@ import Markdown from 'markdown-to-jsx'
 
 import Flag from '../Flag'
 
-const LinkButton = styled(Box)`
-  border-radius: 6px;
-  ${Link} {
-    text-decoration: none;
-    color: white;
-  }
-  :hover, :focus {
-    background-color: ${props => props.theme.colors[props.hover]};
-  }
-  :active {
-    background-color: ${props => props.theme.colors[props.active]};
-  }
-`
-
 const StyledFlex = styled(Flex)`
   min-height: 350px;
 `

@@ -79,7 +79,7 @@ export class DetailsBox extends React.Component {
               <Heading h={4}>{title}</Heading>
             </Box>
             <Box ml='auto'>
-              <CollapseTrigger size={36} isOpen={isOpen} />
+              <CollapseTrigger size={36} open={isOpen} />
             </Box>
           </StyledDetailsBoxHeader>
         }

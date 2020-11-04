@@ -28,9 +28,9 @@ export const BoxWithTitle = ({ title, children }) => (
 )
 
 BoxWithTitle.propTypes = {
-  title: PropTypes.oneOf([
+  title: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.node
+    PropTypes.element
   ]).isRequired,
   children: PropTypes.node
 }

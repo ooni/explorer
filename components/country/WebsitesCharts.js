@@ -119,8 +119,8 @@ class TestsByCategoryInNetwork extends React.Component {
                 <strong>{testedUrlsCount}</strong> <FormattedMessage id='Country.Websites.TestedWebsitesCount' />
               </Box>
             </React.Fragment>
-            :
-            <Box my={2}></Box>
+          :
+          <Box my={2}></Box>
           }
           {/* Results per page dropdown
             <Box>
@@ -152,9 +152,9 @@ class TestsByCategoryInNetwork extends React.Component {
             <URLChart key={index} metadata={testedUrl} network={network} countryCode={countryCode} />
           ))}
         {(!fetching && testedUrlsCount > 0) && <Flex flexWrap='wrap' justifyContent='space-between' alignItems='center'>
-          <Link color='blue7' href='javascript:void(0)' onClick={() => this.prevPage()}>{'< '}<FormattedMessage id='Country.Websites.URLCharts.Pagination.Previous' /></Link>
+          <Link color='blue7' href='#' onClick={(e) => {e.preventDefault(); this.prevPage()}}>{'< '}<FormattedMessage id='Country.Websites.URLCharts.Pagination.Previous' /></Link>
           <Text>{currentPage} of { Math.ceil(testedUrlsCount / resultsPerPage)} pages</Text>
-          <Link color='blue7' href='javascript:void(0)' onClick={() => this.nextPage()}><FormattedMessage id='Country.Websites.URLCharts.Pagination.Next' />{' >'}</Link>
+          <Link color='blue7' href='#' onClick={(e) => {e.preventDefault(); this.nextPage()}}><FormattedMessage id='Country.Websites.URLCharts.Pagination.Next' />{' >'}</Link>
         </Flex>}
         {/* URL-wise barcharts End */}
       </React.Fragment>
