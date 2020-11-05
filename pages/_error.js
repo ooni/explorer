@@ -15,7 +15,7 @@ import { FormattedMessage } from 'react-intl'
 
 import NavBar from '../components/NavBar'
 import Layout from '../components/Layout'
-import OONI404 from '../static/images/OONI_404.svg'
+import OONI404 from '../public/static/images/OONI_404.svg'
 
 const FullHeightFlex = styled(Flex)`
   min-height: 50vh;

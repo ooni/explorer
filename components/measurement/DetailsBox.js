@@ -33,7 +33,7 @@ export const DetailsBoxTable = ({
 )
 
 DetailsBoxTable.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   items: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string.isRequired,
     value: PropTypes.string
@@ -94,6 +94,12 @@ export class DetailsBox extends React.Component {
 }
 
 DetailsBox.propTypes = {
-  title: PropTypes.string.isRequired,
-  content: PropTypes.element
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element
+  ]),
+  content: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.array
+  ])
 }

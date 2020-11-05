@@ -4,7 +4,7 @@ import NavBar from '../NavBar'
 import { Container, Flex, Box, Heading, Text } from 'ooni-components'
 import { useRouter } from 'next/router'
 
-import OONI404 from '../../static/images/OONI_404.svg'
+import OONI404 from '../../public/static/images/OONI_404.svg'
 
 const MeasurementNotFound = () => {
   const { asPath } = useRouter()

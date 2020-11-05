@@ -203,7 +203,7 @@ const FiveColRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = 'Ty
 FiveColRow.propTypes = {
   name: PropTypes.string,
   netClass: PropTypes.string,
-  ttl: PropTypes.string,
+  ttl: PropTypes.number,
   type: PropTypes.string,
   data: PropTypes.string,
   header: PropTypes.bool

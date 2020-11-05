@@ -6,7 +6,7 @@ import sentry from '../utils/sentry'
 import Router from 'next/router'
 import NProgress from 'nprogress'
 
-import '../static/nprogress.css'
+import '../public/static/nprogress.css'
 import ErrorPage from './_error'
 
 // Intercept route changes on page navigation to show top edge progress bar

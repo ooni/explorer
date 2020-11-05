@@ -31,7 +31,7 @@
     "lodash.random": "^3.2.0",
     "markdown-to-jsx": "^6.11.4",
     "moment": "^2.20.1",
-    "next": "9.3.2",
+    "next": "^10.0.1",
     "nprogress": "^0.2.0",
     "ooni-components": "0.4.0",
     "pretty-ms": "^3.2.0",

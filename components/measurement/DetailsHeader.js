@@ -27,7 +27,10 @@ const TestGroupBadge = ({icon, name, color}) => (
 
 TestGroupBadge.propTypes = {
   icon: PropTypes.element,
-  name: PropTypes.string,
+  name: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element
+  ]),
   color: PropTypes.string
 }
 

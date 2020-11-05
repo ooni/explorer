@@ -9,7 +9,7 @@ const StatusText = styled(Text)`
   color: ${props => props.ok === false ? props.theme.colors.yellow9 : 'unset'}
 `
 
-const AccessPointStatus = ({ icon, label, ok , content, color, ...props}) => {
+const AccessPointStatus = ({ icon, label, ok, content, color, ...props}) => {
   if (content === undefined) {
     if (ok === true) {
       content = <FormattedMessage id='Measurement.Details.Endpoint.Status.Okay' />
@@ -38,9 +38,12 @@ const AccessPointStatus = ({ icon, label, ok , content, color, ...props}) => {
 
 AccessPointStatus.propTypes = {
   icon: PropTypes.element.isRequired,
-  label: PropTypes.string.isRequired,
+  label: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element
+  ]).isRequired,
   ok: PropTypes.oneOf([true, false, undefined]),
-  content: PropTypes.element
+  content: PropTypes.any
 }
 
 export default AccessPointStatus

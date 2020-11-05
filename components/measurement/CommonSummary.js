@@ -100,7 +100,9 @@ const CommonSummary = ({
 }
 
 CommonSummary.propTypes = {
-  measurement: PropTypes.object.isRequired,
+  test_start_time: PropTypes.string.isRequired,
+  probe_asn: PropTypes.number.isRequired,
+  probe_cc: PropTypes.string.isRequired,
   country: PropTypes.string.isRequired,
   color: PropTypes.string.isRequired
 }

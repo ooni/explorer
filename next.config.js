@@ -6,7 +6,7 @@ const webpack = require('webpack')
 
 process.env.PORT = process.env.PORT || 3100
 
-module.exports = withSourceMaps(withCSS({
+module.exports = withSourceMaps({
   webpack: (config, {isServer}) => {
     config.plugins.push(
       new webpack.DefinePlugin({
@@ -34,4 +34,4 @@ module.exports = withSourceMaps(withCSS({
 
     return config
   }
-}))
+})
