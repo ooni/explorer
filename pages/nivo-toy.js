@@ -115,6 +115,7 @@ const getChartMetadata = async (params) => {
   console.log(resp)
   return {
     data: resp.data.result,
+    dimensionCount: resp.data.dimension_count,
     url: resp.request.responseURL,
     cols,
     indexBy
@@ -234,10 +235,16 @@ const Chart = () => {
         {loading && <h2>Loading ...</h2>}
             </Box>
             <Box width={1} style={{height: '80vh'}}>
-        {chartMeta && <StackedBarChart loadTime={chartMeta.loadTime} data={chartMeta.data} cols={chartMeta.cols} indexBy={chartMeta.indexBy} />}
+            {chartMeta && chartMeta.dimensionCount == 1 &&
+            <StackedBarChart loadTime={chartMeta.loadTime} data={chartMeta.data} cols={chartMeta.cols} indexBy={chartMeta.indexBy} />
+            }
+            {chartMeta && chartMeta.dimensionCount > 1 &&
+            <div>Multidimensional chart</div>
+            }
             </Box>
             <Box width={1}>
               {chartMeta && chartMeta.url}
+              {chartMeta && ` (dimensions: ${chartMeta.dimensionCount})`}
             </Box>
             <Box width={1}>
         {loadTime && <span>Load time: {loadTime} ms</span>}
