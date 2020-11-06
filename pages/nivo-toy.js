@@ -1,4 +1,5 @@
 /* global process */
+import styled from 'styled-components'
 import React from 'react'
 import { useState, useEffect } from 'react'
 import { ResponsiveBar } from '@nivo/bar'
@@ -12,7 +13,8 @@ import {
   Container,
   Heading,
   Text, Hero,
-  Flex, Box
+  Flex, Box,
+  Label
 } from 'ooni-components'
 
 const colorMap = {
@@ -23,6 +25,10 @@ const colorMap = {
   // 'http-failure': '#e8590c', // orange8
 }
 
+const StyledLabel = styled(Label)`
+  color: ${props => props.theme.colors.blue5};
+  padding-top: 10px;
+`
 const colorFunc = (d) => colorMap[d.id] || '#ccc'
 
 const parseDate = d3.timeParse("%Y-%m-%d %H:%M:%S")
@@ -32,7 +38,7 @@ const loadData = async (params) => {
   const response = await axios.get('https://api.ooni.io/api/v1/aggregation', {
     'params': params
   })
-  return response.data.result
+  return response
 }
 
 const StackedBarChart = ({data, cols, indexBy}) => (
@@ -105,9 +111,11 @@ const getChartMetadata = async (params) => {
   let indexBy = ''
   cols.push(params['axis_x'])
   indexBy = params['axis_x']
-  let data = await loadData(params)
+  let resp = await loadData(params)
+  console.log(resp)
   return {
-    data,
+    data: resp.data.result,
+    url: resp.request.responseURL,
     cols,
     indexBy
   }
@@ -156,79 +164,86 @@ const Chart = () => {
       <Layout>
         <Container>
           <form onSubmit={handleSubmit(onSubmit)} class="form-container">
-            <div class="form-item">
-              <span class="label">probe_cc</span>
-              <input name="probe_cc" ref={register} />
-            </div>
-            <div class="form-item">
-              <span class="label">probe_asn</span>
-              <input name="probe_asn" ref={register} />
-            </div>
-            <div class="form-item">
-              <span class="label">test_name</span>
-              <input name="test_name" defaultValue='web_connectivity' ref={register} />
-            </div>
-            <div class="form-item">
-              <span class="label">since</span>
+            <Flex flexWrap='wrap'>
+              <Box width={1/3}>
+                <StyledLabel>
+                  probe_cc
+                </StyledLabel>
+                <input name="probe_cc" ref={register} />
+              </Box>
+              <Box width={1/3}>
+                <StyledLabel>
+                  probe_asn
+                </StyledLabel>
+                <input name="probe_asn" ref={register} />
+              </Box>
+              <Box width={1/3}>
+                <StyledLabel>
+                  test_name
+                </StyledLabel>
+                <input name="test_name" defaultValue='web_connectivity' ref={register} />
+              </Box>
+              <Box width={1/3}>
+                <StyledLabel>
+                  since
+                </StyledLabel>
               <input name="since" defaultValue='2020-05-01' ref={register} />
-            </div>
-            <div class="form-item">
-              <span class="label">until</span>
-              <input name="until" defaultValue='2020-06-01' ref={register} />
-            </div>
-            <div class="form-item">
-              <span class="label">domain</span>
-              <input name="domain" ref={register} />
-            </div>
-            <div class="form-item">
-              <span class="label">category_code</span>
-              <input name="category_code" ref={register} />
-            </div>
-            <div class="form-item">
-              <span class="label">axis_x</span>
+              </Box>
+              <Box width={1/3}>
+                <StyledLabel>
+                  until 
+                </StyledLabel>
+                <input name="until" defaultValue='2020-06-01' ref={register} />
+              </Box>
+              <Box width={1/3}>
+                <StyledLabel>
+                  domain
+                </StyledLabel>
+                <input name="domain" ref={register} />
+              </Box>
+              <Box width={1/3}>
+                <StyledLabel>
+                  category_code
+                </StyledLabel>
+                <input name="category_code" ref={register} />
+              </Box>
+              <Box width={1/3}>
+                <StyledLabel>
+                  axis_x
+                </StyledLabel>
               <select name="axis_x" ref={register} defaultValue='measurement_start_day'>
                 {optionsAxis.map(option => (<option value={option}>{option}</option>))}
               </select>
-            </div>
-            <div class="form-item">
-              <span class="label">axis_y</span>
+              </Box>
+              <Box width={1/3}>
+                <StyledLabel>
+                  axis_y
+                </StyledLabel>
               <select name="axis_y" ref={register} defaultValue=''>
                 {optionsAxis.map(option => (<option value={option}>{option}</option>))}
               </select>
-            </div>
-            <input type="submit" />
+              </Box>
+              <Box width={1/3}>
+              <input type="submit" />
+              </Box>
+            </Flex>
+
           </form>
+          <Flex flexWrap='wrap'>
+            <Box width={1}>
+        {loading && <h2>Loading ...</h2>}
+            </Box>
+            <Box width={1} style={{height: '80vh'}}>
+        {chartMeta && <StackedBarChart loadTime={chartMeta.loadTime} data={chartMeta.data} cols={chartMeta.cols} indexBy={chartMeta.indexBy} />}
+            </Box>
+            <Box width={1}>
+              {chartMeta && chartMeta.url}
+            </Box>
+            <Box width={1}>
+        {loadTime && <span>Load time: {loadTime} ms</span>}
+            </Box>
+          </Flex>
         </Container>
-      <div className="chart">
-      {loading && <h2>Loading ...</h2>}
-      {chartMeta && <StackedBarChart loadTime={chartMeta.loadTime} data={chartMeta.data} cols={chartMeta.cols} indexBy={chartMeta.indexBy} />}
-      {loadTime && <span>Load time: {loadTime} ms</span>}
-      <style jsx>{`
-        .chart {
-          height:50vh;
-          width:60vw;
-          background: white;
-          box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
-          transition: 0.3s;
-        }
-        .chart:hover {
-          box-shadow: 0 8px 16px 0 rgba(0,0,0,0.2);
-        }
-        .form-container {
-          width: 800px;
-          display: flex;
-          flex-wrap: wrap;
-          align-items: center;
-        }
-        .form-item .label {
-          padding-right: 10px;
-          padding-left: 20px;
-        }
-        .form-item {
-          padding-bottom: 10px;
-        }
-        `}</style>
-        </div>
         </Layout>
       )
 }
