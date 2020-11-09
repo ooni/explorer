@@ -65,6 +65,12 @@ describe('Measurement Page Tests', () => {
       cy.heroHasColor(anomalyColor)
         .contains('Anomaly')
     })
+
+    // it.only('renders a failed measurement', () => {
+    //   cy.visit('/measurement/20201106T201330Z_whatsapp_BA_20875_n1_l6spr0AGVxYVjr1f')
+    //   cy.heroHasColor(errorColor)
+    //     .contains('Error')
+    // })
   })
 
   describe('Facebook Messenger Tests', () => {
