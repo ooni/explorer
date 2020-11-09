@@ -66,7 +66,8 @@ describe('Measurement Page Tests', () => {
         .contains('Anomaly')
     })
 
-    // it.only('renders a failed measurement', () => {
+    // Failed WhatsApp measurements are not styled and presented as failed tests
+    // it('renders a failed measurement', () => {
     //   cy.visit('/measurement/20201106T201330Z_whatsapp_BA_20875_n1_l6spr0AGVxYVjr1f')
     //   cy.heroHasColor(errorColor)
     //     .contains('Error')
@@ -122,8 +123,8 @@ describe('Measurement Page Tests', () => {
 
     it('renders a failed measurement', () => {
       cy.visit('/measurement/20191109T103749Z_AS15802_pZVgEw2WzmXRnDfw1sGN9tTnIO8iKiQHNWZW7XzPZqsEWsbkAu')
-      cy.heroHasColor(errorColor)
-        .contains('Error')
+      cy.heroHasColor(ooniBlue)
+        .contains('Failed')
     })
   })
 
