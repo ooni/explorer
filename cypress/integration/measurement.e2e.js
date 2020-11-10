@@ -135,7 +135,7 @@ describe('Measurement Page Tests', () => {
         .contains('Results')
     })
     it('renders a failed measurement', () => {
-      cy.visit('/measurement/20190917T214045Z_AS0_P91OeXAs0Z8EN91RDcZNGZ2xMPHFEJ8E6PYSiah8gkcuT9qRAo')
+      cy.visit('/measurement/20190930T212715Z_AS17380_2W4uXDAWAckWTGI5TRep5hw5j5gSS31wKlbO2RHlV0v4fudSXW')
       cy.heroHasColor(errorColor)
         .contains('Error')
     })
