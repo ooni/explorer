@@ -123,6 +123,11 @@ export const testNames = {
     name: <FormattedMessage id='Tests.Tor.Name' />,
     info: 'https://ooni.org/nettest/tor/'
   },
+  'riseupvpn': {
+    group: 'circumvention',
+    name: <FormattedMessage id='Tests.RiseupVPN.Name' />,
+    info: 'https://ooni.org/nettest/'
+  },
 
   /* Legacy tests */
   'tcp_connect': {
