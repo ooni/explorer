@@ -13,6 +13,7 @@ import HttpInvalidRequestLine from './nettests/HTTPInvalidRequestLine'
 import VanillaTorDetails from './nettests/VanillaTor'
 import PsiphonDetails from './nettests/Psiphon'
 import TorDetails from './nettests/Tor'
+import RiseupVPNDetails from './nettests/RiseupVPN'
 
 import DefaultTestDetails from './nettests/Default'
 
@@ -27,12 +28,13 @@ const mapTestDetails = {
   http_invalid_request_line: HttpInvalidRequestLine,
   vanilla_tor: VanillaTorDetails,
   psiphon: PsiphonDetails,
-  tor: TorDetails
+  tor: TorDetails,
+  riseupvpn: RiseupVPNDetails,
 }
 
 
 const MeasurementContainer = ({ testName, measurement, ...props }) => {
-  const TestDetails = measurement ? mapTestDetails[testName] : DefaultTestDetails
+  const TestDetails = testName in mapTestDetails ? mapTestDetails[testName] : DefaultTestDetails
   return (
     <React.Fragment>
       <TestDetails measurement={measurement} {...props} />
