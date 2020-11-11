@@ -376,7 +376,9 @@ class Search extends React.Component {
                 <ResultsList results={results} testNamesKeyed={testNamesKeyed} />
                 {this.state.nextURL &&
                   <Flex alignItems='center' justifyContent='center'>
-                    <Button onClick={this.loadMore}><FormattedMessage id='Search.Button.LoadMore' /></Button>
+                    <Button onClick={this.loadMore} data-test-id='load-more-button'>
+                      <FormattedMessage id='Search.Button.LoadMore' />
+                    </Button>
                   </Flex>
                 }
               </React.Fragment>}
