@@ -1,6 +1,6 @@
 {
   "name": "ooni-explorer",
-  "version": "2.1.2-dev",
+  "version": "2.1.2",
   "author": "Open Observatory of Network Interference (OONI) <contact@openobservatory.org>",
   "license": "BSD-3-Clause",
   "main": "index.js",
@@ -74,7 +74,7 @@
     "start-server-and-test": "^1.10.8"
   },
   "scripts": {
-    "dev": "NODE_ENV=development MEASUREMENTS_URL=https://ams-pg.ooni.org SENTRY_DSN=https://49af7fff247c445b9a7c98ee21ddfd2f@sentry.io/1427510 node index.js",
+    "dev": "NODE_ENV=development MEASUREMENTS_URL=https://api.ooni.io SENTRY_DSN=https://49af7fff247c445b9a7c98ee21ddfd2f@sentry.io/1427510 node index.js",
     "build-translations": "node ./scripts/build-translations.js",
     "extract-i18n-keys": "yarn build && node ./scripts/extract-react-intl-keys.js",
     "build": "next build",
@@ -83,6 +83,6 @@
     "test:e2e": "yarn build && start-server-and-test start http://localhost:3100 cypress:run",
     "cypress:run": "cypress run",
     "test": "echo nothing interesting",
-    "start": "MEASUREMENTS_URL=https://ams-pg.ooni.org node index.js"
+    "start": "MEASUREMENTS_URL=https://api.ooni.io node index.js"
   }
 }
