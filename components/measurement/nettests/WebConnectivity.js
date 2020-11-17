@@ -364,6 +364,21 @@ const WebConnectivityDetails = ({
         }}
       />
     )
+  } else {
+    // Fallback condition to handle older measurements not present in fastpath
+    // See: https://github.com/ooni/explorer/issues/426#issuecomment-612094244
+    status = 'error'
+    summaryText = (
+      <FormattedMessage
+        id='Measurement.SummaryText.Websites.Failed'
+        values={{
+          date: date,
+          WebsiteURL: input,
+          network: probe_asn,
+          country: country,
+        }}
+      />
+    )
   }
 
   const tcpConnections = tcp_connect.map((connection) => {
