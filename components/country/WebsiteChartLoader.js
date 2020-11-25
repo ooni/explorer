@@ -38,7 +38,7 @@ WebsiteSectionLoader.propTypes = {
   rows: PropTypes.number
 }
 
-export const AppsChartLoader = (props) => {
+export const AppsChartLoader = ({xOffset = 50, barWidth = 10, barHeight = 30, ...props}) => {
   const random = Math.floor(Math.random() * (20 - 16) + 16)
   return (
     <ContentLoader
@@ -50,7 +50,7 @@ export const AppsChartLoader = (props) => {
       {...props}
     >
       {Array(random).fill('').map((e, i) => (
-        <rect key={i} x={50 + i*20} y="20" rx="2" ry="2" width="10" height="30" />
+        <rect key={i} x={xOffset + i * barWidth * 2} y="20" rx="2" ry="2" width={barWidth} height={barHeight} />
       ))
       }
     </ContentLoader>
