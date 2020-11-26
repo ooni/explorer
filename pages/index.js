@@ -83,6 +83,15 @@ const StatsItem = ({label, unit, value }) => (
   </StyledStatsItem>
 )
 
+StatsItem.propTypes = {
+  label: PropTypes.oneOfType([
+    PropTypes.element,
+    PropTypes.string
+  ]),
+  unit: PropTypes.string,
+  value: PropTypes.number
+}
+
 const FeatureRow = styled(Flex)`
 
 `
@@ -298,7 +307,7 @@ export default class LandingPage extends React.Component {
 }
 
 LandingPage.propTypes = {
-  asnCount: PropTypes.number,
   countryCount: PropTypes.number,
+  asnCount: PropTypes.number,
   measurementCount: PropTypes.number
 }
