@@ -5,6 +5,7 @@ import App from 'next/app'
 import sentry from '../utils/sentry'
 import Router from 'next/router'
 import NProgress from 'nprogress'
+import 'fontsource-fira-sans/latin.css'
 
 import '../public/static/nprogress.css'
 import ErrorPage from './_error'

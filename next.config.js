@@ -1,7 +1,5 @@
 /* global require, module, process */
-const withCSS = require('@zeit/next-css')
 const withSourceMaps = require('@zeit/next-source-maps')
-const child_process = require('child_process')
 const webpack = require('webpack')
 
 process.env.PORT = process.env.PORT || 3100

@@ -4,11 +4,6 @@ import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react'
 import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import { theme } from 'ooni-components'
 
-// Moved this from `_document.js` because `next-css` fails to extract
-// imported css from `_document.js`. `next-css` should be upgraded along with
-// the upgrade to `next@latest`
-import 'typeface-fira-sans/index.css'
-
 import Header from './Header'
 import Footer from './Footer'
 import withIntl from './withIntl'
