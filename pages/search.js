@@ -1,9 +1,11 @@
-import React from 'react'
+/* global process */
+import React, { useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
-import { withRouter } from 'next/router'
+import { useRouter } from 'next/router'
 import moment from 'moment'
 import axios from 'axios'
+import useSWR from 'swr'
 import styled from 'styled-components'
 import {
   Flex, Box,
@@ -130,264 +132,142 @@ const NoResults = () => (
   </Flex>
 )
 
-class Search extends React.Component {
-  static async getInitialProps ({ query }) {
-    let msmtR, testNamesR, countriesR
-    let client = axios.create({baseURL: process.env.MEASUREMENTS_URL})  // eslint-disable-line
+const API_SERVER = process.env.MEASUREMENTS_URL
 
-    // By default, on '/search' show measurements published until today
-    // including the measurements of today (so the date of tomorrow).
-    // This prevents the search page from showing time-travelling future
-    // measurements from showing up
-    const until = moment.utc().add(1, 'day').format('YYYY-MM-DD')
-    if (!query.until) {
-      query.until = until
-    }
+const fetcher = (url, query) => {
+  let params = {}
+  if (typeof query === 'object') {
+    params = queryToParams({ query })
+  }
+  return axios.get(API_SERVER + url, { params }).then(res => res.data)
+}
 
-    const since = moment(query.until).utc().subtract(30, 'day').format('YYYY-MM-DD')
-    if (!query.since) {
-      query.since = since
-    }
+export async function getServerSideProps ({ query }) {
+  let testNamesR, countriesR
 
-    [testNamesR, countriesR] = await Promise.all([
-      client.get('/api/_/test_names'),
-      client.get('/api/_/countries')
-    ])
+  let client = axios.create({baseURL: process.env.MEASUREMENTS_URL});  // eslint-disable-line
 
-    let testNames = testNamesR.data.test_names
-    testNames.sort(sortByKey('name'))
+  [testNamesR, countriesR] = await Promise.all([
+    client.get('/api/_/test_names'),
+    client.get('/api/_/countries')
+  ])
 
-    let testNamesKeyed = {}
-    testNames.forEach(v => testNamesKeyed[v.id] = v.name)
+  let testNames = testNamesR.data.test_names
+  testNames.sort(sortByKey('name'))
 
-    let countries = countriesR.data.countries
-    countries.sort(sortByKey('name'))
+  let testNamesKeyed = {}
+  testNames.forEach(v => testNamesKeyed[v.id] = v.name)
 
+  let countries = countriesR.data.countries
+  countries.sort(sortByKey('name'))
 
-    try {
-      msmtR = await getMeasurements(query)
-    } catch (err) {
-      let error
-      if (err.response) {
-        error = err.response.data
-      } else {
-        error = err.message
-      }
-      return {
-        error,
-        results: [],
-        nextURL: null,
-        testNamesKeyed,
-        testNames,
-        countries
-      }
-    }
-
-    const measurements = msmtR.data
-    // drop results with probe_asn === 'AS0'
-    const results = measurements.results.filter(item => item.probe_asn !== 'AS0')
-
-    return {
-      error: null,
-      results,
-      nextURL: measurements.metadata.next_url,
+  return {
+    props: {
       testNamesKeyed,
       testNames,
-      countries,
-    }
-  }
-
-  constructor(props) {
-    super(props)
-    this.state = {
-      testNameFilter: props.router.query.test_name,
-      domainFilter: props.router.query.domain,
-      countryFilter: props.router.query.probe_cc,
-      asnFilter: props.router.query.probe_asn,
-      sinceFilter: props.router.query.since,
-      untilFilter: props.router.query.until,
-      results: props.results,
-      nextURL: props.nextURL,
-
-      onlyFilter: props.router.query.only || 'all',
-
-      search: null,
-      error: props.error,
-
-      loading: false
-    }
-    this.getFilterQuery = this.getFilterQuery.bind(this)
-    this.onApplyFilter = this.onApplyFilter.bind(this)
-    this.loadMore = this.loadMore.bind(this)
-  }
-
-  componentDidMount () {
-    const { query, replace } = this.props.router
-    const href = {
-      pathname: '/search',
-      query
-    }
-    replace(href, href, { shallow: true })
-  }
-
-  shouldComponentUpdate (nextProps, nextState) {
-    if (this.props != nextProps) {
-      return true
-    }
-    if (this.state.results != nextState.results) {
-      return true
-    }
-    if (this.state.loading != nextState.loading) {
-      return true
-    }
-    return false
-  }
-
-  loadMore() {
-    axios.get(this.state.nextURL)
-      .then((res) => {
-        // XXX update the query
-        const nextPageResults = res.data.results.filter(item => item.probe_asn !== 'AS0')
-        this.setState({
-          results: this.state.results.concat(nextPageResults),
-          nextURL: res.data.metadata.next_url,
-          show: this.state.show + 50
-        })
-      })
-      .catch((err) => {
-        this.setState({
-          error: err
-        })
-      })
-  }
-
-  onApplyFilter (state) {
-    this.setState({
-      error: null,
-      loading: true,
-      ...state
-    }, () => {
-      const query = this.getFilterQuery()
-      const href = {
-        pathname: '/search',
-        query
-      }
-      this.props.router.push(href, href, { shallow: true }).then(() => {
-        // XXX do error handling
-        getMeasurements(query)
-          .then((res) => {
-            const results = res.data.results.filter(item => item.probe_asn !== 'AS0')
-            this.setState({
-              loading: false,
-              results,
-              nextURL: res.data.metadata.next_url
-            })
-          })
-          .catch((err) => {
-            this.setState({
-              error: err,
-              loading: false
-            })
-          })
-      })
-    })
-  }
-
-  getFilterQuery () {
-    const mappings = [
-      ['domainFilter', 'domain'],
-      ['countryFilter', 'probe_cc'],
-      ['asnFilter', 'probe_asn'],
-      ['testNameFilter', 'test_name'],
-      ['sinceFilter', 'since'],
-      ['untilFilter', 'until'],
-      ['onlyFilter', 'only']
-    ]
-    let query = {...this.props.router.query}
-    mappings.forEach((m) => {
-      if (!this.state[m[0]] || this.state[m[0]] === 'XX') {
-        // If it's unset or marked as XX, let's be sure the path is clean
-        if (query[m[1]]) {
-          delete query[m[1]]
-        }
-      } else if (m[0] === 'onlyFilter' && this.state[m[0]] == 'all') {
-        // If the onlyFilter is not set to 'confirmed' or 'anomalies'
-        // remove it from the path
-        if (query[m[1]]) {
-          delete query[m[1]]
-        }
-      } else {
-        query[m[1]] = this.state[m[0]]
-      }
-    })
-    return query
-  }
-
-  render () {
-    const {
-      testNames,
-      testNamesKeyed,
       countries
-    } = this.props
-
-    const {
-      loading,
-      error,
-      results,
-      onlyFilter,
-      domainFilter,
-      testNameFilter,
-      countryFilter,
-      asnFilter,
-      sinceFilter,
-      untilFilter
-    } = this.state
-
-    return (
-      <Layout>
-        <Head>
-          <title>Search Measurements - OONI Explorer</title>
-        </Head>
-
-        <NavBar />
-
-        <Container>
-          <Flex pt={3} flexWrap='wrap'>
-            <Box width={[1, 1/4]} px={2}>
-              <FilterSidebar
-                domainFilter={domainFilter}
-                testNameFilter={testNameFilter}
-                countryFilter={countryFilter}
-                asnFilter={asnFilter}
-                sinceFilter={sinceFilter}
-                untilFilter={untilFilter}
-                onlyFilter={onlyFilter}
-                onApplyFilter={this.onApplyFilter}
-                testNames={testNames}
-                countries={countries}
-              />
-            </Box>
-            <Box width={[1, 3/4]} px={2}>
-              {error && <ErrorBox error={error} />}
-              {loading && <Loader />}
-
-              {!error && !loading && results.length === 0 && <NoResults />}
-              {!error && !loading && results.length > 0 && <React.Fragment>
-                <ResultsList results={results} testNamesKeyed={testNamesKeyed} />
-                {this.state.nextURL &&
-                  <Flex alignItems='center' justifyContent='center'>
-                    <Button onClick={this.loadMore} data-test-id='load-more-button'>
-                      <FormattedMessage id='Search.Button.LoadMore' />
-                    </Button>
-                  </Flex>
-                }
-              </React.Fragment>}
-            </Box>
-          </Flex>
-        </Container>
-      </Layout>
-    )
+    }
   }
+}
+
+const swrOptions = {
+  revalidateOnFocus: false,
+}
+
+const Search = ({ countries = [], testNames, testNamesKeyed }) => {
+  // const [results, setResults] = useState(null)
+  // const [error, setError] = useState(null)
+  const {
+    loading,
+    onlyFilter,
+    domainFilter,
+    testNameFilter,
+    countryFilter,
+    asnFilter,
+    sinceFilter,
+    untilFilter
+  } = {}
+
+  const [pageCount, setPageCount] = useState(1)
+  const pages = []
+
+  const { query } = useRouter()
+
+  // By default, on '/search' show measurements published until today
+  // including the measurements of today (so the date of tomorrow).
+  // This prevents the search page from showing time-travelling future
+  // measurements from showing up
+  const until = moment.utc().add(1, 'day').format('YYYY-MM-DD')
+  if (!query.until) {
+    query.until = until
+  }
+
+  const since = moment(query.until).utc().subtract(30, 'day').format('YYYY-MM-DD')
+  if (!query.since) {
+    query.since = since
+  }
+
+  // const { data, error, isValidating } = useSWR(['/api/_/countries'], fetcher, swrOptions)
+  const { data, error, isValidating } = useSWR(['/api/v1/measurements', query], fetcher, swrOptions)
+
+  const results = data ? data.results : []
+  const nextURL = data && data.metadata && data.metadata.next_url
+
+  const isLoadingInitialData = !results && !error
+  const isEmpty = results?.[0]?.length === 0
+
+  const onApplyFilter = useCallback(() => {
+
+  }, [])
+
+  return (
+    <Layout>
+      <Head>
+        <title>Search Measurements - OONI Explorer</title>
+      </Head>
+
+      <NavBar />
+      <Container>
+        <Flex pt={3} flexWrap='wrap'>
+          <Box width={[1, 1/4]} px={2}>
+            <FilterSidebar
+              domainFilter={domainFilter}
+              testNameFilter={testNameFilter}
+              countryFilter={countryFilter}
+              asnFilter={asnFilter}
+              sinceFilter={sinceFilter}
+              untilFilter={untilFilter}
+              onlyFiltwithRouterer={onlyFilter}
+              onApplyFilter={onApplyFilter}
+              testNames={testNames}
+              countries={countries}
+            />
+          </Box>
+          <Box width={[1, 3/4]} px={2}>
+            {error && <ErrorBox error={error} />}
+            {isValidating && <Loader />}
+            {isEmpty && <NoResults />}
+            {!isEmpty &&
+              <Flex flexDirection='column'>
+                <Box>
+                  <ResultsList results={results} testNamesKeyed={testNamesKeyed} />
+                </Box>
+                <Box>
+                  {nextURL &&
+                    <Flex alignItems='center' justifyContent='center'>
+                      <Button onClick={() => {}} data-test-id='load-more-button'>
+                        <FormattedMessage id='Search.Button.LoadMore' />
+                      </Button>
+                    </Flex>
+                  }
+                </Box>
+              </Flex>
+            }
+          </Box>
+        </Flex>
+      </Container>
+    </Layout>
+  )
 }
 
 Search.propTypes = {
@@ -400,4 +280,4 @@ Search.propTypes = {
   error: PropTypes.object
 }
 
-export default withRouter(Search)
+export default Search
