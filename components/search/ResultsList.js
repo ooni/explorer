@@ -41,7 +41,9 @@ const testsWithStates = [
   'web_connectivity',
   'telegram',
   'whatsapp',
-  'facebook_messenger'
+  'facebook_messenger',
+  'tor',
+  'psiphon'
 ]
 
 const imTests = [
@@ -141,6 +143,22 @@ const messages = defineMessages({
   },
   'Search.HTTPRequests.Results.Anomaly': {
     id: 'Search.HTTPRequests.Results.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.Tor.Results.Reachable': {
+    id: 'Search.Tor.Results.Reachable',
+    defaultMessage: ''
+  },
+  'Search.Tor.Results.Anomaly': {
+    id: 'Search.Tor.Results.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.Psiphon.Results.Reachable': {
+    id: 'Search.Psiphon.Results.Reachable',
+    defaultMessage: ''
+  },
+  'Search.Psiphon.Results.Anomaly': {
+    id: 'Search.Psiphon.Results.Anomaly',
     defaultMessage: ''
   },
 })
