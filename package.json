@@ -33,7 +33,7 @@
     "moment": "^2.20.1",
     "next": "^10.0.1",
     "nprogress": "^0.2.0",
-    "ooni-components": "0.4.0",
+    "ooni-components": "^0.4.1",
     "pretty-ms": "^3.2.0",
     "prop-types": "15.7.2",
     "react": "16.14.0",
