@@ -175,23 +175,21 @@ const swrOptions = {
 }
 
 const Search = ({ countries = [], testNames, testNamesKeyed }) => {
-  // const [results, setResults] = useState(null)
-  // const [error, setError] = useState(null)
-  const {
-    loading,
-    onlyFilter,
-    domainFilter,
-    testNameFilter,
-    countryFilter,
-    asnFilter,
-    sinceFilter,
-    untilFilter
-  } = {}
 
   const [pageCount, setPageCount] = useState(1)
   const pages = []
 
   const { query } = useRouter()
+
+  const {
+    only: onlyFilter,
+    domain: domainFilter,
+    test_name: testNameFilter,
+    probe_cc: countryFilter,
+    probe_asn: asnFilter,
+    since: sinceFilter,
+    until: untilFilter
+  } = query
 
   // By default, on '/search' show measurements published until today
   // including the measurements of today (so the date of tomorrow).
@@ -207,14 +205,13 @@ const Search = ({ countries = [], testNames, testNamesKeyed }) => {
     query.since = since
   }
 
-  // const { data, error, isValidating } = useSWR(['/api/_/countries'], fetcher, swrOptions)
   const { data, error, isValidating } = useSWR(['/api/v1/measurements', query], fetcher, swrOptions)
 
   const results = data ? data.results : []
   const nextURL = data && data.metadata && data.metadata.next_url
 
-  const isLoadingInitialData = !results && !error
-  const isEmpty = results?.[0]?.length === 0
+  const isLoadingInitialData = !data && !error
+  const isEmpty = data?.results?.length === 0
 
   const onApplyFilter = useCallback(() => {
 
@@ -237,7 +234,7 @@ const Search = ({ countries = [], testNames, testNamesKeyed }) => {
               asnFilter={asnFilter}
               sinceFilter={sinceFilter}
               untilFilter={untilFilter}
-              onlyFiltwithRouterer={onlyFilter}
+              onlyFilter={onlyFilter}
               onApplyFilter={onApplyFilter}
               testNames={testNames}
               countries={countries}
