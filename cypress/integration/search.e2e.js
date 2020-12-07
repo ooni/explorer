@@ -66,9 +66,9 @@ describe('Seearch Page Tests', () => {
     })
 
     cy.get('[data-test-id="testname-filter"]').select('Telegram')
-    cy.get('label[label="Confirmed"]').click()
-    cy.get('label[label="Anomalies"]').click()
-    cy.get('label[label="All Results"]').click()
+    cy.get('label').contains('Confirmed').click()
+    cy.get('label').contains('Anomalies').click()
+    cy.get('label').contains('All Results').click()
 
   })
 
