@@ -1,10 +1,12 @@
 import React from 'react'
+import PropTypes from 'prop-types'
 import { useForm, Controller } from 'react-hook-form'
 import styled from 'styled-components'
 import {
   Flex, Box,
   Label, Input, Select, Button
 } from 'ooni-components'
+import { countryList } from 'country-util'
 
 import categoryCodes from './category_codes.json'
 
@@ -36,7 +38,20 @@ export const Form = ({ onSubmit }) => {
           <StyledLabel>
             Country
           </StyledLabel>
-          <input name="probe_cc" ref={register} />
+          <Controller
+            as={Select}
+            name='probe_cc'
+            control={control}
+            defaultValue=''
+          >
+            <option>All Countries</option>
+            {countryList
+              .sort((a,b) => a.iso3166_name > b.iso3166_name)
+              .map((c, idx) =>(
+                <option key={idx} value={c.iso3166_alpha2}>{c.iso3166_name}</option>
+              ))
+            }
+          </Controller>
         </Box>
         <Box width={1/3}>
           <StyledLabel>
@@ -110,4 +125,8 @@ export const Form = ({ onSubmit }) => {
       </Box>
     </form>
   )
+}
+
+Form.propTypes = {
+  onSubmit: PropTypes.func.isRequired
 }
