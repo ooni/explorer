@@ -1,8 +1,6 @@
 /* global process */
-import styled from 'styled-components'
 import React from 'react'
 import { useState, useEffect } from 'react'
-import { useForm } from 'react-hook-form'
 import * as d3 from 'd3'
 import axios from 'axios'
 import {
@@ -15,12 +13,7 @@ import {
 import Layout from '../../components/Layout'
 import NavBar from '../../components/NavBar'
 import { StackedBarChart } from '../../components/aggregation/mat/Charts'
-
-const StyledLabel = styled(Label)`
-  color: ${props => props.theme.colors.blue5};
-  padding-top: 10px;
-`
-
+import { Form } from '../../components/aggregation/mat/Form'
 
 const loadData = async (params) => {
   const response = await axios.get('https://api.ooni.io/api/v1/aggregation', {
@@ -50,15 +43,6 @@ const getChartMetadata = async (params) => {
   }
 }
 
-const optionsAxis = [
-  'measurement_start_day',
-  'domain',
-  'category_code',
-  'probe_cc',
-  'probe_asn',
-  ''
-]
-
 const MeasurementAggregationToolkit = () => {
 
   const [chartMeta, setChartMeta] = useState(null)
@@ -68,13 +52,9 @@ const MeasurementAggregationToolkit = () => {
     {'label': 'measurement_start_day', 'value': 'measurement_start_day'}
   ])
   const [selectedAxisY, setAxisY] = useState([]);
-  const { register, handleSubmit, watch, errors } = useForm()
 
   const onSubmit = (data) => {
     setChartMeta(null)
-    let indexBy = 'measurement_start_day'
-    let test_name = 'web_connectivity'
-    let probe_cc = 'IT'
     let params = {}
     for (const p of Object.keys(data)) {
       if (data[p] !== '') {
@@ -95,72 +75,7 @@ const MeasurementAggregationToolkit = () => {
       <NavBar />
       <Container>
         <Heading h={1} my={4}>OONI Measurement Aggregation Toolkit</Heading>
-        <form onSubmit={handleSubmit(onSubmit)} className="form-container">
-          <Flex flexWrap='wrap'>
-            <Box width={1/3}>
-              <StyledLabel>
-                probe_cc
-              </StyledLabel>
-              <input name="probe_cc" ref={register} />
-            </Box>
-            <Box width={1/3}>
-              <StyledLabel>
-                probe_asn
-              </StyledLabel>
-              <input name="probe_asn" ref={register} />
-            </Box>
-            <Box width={1/3}>
-              <StyledLabel>
-                test_name
-              </StyledLabel>
-              <input name="test_name" defaultValue='web_connectivity' ref={register} />
-            </Box>
-            <Box width={1/3}>
-              <StyledLabel>
-                since
-              </StyledLabel>
-              <input name="since" defaultValue='2020-05-01' ref={register} />
-            </Box>
-            <Box width={1/3}>
-              <StyledLabel>
-                until
-              </StyledLabel>
-              <input name="until" defaultValue='2020-06-01' ref={register} />
-            </Box>
-            <Box width={1/3}>
-              <StyledLabel>
-                domain
-              </StyledLabel>
-              <input name="domain" ref={register} />
-            </Box>
-            <Box width={1/3}>
-              <StyledLabel>
-                category_code
-              </StyledLabel>
-              <input name="category_code" ref={register} />
-            </Box>
-            <Box width={1/3}>
-              <StyledLabel>
-                axis_x
-              </StyledLabel>
-              <select name="axis_x" ref={register} defaultValue='measurement_start_day'>
-                {optionsAxis.map(option => (<option value={option}>{option}</option>))}
-              </select>
-            </Box>
-            <Box width={1/3}>
-              <StyledLabel>
-                axis_y
-              </StyledLabel>
-              <select name="axis_y" ref={register} defaultValue=''>
-                {optionsAxis.map(option => (<option value={option}>{option}</option>))}
-              </select>
-            </Box>
-            <Box width={1/3}>
-              <input type="submit" />
-            </Box>
-          </Flex>
-
-        </form>
+        <Form onSubmit={onSubmit} />
         <Flex flexWrap='wrap'>
           <Box width={1}>
             {loading && <h2>Loading ...</h2>}
