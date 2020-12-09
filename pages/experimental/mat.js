@@ -1,13 +1,10 @@
-/* global process */
 import React from 'react'
-import { useState, useEffect } from 'react'
-import * as d3 from 'd3'
+import { useState } from 'react'
 import axios from 'axios'
 import {
   Container,
   Heading,
   Flex, Box,
-  Label, Input, Select
 } from 'ooni-components'
 
 import Layout from '../../components/Layout'

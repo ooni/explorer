@@ -7,8 +7,10 @@ import {
   Label, Input, Select, Button
 } from 'ooni-components'
 import { countryList } from 'country-util'
+import moment from 'moment'
 
 import categoryCodes from './category_codes.json'
+import DatePicker from '../../DatePicker'
 
 const StyledLabel = styled(Label).attrs({
   fontSize: 2,
@@ -29,7 +31,9 @@ const optionsAxis = [
 ]
 
 export const Form = ({ onSubmit }) => {
-  const { register, handleSubmit, control, errors } = useForm()
+  const { register, handleSubmit, control, getValues } = useForm()
+  const tomorrow = moment.utc().add(1, 'day').format('YYYY-MM-DD')
+  const lastMonthtoday = moment.utc().subtract(30, 'day').format('YYYY-MM-DD')
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="form-container">
@@ -44,7 +48,7 @@ export const Form = ({ onSubmit }) => {
             control={control}
             defaultValue=''
           >
-            <option>All Countries</option>
+            <option value='XX'>All Countries</option>
             {countryList
               .sort((a,b) => a.iso3166_name > b.iso3166_name)
               .map((c, idx) =>(
@@ -69,13 +73,64 @@ export const Form = ({ onSubmit }) => {
           <StyledLabel>
             Since
           </StyledLabel>
-          <input name="since" defaultValue='2020-05-01' ref={register} />
+          <Controller
+            name='since'
+            control={control}
+            render={({onChange}) => (
+              <DatePicker
+                defaultValue={lastMonthtoday}
+                dateFormat='YYYY-MM-DD'
+                utc={true}
+                timeFormat={false}
+                onChange={(date) =>
+                  onChange(moment.isMoment(date)
+                    ? date.format('YYYY-MM-DD')
+                    : date
+                  )
+                }
+                isValidDate={currentDate => {
+                  const untilValue = getValues('until')
+                  if (untilValue && untilValue.length !== 0) {
+                    return currentDate.isBefore(untilValue, 'day')
+                  } else {
+                    return currentDate.isBefore(tomorrow)
+                  }
+                }}
+              />
+            )}
+          />
         </Box>
         <Box width={1/3}>
           <StyledLabel>
             Until
           </StyledLabel>
-          <input name="until" defaultValue='2020-06-01' ref={register} />
+          <Controller
+            name='until'
+            control={control}
+            defaultValue={tomorrow}
+            render={({onChange}) => (
+              <DatePicker
+                defaultValue={lastMonthtoday}
+                dateFormat='YYYY-MM-DD'
+                utc={true}
+                timeFormat={false}
+                onChange={(date) =>
+                  onChange(moment.isMoment(date)
+                    ? date.format('YYYY-MM-DD')
+                    : date
+                  )
+                }
+                isValidDate={currentDate => {
+                  const sinceFilter = getValues('since')
+                  if (sinceFilter && sinceFilter.length !== 0) {
+                    return currentDate.isAfter(sinceFilter) && currentDate.isSameOrBefore(tomorrow)
+                  } else {
+                    return currentDate.isSameOrBefore(tomorrow)
+                  }
+                }}
+              />
+            )}
+          />
         </Box>
         <Box width={1/3}>
           <StyledLabel>
