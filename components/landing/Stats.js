@@ -1,3 +1,4 @@
+/* global process */
 import React from 'react'
 import {
   VictoryChart,
@@ -9,10 +10,10 @@ import {
 } from 'victory'
 import axios from 'axios'
 import moment from 'moment'
-import { Flex, Heading, Text, theme } from 'ooni-components'
-import { injectIntl } from 'react-intl'
+import { Flex, Text, theme } from 'ooni-components'
+import { useIntl } from 'react-intl'
+import useSWR from 'swr'
 
-import SpinLoader from '../vendor/SpinLoader'
 import Tooltip from '../country/Tooltip'
 import FormattedMarkdown from '../FormattedMarkdown'
 import VictoryTheme from '../VictoryTheme'
@@ -29,45 +30,37 @@ const getMaxima = (data) => {
   return maxima
 }
 
-class CoverageChart extends React.Component {
-  constructor(props) {
-    super(props)
-    this.state = {
-      countryCoverage: null,
-      networkCoverage: null,
-      measurementsByMonth: null,
-      fetching: true
-    }
-  }
-  componentDidMount() {
-    this.fetchCoverageStats()
-  }
+const BASE_URL = `${process.env.MEASUREMENTS_URL}`
 
-  async fetchCoverageStats () {
-    const client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
-    const result = await client.get('/api/_/global_overview_by_month')
+const dataFetcher = query => (
+  axios.get( BASE_URL + query).then(r => r.data)
+)
 
-    this.setState({
-      countryCoverage: result.data.countries_by_month,
-      networkCoverage: result.data.networks_by_month,
-      measurementsByMonth: result.data.measurements_by_month,
-      fetching: false
-    })
-  }
+const swrOptions = {
+  revalidateOnFocus: false,
+}
 
-  render() {
-    const { countryCoverage, networkCoverage, measurementsByMonth, fetching } = this.state
-    const { intl } = this.props
+const CoverageChart = () => {
 
-    if (fetching) {
-      return (<ChartLoader />)
-    }
+  const { data, isValidating } = useSWR('/api/_/global_overview_by_month', dataFetcher, swrOptions)
+
+  const intl = useIntl()
+
+  if (data) {
+    const {
+      countries_by_month: countryCoverage,
+      networks_by_month: networkCoverage,
+      measurements_by_month: measurementsByMonth
+    } = data
+    countryCoverage.pop()
+    networkCoverage.pop()
+    measurementsByMonth.pop()
 
     // API responses are ordered by date, with most recent month at the end
     const lastMonth = {
-      countryCount: countryCoverage[countryCoverage.length - 1].value,
-      networkCount: networkCoverage[networkCoverage.length - 1].value,
-      measurementCount: measurementsByMonth[measurementsByMonth.length - 1].value
+      countryCount: countryCoverage[countryCoverage.length - 2].value,
+      networkCount: networkCoverage[networkCoverage.length - 2].value,
+      measurementCount: measurementsByMonth[measurementsByMonth.length - 2].value
     }
 
     // Determine the maximum value for each data set
@@ -225,7 +218,9 @@ class CoverageChart extends React.Component {
         </VictoryChart>
       </React.Fragment>
     )
+  } else {
+    return (<ChartLoader />)
   }
 }
 
-export default injectIntl(CoverageChart)
+export default CoverageChart
