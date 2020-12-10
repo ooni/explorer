@@ -31,7 +31,7 @@ const optionsAxis = [
 const tomorrow = moment.utc().add(1, 'day').format('YYYY-MM-DD')
 const lastMonthToday = moment.utc().subtract(30, 'day').format('YYYY-MM-DD')
 
-const defaultValues = {
+const defaultDefaultValues = {
   probe_cc: '',
   probe_asn: '',
   test_name: 'web_connectivity',
@@ -43,7 +43,8 @@ const defaultValues = {
   axis_y: ''
 }
 
-export const Form = ({ onSubmit, testNames }) => {
+export const Form = ({ onSubmit, testNames, query }) => {
+  const defaultValues = Object.assign({}, defaultDefaultValues, query)
   const { handleSubmit, control, getValues } = useForm({
     defaultValues
   })
@@ -75,9 +76,11 @@ export const Form = ({ onSubmit, testNames }) => {
           <Controller
             name='probe_asn'
             control={control}
-            render={() => (
+            render={({onChange, value}) => (
               <Input
                 placeholder='AS1234'
+                onChange={(e) => onChange(e)}
+                value={value}
               />
             )}
           />
@@ -167,9 +170,11 @@ export const Form = ({ onSubmit, testNames }) => {
           <Controller
             name='input'
             control={control}
-            render={() => (
+            render={({onChange, value}) => (
               <Input
                 placeholder='https://twitter.com/OpenObservatory'
+                onChange={(e) => onChange(e)}
+                value={value}
               />
             )}
           />
