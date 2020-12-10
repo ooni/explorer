@@ -1,3 +1,4 @@
+/* global process */
 import React, { useState } from 'react'
 import Head from 'next/head'
 import axios from 'axios'
@@ -11,6 +12,8 @@ import Layout from '../../components/Layout'
 import NavBar from '../../components/NavBar'
 import { StackedBarChart } from '../../components/aggregation/mat/Charts'
 import { Form } from '../../components/aggregation/mat/Form'
+
+const baseURL = process.env.MEASUREMENTS_URL
 
 const loadData = async (params) => {
   const response = await axios.get('https://api.ooni.io/api/v1/aggregation', {
@@ -40,7 +43,22 @@ const getChartMetadata = async (params) => {
   }
 }
 
-const MeasurementAggregationToolkit = () => {
+export const getServerSideProps = async () => {
+  const testNamesR = await axios.get(`${baseURL}/api/_/test_names`)
+  if (Array.isArray(testNamesR?.data?.test_names)){
+    return {
+      props: {
+        testNames: testNamesR.data.test_names
+      }
+    }
+  } else {
+    return {
+      testNames: []
+    }
+  }
+}
+
+const MeasurementAggregationToolkit = ({ testNames }) => {
 
   const [chartMeta, setChartMeta] = useState(null)
   const [loadTime, setLoadTime] = useState(null)
@@ -75,7 +93,7 @@ const MeasurementAggregationToolkit = () => {
       <NavBar />
       <Container>
         <Heading h={1} my={4}>OONI Measurement Aggregation Toolkit</Heading>
-        <Form onSubmit={onSubmit} />
+        <Form onSubmit={onSubmit} testNames={testNames} />
         <Flex flexWrap='wrap'>
           <Box width={1}>
             {loading && <h2>Loading ...</h2>}
