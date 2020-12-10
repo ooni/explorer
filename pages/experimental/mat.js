@@ -1,5 +1,5 @@
-import React from 'react'
-import { useState } from 'react'
+import React, { useState } from 'react'
+import Head from 'next/head'
 import axios from 'axios'
 import {
   Container,
@@ -69,6 +69,9 @@ const MeasurementAggregationToolkit = () => {
 
   return (
     <Layout>
+      <Head>
+        <title>OONI MAT</title>
+      </Head>
       <NavBar />
       <Container>
         <Heading h={1} my={4}>OONI Measurement Aggregation Toolkit</Heading>

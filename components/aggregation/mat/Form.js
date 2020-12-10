@@ -13,9 +13,7 @@ import categoryCodes from './category_codes.json'
 import DatePicker from '../../DatePicker'
 
 const StyledLabel = styled(Label).attrs({
-  fontSize: 2,
   my: 2,
-  pt: 3,
   color: 'blue5',
 })`
   text:
@@ -23,21 +21,37 @@ const StyledLabel = styled(Label).attrs({
 
 const optionsAxis = [
   'measurement_start_day',
-  'domain',
+  'input',
   'category_code',
   'probe_cc',
   'probe_asn',
   ''
 ]
 
-export const Form = ({ onSubmit }) => {
-  const { register, handleSubmit, control, getValues } = useForm()
-  const tomorrow = moment.utc().add(1, 'day').format('YYYY-MM-DD')
-  const lastMonthtoday = moment.utc().subtract(30, 'day').format('YYYY-MM-DD')
+const tomorrow = moment.utc().add(1, 'day').format('YYYY-MM-DD')
+const lastMonthToday = moment.utc().subtract(30, 'day').format('YYYY-MM-DD')
 
+const defaultValues = {
+  probe_cc: '',
+  probe_asn: '',
+  test_name: 'web_connectivity',
+  input: '',
+  category_code: '',
+  since: lastMonthToday,
+  until: tomorrow,
+  axis_x: 'measurement_start_day',
+  axis_y: ''
+}
+
+export const Form = ({ onSubmit }) => {
+  const { register, handleSubmit, control, getValues, watch } = useForm({
+    defaultValues
+  })
+  const allValues = watch()
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="form-container">
-      <Flex flexWrap='wrap'>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <pre>{JSON.stringify(allValues, null, 2)}</pre>
+      <Flex my={2}>
         <Box width={1/3}>
           <StyledLabel>
             Country
@@ -46,9 +60,8 @@ export const Form = ({ onSubmit }) => {
             as={Select}
             name='probe_cc'
             control={control}
-            defaultValue=''
           >
-            <option value='XX'>All Countries</option>
+            <option value=''>All Countries</option>
             {countryList
               .sort((a,b) => a.iso3166_name > b.iso3166_name)
               .map((c, idx) =>(
@@ -57,19 +70,21 @@ export const Form = ({ onSubmit }) => {
             }
           </Controller>
         </Box>
-        <Box width={1/3}>
+        <Box width={1/6}>
           <StyledLabel>
             ASN
           </StyledLabel>
-          <input name="probe_asn" ref={register} />
+          <Controller
+            name='probe_asn'
+            control={control}
+            render={() => (
+              <Input
+                placeholder='AS1234'
+              />
+            )}
+          />
         </Box>
-        <Box width={1/3}>
-          <StyledLabel>
-            Test Name
-          </StyledLabel>
-          <input name="test_name" defaultValue='web_connectivity' ref={register} />
-        </Box>
-        <Box width={1/3}>
+        <Box width={1/5} px={3}>
           <StyledLabel>
             Since
           </StyledLabel>
@@ -78,7 +93,7 @@ export const Form = ({ onSubmit }) => {
             control={control}
             render={({onChange}) => (
               <DatePicker
-                defaultValue={lastMonthtoday}
+                defaultValue={defaultValues.since}
                 dateFormat='YYYY-MM-DD'
                 utc={true}
                 timeFormat={false}
@@ -100,17 +115,16 @@ export const Form = ({ onSubmit }) => {
             )}
           />
         </Box>
-        <Box width={1/3}>
+        <Box width={1/4} px={3}>
           <StyledLabel>
             Until
           </StyledLabel>
           <Controller
             name='until'
             control={control}
-            defaultValue={tomorrow}
             render={({onChange}) => (
               <DatePicker
-                defaultValue={lastMonthtoday}
+                defaultValue={defaultValues.until}
                 dateFormat='YYYY-MM-DD'
                 utc={true}
                 timeFormat={false}
@@ -132,13 +146,34 @@ export const Form = ({ onSubmit }) => {
             )}
           />
         </Box>
-        <Box width={1/3}>
+      </Flex>
+      <Flex justifyContent='space-between'>
+        <Box>
           <StyledLabel>
-            Domain
+            Test Name
           </StyledLabel>
-          <input name="domain" ref={register} />
+          <Controller
+            name='test_name'
+            control={control}
+            as={Select}
+          >
+            {['web_connectivity', 'telegram'].map((testName, idx) => (
+              <option key={idx} value={testName}>{testName}</option>
+            ))}
+          </Controller>
         </Box>
-        <Box width={1/3}>
+        <Box>
+          <StyledLabel>
+            Input
+          </StyledLabel>
+          <Controller
+            name='input'
+            control={control}
+            as={Input}
+            placeholder='https://twitter.com/OpenObservatory'
+          />
+        </Box>
+        <Box>
           <StyledLabel>
             Category Codes
           </StyledLabel>
@@ -146,7 +181,6 @@ export const Form = ({ onSubmit }) => {
             as={Select}
             name='category_code'
             control={control}
-            defaultValue=""
           >
             <option value="">ALL</option>
             {categoryCodes.map((code, idx) => (
@@ -154,25 +188,33 @@ export const Form = ({ onSubmit }) => {
             ))}
           </Controller>
         </Box>
-        <Box width={1/3}>
+        <Box>
           <StyledLabel>
             X Axis
           </StyledLabel>
-          <select name="axis_x" ref={register} defaultValue='measurement_start_day'>
+          <Controller
+            as={Select}
+            name='axis_x'
+            control={control}
+          >
             {optionsAxis.map((option, idx) => (
               <option key={idx} value={option}>{option}</option>
             ))}
-          </select>
+          </Controller>
         </Box>
-        <Box width={1/3}>
+        <Box>
           <StyledLabel>
             Y Axis
           </StyledLabel>
-          <select name="axis_y" ref={register} defaultValue=''>
+          <Controller
+            as={Select}
+            name='axis_y'
+            control={control}
+          >
             {optionsAxis.map((option, idx) => (
               <option key={idx} value={option}>{option}</option>
             ))}
-          </select>
+          </Controller>
         </Box>
       </Flex>
       <Box width={1/3} my={4}>
