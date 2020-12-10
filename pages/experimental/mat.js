@@ -14,8 +14,10 @@ import Layout from '../../components/Layout'
 import NavBar from '../../components/NavBar'
 import { StackedBarChart } from '../../components/aggregation/mat/Charts'
 import { Form } from '../../components/aggregation/mat/Form'
+import { axiosResponseTime } from '../../components/axios-plugins'
 
 const baseURL = process.env.MEASUREMENTS_URL
+axiosResponseTime(axios)
 
 export const getServerSideProps = async () => {
   const testNamesR = await axios.get(`${baseURL}/api/_/test_names`)
@@ -40,7 +42,11 @@ const fetcher = (query) => {
   const qs = new URLSearchParams(query).toString()
   const reqUrl = `${baseURL}/api/v1/aggregation?${qs}`
   return axios.get(reqUrl).then(r => {
-    return r.data
+    return {
+      data: r.data,
+      loadTime: r.loadTime,
+      url: r.config.url
+    }
   })
 }
 
@@ -87,11 +93,10 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
       indexBy = query['axis_x']
 
       return {
-        data: data.result,
-        dimensionCount: data.dimension_count,
-        // TODO Get response time from axios
-        // url: resp.request.responseURL,
-        url: '',
+        data: data.data.result,
+        dimensionCount: data.data.dimension_count,
+        url: data.url,
+        loadTime: data.loadTime,
         cols,
         indexBy
       }
