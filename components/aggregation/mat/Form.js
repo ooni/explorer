@@ -43,15 +43,13 @@ const defaultValues = {
   axis_y: ''
 }
 
-export const Form = ({ onSubmit }) => {
-  const { register, handleSubmit, control, getValues, watch } = useForm({
+export const Form = ({ onSubmit, testNames }) => {
+  const { handleSubmit, control, getValues } = useForm({
     defaultValues
   })
-  const allValues = watch()
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <pre>{JSON.stringify(allValues, null, 2)}</pre>
-      <Flex my={2}>
+      <Flex my={2} alignItems='center'>
         <Box width={1/3}>
           <StyledLabel>
             Country
@@ -147,7 +145,7 @@ export const Form = ({ onSubmit }) => {
           />
         </Box>
       </Flex>
-      <Flex justifyContent='space-between'>
+      <Flex justifyContent='space-between'  alignItems='center'>
         <Box>
           <StyledLabel>
             Test Name
@@ -157,8 +155,8 @@ export const Form = ({ onSubmit }) => {
             control={control}
             as={Select}
           >
-            {['web_connectivity', 'telegram'].map((testName, idx) => (
-              <option key={idx} value={testName}>{testName}</option>
+            {testNames.map((test, idx) => (
+              <option key={idx} value={test.id}>{test.name}</option>
             ))}
           </Controller>
         </Box>
@@ -169,8 +167,11 @@ export const Form = ({ onSubmit }) => {
           <Controller
             name='input'
             control={control}
-            as={Input}
-            placeholder='https://twitter.com/OpenObservatory'
+            render={() => (
+              <Input
+                placeholder='https://twitter.com/OpenObservatory'
+              />
+            )}
           />
         </Box>
         <Box>
@@ -225,5 +226,6 @@ export const Form = ({ onSubmit }) => {
 }
 
 Form.propTypes = {
-  onSubmit: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired,
+  testNames: PropTypes.array
 }
