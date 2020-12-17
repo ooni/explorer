@@ -91,6 +91,9 @@ const Measurement = ({
   const queryString = new URLSearchParams(query);
   const rawMsmtDownloadURL = `${process.env.MEASUREMENTS_URL}/api/v1/raw_measurement?${queryString}`
 
+  // Add the 'AS' prefix to probe_asn when APi chooses to snd just the number
+  probe_asn = typeof probe_asn === 'number' ? `AS${probe_asn}` : probe_asn
+
   return (
     <Layout>
       <Head>

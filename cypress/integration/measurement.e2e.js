@@ -142,17 +142,28 @@ describe('Measurement Page Tests', () => {
   })
 
   describe('Psiphon Tests', () => {
-    it('renders a valid measurement', () => {
-      cy.visit('/measurement/20200304T195627Z_AS30722_Swo4rmIOhNco9zQlX1qf421E6xgMzf5QZeP6oExHWmNOlsUNsO')
+    it('renders an accessible measurement', () => {
+      cy.visit('/measurement/20201203T234857Z_psiphon_US_7922_n1_o3EQXofRAStZ6bpV')
       cy.heroHasColor(normalColor)
-        .contains('OK')
+        .contains('Psiphon works')
+    })
+    it('renders an anomaly measurement', () => {
+      cy.visit('/measurement/20201203T083430Z_psiphon_HK_58453_n1_uKomfZwdUoeRHefK')
+      cy.heroHasColor(anomalyColor)
+        .contains('Psiphon is likely blocked')
     })
   })
 
   describe('Tor Tests', () => {
-    it('renders a valid measurement', () => {
+    it('renders an accessible measurement', () => {
       cy.visit('/measurement/20200304T185533Z_AS30722_H9in1I9RdujJM8lLfCz01SXDoKFRvvdeb519BpHzGk2uYUArkx')
-      cy.heroHasColor(ooniBlue)
+      cy.heroHasColor(normalColor)
+        .contains('Tor works')
+    })
+    it('renders an anomaly measurement', () => {
+      cy.visit('/measurement/20201203T024400Z_tor_CN_4134_n1_XtHDEW5iIBzbErYo')
+      cy.heroHasColor(anomalyColor)
+        .contains('Tor is likely blocked')
     })
   })
 

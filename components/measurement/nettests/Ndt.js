@@ -57,43 +57,45 @@ const NdtDetails = ({ measurement, render }) => {
   const ping = simple.ping && (simple.ping).toFixed(1)
 
   let performanceDetails = null
-  try {
-    if (isNdt7) {
-      const summary = testKeys.summary || {}
-      // Summary
-      packetLoss = summary.retransmit_rate && (summary.retransmit_rate * 100).toFixed(3)
-      minRTT = summary.min_rtt && (summary.min_rtt).toFixed(0)
-      maxRTT = summary.max_rtt && (summary.max_rtt).toFixed(0)
-      mss = summary.mss
-      outOfOrder = null
-      timeouts = null
+  if (!isFailed) {
+    try {
+      if (isNdt7) {
+        const summary = testKeys.summary || {}
+        // Summary
+        packetLoss = summary.retransmit_rate && (summary.retransmit_rate * 100).toFixed(3)
+        minRTT = summary.min_rtt && (summary.min_rtt).toFixed(0)
+        maxRTT = summary.max_rtt && (summary.max_rtt).toFixed(0)
+        mss = summary.mss
+        outOfOrder = null
+        timeouts = null
+      }
+      else {
+        const advanced = testKeys.advanced || null
+        // Advanced
+        delete advanced['out_of_order']
+        packetLoss = advanced.packet_loss && (advanced.packet_loss * 100).toFixed(3)
+        outOfOrder = advanced.out_of_order && (advanced.out_of_order * 100).toFixed(1)
+        minRTT = advanced.min_rtt && (advanced.min_rtt).toFixed(0)
+        maxRTT = advanced.max_rtt && (advanced.max_rtt).toFixed(0)
+        mss = advanced?.mss
+        timeouts = advanced?.timeouts
+      }
+      performanceDetails = (
+        <PerformanceDetails
+          isNdt7={isNdt7}
+          averagePing={ping}
+          maxPing={maxRTT}
+          mss={mss}
+          packetLoss={packetLoss}
+          outOfOrder={outOfOrder}
+          timeouts={timeouts}
+        />
+      )
+    } catch (e) {
+      console.error(`Error in parsing test_keys for ${measurement.test_name}`)
+      console.error(e)
+      // Leaves performanceDetails `null` and thus isn't rendered
     }
-    else {
-      const advanced = testKeys.advanced || null
-      // Advanced
-      delete advanced['out_of_order']
-      packetLoss = advanced.packet_loss && (advanced.packet_loss * 100).toFixed(3)
-      outOfOrder = advanced.out_of_order && (advanced.out_of_order * 100).toFixed(1)
-      minRTT = advanced.min_rtt && (advanced.min_rtt).toFixed(0)
-      maxRTT = advanced.max_rtt && (advanced.max_rtt).toFixed(0)
-      mss = advanced?.mss
-      timeouts = advanced?.timeouts
-    }
-    performanceDetails = (
-      <PerformanceDetails
-        isNdt7={isNdt7}
-        averagePing={ping}
-        maxPing={maxRTT}
-        mss={mss}
-        packetLoss={packetLoss}
-        outOfOrder={outOfOrder}
-        timeouts={timeouts}
-      />
-    )
-  } catch (e) {
-    console.error(`Error in parsing test_keys for ${measurement.test_name}`)
-    console.error(e)
-    // Leaves performanceDetails `null` and thus isn't rendered
   }
 
   // FIXME we need to style the failed test case properly
