@@ -1,6 +1,6 @@
 {
   "name": "ooni-explorer",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "author": "Open Observatory of Network Interference (OONI) <contact@openobservatory.org>",
   "license": "BSD-3-Clause",
   "main": "index.js",
@@ -69,9 +69,12 @@
     "styled-system": "3.1.6",
     "react-icons": "2.2.7",
     "js-yaml": "^3.13.1",
-    "serialize-javascript": "^2.1.1",
+    "serialize-javascript": "^3.1.0",
     "https-proxy-agent": "^2.2.3",
-    "kind-of": "^6.0.3"
+    "kind-of": "^6.0.3",
+    "object-path": "^0.11.5",
+    "node-fetch": "^2.6.1",
+    "http-proxy": "^1.18.1"
   },
   "devDependencies": {
     "babel-plugin-react-intl": "^3.2.0",
