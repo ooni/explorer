@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Box } from 'ooni-components'
-import { Text } from 'rebass'
+import { Box, Text } from 'ooni-components'
 import { FormattedMessage } from 'react-intl'
 import styled from 'styled-components'
 

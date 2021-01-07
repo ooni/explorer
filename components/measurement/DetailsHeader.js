@@ -1,10 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import prettyMs from 'pretty-ms'
-import { Flex, Box, Link } from 'ooni-components'
-// FIXME: Include 'fontWeight' to ooni-components/atoms/Text
-// Using Text from rebass directly for now
-import { Text } from 'rebass'
+import { Flex, Box, Link, Text } from 'ooni-components'
 import { FormattedMessage } from 'react-intl'
 import { MdOpenInNew } from 'react-icons/lib/md'
 
@@ -44,7 +41,7 @@ const DetailsHeader = ({testName, runtime, notice, url}) => {
           <Box>
             <TestGroupBadge
               icon={metadata.icon}
-              name={<Text fontSize={20} is='span'>{metadata.groupName}</Text>}
+              name={<Text fontSize={20} as='span'>{metadata.groupName}</Text>}
               color={metadata.color}
             />
           </Box>
@@ -64,7 +61,7 @@ const DetailsHeader = ({testName, runtime, notice, url}) => {
         <Box>
           {runtime &&
             <Text fontSize={20}>
-              <FormattedMessage id='Measurement.DetailsHeader.Runtime' />: <Text is='span' fontWeight='bold'>{prettyMs(runtime * 1000)}</Text>
+              <FormattedMessage id='Measurement.DetailsHeader.Runtime' />: <Text as='span' fontWeight='bold'>{prettyMs(runtime * 1000)}</Text>
             </Text>
           }
         </Box>

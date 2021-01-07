@@ -4,10 +4,10 @@ import bufferFrom from 'buffer-from'
 import {
   Heading,
   Flex,
-  Box
+  Box,
+  Text
 } from 'ooni-components'
 
-import { Text } from 'rebass'
 import moment from 'moment'
 import { Tick, Cross } from 'ooni-components/dist/icons'
 

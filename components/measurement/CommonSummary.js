@@ -5,8 +5,8 @@ import {
   Flex,
   Container,
   Box,
+  Text
 } from 'ooni-components'
-import { Text } from 'rebass'
 import moment from 'moment'
 import { useIntl } from 'react-intl'
 

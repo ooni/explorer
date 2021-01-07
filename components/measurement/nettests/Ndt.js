@@ -3,28 +3,14 @@ import PropTypes from 'prop-types'
 import {
   Flex,
   Box,
+  Text
 } from 'ooni-components'
-import { Text } from 'rebass'
 import { MdFlashOn } from 'react-icons/lib/md'
 import { useIntl, defineMessages } from 'react-intl'
 
 import { mlabServerDetails } from './mlab_utils'
 import PerformanceDetails from '../PerformanceDetails'
-
-const InfoBoxItem = ({
-  label,
-  content,
-  unit
-}) => (
-  <Box>
-    <Text fontSize={24}>
-      {content} {unit && <Text is='small'>{unit}</Text>}
-    </Text>
-    <Text fontWeight='bold' fontSize={16} >
-      {label}
-    </Text>
-  </Box>
-)
+import { InfoBoxItem } from '../InfoBoxItem'
 
 const ServerLocation = ({ serverAddress = '', isNdt7 }) => {
   const server = mlabServerDetails(serverAddress, isNdt7)

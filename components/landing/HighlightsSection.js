@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Flex, Box } from 'ooni-components'
-import { Text } from 'rebass'
+import { Flex, Box, Text } from 'ooni-components'
 
 import HighlightBox from './HighlightBox'
 

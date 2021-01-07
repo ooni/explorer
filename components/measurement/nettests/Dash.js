@@ -6,20 +6,7 @@ import { useIntl, defineMessages } from 'react-intl'
 
 import MdFlashOn from 'react-icons/lib/md/flash-on'
 
-const InfoBoxItem = ({
-  label,
-  content,
-  unit
-}) => (
-  <Box>
-    <Text fontSize={24}>
-      {content} <Text is='small'>{unit}</Text>
-    </Text>
-    <Text fontWeight='bold' fontSize={16} >
-      {label}
-    </Text>
-  </Box>
-)
+import { InfoBoxItem } from '../InfoBoxItem'
 
 /*
  * This table is derived from:

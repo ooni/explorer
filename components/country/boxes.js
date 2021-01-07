@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Box, Container } from 'ooni-components'
-import { Text } from 'rebass'
+import { Box, Container, Text } from 'ooni-components'
 
 const StyledBox = styled(Box)`
   border: 1px solid ${props => props.theme.colors.gray4};

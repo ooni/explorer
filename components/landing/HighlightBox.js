@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import NLink from 'next/link'
-import { Flex, Box, Link, theme } from 'ooni-components'
-import { Text } from 'rebass'
+import { Flex, Box, Link, theme, Text } from 'ooni-components'
 import styled from 'styled-components'
 import Markdown from 'markdown-to-jsx'
 
