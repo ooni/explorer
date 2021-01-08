@@ -16,10 +16,13 @@ jobs:
       - name: Cypress run
         uses: cypress-io/github-action@v2
         with:
-          build: npm run build
-          start: npm start
+          build: yarn build
+          start: yarn start
           wait-on: 'http://localhost:3100'
           browser: chrome
+          command-prefix: 'percy exec -- npx'
+        env:
+          PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
 
       - name: Upload screenshots on failure
         uses: actions/upload-artifact@v2

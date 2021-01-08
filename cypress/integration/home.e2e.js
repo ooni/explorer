@@ -5,6 +5,7 @@ describe('Home Page Tests', () => {
   before(() => {
     cy.visit('/')
     cy.screenshot('home-page')
+    cy.percySnapshot()
   })
 
   // TODO: Check if stats appear

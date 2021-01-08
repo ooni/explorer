@@ -6,6 +6,10 @@ describe('Countries Page Tests', () => {
     cy.visit('/countries')
   })
 
+  it('shows countries page', () => {
+    cy.percySnapshot()
+  })
+
   it('first region (Africa) is visible', () => {
     cy.get(':nth-child(1) > h1')
       .contains('Africa')

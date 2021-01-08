@@ -14,6 +14,7 @@ describe('Seearch Page Tests', () => {
           .should('have.attr', 'href')
           .and('match', /measurement/)
       })
+    cy.percySnapshot()
   })
 
   it('shows relevant search results when filter changes', () => {

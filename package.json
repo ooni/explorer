@@ -75,6 +75,7 @@
     "http-proxy": "^1.18.1"
   },
   "devDependencies": {
+    "@percy/cypress": "^2.3.3",
     "babel-plugin-react-intl": "^3.2.0",
     "cypress": "^5.2.0",
     "eslint": "^4.19.1",
@@ -89,9 +90,8 @@
     "build": "next build",
     "export": "next export",
     "lint": "eslint --ignore-path .gitignore --ignore-pattern components/vendor .",
-    "test:e2e": "yarn build && start-server-and-test start http://localhost:3100 cypress:run",
+    "test": "start-server-and-test 'yarn build && yarn start' 3100 cypress:run",
     "cypress:run": "cypress run",
-    "test": "echo nothing interesting",
     "start": "MEASUREMENTS_URL=https://api.ooni.io node index.js"
   }
 }

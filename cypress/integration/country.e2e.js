@@ -14,6 +14,7 @@ describe('Country Page Tests', () => {
   // TODO: Expanding IM section rows show website graphs
 
   it('renders the correct country page', () => {
+    cy.percySnapshot()
     cy.get('h1').contains('Canada')
   })
 

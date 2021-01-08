@@ -1,4 +1,6 @@
 # OONI Explorer
+[![This project is using Percy.io for visual regression testing.](https://percy.io/static/images/percy-badge.svg)](https://percy.io/407b7763/ooni-explorer)
+
 
 For the live website see: https://explorer.ooni.org.
 
