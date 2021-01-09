@@ -126,7 +126,7 @@ describe('Measurement Page Tests', () => {
     // Failed WhatsApp measurements are not styled and presented as failed tests
     // it('renders a failed measurement', () => {
     //   cy.visit('/measurement/20201106T201330Z_whatsapp_BA_20875_n1_l6spr0AGVxYVjr1f')
-    // cy.percySnapshot()
+    //  cy.percySnapshot()
     //   cy.heroHasColor(errorColor)
     //     .contains('Error')
     // })
