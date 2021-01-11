@@ -1,6 +1,6 @@
 /* global process */
 import { rest } from 'msw'
-import fixtures from '../fixtures'
+import fixtures from '../fixtures/SSRcalls'
 
 export const handlers = [
   rest.get(`${process.env.MEASUREMENTS_URL}/api/v1/measurements`, (req, res, ctx) => {
@@ -19,13 +19,15 @@ export const handlers = [
       return
     }
   }),
-  // generic handler for all API calls
-  // rest.get(`${process.env.MEASUREMENTS_URL}/api/:part1/:part2`, (req, res, ctx) => {
-  //   const { part1, part2 } = req.params
-  //   if (`/api/${part1}/${part2}` in fixtures) {
-  //     return res(
-  //       ctx.json(fixtures[`/api/${part1}/${part2}`])
-  //     )
-  //   }
-  // })
+  // generic handler for all API calls with fixtures in `cypress/fixtures/SSRcalls`
+  rest.get(`${process.env.MEASUREMENTS_URL}/api/:part1/:part2`, (req, res, ctx) => {
+    const { part1, part2 } = req.params
+    if (`/api/${part1}/${part2}` in fixtures) {
+      return res(
+        ctx.json(fixtures[`/api/${part1}/${part2}`])
+      )
+    } else {
+      return
+    }
+  })
 ]

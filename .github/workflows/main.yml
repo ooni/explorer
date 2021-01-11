@@ -23,6 +23,7 @@ jobs:
           command-prefix: 'percy exec -- npx'
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
+          API_MOCKING: enabled
 
       - name: Upload screenshots on failure
         uses: actions/upload-artifact@v2
