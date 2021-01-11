@@ -17,13 +17,12 @@ jobs:
         uses: cypress-io/github-action@v2
         with:
           build: yarn build
-          start: yarn start
+          start: API_MOCKING=enabled yarn start
           wait-on: 'http://localhost:3100'
           browser: chrome
           command-prefix: 'percy exec -- npx'
         env:
           PERCY_TOKEN: ${{ secrets.PERCY_TOKEN }}
-          API_MOCKING: enabled
 
       - name: Upload screenshots on failure
         uses: actions/upload-artifact@v2
