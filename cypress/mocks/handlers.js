@@ -9,12 +9,9 @@ export const handlers = [
     if (req.url.searchParams.get('since') === '2020-12-06'
       && req.url.searchParams.get('until') === '2020-12-15'
     ) {
-      const { part1, part2 } = req.params
-      if (`/api/${part1}/${part2}` in fixtures) {
-        return res(
-          ctx.json(fixtures[`/api/${part1}/${part2}`])
-        )
-      }
+      return res(
+        ctx.json(fixtures['/api/v1/measurements'])
+      )
     } else {
       return
     }

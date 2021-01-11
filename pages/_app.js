@@ -20,7 +20,7 @@ const { Sentry, captureException } = sentry()
 
 // This enables using mocked responses to API requests while testing
 // To show consistent results across visual tests
-if (process.env.API_MOCKING === 'enabled' && process.env.NODE_ENV !== 'production') {
+if (process.env.API_MOCKING === 'enabled' && process.env.CI === 'true') {
   require('../cypress/mocks')
 }
 
