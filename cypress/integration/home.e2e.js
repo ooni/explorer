@@ -3,7 +3,12 @@
 describe('Home Page Tests', () => {
 
   before(() => {
-    cy.intercept('GET', '/api/_/*').as('apiCalls')
+    cy.intercept(
+      'GET',
+      '/api/_/global_overview_by_month',
+      { fixture: 'globalMonthlyStatApi.json' }
+    ).as('globalMonthlyStatApi')
+
     cy.visit('/')
   })
 
@@ -11,7 +16,7 @@ describe('Home Page Tests', () => {
   // TODO: Check if monthly coverage graph loads
   // TODO: Check if Highlights cards are displayed
   it('shows home page', () => {
-    cy.wait('@apiCalls')
+    cy.wait('@globalMonthlyStatApi')
     cy.percySnapshot()
   })
 

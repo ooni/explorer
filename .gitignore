@@ -5,3 +5,6 @@ ignore/
 .DS_Store
 package-lock.json
 static/lang/.messages/
+cypress/screenshots
+cypress/videos
+cypress/logs

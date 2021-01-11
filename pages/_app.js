@@ -1,3 +1,4 @@
+/* global require, process */
 //FROM: https://github.com/zeit/next.js/blob/master/examples/with-sentry
 
 import React from 'react'
@@ -16,6 +17,12 @@ Router.onRouteChangeComplete = () => NProgress.done()
 Router.onRouteChangeError = () => NProgress.done()
 
 const { Sentry, captureException } = sentry()
+
+// This enables using mocked responses to API requests while testing
+// To show consistent results across visual tests
+if (process.env.API_MOCKING === 'enabled' && process.env.NODE_ENV !== 'production') {
+  require('../cypress/mocks')
+}
 
 export default class MyApp extends App {
   constructor () {

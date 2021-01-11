@@ -2,11 +2,14 @@
 
 describe('Seearch Page Tests', () => {
 
-  before(() => {
-    cy.visit('/search')
+  it('Serach page renders for Percy', () => {
+    cy.visit('/search?since=2020-12-06&until=2020-12-15')
+    cy.get('[data-test-id="results-list"]').should('be.visible')
+    cy.percySnapshot()
   })
 
   it('default filter shows 50 results', () => {
+    cy.visit('/search')
     // Check if search results appear upon page load
     cy.get('[data-test-id="results-list"]').children('a').should('have.length', 50)
       .each(($el) => {
@@ -14,10 +17,10 @@ describe('Seearch Page Tests', () => {
           .should('have.attr', 'href')
           .and('match', /measurement/)
       })
-    cy.percySnapshot()
   })
 
   it('shows relevant search results when filter changes', () => {
+    cy.visit('/search')
     cy.get('select[name="testNameFilter"]').select('web_connectivity')
     cy.get('button').contains('Filter Results').should('not.be.disabled').click()
     cy.get('[data-test-id="results-list"]', { timeout: 10000 })
@@ -30,18 +33,16 @@ describe('Seearch Page Tests', () => {
   })
 
   it('fetches more results when "Load More" button is clicked', () => {
+    cy.visit('/search')
     cy.get('[data-test-id="load-more-button"]').click()
     cy.get('[data-test-id="results-list"]').children('a').should('have.length', 100)
-  })
-
-  it('results loaded by "Load More" button are valid', () => {
     cy.get('[data-test-id="results-list"] > a:nth-child(51)').click()
     cy.url().should('include', '/measurement/')
-    cy.go('back')
   })
 
 
   it('all filters are usable', () => {
+    cy.visit('/search')
     cy.get('[data-test-id="country-filter"]').select('Italy')
     cy.get('[data-test-id="asn-filter"]').type('12345')
 
@@ -74,7 +75,8 @@ describe('Seearch Page Tests', () => {
   })
 
   it('conditional filters are hidden and shown depending on selections', () => {
-    cy.get('[data-test-id="domain-filter"]').should('not.be.visible')
+    cy.visit('/search?test_name=tor')
+    cy.get('[data-test-id="domain-filter"]').should('not.exist')
     cy.get('[data-test-id="testname-filter"]').select('Web Connectivity')
     cy.get('[data-test-id="domain-filter"]').should('be.visible')
   })
