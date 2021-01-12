@@ -21,7 +21,8 @@ describe('Country Page Tests', () => {
   // TODO: Expanding IM section rows show website graphs
 
   it.only('shows country page', () => {
-    cy.wait('@apiCalls')
+    // sometimes cypress doesn't wait until multiple requests with same alias respond
+    cy.wait(['@apiCalls', '@website_stats', '@website_stats', '@website_stats', '@website_stats'])
     cy.percySnapshot()
   })
 
