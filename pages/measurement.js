@@ -124,13 +124,15 @@ const Measurement = ({
             details
           }) => (
             <React.Fragment>
-              {headMetadata && <HeadMetadata
-                    content={headMetadata}
-                    testName={measurement.test_name}
-                    testUrl={measurement.input}
-                    country={country}
-                    date={measurement.test_start_time}
-              />}
+              {headMetadata &&
+                <HeadMetadata
+                  content={headMetadata}
+                  testName={test_name}
+                  testUrl={input}
+                  country={country}
+                  date={test_start_time}
+                />
+              }
               <NavBar color={pageColors[status]} />
               <Hero
                 color={pageColors[status]}
