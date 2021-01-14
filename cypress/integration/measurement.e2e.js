@@ -17,7 +17,7 @@ describe('Measurement Page Tests', () => {
     it('renders a valid blocked og:description', () => {
       cy.visit('/measurement/20200303T085244Z_AS42668_UThI3Fdoo0IZ6610604dd0CGkhd7oQV6QLWWzZDVLJ35oGxBO4?input=http%3A%2F%2Frutor.org%2F')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'On March 03, 2020, 8:52 AM UTC, http://rutor.org/ was blocked in Russia, explore more details and other measurements on OONI Explorer.')
+        .should('have.attr', 'content', 'On March 03, 2020, 08:52 AM UTC, http://rutor.org/ was blocked in Russia, explore more details and other measurements on OONI Explorer.')
     })
 
     it('renders a valid anomaly og:description', () => {
@@ -96,10 +96,10 @@ describe('Measurement Page Tests', () => {
         .should('have.attr', 'content', 'On August 7, 2020, Whatsapp was reachable in United States, explore more details and other measurements on OONI Explorer.')
     })
 
-    it('renders an unreachable og:description', () => {
+    it.only('renders an unreachable og:description', () => {
       cy.visit('/measurement/20200407T024309Z_AS4713_xA9Wh81DQrIFqRe46zwKeyJw4DJQwjyTLBIi2zSQqWUBsfQMJS')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'On April 6, 2020, Whatsapp was NOT reachable in Japan, explore more details and other measurements on OONI Explorer.')
+        .should('have.attr', 'content', 'On April 7, 2020, Whatsapp was NOT reachable in Japan, explore more details and other measurements on OONI Explorer.')
     })
 
     it('renders an accessible measurement', () => {

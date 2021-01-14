@@ -14,11 +14,11 @@ const HeadMetadata = ({
 }) => {
   const intl = useIntl()
   let description = ''
-  
+
   if (content.formatted) {
     description = content.message
   } else {
-    const formattedDate = moment(date).format('LL')
+    const formattedDate = moment.utc(date).format('LL')
     const metadata = getTestMetadata(testName)
     description = intl.formatMessage(
       content.message,
@@ -48,4 +48,4 @@ HeadMetadata.propTypes = {
   })
 }
 
-export default HeadMetadata 
+export default HeadMetadata

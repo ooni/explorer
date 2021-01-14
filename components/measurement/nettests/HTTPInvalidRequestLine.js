@@ -29,11 +29,11 @@ const HttpInvalidRequestLineDetails = ({ measurement, render }) => {
     render({
       status: isAnomaly ? 'anomaly' : 'reachable',
       statusLabel: isAnomaly
-      ? <FormattedMessage id='Measurement.Hero.Status.HTTPInvalidReqLine.MiddleboxesDetected' />
-      : <FormattedMessage id='Measurement.Hero.Status.HTTPInvalidReqLine.NoMiddleBoxes' />,
+        ? <FormattedMessage id='Measurement.Hero.Status.HTTPInvalidReqLine.MiddleboxesDetected' />
+        : <FormattedMessage id='Measurement.Hero.Status.HTTPInvalidReqLine.NoMiddleBoxes' />,
       summaryText: isAnomaly
-      ? 'Measurement.HTTPInvalidReqLine.MiddleboxesDetected.SummaryText'
-      : 'Measurement.HTTPInvalidReqLine.NoMiddleBoxes.SummaryText',
+        ? 'Measurement.HTTPInvalidReqLine.MiddleboxesDetected.SummaryText'
+        : 'Measurement.HTTPInvalidReqLine.NoMiddleBoxes.SummaryText',
       headMetadata: {
         message: isAnomaly ? messages.middleboxes : messages.noMiddleboxes,
         formatted: false
