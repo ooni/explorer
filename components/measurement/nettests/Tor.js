@@ -149,7 +149,7 @@ const TorDetails = ({
   render
 }) => {
   // https://github.com/ooni/spec/blob/master/nettests/ts-023-tor.md#possible-conclusions
-  let status, hint
+  let status, hint, summaryText
 
   if (isFailure) {
     status = 'error'
@@ -244,6 +244,7 @@ const TorDetails = ({
       {render({
         status: status,
         statusInfo: hint,
+        summaryText: summaryText,
         headMetadata: {
           message: messages.tor,
           formatted: false

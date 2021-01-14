@@ -1,4 +1,4 @@
-/* global describe, it, cy, before */
+/* global describe, it, cy */
 describe('Measurement Page Tests', () => {
 
   const normalColor = 'rgb(47, 158, 68)'
@@ -9,19 +9,19 @@ describe('Measurement Page Tests', () => {
 
   describe('Web Connectivity tests', () => {
     it('renders a valid accessible og:description', () => {
-      cy.visit('/measurement/20200807T220702Z_AS9009_VDIirQFXzvVZXGTDXrRKAd7oQB3CpnKGISOZLs7kQFV6RJNR7n')
+      cy.visit('/measurement/20200807T220702Z_AS9009_VDIirQFXzvVZXGTDXrRKAd7oQB3CpnKGISOZLs7kQFV6RJNR7n?input=https%3A%2F%2Fwww.theguardian.com%2F')
       cy.get('head meta[property="og:description"]')
         .should('have.attr', 'content', 'On August 07, 2020, 10:42 PM UTC, https://www.theguardian.com/ was accessible in United States, explore more details and other measurements on OONI Explorer.')
     })
 
     it('renders a valid blocked og:description', () => {
-      cy.visit('/measurement/20200807T220532Z_AS4788_2LHmYburP47k1z4qy9KxfZiKkxBJKITPfATIsgLkY6FRWw165o')
+      cy.visit('/measurement/20200303T085244Z_AS42668_UThI3Fdoo0IZ6610604dd0CGkhd7oQV6QLWWzZDVLJ35oGxBO4?input=http%3A%2F%2Frutor.org%2F')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'On August 07, 2020, 10:15 PM UTC, https://icao.maps.arcgis.com/apps/opsdashboard/index.html#/977dde48256b489fb48fa98e724721e8 was accessible in Malaysia, explore more details and other measurements on OONI Explorer.')
+        .should('have.attr', 'content', 'On March 03, 2020, 8:52 AM UTC, http://rutor.org/ was blocked in Russia, explore more details and other measurements on OONI Explorer.')
     })
 
     it('renders a valid anomaly og:description', () => {
-      cy.visit('/measurement/20200807T223513Z_AS27364_QJdsvFRG6B98MqqWR3QTey9WheksI7757sefWWMwAe0OHU8hWT')
+      cy.visit('/measurement/20200807T223513Z_AS27364_QJdsvFRG6B98MqqWR3QTey9WheksI7757sefWWMwAe0OHU8hWT?input=http%3A%2F%2Fwww.google.com%2Fsearch%3Fq%3Dlesbian')
       cy.get('head meta[property="og:description"]')
         .should('have.attr', 'content', 'On August 07, 2020, 10:35 PM UTC, http://www.google.com/search?q=lesbian was accessible in United States, explore more details and other measurements on OONI Explorer.')
     })
@@ -96,11 +96,11 @@ describe('Measurement Page Tests', () => {
         .should('have.attr', 'content', 'On August 7, 2020, Whatsapp was reachable in United States, explore more details and other measurements on OONI Explorer.')
     })
 
-    // it('renders a unreachable og:description', () => {
-    //   cy.visit('')
-    //   cy.get('head meta[property="og:description"]')
-    //     .should('have.attr', 'content', '')
-    // })
+    it('renders an unreachable og:description', () => {
+      cy.visit('/measurement/20200407T024309Z_AS4713_xA9Wh81DQrIFqRe46zwKeyJw4DJQwjyTLBIi2zSQqWUBsfQMJS')
+      cy.get('head meta[property="og:description"]')
+        .should('have.attr', 'content', 'On April 6, 2020, Whatsapp was NOT reachable in Japan, explore more details and other measurements on OONI Explorer.')
+    })
 
     it('renders an accessible measurement', () => {
       cy.visit('/measurement/20200304T203936Z_AS44869_bVdV4B2HXylbIS8nFmdYbXDsDa5gwmkJbF38uWEfus1MMpS5b6')
@@ -164,6 +164,11 @@ describe('Measurement Page Tests', () => {
       cy.get('head meta[property="og:description"]')
         .should('have.attr', 'content', 'On August 7, 2020, NO HTTP header manipulation was detected in South Africa, explore more details and other measurements on OONI Explorer.')
     })
+    it('renders an anomaly og:description', () => {
+      cy.visit('/measurement/20190530T141520Z_AS4788_DNqCUqL7CAfijExowyaymigb2sITdpS47gjrieDJCx8kDc1TfO')
+      cy.get('head meta[property="og:description"]')
+        .should('have.attr', 'content', 'On May 30, 2019, HTTP header manipulation was detected in Malaysia, explore more details and other measurements on OONI Explorer.')
+    })
   })
 
   describe('HTTP Invalid Request Line Tests', () => {
@@ -181,6 +186,11 @@ describe('Measurement Page Tests', () => {
       cy.visit('/measurement/20200807T222629Z_AS31334_YNx9EqZSwRVEzVLN3TowlkW0a8pw1PYzJSI8yxHKDhVa7a2han')
       cy.get('head meta[property="og:description"]')
         .should('have.attr', 'content', 'On August 7, 2020, NO network traffic manipulation was detected in Germany, explore more details and other measurements on OONI Explorer.')
+    })
+    it('render an anomaly og:description', () => {
+      cy.visit('/measurement/20170213T160709Z_AS8452_M5qSjOZgYwFrkQYVfdrYmYw2tLc3dzJB7mVbtjVoR1qCdbcEOA')
+      cy.get('head meta[property="og:description"]')
+        .should('have.attr', 'content', 'On February 13, 2017, network traffic manipulation was detected in Egypt, explore more details and other measurements on OONI Explorer.')
     })
   })
 
