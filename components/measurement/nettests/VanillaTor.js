@@ -4,7 +4,7 @@ import {
   Container,
   Flex,
 } from 'ooni-components'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, defineMessages } from 'react-intl'
 import MdCheckCircle from 'react-icons/lib/md/check-circle'
 import MdTimelapse from 'react-icons/lib/md/timelapse'
 
@@ -19,15 +19,31 @@ const VanillaTorDetails = ({ measurement, render }) => {
   const torProgress = testKeys.tor_progress
   const isFailure = testKeys.error !== null
   const failure = testKeys.failure
+
+  const messages = defineMessages({
+    reachable: {
+      id: 'Measurement.Metadata.VanillaTor.Reachable',
+      defaultMessage: 'On {date}, Vanilla Tor was able to bootstrap in {country}, explore more details and other measurements on OONI Explorer.'
+    },
+    unReachable: {
+      id: 'Measurement.Metadata.VanillaTor.UnReachable',
+      defaultMessage: 'On {date}, Vanilla Tor was NOT able to bootstrap in {country}, explore more details and other measurements on OONI Explorer.'
+    }
+  })
+
   return (
     render({
       status: isAnomaly ? 'anomaly' : 'reachable',
       statusLabel: isAnomaly
-        ? <FormattedMessage id='Measurement.Hero.Status.TorVanilla.Blocked' />
-        : <FormattedMessage id='Measurement.Hero.Status.TorVanilla.Reachable' />,
+      ? <FormattedMessage id='Measurement.Hero.Status.TorVanilla.Blocked' />
+      : <FormattedMessage id='Measurement.Hero.Status.TorVanilla.Reachable' />,
       summaryText: isAnomaly
-        ? 'Measurement.Details.SummaryText.TorVanilla.Blocked'
-        : 'Measurement.Details.SummaryText.TorVanilla.Reachable',
+      ? 'Measurement.Details.SummaryText.TorVanilla.Blocked'
+      : 'Measurement.Details.SummaryText.TorVanilla.Reachable',
+      headMetadata: {
+        message: isAnomaly ? messages.unReachable : messages.reachable,
+        formatted: false
+      },
       details: (
         <React.Fragment>
           <Container>

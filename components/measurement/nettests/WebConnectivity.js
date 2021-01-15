@@ -307,6 +307,7 @@ const WebConnectivityDetails = ({
 
   let status = 'default'
   let summaryText = ''
+  let headMetadata = { message: '', formatted: true }
 
   let reason = messages[`blockingReason.${blocking}`] && intl.formatMessage(messages[`blockingReason.${blocking}`])
 
@@ -326,72 +327,128 @@ const WebConnectivityDetails = ({
     )
   } else if(isConfirmed) {
     status = 'confirmed'
-    summaryText = (
-      <FormattedMessage
-        id='Measurement.SummaryText.Websites.ConfirmedBlocked'
-        values={{
-          date: date,
-          WebsiteURL: input,
-          network: probe_asn,
-          country: country,
-        }}
-      />
+    summaryText = intl.formatMessage(
+      {
+        id: 'Measurement.SummaryText.Websites.ConfirmedBlocked'
+      },
+      {
+        date: date,
+        WebsiteURL: input,
+        network: probe_asn,
+        country: country,
+      }
+    )
+    headMetadata.message = intl.formatMessage(
+      {
+        id: 'Measurement.Metadata.WebConnectivity.ConfirmedBlocked',
+        defaultMessage: 'On {date}, {websiteURL} was blocked in {country}, explore more details and other measurements on OONI Explorer.'
+      },
+      {
+        date: date,
+        websiteURL: input,
+        country: country,
+      }
     )
   } else if (isAnomaly) {
     status = 'anomaly'
-    summaryText = (
-      <FormattedMessage
-        id='Measurement.SummaryText.Websites.Anomaly'
-        values={{
-          date: date,
-          WebsiteURL: input,
-          network: probe_asn,
-          country: country,
-          BlockingReason: reason && <strong>{reason}</strong>
-        }}
-      />
+    summaryText = intl.formatMessage(
+      {
+        id: 'Measurement.SummaryText.Websites.Anomaly'
+      },
+      {
+        date: date,
+        WebsiteURL: input,
+        network: probe_asn,
+        country: country,
+        BlockingReason: reason && <strong>{reason}</strong>
+      }
+    )
+    headMetadata.message = intl.formatMessage(
+      {
+        id: 'Measurement.Metadata.WebConnectivity.Anomaly',
+        defaultMessage: 'On {date}, {websiteURL} showed signs of {reason} in {country}, explore more details and other measurements on OONI Explorer.'
+      },
+      {
+        date: date,
+        websiteURL: input,
+        country: country,
+        reason: reason
+      }
     )
   } else if (accessible) {
     status = 'reachable'
-    summaryText = (
-      <FormattedMessage
-        id='Measurement.SummaryText.Websites.Accessible'
-        values={{
-          date: date,
-          WebsiteURL: input,
-          network: probe_asn,
-          country: country
-        }}
-      />
+    summaryText = intl.formatMessage(
+      {
+        id: 'Measurement.SummaryText.Websites.Accessible'
+      },
+      {
+        date: date,
+        WebsiteURL: input,
+        network: probe_asn,
+        country: country
+      }
+    )
+    headMetadata.message = intl.formatMessage(
+      {
+        id: 'Measurement.Metadata.WebConnectivity.Accessible',
+        defaultMessage: 'On {date}, {websiteURL} was accessible in {country}, explore more details and other measurements on OONI Explorer.'
+      },
+      {
+        date: date,
+        websiteURL: input,
+        country: country,
+      }
     )
   } else if (blocking === false) {
     // When not accessible, but also not blocking, it must be down
     status = 'down'
-    summaryText = (
-      <FormattedMessage
-        id='Measurement.SummaryText.Websites.Down'
-        values={{
-          date: date,
-          WebsiteURL: input,
-          network: probe_asn,
-          country: country
-        }}
-      />
+    summaryText = intl.formatMessage(
+      {
+        id: 'Measurement.SummaryText.Websites.Down'
+      },
+      {
+        date: date,
+        WebsiteURL: input,
+        network: probe_asn,
+        country: country
+      }
+    )
+    headMetadata.message = intl.formatMessage(
+      {
+        id: 'Measurement.Metadata.WebConnectivity.Down',
+        defaultmessage: 'on {date}, {websiteurl} was down in {country}, explore more details and other measurements on ooni explorer.'
+      },
+      {
+        date: date,
+        websiteurl: input,
+        country: country,
+      }
     )
   } else {
     // Fallback condition to handle older measurements not present in fastpath
     // See: https://github.com/ooni/explorer/issues/426#issuecomment-612094244
     status = 'error'
-    summaryText = (
-      <FormattedMessage
-        id='Measurement.SummaryText.Websites.Failed'
-        values={{
-          date: date,
-          WebsiteURL: input,
-          network: probe_asn,
-          country: country,
-        }}
-      />
+    summaryText = intl.formatMessage(
+      {
+        id: 'Measurement.SummaryText.Websites.Failed'
+      },
+      {
+        date: date,
+        WebsiteURL: input,
+        network: probe_asn,
+        country: country
+      }
+    )
+    headMetadata.message = intl.formatMessage(
+      {
+        id: 'Measurement.Metadata.WebConnectivity.Failed',
+        defaultmessage: 'on {date}, Web Connectivity test for {websiteurl} failed in {country}, explore more details and other measurements on ooni explorer.'
+      },
+      {
+        date: date,
+        websiteurl: input,
+        country: country,
+      }
     )
   }
 
@@ -410,6 +467,7 @@ const WebConnectivityDetails = ({
         status: status,
         statusInfo: <StatusInfo url={input} message={reason || null} />,
         summaryText: summaryText,
+        headMetadata: headMetadata,
         details: (
           <React.Fragment>
             {/* Failures */}

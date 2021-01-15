@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback } from 'react'
 import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, defineMessages } from 'react-intl'
 import { Flex, Text, Container, theme } from 'ooni-components'
 import styled from 'styled-components'
 import { useTable, useSortBy } from 'react-table'
@@ -232,12 +232,23 @@ const TorDetails = ({
     })
   ), [targets])
 
+  const messages = defineMessages({
+    tor: {
+      id: 'Measurement.Metadata.Tor',
+      defaultMessage: 'See results of Tor Test on {date} in {country} and other measurements on OONI Explorer.'
+    }
+  })
+
   return (
     <React.Fragment>
       {render({
         status: status,
         statusInfo: hint,
         summaryText: summaryText,
+        headMetadata: {
+          message: messages.tor,
+          formatted: false
+        },
         details: (
           <React.Fragment>
             <Container>
