@@ -20,13 +20,13 @@ describe('Country Page Tests', () => {
   // TODO: Pagination works
   // TODO: Expanding IM section rows show website graphs
 
-  it.only('shows country page', () => {
+  it('shows country page', () => {
     // sometimes cypress doesn't wait until multiple requests with same alias respond
     cy.wait(['@apiCalls', '@website_stats', '@website_stats', '@website_stats', '@website_stats'])
     cy.percySnapshot()
   })
 
-  it.only('renders the correct country page', () => {
+  it('renders the correct country page', () => {
     cy.get('h1').contains('Canada')
   })
 
