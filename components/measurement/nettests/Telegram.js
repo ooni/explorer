@@ -93,7 +93,7 @@ const TelegramDetails = ({ measurement, render }) => {
                       />
                     </Box>
                   </Flex>
-                  {tcp_connect && tcp_connect.length > 0 &&
+                  {Array.isArray(tcp_connect) && tcp_connect.length > 0 &&
                   <div>
                     <Heading h={4}> <FormattedMessage id='Measurement.Details.Telegram.Endpoint.Status.Heading' /> </Heading>
                     {tcp_connect.map((connection, index) => (

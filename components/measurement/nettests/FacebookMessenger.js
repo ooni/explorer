@@ -88,7 +88,7 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
                       />
                     </Box>
                   </Flex>
-                  {tcpConnections && tcpConnections.length > 0 &&
+                  {Array.isArray(tcpConnections) && tcpConnections.length > 0 &&
                   <React.Fragment>
                     <Heading h={4}> <FormattedMessage id='Measurement.Details.FacebookMessenger.Endpoint.Status.Heading' /> </Heading>
                     {tcpConnections.map((connection, index) => (

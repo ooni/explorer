@@ -100,7 +100,7 @@ const WhatsAppDetails = ({ isAnomaly, scores, measurement, render }) => {
             </Box>
           </Flex>
         </Box>
-        {tcp_connect && tcp_connect.length > 0 &&
+        {Array.isArray(tcp_connect) && tcp_connect.length > 0 &&
           <React.Fragment>
             <Heading h={4}> <FormattedMessage id='Measurement.Details.WhatsApp.Endpoint.Status.Heading' /> </Heading>
             {tcp_connect.map((connection, index) => (

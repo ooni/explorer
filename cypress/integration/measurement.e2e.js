@@ -61,6 +61,10 @@ describe('Measurement Page Tests', () => {
       cy.heroHasColor(errorColor)
         .contains('Error')
     })
+
+    it('renders a measurement with missing data in test_keys', () => {
+      cy.visit('/measurement/20210128T090057Z_webconnectivity_IT_30722_n1_WOS6jGJBP1UMopM9?input=http%3A%2F%2Fvoice.yahoo.jajah.com%2F')
+    })
   })
 
   describe('Telegram Tests', () => {
