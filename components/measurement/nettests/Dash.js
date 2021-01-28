@@ -2,7 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Flex, Box } from 'ooni-components'
 import { Text } from 'rebass'
-import { useIntl } from 'react-intl'
+import { useIntl, defineMessages } from 'react-intl'
+
 import MdFlashOn from 'react-icons/lib/md/flash-on'
 
 const InfoBoxItem = ({
@@ -73,6 +74,13 @@ const getOptimalQualityForBitrate = (testKeys) => {
   return optimalQuality
 }
 
+const messages = defineMessages({
+  dash: {
+    id: 'Measurement.Metadata.Dash',
+    defaultMessage: 'See results of Dash Test on {date} in {country} and other measurements on OONI Explorer.'
+  }
+})
+
 const DashDetails = ({ measurement, render }) => {
   const intl = useIntl()
   const testKeys = measurement.test_keys
@@ -92,6 +100,10 @@ const DashDetails = ({ measurement, render }) => {
     render({
       statusIcon: <MdFlashOn />,
       statusLabel: intl.formatMessage({ id: 'Measurement.Hero.Status.Dash.Title' }),
+      headMetadata: {
+        message: messages.dash,
+        formatted: false
+      },
       statusInfo: (
         <Box width={1}>
           <Flex justifyContent='space-around'>

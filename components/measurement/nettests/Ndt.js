@@ -6,7 +6,7 @@ import {
 } from 'ooni-components'
 import { Text } from 'rebass'
 import { MdFlashOn } from 'react-icons/lib/md'
-import { useIntl } from 'react-intl'
+import { useIntl, defineMessages } from 'react-intl'
 
 import { mlabServerDetails } from './mlab_utils'
 import PerformanceDetails from '../PerformanceDetails'
@@ -98,11 +98,22 @@ const NdtDetails = ({ measurement, render }) => {
     }
   }
 
+  const messages = defineMessages({
+    Ndt: {
+      id: 'Measurement.Metadata.Ndt',
+      defaultMessage: 'See results of NDT Test on {date} in {country} and other measurements on OONI Explorer.'
+    }
+  })
+
   // FIXME we need to style the failed test case properly
   return (
     render({
       statusIcon: <MdFlashOn />,
       statusLabel: intl.formatMessage({id: 'Measurement.Hero.Status.NDT.Title'}),
+      headMetadata: {
+        message: messages.Ndt,
+        formatted: false
+      },
       statusInfo: (
         <Box width={1}>
           {isFailed ? (

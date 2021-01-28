@@ -2,7 +2,7 @@ import React from 'react'
 import Head from 'next/head'
 import { useIntl } from 'react-intl'
 
-const IntlHead = ({
+const CountryHead = ({
   countryName,
   measurementCount,
   networkCount
@@ -35,4 +35,4 @@ const IntlHead = ({
   )
 }
 
-export default IntlHead
+export default CountryHead

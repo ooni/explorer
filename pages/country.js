@@ -19,7 +19,7 @@ import WebsitesSection from '../components/country/Websites'
 import AppsSection from '../components/country/Apps'
 // import NetworkPropertiesSection from '../components/country/NetworkProperties'
 import { CountryContextProvider } from '../components/country/CountryContext'
-import IntlHead from '../components/country/IntlHead'
+import CountryHead from '../components/country/CountryHead'
 
 const getCountryReports = (countryCode, data) => {
   const reports = data.filter((article) => (
@@ -116,7 +116,7 @@ export default class Country extends React.Component {
 
     return (
       <Layout>
-        <IntlHead countryName={countryName} measurementCount={overviewStats.measurement_count} measuredSince={overviewStats.first_bucket_date} networkCount={overviewStats.network_count} />
+        <CountryHead countryName={countryName} measurementCount={overviewStats.measurement_count} measuredSince={overviewStats.first_bucket_date} networkCount={overviewStats.network_count} />
         <StickyContainer>
           <Sticky>
             {({ style, distanceFromTop }) => {

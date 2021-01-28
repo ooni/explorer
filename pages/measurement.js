@@ -13,6 +13,7 @@ import SummaryText from '../components/measurement/SummaryText'
 import CommonDetails from '../components/measurement/CommonDetails'
 import MeasurementContainer from '../components/measurement/MeasurementContainer'
 import MeasurementNotFound from '../components/measurement/MeasurementNotFound'
+import HeadMetadata from '../components/measurement/HeadMetadata'
 
 import Layout from '../components/Layout'
 import NavBar from '../components/NavBar'
@@ -119,9 +120,19 @@ const Measurement = ({
             statusInfo,
             legacy = false,
             summaryText,
+            headMetadata,
             details
           }) => (
             <React.Fragment>
+              {headMetadata &&
+                <HeadMetadata
+                  content={headMetadata}
+                  testName={test_name}
+                  testUrl={input}
+                  country={country}
+                  date={test_start_time}
+                />
+              }
               <NavBar color={pageColors[status]} />
               <Hero
                 color={pageColors[status]}

@@ -7,7 +7,7 @@ import {
   Flex,
   Box
 } from 'ooni-components'
-import { FormattedMessage, useIntl } from 'react-intl'
+import { defineMessages, FormattedMessage, useIntl } from 'react-intl'
 
 import { DetailsBox } from '../DetailsBox'
 import AccessPointStatus from '../AccessPointStatus'
@@ -27,6 +27,17 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
   )
   const tcpConnections = testKeys.tcp_connect
 
+  const messages = defineMessages({
+    notReachable: {
+      id: 'Measurement.Metadata.FacebookMessenger.NotReachable',
+      defaultMessage: 'On {date}, Facebook Messenger was NOT reachable in {country}, explore more details and other measurements on OONI Explorer.',
+    },
+    reachable: {
+      id: 'Measurement.Metadata.FacebookMessenger.Reachable',
+      defaultMessage:  'On {date}, Facebook Messenger was reachable in {country}, explore more details and other measurements on OONI Explorer.'
+    }
+  })
+
   let summaryText = ''
   if (!isWorking) {
     if (tcpBlocking) {
@@ -35,7 +46,7 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
       summaryText += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.TCPSuccess'})
     }
 
-    summaryText += '&nbsp;'
+    summaryText += ' '
 
     if (dnsBlocking) {
       summaryText += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.DNSFailure'})
@@ -50,9 +61,13 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
     render({
       status: isWorking ? 'reachable' : 'anomaly',
       statusInfo: isWorking
-        ? <FormattedMessage id='Measurement.Status.Hint.FacebookMessenger.Reachable' />
-        : <FormattedMessage id='Measurement.Status.Hint.FacebookMessenger.Blocked' />,
+      ? <FormattedMessage id='Measurement.Status.Hint.FacebookMessenger.Reachable' />
+      : <FormattedMessage id='Measurement.Status.Hint.FacebookMessenger.Blocked' />,
       summaryText: summaryText,
+      headMetadata: {
+        message: isWorking ? messages.reachable : messages.notReachable,
+        formatted: false
+      },
       details: (
         <React.Fragment>
           <Container>
@@ -74,27 +89,27 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
                     </Box>
                   </Flex>
                   {tcpConnections && tcpConnections.length > 0 &&
-                    <React.Fragment>
-                      <Heading h={4}> <FormattedMessage id='Measurement.Details.FacebookMessenger.Endpoint.Status.Heading' /> </Heading>
-                      {tcpConnections.map((connection, index) => (
-                        <Flex key={index}>
-                          <Box>
-                            <Text>
-                              {connection.status.failure &&
-                                <FormattedMessage id="Measurement.Details.FacebookMessenger.Endpoint.ConnectionTo.Failed"
-                                  values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
-                                />
-                              }
-                              {connection.status.success &&
-                                <FormattedMessage id="Measurement.Details.FacebookMessenger.Endpoint.ConnectionTo.Successful"
-                                  values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
-                                />
-                              }
-                            </Text>
-                          </Box>
-                        </Flex>
-                      ))}
-                    </React.Fragment>
+                  <React.Fragment>
+                    <Heading h={4}> <FormattedMessage id='Measurement.Details.FacebookMessenger.Endpoint.Status.Heading' /> </Heading>
+                    {tcpConnections.map((connection, index) => (
+                      <Flex key={index}>
+                        <Box>
+                          <Text>
+                            {connection.status.failure &&
+                            <FormattedMessage id="Measurement.Details.FacebookMessenger.Endpoint.ConnectionTo.Failed"
+                              values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
+                            />
+                            }
+                            {connection.status.success &&
+                              <FormattedMessage id="Measurement.Details.FacebookMessenger.Endpoint.ConnectionTo.Successful"
+                                values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
+                              />
+                            }
+                          </Text>
+                        </Box>
+                      </Flex>
+                    ))}
+                  </React.Fragment>
                   }
                 </React.Fragment>
               } />
