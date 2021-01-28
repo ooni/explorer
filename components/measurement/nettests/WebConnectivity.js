@@ -219,7 +219,7 @@ const QueryContainer = ({query}) => {
     failure
   } = query
   return (
-    <Flex flexWrap='wrap'>
+    <Flex flexWrap='wrap' my={2}>
       <Box width={1} mb={2}>
         {/* Metadata */}
         <Flex>
@@ -240,26 +240,28 @@ const QueryContainer = ({query}) => {
         </Flex>
       </Box>
       {failure && <Box width={1}><FailureString failure={failure} /></Box>}
-      <Box width={1}>
-        <FiveColRow header />
-        {answers.map((dnsAnswer, index) => (
-          <FiveColRow
-            key={index}
-            name='@'
-            netClass='IN'
-            ttl={dnsAnswer.ttl}
-            type={dnsAnswer.answer_type}
-            data={dnsAnswer.answer_type === 'A'
-              ? dnsAnswer.ipv4
-              : dnsAnswer.answer_type === 'AAAA'
-                ? dnsAnswer.ipv6
-                : dnsAnswer.answer_type === 'CNAME'
-                  ? dnsAnswer.hostname
-                  : null // for any other answer_type, DATA column will be empty
-            }
-          />
-        ))}
-      </Box>
+      {!failure &&
+        <Box width={1}>
+          <FiveColRow header />
+          {Array.isArray(answers) && answers.map((dnsAnswer, index) => (
+            <FiveColRow
+              key={index}
+              name='@'
+              netClass='IN'
+              ttl={dnsAnswer.ttl}
+              type={dnsAnswer.answer_type}
+              data={dnsAnswer.answer_type === 'A'
+                ? dnsAnswer.ipv4
+                : dnsAnswer.answer_type === 'AAAA'
+                  ? dnsAnswer.ipv6
+                  : dnsAnswer.answer_type === 'CNAME'
+                    ? dnsAnswer.hostname
+                    : null // for any other answer_type, DATA column will be empty
+              }
+            />
+          ))}
+        </Box>
+      }
     </Flex>
 
   )
@@ -285,7 +287,7 @@ const WebConnectivityDetails = ({
       accessible,
       blocking,
       queries,
-      tcp_connect = [],
+      tcp_connect,
       requests,
       client_resolver,
       http_experiment_failure,
@@ -452,14 +454,14 @@ const WebConnectivityDetails = ({
     )
   }
 
-  const tcpConnections = tcp_connect.map((connection) => {
+  const tcpConnections = Array.isArray(tcp_connect) ? tcp_connect.map((connection) => {
     const status = (connection.status.success) ? 'Success' :
       (connection.status.blocked) ? 'Blocked' : 'Failed'
     return {
       destination: connection.ip + ':' + connection.port,
       status
     }
-  })
+  }) : []
 
   return (
     <React.Fragment>
@@ -513,7 +515,7 @@ const WebConnectivityDetails = ({
                       </Box>
                     </Flex>
                     <Box width={1}>
-                      {queries && queries.map((query, index) => <QueryContainer key={index} query={query} />)}
+                      {Array.isArray(queries) && queries.map((query, index) => <QueryContainer key={index} query={query} />)}
                     </Box>
                   </React.Fragment>
                 }
@@ -551,7 +553,7 @@ const WebConnectivityDetails = ({
               <DetailsBox
                 title={<FormattedMessage id='Measurement.Details.Websites.HTTP.Heading' />}
                 content={
-                  requests ? (
+                  Array.isArray(requests) ? (
                     <Box width={1}>
                       {requests.map((request, index) => <RequestResponseContainer key={index} request={request} />)}
                     </Box>
