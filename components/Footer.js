@@ -9,7 +9,7 @@ import { version } from '../package.json'
 const StyledFooter = styled.footer`
   background-color: ${props => props.theme.colors.blue9};
   color: #ffffff;
-  font-size: 0.857rem;
+  font-size: 16px;
   margin-top: 32px;
 `
 
