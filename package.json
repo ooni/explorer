@@ -1,6 +1,6 @@
 {
   "name": "ooni-explorer",
-  "version": "2.4.1",
+  "version": "2.4.2",
   "author": "Open Observatory of Network Interference (OONI) <contact@openobservatory.org>",
   "license": "BSD-3-Clause",
   "main": "index.js",
@@ -8,7 +8,7 @@
   "dependencies": {
     "@babel/cli": "7.4.4",
     "@babel/core": "7.4.4",
-    "@datapunt/matomo-tracker-js": "^0.0.15",
+    "@datapunt/matomo-tracker-react": "^0.3.1",
     "@nivo/bar": "^0.62.0",
     "@nivo/calendar": "^0.62.0",
     "@nivo/heatmap": "^0.62.0",

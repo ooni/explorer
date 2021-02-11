@@ -1206,10 +1206,17 @@
     debug "^3.1.0"
     lodash.once "^4.1.1"
 
-"@datapunt/matomo-tracker-js@^0.0.15":
-  version "0.0.15"
-  resolved "https://registry.yarnpkg.com/@datapunt/matomo-tracker-js/-/matomo-tracker-js-0.0.15.tgz#b04ee46ce9d3364fa15f9ff5f9f1de0556fb242f"
-  integrity sha512-Cx8lzNzSMUsIeXBs18Y/ePC9GKbmHoyMLTtk3y4mHEhRI9hk3X8rNTP3EwgHz6QlxY1CdzE8hJQ3GQtqR2HHpQ==
+"@datapunt/matomo-tracker-js@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@datapunt/matomo-tracker-js/-/matomo-tracker-js-0.3.1.tgz#a707429471d89da78f095d75a055bad98b299eec"
+  integrity sha512-JIeK7SUHlunspS+6z4wzw9YdsWv1mN2UyL10JWPHhOC45y7rTpcvmvIzkV67xdOd7qS8fE1M2e1qLBFz/dfJug==
+
+"@datapunt/matomo-tracker-react@^0.3.1":
+  version "0.3.1"
+  resolved "https://registry.yarnpkg.com/@datapunt/matomo-tracker-react/-/matomo-tracker-react-0.3.1.tgz#c172810b4570046fe8eab4cfe9d4c9d90e9cc8c2"
+  integrity sha512-bO2UW1lEAdoQytucM+2ufOvVbdIlBwDaQWzsHpDNc1ZRQuMENgA+6Q8gRXNrny1YasqveS5t2YyZocxyPWrmLg==
+  dependencies:
+    "@datapunt/matomo-tracker-js" "^0.3.1"
 
 "@emotion/is-prop-valid@^0.8.1":
   version "0.8.6"

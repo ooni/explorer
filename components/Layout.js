@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { createGlobalStyle } from 'styled-components'
 import {
   Provider,
   theme
 } from 'ooni-components'
+import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react'
 
 // Moved this from `_document.js` because `next-css` fails to extract
 // imported css from `_document.js`. `next-css` should be upgraded along with
@@ -47,19 +48,37 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-const Layout = ({ children, disableFooter = false }) => (
-  <Provider theme={theme}>
-    <GlobalStyle />
-    <div className="site">
-      <Header />
-      <div className="content">
-        { children }
-      </div>
-      {!disableFooter && <Footer />}
-    </div>
-    <FeedbackButton />
-  </Provider>
-)
+const matomoInstance = createInstance({
+  urlBase: 'https://matomo.ooni.org/',
+  siteId: 2,
+  trackerUrl: 'https://matomo.ooni.org/matomo.php',
+  srcUrl: 'https://matomo.ooni.org/matomo.js',
+  configurations: {
+    disableCookies: true
+  }
+})
+
+const Layout = ({ children, disableFooter = false }) => {
+  useEffect(() => {
+    matomoInstance.trackPageView()
+  }, [])
+
+  return (
+    <MatomoProvider value={matomoInstance}>
+      <Provider theme={theme}>
+        <GlobalStyle />
+        <div className="site">
+          <Header />
+          <div className="content">
+            { children }
+          </div>
+          {!disableFooter && <Footer />}
+        </div>
+        <FeedbackButton />
+      </Provider>
+    </MatomoProvider>
+  )
+}
 
 Layout.propTypes = {
   children: PropTypes.array.isRequired,
