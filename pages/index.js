@@ -1,8 +1,9 @@
 /* global process */
+import PropTypes from 'prop-types'
 import React from 'react'
 import Head from 'next/head'
 import NLink from 'next/link'
-import Router from 'next/router';
+import Router from 'next/router'
 import FormattedMarkdown from '../components/FormattedMarkdown'
 import styled from 'styled-components'
 import axios from 'axios'
@@ -22,7 +23,6 @@ import NavBar from '../components/NavBar'
 import { toCompactNumberUnit } from '../utils'
 import HighlightSection from '../components/landing/HighlightsSection'
 import highlightContent from '../components/landing/highlights.json'
-import { Flag } from '../components/Flag'
 import CoverageChart from '../components/landing/Stats'
 
 const HeroUnit = styled.div`
@@ -77,6 +77,15 @@ const StatsItem = ({label, unit, value }) => (
   </StyledStatsItem>
 )
 
+StatsItem.propTypes = {
+  label: PropTypes.oneOfType([
+    PropTypes.instanceOf(FormattedMessage),
+    PropTypes.string
+  ]),
+  unit: PropTypes.string,
+  value: PropTypes.number
+}
+
 const FeatureRow = styled(Flex)`
 
 `
@@ -110,10 +119,6 @@ FeatureBoxTitle.defaultProps = {
 
 const ImgBox = styled.img`
   width: 100%;
-`
-
-const BorderedBox = styled(Box)`
-  border: 1px solid ${props => props.theme.colors.gray3};
 `
 
 const StyledContainer = styled(Container)`
@@ -292,4 +297,10 @@ export default class LandingPage extends React.Component {
       </Layout>
     )
   }
+}
+
+LandingPage.propTypes = {
+  asnCount: PropTypes.number,
+  countryCount: PropTypes.number,
+  measurementCount: PropTypes.number
 }

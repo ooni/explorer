@@ -72,7 +72,7 @@ class ErrorPage extends React.Component {
     )
   }
 
-  render500 () {
+  render500 (errors) {
     return (
       <Layout>
         <Head>
@@ -87,6 +87,9 @@ class ErrorPage extends React.Component {
             <Text my={4}>
               Maybe try <Link href='/countries'><a>exploring some measurements</a></Link> or go to our <Link href='/'><a>homepage</a></Link>.
             </Text>
+            {errors && <Box as='pre' bg='gray1' p={2}>
+              {JSON.stringify(errors, null, 2)}
+            </Box>}
           </FullHeightFlex>
         </Container>
       </Layout>
@@ -94,16 +97,17 @@ class ErrorPage extends React.Component {
   }
 
   render () {
-    const { errorCode } = this.props
+    const { errorCode, errors } = this.props
     if (errorCode === 404) {
       return this.render404()
     }
-    return this.render500()
+    return this.render500(errors)
   }
 }
 
 ErrorPage.propTypes = {
-  errorCode: PropTypes.number.isRequired
+  errorCode: PropTypes.number.isRequired,
+  errors: PropTypes.any
 }
 
 export default ErrorPage

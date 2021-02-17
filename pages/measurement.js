@@ -17,6 +17,7 @@ import HeadMetadata from '../components/measurement/HeadMetadata'
 
 import Layout from '../components/Layout'
 import NavBar from '../components/NavBar'
+import ErrorPage from './_error'
 
 const pageColors = {
   default: theme.colors.base,
@@ -28,52 +29,72 @@ const pageColors = {
 }
 
 export async function getServerSideProps({ query }) {
-  let initialProps = {}
-
-  let client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
-  let params = {
-    report_id: query.report_id,
-    full: true
+  let initialProps = {
+    errors: []
   }
-  if (query.input) {
-    params['input'] = query.input
-  }
-
-  let response = await client.get('/api/v1/measurement_meta', {
-    params
-  })
-
-  // If response `data` is an empty object, the measurement was
-  // probably not found
-  if (response.hasOwnProperty('data') && Object.keys(response.data).length !== 0) {
-    initialProps = Object.assign({}, response.data)
-
-    if (typeof initialProps['scores'] === 'string') {
-      try {
-        initialProps['scores'] = JSON.parse(initialProps['scores'])
-        initialProps['raw_measurement'] = JSON.parse(initialProps['raw_measurement'])
-      } catch (e) {
-        console.error(`Failed to parse JSON in scores: ${e.toString()}`)
-      }
+  let response
+  let client
+  try {
+    client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
+    let params = {
+      report_id: query.report_id,
+      full: true
+    }
+    if (query.input) {
+      params['input'] = query.input
     }
 
-    const { probe_cc } = response.data
-    const countryObj = countryUtil.countryList.find(country => (
-      country.iso3166_alpha2 === probe_cc
-    ))
+    try {
+      response = await client.get('/api/v1/measurement_meta', {
+        params
+      })
+    } catch (e) {
+      initialProps.errors.push(`Failed to fetch measurement data. Server message: ${e.response.status}, ${e.response.statusText}`)
+    }
 
-    initialProps['country'] = countryObj?.name || 'Unknown'
-  } else {
-    // Measurement not found
-    initialProps.notFound = true
+    // If response `data` is an empty object, the measurement was
+    // probably not found
+    if (response.hasOwnProperty('data') && Object.keys(response.data).length !== 0) {
+      initialProps = {...initialProps, ...response.data}
+
+      if (typeof initialProps['scores'] === 'string') {
+        try {
+          initialProps['scores'] = JSON.parse(initialProps['scores'])
+        } catch (e) {
+          throw new Error(`Failed to parse JSON in scores: ${e.toString()}`)
+        }
+      }
+
+      if (typeof initialProps['raw_measurement'] === 'string') {
+        console.log(typeof initialProps['raw_measurement'])
+        try {
+          initialProps['raw_measurement'] = JSON.parse(initialProps['raw_measurement'])
+        } catch (e) {
+          throw new Error(`Failed to parse raw_measurement: ${e.toString()}`)
+        }
+      } else {
+        throw new Error(`Invalid data found of type: ${initialProps['raw_measurement']} in 'raw_measurement'.`)
+      }
+
+      const { probe_cc } = response.data
+      const countryObj = countryUtil.countryList.find(country => (
+        country.iso3166_alpha2 === probe_cc
+      ))
+      initialProps['country'] = countryObj?.name || 'Unknown'
+    } else {
+      // Measurement not found
+      initialProps.notFound = true
+    }
+  } catch (e) {
+    initialProps.errors.push(e.message)
   }
-
   return {
     props: initialProps
   }
 }
 
 const Measurement = ({
+  errors,
   country,
   confirmed,
   anomaly,
@@ -94,6 +115,12 @@ const Measurement = ({
 
   // Add the 'AS' prefix to probe_asn when APi chooses to snd just the number
   probe_asn = typeof probe_asn === 'number' ? `AS${probe_asn}` : probe_asn
+
+  if (errors.length > 0) {
+    return (
+      <ErrorPage errorCode={501} errors={errors} />
+    )
+  }
 
   return (
     <Layout>

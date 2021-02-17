@@ -21,7 +21,8 @@ export default class MyApp extends App {
     super(...arguments)
     this.state = {
       hasError: false,
-      errorEventId: undefined
+      errorEventId: undefined,
+      error: null
     }
   }
 
@@ -39,6 +40,7 @@ export default class MyApp extends App {
       // This will work on both client and server sides.
       const errorEventId = captureException(error, ctx)
       return {
+        error: error,
         hasError: true,
         errorEventId
       }
@@ -65,12 +67,12 @@ export default class MyApp extends App {
 
     // Store the event id at this point as we don't have access to it within
     // `getDerivedStateFromError`.
-    this.setState({ errorEventId, hasError: true })
+    this.setState({ errorEventId, hasError: true, error })
   }
 
   render () {
     return this.state.hasError ? (
-      <ErrorPage errorCode={500} />
+      <ErrorPage errorCode={500} errors={this.state.error} />
     ) : (
       // Render the normal Next.js page
       super.render()
