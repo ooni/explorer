@@ -194,7 +194,8 @@ const Measurement = ({
                 {details}
                 <CommonDetails
                   measurementURL={rawMsmtDownloadURL}
-                  measurement={raw_measurement ?? {}}
+                  measurement={raw_measurement}
+                  reportId={report_id}
                 />
               </Container>
             </React.Fragment>

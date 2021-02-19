@@ -45,18 +45,19 @@ JsonViewer.propTypes = {
 
 const CommonDetails = ({
   measurement,
-  measurementURL
+  measurementURL,
+  reportId
 }) => {
   const {
-    report_id,
     software_name,
     software_version,
     annotations,
-  } = measurement
+  } = measurement ?? {}
   const intl = useIntl()
 
-  let engine = 'none',
-    platform = 'Unavailable'
+  const unavailable = intl.formatMessage({ id: 'Measurement.CommonDetails.Value.Unavailable' })
+  let engine = unavailable
+  let platform = unavailable
 
   if (annotations && annotations.engine_name) {
     engine = annotations.engine_name
@@ -70,23 +71,26 @@ const CommonDetails = ({
     platform = annotations.platform
   }
 
-  const downloadFilename = `ooni-measurement-${report_id}.json`
+  let software = software_name ?? unavailable
+  software += software_version ? ` (${software_version})` : ''
+
+  const downloadFilename = `ooni-measurement-${reportId}.json`
   const items = [
     {
       label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.MsmtID' }),
-      value: report_id
+      value: reportId ?? unavailable
     },
     {
       label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.Platform' }),
-      value: platform ? platform : 'unknown'
+      value: platform
     },
     {
       label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.Software' }),
-      value: `${software_name} (${software_version})`
+      value: software
     },
     {
       label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.Engine' }),
-      value: engine
+      value: engine ?? intl.formatMessage({ id: 'Measurement.CommonDetails.Value.Unavailable' })
     }
   ]
   return (

@@ -160,7 +160,7 @@ RequestResponseContainer.propTypes = {
 
 const FailureString = ({failure}) => {
   if (typeof failure === 'undefined') {
-    return (<FormattedMessage id='Measurement.Details.Endpoint.Status.Unknown' />)
+    return (<FormattedMessage id='Measurement.Details.Websites.Failures.Values.Unknown' />)
   }
   if (!failure) {
     return (
@@ -500,40 +500,38 @@ const WebConnectivityDetails = ({
           <React.Fragment>
             {/* Failures */}
             <Flex>
-              {http_experiment_failure && dns_experiment_failure && control_failure && 
-                <DetailsBox
-                  title={<FormattedMessage id='Measurement.Details.Websites.Failures.Heading' />}
-                  content={
-                    <Flex mb={2} flexWrap='wrap'>
-                      <Box width={1/3}>
-                        <FormattedMessage id='Measurement.Details.Websites.Failures.Label.HTTP' />
-                      </Box>
-                      <Box width={2/3}>
-                        <FailureString failure={http_experiment_failure} />
-                      </Box>
-                      <Box width={1/3}>
-                        <FormattedMessage id='Measurement.Details.Websites.Failures.Label.DNS' />
-                      </Box>
-                      <Box width={2/3}>
-                        <FailureString failure={dns_experiment_failure} />
-                      </Box>
-                      <Box width={1/3}>
-                        <FormattedMessage id='Measurement.Details.Websites.Failures.Label.Control' />
-                      </Box>
-                      <Box width={2/3}>
-                        <FailureString failure={control_failure} />
-                      </Box>
-                    </Flex>
-                  }
-                />
-              }
+              <DetailsBox
+                title={<FormattedMessage id='Measurement.Details.Websites.Failures.Heading' />}
+                content={
+                  <Flex mb={2} flexWrap='wrap'>
+                    <Box width={1/3}>
+                      <FormattedMessage id='Measurement.Details.Websites.Failures.Label.HTTP' />
+                    </Box>
+                    <Box width={2/3}>
+                      <FailureString failure={http_experiment_failure} />
+                    </Box>
+                    <Box width={1/3}>
+                      <FormattedMessage id='Measurement.Details.Websites.Failures.Label.DNS' />
+                    </Box>
+                    <Box width={2/3}>
+                      <FailureString failure={dns_experiment_failure} />
+                    </Box>
+                    <Box width={1/3}>
+                      <FormattedMessage id='Measurement.Details.Websites.Failures.Label.Control' />
+                    </Box>
+                    <Box width={2/3}>
+                      <FailureString failure={control_failure} />
+                    </Box>
+                  </Flex>
+                }
+              />
             </Flex>
             {/* DNS Queries */}
             <Flex>
-              {queries &&
-                <DetailsBox
-                  title={<FormattedMessage id='Measurement.Details.Websites.DNSQueries.Heading' />}
-                  content={
+              <DetailsBox
+                title={<FormattedMessage id='Measurement.Details.Websites.DNSQueries.Heading' />}
+                content={
+                  Array.isArray(queries) ? (
                     <React.Fragment>
                       <Flex flexWrap='wrap' mb={2}>
                         <Box mr={1}>
@@ -544,59 +542,58 @@ const WebConnectivityDetails = ({
                         </Box>
                       </Flex>
                       <Box width={1}>
-                        {Array.isArray(queries) && queries.map((query, index) => <QueryContainer key={index} query={query} />)}
+                        {queries.map((query, index) => <QueryContainer key={index} query={query} />)}
                       </Box>
                     </React.Fragment>
-                  }
-                />
-              }
+                  ) : (
+                    <FormattedMessage id='Measurement.Details.Websites.DNSQueries.NoData' />
+                  )
+                }
+              />
             </Flex>
             {/* TCP COnnections */}
             <Flex>
-              {tcp_connect &&
-                <DetailsBox
-                  title={<FormattedMessage id='Measurement.Details.Websites.TCP.Heading' />}
-                  content={
-                    <React.Fragment>
-                      {tcpConnections.length === 0 && <FormattedMessage id='Measurement.Details.Websites.TCP.NoData' />}
-                      {tcpConnections.map((connection, index) => (
-                        <Flex key={index}>
-                          <Box>
-                            <Text>
-                              <FormattedMessage
-                                id='Measurement.Details.Websites.TCP.ConnectionTo'
-                                values={{
-                                  destination: <strong> {connection.destination} </strong>,
-                                  connectionStatus: intl.formatMessage(messages[`connection.${connection.status}`])
-                                }}
-                              />
-                            </Text>
-                          </Box>
-                        </Flex>
-                      ))}
-                    </React.Fragment>
-                  } 
-                />
-              }
+              <DetailsBox
+                title={<FormattedMessage id='Measurement.Details.Websites.TCP.Heading' />}
+                content={
+                  tcpConnections.length > 0 ? (
+                    tcpConnections.map((connection, index) => (
+                      <Flex key={index}>
+                        <Box>
+                          <Text>
+                            <FormattedMessage
+                              id='Measurement.Details.Websites.TCP.ConnectionTo'
+                              values={{
+                                destination: <strong> {connection.destination} </strong>,
+                                connectionStatus: intl.formatMessage(messages[`connection.${connection.status}`])
+                              }}
+                            />
+                          </Text>
+                        </Box>
+                      </Flex>
+                    ))
+                  ) : (
+                    <FormattedMessage id='Measurement.Details.Websites.TCP.NoData' />
+                  )
+                }
+              />
             </Flex>
             {/* I would like us to enrich the HTTP response body section with
               information about every request and response as this is a very common
             thing we look at when investigating a case. */}
             <Flex>
-              {requests &&
-                <DetailsBox
-                  title={<FormattedMessage id='Measurement.Details.Websites.HTTP.Heading' />}
-                  content={
-                    Array.isArray(requests) ? (
-                      <Box width={1}>
-                        {requests.map((request, index) => <RequestResponseContainer key={index} request={request} />)}
-                      </Box>
-                    ) : (
-                      <FormattedMessage id='Measurement.Details.Websites.HTTP.NoData' />
-                    )
-                  }
-                />
-              }
+              <DetailsBox
+                title={<FormattedMessage id='Measurement.Details.Websites.HTTP.Heading' />}
+                content={
+                  Array.isArray(requests) ? (
+                    <Box width={1}>
+                      {requests.map((request, index) => <RequestResponseContainer key={index} request={request} />)}
+                    </Box>
+                  ) : (
+                    <FormattedMessage id='Measurement.Details.Websites.HTTP.NoData' />
+                  )
+                }
+              />
             </Flex>
           </React.Fragment>
         )
