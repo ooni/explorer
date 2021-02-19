@@ -16,7 +16,7 @@ import styled from 'styled-components'
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 
 import { DetailsBox } from '../DetailsBox'
-import FormattedMarkdown from 'components/FormattedMarkdown'
+import FormattedMarkdown from '../../FormattedMarkdown'
 
 const messages = defineMessages({
   'blockingReason.http-diff': {
