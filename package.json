@@ -88,7 +88,7 @@
     "extract-i18n-keys": "yarn build && node ./scripts/extract-react-intl-keys.js",
     "build": "next build",
     "export": "next export",
-    "lint": "eslint --ignore-path .gitignore --ignore-pattern components/vendor .",
+    "lint": "eslint --ignore-path .gitignore .",
     "test:e2e": "yarn build && start-server-and-test start http://localhost:3100 cypress:run",
     "cypress:run": "cypress run",
     "test": "echo nothing interesting",

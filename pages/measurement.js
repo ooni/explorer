@@ -55,7 +55,7 @@ export async function getServerSideProps({ query }) {
 
     // If response `data` is an empty object, the measurement was
     // probably not found
-    if (response.hasOwnProperty('data') && Object.keys(response.data).length !== 0) {
+    if (Object.prototype.hasOwnProperty.call(response, 'data') && Object.keys(response.data).length !== 0) {
       initialProps = {...initialProps, ...response.data}
 
       if (typeof initialProps['scores'] === 'string') {
@@ -106,7 +106,7 @@ const Measurement = ({
   ...rest
 }) => {
   const { query } = useRouter()
-  const queryString = new URLSearchParams(query);
+  const queryString = new URLSearchParams(query)
   const rawMsmtDownloadURL = `${process.env.MEASUREMENTS_URL}/api/v1/raw_measurement?${queryString}`
 
   // Add the 'AS' prefix to probe_asn when APi chooses to snd just the number
