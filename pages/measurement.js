@@ -1,3 +1,4 @@
+/* global process */
 import React from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
@@ -65,15 +66,10 @@ export async function getServerSideProps({ query }) {
         }
       }
 
-      if (typeof initialProps['raw_measurement'] === 'string') {
-        console.log(typeof initialProps['raw_measurement'])
-        try {
-          initialProps['raw_measurement'] = JSON.parse(initialProps['raw_measurement'])
-        } catch (e) {
-          throw new Error(`Failed to parse raw_measurement: ${e.toString()}`)
-        }
-      } else {
-        throw new Error(`Invalid data found of type: ${initialProps['raw_measurement']} in 'raw_measurement'.`)
+      try {
+        initialProps['raw_measurement'] = JSON.parse(initialProps['raw_measurement'])
+      } catch (e) {
+        throw new Error(`Failed to parse raw_measurement: ${e.toString()}`)
       }
 
       const { probe_cc } = response.data
@@ -138,6 +134,8 @@ const Measurement = ({
           country={country}
           measurement={raw_measurement}
           input={input}
+          test_start_time={test_start_time}
+          probe_asn={probe_asn}
           {...rest}
 
           render={({
@@ -196,7 +194,7 @@ const Measurement = ({
                 {details}
                 <CommonDetails
                   measurementURL={rawMsmtDownloadURL}
-                  measurement={raw_measurement}
+                  measurement={raw_measurement || {}}
                 />
               </Container>
             </React.Fragment>
@@ -207,12 +205,19 @@ const Measurement = ({
 }
 
 Measurement.propTypes = {
-  measurement: PropTypes.object,
-  measurementURL: PropTypes.string,
-  isAnomaly: PropTypes.bool,
-  isFailure: PropTypes.bool,
-  isConfirmed: PropTypes.bool,
-  country: PropTypes.string
+  anomaly: PropTypes.bool,
+  confirmed: PropTypes.bool,
+  country: PropTypes.string,
+  errors: PropTypes.arrayOf(PropTypes.string),
+  failure: PropTypes.bool,
+  input: PropTypes.any,
+  notFound: PropTypes.bool,
+  probe_asn: PropTypes.any,
+  probe_cc: PropTypes.string,
+  raw_measurement: PropTypes.object,
+  report_id: PropTypes.string,
+  test_name: PropTypes.string,
+  test_start_time: PropTypes.string
 }
 
 export default Measurement

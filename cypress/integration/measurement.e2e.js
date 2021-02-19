@@ -100,7 +100,7 @@ describe('Measurement Page Tests', () => {
         .should('have.attr', 'content', 'On August 7, 2020, Whatsapp was reachable in United States, explore more details and other measurements on OONI Explorer.')
     })
 
-    it.only('renders an unreachable og:description', () => {
+    it('renders an unreachable og:description', () => {
       cy.visit('/measurement/20200407T024309Z_AS4713_xA9Wh81DQrIFqRe46zwKeyJw4DJQwjyTLBIi2zSQqWUBsfQMJS')
       cy.get('head meta[property="og:description"]')
         .should('have.attr', 'content', 'On April 7, 2020, Whatsapp was NOT reachable in Japan, explore more details and other measurements on OONI Explorer.')
