@@ -1,4 +1,4 @@
-/* global require */
+/* global process */
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
@@ -10,34 +10,37 @@ import {
   Link,
   theme
 } from 'ooni-components'
-
-import NoSSR from 'react-no-ssr'
-import { useIntl } from 'react-intl'
+import dynamic from 'next/dynamic'
+import { FormattedMessage, useIntl } from 'react-intl'
+import { useRouter } from 'next/router'
 
 import { DetailsBoxTable, DetailsBox } from './DetailsBox'
 
-// We wrap the json viewer so that we can render it only in client side rendering
-class JsonViewer extends React.Component {
-  render() {
-    const ReactJson = require('react-json-view').default
-    const {
-      src
-    } = this.props
-    const StyledReactJsonContainer = styled.div`
-      .string-value {
-        text-overflow: ellipsis;
-        max-width: 800px;
-        overflow: hidden;
-        display: inline-block;
-      }
-    `
-    return (
-      <StyledReactJsonContainer>
-        <ReactJson collapsed={1} src={src} />
-      </StyledReactJsonContainer>
-    )
-  }
+const LoadingRawData = (props) => {
+  console.log(props)
+  return (<Box fontSize={1}>Loading</Box>)
 }
+
+const ReactJson = dynamic(
+  () => import('react-json-view'),
+  { ssr: false, loading: LoadingRawData }
+
+)
+
+const StyledReactJsonContainer = styled.div`
+  .string-value {
+    text-overflow: ellipsis;
+    max-width: 800px;
+    overflow: hidden;
+    display: inline-block;
+  }
+`
+
+const JsonViewer = ({ src }) => (
+  <StyledReactJsonContainer>
+    <ReactJson collapsed={1} src={src} />
+  </StyledReactJsonContainer>
+)
 
 JsonViewer.propTypes = {
   src: PropTypes.object.isRequired
@@ -45,7 +48,6 @@ JsonViewer.propTypes = {
 
 const CommonDetails = ({
   measurement,
-  measurementURL,
   reportId
 }) => {
   const {
@@ -53,9 +55,14 @@ const CommonDetails = ({
     software_version,
     annotations,
   } = measurement ?? {}
-  const intl = useIntl()
 
+  const { query } = useRouter()
+  const queryString = new URLSearchParams(query)
+  const rawMsmtDownloadURL = `${process.env.MEASUREMENTS_URL}/api/v1/raw_measurement?${queryString}`
+
+  const intl = useIntl()
   const unavailable = intl.formatMessage({ id: 'Measurement.CommonDetails.Value.Unavailable' })
+
   let engine = unavailable
   let platform = unavailable
 
@@ -112,22 +119,27 @@ const CommonDetails = ({
                 <Heading h={4}>{intl.formatMessage({ id: 'Measurement.CommonDetails.RawMeasurement.Heading' })}</Heading>
               </Box>
               <Box >
-                <Link color='blue7' href={measurementURL} download={downloadFilename}>
+                <Link color='blue7' href={rawMsmtDownloadURL} download={downloadFilename}>
                   <Button
                     onClick={(e) => e.stopPropagation()}
                     fontSize={13}
                     mx={3}
-                    px={3}>{intl.formatMessage({ id: 'Measurement.CommonDetails.RawMeasurement.Download' })}</Button>
+                    px={3}
+                  >
+                    {intl.formatMessage({ id: 'Measurement.CommonDetails.RawMeasurement.Download' })}
+                  </Button>
                 </Link>
               </Box>
             </Flex>
           }
           content={
-            <Flex bg='WHITE' p={3}>
-              <NoSSR>
+            measurement && typeof measurement === 'object' ? (
+              <Flex bg='WHITE' p={3}>
                 <JsonViewer src={measurement} />
-              </NoSSR>
-            </Flex>
+              </Flex>
+            ) : (
+              <FormattedMessage id='Measurement.CommonDetails.RawMeasurement.Unavailable' />
+            )
           }
         />
       </Flex>
@@ -136,8 +148,8 @@ const CommonDetails = ({
 }
 
 CommonDetails.propTypes = {
-  measurement: PropTypes.object.isRequired,
-  measurementURL: PropTypes.string.isRequired
+  measurement: PropTypes.object,
+  reportId: PropTypes.string
 }
 
 export default CommonDetails

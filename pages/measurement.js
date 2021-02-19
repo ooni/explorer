@@ -2,7 +2,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
 import countryUtil from 'country-util'
 import axios from 'axios'
 import { Container, theme } from 'ooni-components'
@@ -105,9 +104,6 @@ const Measurement = ({
   report_id,
   ...rest
 }) => {
-  const { query } = useRouter()
-  const queryString = new URLSearchParams(query)
-  const rawMsmtDownloadURL = `${process.env.MEASUREMENTS_URL}/api/v1/raw_measurement?${queryString}`
 
   // Add the 'AS' prefix to probe_asn when APi chooses to snd just the number
   probe_asn = typeof probe_asn === 'number' ? `AS${probe_asn}` : probe_asn
@@ -193,7 +189,6 @@ const Measurement = ({
                 }
                 {details}
                 <CommonDetails
-                  measurementURL={rawMsmtDownloadURL}
                   measurement={raw_measurement}
                   reportId={report_id}
                 />
