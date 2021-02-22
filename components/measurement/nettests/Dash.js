@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Flex, Box } from 'ooni-components'
-import { Text } from 'rebass'
 import { useIntl, defineMessages } from 'react-intl'
 
 import MdFlashOn from 'react-icons/lib/md/flash-on'
