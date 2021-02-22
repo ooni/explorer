@@ -22,11 +22,11 @@ export const HttpHeaderFieldManipulationDetails = ({ measurement, render }) => {
   const messages = defineMessages({
     middleboxes: {
       id: 'Measurement.Metadata.HTTPHeaderManipulation.MiddleboxesDetected',
-      defaultMessage:  'On {date}, HTTP header manipulation was detected in {country}, explore more details and other measurements on OONI Explorer.'
+      defaultMessage:  'HTTP header manipulation was detected in {country}'
     },
     noMiddleboxes: {
       id: 'Measurement.Metadata.HTTPHeaderManipulation.NoMiddleboxesDetected',
-      defaultMessage:  'On {date}, NO HTTP header manipulation was detected in {country}, explore more details and other measurements on OONI Explorer.'
+      defaultMessage:  'HTTP header manipulation was not detected in {country}'
     }
   })
 

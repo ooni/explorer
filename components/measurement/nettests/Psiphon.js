@@ -21,11 +21,11 @@ const PsiphonDetails = ({
   const messages = defineMessages({
     reachable: {
       id: 'Measurement.Metadata.Psiphon.Reachable',
-      defaultMessage: 'On {date}, Psiphon was reachable in {country}, explore more details and other measurements on OONI Explorer.'
+      defaultMessage: 'Psiphon was reachable in {country}'
     },
     unReachable: {
       id: 'Measurement.Metadata.Psiphon.UnReachable',
-      defaultMessage: 'On {date}, Psiphon was NOT reachable in {country}, explore more details and other measurements on OONI Explorer.'
+      defaultMessage: 'Psiphon was NOT reachable in {country}'
     }
   })
 

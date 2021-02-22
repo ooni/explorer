@@ -30,11 +30,11 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
   const messages = defineMessages({
     notReachable: {
       id: 'Measurement.Metadata.FacebookMessenger.NotReachable',
-      defaultMessage: 'On {date}, Facebook Messenger was NOT reachable in {country}, explore more details and other measurements on OONI Explorer.',
+      defaultMessage: 'Facebook Messenger was NOT reachable in {country}',
     },
     reachable: {
       id: 'Measurement.Metadata.FacebookMessenger.Reachable',
-      defaultMessage:  'On {date}, Facebook Messenger was reachable in {country}, explore more details and other measurements on OONI Explorer.'
+      defaultMessage:  'Facebook Messenger was reachable in {country}', 
     }
   })
 

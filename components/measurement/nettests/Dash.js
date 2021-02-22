@@ -77,7 +77,8 @@ const getOptimalQualityForBitrate = (testKeys) => {
 const messages = defineMessages({
   dash: {
     id: 'Measurement.Metadata.Dash',
-    defaultMessage: 'See results of Dash Test on {date} in {country} and other measurements on OONI Explorer.'
+
+    defaultMessage: 'Video streaming speed test result (Dash test) in {country}'
   }
 })
 

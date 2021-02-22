@@ -23,11 +23,11 @@ const VanillaTorDetails = ({ measurement, render }) => {
   const messages = defineMessages({
     reachable: {
       id: 'Measurement.Metadata.VanillaTor.Reachable',
-      defaultMessage: 'On {date}, Vanilla Tor was able to bootstrap in {country}, explore more details and other measurements on OONI Explorer.'
+      defaultMessage: 'Vanilla Tor was able to bootstrap in {country}'
     },
     unReachable: {
       id: 'Measurement.Metadata.VanillaTor.UnReachable',
-      defaultMessage: 'On {date}, Vanilla Tor was NOT able to bootstrap in {country}, explore more details and other measurements on OONI Explorer.'
+      defaultMessage: 'Vanilla Tor was NOT able to bootstrap in {country}'
     }
   })
 

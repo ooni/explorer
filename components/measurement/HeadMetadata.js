@@ -15,10 +15,10 @@ const HeadMetadata = ({
   const intl = useIntl()
   let description = ''
 
+  const formattedDate = moment.utc(date).format('LL')
   if (content.formatted) {
     description = content.message
   } else {
-    const formattedDate = moment.utc(date).format('LL')
     const metadata = getTestMetadata(testName)
     description = intl.formatMessage(
       content.message,
@@ -32,14 +32,17 @@ const HeadMetadata = ({
 
   return (
     <Head>
+      <title>
+        {description}
+      </title>
       <meta
         key="og:description"
         property="og:description"
-        content={description}
+        content={`OONI data suggests ${description} on ${formattedDate}, find more open data on internet censorship on OONI Explorer`}
       />
       <meta
         name="description"
-        content={description}
+        content={`OONI data suggests ${description} on ${formattedDate}, find more open data on internet censorship on OONI Explorer`}
       />
     </Head>
   )

@@ -235,7 +235,7 @@ const TorDetails = ({
   const messages = defineMessages({
     tor: {
       id: 'Measurement.Metadata.Tor',
-      defaultMessage: 'See results of Tor Test on {date} in {country} and other measurements on OONI Explorer.'
+      defaultMessage: 'Tor censorship test result in {country}'
     }
   })
 

@@ -28,11 +28,11 @@ const TelegramDetails = ({ measurement, render }) => {
   const message = defineMessages({
     reachable: {
       id: 'Measurement.Metadata.Telegram.Reachable',
-      defaultMessage: 'On {date}, Telegram was reachable in {country}, explore more details and other measurements on OONI Explorer.'
+      defaultMessage: 'Telegram was reachable in {country}'
     },
     unReachable: {
       id: 'Measurement.Metadata.Telegram.UnReachable',
-      defaultMessage: 'On {date}, Telegram was NOT reachable in {country}, explore more details and other measurements on OONI Explorer.'
+      defaultMessage: 'Telegram was NOT reachable in {country}'
     }
   })
 

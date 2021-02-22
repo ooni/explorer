@@ -343,7 +343,7 @@ const WebConnectivityDetails = ({
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.ConfirmedBlocked',
-        defaultMessage: 'On {date}, {websiteURL} was blocked in {country}, explore more details and other measurements on OONI Explorer.'
+        defaultMessage: '{websiteURL} was blocked in {country}'
       },
       {
         date: date,
@@ -368,7 +368,7 @@ const WebConnectivityDetails = ({
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Anomaly',
-        defaultMessage: 'On {date}, {websiteURL} showed signs of {reason} in {country}, explore more details and other measurements on OONI Explorer.'
+        defaultMessage: '{websiteURL} showed signs of {reason} in {country}'
       },
       {
         date: date,
@@ -393,7 +393,7 @@ const WebConnectivityDetails = ({
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Accessible',
-        defaultMessage: 'On {date}, {websiteURL} was accessible in {country}, explore more details and other measurements on OONI Explorer.'
+        defaultMessage: '{websiteURL} was accessible in {country}'
       },
       {
         date: date,
@@ -418,7 +418,7 @@ const WebConnectivityDetails = ({
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Down',
-        defaultmessage: 'on {date}, {websiteurl} was down in {country}, explore more details and other measurements on ooni explorer.'
+        defaultmessage: '{websiteurl} was down in {country}'
       },
       {
         date: date,
@@ -444,7 +444,7 @@ const WebConnectivityDetails = ({
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Failed',
-        defaultmessage: 'on {date}, Web Connectivity test for {websiteurl} failed in {country}, explore more details and other measurements on ooni explorer.'
+        defaultmessage: '{websiteurl} failed to be measured in {country}'
       },
       {
         date: date,

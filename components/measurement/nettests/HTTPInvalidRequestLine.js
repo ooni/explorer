@@ -17,11 +17,11 @@ const HttpInvalidRequestLineDetails = ({ measurement, render }) => {
   const messages = defineMessages({
     middleboxes: {
       id: 'Measurement.Metadata.HTTPInvalidReqLine.Middleboxes',
-      defaultMessage: 'On {date}, network traffic manipulation was detected in {country}, explore more details and other measurements on OONI Explorer.'
+      defaultMessage: 'Network traffic manipulation was detected in {country}'
     },
     noMiddleboxes: {
       id: 'Measurement.Metadata.HTTPInvalidReqLine.NoMiddleboxes',
-      defaultMessage: 'On {date}, NO network traffic manipulation was detected in {country}, explore more details and other measurements on OONI Explorer.'
+      defaultMessage: 'Network traffic manipulation was not detected in {country}'
     }
   })
 
