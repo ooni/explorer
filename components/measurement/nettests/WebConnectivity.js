@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import bufferFrom from 'buffer-from'
+import url from 'url'
 import {
   Heading,
   Flex,
@@ -313,6 +314,9 @@ const WebConnectivityDetails = ({
 
   let reason = messages[`blockingReason.${blocking}`] && intl.formatMessage(messages[`blockingReason.${blocking}`])
 
+  const p = url.parse(input)
+  const hostname = p.host
+
   if (isFailure) {
     status = 'error'
     reason = null
@@ -343,11 +347,11 @@ const WebConnectivityDetails = ({
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.ConfirmedBlocked',
-        defaultMessage: '{websiteURL} was blocked in {country}'
+        defaultMessage: '{hostname} was blocked in {country}'
       },
       {
         date: date,
-        websiteURL: input,
+        hostname,
         country: country,
       }
     )
@@ -368,11 +372,11 @@ const WebConnectivityDetails = ({
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Anomaly',
-        defaultMessage: '{websiteURL} showed signs of {reason} in {country}'
+        defaultMessage: '{hostname} showed signs of {reason} in {country}'
       },
       {
         date: date,
-        websiteURL: input,
+        hostname,
         country: country,
         reason: reason
       }
@@ -393,11 +397,11 @@ const WebConnectivityDetails = ({
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Accessible',
-        defaultMessage: '{websiteURL} was accessible in {country}'
+        defaultMessage: '{hostname} was accessible in {country}'
       },
       {
         date: date,
-        websiteURL: input,
+        hostname,
         country: country,
       }
     )
@@ -418,11 +422,11 @@ const WebConnectivityDetails = ({
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Down',
-        defaultmessage: '{websiteurl} was down in {country}'
+        defaultmessage: '{hostname} was down in {country}'
       },
       {
         date: date,
-        websiteurl: input,
+        hostname,
         country: country,
       }
     )
@@ -444,11 +448,11 @@ const WebConnectivityDetails = ({
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Failed',
-        defaultmessage: '{websiteurl} failed to be measured in {country}'
+        defaultmessage: '{hostname} failed to be measured in {country}'
       },
       {
         date: date,
-        websiteurl: input,
+        hostname,
         country: country,
       }
     )
