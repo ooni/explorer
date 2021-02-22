@@ -103,7 +103,7 @@ describe('Measurement Page Tests', () => {
     it.only('renders an unreachable og:description', () => {
       cy.visit('/measurement/20200407T024309Z_AS4713_xA9Wh81DQrIFqRe46zwKeyJw4DJQwjyTLBIi2zSQqWUBsfQMJS')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'On April 7, 2020, Whatsapp was NOT reachable in Japan, explore more details and other measurements on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests WhatsApp was likely blocked in Japan on April 7, 2020, find more open data on internet censorship on OONI Explorer')
     })
 
     it('renders an accessible measurement', () => {
