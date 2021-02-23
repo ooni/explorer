@@ -204,7 +204,7 @@ class Countries extends React.Component {
     return (
       <Layout>
         <Head>
-          <title>Internet Censorship around the world - OONI Explorer</title>
+          <title>Internet Censorship around the world | OONI Explorer</title>
         </Head>
 
         <StickyContainer>
