@@ -1,23 +1,37 @@
 import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Flex, Box, NavLink } from 'ooni-components'
+import { Flex, Box, Link } from 'ooni-components'
 import styled from 'styled-components'
 import { FormattedMessage } from 'react-intl'
 import { MdExpandLess } from 'react-icons/lib/md'
-import { Hide } from 'rebass'
 import SocialButtons from '../SocialButtons'
 
-const PageNavItem = ({ link, children }) => (
-  <Box mx={3} my={1}>
-    <NavLink fontWeight='normal' color='blue5' href={link}>{children}</NavLink>
+const HideInLargeScreens = ({ children }) => (
+  <Box
+    sx={{
+      display: 'none',
+      '@media screen and (max-width: 64em)': {
+        display: 'block',
+      }
+    }}
+  >
+    {children}
   </Box>
 )
 
-const ToggleIcon = styled(MdExpandLess)`
+const PageNavItem = ({ link, children }) => (
+  <Box mx={3} my={1}>
+    <Link p={2} fontSize={16} color='blue5' href={link}>{children}</Link>
+  </Box>
+)
+
+const ToggleIcon = styled(MdExpandLess).attrs({
+
+})`
   cursor: pointer;
   background-color: ${props => props.theme.colors.gray3};
   border-radius: 50%;
-  transform: ${props => props.isOpen ? 'rotate(0deg)': 'rotate(180deg)'};
+  transform: ${props => props.open ? 'rotate(0deg)': 'rotate(180deg)'};
   transition: transform 0.1s linear;
 `
 
@@ -27,9 +41,9 @@ const PageNavMenu = ({ countryCode }) => {
   return (
     <React.Fragment>
       {/* Show a trigger to open and close the nav menu, but hide it on desktops */}
-      <Hide large xlarge>
-        <ToggleIcon size={36} isOpen={isOpen} onClick={() => setOpen(!isOpen)} />
-      </Hide>
+      <HideInLargeScreens large xlarge>
+        <ToggleIcon size={36} open={isOpen} onClick={() => setOpen(!isOpen)} />
+      </HideInLargeScreens>
       <Box width={[1, 'unset']} py={2}>
         {isOpen && <Flex flexDirection={['column', 'row']} justifyContent='center' py={1}>
           <PageNavItem link='#overview'>

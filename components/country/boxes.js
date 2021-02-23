@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
-import { Box, Container } from 'ooni-components'
-import { Text } from 'rebass'
+import { Box, Container, Text } from 'ooni-components'
 
 const StyledBox = styled(Box)`
   border: 1px solid ${props => props.theme.colors.gray4};
@@ -28,9 +27,9 @@ export const BoxWithTitle = ({ title, children }) => (
 )
 
 BoxWithTitle.propTypes = {
-  title: PropTypes.oneOf([
+  title: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.node
+    PropTypes.element
   ]).isRequired,
   children: PropTypes.node
 }

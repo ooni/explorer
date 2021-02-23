@@ -54,12 +54,15 @@ const SummaryText = ({
 
 SummaryText.propTypes = {
   testName: PropTypes.string.isRequired,
-  network: PropTypes.string.isRequired,
+  network: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
   country: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
   content: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.any,
+    PropTypes.element,
     PropTypes.func
   ])
 }

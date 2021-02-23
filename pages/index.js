@@ -1,6 +1,6 @@
 /* global process */
-import PropTypes from 'prop-types'
 import React from 'react'
+import PropTypes from 'prop-types'
 import Head from 'next/head'
 import NLink from 'next/link'
 import Router from 'next/router'
@@ -15,8 +15,8 @@ import {
   Container,
   Button,
   Heading,
+  Text
 } from 'ooni-components'
-import { Text } from 'rebass'
 
 import Layout from '../components/Layout'
 import NavBar from '../components/NavBar'
@@ -26,7 +26,6 @@ import highlightContent from '../components/landing/highlights.json'
 import CoverageChart from '../components/landing/Stats'
 
 const HeroUnit = styled.div`
-  background: url(/static/images/world-dots.svg);
   background: linear-gradient(
     319.33deg,
     ${props => props.theme.colors.blue9} 39.35%,
@@ -40,6 +39,13 @@ const HeroUnit = styled.div`
 `
 
 const ExploreButton = styled(Button)`
+  font-weight: normal;
+  color: white;
+  border: 2px solid white;
+  border-radius: 48px;
+  height: 60px;
+  cursor: pointer; /* until added to Button in ooni-components */
+
   &:hover, &:focus {
     background-color: white;
     color: ${props => props.theme.colors.blue5};
@@ -69,7 +75,7 @@ const StatsItem = ({label, unit, value }) => (
   <StyledStatsItem color='blue9' width={[1/3]} p={3}>
     <Text fontSize={[42, 48]} fontWeight={300}>
       {value}
-      <Text is='span' fontSize={32}>{unit}</Text>
+      <Text as='span' fontSize={32}>{unit}</Text>
     </Text>
     <StyledLabel>
       {label}
@@ -79,7 +85,7 @@ const StatsItem = ({label, unit, value }) => (
 
 StatsItem.propTypes = {
   label: PropTypes.oneOfType([
-    PropTypes.instanceOf(FormattedMessage),
+    PropTypes.element,
     PropTypes.string
   ]),
   unit: PropTypes.string,
@@ -145,7 +151,8 @@ export default class LandingPage extends React.Component {
 
   render () {
     let {
-      measurementCount, asnCount,
+      measurementCount,
+      asnCount,
       countryCount
     } = this.props
 
@@ -165,7 +172,7 @@ export default class LandingPage extends React.Component {
                 <Text fontSize={[32, 64]} color='#ffffff'><FormattedMessage id='Home.Banner.Title.UncoverEvidence' /></Text>
               </Heading>
               <Text fontSize={[18, 24]} color='blue1'><FormattedMessage id='Home.Banner.Subtitle.ExploreCensorshipEvents' /></Text>
-              <ExploreButton mt={48} hollow inverted fontSize={24} onClick={() => (
+              <ExploreButton mt={48} px={5} hollow fontSize={24} onClick={() => (
                 Router.push('/countries')
               )}>
                 <FormattedMessage id='Home.Banner.Button.Explore' />
@@ -300,7 +307,7 @@ export default class LandingPage extends React.Component {
 }
 
 LandingPage.propTypes = {
-  asnCount: PropTypes.number,
   countryCount: PropTypes.number,
+  asnCount: PropTypes.number,
   measurementCount: PropTypes.number
 }

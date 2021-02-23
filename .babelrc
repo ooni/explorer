@@ -3,7 +3,7 @@
     "inline-react-svg",
     ["styled-components", {"ssr": true, "displayName": true, "preprocess": false}],
     ["react-intl", {
-      "messagesDir": "./static/lang/.messages",
+      "messagesDir": "./public/static/lang/.messages",
       "enforceDescriptions": false,
       "enforceDefaultMessage": false
     }]

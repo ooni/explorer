@@ -8,10 +8,10 @@ const StyledSelect = styled(Select)`
 `
 
 const ASNSelector = ({ networks, onNetworkChange, selectedNetwork }) => (
-  <StyledSelect onChange={(e) => onNetworkChange(e.target.value)}>
+  <StyledSelect onChange={(e) => onNetworkChange(e.target.value)} defaultValue={selectedNetwork}>
     {
       networks.map((network, index) => (
-        <option key={index} value={network.probe_asn} selected={selectedNetwork === network.probe_asn}>
+        <option key={index} value={network.probe_asn}>
           {`AS${network.probe_asn} (${network.count} Tests)`}
         </option>
       ))
