@@ -2,7 +2,7 @@ import React from 'react'
 
 import Head from 'next/head'
 
-const description = 'OONI Explorer is an open data resource on internet censorship around the world. Consisting of millions of network measurements collected from more than 200 countries since 2012, OONI Explorer sheds light on internet censorship and other forms of network interference worldwide.'
+const description = 'OONI Explorer is an open data resource on Internet censorship around the world consisting of millions of measurements on network inteference.'
 
 export default class Header extends React.Component {
   render() {
