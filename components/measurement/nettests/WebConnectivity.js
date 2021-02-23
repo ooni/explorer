@@ -271,6 +271,15 @@ QueryContainer.propTypes = {
   query: PropTypes.object
 }
 
+
+
+/*
+ * This validation function can either be evolved into a generic one to run before
+ * deciding to render a specific component from `measurement/nettests/*`
+ * or similar local methods across all other measurements. Right now it makes sure
+ * the component works with an object that has all the expected keys,
+ * even if they are absent in API responses.
+ */
 const validateMeasurement = (measurement) => {
   // assign valid defaults like `undefined` or `null` to each property
   // Useful when parts of the measurement object are absent
