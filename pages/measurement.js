@@ -32,6 +32,15 @@ export async function getServerSideProps({ query }) {
   let initialProps = {
     errors: []
   }
+
+  // If there is no report_id to use, fail early with MeasurementNotFound
+  if (typeof query.report_id !== 'string' || query.report_id.length < 1) {
+    initialProps.notFound = true
+    return {
+      props: initialProps
+    }
+  }
+
   let response
   let client
   try {
@@ -49,7 +58,7 @@ export async function getServerSideProps({ query }) {
         params
       })
     } catch (e) {
-      initialProps.errors.push(`Failed to fetch measurement data. Server message: ${e.response.status}, ${e.response.statusText}`)
+      throw new Error(`Failed to fetch measurement data. Server message: ${e.response.status}, ${e.response.statusText}`)
     }
 
     // If response `data` is an empty object, the measurement was
