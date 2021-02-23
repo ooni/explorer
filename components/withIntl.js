@@ -3,7 +3,7 @@ import React, {Component} from 'react'
 import { IntlProvider } from 'react-intl'
 
 let messages = {
-  en: require('../static/lang/en.json')
+  en: require('../public/static/lang/en.json')
 }
 
 const getLocale = () => {

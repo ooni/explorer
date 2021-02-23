@@ -1,11 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link, Flex } from 'ooni-components'
-import { Text } from 'rebass'
+import { Link, Flex, Text } from 'ooni-components'
 import { MdShare } from 'react-icons/lib/md'
 
 function SocialButtons({ url }){
-  const text = 'Data from OONI Explorer';
+  const text = 'Data from OONI Explorer'
   return(
     <Flex px={2} alignItems='center'>
       <MdShare height='20px' width='20px'/>

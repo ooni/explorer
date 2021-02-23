@@ -9,9 +9,8 @@ import {
   Flex, Box,
   Container,
   Link, Input,
-  Heading,
+  Heading, Text
 } from 'ooni-components'
-import { Text } from 'rebass'
 import { StickyContainer, Sticky } from 'react-sticky'
 
 import Flag from '../components/Flag'

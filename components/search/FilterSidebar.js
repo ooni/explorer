@@ -8,15 +8,20 @@ import {
   Input,
   Select,
   Label,
-  RadioGroup,
-  RadioButton
 } from 'ooni-components'
 import moment from 'moment'
 
 import DatePicker from '../DatePicker'
+import {
+  RadioGroup,
+  RadioButton
+} from './Radio'
 
 const StyledInputWithLabel = styled.div``
-const StyledLabel = styled(Label)`
+const StyledLabel = styled(Label).attrs({
+  mb: 1,
+  fontSize: 1
+})`
   color: ${props => props.theme.colors.blue5};
   padding-top: 32px;
 `

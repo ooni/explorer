@@ -133,7 +133,7 @@ export default class Country extends React.Component {
                         <Flag countryCode={countryCode} size={miniHeader ? 32: 60} />
                       </Box>
                       <Box ml={3} mr='auto'>
-                        <AnimatedHeading fontSize={miniHeader ? 2 : 4}>
+                        <AnimatedHeading h={1} fontWeight='heading' fontSize={miniHeader ? 2 : 4}>
                           {countryName}
                         </AnimatedHeading>
                       </Box>

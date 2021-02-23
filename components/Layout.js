@@ -1,16 +1,8 @@
 import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { createGlobalStyle } from 'styled-components'
-import {
-  Provider,
-  theme
-} from 'ooni-components'
 import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react'
-
-// Moved this from `_document.js` because `next-css` fails to extract
-// imported css from `_document.js`. `next-css` should be upgraded along with
-// the upgrade to `next@latest`
-import 'typeface-fira-sans/index.css'
+import { createGlobalStyle, ThemeProvider } from 'styled-components'
+import { theme } from 'ooni-components'
 
 import Header from './Header'
 import Footer from './Footer'
@@ -65,7 +57,7 @@ const Layout = ({ children, disableFooter = false }) => {
 
   return (
     <MatomoProvider value={matomoInstance}>
-      <Provider theme={theme}>
+      <ThemeProvider theme={theme}>
         <GlobalStyle />
         <div className="site">
           <Header />
@@ -75,7 +67,7 @@ const Layout = ({ children, disableFooter = false }) => {
           {!disableFooter && <Footer />}
         </div>
         <FeedbackButton />
-      </Provider>
+      </ThemeProvider>
     </MatomoProvider>
   )
 }

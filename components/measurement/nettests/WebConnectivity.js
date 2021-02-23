@@ -4,11 +4,10 @@ import bufferFrom from 'buffer-from'
 import {
   Heading,
   Flex,
-  Pre,
-  Box
+  Box,
+  Text
 } from 'ooni-components'
 
-import { Text } from 'rebass'
 import moment from 'moment'
 import { Tick, Cross } from 'ooni-components/dist/icons'
 
@@ -66,7 +65,7 @@ StatusInfo.propTypes = {
 }
 
 // From https://css-tricks.com/snippets/css/make-pre-text-wrap/
-const WrappedPre = styled(Pre)`
+const WrappedPre = styled.pre`
   white-space: pre-wrap;       /* css-3 */
   white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
   white-space: -pre-wrap;      /* Opera 4-6 */
@@ -119,7 +118,7 @@ const RequestResponseContainer = ({request}) => {
             <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Request.URL' /></Heading>
           </Box>
           <Box width={1} mb={2} p={2} bg='gray2'>
-            <Pre fontSize={14}>{request.request.method} {request.request.url}</Pre>
+            <pre fontSize={14}>{request.request.method} {request.request.url}</pre>
           </Box>
           {/* Response Headers */}
           <Box width={1} mb={1} >
@@ -204,7 +203,7 @@ const FiveColRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = 'Ty
 FiveColRow.propTypes = {
   name: PropTypes.string,
   netClass: PropTypes.string,
-  ttl: PropTypes.string,
+  ttl: PropTypes.number,
   type: PropTypes.string,
   data: PropTypes.string,
   header: PropTypes.bool

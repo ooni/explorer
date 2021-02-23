@@ -2,7 +2,6 @@
 /* eslint no-console: off */
 const express = require('express')
 const next = require('next')
-const axios = require('axios')
 const favicon = require('serve-favicon')
 const path = require('path')
 
@@ -43,7 +42,7 @@ app.prepare()
     })
   })
   .then(() => {
-    server.use(favicon(path.join(__dirname, 'static', 'images', 'favicons', 'favicon.ico')))
+    server.use(favicon(path.join(__dirname, 'public', 'static', 'images', 'favicons', 'favicon.ico')))
 
     const { Sentry } = require('./utils/sentry')(app.buildId)
     // This attaches request information to sentry errors

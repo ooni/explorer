@@ -22,7 +22,7 @@ export const CountryContextProvider = ({
 CountryContextProvider.propTypes = {
   countryCode: PropTypes.string.isRequired,
   countryName: PropTypes.string.isRequired,
-  children: PropTypes.children
+  children: PropTypes.any
 }
 
 
