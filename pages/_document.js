@@ -12,7 +12,7 @@ export default class MyDocument extends Document {
 
   render () {
     return (
-      <html>
+      <html lang="en">
         <Head>
           <link rel='stylesheet' href='/_next/static/style.css' />
           {this.props.styleTags}
