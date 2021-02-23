@@ -17,7 +17,6 @@ import { useRouter } from 'next/router'
 import { DetailsBoxTable, DetailsBox } from './DetailsBox'
 
 const LoadingRawData = (props) => {
-  console.log(props)
   return (<Box fontSize={1}>Loading</Box>)
 }
 
