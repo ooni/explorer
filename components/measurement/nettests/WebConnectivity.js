@@ -190,7 +190,7 @@ DnsAnswerCell.propTypes = {
 }
 
 const FiveColRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = 'Type', data = 'DATA', header = false}) => (
-  <Text fontWeight={header && 'bold'}>
+  <Text fontWeight={header ? 'bold' : undefined}>
     <Flex flexWrap='wrap' mb={2}>
       <DnsAnswerCell>{name}</DnsAnswerCell>
       <DnsAnswerCell>{netClass}</DnsAnswerCell>

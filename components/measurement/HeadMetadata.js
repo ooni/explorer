@@ -6,7 +6,7 @@ import { getTestMetadata } from '../utils'
 
 const HeadMetadata = ({
   testName,
-  network,
+  // network,
   country,
   date,
   content
@@ -18,7 +18,7 @@ const HeadMetadata = ({
     timeZone: 'UTC',
     timeZoneName: 'short',
     day: 'numeric', month: 'long', year: 'numeric',
-    hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false
+    hour: 'numeric', minute: 'numeric', second: 'numeric'
   })
 
   if (content.formatted) {
@@ -35,6 +35,8 @@ const HeadMetadata = ({
     )
   }
 
+  const metaDescription = `OONI data suggests ${description} on ${formattedDate}, find more open data on internet censorship on OONI Explorer.`
+
   return (
     <Head>
       <title>
@@ -43,11 +45,11 @@ const HeadMetadata = ({
       <meta
         key="og:description"
         property="og:description"
-        content={`OONI data suggests ${description} on ${formattedDate}, find more open data on internet censorship on OONI Explorer`}
+        content={metaDescription}
       />
       <meta
         name="description"
-        content={`OONI data suggests ${description} on ${formattedDate}, find more open data on internet censorship on OONI Explorer`}
+        content={metaDescription}
       />
     </Head>
   )
