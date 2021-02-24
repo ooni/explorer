@@ -232,7 +232,7 @@ describe('Measurement Page Tests', () => {
     it('renders a valid og:description', () => {
       cy.visit('/measurement/20200807T222018Z_AS33363_FTKkox83LnAxEXkK8hJQuuqzBjZu2nyTl87aLXQ7MbCPvZIEgW')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests Video streaming speed test result (Dash test) in United States on August 7, 2020, 10:20:16 PM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests 1440p (2k) quality video streaming at 25.43 Mbit/s speed in United States on August 7, 2020, 10:20:16 PM UTC, find more open data on internet censorship on OONI Explorer.')
     })
   })
 

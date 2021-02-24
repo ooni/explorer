@@ -61,8 +61,8 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
     render({
       status: isWorking ? 'reachable' : 'anomaly',
       statusInfo: isWorking
-      ? <FormattedMessage id='Measurement.Status.Hint.FacebookMessenger.Reachable' />
-      : <FormattedMessage id='Measurement.Status.Hint.FacebookMessenger.Blocked' />,
+        ? <FormattedMessage id='Measurement.Status.Hint.FacebookMessenger.Reachable' />
+        : <FormattedMessage id='Measurement.Status.Hint.FacebookMessenger.Blocked' />,
       summaryText: summaryText,
       headMetadata: {
         message: isWorking ? messages.reachable : messages.notReachable,

@@ -307,14 +307,14 @@ const WebConnectivityDetails = ({
     timeZoneName: 'short'
   })
 
+  const p = url.parse(input)
+  const hostname = p.host
+
   let status = 'default'
   let summaryText = ''
   let headMetadata = { message: '', formatted: true }
 
   let reason = messages[`blockingReason.${blocking}`] && intl.formatMessage(messages[`blockingReason.${blocking}`])
-
-  const p = url.parse(input)
-  const hostname = p.host
 
   if (isFailure) {
     status = 'error'
