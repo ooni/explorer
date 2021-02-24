@@ -5,7 +5,8 @@
     ["react-intl", {
       "messagesDir": "./public/static/lang/.messages",
       "enforceDescriptions": false,
-      "enforceDefaultMessage": false
+      "enforceDefaultMessage": false,
+      "extractFromFormatMessageCall": true
     }]
   ],
   "presets": [

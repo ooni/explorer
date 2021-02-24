@@ -38,11 +38,11 @@ const WhatsAppDetails = ({ isAnomaly, scores, measurement, render }) => {
   const messages = defineMessages({
     reachable: {
       id: 'Measurement.Metadata.Whatsapp.Reachable',
-      defaultMessage: 'On {date}, Whatsapp was reachable in {country}, explore more details and other measurements on OONI Explorer.'
+      defaultMessage: 'WhatsApp was reachable in {country}'
     },
     unReachable: {
-      id: 'Measurement.Metadata.VanillaTor.UnReachable',
-      defaultMessage: 'On {date}, Whatsapp was NOT reachable in {country}, explore more details and other measurements on OONI Explorer.'
+      id: 'Measurement.Metadata.Whatsapp.UnReachable',
+      defaultMessage: 'WhatsApp was likely blocked in {country}'
     }
   })
 

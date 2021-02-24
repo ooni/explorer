@@ -5,11 +5,11 @@ const { basename, resolve } = require('path')
 // const csvParse = require('csv-parse/lib/sync')
 const { readFileSync, writeFileSync } = require('fs')
 
-const LANG_DIR = './static/lang/'
+const LANG_DIR = './public/static/lang/'
 const DEFAULT_LOCALE = 'en'
 const TRANSLATED_STRINGS_DIR = '../translations/explorer'
 
-const supportedLanguages = glob.sync('./static/lang/*.json').map((f) => basename(f, '.json'))
+const supportedLanguages = glob.sync(`${LANG_DIR}/*.json`).map((f) => basename(f, '.json'))
 
 // Copy latest files from `translations`
 supportedLanguages.forEach((lang) => {
@@ -25,5 +25,5 @@ const translationsMap = supportedLanguages
   }, {})
 
 const translationsContent = `window.OONITranslations = ${JSON.stringify(translationsMap)}`
-writeFileSync('./static/lang/translations.js', translationsContent)
-console.log('> Wrote translations to: ./static/lang/translations.js')
+writeFileSync(`${LANG_DIR}/translations.js`, translationsContent)
+console.log(`> Wrote translations to: ${LANG_DIR}/translations.js`)

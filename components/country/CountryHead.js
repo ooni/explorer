@@ -10,7 +10,7 @@ const CountryHead = ({
   const intl = useIntl()
   return (
     <Head>
-      <title>Internet Censorship in {countryName} - OONI Explorer</title>
+      <title>Internet Censorship in {countryName} | OONI Explorer</title>
       <meta
         key="og:title"
         property="og:title"
@@ -31,6 +31,17 @@ const CountryHead = ({
           networkCount: intl.formatNumber(networkCount)
         })}
       />
+      <meta
+        name="description"
+        content={intl.formatMessage({
+          id: 'Country.Meta.Description',
+        },{
+          measurementCount: intl.formatNumber(measurementCount),
+          countryName,
+          networkCount: intl.formatNumber(networkCount)
+        })}
+      />
+
     </Head>
   )
 }

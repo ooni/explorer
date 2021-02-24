@@ -63,11 +63,12 @@ const getOptimalQualityForBitrate = (testKeys) => {
 const messages = defineMessages({
   dash: {
     id: 'Measurement.Metadata.Dash',
-    defaultMessage: 'See results of Dash Test on {date} in {country} and other measurements on OONI Explorer.'
+
+    defaultMessage: '{videoQuality} quality video streaming at {speed} Mbit/s speed in {country}'
   }
 })
 
-const DashDetails = ({ measurement, render }) => {
+const DashDetails = ({ measurement, country, render }) => {
   const intl = useIntl()
   const testKeys = measurement.test_keys
   const failure = testKeys.failure
@@ -79,7 +80,7 @@ const DashDetails = ({ measurement, render }) => {
   }
 
   const optimalVideoRate = getOptimalQualityForBitrate(testKeys).type
-  const medianBitrate = (testKeys.simple.median_bitrate / 1000).toFixed(2)
+  const medianBitrateInMbits = (testKeys.simple.median_bitrate / 1000).toFixed(2)
   const playoutDelay = (testKeys.simple.min_playout_delay).toFixed(2)
 
   return (
@@ -87,8 +88,8 @@ const DashDetails = ({ measurement, render }) => {
       statusIcon: <MdFlashOn />,
       statusLabel: intl.formatMessage({ id: 'Measurement.Hero.Status.Dash.Title' }),
       headMetadata: {
-        message: messages.dash,
-        formatted: false
+        message: intl.formatMessage(messages.dash, {videoQuality: optimalVideoRate, speed: medianBitrateInMbits, country: country}),
+        formatted: true
       },
       statusInfo: (
         <Box width={1}>
@@ -99,7 +100,7 @@ const DashDetails = ({ measurement, render }) => {
             />
             <InfoBoxItem
               label={intl.formatMessage({ id: 'Measurement.Status.Info.Label.Bitrate' })}
-              content={medianBitrate} unit='Mbit/s'
+              content={medianBitrateInMbits} unit='Mbit/s'
             />
             <InfoBoxItem
               label={intl.formatMessage({ id: 'Measurement.Status.Info.Label.Delay' })}

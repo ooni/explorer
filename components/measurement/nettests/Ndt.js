@@ -87,7 +87,7 @@ const NdtDetails = ({ measurement, render }) => {
   const messages = defineMessages({
     Ndt: {
       id: 'Measurement.Metadata.Ndt',
-      defaultMessage: 'See results of NDT Test on {date} in {country} and other measurements on OONI Explorer.'
+      defaultMessage: 'Speed test result (NDT Test) in {country}'
     }
   })
 

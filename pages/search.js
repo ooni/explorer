@@ -346,7 +346,7 @@ class Search extends React.Component {
     return (
       <Layout>
         <Head>
-          <title>Search Measurements - OONI Explorer</title>
+          <title>Search through millions of Internet censorship measurements | OONI Explorer</title>
         </Head>
 
         <NavBar />

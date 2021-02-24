@@ -7,7 +7,6 @@ import {
   Box,
   Text
 } from 'ooni-components'
-import moment from 'moment'
 import { useIntl } from 'react-intl'
 
 import Flag from '../Flag'
@@ -61,7 +60,7 @@ const CommonSummary = ({
     </Box>
   </Flex>
 
-  const formattedDate = intl.formatDate(moment.utc(startTime).toDate(), {
+  const formattedDate = intl.formatDate(startTime, {
     year: 'numeric',
     month: 'long',
     day: '2-digit',

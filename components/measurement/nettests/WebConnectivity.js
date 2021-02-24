@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import bufferFrom from 'buffer-from'
+import url from 'url'
 import {
   Heading,
   Flex,
@@ -190,7 +191,7 @@ DnsAnswerCell.propTypes = {
 }
 
 const FiveColRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = 'Type', data = 'DATA', header = false}) => (
-  <Text fontWeight={header && 'bold'}>
+  <Text fontWeight={header ? 'bold' : undefined}>
     <Flex flexWrap='wrap' mb={2}>
       <DnsAnswerCell>{name}</DnsAnswerCell>
       <DnsAnswerCell>{netClass}</DnsAnswerCell>
@@ -343,6 +344,9 @@ const WebConnectivityDetails = ({
     timeZoneName: 'short'
   })
 
+  const p = url.parse(input)
+  const hostname = p.host
+
   let status = 'default'
   let reason = null
   let summaryText = ''
@@ -378,11 +382,11 @@ const WebConnectivityDetails = ({
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.ConfirmedBlocked',
-        defaultMessage: 'On {date}, {websiteURL} was blocked in {country}, explore more details and other measurements on OONI Explorer.'
+        defaultMessage: '{hostname} was blocked in {country}'
       },
       {
         date: date,
-        websiteURL: input,
+        hostname,
         country: country,
       }
     )
@@ -403,11 +407,11 @@ const WebConnectivityDetails = ({
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Anomaly',
-        defaultMessage: 'On {date}, {websiteURL} showed signs of {reason} in {country}, explore more details and other measurements on OONI Explorer.'
+        defaultMessage: '{hostname} showed signs of {reason} in {country}'
       },
       {
         date: date,
-        websiteURL: input,
+        hostname,
         country: country,
         reason: reason
       }
@@ -428,11 +432,11 @@ const WebConnectivityDetails = ({
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Accessible',
-        defaultMessage: 'On {date}, {websiteURL} was accessible in {country}, explore more details and other measurements on OONI Explorer.'
+        defaultMessage: '{hostname} was accessible in {country}'
       },
       {
         date: date,
-        websiteURL: input,
+        hostname,
         country: country,
       }
     )
@@ -453,11 +457,11 @@ const WebConnectivityDetails = ({
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Down',
-        defaultmessage: 'on {date}, {websiteurl} was down in {country}, explore more details and other measurements on ooni explorer.'
+        defaultmessage: '{hostname} was down in {country}'
       },
       {
         date: date,
-        websiteurl: input,
+        hostname,
         country: country,
       }
     )
@@ -479,11 +483,11 @@ const WebConnectivityDetails = ({
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Failed',
-        defaultmessage: 'on {date}, Web Connectivity test for {websiteurl} failed in {country}, explore more details and other measurements on ooni explorer.'
+        defaultmessage: '{hostname} failed to be measured in {country}'
       },
       {
         date: date,
-        websiteurl: input,
+        hostname,
         country: country,
       }
     )
