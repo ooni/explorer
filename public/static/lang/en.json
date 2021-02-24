@@ -426,6 +426,7 @@
   "Home.Highlights.LGBTQI.Description": "Minority group sites are blocked around the world. Below we share a few cases on the blocking of LGBTQI sites.",
   "Home.Highlights.Changes": "Censorship changes",
   "Home.Highlights.Changes.Description": "OONI measurements have been collected on a continuous basis since 2012, enabling the identification of censorship changes around the world. Some examples include:",
+  "Home.Meta.Description": "OONI Explorer is an open data resource on Internet censorship around the world consisting of millions of measurements on network inteference.",
   "Countries.Heading.JumpToContinent": "Jump to continent",
   "Countries.Search.NoCountriesFound": "No countries found with '{searchTerm}'",
   "Countries.Search.Placeholder": "Search for countries",
