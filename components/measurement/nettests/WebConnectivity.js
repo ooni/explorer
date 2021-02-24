@@ -10,12 +10,13 @@ import {
 
 import moment from 'moment'
 import { Tick, Cross } from 'ooni-components/dist/icons'
-
+import deepmerge from 'deepmerge'
 import styled from 'styled-components'
 
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 
 import { DetailsBox } from '../DetailsBox'
+import FormattedMarkdown from '../../FormattedMarkdown'
 
 const messages = defineMessages({
   'blockingReason.http-diff': {
@@ -159,7 +160,7 @@ RequestResponseContainer.propTypes = {
 
 const FailureString = ({failure}) => {
   if (typeof failure === 'undefined') {
-    return (<FormattedMessage id='Measurement.Details.Endpoint.Status.Unknown' />)
+    return (<FormattedMessage id='Measurement.Details.Websites.Failures.Values.Unknown' />)
   }
   if (!failure) {
     return (
@@ -270,18 +271,54 @@ QueryContainer.propTypes = {
   query: PropTypes.object
 }
 
+
+
+/*
+ * This validation function can either be evolved into a generic one to run before
+ * deciding to render a specific component from `measurement/nettests/*`
+ * or similar local methods across all other measurements. Right now it makes sure
+ * the component works with an object that has all the expected keys,
+ * even if they are absent in API responses.
+ */
+const validateMeasurement = (measurement) => {
+  // assign valid defaults like `undefined` or `null` to each property
+  // Useful when parts of the measurement object are absent
+  const validDefaults = {
+    input: undefined,
+    probe_asn: undefined,
+    scores: {
+      analysis: {
+        blocking_type: undefined
+      }
+    },
+    test_keys: {
+      accessible: undefined,
+      blocking: undefined,
+      queries: undefined,
+      tcp_connect: undefined,
+      requests: undefined,
+      client_resolver: undefined,
+      http_experiment_failure: undefined,
+      dns_experiment_failure: undefined,
+      control_failure: undefined
+    }
+  }
+  return deepmerge(validDefaults, measurement)
+}
+
 const WebConnectivityDetails = ({
   isConfirmed,
   isAnomaly,
   isFailure,
   country,
   measurement,
+  scores,
+  test_start_time,
+  probe_asn,
+  input,
   render
 }) => {
   const {
-    input,
-    probe_asn,
-    test_start_time,
     test_keys: {
       accessible,
       blocking,
@@ -293,7 +330,7 @@ const WebConnectivityDetails = ({
       dns_experiment_failure,
       control_failure
     }
-  } = measurement
+  } = validateMeasurement(measurement ?? {})
 
   const intl = useIntl()
   const date = intl.formatDate(moment.utc(test_start_time).toDate(), {
@@ -307,10 +344,9 @@ const WebConnectivityDetails = ({
   })
 
   let status = 'default'
+  let reason = null
   let summaryText = ''
   let headMetadata = { message: '', formatted: true }
-
-  let reason = messages[`blockingReason.${blocking}`] && intl.formatMessage(messages[`blockingReason.${blocking}`])
 
   if (isFailure) {
     status = 'error'
@@ -352,18 +388,18 @@ const WebConnectivityDetails = ({
     )
   } else if (isAnomaly) {
     status = 'anomaly'
-    summaryText = intl.formatMessage(
-      {
-        id: 'Measurement.SummaryText.Websites.Anomaly'
-      },
-      {
+    const blockingReason = blocking ?? scores?.analysis?.blocking_type ?? null
+    reason = messages[`blockingReason.${blockingReason}`] && intl.formatMessage(messages[`blockingReason.${blockingReason}`])
+    summaryText = (<FormattedMarkdown
+      id='Measurement.SummaryText.Websites.Anomaly'
+      values={{
         date: date,
         WebsiteURL: input,
         network: probe_asn,
         country: country,
-        BlockingReason: reason && <strong>{reason}</strong>
-      }
-    )
+        BlockingReason: reason && `**${reason}**`
+      }}
+    />)
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Anomaly',
@@ -466,7 +502,7 @@ const WebConnectivityDetails = ({
     <React.Fragment>
       {render({
         status: status,
-        statusInfo: <StatusInfo url={input} message={reason || null} />,
+        statusInfo: <StatusInfo url={input} message={reason} />,
         summaryText: summaryText,
         headMetadata: headMetadata,
         details: (
@@ -504,19 +540,23 @@ const WebConnectivityDetails = ({
               <DetailsBox
                 title={<FormattedMessage id='Measurement.Details.Websites.DNSQueries.Heading' />}
                 content={
-                  <React.Fragment>
-                    <Flex flexWrap='wrap' mb={2}>
-                      <Box mr={1}>
-                        <strong><FormattedMessage id='Measurement.Details.Websites.DNSQueries.Label.Resolver' />:</strong>
+                  Array.isArray(queries) ? (
+                    <React.Fragment>
+                      <Flex flexWrap='wrap' mb={2}>
+                        <Box mr={1}>
+                          <strong><FormattedMessage id='Measurement.Details.Websites.DNSQueries.Label.Resolver' />:</strong>
+                        </Box>
+                        <Box>
+                          {client_resolver || '(unknown)'}
+                        </Box>
+                      </Flex>
+                      <Box width={1}>
+                        {queries.map((query, index) => <QueryContainer key={index} query={query} />)}
                       </Box>
-                      <Box>
-                        {client_resolver || '(unknown)'}
-                      </Box>
-                    </Flex>
-                    <Box width={1}>
-                      {Array.isArray(queries) && queries.map((query, index) => <QueryContainer key={index} query={query} />)}
-                    </Box>
-                  </React.Fragment>
+                    </React.Fragment>
+                  ) : (
+                    <FormattedMessage id='Measurement.Details.Websites.DNSQueries.NoData' />
+                  )
                 }
               />
             </Flex>
@@ -525,9 +565,8 @@ const WebConnectivityDetails = ({
               <DetailsBox
                 title={<FormattedMessage id='Measurement.Details.Websites.TCP.Heading' />}
                 content={
-                  <React.Fragment>
-                    {tcpConnections.length === 0 && <FormattedMessage id='Measurement.Details.Websites.TCP.NoData' />}
-                    {tcpConnections.map((connection, index) => (
+                  tcpConnections.length > 0 ? (
+                    tcpConnections.map((connection, index) => (
                       <Flex key={index}>
                         <Box>
                           <Text>
@@ -541,9 +580,12 @@ const WebConnectivityDetails = ({
                           </Text>
                         </Box>
                       </Flex>
-                    ))}
-                  </React.Fragment>
-                } />
+                    ))
+                  ) : (
+                    <FormattedMessage id='Measurement.Details.Websites.TCP.NoData' />
+                  )
+                }
+              />
             </Flex>
             {/* I would like us to enrich the HTTP response body section with
               information about every request and response as this is a very common
@@ -570,12 +612,20 @@ const WebConnectivityDetails = ({
 }
 
 WebConnectivityDetails.propTypes = {
-  isConfirmed: PropTypes.bool.isRequired,
-  isAnomaly: PropTypes.bool.isRequired,
-  isFailure: PropTypes.bool.isRequired,
   country: PropTypes.string.isRequired,
+  input: PropTypes.any,
+  isAnomaly: PropTypes.bool.isRequired,
+  isConfirmed: PropTypes.bool.isRequired,
+  isFailure: PropTypes.bool.isRequired,
   measurement: PropTypes.object.isRequired,
-  render: PropTypes.func
+  probe_asn: PropTypes.any,
+  render: PropTypes.func,
+  scores: PropTypes.shape({
+    analysis: PropTypes.shape({
+      blocking_type: PropTypes.any
+    })
+  }),
+  test_start_time: PropTypes.any
 }
 
 export default WebConnectivityDetails

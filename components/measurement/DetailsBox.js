@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useState, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Flex, Box, Text, Heading } from 'ooni-components'
-
+import { FormattedMessage } from 'react-intl'
 import { CollapseTrigger } from '../CollapseTrigger'
 
 const DetailBoxLabel = styled(Text)`
@@ -53,53 +53,39 @@ const StyledDetailsBoxContent = styled(Box)`
   overflow-x: auto;
 `
 
-export class DetailsBox extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      isOpen: props.collapsed ? false :  true
-    }
-    this.onToggle = this.onToggle.bind(this)
-  }
+export const DetailsBox = ({ title, content, collapsed = false, ...rest }) => {
+  const [isOpen, setIsOpen] = useState(!collapsed)
 
-  onToggle () {
-    this.setState((state) => ({
-      isOpen: !state.isOpen
-    }))
-  }
+  const onToggle = useCallback(() => {
+    setIsOpen(!isOpen)
+  }, [isOpen, setIsOpen])
 
-  render () {
-    const { title, content, ...rest } = this.props
-    const { isOpen } = this.state
-    return (
-      <StyledDetailsBox width={1} {...rest} mb={3}>
-        {title &&
-          <StyledDetailsBoxHeader px={3} py={2} bg='gray2' alignItems='center' onClick={() => this.onToggle()}>
-            <Box>
-              <Heading h={4}>{title}</Heading>
-            </Box>
-            <Box ml='auto'>
-              <CollapseTrigger size={36} open={isOpen} />
-            </Box>
-          </StyledDetailsBoxHeader>
-        }
-        {isOpen &&
-          <StyledDetailsBoxContent p={3} flexWrap='wrap'>
-            {content}
-          </StyledDetailsBoxContent>
-        }
-      </StyledDetailsBox>
-    )
-  }
+  return (
+    <StyledDetailsBox width={1} {...rest} mb={3}>
+      {title &&
+        <StyledDetailsBoxHeader px={3} py={2} bg='gray2' alignItems='center' onClick={onToggle}>
+          <Box>
+            <Heading h={4}>{title}</Heading>
+          </Box>
+          <Box ml='auto'>
+            <CollapseTrigger size={36} isOpen={isOpen} />
+          </Box>
+        </StyledDetailsBoxHeader>
+      }
+      {isOpen &&
+        <StyledDetailsBoxContent p={3} flexWrap='wrap'>
+          {content}
+        </StyledDetailsBoxContent>
+      }
+    </StyledDetailsBox>
+  )
 }
 
 DetailsBox.propTypes = {
   title: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.element
-  ]),
-  content: PropTypes.oneOfType([
-    PropTypes.element,
-    PropTypes.array
-  ])
+    PropTypes.instanceOf(FormattedMessage)
+  ]).isRequired,
+  content: PropTypes.node,
+  collapsed: PropTypes.bool
 }

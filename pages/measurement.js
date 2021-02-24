@@ -1,7 +1,7 @@
+/* global process */
 import React from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
 import countryUtil from 'country-util'
 import axios from 'axios'
 import { Container, theme } from 'ooni-components'
@@ -32,6 +32,15 @@ export async function getServerSideProps({ query }) {
   let initialProps = {
     errors: []
   }
+
+  // If there is no report_id to use, fail early with MeasurementNotFound
+  if (typeof query.report_id !== 'string' || query.report_id.length < 1) {
+    initialProps.notFound = true
+    return {
+      props: initialProps
+    }
+  }
+
   let response
   let client
   try {
@@ -49,12 +58,12 @@ export async function getServerSideProps({ query }) {
         params
       })
     } catch (e) {
-      initialProps.errors.push(`Failed to fetch measurement data. Server message: ${e.response.status}, ${e.response.statusText}`)
+      throw new Error(`Failed to fetch measurement data. Server message: ${e.response.status}, ${e.response.statusText}`)
     }
 
     // If response `data` is an empty object, the measurement was
     // probably not found
-    if (response.hasOwnProperty('data') && Object.keys(response.data).length !== 0) {
+    if (Object.prototype.hasOwnProperty.call(response, 'data') && Object.keys(response.data).length !== 0) {
       initialProps = {...initialProps, ...response.data}
 
       if (typeof initialProps['scores'] === 'string') {
@@ -65,15 +74,10 @@ export async function getServerSideProps({ query }) {
         }
       }
 
-      if (typeof initialProps['raw_measurement'] === 'string') {
-        console.log(typeof initialProps['raw_measurement'])
-        try {
-          initialProps['raw_measurement'] = JSON.parse(initialProps['raw_measurement'])
-        } catch (e) {
-          throw new Error(`Failed to parse raw_measurement: ${e.toString()}`)
-        }
-      } else {
-        throw new Error(`Invalid data found of type: ${initialProps['raw_measurement']} in 'raw_measurement'.`)
+      try {
+        initialProps['raw_measurement'] = JSON.parse(initialProps['raw_measurement'])
+      } catch (e) {
+        throw new Error(`Failed to parse raw_measurement: ${e.toString()}`)
       }
 
       const { probe_cc } = response.data
@@ -109,9 +113,6 @@ const Measurement = ({
   report_id,
   ...rest
 }) => {
-  const { query } = useRouter()
-  const queryString = new URLSearchParams(query);
-  const rawMsmtDownloadURL = `${process.env.MEASUREMENTS_URL}/api/v1/raw_measurement?${queryString}`
 
   // Add the 'AS' prefix to probe_asn when APi chooses to snd just the number
   probe_asn = typeof probe_asn === 'number' ? `AS${probe_asn}` : probe_asn
@@ -138,6 +139,8 @@ const Measurement = ({
           country={country}
           measurement={raw_measurement}
           input={input}
+          test_start_time={test_start_time}
+          probe_asn={probe_asn}
           {...rest}
 
           render={({
@@ -195,8 +198,8 @@ const Measurement = ({
                 }
                 {details}
                 <CommonDetails
-                  measurementURL={rawMsmtDownloadURL}
                   measurement={raw_measurement}
+                  reportId={report_id}
                 />
               </Container>
             </React.Fragment>
@@ -207,12 +210,19 @@ const Measurement = ({
 }
 
 Measurement.propTypes = {
-  measurement: PropTypes.object,
-  measurementURL: PropTypes.string,
-  isAnomaly: PropTypes.bool,
-  isFailure: PropTypes.bool,
-  isConfirmed: PropTypes.bool,
-  country: PropTypes.string
+  anomaly: PropTypes.bool,
+  confirmed: PropTypes.bool,
+  country: PropTypes.string,
+  errors: PropTypes.arrayOf(PropTypes.string),
+  failure: PropTypes.bool,
+  input: PropTypes.any,
+  notFound: PropTypes.bool,
+  probe_asn: PropTypes.any,
+  probe_cc: PropTypes.string,
+  raw_measurement: PropTypes.object,
+  report_id: PropTypes.string,
+  test_name: PropTypes.string,
+  test_start_time: PropTypes.string
 }
 
 export default Measurement

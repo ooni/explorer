@@ -54,9 +54,11 @@
   "Measurement.Details.Websites.Failures.Label.HTTP": "HTTP Experiment",
   "Measurement.Details.Websites.Failures.Label.DNS": "DNS Experiment",
   "Measurement.Details.Websites.Failures.Label.Control": "Control",
+  "Measurement.Details.Websites.Failures.Values.Unknown": "No data",
   "Measurement.Details.Websites.Failures.Values.Null": "null",
   "Measurement.Details.Websites.DNSQueries.Heading": "DNS Queries",
   "Measurement.Details.Websites.DNSQueries.Label.Resolver": "Resolver",
+  "Measurement.Details.Websites.DNSQueries.NoData": "No data.",
   "Measurement.Details.Websites.TCP.Heading": "TCP Connections",
   "Measurement.Details.Websites.TCP.NoData": "No data.",
   "Measurement.Details.Websites.TCP.ConnectionTo": "Connection to {destination} {connectionStatus}.",
@@ -73,8 +75,10 @@
   "Measurement.CommonDetails.Label.Platform": "Platform",
   "Measurement.CommonDetails.Label.Software": "Software Name",
   "Measurement.CommonDetails.Label.Engine": "Measurement Engine",
+  "Measurement.CommonDetails.Value.Unavailable": "Unavailable",
   "Measurement.CommonDetails.RawMeasurement.Heading": "Raw Measurement Data",
   "Measurement.CommonDetails.RawMeasurement.Download": "Download JSON",
+  "Measurement.CommonDetails.RawMeasurement.Unavailable": "Unavailable",
   "Measurement.Hero.Status.NDT.Title": "Results",
   "Measurement.Status.Info.Label.Download": "Download",
   "Measurement.Status.Info.Label.Upload": "Upload",
@@ -331,6 +335,7 @@
   "Country.NetworkProperties.InfoBox.Label.Middleboxes.Found": "Middleboxes detected",
   "Country.NetworkProperties.InfoBox.Label.Middleboxes.NotFound": "No middleboxes detected",
   "Country.NetworkProperties.Button.ShowMore": "Show more networks",
+  "Country.Label.NoData": "No Data Available",
   "Search.Sidebar.Domain": "Domain",
   "Search.Sidebar.Domain.Placeholder": "e.g. twitter.com or 1.1.1.1",
   "Search.Sidebar.Domain.Error": "Please enter a valid domain name or IP address, such as twitter.com or 1.1.1.1",
@@ -428,6 +433,5 @@
   "Error.404.Heading": "The requested page does not exist",
   "Error.404.Message": "We could not find the content you were looking for. Maybe try {measurmentLink} or look at {homePageLink}.",
   "Error.404.MeasurmentLinkText": "exploring some measurement",
-  "Error.404.HomepageLinkText": "the homepage",
-  "Country.Label.NoData": "No Data Available"
+  "Error.404.HomepageLinkText": "the homepage"
 }

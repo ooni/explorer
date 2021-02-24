@@ -1,5 +1,5 @@
 import React from 'react'
-
+import PropTypes from 'prop-types'
 import WebConnectivityDetails from './nettests/WebConnectivity'
 import TelegramDetails from './nettests/Telegram'
 import WhatsAppDetails from './nettests/WhatsApp'
@@ -40,6 +40,11 @@ const MeasurementContainer = ({ testName, measurement, ...props }) => {
       <TestDetails measurement={measurement} {...props} />
     </React.Fragment>
   )
+}
+
+MeasurementContainer.propTypes = {
+  measurement: PropTypes.any,
+  testName: PropTypes.any
 }
 
 export default MeasurementContainer

@@ -12,7 +12,7 @@
             "experimentalObjectRestSpread": true,
             "jsx": true
         },
-        "ecmaVersion": "2017",
+        "ecmaVersion": 2020,
         "sourceType": "module"
     },
     "plugins": [
@@ -36,5 +36,6 @@
             "never"
         ],
         "react/prop-types": ["warn"]
-    }
+    },
+    "ignorePatterns": ["components/vendor", "static"]
 }

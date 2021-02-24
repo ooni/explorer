@@ -23,6 +23,7 @@
     "buffer-from": "^1.1.1",
     "country-util": "0.1.0",
     "d3": "^5.16.0",
+    "deepmerge": "^4.2.2",
     "express": "^4.14.0",
     "file-loader": "3.0.1",
     "flag-icon-css": "^2.9.0",
@@ -76,8 +77,8 @@
   "devDependencies": {
     "babel-plugin-react-intl": "^3.2.0",
     "cypress": "^5.2.0",
-    "eslint": "^4.19.1",
-    "eslint-plugin-react": "^7.7.0",
+    "eslint": "^7.20.0",
+    "eslint-plugin-react": "^7.22.0",
     "mustache": "^2.3.0",
     "start-server-and-test": "^1.10.8"
   },
@@ -87,7 +88,7 @@
     "extract-i18n-keys": "yarn build && node ./scripts/extract-react-intl-keys.js",
     "build": "next build",
     "export": "next export",
-    "lint": "eslint --ignore-path .gitignore --ignore-pattern components/vendor .",
+    "lint": "eslint --ignore-path .gitignore .",
     "test:e2e": "yarn build && start-server-and-test start http://localhost:3100 cypress:run",
     "cypress:run": "cypress run",
     "test": "echo nothing interesting",
