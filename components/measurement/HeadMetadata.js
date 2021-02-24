@@ -2,7 +2,6 @@ import React from 'react'
 import Head from 'next/head'
 import PropTypes from 'prop-types'
 import { useIntl } from 'react-intl'
-import moment from 'moment'
 import { getTestMetadata } from '../utils'
 
 const HeadMetadata = ({
@@ -15,7 +14,13 @@ const HeadMetadata = ({
   const intl = useIntl()
   let description = ''
 
-  const formattedDate = moment.utc(date).format('LL')
+  const formattedDate = intl.formatDate(date, {
+    timeZone: 'UTC',
+    timeZoneName: 'short',
+    day: 'numeric', month: 'long', year: 'numeric',
+    hour: 'numeric', minute: 'numeric', second: 'numeric', hour12: false
+  })
+
   if (content.formatted) {
     description = content.message
   } else {
