@@ -54,7 +54,7 @@
     "serve-favicon": "^2.5.0",
     "styled-components": "^4.4.1",
     "swr": "^0.2.3",
-    "three": "^0.86.0",
+    "three": "^0.125.0",
     "url": "^0.11.0",
     "url-loader": "1.1.2",
     "use-clipboard-copy": "^0.1.2",
