@@ -86,14 +86,17 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
         'anomaly_count',
         'confirmed_count',
         'failure_count',
-        'measurement_count',
+        'ok_count',
       ]
       let indexBy = ''
       cols.push(query['axis_x'])
       indexBy = query['axis_x']
-
+      let reshapedData = data.data.result.map(d => {
+        d['ok_count'] = d.measurement_count - d.confirmed_count - d.anomaly_count
+        return d
+      })
       return {
-        data: data.data.result,
+        data: reshapedData,
         dimensionCount: data.data.dimension_count,
         url: data.url,
         loadTime: data.loadTime,
