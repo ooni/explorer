@@ -72,9 +72,6 @@ const WhatsAppDetails = ({ isAnomaly, scores, measurement, render }) => {
     },
     details: (
       <React.Fragment>
-        { !scores.analysis && <BugBox>
-        <Text>Attention! This test result may not be accurate as it may be affected by a <a href="https://github.com/ooni/explorer/issues/406">known data processing issue</a> that we are working on fixing. If in doubt on how to interpret this particular result, feel free to <a href="https://ooni.org/about">reach out to the OONI team</a>.</Text>
-        </BugBox>}
         <Box width={1/2}>
           <Flex>
             <Box width={1/3}>
