@@ -125,6 +125,11 @@ class URLChart extends React.Component {
         input: metadata.input
       }
     })
+    // HACK: Temporary fix to workaround backend bug showing wrong anomaly and confirmed counts
+    const fixedData = result.data.results.map(d => {
+      d.anomaly_count = d.anomaly_count - d.confirmed_count
+      return d
+    })
     this.setState({
       data: result.data.results,
       fetching: false
