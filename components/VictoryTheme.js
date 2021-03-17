@@ -1,4 +1,3 @@
-import { assign } from 'lodash'
 import { theme } from 'ooni-components'
 
 const colors = theme.colors
@@ -36,7 +35,7 @@ export const baseLabelStyles = {
   stroke: 'transparent',
 }
 
-const centeredLabelStyles = assign({ textAnchor: 'middle' }, baseLabelStyles)
+const centeredLabelStyles = Object.assign({ textAnchor: 'middle' }, baseLabelStyles)
 
 // Strokes
 const strokeDasharray = '1, 3'
@@ -55,7 +54,7 @@ export const axisYStyle = {
     fill: 'transparent',
     stroke: 'transparent'
   },
-  axisLabel: assign({}, centeredLabelStyles, {padding: 25}),
+  axisLabel: Object.assign({}, centeredLabelStyles, {padding: 25}),
   ticks: {
     fill: 'transparent',
     stroke: 'transparent'
@@ -63,7 +62,7 @@ export const axisYStyle = {
 }
 
 const victoryTheme = {
-  area: assign({
+  area: Object.assign({
     style: {
       data: {
         fill: primaryColor
@@ -72,7 +71,7 @@ const victoryTheme = {
     }
   }, baseProps),
 
-  axis: assign({}, baseProps, {
+  axis: Object.assign({}, baseProps, {
     style: {
       axis: {
         fill: 'transparent',
@@ -81,7 +80,7 @@ const victoryTheme = {
         strokeLinecap,
         strokeLinejoin
       },
-      axisLabel: assign({}, centeredLabelStyles, {padding: 25}),
+      axisLabel: Object.assign({}, centeredLabelStyles, {padding: 25}),
       grid: {
         fill: 'transparent',
         stroke: 'transparent',
@@ -96,7 +95,7 @@ const victoryTheme = {
     }
   }),
 
-  bar: assign({
+  bar: Object.assign({
     style: {
       data: {
         fill: primaryColor,
@@ -107,7 +106,7 @@ const victoryTheme = {
     }
   }, baseProps),
 
-  candlestick: assign({
+  candlestick: Object.assign({
     style: {
       data: {
         stroke: primaryColor,
@@ -123,7 +122,7 @@ const victoryTheme = {
 
   chart: baseProps,
 
-  errorbar: assign({
+  errorbar: Object.assign({
     style: {
       data: {
         fill: 'transparent',
@@ -134,11 +133,11 @@ const victoryTheme = {
     },
   }, baseProps),
 
-  group: assign({
+  group: Object.assign({
     colorScale: colorScale,
   }, baseProps),
 
-  line: assign({
+  line: Object.assign({
     style: {
       data: {
         fill: 'transparent',
@@ -155,7 +154,7 @@ const victoryTheme = {
         stroke: 'transparent',
         strokeWidth: 1
       },
-      labels: assign({padding: 20}, baseLabelStyles)
+      labels: Object.assign({padding: 20}, baseLabelStyles)
     },
     colorScale: colorScale,
     width: 400,
@@ -163,7 +162,7 @@ const victoryTheme = {
     padding: 50
   },
 
-  scatter: assign({
+  scatter: Object.assign({
     style: {
       data: {
         fill: primaryColor,
@@ -174,10 +173,10 @@ const victoryTheme = {
     },
   }, baseProps),
 
-  stack: assign({colorScale: colorScale}, baseProps),
+  stack: Object.assign({colorScale: colorScale}, baseProps),
 
   tooltip: {
-    style: assign({}, centeredLabelStyles, {
+    style: Object.assign({}, centeredLabelStyles, {
       padding: 5,
       pointerEvents: 'none'
     }),
@@ -190,14 +189,14 @@ const victoryTheme = {
     pointerLength: 10
   },
 
-  voronoi: assign ({
+  voronoi: Object.assign({
     style: {
       data: {
         fill: 'transparent',
         stroke: 'transparent',
         strokeWidth: 0
       },
-      labels: assign({}, centeredLabelStyles, {
+      labels: Object.assign({}, centeredLabelStyles, {
         padding: 5,
         pointerEvents: 'none'
       }),
