@@ -157,8 +157,8 @@ class AppsStatsCircumventionRow extends React.Component {
               <Box ml={4}>
                 <CollapseTrigger
                   size={36}
-                  bg={theme.colors.gray3}
-                  open={!minimized}
+                  $bg={theme.colors.gray3}
+                  $open={!minimized}
                   onClick={this.toggleMinimize}
                 />
               </Box>

@@ -47,7 +47,7 @@
     "rebass": "4.0.7",
     "sentry-testkit": "^2.2.0",
     "serve-favicon": "^2.5.0",
-    "styled-components": "^4.4.1",
+    "styled-components": "^5.1.0",
     "swr": "^0.2.3",
     "url": "^0.11.0",
     "use-clipboard-copy": "^0.1.2",
