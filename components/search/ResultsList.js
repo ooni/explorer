@@ -330,7 +330,17 @@ const ResultItem = ({
                   <ASNBox asn={probe_asn} />
                 </Box>
                 <Box width={5/16}>
-                  {moment.utc(measurement_start_time).format('YYYY-MM-DD HH:mm [UTC]')}
+                  {
+                    useIntl().formatDate(measurement_start_time, {
+                      year: 'numeric',
+                      month: 'long',
+                      day: '2-digit',
+                      hour: '2-digit',
+                      minute: 'numeric',
+                      timeZone: 'UTC',
+                      timeZoneName: 'short'
+                    })
+                  }
                 </Box>
                 <Box width={5/16}>
                   {testDisplayName}
