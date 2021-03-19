@@ -144,7 +144,7 @@ class FilterSidebar extends React.Component {
       case 'domainFilter':
         var domainValue = e.target.value
         // eslint-disable-next-line no-useless-escape
-        var domainRegEx = /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,7}(:[0-9]{1,5})?(\/)?$/
+        var domainRegEx = /^(https?:\/\/)?[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,7}(:[0-9]{1,5})?(\/)?$/
         var ipRegEx = /^(([0-9]{1,3})\.){3}([0-9]{1,3})/
         if (domainValue && domainValue.match(domainRegEx) === null
           && domainValue.match(ipRegEx) === null) {
@@ -222,9 +222,32 @@ class FilterSidebar extends React.Component {
     }
   }
 
+  // Function to get usable domain URL
+  // Eg. https://www.twitter.com/ is converted to twitter.com
+  getUsableDomainValue() {
+    var domainValue = this.state.domainFilter
+
+    if (/^(https?:\/\/)/.test(domainValue)) {
+      var domainValueWithoutHttp = domainValue.replace(/^(https?:\/\/)/, '')
+      domainValue = domainValueWithoutHttp
+    }
+    if(/^(www\.)/.test(domainValue)) {
+      var domainValueWithoutWWW = domainValue.replace(/^(www\.)/, '')
+      domainValue = domainValueWithoutWWW
+    }
+    if(/(\/)$/.test(domainValue)) {
+      var domainValueWithoutTrailingSlash = domainValue.replace(/(\/)$/, '')
+      domainValue = domainValueWithoutTrailingSlash
+    }
+
+    return domainValue ? domainValue : this.state.domainFilter
+  }
+
   onClickApplyFilter() {
+    var domainValue = this.getUsableDomainValue()
+    console.log('domainValue final: ', domainValue)
     this.props.onApplyFilter({
-      domainFilter: this.state.domainFilter,
+      domainFilter: domainValue,
       onlyFilter: this.state.onlyFilter,
       testNameFilter: this.state.testNameFilter,
       countryFilter: this.state.countryFilter,
