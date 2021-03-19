@@ -245,7 +245,7 @@ class FilterSidebar extends React.Component {
 
   onClickApplyFilter() {
     var domainValue = this.getUsableDomainValue()
-    console.log('domainValue final: ', domainValue)
+    
     this.props.onApplyFilter({
       domainFilter: domainValue,
       onlyFilter: this.state.onlyFilter,
