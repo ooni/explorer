@@ -222,9 +222,32 @@ class FilterSidebar extends React.Component {
     }
   }
 
+  // Function to get usable domain URL
+  // Eg. https://www.twitter.com/ is converted to twitter.com
+  getUsableDomainValue() {
+    var domainValue = this.state.domainFilter
+
+    if (/^(https?:\/\/)/.test(domainValue)) {
+      var domainValueWithoutHttp = domainValue.replace(/^(https?:\/\/)/, '')
+      domainValue = domainValueWithoutHttp
+    }
+    if(/^(www\.)/.test(domainValue)) {
+      var domainValueWithoutWWW = domainValue.replace(/^(www\.)/, '')
+      domainValue = domainValueWithoutWWW
+    }
+    if(/(\/)$/.test(domainValue)) {
+      var domainValueWithoutTrailingSlash = domainValue.replace(/(\/)$/, '')
+      domainValue = domainValueWithoutTrailingSlash
+    }
+
+    return domainValue ? domainValue : this.state.domainFilter
+  }
+
   onClickApplyFilter() {
+    var domainValue = this.getUsableDomainValue()
+
     this.props.onApplyFilter({
-      domainFilter: this.state.domainFilter,
+      domainFilter: domainValue,
       onlyFilter: this.state.onlyFilter,
       testNameFilter: this.state.testNameFilter,
       countryFilter: this.state.countryFilter,
