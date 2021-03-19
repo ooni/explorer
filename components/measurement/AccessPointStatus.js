@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl'
 import styled from 'styled-components'
 
 const StatusText = styled(Text)`
-  color: ${props => props.ok === false ? props.theme.colors.yellow9 : 'unset'}
+  color: ${props => props.$ok === false ? props.theme.colors.yellow9 : 'unset'}
 `
 
 const AccessPointStatus = ({ icon, label, ok, content, color, ...props}) => {
@@ -24,7 +24,7 @@ const AccessPointStatus = ({ icon, label, ok, content, color, ...props}) => {
       {icon}
       <Text fontWeight='bold' fontSize={0}>{label}</Text>
       <StatusText
-        ok={ok}
+        $ok={ok}
         fontSize={3}
         fontWeight={200}
         color={color}
