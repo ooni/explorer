@@ -68,7 +68,7 @@ export const DetailsBox = ({ title, content, collapsed = false, ...rest }) => {
             <Heading h={4}>{title}</Heading>
           </Box>
           <Box ml='auto'>
-            <CollapseTrigger size={36} isOpen={isOpen} />
+            <CollapseTrigger size={36} $isOpen={isOpen} />
           </Box>
         </StyledDetailsBoxHeader>
       }
