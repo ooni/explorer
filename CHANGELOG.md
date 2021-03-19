@@ -1,5 +1,19 @@
 # Changelog
 
+## [2.4.4] - 2021-03-18
+
+### Changed
+* Show the ok_count as the difference of confirmed and anomalies
+
+### Fixed
+* Fix temporarily API bug showing same anomaly and confirmed count
+* Add experimental icon to MAT page
+
+### Removed
+* Remove accuracy disclaimer on whatsapp pages added in ca9526643b5fecb34c2794ea574bc83f7f4714d6
+* Remove unused dependencies
+
+
 ## [2.1.1] - 2020-10-27
 
 ### Changed
