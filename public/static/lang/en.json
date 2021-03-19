@@ -78,6 +78,7 @@
   "Measurement.CommonDetails.Value.Unavailable": "Unavailable",
   "Measurement.CommonDetails.RawMeasurement.Heading": "Raw Measurement Data",
   "Measurement.CommonDetails.RawMeasurement.Download": "Download JSON",
+  "Measurement.CommonDetails.RawMeasurement.Expand": "Expand All",
   "Measurement.CommonDetails.RawMeasurement.Unavailable": "Unavailable",
   "Measurement.Hero.Status.NDT.Title": "Results",
   "Measurement.Status.Info.Label.Download": "Download",
