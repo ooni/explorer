@@ -144,7 +144,7 @@ class FilterSidebar extends React.Component {
       case 'domainFilter':
         var domainValue = e.target.value
         // eslint-disable-next-line no-useless-escape
-        var domainRegEx = /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,7}(:[0-9]{1,5})?(\/)?$/
+        var domainRegEx = /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,7}(:[0-9]{1,5})?(\|\/)?$/
         var ipRegEx = /^(([0-9]{1,3})\.){3}([0-9]{1,3})/
         if (domainValue && domainValue.match(domainRegEx) === null
           && domainValue.match(ipRegEx) === null) {
