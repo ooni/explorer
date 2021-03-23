@@ -3,13 +3,13 @@ import PropTypes from 'prop-types'
 import {
   Text
 } from 'ooni-components'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, defineMessages } from 'react-intl'
 
 export const HttpHeaderFieldManipulationDetails = ({ measurement, render }) => {
   const testKeys = measurement.test_keys
   let isAnomaly = false
   let isFailed = true
-  const tampering = testKeys.tampering
+  const tampering = testKeys?.tampering || {}
   Object.keys(tampering).forEach((key) => {
     if (tampering[key] === true) {
       isAnomaly = true
@@ -18,7 +18,17 @@ export const HttpHeaderFieldManipulationDetails = ({ measurement, render }) => {
       isFailed = false
     }
   })
-  const headerDiff = testKeys.tampering.header_name_diff
+
+  const messages = defineMessages({
+    middleboxes: {
+      id: 'Measurement.Metadata.HTTPHeaderManipulation.MiddleboxesDetected',
+      defaultMessage:  'HTTP header manipulation was detected in {country}'
+    },
+    noMiddleboxes: {
+      id: 'Measurement.Metadata.HTTPHeaderManipulation.NoMiddleboxesDetected',
+      defaultMessage:  'HTTP header manipulation was not detected in {country}'
+    }
+  })
 
   return (
     render({
@@ -29,13 +39,10 @@ export const HttpHeaderFieldManipulationDetails = ({ measurement, render }) => {
       summaryText: isAnomaly
         ? 'Measurement.HTTPHeaderManipulation.MiddleBoxesDetected.SummaryText'
         : 'Measurement.HTTPHeaderManipulation.NoMiddleBoxes.SummaryText',
-      details: (
-        <div>
-          {/*<Text>isAnomaly: {isAnomaly.toString()}</Text>
-          <Text>isFailed: {isFailed.toString()}</Text>
-          <Text>headerDiff: {headerDiff.toString()}</Text>*/}
-        </div>
-      )
+      headMetadata: {
+        message: isAnomaly ? messages.middleboxes : messages.noMiddleboxes,
+        formatted: false
+      }
     })
   )
 }

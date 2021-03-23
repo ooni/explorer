@@ -4,7 +4,6 @@ import axios from 'axios'
 import {
   Container,
   Heading,
-  Text, Hero,
   Flex, Box
 } from 'ooni-components'
 import countryUtil from 'country-util'
@@ -18,11 +17,11 @@ import PageNavMenu from '../components/country/PageNavMenu'
 import Overview from '../components/country/Overview'
 import WebsitesSection from '../components/country/Websites'
 import AppsSection from '../components/country/Apps'
-import NetworkPropertiesSection from '../components/country/NetworkProperties'
+// import NetworkPropertiesSection from '../components/country/NetworkProperties'
 import { CountryContextProvider } from '../components/country/CountryContext'
-import IntlHead from '../components/country/IntlHead'
 import { ScreenshotProvider } from '../components/ScreenshotContext'
 import TestsByGroup from '../components/country/OverviewCharts'
+import CountryHead from '../components/country/CountryHead'
 
 const getCountryReports = (countryCode, data) => {
   const reports = data.filter((article) => (
@@ -126,13 +125,7 @@ export default function Country(props){
   } else {
     return (
       <Layout>
-        <IntlHead
-          countryCode={countryCode}
-          countryName={countryName}
-          measurementCount={overviewStats.measurement_count}
-          measuredSince={overviewStats.first_bucket_date}
-          networkCount={overviewStats.network_count}
-        />
+        <CountryHead countryName={countryName} measurementCount={overviewStats.measurement_count} measuredSince={overviewStats.first_bucket_date} networkCount={overviewStats.network_count} />
         <StickyContainer>
           <Sticky>
             {({ style, distanceFromTop }) => {
@@ -149,11 +142,11 @@ export default function Country(props){
                         <Flag countryCode={countryCode} size={miniHeader ? 32: 60} />
                       </Box>
                       <Box ml={3} mr='auto'>
-                        <AnimatedHeading fontSize={miniHeader ? 2 : 4}>
+                        <AnimatedHeading h={1} fontWeight='heading' fontSize={miniHeader ? 2 : 4}>
                           {countryName}
                         </AnimatedHeading>
                       </Box>
-                      <PageNavMenu />
+                      <PageNavMenu countryCode={countryCode}/>
                     </AnimatedFlex>
                   </Container>
                 </RaisedHeader>
@@ -180,7 +173,7 @@ export default function Country(props){
                   />
                   <WebsitesSection />
                   <AppsSection />
-                  <NetworkPropertiesSection countryCode={countryCode} />
+                  {/* <NetworkPropertiesSection countryCode={countryCode} /> */}
                 </CountryContextProvider>
               </Box>
             </Flex>

@@ -1,16 +1,9 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import PropTypes from 'prop-types'
-import { createGlobalStyle } from 'styled-components'
-import {
-  Provider,
-  theme
-} from 'ooni-components'
+import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react'
+import { createGlobalStyle, ThemeProvider } from 'styled-components'
+import { theme } from 'ooni-components'
 import { useScreenshot } from './ScreenshotContext'
-
-// Moved this from `_document.js` because `next-css` fails to extract
-// imported css from `_document.js`. `next-css` should be upgraded along with
-// the upgrade to `next@latest`
-import 'typeface-fira-sans/index.css'
 
 import Header from './Header'
 import Footer from './Footer'
@@ -48,24 +41,39 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-const Layout = ({ children, disableFooter = false }) => {
-  const { isScreenshot } = useScreenshot() 
+const matomoInstance = createInstance({
+  urlBase: 'https://matomo.ooni.org/',
+  siteId: 2,
+  trackerUrl: 'https://matomo.ooni.org/matomo.php',
+  srcUrl: 'https://matomo.ooni.org/matomo.js',
+  configurations: {
+    disableCookies: true
+  }
+})
 
-  return(
-    <Provider theme={theme}>
-      <GlobalStyle />
-      <div className="site">
-        <Header />
-        <div className="content">
-          { children }
+const Layout = ({ children, disableFooter = false }) => {
+  const { isScreenshot } = useScreenshot()
+
+  useEffect(() => {
+    matomoInstance.trackPageView()
+  }, [])
+
+  return (
+    <MatomoProvider value={matomoInstance}>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <div className="site">
+          <Header />
+          <div className="content">
+            { children }
+          </div>
+          {!disableFooter && !isScreenshot && <Footer />}
         </div>
-        {!isScreenshot && <Footer />}
-      </div>
-      {!isScreenshot && <FeedbackButton />}
-    </Provider>
+        {!isScreenshot && <FeedbackButton />}
+      </ThemeProvider>
+    </MatomoProvider>
   )
 }
-
 
 Layout.propTypes = {
   children: PropTypes.array.isRequired,

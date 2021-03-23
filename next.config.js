@@ -1,12 +1,10 @@
 /* global require, module, process */
-const withCSS = require('@zeit/next-css')
 const withSourceMaps = require('@zeit/next-source-maps')
-const child_process = require('child_process')
 const webpack = require('webpack')
 
 process.env.PORT = process.env.PORT || 3100
 
-module.exports = withSourceMaps(withCSS({
+module.exports = withSourceMaps({
   webpack: (config, {isServer}) => {
     config.plugins.push(
       new webpack.DefinePlugin({
@@ -15,26 +13,11 @@ module.exports = withSourceMaps(withCSS({
         'process.env.SENTRY_DSN': JSON.stringify(process.env.SENTRY_DSN || 'https://49af7fff247c445b9a7c98ee21ddfd2f@sentry.io/1427510'),
       })
     )
-    config.module.rules.push({
-      test: /\.(otf|ttf|woff|woff2)$/,
-      use: {
-        loader: 'file-loader',
-        options: {
-          limit: 10000,
-          publicPath: '/_next/static/',
-          outputPath: 'static/',
-          name: '[name].[ext]'
-        }
-      }
-    })
 
     if (!isServer) {
       config.resolve.alias['@sentry/node'] = '@sentry/browser'
     }
 
     return config
-  },
-  experimental: {
-    css: false
   }
-}))
+})

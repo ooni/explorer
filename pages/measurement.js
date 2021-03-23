@@ -1,3 +1,4 @@
+/* global process */
 import React from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
@@ -13,9 +14,12 @@ import CommonDetails from '../components/measurement/CommonDetails'
 import MeasurementContainer from '../components/measurement/MeasurementContainer'
 import { ScreenshotProvider } from '../components/ScreenshotContext'
 import ScreenshotWrapper from '../components/ScreenshotWrapper'
+import MeasurementNotFound from '../components/measurement/MeasurementNotFound'
+import HeadMetadata from '../components/measurement/HeadMetadata'
 
 import Layout from '../components/Layout'
 import NavBar from '../components/NavBar'
+import ErrorPage from './_error'
 
 const pageColors = {
   default: theme.colors.base,
@@ -26,148 +30,233 @@ const pageColors = {
   confirmed: theme.colors.red7
 }
 
-Measurement.getInitialProps = async ({query}) => {
-  let initialProps = {}
-  let client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
-  let params = {
-    report_id: query.report_id
+export async function getServerSideProps({ query }) {
+  let initialProps = {
+    errors: []
   }
-  if (query.input) {
-    params['input'] = query.input
-  }
-  let msmtResult = await client.get('/api/v1/measurements', {
-    params
-  })
-  if (msmtResult.data.results.length > 0) {
-    const results = msmtResult.data.results
-    const measurementURL = results[0].measurement_url
-    if (results.length > 1) {
-      initialProps['warning'] = 'dupes'
-    }
-    let msmtContent = await client.get(measurementURL)
-    initialProps['measurement'] = msmtContent.data
-    initialProps['measurementURL'] = measurementURL
-    initialProps['isAnomaly'] = results[0].anomaly
-    initialProps['isFailure'] = results[0].failure
-    initialProps['isConfirmed'] = results[0].confirmed
-    initialProps['scores'] = results[0].scores || null
-    const countryObj = countryUtil.countryList.find(country => (
-      country.iso3166_alpha2 === msmtContent.data.probe_cc
-    ))
 
-    initialProps['country'] = countryObj ? countryObj.name : 'Unknown'
+  // If there is no report_id to use, fail early with MeasurementNotFound
+  if (typeof query.report_id !== 'string' || query.report_id.length < 1) {
+    initialProps.notFound = true
+    return {
+      props: initialProps
+    }
   }
-  initialProps['screenshot'] = query.screenshot ? true : false
-  return initialProps
+
+  let response
+  let client
+  try {
+    client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
+    let params = {
+      report_id: query.report_id,
+      full: true
+    }
+    if (query.input) {
+      params['input'] = query.input
+    }
+
+    try {
+      response = await client.get('/api/v1/measurement_meta', {
+        params
+      })
+    } catch (e) {
+      throw new Error(`Failed to fetch measurement data. Server message: ${e.response.status}, ${e.response.statusText}`)
+    }
+
+    // If response `data` is an empty object, the measurement was
+    // probably not found
+    if (Object.prototype.hasOwnProperty.call(response, 'data') && Object.keys(response.data).length !== 0) {
+      initialProps = {...initialProps, ...response.data}
+
+      if (typeof initialProps['scores'] === 'string') {
+        try {
+          initialProps['scores'] = JSON.parse(initialProps['scores'])
+        } catch (e) {
+          throw new Error(`Failed to parse JSON in scores: ${e.toString()}`)
+        }
+      }
+
+      try {
+        initialProps['raw_measurement'] = JSON.parse(initialProps['raw_measurement'])
+      } catch (e) {
+        throw new Error(`Failed to parse raw_measurement: ${e.toString()}`)
+      }
+
+      const { probe_cc } = response.data
+      const countryObj = countryUtil.countryList.find(country => (
+        country.iso3166_alpha2 === probe_cc
+      ))
+      initialProps['country'] = countryObj?.name || 'Unknown'
+    } else {
+      // Measurement not found
+      initialProps.notFound = true
+    }
+    initialProps['screenshot'] = query.screenshot ? true : false
+  } catch (e) {
+    initialProps.errors.push(e.message)
+  }
+  return {
+    props: initialProps
+  }
 }
 
-export default function Measurement({
-  measurement,
-  scores,
+const Measurement = ({
+  errors,
   country,
-  measurementURL,
-  isConfirmed,
-  isAnomaly,
-  isFailure,
-  screenshot
-}){
-  const origin =
-    typeof window === 'undefined'
-    ? 'https://explorer.ooni.com'
-    : window.location.origin
+  confirmed,
+  anomaly,
+  failure,
+  test_name,
+  test_start_time,
+  probe_cc,
+  probe_asn,
+  notFound = false,
+  input,
+  raw_measurement,
+  report_id,
+  screenshot,
+  ...rest
+}) => {
+
+  // Add the 'AS' prefix to probe_asn when APi chooses to snd just the number
+  probe_asn = typeof probe_asn === 'number' ? `AS${probe_asn}` : probe_asn
+
+  if (errors.length > 0) {
+    return (
+      <ErrorPage errorCode={501} errors={errors} />
+    )
+  }
 
   return (
     <ScreenshotProvider screenshot={screenshot}>
       <Layout>
         <Head>
           <title>OONI Explorer</title>
-          <meta
-            property='og:image'
-            content={`${origin}/screenshot/measurement/${measurement.report_id}`}
-          />
         </Head>
-        <MeasurementContainer
-          isConfirmed={isConfirmed}
-          isAnomaly={isAnomaly}
-          isFailure={isFailure}
-          country={country}
-          measurement={measurement}
-          scores={scores}
-          render={({
-            status = 'default',
+        {notFound ? (
+          <MeasurementNotFound />
+        ): (
+          <MeasurementContainer
+            isConfirmed={confirmed}
+            isAnomaly={anomaly}
+            isFailure={failure}
+            testName={test_name}
+            country={country}
+            measurement={raw_measurement}
+            input={input}
+            test_start_time={test_start_time}
+            probe_asn={probe_asn}
+            {...rest}
+
+            render={({
+              status = 'default',
               statusIcon,
               statusLabel,
               statusInfo,
               legacy = false,
               summaryText,
-              details }) => (
-                <React.Fragment>
-                  {screenshot ?
-                      (<React.Fragment>
-                        <ScreenshotWrapper
-                          color={pageColors[status]}
-                        >
-                          <NavBar color={pageColors[status]} />
-                          <Hero
-                            color={pageColors[status]}
-                            status={status}
-                            icon={statusIcon}
-                            label={statusLabel}
-                            info={statusInfo}
-                          />
-                          <CommonSummary
-                            color={pageColors[status]}
-                            measurement={measurement}
-                            country={country} />
-                        </ScreenshotWrapper>
-                      </React.Fragment>) :
-                      (<React.Fragment>
-                        <NavBar color={pageColors[status]} />
-                        <Hero
-                          color={pageColors[status]}
-                          status={status}
-                          icon={statusIcon}
-                          label={statusLabel}
-                          info={statusInfo}
-                        />
-                        <CommonSummary
-                          color={pageColors[status]}
-                          measurement={measurement}
-                          country={country} />
-                      </React.Fragment>)
-                  }
-
-                  {!screenshot && <Container>
-                    <DetailsHeader
-                      testName={measurement.test_name}
-                      runtime={measurement.test_runtime}
-                      notice={legacy}
+              headMetadata,
+              details
+            }) => (
+              <React.Fragment>
+                {headMetadata &&
+                  <HeadMetadata
+                    content={headMetadata}
+                    testName={test_name}
+                    testUrl={input}
+                    country={country}
+                    date={test_start_time}
+                  />
+                }
+                {screenshot ? (
+                  <React.Fragment>
+                    <ScreenshotWrapper
+                      color={pageColors[status]}
+                    >
+                      <NavBar color={pageColors[status]} />
+                      <Hero
+                        color={pageColors[status]}
+                        status={status}
+                        icon={statusIcon}
+                        label={statusLabel}
+                        info={statusInfo}
+                      />
+                      <CommonSummary
+                        test_start_time={test_start_time}
+                        probe_asn={probe_asn}
+                        probe_cc={probe_cc}
+                        color={pageColors[status]}
+                        country={country}
+                      />
+                    </ScreenshotWrapper>
+                  </React.Fragment>
+                ) : (
+                  <React.Fragment>
+                    <NavBar color={pageColors[status]} />
+                    <Hero
+                      color={pageColors[status]}
+                      status={status}
+                      icon={statusIcon}
+                      label={statusLabel}
+                      info={statusInfo}
                     />
-                    {summaryText && <SummaryText
-                      testName={measurement.test_name}
-                      testUrl={measurement.input}
-                      network={measurement.probe_asn}
+                    <CommonSummary
+                      test_start_time={test_start_time}
+                      probe_asn={probe_asn}
+                      probe_cc={probe_cc}
+                      color={pageColors[status]}
                       country={country}
-                      date={measurement.test_start_time}
-                      content={summaryText}
-                    />}
+                    />
+                  </React.Fragment>
+                )}
+
+                {!screenshot &&
+                  <Container>
+                    <DetailsHeader
+                      testName={test_name}
+                      runtime={raw_measurement?.test_runtime}
+                      notice={legacy}
+                      url={`measurement/${report_id}`}
+                    />
+                    {summaryText &&
+                      <SummaryText
+                        testName={test_name}
+                        testUrl={input}
+                        network={probe_asn}
+                        country={country}
+                        date={test_start_time}
+                        content={summaryText}
+                      />
+                    }
                     {details}
                     <CommonDetails
-                      measurementURL={measurementURL}
-                      measurement={measurement} />
-                  </Container>}
-                </React.Fragment>
-              )} />
+                      measurement={raw_measurement}
+                      reportId={report_id}
+                    />
+                  </Container>
+                }
+              </React.Fragment>
+            )} />
+        )}
       </Layout>
     </ScreenshotProvider>
   )
 }
 
 Measurement.propTypes = {
-  measurement: PropTypes.object.isRequired,
-  measurementURL: PropTypes.string,
-  isAnomaly: PropTypes.bool,
-  isFailure: PropTypes.bool,
-  isConfirmed: PropTypes.bool,
-  country: PropTypes.string
+  anomaly: PropTypes.bool,
+  confirmed: PropTypes.bool,
+  country: PropTypes.string,
+  errors: PropTypes.arrayOf(PropTypes.string),
+  failure: PropTypes.bool,
+  input: PropTypes.any,
+  notFound: PropTypes.bool,
+  probe_asn: PropTypes.any,
+  probe_cc: PropTypes.string,
+  raw_measurement: PropTypes.object,
+  report_id: PropTypes.string,
+  test_name: PropTypes.string,
+  test_start_time: PropTypes.string
 }
+
+export default Measurement

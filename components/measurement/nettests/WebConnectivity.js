@@ -1,22 +1,23 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import bufferFrom from 'buffer-from'
+import url from 'url'
 import {
   Heading,
   Flex,
-  Pre,
-  Box
+  Box,
+  Text
 } from 'ooni-components'
 
-import { Text } from 'rebass'
 import moment from 'moment'
 import { Tick, Cross } from 'ooni-components/dist/icons'
-
+import deepmerge from 'deepmerge'
 import styled from 'styled-components'
 
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 
 import { DetailsBox } from '../DetailsBox'
+import FormattedMarkdown from '../../FormattedMarkdown'
 
 const messages = defineMessages({
   'blockingReason.http-diff': {
@@ -60,8 +61,13 @@ const StatusInfo = ({ url, message}) => (
   </Flex>
 )
 
+StatusInfo.propTypes = {
+  url: PropTypes.string,
+  message: PropTypes.string
+}
+
 // From https://css-tricks.com/snippets/css/make-pre-text-wrap/
-const WrappedPre = styled(Pre)`
+const WrappedPre = styled.pre`
   white-space: pre-wrap;       /* css-3 */
   white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
   white-space: -pre-wrap;      /* Opera 4-6 */
@@ -114,7 +120,7 @@ const RequestResponseContainer = ({request}) => {
             <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Request.URL' /></Heading>
           </Box>
           <Box width={1} mb={2} p={2} bg='gray2'>
-            <Pre fontSize={14}>{request.request.method} {request.request.url}</Pre>
+            <pre fontSize={14}>{request.request.method} {request.request.url}</pre>
           </Box>
           {/* Response Headers */}
           <Box width={1} mb={1} >
@@ -149,7 +155,14 @@ const RequestResponseContainer = ({request}) => {
   )
 }
 
+RequestResponseContainer.propTypes = {
+  request: PropTypes.object.isRequired
+}
+
 const FailureString = ({failure}) => {
+  if (typeof failure === 'undefined') {
+    return (<FormattedMessage id='Measurement.Details.Websites.Failures.Values.Unknown' />)
+  }
   if (!failure) {
     return (
       <div>
@@ -174,17 +187,17 @@ const DnsAnswerCell = (props) => (
 )
 
 DnsAnswerCell.propTypes = {
-  children: PropTypes.element
+  children: PropTypes.any
 }
 
 const FiveColRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = 'Type', data = 'DATA', header = false}) => (
-  <Text fontWeight={header && 'bold'}>
+  <Text fontWeight={header ? 'bold' : undefined}>
     <Flex flexWrap='wrap' mb={2}>
       <DnsAnswerCell>{name}</DnsAnswerCell>
       <DnsAnswerCell>{netClass}</DnsAnswerCell>
       <DnsAnswerCell>{ttl}</DnsAnswerCell>
       <DnsAnswerCell>{type}</DnsAnswerCell>
-      <DnsAnswerCell>{type === 'A' ? data.ipv4 : type === 'CNAME' ? data.hostname : data}</DnsAnswerCell>
+      <DnsAnswerCell>{data}</DnsAnswerCell>
     </Flex>
   </Text>
 )
@@ -192,7 +205,7 @@ const FiveColRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = 'Ty
 FiveColRow.propTypes = {
   name: PropTypes.string,
   netClass: PropTypes.string,
-  ttl: PropTypes.string,
+  ttl: PropTypes.number,
   type: PropTypes.string,
   data: PropTypes.string,
   header: PropTypes.bool
@@ -207,7 +220,7 @@ const QueryContainer = ({query}) => {
     failure
   } = query
   return (
-    <Flex flexWrap='wrap'>
+    <Flex flexWrap='wrap' my={2}>
       <Box width={1} mb={2}>
         {/* Metadata */}
         <Flex>
@@ -228,25 +241,70 @@ const QueryContainer = ({query}) => {
         </Flex>
       </Box>
       {failure && <Box width={1}><FailureString failure={failure} /></Box>}
-      <Box width={1}>
-        <FiveColRow header />
-        {answers.map((dnsAnswer, index) => (
-          <FiveColRow
-            key={index}
-            name='@'
-            netClass='IN'
-            ttl={dnsAnswer.ttl}
-            type={dnsAnswer.answer_type}
-            data={{ipv4: dnsAnswer.ipv4, hostname: dnsAnswer.hostname}}
-          />
-        ))}
-      </Box>
+      {!failure &&
+        <Box width={1}>
+          <FiveColRow header />
+          {Array.isArray(answers) && answers.map((dnsAnswer, index) => (
+            <FiveColRow
+              key={index}
+              name='@'
+              netClass='IN'
+              ttl={dnsAnswer.ttl}
+              type={dnsAnswer.answer_type}
+              data={dnsAnswer.answer_type === 'A'
+                ? dnsAnswer.ipv4
+                : dnsAnswer.answer_type === 'AAAA'
+                  ? dnsAnswer.ipv6
+                  : dnsAnswer.answer_type === 'CNAME'
+                    ? dnsAnswer.hostname
+                    : null // for any other answer_type, DATA column will be empty
+              }
+            />
+          ))}
+        </Box>
+      }
     </Flex>
+
   )
 }
 
 QueryContainer.propTypes = {
   query: PropTypes.object
+}
+
+
+
+/*
+ * This validation function can either be evolved into a generic one to run before
+ * deciding to render a specific component from `measurement/nettests/*`
+ * or similar local methods across all other measurements. Right now it makes sure
+ * the component works with an object that has all the expected keys,
+ * even if they are absent in API responses.
+ */
+const validateMeasurement = (measurement) => {
+  // assign valid defaults like `undefined` or `null` to each property
+  // Useful when parts of the measurement object are absent
+  const validDefaults = {
+    input: undefined,
+    probe_asn: undefined,
+    scores: {
+      analysis: {
+        blocking_type: undefined
+      }
+    },
+    test_keys: {
+      accessible: undefined,
+      blocking: undefined,
+      queries: undefined,
+      tcp_connect: undefined,
+      requests: undefined,
+      client_resolver: undefined,
+      http_experiment_failure: undefined,
+      dns_experiment_failure: undefined,
+      control_failure: undefined
+    }
+  }
+  return deepmerge(validDefaults, measurement)
 }
 
 const WebConnectivityDetails = ({
@@ -255,24 +313,25 @@ const WebConnectivityDetails = ({
   isFailure,
   country,
   measurement,
+  scores,
+  test_start_time,
+  probe_asn,
+  input,
   render
 }) => {
   const {
-    input,
-    probe_asn,
-    test_start_time,
     test_keys: {
       accessible,
       blocking,
       queries,
-      tcp_connect = [],
+      tcp_connect,
       requests,
       client_resolver,
       http_experiment_failure,
       dns_experiment_failure,
       control_failure
     }
-  } = measurement
+  } = validateMeasurement(measurement ?? {})
 
   const intl = useIntl()
   const date = intl.formatDate(moment.utc(test_start_time).toDate(), {
@@ -284,94 +343,18 @@ const WebConnectivityDetails = ({
     timeZone: 'UTC',
     timeZoneName: 'short'
   })
-  const reasons = {
-    'http-diff': 'HTTP-diff',
-    'http-failure': 'HTTP-failure',
-    'dns': 'DNS',
-    'tcp_ip': 'TCP'
-  }
+
+  const p = url.parse(input)
+  const hostname = p.host
 
   let status = 'default'
+  let reason = null
   let summaryText = ''
+  let headMetadata = { message: '', formatted: true }
 
-  const reason = messages[`blockingReason.${blocking}`] && intl.formatMessage(messages[`blockingReason.${blocking}`])
-
-  // TODO: Disabled temporarily because `isFailure` is flagged incorrectly in
-  // some measurments. When fixed, this should be uncommented and the last
-  // section in the chain should be removed
-
-  // if (isFailure) {
-  //   status = 'error'
-  //   reason = null
-  //   summaryText = (
-  //     <FormattedMessage
-  //       id='Measurement.SummaryText.Websites.Failed'
-  //       values={{
-  //         date: date,
-  //         WebsiteURL: input,
-  //         network: probe_asn,
-  //         country: country,
-  //       }}
-  //     />
-  //   )
-  // } else
-  if(isConfirmed) {
-    status = 'confirmed'
-    summaryText = (
-      <FormattedMessage
-        id='Measurement.SummaryText.Websites.ConfirmedBlocked'
-        values={{
-          date: date,
-          WebsiteURL: input,
-          network: probe_asn,
-          country: country,
-        }}
-      />
-    )
-  } else if (isAnomaly) {
-    status = 'anomaly'
-    summaryText = (
-      <FormattedMessage
-        id='Measurement.SummaryText.Websites.Anomaly'
-        values={{
-          date: date,
-          WebsiteURL: input,
-          network: probe_asn,
-          country: country,
-          BlockingReason: reason && <strong>{reason}</strong>
-        }}
-      />
-    )
-  } else if (accessible) {
-    status = 'reachable'
-    summaryText = (
-      <FormattedMessage
-        id='Measurement.SummaryText.Websites.Accessible'
-        values={{
-          date: date,
-          WebsiteURL: input,
-          network: probe_asn,
-          country: country
-        }}
-      />
-    )
-  } else if (blocking === false) {
-    // When not accessible, but also not blocking, it must be down
-    status = 'down'
-    summaryText = (
-      <FormattedMessage
-        id='Measurement.SummaryText.Websites.Down'
-        values={{
-          date: date,
-          WebsiteURL: input,
-          network: probe_asn,
-          country: country
-        }}
-      />
-    )
-  } else {
-    // TODO: Remove this block when the first block in this chain is enabled.
+  if (isFailure) {
     status = 'error'
+    reason = null
     summaryText = (
       <FormattedMessage
         id='Measurement.SummaryText.Websites.Failed'
@@ -383,23 +366,149 @@ const WebConnectivityDetails = ({
         }}
       />
     )
+  } else if(isConfirmed) {
+    status = 'confirmed'
+    summaryText = intl.formatMessage(
+      {
+        id: 'Measurement.SummaryText.Websites.ConfirmedBlocked'
+      },
+      {
+        date: date,
+        WebsiteURL: input,
+        network: probe_asn,
+        country: country,
+      }
+    )
+    headMetadata.message = intl.formatMessage(
+      {
+        id: 'Measurement.Metadata.WebConnectivity.ConfirmedBlocked',
+        defaultMessage: '{hostname} was blocked in {country}'
+      },
+      {
+        date: date,
+        hostname,
+        country: country,
+      }
+    )
+  } else if (isAnomaly) {
+    status = 'anomaly'
+    const blockingReason = blocking ?? scores?.analysis?.blocking_type ?? null
+    reason = messages[`blockingReason.${blockingReason}`] && intl.formatMessage(messages[`blockingReason.${blockingReason}`])
+    summaryText = (<FormattedMarkdown
+      id='Measurement.SummaryText.Websites.Anomaly'
+      values={{
+        date: date,
+        WebsiteURL: input,
+        network: probe_asn,
+        country: country,
+        BlockingReason: reason && `**${reason}**`
+      }}
+    />)
+    headMetadata.message = intl.formatMessage(
+      {
+        id: 'Measurement.Metadata.WebConnectivity.Anomaly',
+        defaultMessage: '{hostname} showed signs of {reason} in {country}'
+      },
+      {
+        date: date,
+        hostname,
+        country: country,
+        reason: reason
+      }
+    )
+  } else if (accessible) {
+    status = 'reachable'
+    summaryText = intl.formatMessage(
+      {
+        id: 'Measurement.SummaryText.Websites.Accessible'
+      },
+      {
+        date: date,
+        WebsiteURL: input,
+        network: probe_asn,
+        country: country
+      }
+    )
+    headMetadata.message = intl.formatMessage(
+      {
+        id: 'Measurement.Metadata.WebConnectivity.Accessible',
+        defaultMessage: '{hostname} was accessible in {country}'
+      },
+      {
+        date: date,
+        hostname,
+        country: country,
+      }
+    )
+  } else if (blocking === false) {
+    // When not accessible, but also not blocking, it must be down
+    status = 'down'
+    summaryText = intl.formatMessage(
+      {
+        id: 'Measurement.SummaryText.Websites.Down'
+      },
+      {
+        date: date,
+        WebsiteURL: input,
+        network: probe_asn,
+        country: country
+      }
+    )
+    headMetadata.message = intl.formatMessage(
+      {
+        id: 'Measurement.Metadata.WebConnectivity.Down',
+        defaultmessage: '{hostname} was down in {country}'
+      },
+      {
+        date: date,
+        hostname,
+        country: country,
+      }
+    )
+  } else {
+    // Fallback condition to handle older measurements not present in fastpath
+    // See: https://github.com/ooni/explorer/issues/426#issuecomment-612094244
+    status = 'error'
+    summaryText = intl.formatMessage(
+      {
+        id: 'Measurement.SummaryText.Websites.Failed'
+      },
+      {
+        date: date,
+        WebsiteURL: input,
+        network: probe_asn,
+        country: country
+      }
+    )
+    headMetadata.message = intl.formatMessage(
+      {
+        id: 'Measurement.Metadata.WebConnectivity.Failed',
+        defaultmessage: '{hostname} failed to be measured in {country}'
+      },
+      {
+        date: date,
+        hostname,
+        country: country,
+      }
+    )
   }
 
-  const tcpConnections = tcp_connect.map((connection) => {
+  const tcpConnections = Array.isArray(tcp_connect) ? tcp_connect.map((connection) => {
     const status = (connection.status.success) ? 'Success' :
       (connection.status.blocked) ? 'Blocked' : 'Failed'
     return {
       destination: connection.ip + ':' + connection.port,
       status
     }
-  })
+  }) : []
 
   return (
     <React.Fragment>
       {render({
         status: status,
-        statusInfo: <StatusInfo url={input} message={reason || null} />,
+        statusInfo: <StatusInfo url={input} message={reason} />,
         summaryText: summaryText,
+        headMetadata: headMetadata,
         details: (
           <React.Fragment>
             {/* Failures */}
@@ -435,19 +544,23 @@ const WebConnectivityDetails = ({
               <DetailsBox
                 title={<FormattedMessage id='Measurement.Details.Websites.DNSQueries.Heading' />}
                 content={
-                  <React.Fragment>
-                    <Flex flexWrap='wrap' mb={2}>
-                      <Box mr={1}>
-                        <strong><FormattedMessage id='Measurement.Details.Websites.DNSQueries.Label.Resolver' />:</strong>
+                  Array.isArray(queries) ? (
+                    <React.Fragment>
+                      <Flex flexWrap='wrap' mb={2}>
+                        <Box mr={1}>
+                          <strong><FormattedMessage id='Measurement.Details.Websites.DNSQueries.Label.Resolver' />:</strong>
+                        </Box>
+                        <Box>
+                          {client_resolver || '(unknown)'}
+                        </Box>
+                      </Flex>
+                      <Box width={1}>
+                        {queries.map((query, index) => <QueryContainer key={index} query={query} />)}
                       </Box>
-                      <Box>
-                        {client_resolver || '(unknown)'}
-                      </Box>
-                    </Flex>
-                    <Box width={1}>
-                      {queries && queries.map((query, index) => <QueryContainer key={index} query={query} />)}
-                    </Box>
-                  </React.Fragment>
+                    </React.Fragment>
+                  ) : (
+                    <FormattedMessage id='Measurement.Details.Websites.DNSQueries.NoData' />
+                  )
                 }
               />
             </Flex>
@@ -456,9 +569,8 @@ const WebConnectivityDetails = ({
               <DetailsBox
                 title={<FormattedMessage id='Measurement.Details.Websites.TCP.Heading' />}
                 content={
-                  <React.Fragment>
-                    {tcpConnections.length === 0 && <FormattedMessage id='Measurement.Details.Websites.TCP.NoData' />}
-                    {tcpConnections.map((connection, index) => (
+                  tcpConnections.length > 0 ? (
+                    tcpConnections.map((connection, index) => (
                       <Flex key={index}>
                         <Box>
                           <Text>
@@ -472,9 +584,12 @@ const WebConnectivityDetails = ({
                           </Text>
                         </Box>
                       </Flex>
-                    ))}
-                  </React.Fragment>
-                } />
+                    ))
+                  ) : (
+                    <FormattedMessage id='Measurement.Details.Websites.TCP.NoData' />
+                  )
+                }
+              />
             </Flex>
             {/* I would like us to enrich the HTTP response body section with
               information about every request and response as this is a very common
@@ -483,7 +598,7 @@ const WebConnectivityDetails = ({
               <DetailsBox
                 title={<FormattedMessage id='Measurement.Details.Websites.HTTP.Heading' />}
                 content={
-                  requests ? (
+                  Array.isArray(requests) ? (
                     <Box width={1}>
                       {requests.map((request, index) => <RequestResponseContainer key={index} request={request} />)}
                     </Box>
@@ -501,12 +616,20 @@ const WebConnectivityDetails = ({
 }
 
 WebConnectivityDetails.propTypes = {
-  isConfirmed: PropTypes.bool.isRequired,
-  isAnomaly: PropTypes.bool.isRequired,
-  isFailure: PropTypes.bool.isRequired,
   country: PropTypes.string.isRequired,
+  input: PropTypes.any,
+  isAnomaly: PropTypes.bool.isRequired,
+  isConfirmed: PropTypes.bool.isRequired,
+  isFailure: PropTypes.bool.isRequired,
   measurement: PropTypes.object.isRequired,
-  render: PropTypes.func
+  probe_asn: PropTypes.any,
+  render: PropTypes.func,
+  scores: PropTypes.shape({
+    analysis: PropTypes.shape({
+      blocking_type: PropTypes.any
+    })
+  }),
+  test_start_time: PropTypes.any
 }
 
 export default WebConnectivityDetails

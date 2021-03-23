@@ -9,9 +9,8 @@ import {
   Flex, Box,
   Container,
   Link, Input,
-  Heading,
+  Heading, Text
 } from 'ooni-components'
-import { Text } from 'rebass'
 import { StickyContainer, Sticky } from 'react-sticky'
 
 import Flag from '../components/Flag'
@@ -69,8 +68,16 @@ const RegionHeaderAnchor = styled.div`
     display: block;
     width: 0;
     /* Height of the combined header (NavBar and Regions) */
+    /* This is needed to compensate the for the sticky navbar and region
+       links bar when scrolling to the selected region. And the height of these
+       bars changes in the mobile layout. This has evolved to be a bad design
+       that needs to be replaced. */
     height: 145px;
     margin-top: -145px;
+    @media(max-width: 768px) {
+      height: 375px;
+      margin-top: -375px;
+    }
   }
 `
 
@@ -111,16 +118,21 @@ const RegionMenu = styled.div`
   background-color: white;
   border-bottom: 1px solid ${props => props.theme.colors.gray3};
 `
-
 const StyledRegionLink = styled.a`
-  color: ${props => props.theme.colors.blue5};
+  display: block;
+  color: ${(props) => props.theme.colors.blue5};
   text-decoration: none;
+  border-bottom: 2px solid transparent;
+  :hover {
+    border-bottom: 2px solid ${(props) => props.theme.colors.blue5};
+    width: 100%;
+  }
 `
 
 const RegionLink = ({ href, label }) => (
-  <Box px={3} py={4}>
+  <Box px={[1,3]} py={[2,4]}>
     <StyledRegionLink href={href}>
-      <Text fontSize={20}>{label}</Text>
+      <Text fontSize={[16, 20]}>{label}</Text>
     </StyledRegionLink>
   </Box>
 )
@@ -191,7 +203,7 @@ class Countries extends React.Component {
     return (
       <Layout>
         <Head>
-          <title>Internet Censorship around the world - OONI Explorer</title>
+          <title>Internet Censorship around the world | OONI Explorer</title>
         </Head>
 
         <StickyContainer>
@@ -201,19 +213,23 @@ class Countries extends React.Component {
                 <NavBar />
                 <RegionMenu>
                   <Container>
-                    <Flex justifyContent='space-around' alignItems='center'>
-                      <RegionLink href="#Africa" label='Africa' />
-                      <RegionLink href="#Americas" label='Americas' />
-                      <RegionLink href="#Asia" label='Asia' />
-                      <RegionLink href="#Europe" label='Europe' />
-                      <RegionLink href="#Oceania" label='Oceania' />
-                      <Box>
+                    <Flex
+                      flexDirection={['column', 'row']}
+                      justifyContent={['flex-start', 'flex-end']}
+                      alignItems={['flex-start', 'center']}
+                    >
+                      <Box my={2}>
                         <Input
                           onChange={(e) => this.onSearchChange(e.target.value)}
                           placeholder='Search for Countries'
                           error={filteredCountries.length === 0}
                         />
                       </Box>
+                      <RegionLink href="#Africa" label='Africa' />
+                      <RegionLink href="#Americas" label='Americas' />
+                      <RegionLink href="#Asia" label='Asia' />
+                      <RegionLink href="#Europe" label='Europe' />
+                      <RegionLink href="#Oceania" label='Oceania' />
                     </Flex>
                   </Container>
                 </RegionMenu>

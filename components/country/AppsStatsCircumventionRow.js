@@ -114,7 +114,10 @@ class AppsStatsCircumventionRow extends React.Component {
         </Flex>
         {(visibleNetworks < totalNetworks) &&
           <Flex justifyContent='center'>
-            <Link color='blue7' href='javascript:void(0)' onClick={() => this.showMore()}>
+            <Link color='blue7' href='#' onClick={(e) => {
+              e.preventDefault()
+              this.showMore()
+            }}>
               <FormattedMessage id='Country.Apps.Button.ShowMore' />
             </Link>
           </Flex>
@@ -155,7 +158,7 @@ class AppsStatsCircumventionRow extends React.Component {
                 <CollapseTrigger
                   size={36}
                   bg={theme.colors.gray3}
-                  isOpen={!minimized}
+                  open={!minimized}
                   onClick={this.toggleMinimize}
                 />
               </Box>

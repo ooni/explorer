@@ -1,12 +1,12 @@
 import React from 'react'
 import { defineMessages, FormattedMessage, useIntl } from 'react-intl'
 import styled from 'styled-components'
-import { Flex, Box, Heading, Link } from 'ooni-components'
-import { Text } from 'rebass'
+import { Box, Heading, Link, Text } from 'ooni-components'
 import SectionHeader from './SectionHeader'
 import { BoxWithTitle } from './boxes'
 import TestsByGroup from './OverviewCharts'
 import FormattedMarkdown from '../FormattedMarkdown'
+import { useCountry } from './CountryContext'
 import {
   NettestGroupWebsites,
   NettestGroupInstantMessaging,
@@ -110,6 +110,7 @@ const Overview = ({
   featuredArticles = []
 }) => {
   const intl = useIntl()
+  const { countryCode } = useCountry()
   return (
     <React.Fragment>
       <SectionHeader>
@@ -123,8 +124,8 @@ const Overview = ({
           id='Country.Overview.SummaryTextTemplate'
           values={{
             measurementCount: intl.formatNumber(measurementCount),
+            linkToMeasurements: `/search?probe_cc=${countryCode}`,
             countryName,
-            startDate: intl.formatDate(measuredSince),
             networkCovered: intl.formatNumber(networkCount)
           }}
         />

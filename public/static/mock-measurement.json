@@ -1,0 +1,234 @@
+{
+  "anomaly": false,
+  "confirmed": false,
+  "failure": false,
+  "input": "inp",
+  "measurement_start_time": "2020-02-09T23:57:26Z",
+  "probe_asn": 22773,
+  "probe_cc": "US",
+  "report_id": "rid",
+  "scores": "{'blocking_general':0.0,'blocking_global':0.0,'blocking_country':0.0,'blocking_isp':0.0,'blocking_local':0.0}",
+  "test_name": "web_connectivity",
+  "test_start_time": "2020-02-09T23:56:06Z",
+  "category_code": "CULTR",
+  "measurement": {
+    "test_keys": {
+      "accessible": true,
+      "control": {
+        "tcp_connect": {
+          "104.28.25.130:80": {
+            "status": true,
+            "failure": null
+          },
+          "104.28.24.130:80": {
+            "status": true,
+            "failure": null
+          }
+        },
+        "http_request": {
+          "body_length": 92179,
+          "failure": null,
+          "status_code": 200,
+          "headers": {
+            "Expect-CT": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\"",
+            "Via": "1.1 varnish-v4",
+            "Set-Cookie": "__cfduid=dc6c0f5a62955ff34c47ab63ba5b6d9921588998412; expires=Mon, 08-Jun-20 04:26:52 GMT; path=/; domain=.ledarsidorna.se; HttpOnly; SameSite=Lax",
+            "Age": "104",
+            "Vary": "Accept-Encoding",
+            "cf-request-id": "029948b22c0000c7619c015200000001",
+            "Server": "cloudflare",
+            "X-Varnish": "1166306 8383239",
+            "Link": "<https://ledarsidorna.se/wp-json/>; rel=\"https://api.w.org/\"",
+            "Date": "Sat, 09 May 2020 04:26:52 GMT",
+            "CF-RAY": "5908aa304ad7c761-AMS",
+            "Content-Type": "text/html; charset=UTF-8",
+            "CF-Cache-Status": "DYNAMIC"
+          },
+          "title": "\n\t\tLedarsidorna.se - Alltid i opposition\t"
+        },
+        "dns": {
+          "failure": null,
+          "addrs": [
+            "104.28.24.130",
+            "104.28.25.130"
+          ]
+        }
+      },
+      "control_failure": null,
+      "socksproxy": null,
+      "http_experiment_failure": null,
+      "agent": "redirect",
+      "retries": null,
+      "client_resolver": "127.0.0.1",
+      "dns_consistency": "consistent",
+      "dns_experiment_failure": null,
+      "body_proportion": 1,
+      "blocking": false,
+      "queries": [
+        {
+          "engine": "system",
+          "resolver_hostname": null,
+          "query_type": "A",
+          "hostname": "ledarsidorna.se",
+          "answers": [
+            {
+              "hostname": "ledarsidorna.se",
+              "answer_type": "CNAME",
+              "ttl": null
+            },
+            {
+              "ipv4": "104.28.25.130",
+              "answer_type": "A",
+              "ttl": null
+            },
+            {
+              "ipv4": "104.28.24.130",
+              "answer_type": "A",
+              "ttl": null
+            }
+          ],
+          "failure": null,
+          "resolver_port": null
+        }
+      ],
+      "body_length_match": true,
+      "requests": [
+        {
+          "failure": null,
+          "request": {
+            "body": "",
+            "headers": {
+              "Accept-Language": "en-US;q=0.8,en;q=0.5",
+              "Cookie": "__cfduid=d403c81d7f488357c6347c42e2776d640158899841",
+              "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+              "User-Agent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36"
+            },
+            "tor": {
+              "is_tor": false,
+              "exit_ip": null,
+              "exit_name": null
+            },
+            "url": "https://ledarsidorna.se/",
+            "method": "GET"
+          },
+          "response": {
+            "body": "[redacted body here]",
+            "headers": {
+              "Expect-CT": "max-age=604800, report-uri=\"https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct\"",
+              "Via": "1.1 varnish-v4",
+              "Transfer-Encoding": "chunked",
+              "Age": "104",
+              "Vary": "Accept-Encoding",
+              "cf-request-id": "029948af7c0000d8794e90a200000001",
+              "Server": "cloudflare",
+              "Connection": "keep-alive",
+              "X-Varnish": "1166302 8383239",
+              "Link": "<https://ledarsidorna.se/wp-json/>; rel=\"https://api.w.org/\"",
+              "Date": "Sat, 09 May 2020 04:26:52 GMT",
+              "CF-RAY": "5908aa2bf809d879-CPH",
+              "Content-Type": "text/html; charset=UTF-8",
+              "CF-Cache-Status": "DYNAMIC"
+            },
+            "response_line": "HTTP/1.1 200 OK",
+            "code": 200
+          }
+        },
+        {
+          "failure": null,
+          "request": {
+            "body": "",
+            "headers": {
+              "Accept-Language": "en-US;q=0.8,en;q=0.5",
+              "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+              "User-Agent": "Mozilla/5.0 (Windows NT 6.1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36"
+            },
+            "tor": {
+              "is_tor": false,
+              "exit_ip": null,
+              "exit_name": null
+            },
+            "url": "http://ledarsidorna.se/",
+            "method": "GET"
+          },
+          "response": {
+            "body": "",
+            "headers": {
+              "Via": "1.1 varnish-v4",
+              "Transfer-Encoding": "chunked",
+              "Set-Cookie": "__cfduid=d403c81d7f488357c6347c42e2776d6401588998411; expires=Mon, 08-Jun-20 04:26:51 GMT; path=/; domain=.ledarsidorna.se; HttpOnly; SameSite=Lax",
+              "Age": "0",
+              "cf-request-id": "029948ae850000d89193015200000001",
+              "Server": "cloudflare",
+              "Connection": "keep-alive",
+              "X-Varnish": "10242248",
+              "Location": "https://ledarsidorna.se/",
+              "Date": "Sat, 09 May 2020 04:26:51 GMT",
+              "CF-RAY": "5908aa2a6fa0d891-CPH",
+              "Content-Type": "text/html; charset=UTF-8",
+              "CF-Cache-Status": "DYNAMIC"
+            },
+            "response_line": "HTTP/1.1 302 Found",
+            "code": 302
+          }
+        }
+      ],
+      "tcp_connect": [
+        {
+          "status": {
+            "failure": null,
+            "success": true,
+            "blocked": false
+          },
+          "ip": "104.28.25.130",
+          "port": 80
+        },
+        {
+          "status": {
+            "failure": null,
+            "success": true,
+            "blocked": false
+          },
+          "ip": "104.28.24.130",
+          "port": 80
+        }
+      ],
+      "title_match": true,
+      "headers_match": true,
+      "status_code_match": true
+    },
+    "test_start_time": "2020-05-09 04:32:54",
+    "input_hashes": [],
+    "probe_ip": "127.0.0.1",
+    "probe_city": null,
+    "test_helpers": {
+      "backend": {
+        "type": "https",
+        "address": "https://wcth.ooni.io"
+      }
+    },
+    "probe_cc": "SE",
+    "id": "d15df329-5242-4fb0-8a7b-4f8a86e739f4",
+    "test_runtime": 1.2498528957,
+    "input": "http://ledarsidorna.se",
+    "probe_asn": "AS1257",
+    "annotations": {
+      "engine_name": "libmeasurement_kit",
+      "engine_version_full": "v0.10.11",
+      "engine_version": "0.10.11",
+      "platform": "android",
+      "flavor": "full",
+      "network_type": "mobile"
+    },
+    "software_name": "ooniprobe-android",
+    "software_version": "2.3.2",
+    "data_format_version": "0.2.0",
+    "report_filename": "2020-05-09/20200509T043254Z-SE-AS1257-web_connectivity-20200509T042651Z_AS1257_ybb3RoTQ7VmPcnF3UfhgtyrlnGXkVSGsOCgwHjhZrSENuC5M9e-0.2.0-probe.json",
+    "test_version": "0.0.1",
+    "bucket_date": "2020-05-09",
+    "test_name": "web_connectivity",
+    "report_id": "20200509T042651Z_AS1257_ybb3RoTQ7VmPcnF3UfhgtyrlnGXkVSGsOCgwHjhZrSENuC5M9e",
+    "measurement_start_time": "2020-05-09 04:32:55",
+    "backend_version": null,
+    "options": []
+  }
+}

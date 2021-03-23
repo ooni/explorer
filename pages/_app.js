@@ -5,9 +5,9 @@ import App from 'next/app'
 import sentry from '../utils/sentry'
 import Router from 'next/router'
 import NProgress from 'nprogress'
-import MatomoTracker from '@datapunt/matomo-tracker-js'
+import 'fontsource-fira-sans/latin.css'
 
-import '../static/nprogress.css'
+import '../public/static/nprogress.css'
 import ErrorPage from './_error'
 
 // Intercept route changes on page navigation to show top edge progress bar
@@ -15,14 +15,15 @@ Router.onRouteChangeStart = () => NProgress.start()
 Router.onRouteChangeComplete = () => NProgress.done()
 Router.onRouteChangeError = () => NProgress.done()
 
-const { Sentry, captureException } = sentry()
+const { captureException } = sentry()
 
 export default class MyApp extends App {
   constructor () {
     super(...arguments)
     this.state = {
       hasError: false,
-      errorEventId: undefined
+      errorEventId: undefined,
+      error: null
     }
   }
 
@@ -40,6 +41,7 @@ export default class MyApp extends App {
       // This will work on both client and server sides.
       const errorEventId = captureException(error, ctx)
       return {
+        error: error,
         hasError: true,
         errorEventId
       }
@@ -66,22 +68,12 @@ export default class MyApp extends App {
 
     // Store the event id at this point as we don't have access to it within
     // `getDerivedStateFromError`.
-    this.setState({ errorEventId, hasError: true })
-  }
-
-  componentDidMount() {
-    const MatomoInstance = new window.MatomoTracker({
-      urlBase: 'https://matomo.ooni.org/',
-      siteId: 2,
-      trackerUrl: 'https://matomo.ooni.org/matomo.php',
-      srcUrl: 'https://matomo.ooni.org/matomo.js',
-    })
-    MatomoInstance.trackPageView()
+    this.setState({ errorEventId, hasError: true, error })
   }
 
   render () {
     return this.state.hasError ? (
-      <ErrorPage errorCode={500} />
+      <ErrorPage errorCode={500} errors={this.state.error} />
     ) : (
       // Render the normal Next.js page
       super.render()

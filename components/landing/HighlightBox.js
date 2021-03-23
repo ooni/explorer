@@ -1,26 +1,11 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import NLink from 'next/link'
-import { Flex, Box, Link, theme } from 'ooni-components'
-import { Text } from 'rebass'
+import { Flex, Box, Link, theme, Text } from 'ooni-components'
 import styled from 'styled-components'
 import Markdown from 'markdown-to-jsx'
 
 import Flag from '../Flag'
-
-const LinkButton = styled(Box)`
-  border-radius: 6px;
-  ${Link} {
-    text-decoration: none;
-    color: white;
-  }
-  :hover, :focus {
-    background-color: ${props => props.theme.colors[props.hover]};
-  }
-  :active {
-    background-color: ${props => props.theme.colors[props.active]};
-  }
-`
 
 const StyledFlex = styled(Flex)`
   min-height: 350px;

@@ -1,40 +1,11 @@
-
 import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  Heading,
-  Flex,
-  Box,
-  theme
-} from 'ooni-components'
-
-import { Text } from 'rebass'
-import { useIntl } from 'react-intl'
-
-import {
-  VictoryChart,
-  VictoryLine,
-  VictoryTooltip,
-  VictoryVoronoiContainer,
-  VictoryAxis
-} from 'victory'
+import { Flex, Box } from 'ooni-components'
+import { useIntl, defineMessages } from 'react-intl'
 
 import MdFlashOn from 'react-icons/lib/md/flash-on'
 
-const InfoBoxItem = ({
-  label,
-  content,
-  unit
-}) => (
-  <Box>
-    <Text fontSize={24}>
-      {content} <Text is='small'>{unit}</Text>
-    </Text>
-    <Text fontWeight='bold' fontSize={16} >
-      {label}
-    </Text>
-  </Box>
-)
+import { InfoBoxItem } from '../InfoBoxItem'
 
 /*
  * This table is derived from:
@@ -89,33 +60,37 @@ const getOptimalQualityForBitrate = (testKeys) => {
   return optimalQuality
 }
 
-const DashDetails = ({ measurement, render }) => {
+const messages = defineMessages({
+  dash: {
+    id: 'Measurement.Metadata.Dash',
+
+    defaultMessage: '{videoQuality} quality video streaming at {speed} Mbit/s speed in {country}'
+  }
+})
+
+const DashDetails = ({ measurement, country, render }) => {
   const intl = useIntl()
   const testKeys = measurement.test_keys
-  // const isFailed = testKeys.failure !== null
-  // const failure = testKeys.failure
+  const failure = testKeys.failure
 
-  if (typeof testKeys.simple === 'undefined' || typeof testKeys.receiver_data === 'undefined') {
+  if (failure === true || typeof testKeys.simple === 'undefined' || typeof testKeys.receiver_data === 'undefined') {
     return render({
       status: 'error'
     })
   }
 
   const optimalVideoRate = getOptimalQualityForBitrate(testKeys).type
-  const medianBitrate = (testKeys.simple.median_bitrate / 1000).toFixed(2)
+  const medianBitrateInMbits = (testKeys.simple.median_bitrate / 1000).toFixed(2)
   const playoutDelay = (testKeys.simple.min_playout_delay).toFixed(2)
-
-  // construct data for graph
-  const clientData = testKeys.receiver_data
-  const data = clientData.map(iteration => ({
-    x: iteration.iteration,
-    y: iteration.rate / 1000,
-  }))
 
   return (
     render({
       statusIcon: <MdFlashOn />,
       statusLabel: intl.formatMessage({ id: 'Measurement.Hero.Status.Dash.Title' }),
+      headMetadata: {
+        message: intl.formatMessage(messages.dash, {videoQuality: optimalVideoRate, speed: medianBitrateInMbits, country: country}),
+        formatted: true
+      },
       statusInfo: (
         <Box width={1}>
           <Flex justifyContent='space-around'>
@@ -125,7 +100,7 @@ const DashDetails = ({ measurement, render }) => {
             />
             <InfoBoxItem
               label={intl.formatMessage({ id: 'Measurement.Status.Info.Label.Bitrate' })}
-              content={medianBitrate} unit='Mbit/s'
+              content={medianBitrateInMbits} unit='Mbit/s'
             />
             <InfoBoxItem
               label={intl.formatMessage({ id: 'Measurement.Status.Info.Label.Delay' })}
@@ -134,55 +109,7 @@ const DashDetails = ({ measurement, render }) => {
           </Flex>
         </Box>
       ),
-      details: (
-        <Flex>
-          {/*<Box p={3} width={1}>
-            <Heading h={4}> Video Quality by time </Heading>
-            <Box>
-              <VictoryChart
-                height={200}
-                width={600}
-                containerComponent={
-                  <VictoryVoronoiContainer voronoiDimension="x"
-                    labels={(d) => `${d.y} Mb/s`}
-                    labelComponent={<VictoryTooltip
-                      cornerRadius={0}
-                      flyoutStyle={{fill: 'WHITE'}}
-                    />}
-                  />
-                }
-              >
-                <VictoryAxis
-                  tickValues={data.map((i => i.x + 's'))}
-                  style={{
-                    tickLabels: { fontSize: 10, padding: 5}
-                  }}
-                />
-                <VictoryAxis
-                  dependentAxis
-                  style={{
-                    axisLabel: { fontSize: 10, padding: 0 },
-                    ticks: { stroke: "grey", size: 5 },
-                    tickLabels: { fontSize: 10, padding: 5 }
-                  }}
-                />
-                <VictoryLine
-                  style={{
-                    data: { stroke: theme.colors.base }
-                  }}
-                  data={data}
-                  animate={{
-                    duration: 2000,
-                    onLoad: { duration: 1000 }
-                  }}
-
-
-                />
-              </VictoryChart>
-            </Box>
-          </Box>*/}
-        </Flex>
-      )
+      details: null
     })
   )
 }

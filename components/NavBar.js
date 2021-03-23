@@ -19,7 +19,7 @@ const StyledNavItem = styled.a`
   text-decoration: none;
   position: relative;
   display: inline;
-  margin-left: 16px;
+  padding-top: 4px;
 `
 
 const NavItemLabel = styled.span`
@@ -49,12 +49,14 @@ const Underline = styled.span`
 const NavItemComponent = ({router, label, href}) => {
   const active = router.pathname === href
   return (
-    <NLink href={href} passHref>
-      <StyledNavItem>
-        <NavItemLabel active={active} >{label}</NavItemLabel>
-        <Underline active={active} />
-      </StyledNavItem>
-    </NLink>
+    <Box ml={[0, 4]} my={[2, 0]}>
+      <NLink href={href} passHref>
+        <StyledNavItem>
+          <NavItemLabel active={active} >{label}</NavItemLabel>
+          <Underline active={active} />
+        </StyledNavItem>
+      </NLink>
+    </Box>
   )
 }
 const NavItem = withRouter(NavItemComponent)
@@ -67,25 +69,33 @@ const StyledNavBar = styled.div`
 `
 
 export const NavBar = ({color}) => {
-  const { isScreenshot } = useScreenshot() 
+  const { isScreenshot } = useScreenshot()
 
   return (
     <StyledNavBar color={color}>
       <Container>
-        <Flex alignItems='center'>
+        <Flex
+          flexDirection={['column', 'row']}
+          justifyContent={['flex-start', 'space-around']}
+          alignItems={['flex-start', 'center']}
+        >
           <Box style={{zIndex: 1}}>
             <NLink href='/' passHref>
               <Link><ExplorerLogo height='26px' /></Link>
             </NLink>
           </Box>
-          {!isScreenshot ?
-              (<Box ml='auto'>
+          {!isScreenshot ? (
+            <Box ml={[0,'auto']} mt={[2, 0]}>
+              <Flex flexDirection={['column', 'row']} >
                 <NavItem label={<FormattedMessage id='Navbar.Search' />} href='/search' />
                 <NavItem label={<FormattedMessage id='Navbar.Countries' />} href='/countries' />
-              </Box>):
-              (<Box ml='auto' color='white'>
-                For more details and measurements visit www.explorer.ooni.org
-              </Box>)}
+              </Flex>
+            </Box>
+          ) : (
+            <Box ml='auto' color='white'>
+              For more details and measurements visit https://explorer.ooni.org
+            </Box>
+          )}
         </Flex>
       </Container>
     </StyledNavBar>

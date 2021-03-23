@@ -144,6 +144,11 @@ class Search extends React.Component {
       query.until = until
     }
 
+    const since = moment(query.until).utc().subtract(30, 'day').format('YYYY-MM-DD')
+    if (!query.since) {
+      query.since = since
+    }
+
     [testNamesR, countriesR] = await Promise.all([
       client.get('/api/_/test_names'),
       client.get('/api/_/countries')
@@ -179,10 +184,12 @@ class Search extends React.Component {
     }
 
     const measurements = msmtR.data
+    // drop results with probe_asn === 'AS0'
+    const results = measurements.results.filter(item => item.probe_asn !== 'AS0')
 
     return {
       error: null,
-      results: measurements.results,
+      results,
       nextURL: measurements.metadata.next_url,
       testNamesKeyed,
       testNames,
@@ -240,8 +247,9 @@ class Search extends React.Component {
     axios.get(this.state.nextURL)
       .then((res) => {
         // XXX update the query
+        const nextPageResults = res.data.results.filter(item => item.probe_asn !== 'AS0')
         this.setState({
-          results: this.state.results.concat(res.data.results),
+          results: this.state.results.concat(nextPageResults),
           nextURL: res.data.metadata.next_url,
           show: this.state.show + 50
         })
@@ -268,9 +276,10 @@ class Search extends React.Component {
         // XXX do error handling
         getMeasurements(query)
           .then((res) => {
+            const results = res.data.results.filter(item => item.probe_asn !== 'AS0')
             this.setState({
               loading: false,
-              results: res.data.results,
+              results,
               nextURL: res.data.metadata.next_url
             })
           })
@@ -337,7 +346,7 @@ class Search extends React.Component {
     return (
       <Layout>
         <Head>
-          <title>Search Measurements - OONI Explorer</title>
+          <title>Search through millions of Internet censorship measurements | OONI Explorer</title>
         </Head>
 
         <NavBar />
@@ -363,17 +372,16 @@ class Search extends React.Component {
               {loading && <Loader />}
 
               {!error && !loading && results.length === 0 && <NoResults />}
-              {!error && !loading && results.length > 0
-                && <div>
-                  <ResultsList results={results} testNamesKeyed={testNamesKeyed} />
-                  {
-                    this.state.nextURL &&
-                    <Flex alignItems='center' justifyContent='center'>
-                      <Button onClick={this.loadMore}><FormattedMessage id='Search.Button.LoadMore' /></Button>
-                    </Flex>
-                  }
-                </div>
-              }
+              {!error && !loading && results.length > 0 && <React.Fragment>
+                <ResultsList results={results} testNamesKeyed={testNamesKeyed} />
+                {this.state.nextURL &&
+                  <Flex alignItems='center' justifyContent='center'>
+                    <Button onClick={this.loadMore} data-test-id='load-more-button'>
+                      <FormattedMessage id='Search.Button.LoadMore' />
+                    </Button>
+                  </Flex>
+                }
+              </React.Fragment>}
             </Box>
           </Flex>
         </Container>

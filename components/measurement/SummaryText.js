@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import moment from 'moment'
 import { useIntl } from 'react-intl'
-import { Link, Text } from 'ooni-components'
+import { Flex, Text } from 'ooni-components'
 
 import { getTestMetadata } from '../utils'
 import FormattedMarkdown from '../FormattedMarkdown'
@@ -44,20 +44,25 @@ const SummaryText = ({
     textToRender = content
   }
   return (
-    <Text py={4} fontSize={20}>
-      {textToRender}
-    </Text>
+    <Flex>
+      <Text py={4} fontSize={20}>
+        {textToRender}
+      </Text>
+    </Flex>
   )
 }
 
 SummaryText.propTypes = {
   testName: PropTypes.string.isRequired,
-  network: PropTypes.string.isRequired,
+  network: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
   country: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
   content: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.any,
+    PropTypes.element,
     PropTypes.func
   ])
 }

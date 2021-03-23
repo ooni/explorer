@@ -1,5 +1,5 @@
 import React from 'react'
-
+import PropTypes from 'prop-types'
 import WebConnectivityDetails from './nettests/WebConnectivity'
 import TelegramDetails from './nettests/Telegram'
 import WhatsAppDetails from './nettests/WhatsApp'
@@ -13,6 +13,7 @@ import HttpInvalidRequestLine from './nettests/HTTPInvalidRequestLine'
 import VanillaTorDetails from './nettests/VanillaTor'
 import PsiphonDetails from './nettests/Psiphon'
 import TorDetails from './nettests/Tor'
+import RiseupVPNDetails from './nettests/RiseupVPN'
 
 import DefaultTestDetails from './nettests/Default'
 
@@ -27,19 +28,23 @@ const mapTestDetails = {
   http_invalid_request_line: HttpInvalidRequestLine,
   vanilla_tor: VanillaTorDetails,
   psiphon: PsiphonDetails,
-  tor: TorDetails
+  tor: TorDetails,
+  riseupvpn: RiseupVPNDetails,
 }
 
-// FIXME to have header and stuff
-const MeasurementNotFound = () => <h4>Measurement not Found</h4>
 
-const MeasurementContainer = ({ measurement, ...props }) => {
-  if (measurement === undefined) {
-    return <MeasurementNotFound />
-  }
+const MeasurementContainer = ({ testName, measurement, ...props }) => {
+  const TestDetails = testName in mapTestDetails ? mapTestDetails[testName] : DefaultTestDetails
+  return (
+    <React.Fragment>
+      <TestDetails measurement={measurement} {...props} />
+    </React.Fragment>
+  )
+}
 
-  const TestDetails = mapTestDetails[measurement.test_name] || DefaultTestDetails
-  return <TestDetails measurement={measurement} {...props} />
+MeasurementContainer.propTypes = {
+  measurement: PropTypes.any,
+  testName: PropTypes.any
 }
 
 export default MeasurementContainer

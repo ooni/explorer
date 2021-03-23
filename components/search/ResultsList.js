@@ -4,7 +4,7 @@ import url from 'url'
 import moment from 'moment'
 import NLink from 'next/link'
 import styled from 'styled-components'
-import { defineMessages, FormattedMessage, useIntl } from 'react-intl'
+import { defineMessages, useIntl } from 'react-intl'
 import {
   Flex, Box,
   Link,
@@ -38,7 +38,18 @@ const ResultTagHollow = styled(StyledResultTag)`
 `
 
 const testsWithStates = [
-  'web_connectivity'
+  'web_connectivity',
+  'telegram',
+  'whatsapp',
+  'facebook_messenger',
+  'tor',
+  'psiphon'
+]
+
+const imTests = [
+  'telegram',
+  'whatsapp',
+  'facebook_messenger'
 ]
 
 const messages = defineMessages({
@@ -134,39 +145,23 @@ const messages = defineMessages({
     id: 'Search.HTTPRequests.Results.Anomaly',
     defaultMessage: ''
   },
+  'Search.Tor.Results.Reachable': {
+    id: 'Search.Tor.Results.Reachable',
+    defaultMessage: ''
+  },
+  'Search.Tor.Results.Anomaly': {
+    id: 'Search.Tor.Results.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.Psiphon.Results.Reachable': {
+    id: 'Search.Psiphon.Results.Reachable',
+    defaultMessage: ''
+  },
+  'Search.Psiphon.Results.Anomaly': {
+    id: 'Search.Psiphon.Results.Anomaly',
+    defaultMessage: ''
+  },
 })
-
-const ResultTag = ({msmt}) => {
-  const intl = useIntl()
-  if (testsWithStates.indexOf(msmt.test_name) > -1) {
-    const testDisplayName = msmt.testName.replace(/ /gi, '')
-    const computedMessageIdPrefix = `Search.${testDisplayName}.Results`
-    if (msmt.confirmed === true) {
-      return <ResultTagFilled>
-        {/* <FormattedMessage id={`${computedMessageIdPrefix}.Blocked`} /> */}
-        {intl.formatMessage(messages[`${computedMessageIdPrefix}.Blocked`])}
-      </ResultTagFilled>
-    /* XXX hotfix due to all measurements showing failure
-    } else if (msmt.failure === true) {
-      return <StyledResultTag>
-        {intl.formatMessage(messages[`${computedMessageIdPrefix}.Error`])}
-      </StyledResultTag>
-    */
-    } else if (msmt.anomaly === true) {
-      return <ResultTagHollow>
-        {/* <FormattedMessage id={`${computedMessageIdPrefix}.Anomaly`} /> */}
-        {intl.formatMessage(messages[`${computedMessageIdPrefix}.Anomaly`])}
-      </ResultTagHollow>
-    } else {
-      return <StyledResultTag>
-        {/* <FormattedMessage id={`${computedMessageIdPrefix}.Reachable`} /> */}
-        {intl.formatMessage(messages[`${computedMessageIdPrefix}.Reachable`])}
-      </StyledResultTag>
-    }
-  } else {
-    return null
-  }
-}
 
 const ASNBox = ({asn}) => {
   const justNumber = asn.split('AS')[1]
@@ -205,47 +200,12 @@ ViewDetailsLink.propTypes = {
   children: PropTypes.element.isRequired
 }
 
-const StyledColorCode = styled.div`
+const ColoredIndicator = styled.div`
   height: 100%;
   width: 5px;
   margin-right: 10px;
+  background-color: ${props => props.color || 'unset'}
 `
-
-const ColorCodeConfirmed = styled(StyledColorCode)`
-  background-color: ${colorConfirmed};
-`
-const ColorCodeAnomaly = styled(StyledColorCode)`
-  background-color: ${colorAnomaly};
-`
-const ColorCodeNormal = styled(StyledColorCode)`
-  background-color: ${colorNormal};
-`
-const ColorCodeFailed = styled(StyledColorCode)`
-  background-color: ${colorError};
-`
-// For tests without a result
-const NoColorCode = styled(StyledColorCode)``
-
-const ColorCode = ({msmt}) => {
-  if (testsWithStates.indexOf(msmt.test_name) > -1) {
-    if (msmt.confirmed === true) {
-      return <ColorCodeConfirmed />
-    /* XXX hotfix due to all measurements showing failures
-    } else if (msmt.failure === true) {
-      return <ColorCodeFailed />
-    */
-    } else if (msmt.anomaly === true) {
-      return <ColorCodeAnomaly />
-    }
-    return <ColorCodeNormal />
-  } else {
-    return <NoColorCode />
-  }
-}
-
-ColorCode.propTypes = {
-  msmt: PropTypes.object
-}
 
 const ResultRow = styled(Flex)`
   color: ${props => props.theme.colors.gray7};
@@ -265,10 +225,67 @@ const ResultInput = styled.div`
   color: ${props => props.theme.colors.gray5};
 `
 
-const ResultItem = ({msmt}) => {
+const getIndicators = ({ test_name, testDisplayName, scores = {}, confirmed, anomaly }) => {
+  let color = '', tag = null
   const intl = useIntl()
+  if (testsWithStates.includes(test_name)) {
+    if (imTests.includes(test_name) && Object.entries(scores).length === 0) {
+      return [color, tag]
+    }
+
+    const testName = testDisplayName.replace(/ /gi, '')
+    const computedMessageIdPrefix = `Search.${testName}.Results`
+
+    if (confirmed === true) {
+      color = colorConfirmed
+      tag = (
+        <ResultTagFilled>
+          {intl.formatMessage(messages[`${computedMessageIdPrefix}.Blocked`])}
+        </ResultTagFilled>
+      )
+    /* XXX hotfix due to all measurements showing failures
+    } else if (msmt.failure === true) {
+      color = colorError
+      tag = (
+        <ResultTagHollow>
+          {intl.formatMessage(messages[`${computedMessageIdPrefix}.Error`])}
+        </ResultTagHollow>
+      )
+    */
+    } else if (anomaly === true) {
+      color = colorAnomaly
+      tag = (
+        <ResultTagHollow>
+          {intl.formatMessage(messages[`${computedMessageIdPrefix}.Anomaly`])}
+        </ResultTagHollow>
+      )
+    } else {
+      color = colorNormal
+      tag = (
+        <StyledResultTag>
+          {intl.formatMessage(messages[`${computedMessageIdPrefix}.Reachable`])}
+        </StyledResultTag>
+      )
+    }
+  }
+  return [color, tag]
+}
+
+const ResultItem = ({
+  test_name,
+  testDisplayName,
+  input,
+  report_id,
+  probe_cc,
+  probe_asn,
+  measurement_start_time,
+  scores,
+  confirmed,
+  anomaly,
+  failure
+}) => {
   const pathMaxLen = 10
-  let input = msmt.input
+  let inputLabel = input
   if (input) {
     const p = url.parse(input)
 
@@ -285,35 +302,38 @@ const ResultItem = ({msmt}) => {
         p.host = `${p.host.substr(0, domainMaxLen)}…`
       }
 
-      input = <span><Hostname>{`${p.protocol}//${p.host}`}</Hostname>{path}</span>
+      inputLabel = <span><Hostname>{`${p.protocol}//${p.host}`}</Hostname>{path}</span>
     } else {
-      input = <Hostname>{p.path}</Hostname>
+      inputLabel = <Hostname>{p.path}</Hostname>
     }
   }
+
+  const [indicatorColor, tag] = getIndicators({test_name, testDisplayName, scores, confirmed, anomaly, failure})
+
   return (
-    <ViewDetailsLink reportId={msmt.report_id} input={msmt.input}>
+    <ViewDetailsLink reportId={report_id} input={input}>
       <ResultRow flexWrap='wrap' alignItems='stretch'>
         <Box width={1/32}>
-          <ColorCode msmt={msmt} />
+          <ColoredIndicator color={indicatorColor} />
         </Box>
         <Box width={31/32} py={3}>
           <Flex flexDirection={['column', 'row']} alignItems='center'>
             <Box width={[1, 3/5]}>
               <Flex alignItems='center'>
                 <Box width={1/16}>
-                  <Text bold color='gray8'>{msmt.probe_cc}</Text>
+                  <Text bold color='gray8'>{probe_cc}</Text>
                 </Box>
                 <Box width={2/16}>
-                  <Flag countryCode={msmt.probe_cc} size={32} />
+                  <Flag countryCode={probe_cc} size={32} />
                 </Box>
                 <Box width={3/16}>
-                  <ASNBox asn={msmt.probe_asn} />
+                  <ASNBox asn={probe_asn} />
                 </Box>
                 <Box width={5/16}>
-                  {moment.utc(msmt.measurement_start_time).format('YYYY-MM-DD HH:mm [UTC]')}
+                  {moment.utc(measurement_start_time).format('YYYY-MM-DD HH:mm [UTC]')}
                 </Box>
                 <Box width={5/16}>
-                  {msmt.testName}
+                  {testDisplayName}
                 </Box>
               </Flex>
             </Box>
@@ -322,12 +342,12 @@ const ResultItem = ({msmt}) => {
               <Flex justifyContent='space-between' alignItems='center'>
                 <Box>
                   {input &&
-                    <ResultInput title={msmt.input}>
-                      {input}
+                    <ResultInput title={input}>
+                      {inputLabel}
                     </ResultInput>}
                 </Box>
                 <Box mr={3}>
-                  <ResultTag msmt={msmt} />
+                  {tag}
                 </Box>
               </Flex>
             </Box>
@@ -340,7 +360,17 @@ const ResultItem = ({msmt}) => {
 }
 
 ResultItem.propTypes = {
-  msmt: PropTypes.object
+  test_name: PropTypes.string,
+  testDisplayName: PropTypes.string,
+  input: PropTypes.string,
+  report_id: PropTypes.string,
+  probe_cc: PropTypes.string,
+  probe_asn: PropTypes.string,
+  measurement_start_time: PropTypes.string,
+  scores: PropTypes.object,
+  confirmed: PropTypes.bool,
+  anomaly: PropTypes.bool,
+  failure: PropTypes.bool,
 }
 
 const ResultContainer = styled(Box)`
@@ -351,11 +381,11 @@ const ResultContainer = styled(Box)`
 
 const ResultsList = ({results, testNamesKeyed}) => {
   return (
-    <Flex flexWrap='wrap'>
+    <Flex>
       <ResultContainer my={4} width={1} data-test-id='results-list'>
         {results.map((msmt, idx) => {
-          msmt.testName = testNamesKeyed[msmt.test_name]
-          return <ResultItem key={idx} msmt={msmt} />
+          msmt.testDisplayName = testNamesKeyed[msmt.test_name]
+          return <ResultItem key={idx} {...msmt} />
         })}
       </ResultContainer>
     </Flex>

@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback } from 'react'
 import PropTypes from 'prop-types'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, defineMessages } from 'react-intl'
 import { Flex, Text, Container, theme } from 'ooni-components'
 import styled from 'styled-components'
 import { useTable, useSortBy } from 'react-table'
@@ -143,11 +143,27 @@ const ConnectionStatusCell = ({ cell: { value} }) => {
 }
 
 const TorDetails = ({
+  isAnomaly,
+  isFailure,
   measurement,
   render
 }) => {
   // https://github.com/ooni/spec/blob/master/nettests/ts-023-tor.md#possible-conclusions
   let status, hint, summaryText
+
+  if (isFailure) {
+    status = 'error'
+    hint = <FormattedMessage id='Measurement.Status.Hint.Tor.Error' />
+    summaryText = 'Measurement.Details.SummaryText.Tor.Error'
+  } else if (isAnomaly) {
+    status = 'anomaly'
+    hint = <FormattedMessage id='Measurement.Status.Hint.Tor.Blocked' />
+    summaryText = 'Measurement.Details.SummaryText.Tor.Blocked'
+  } else {
+    status = 'reachable'
+    hint = <FormattedMessage id='Measurement.Status.Hint.Tor.Reachable' />
+    summaryText = 'Measurement.Details.SummaryText.Tor.OK'
+  }
 
   const {
     or_port_accessible,
@@ -216,12 +232,23 @@ const TorDetails = ({
     })
   ), [targets])
 
+  const messages = defineMessages({
+    tor: {
+      id: 'Measurement.Metadata.Tor',
+      defaultMessage: 'Tor censorship test result in {country}'
+    }
+  })
+
   return (
     <React.Fragment>
       {render({
         status: status,
         statusInfo: hint,
         summaryText: summaryText,
+        headMetadata: {
+          message: messages.tor,
+          formatted: false
+        },
         details: (
           <React.Fragment>
             <Container>

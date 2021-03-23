@@ -8,15 +8,20 @@ import {
   Input,
   Select,
   Label,
-  RadioGroup,
-  RadioButton
 } from 'ooni-components'
 import moment from 'moment'
 
 import DatePicker from '../DatePicker'
+import {
+  RadioGroup,
+  RadioButton
+} from './Radio'
 
 const StyledInputWithLabel = styled.div``
-const StyledLabel = styled(Label)`
+const StyledLabel = styled(Label).attrs({
+  mb: 1,
+  fontSize: 1
+})`
   color: ${props => props.theme.colors.blue5};
   padding-top: 32px;
 `
@@ -118,16 +123,21 @@ class FilterSidebar extends React.Component {
       switch(filterName) {
       case 'asnFilter':
         var asnValue = e.target.value
-        var asnRegEx = /^(^AS|as)?[0-9]+$/
-        if (asnValue && asnValue.match(asnRegEx) === null) {
-          this.setState({
-            asnError: intl.formatMessage({id: 'Search.Sidebar.ASN.Error'}),
-            isFilterDirty: false
-          })
-        } else {
+        // Accepts only formats like AS1234 or 1234
+        // https://regex101.com/r/DnkspD/latest
+        var asnRegEx = /^(AS)?([1-9][0-9]*)$/
+        if (
+          typeof asnValue === 'string' &&
+          (asnValue === '' || asnValue.match(asnRegEx) !== null)
+        ) {
           this.setState({
             asnError: false,
             isFilterDirty: true
+          })
+        } else {
+          this.setState({
+            asnError: intl.formatMessage({id: 'Search.Sidebar.ASN.Error'}),
+            isFilterDirty: false
           })
         }
         break
@@ -262,6 +272,7 @@ class FilterSidebar extends React.Component {
           label={intl.formatMessage({id: 'Search.Sidebar.Country'})}
           value={countryFilter}
           name="countryFilter"
+          data-test-id='country-filter'
           onChange={this.onChangeFilter('countryFilter')}>
           {countryOptions.map((v, idx) => {
             return (
@@ -275,6 +286,7 @@ class FilterSidebar extends React.Component {
           value={asnFilter}
           error={asnError}
           name="asnFilter"
+          data-test-id='asn-filter'
           onChange={this.onChangeFilter('asnFilter')}
           placeholder={intl.formatMessage({id: 'Search.Sidebar.ASN.example'})}
         />
@@ -291,6 +303,7 @@ class FilterSidebar extends React.Component {
               utc={true}
               timeFormat={false}
               isValidDate={this.isSinceValid}
+              inputProps={{id: 'since-filter'}}
             />
           </Box>
           <Box width={1/2} pl={1}>
@@ -304,6 +317,7 @@ class FilterSidebar extends React.Component {
               utc={true}
               timeFormat={false}
               isValidDate={this.isUntilValid}
+              inputProps={{id: 'until-filter'}}
             />
           </Box>
         </Flex>
@@ -312,6 +326,7 @@ class FilterSidebar extends React.Component {
           pt={2}
           label={intl.formatMessage({id: 'Search.Sidebar.TestName'})}
           name='testNameFilter'
+          data-test-id='testname-filter'
           value={testNameFilter}
           onChange={this.onChangeFilter('testNameFilter')}>
           {testNameOptions.map((v, idx) => {
@@ -325,7 +340,8 @@ class FilterSidebar extends React.Component {
           showDomain &&
           <InputWithLabel
             label={intl.formatMessage({id: 'Search.Sidebar.Domain'})}
-            name="domainFilter"
+            name='domainFilter'
+            data-test-id='domain-filter'
             value={domainFilter}
             error={domainError}
             onChange={this.onChangeFilter('domainFilter')}

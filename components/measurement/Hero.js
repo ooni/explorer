@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Container, Flex, Box } from 'ooni-components'
-import { Text } from 'rebass'
+import { Container, Flex, Box, Text } from 'ooni-components'
 import { Tick, Cross } from 'ooni-components/dist/icons'
 import { MdWarning, MdPriorityHigh} from 'react-icons/lib/md'
 import { FaQuestion } from 'react-icons/lib/fa'
@@ -47,7 +46,7 @@ const Hero = ({ status, color, icon, label, info }) => {
   }
 
   return (
-    <HeroContainer py={4} color={color}>
+    <HeroContainer py={4} color={color} data-test-id='hero'>
       <Container>
         <Text fontWeight={600} fontSize={4} as='div'>
           <Flex my={2} justifyContent='center' alignItems='center'>

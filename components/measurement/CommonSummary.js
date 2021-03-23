@@ -5,9 +5,8 @@ import {
   Flex,
   Container,
   Box,
+  Text
 } from 'ooni-components'
-import { Text } from 'rebass'
-import moment from 'moment'
 import { useIntl } from 'react-intl'
 
 import Flag from '../Flag'
@@ -42,13 +41,15 @@ SummaryItemBox.propTypes = {
 
 const CommonSummary = ({
   color,
-  measurement,
+  test_start_time,
+  probe_asn,
+  probe_cc,
   country
 }) => {
   const intl = useIntl()
-  const startTime = measurement.test_start_time
-  const network = measurement.probe_asn
-  const countryCode = measurement.probe_cc
+  const startTime = test_start_time
+  const network = probe_asn
+  const countryCode = probe_cc
 
   const countryBlock = <Flex flexWrap='wrap'>
     <Box mr={2} pb={1} width={1}>
@@ -59,7 +60,7 @@ const CommonSummary = ({
     </Box>
   </Flex>
 
-  const formattedDate = intl.formatDate(moment.utc(startTime).toDate(), {
+  const formattedDate = intl.formatDate(startTime, {
     year: 'numeric',
     month: 'long',
     day: '2-digit',
@@ -98,7 +99,9 @@ const CommonSummary = ({
 }
 
 CommonSummary.propTypes = {
-  measurement: PropTypes.object.isRequired,
+  test_start_time: PropTypes.string.isRequired,
+  probe_asn: PropTypes.number.isRequired,
+  probe_cc: PropTypes.string.isRequired,
   country: PropTypes.string.isRequired,
   color: PropTypes.string.isRequired
 }

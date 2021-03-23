@@ -125,6 +125,11 @@ class URLChart extends React.Component {
         input: metadata.input
       }
     })
+    // HACK: Temporary fix to workaround backend bug showing wrong anomaly and confirmed counts
+    const fixedData = result.data.results.map(d => {
+      d.anomaly_count = d.anomaly_count - d.confirmed_count
+      return d
+    })
     this.setState({
       data: result.data.results,
       fetching: false
@@ -173,7 +178,7 @@ class URLChart extends React.Component {
           <Flex alignItems='center' flexWrap='wrap'>
             <Box width={[1, 1/4]} p={3}>
               <TruncatedURL url={metadata.input} />
-              <Link
+              <Link color='blue7'
                 href={`/search?test_name=web_connectivity&probe_cc=${countryCode}&probe_asn=${network}&domain=${domainToExplore}&since=${since30days}&until=${until}`}
               >
                 <FormattedMessage id='Country.Websites.URLCharts.ExploreMoreMeasurements' />

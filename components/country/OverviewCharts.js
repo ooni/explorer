@@ -63,11 +63,11 @@ const CallToActionBox = () => {
 const TestGroupSelector = ({ testGroup, active, onClick }) => (
   <StyledTestGroupSelector m={2} onClick={() => onClick(testGroup)}>
     <Circle color={active ? testGroups[testGroup].color : theme.colors.gray4} />
-    <Box mx={1} color={!active && theme.colors.gray4 }> {testGroups[testGroup].name} </Box>
+    <Box mx={1} color={!active ? theme.colors.gray4 : 'inherit'}> {testGroups[testGroup].name} </Box>
   </StyledTestGroupSelector>
 )
 
-class TestsByGroup extends React.PureComponent {
+class TestsByGroup extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
