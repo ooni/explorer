@@ -16,7 +16,6 @@ const SummaryText = ({
 }) => {
   const intl = useIntl()
   const metadata = getTestMetadata(testName)
-  const formattedDate = moment(date).format('LL')
   const formattedDateTime = intl.formatDate(moment.utc(date).toDate(), {
     year: 'numeric',
     month: 'long',
@@ -37,7 +36,7 @@ const SummaryText = ({
           testName: `[${metadata.name}](${metadata.info})`,
           network: network,
           country: country,
-          date: `<abbr title='${formattedDateTime}'>${formattedDate}</abbr>`
+          date: formattedDateTime
         }}
       />
   } else {
