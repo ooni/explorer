@@ -28,8 +28,8 @@ const StyledFooterItem = styled(Link)`
   color: #ffffff;
   cursor: pointer;
   opacity: 0.5;
-  display: ${props => (props.horizontal === 'true') ? 'inline' : 'block'};
-  margin-left: ${props => (props.horizontal === 'true') ? '1rem' : 0};
+  display: ${props => (props.$horizontal === 'true') ? 'inline' : 'block'};
+  margin-left: ${props => (props.$horizontal === 'true') ? '1rem' : 0};
   &:hover {
     opacity: 1;
   }
@@ -38,7 +38,7 @@ const StyledFooterItem = styled(Link)`
 const FooterLink = ({ label, href, horizontal = false}) => (
   // Use non-boolean value for props sent to non-DOM styled components
   // https://www.styled-components.com/docs/faqs#why-am-i-getting-html-attribute-warnings
-  <StyledFooterItem mb={2} horizontal={horizontal.toString()} href={href}>
+  <StyledFooterItem mb={2} $horizontal={horizontal.toString()} href={href}>
     {label}
   </StyledFooterItem>
 )
