@@ -35,9 +35,9 @@ const StyledReactJsonContainer = styled.div`
   }
 `
 
-const JsonViewer = ({ src, collapse }) => (
+const JsonViewer = ({ src, collapsed }) => (
   <StyledReactJsonContainer>
-    <ReactJson collapsed={collapse} src={src} />
+    <ReactJson collapsed={collapsed} src={src} />
   </StyledReactJsonContainer>
 )
 
@@ -58,7 +58,7 @@ const CommonDetails = ({
   const { query } = useRouter()
   const queryString = new URLSearchParams(query)
   const rawMsmtDownloadURL = `${process.env.MEASUREMENTS_URL}/api/v1/raw_measurement?${queryString}`
-  const [collapse, setCollapse] = useState(1)
+  const [collapsed, setCollapsed] = useState(1)
 
   const intl = useIntl()
   const unavailable = intl.formatMessage({ id: 'Measurement.CommonDetails.Value.Unavailable' })
@@ -132,7 +132,7 @@ const CommonDetails = ({
               </Box>
               <Box>
                 <Button
-                  onClick={() => setCollapse(50)}
+                  onClick={() => setCollapsed(50)}
                   fontSize={13}
                   mx={1}
                   px={3}
@@ -145,7 +145,7 @@ const CommonDetails = ({
           content={
             measurement && typeof measurement === 'object' ? (
               <Flex bg='WHITE' p={3}>
-                <JsonViewer src={measurement} collapse={collapse} />
+                <JsonViewer src={measurement} collapsed={collapsed} />
               </Flex>
             ) : (
               <FormattedMessage id='Measurement.CommonDetails.RawMeasurement.Unavailable' />
