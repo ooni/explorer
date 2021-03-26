@@ -37,7 +37,7 @@ const StyledReactJsonContainer = styled.div`
 
 const JsonViewer = ({ src, collapsed }) => (
   <StyledReactJsonContainer>
-    <ReactJson collapsed={collapsed} src={src} />
+    <ReactJson collapsed={collapsed} src={src} name={null} indentWidth={2} />
   </StyledReactJsonContainer>
 )
 
