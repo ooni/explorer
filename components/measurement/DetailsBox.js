@@ -63,11 +63,11 @@ export const DetailsBox = ({ title, content, collapsed = false, ...rest }) => {
   return (
     <StyledDetailsBox width={1} {...rest} mb={3}>
       {title &&
-        <StyledDetailsBoxHeader px={3} py={2} bg='gray2' alignItems='center' >
+        <StyledDetailsBoxHeader px={3} py={2} bg='gray2' alignItems='center' onClick={onToggle}>
           <Box>
             <Heading h={4}>{title}</Heading>
           </Box>
-          <Box ml='auto' onClick={onToggle}>
+          <Box ml='auto'>
             <CollapseTrigger size={36} isOpen={isOpen} />
           </Box>
         </StyledDetailsBoxHeader>
