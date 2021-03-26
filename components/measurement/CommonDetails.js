@@ -100,6 +100,12 @@ const CommonDetails = ({
       value: engine ?? intl.formatMessage({ id: 'Measurement.CommonDetails.Value.Unavailable' })
     }
   ]
+
+  const expandAllBtn = (e) => {
+    e.stopPropagation()
+    setCollapsed(50)
+  }
+
   return (
     <React.Fragment>
       <Flex my={4}>
@@ -132,7 +138,7 @@ const CommonDetails = ({
               </Box>
               <Box>
                 <Button
-                  onClick={() => setCollapsed(50)}
+                  onClick={(e) => {expandAllBtn(e)}}
                   fontSize={13}
                   mx={1}
                   px={3}
