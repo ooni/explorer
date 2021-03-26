@@ -120,7 +120,7 @@ const CommonDetails = ({
         <DetailsBox
           collapsed={false}
           title={
-            <Flex px={3} flexWrap='wrap' alignItems='center' bg={theme.colors.gray2}>
+            <Flex px={3} flexDirection={['column', 'row']} alignItems='center' bg={theme.colors.gray2}>
               <Box>
                 <Heading h={4}>{intl.formatMessage({ id: 'Measurement.CommonDetails.RawMeasurement.Heading' })}</Heading>
               </Box>
@@ -140,8 +140,8 @@ const CommonDetails = ({
                 <Button
                   onClick={(e) => {expandAllBtn(e)}}
                   fontSize={13}
-                  mx={1}
-                  px={3}
+                  mx={3}
+                  px={4}
                 >
                   {intl.formatMessage({ id: 'Measurement.CommonDetails.RawMeasurement.Expand' })}
                 </Button>
