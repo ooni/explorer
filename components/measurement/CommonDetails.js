@@ -1,5 +1,5 @@
 /* global process */
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import {
@@ -35,9 +35,9 @@ const StyledReactJsonContainer = styled.div`
   }
 `
 
-const JsonViewer = ({ src }) => (
+const JsonViewer = ({ src, collapsed }) => (
   <StyledReactJsonContainer>
-    <ReactJson collapsed={1} src={src} />
+    <ReactJson collapsed={collapsed} src={src} name={null} indentWidth={2} />
   </StyledReactJsonContainer>
 )
 
@@ -58,6 +58,7 @@ const CommonDetails = ({
   const { query } = useRouter()
   const queryString = new URLSearchParams(query)
   const rawMsmtDownloadURL = `${process.env.MEASUREMENTS_URL}/api/v1/raw_measurement?${queryString}`
+  const [collapsed, setCollapsed] = useState(1)
 
   const intl = useIntl()
   const unavailable = intl.formatMessage({ id: 'Measurement.CommonDetails.Value.Unavailable' })
@@ -99,6 +100,12 @@ const CommonDetails = ({
       value: engine ?? intl.formatMessage({ id: 'Measurement.CommonDetails.Value.Unavailable' })
     }
   ]
+
+  const expandAllBtn = (e) => {
+    e.stopPropagation()
+    setCollapsed(50)
+  }
+
   return (
     <React.Fragment>
       <Flex my={4}>
@@ -113,7 +120,7 @@ const CommonDetails = ({
         <DetailsBox
           collapsed={false}
           title={
-            <Flex px={3} alignItems='center' bg={theme.colors.gray2}>
+            <Flex px={3} flexDirection={['column', 'row']} alignItems='center' bg={theme.colors.gray2}>
               <Box>
                 <Heading h={4}>{intl.formatMessage({ id: 'Measurement.CommonDetails.RawMeasurement.Heading' })}</Heading>
               </Box>
@@ -129,12 +136,22 @@ const CommonDetails = ({
                   </Button>
                 </Link>
               </Box>
+              <Box>
+                <Button
+                  onClick={(e) => {expandAllBtn(e)}}
+                  fontSize={13}
+                  mx={3}
+                  px={4}
+                >
+                  {intl.formatMessage({ id: 'Measurement.CommonDetails.RawMeasurement.Expand' })}
+                </Button>
+              </Box>
             </Flex>
           }
           content={
             measurement && typeof measurement === 'object' ? (
               <Flex bg='WHITE' p={3}>
-                <JsonViewer src={measurement} />
+                <JsonViewer src={measurement} collapsed={collapsed} />
               </Flex>
             ) : (
               <FormattedMessage id='Measurement.CommonDetails.RawMeasurement.Unavailable' />
