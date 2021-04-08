@@ -12,7 +12,8 @@ import useSWR from 'swr'
 
 import Layout from '../../components/Layout'
 import NavBar from '../../components/NavBar'
-import { StackedBarChart } from '../../components/aggregation/mat/Charts'
+import { StackedBarChart } from '../../components/aggregation/mat/StackedBarChart'
+import { FunnelChart } from '../../components/aggregation/mat/FunnelChart'
 import { Form } from '../../components/aggregation/mat/Form'
 import { axiosResponseTime } from '../../components/axios-plugins'
 
@@ -29,7 +30,7 @@ export const getServerSideProps = async () => {
     }
   } else {
     return {
-      testNames: []
+      props: { testNames: [] }
     }
   }
 }
@@ -91,10 +92,10 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
       let indexBy = ''
       cols.push(query['axis_x'])
       indexBy = query['axis_x']
-      let reshapedData = data.data.result.map(d => {
+      let reshapedData = Array.isArray(data.data.result) ? data.data.result.map(d => {
         d['ok_count'] = d.measurement_count - d.confirmed_count - d.anomaly_count
         return d
-      })
+      }) : data.data.result
       return {
         data: reshapedData,
         dimensionCount: data.data.dimension_count,
@@ -121,6 +122,12 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
           {isValidating &&
             <Box>
               <h2>Loading ...</h2>
+            </Box>
+          }
+          {chartMeta && chartMeta.dimensionCount == 0 &&
+            <Box style={{height: '50vh'}}>
+              <FunnelChart data={data.data.result} />
+              <pre>{JSON.stringify(data.data.result, null, 2)}</pre>
             </Box>
           }
           {chartMeta && chartMeta.dimensionCount == 1 &&
