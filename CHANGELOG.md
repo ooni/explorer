@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.5.1] - 2021-04-15
+
+### Changed
+* Group test names in search page sidebar into test groups
+
 ## [2.5.0] - 2021-04-15
 
 ### Added
