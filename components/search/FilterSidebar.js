@@ -51,17 +51,11 @@ const SelectWithLabel = (props) => (
 const StyledFilterSidebar = styled.div`
 `
 
-const TestNameOptions = React.memo(({testNames}) => {
+const TestNameOptions = ({testNames}) => {
   const intl = useIntl()
+
+  // console.log(testNames)
   const groupedTestNameOptions = testNames
-    .sort((a, b) => {
-      // Use the order in which groups are defined in $testGroups
-      const groupsOrder = Object.keys(testGroups)
-      // If it is an unrecognized test name, file it under legacy
-      const groupA = testNamesIntl[a.id]?.group ?? 'legacy'
-      const groupB = testNamesIntl[b.id]?.group ?? 'legacy'
-      return groupsOrder.indexOf(groupA) > groupsOrder.indexOf(groupB)
-    })
     .reduce((grouped, test) => {
       const group = test.id in testNamesIntl ? testNamesIntl[test.id].group : 'legacy'
       const option = {
@@ -77,19 +71,26 @@ const TestNameOptions = React.memo(({testNames}) => {
       return grouped
     }, {})
 
+  const sortedGroupedTestNameOptions = new Map()
+
+  for (const group of Object.keys(testGroups).values()) {
+    if (group in groupedTestNameOptions) {
+      sortedGroupedTestNameOptions.set(group, groupedTestNameOptions[group])
+    }
+  }
 
   return ([
     // Insert an 'Any' option to test name filter
     <option key='XX'>{intl.formatMessage({id: 'Search.Sidebar.TestName.AllTests'})}</option>,
-    Object.keys(groupedTestNameOptions).map(group => {
+    [...sortedGroupedTestNameOptions].map(([group, tests]) => {
       const groupName = group in testGroups ? intl.formatMessage({id: testGroups[group].id}) : group
-      const options = groupedTestNameOptions[group].map((test, idx) => (
-        <option key={`${group}${idx}`} value={test.id}>{test.name}</option>
+      const testOptions = tests.map(({id, name}) => (
+        <option key={id} value={id}>{name}</option>
       ))
-      return [<optgroup key={group} label={groupName} />, ...options]
+      return [<optgroup key={group} label={groupName} />, ...testOptions]
     })
   ])
-})
+}
 
 class FilterSidebar extends React.Component {
   constructor(props) {
