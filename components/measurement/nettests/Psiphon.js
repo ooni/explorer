@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 import { Flex, Container } from 'ooni-components'
-import { MdTimer } from 'react-icons/lib/md'
+import { MdTimer } from 'react-icons/md'
 import { defineMessages } from 'react-intl'
 
 import AccessPointStatus from '../AccessPointStatus'

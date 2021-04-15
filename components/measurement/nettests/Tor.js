@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { useTable, useSortBy } from 'react-table'
 import { Cross, Tick } from 'ooni-components/dist/icons'
 import { useClipboard } from 'use-clipboard-copy'
-import { FaClipboard } from 'react-icons/lib/fa'
+import { FaClipboard } from 'react-icons/fa'
 
 import AccessPointStatus from '../AccessPointStatus'
 

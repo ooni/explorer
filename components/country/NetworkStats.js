@@ -4,7 +4,7 @@ import { Flex, Box, theme } from 'ooni-components'
 import {
   NettestGroupMiddleBoxes,
 } from 'ooni-components/dist/icons'
-import { MdFileDownload, MdFileUpload } from 'react-icons/lib/md'
+import { MdFileDownload, MdFileUpload } from 'react-icons/md'
 import { FormattedMessage } from 'react-intl'
 import styled from 'styled-components'
 

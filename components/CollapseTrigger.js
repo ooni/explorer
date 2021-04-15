@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { MdExpandLess } from 'react-icons/lib/md'
+import { MdExpandLess } from 'react-icons/md'
 
 export const CollapseTrigger = styled(MdExpandLess)`
   cursor: pointer;

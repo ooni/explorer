@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { MdFeedback } from 'react-icons/lib/md'
+import { MdFeedback } from 'react-icons/md'
 import { theme } from 'ooni-components'
 
 import sentry from '../utils/sentry'

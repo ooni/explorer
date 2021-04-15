@@ -8,8 +8,8 @@ import {
   Box,
 } from 'ooni-components'
 import { FormattedMessage } from 'react-intl'
-import MdPhoneAndroid from 'react-icons/lib/md/phone-android'
-import MdWebAsset from 'react-icons/lib/md/web-asset'
+import { MdPhoneAndroid } from 'react-icons/md'
+import { MdWebAsset } from 'react-icons/md'
 import { defineMessages } from 'react-intl'
 
 import AccessPointStatus from '../AccessPointStatus'

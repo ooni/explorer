@@ -4,7 +4,7 @@ import {
   theme
 } from 'ooni-components'
 
-import FaBeer from 'react-icons/lib/fa/beer'
+import { FaBeer } from 'react-icons/fa'
 import {
   NettestGroupWebsites,
   NettestGroupInstantMessaging,
@@ -18,36 +18,43 @@ import { FormattedMessage } from 'react-intl'
 export const testGroups = {
   'websites': {
     'color': theme.colors.indigo5,
+    'id': 'Tests.Groups.Webistes.Name',
     'name': <FormattedMessage id='Tests.Groups.Webistes.Name' />,
     'icon': <NettestGroupWebsites />
   },
   'im': {
     'color': theme.colors.cyan6,
+    'id': 'Tests.Groups.Instant Messagging.Name',
     'name': <FormattedMessage id='Tests.Groups.Instant Messagging.Name' />,
     'icon': <NettestGroupInstantMessaging />
   },
   'middlebox': {
     'color': theme.colors.violet8,
+    'id': 'Tests.Groups.Middlebox.Name',
     'name': <FormattedMessage id='Tests.Groups.Middlebox.Name' />,
     'icon': <NettestGroupMiddleBoxes />
   },
   'performance': {
     'color': theme.colors.fuchsia6,
+    'id': 'Tests.Groups.Performance.Name',
     'name': <FormattedMessage id='Tests.Groups.Performance.Name' />,
     'icon': <NettestGroupPerformance />
   },
   'circumvention': {
     'color': theme.colors.pink6,
+    'id': 'Tests.Groups.Circumvention.Name',
     'name': <FormattedMessage id='Tests.Groups.Circumvention.Name' />,
     'icon': <NettestGroupCircumvention />
   },
   'legacy': {
     'color': theme.colors.gray5,
+    'id': 'Tests.Groups.Legacy.Name',
     'name': <FormattedMessage id='Tests.Groups.Legacy.Name' />,
     'icon': <FaBeer />
   },
   'default': {
     'color': theme.colors.gray5,
+    'id': 'DefaultTestGroupName',
     'name': null,
     'icon': <FaBeer />
   },

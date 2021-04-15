@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Flex, Box } from 'ooni-components'
 import { useIntl, defineMessages } from 'react-intl'
 
-import MdFlashOn from 'react-icons/lib/md/flash-on'
+import { MdFlashOn } from 'react-icons/md'
 
 import { InfoBoxItem } from '../InfoBoxItem'
 

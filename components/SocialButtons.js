@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link, Flex, Text } from 'ooni-components'
-import { MdShare } from 'react-icons/lib/md'
+import { MdShare } from 'react-icons/md'
 
 function SocialButtons({ url }){
   const text = 'Data from OONI Explorer'

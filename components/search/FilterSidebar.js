@@ -1,7 +1,7 @@
 import React from 'react'
 
 import styled from 'styled-components'
-import { injectIntl } from 'react-intl'
+import { injectIntl, useIntl } from 'react-intl'
 import {
   Flex, Box,
   Button,
@@ -16,6 +16,7 @@ import {
   RadioGroup,
   RadioButton
 } from './Radio'
+import { testGroups, testNames as testNamesIntl } from '../test-info'
 
 const StyledInputWithLabel = styled.div``
 const StyledLabel = styled(Label).attrs({
@@ -49,6 +50,47 @@ const SelectWithLabel = (props) => (
 
 const StyledFilterSidebar = styled.div`
 `
+
+const TestNameOptions = ({testNames}) => {
+  const intl = useIntl()
+
+  // console.log(testNames)
+  const groupedTestNameOptions = testNames
+    .reduce((grouped, test) => {
+      const group = test.id in testNamesIntl ? testNamesIntl[test.id].group : 'legacy'
+      const option = {
+        id: test.id,
+        name: test.name,
+        group
+      }
+      if (group in grouped) {
+        grouped[group].push(option)
+      } else {
+        grouped[group] = [option]
+      }
+      return grouped
+    }, {})
+
+  const sortedGroupedTestNameOptions = new Map()
+
+  for (const group of Object.keys(testGroups).values()) {
+    if (group in groupedTestNameOptions) {
+      sortedGroupedTestNameOptions.set(group, groupedTestNameOptions[group])
+    }
+  }
+
+  return ([
+    // Insert an 'Any' option to test name filter
+    <option key='XX'>{intl.formatMessage({id: 'Search.Sidebar.TestName.AllTests'})}</option>,
+    [...sortedGroupedTestNameOptions].map(([group, tests]) => {
+      const groupName = group in testGroups ? intl.formatMessage({id: testGroups[group].id}) : group
+      const testOptions = tests.map(({id, name}) => (
+        <option key={id} value={id}>{name}</option>
+      ))
+      return [<optgroup key={group} label={groupName} />, ...testOptions]
+    })
+  ])
+}
 
 class FilterSidebar extends React.Component {
   constructor(props) {
@@ -259,8 +301,7 @@ class FilterSidebar extends React.Component {
     } = this.state
 
     //Insert an 'Any' option to test name filter
-    const testNameOptions = [...testNames]
-    testNameOptions.unshift({name: intl.formatMessage({id: 'Search.Sidebar.TestName.AllTests'}), id: 'XX'})
+    // testNameOptions.unshift({name: intl.formatMessage({id: 'Search.Sidebar.TestName.AllTests'}), id: 'XX'})
 
     const countryOptions = [...countries]
     countryOptions.unshift({name: intl.formatMessage({id: 'Search.Sidebar.Country.AllCountries'}), alpha_2: 'XX'})
@@ -328,12 +369,9 @@ class FilterSidebar extends React.Component {
           name='testNameFilter'
           data-test-id='testname-filter'
           value={testNameFilter}
-          onChange={this.onChangeFilter('testNameFilter')}>
-          {testNameOptions.map((v, idx) => {
-            return (
-              <option key={idx} value={v.id}>{v.name}</option>
-            )
-          })}
+          onChange={this.onChangeFilter('testNameFilter')}
+        >
+          <TestNameOptions testNames={testNames} />
         </SelectWithLabel>
 
         {
