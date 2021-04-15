@@ -95,6 +95,12 @@ export const testNames = {
     id: 'Tests.WhatsApp.Name',
     info: 'https://ooni.org/nettest/whatsapp/'
   },
+  'signal': {
+    group: 'im',
+    name: <FormattedMessage id='Tests.Signal.Name' />,
+    id: 'Tests.Signal.Name',
+    info: 'https://ooni.org/nettest/signal/'
+  },
 
   /* Performance */
   'ndt': {

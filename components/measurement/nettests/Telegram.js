@@ -6,7 +6,6 @@ import {
   Text,
   Flex,
   Box,
-  theme
 } from 'ooni-components'
 import { FormattedMessage } from 'react-intl'
 import MdPhoneAndroid from 'react-icons/lib/md/phone-android'

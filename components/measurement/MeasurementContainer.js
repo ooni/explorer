@@ -5,7 +5,7 @@ import TelegramDetails from './nettests/Telegram'
 import WhatsAppDetails from './nettests/WhatsApp'
 import DashDetails from './nettests/Dash'
 import NdtDetails from './nettests/Ndt'
-
+import SignalDetails from './nettests/Signal'
 import FacebookMessengerDetails from './nettests/FacebookMessenger'
 import HttpHeaderFieldManipulationDetails from './nettests/HTTPHeaderFieldManipulation'
 import HttpInvalidRequestLine from './nettests/HTTPInvalidRequestLine'
@@ -24,6 +24,7 @@ const mapTestDetails = {
   whatsapp: WhatsAppDetails,
   facebook_messenger: FacebookMessengerDetails,
   telegram: TelegramDetails,
+  signal: SignalDetails,
   http_header_field_manipulation: HttpHeaderFieldManipulationDetails,
   http_invalid_request_line: HttpInvalidRequestLine,
   vanilla_tor: VanillaTorDetails,
