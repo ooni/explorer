@@ -7,9 +7,9 @@ import {
   Box
 } from 'ooni-components'
 import { FormattedMessage, defineMessages } from 'react-intl'
-import MdPhoneAndroid from 'react-icons/lib/md/phone-android'
-import MdWebAsset from 'react-icons/lib/md/web-asset'
-import MdPersonAdd from 'react-icons/lib/md/person-add'
+import { MdPhoneAndroid } from 'react-icons/md'
+import { MdWebAsset } from 'react-icons/md'
+import { MdPersonAdd } from 'react-icons/md'
 import styled from 'styled-components'
 
 import AccessPointStatus from '../AccessPointStatus'

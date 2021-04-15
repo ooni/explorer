@@ -5,8 +5,8 @@ import {
   Flex,
 } from 'ooni-components'
 import { FormattedMessage, defineMessages } from 'react-intl'
-import MdCheckCircle from 'react-icons/lib/md/check-circle'
-import MdTimelapse from 'react-icons/lib/md/timelapse'
+import { MdCheckCircle } from 'react-icons/md'
+import { MdTimelapse } from 'react-icons/md'
 
 import AccessPointStatus from '../AccessPointStatus'
 

@@ -4,7 +4,7 @@ import {
   theme
 } from 'ooni-components'
 
-import FaBeer from 'react-icons/lib/fa/beer'
+import { FaBeer } from 'react-icons/fa'
 import {
   NettestGroupWebsites,
   NettestGroupInstantMessaging,

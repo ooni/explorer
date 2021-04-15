@@ -5,7 +5,7 @@ import {
   Box,
   Text
 } from 'ooni-components'
-import { MdFlashOn } from 'react-icons/lib/md'
+import { MdFlashOn } from 'react-icons/md'
 import { useIntl, defineMessages } from 'react-intl'
 
 import { mlabServerDetails } from './mlab_utils'

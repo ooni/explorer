@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Flex, Box, Link } from 'ooni-components'
 import styled from 'styled-components'
 import { FormattedMessage } from 'react-intl'
-import { MdExpandLess } from 'react-icons/lib/md'
+import { MdExpandLess } from 'react-icons/md'
 import SocialButtons from '../SocialButtons'
 
 const HideInLargeScreens = ({ children }) => (

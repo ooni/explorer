@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import prettyMs from 'pretty-ms'
 import { Flex, Box, Link, Text } from 'ooni-components'
 import { FormattedMessage } from 'react-intl'
-import { MdOpenInNew } from 'react-icons/lib/md'
+import { MdOpenInNew } from 'react-icons/md'
 
 import { getTestMetadata } from '../utils'
 import Badge from '../Badge'
