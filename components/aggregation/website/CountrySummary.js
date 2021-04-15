@@ -1,8 +1,8 @@
 import React from 'react'
 import { Flex, Box, Heading, Text, Link } from 'ooni-components'
 import styled from 'styled-components'
-import { IoCloseCircled } from 'react-icons/io'
-import { FaBarChart, FaExclamationCircle } from 'react-icons/fa'
+import { IoIosCloseCircle } from 'react-icons/io'
+import { FaChartBar, FaExclamationCircle } from 'react-icons/fa'
 import { MdCheckCircle } from 'react-icons/md'
 import NLink from 'next/link'
 import { useRouter } from 'next/router'
@@ -51,7 +51,7 @@ const CountrySummary = ({ data }) => {
     outcome = {
       color: colorConfirmed,
       subtext: 'confirmed blocked',
-      icon: <IoCloseCircled size={ICON_SIZE} />
+      icon: <IoIosCloseCircle size={ICON_SIZE} />
     }
   }
 
@@ -78,7 +78,7 @@ const CountrySummary = ({ data }) => {
         <Box my='auto' ml='auto'>
           <NLink href={`/experimental/website/${probe_cc}?${query}`} passHref>
             <Link color='white'>
-              <FaBarChart size={36} />
+              <FaChartBar size={36} />
             </Link>
           </NLink>
         </Box>
