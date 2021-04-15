@@ -4,6 +4,8 @@
 
 ### Changed
 * Group test names in search page sidebar into test groups
+* Upgraded `next`, `ooni-components`, `react-icons` to latest versions.
+* Upstream changes to component names of some icons from `react-icons`
 
 ## [2.5.0] - 2021-04-15
 
