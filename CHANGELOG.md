@@ -1,5 +1,10 @@
 # Changelog
 
+## [2.5.0] - 2021-04-15
+
+### Added
+* Support for Signal tests (#575)
+
 ## [2.4.4] - 2021-03-18
 
 ### Changed
