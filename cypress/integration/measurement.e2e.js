@@ -126,6 +126,24 @@ describe('Measurement Page Tests', () => {
     // })
   })
 
+  describe.only('Signal Tests', () => {
+    it('renders an accessible measurement', () => {
+      cy.visit('/measurement/20210414T233239Z_signal_BR_271354_n1_zCvPVXKJT7kxPQI4')
+      cy.heroHasColor(normalColor)
+        .contains('OK')
+      cy.get('head meta[property="og:description"]')
+        .should('have.attr', 'content', 'OONI data suggests Signal was reachable in Brazil on April 14, 2021, 11:32:39 PM UTC, find more open data on internet censorship on OONI Explorer.')
+    })
+
+    it('renders an anomaly measurement', () => {
+      cy.visit('/measurement/20210415T084229Z_signal_IR_43754_n1_Jxzkc6sOLFBybUZN')
+      cy.heroHasColor(anomalyColor)
+        .contains('Anomaly')
+      cy.get('head meta[property="og:description"]')
+        .should('have.attr', 'content', 'OONI data suggests Signal was NOT reachable in Iran on April 15, 2021, 8:42:27 AM UTC, find more open data on internet censorship on OONI Explorer.')
+    })
+  })
+
   describe('Facebook Messenger Tests', () => {
     it('renders an accessible measurement', () => {
       cy.visit('/measurement/20200407T235214Z_AS3269_EIlT6478yDwpzYNO8f54Xl12aN4AbkK82OuCUZSYHh3cTKNoYF')
