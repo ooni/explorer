@@ -14,6 +14,7 @@ import Layout from '../../components/Layout'
 import NavBar from '../../components/NavBar'
 import { StackedBarChart } from '../../components/aggregation/mat/StackedBarChart'
 import { FunnelChart } from '../../components/aggregation/mat/FunnelChart'
+import { HeatmapChart } from '../../components/aggregation/mat/HeatMapChart'
 import { Form } from '../../components/aggregation/mat/Form'
 import { axiosResponseTime } from '../../components/axios-plugins'
 
@@ -129,22 +130,21 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
               <FunnelChart data={data.data.result} />
               <pre>{JSON.stringify(data.data.result, null, 2)}</pre>
             </Box>
+
           }
           {chartMeta && chartMeta.dimensionCount == 1 &&
             <Box style={{height: '50vh'}}>
-              <StackedBarChart data={chartMeta.data} cols={chartMeta.cols} indexBy={chartMeta.indexBy} />
+              <StackedBarChart data={data} query={query} />
             </Box>
           }
           {chartMeta && chartMeta.dimensionCount > 1 &&
-            <Flex alignItems='center' justifyContent='center' flexWrap='wrap'>
-              <Text fontSize={64}>🚧</Text>
-              <Heading h={3}  mx={4}>
-                Two dimensional charts coming soon.
-              </Heading>
-              <Text fontSize={64}>🚧</Text>
+            <Flex alignItems='center' justifyContent='center' flexDirection='column'>
+              <Box width={1}>
+                <HeatmapChart data={data.data.result} query={query} />
+              </Box>
               <br />
               <Box width={1} style={{height: '30vh', 'overflow-y': 'scroll'}} >
-                <pre>{JSON.stringify(chartMeta, null, 2)}</pre>
+                <pre>{JSON.stringify(data.data.result, null, 2)}</pre>
               </Box>
             </Flex>
           }
