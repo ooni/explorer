@@ -48,6 +48,9 @@ export const Form = ({ onSubmit, testNames, query }) => {
   const { handleSubmit, control, getValues } = useForm({
     defaultValues
   })
+  const sortedCountries = countryList
+    .sort((a,b) => (a.iso3166_name < b.iso3166_name) ? -1 : (a.iso3166_name > b.iso3166_name) ? 1 : 0)
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex my={2} alignItems='center'>
@@ -61,8 +64,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             control={control}
           >
             <option value=''>All Countries</option>
-            {countryList
-              .sort((a,b) => a.iso3166_name > b.iso3166_name)
+            {sortedCountries
               .map((c, idx) =>(
                 <option key={idx} value={c.iso3166_alpha2}>{c.iso3166_name}</option>
               ))
@@ -232,5 +234,15 @@ export const Form = ({ onSubmit, testNames, query }) => {
 
 Form.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  testNames: PropTypes.array
+  testNames: PropTypes.array,
+  query: PropTypes.shape({
+    axis_x: PropTypes.string,
+    axis_y: PropTypes.string,
+    since: PropTypes.string,
+    until: PropTypes.string,
+    test_name: PropTypes.string,
+    input: PropTypes.string,
+    probe_cc: PropTypes.string,
+    category_code: PropTypes.string,
+  })
 }

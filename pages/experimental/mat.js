@@ -1,12 +1,13 @@
 /* global process */
 import React, { useCallback, useMemo } from 'react'
+import PropTypes from 'prop-types'
 import Head from 'next/head'
 import { useRouter } from  'next/router'
 import axios from 'axios'
 import {
   Container,
   Heading,
-  Flex, Box, Text
+  Flex, Box,
 } from 'ooni-components'
 import useSWR from 'swr'
 
@@ -143,9 +144,9 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
                 <HeatmapChart data={data.data.result} query={query} />
               </Box>
               <br />
-              <Box width={1} style={{height: '30vh', 'overflow-y': 'scroll'}} >
+              {/* <Box width={1} style={{height: '30vh', 'overflow-y': 'scroll'}} >
                 <pre>{JSON.stringify(data.data.result, null, 2)}</pre>
-              </Box>
+              </Box> */}
             </Flex>
           }
           <Box>
@@ -162,6 +163,15 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
         </Flex>
       </Container>
     </Layout>
+  )
+}
+
+MeasurementAggregationToolkit.propTypes = {
+  testNames: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string
+    })
   )
 }
 

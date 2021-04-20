@@ -15,7 +15,6 @@ import Global from '../../../components/aggregation/website/Global'
 import FForm from '../../../components/aggregation/website/Form'
 import { paramsToQuery, queryToParams } from '../../../components/aggregation/website/queryUtils'
 import { Debug } from '../../../components/aggregation/website/Debug'
-import { GlobalLoader } from '../../../components/aggregation/website/GlobalLoader'
 
 const Form = React.memo(FForm)
 

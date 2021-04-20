@@ -65,7 +65,7 @@ export const StackedBarChart = ({ data, query }) => {
         tickPadding: 5,
         tickRotation: 45,
         legend: 'day',
-        legendPosition: 'left',
+        legendPosition: 'start',
         legendOffset: 32
       }}
       axisLeft={{
