@@ -95,7 +95,8 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
       cols.push(query['axis_x'])
       indexBy = query['axis_x']
       let reshapedData = Array.isArray(data.data.result) ? data.data.result.map(d => {
-        d['ok_count'] = d.measurement_count - d.confirmed_count - d.anomaly_count
+        d['anomaly_count'] = d.anomaly_count - d.confirmed_count
+        d['ok_count'] = d.measurement_count - d.confirmed_count - d.anomaly_count - d.failure_count
         return d
       }) : data.data.result
       return {
@@ -131,7 +132,6 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
               <FunnelChart data={data.data.result} />
               <pre>{JSON.stringify(data.data.result, null, 2)}</pre>
             </Box>
-
           }
           {chartMeta && chartMeta.dimensionCount == 1 &&
             <Box style={{height: '50vh'}}>
@@ -139,14 +139,10 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
             </Box>
           }
           {chartMeta && chartMeta.dimensionCount > 1 &&
-            <Flex alignItems='center' justifyContent='center' flexDirection='column'>
-              <Box width={1}>
+            <Flex alignItems='center' flexDirection='column'>
+              <Box>
                 <HeatmapChart data={data.data.result} query={query} />
               </Box>
-              <br />
-              {/* <Box width={1} style={{height: '30vh', 'overflow-y': 'scroll'}} >
-                <pre>{JSON.stringify(data.data.result, null, 2)}</pre>
-              </Box> */}
             </Flex>
           }
           <Box>

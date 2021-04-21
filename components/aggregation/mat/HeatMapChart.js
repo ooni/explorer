@@ -116,18 +116,15 @@ const CustomHeatMapCell = ({
 CustomHeatMapCell.propTypes = {
   borderColor: PropTypes.string,
   borderWidth: PropTypes.number,
-  data: PropTypes.shape({
-    key: PropTypes.any
-  }),
-  height: PropTypes.any,
-  onHover: PropTypes.any,
-  onLeave: PropTypes.any,
-  opacity: PropTypes.any,
-  textColor: PropTypes.any,
+  height: PropTypes.number,
+  onHover: PropTypes.func,
+  onLeave: PropTypes.func,
+  opacity: PropTypes.number,
+  textColor: PropTypes.string,
   value: PropTypes.any,
-  width: PropTypes.any,
-  x: PropTypes.any,
-  y: PropTypes.any
+  width: PropTypes.number,
+  x: PropTypes.number,
+  y: PropTypes.number
 }
 
 const HeatMapCell = React.memo(CustomHeatMapCell)
