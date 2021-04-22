@@ -81,7 +81,7 @@ const TestNameOptions = ({testNames}) => {
 
   return ([
     // Insert an 'Any' option to test name filter
-    <option key='XX'>{intl.formatMessage({id: 'Search.Sidebar.TestName.AllTests'})}</option>,
+    <option key='XX' value='XX'>{intl.formatMessage({id: 'Search.Sidebar.TestName.AllTests'})}</option>,
     [...sortedGroupedTestNameOptions].map(([group, tests]) => {
       const groupName = group in testGroups ? intl.formatMessage({id: testGroups[group].id}) : group
       const testOptions = tests.map(({id, name}) => (
