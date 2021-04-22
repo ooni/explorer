@@ -29,25 +29,27 @@ const PsiphonDetails = ({
     }
   })
 
-  let status, hint, summaryText
+  let status, hint, summaryText, metaText
 
   // https://github.com/ooni/spec/blob/master/nettests/ts-015-psiphon.md#possible-conclusions
   // Determine if psiphon is blocked and if the probe could bootstrap psiphon
   if (failure) {
     status = 'anomaly'
+    metaText = messages.unReachable
     if (bootstrap_time === 0) {
       // Unable to bootstrap
       hint = <FormattedMessage id='Measurement.Status.Hint.Psiphon.BootstrappingError' />
-        summaryText = 'Measurement.Details.SummaryText.Psiphon.BootstrappingError'
+      summaryText = 'Measurement.Details.SummaryText.Psiphon.BootstrappingError'
     } else {
       // Unable to use Psiphon to reach https://google.com/humans.txt
       hint = <FormattedMessage id='Measurement.Status.Hint.Psiphon.Blocked' />
-        summaryText = 'Measurement.Details.SummaryText.Psiphon.Blocked'
+      summaryText = 'Measurement.Details.SummaryText.Psiphon.Blocked'
     }
   } else {
     status = 'reachable'
     hint = <FormattedMessage id='Measurement.Status.Hint.Psiphon.Reachable' />
-      summaryText = 'Measurement.Details.SummaryText.Psiphon.OK'
+    summaryText = 'Measurement.Details.SummaryText.Psiphon.OK'
+    metaText = messages.reachable
   }
 
   return (
@@ -57,7 +59,7 @@ const PsiphonDetails = ({
         statusInfo: hint,
         summaryText: summaryText,
         headMetadata: {
-          message: failure ? messages.unReachable : messages.reachable,
+          message: metaText,
           formatted: false
         },
         details: (
