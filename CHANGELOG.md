@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.5.2] - 2021-04-22
+
+### Added
+* Summary text on RiseupVPN measurement pages
+### Fixed
+* Fix bug when selecting 'Any' in test name filter
+
 ## [2.5.1] - 2021-04-15
 
 ### Changed
