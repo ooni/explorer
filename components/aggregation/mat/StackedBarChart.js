@@ -26,7 +26,6 @@ export const StackedBarChart = ({ data, query }) => {
         'ok_count',
       ]
       let indexBy = ''
-      cols.push(query['axis_x'])
       indexBy = query['axis_x']
       let reshapedData = Array.isArray(data.data.result) ? data.data.result.map(d => {
         d['ok_count'] = d.measurement_count - d.confirmed_count - d.anomaly_count
