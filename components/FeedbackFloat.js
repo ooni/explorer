@@ -14,8 +14,9 @@ const StyledFeedbackButton = styled.div`
   width:50px;
   height:50px;
   line-height: 50px;
-  text-align: center;
-  vertical-align: middle;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   background-color: ${props => props.theme.colors.gray9};
   opacity: 0.8;
   -webkit-border-radius:60px;
@@ -42,7 +43,7 @@ const FeedbackButton = () => (
     Sentry.showReportDialog({ eventId, ...dialogOptions })
   }
   }>
-    <MdFeedback size={32} color={theme.colors.white} />
+    <MdFeedback size={24} color={theme.colors.white} />
   </StyledFeedbackButton>
 )
 
