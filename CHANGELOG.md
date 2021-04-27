@@ -1,5 +1,14 @@
 # Changelog
 
+## [2.5.3] - 2021-04-27
+
+### Added
+* Show anomaly status in search results for middlebox tests
+### Fixed
+* Alignment of the floating feedback button (#583)
+
+### Changed
+* Control which tests can be filtered with anomaly and confirmed status
 ## [2.5.2] - 2021-04-22
 
 ### Added
