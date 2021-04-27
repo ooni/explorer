@@ -43,7 +43,9 @@ const testsWithStates = [
   'whatsapp',
   'facebook_messenger',
   'tor',
-  'psiphon'
+  'psiphon',
+  'http_header_field_manipulation',
+  'http_invalid_request_line',
 ]
 
 const imTests = [

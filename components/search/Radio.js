@@ -20,12 +20,6 @@ export const RadioGroup = ({
   direction = 'column',
   ...props
 }) => {
-  const [currentValue, setCurrentValue] = useState(value)
-
-  const onChangeCallback = useCallback((event) => {
-    setCurrentValue(event.target.value)
-    onChange(event.target.value)
-  }, [value])
 
   return (
     <Flex flexDirection={direction} {...props}>
@@ -34,8 +28,8 @@ export const RadioGroup = ({
           ? child
           : React.cloneElement(child, {
             name: name,
-            checked: child.props.value === currentValue,
-            onChange: onChangeCallback,
+            checked: child.props.value === value,
+            onChange: (e) => { onChange(e.target.value) },
           })
       ))}
     </Flex>
