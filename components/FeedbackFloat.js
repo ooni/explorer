@@ -1,21 +1,18 @@
 import React from 'react'
 import styled from 'styled-components'
 import { MdFeedback } from 'react-icons/md'
-import { theme } from 'ooni-components'
+import { theme, Flex } from 'ooni-components'
 
 import sentry from '../utils/sentry'
 const { Sentry } = sentry()
 
-const StyledFeedbackButton = styled.div`
+const StyledFeedbackButton = styled(Flex)`
   position:fixed;
   right:10px;
   bottom:10px;
   cursor:pointer;
   width:50px;
   height:50px;
-  line-height: 50px;
-  text-align: center;
-  vertical-align: middle;
   background-color: ${props => props.theme.colors.gray9};
   opacity: 0.8;
   -webkit-border-radius:60px;
@@ -41,8 +38,8 @@ const FeedbackButton = () => (
     const eventId = Sentry.captureMessage('User Feedback')
     Sentry.showReportDialog({ eventId, ...dialogOptions })
   }
-  }>
-    <MdFeedback size={32} color={theme.colors.white} />
+  } alignItems='center' justifyContent='center'>
+    <MdFeedback size={24} color={theme.colors.white} />
   </StyledFeedbackButton>
 )
 
