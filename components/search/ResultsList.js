@@ -42,6 +42,7 @@ const testsWithStates = [
   'telegram',
   'whatsapp',
   'facebook_messenger',
+  'signal',
   'tor',
   'psiphon',
   'http_header_field_manipulation',
@@ -105,6 +106,18 @@ const messages = defineMessages({
   },
   'Search.Telegram.Results.Error': {
     id: 'Search.Telegram.Results.Error',
+    defaultMessage: ''
+  },
+  'Search.Signal.Results.Reachable': {
+    id: 'Search.Signal.Results.Reachable',
+    defaultMessage: ''
+  },
+  'Search.Signal.Results.Anomaly': {
+    id: 'Search.Signal.Results.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.Signal.Results.Error': {
+    id: 'Search.Signal.Results.Error',
     defaultMessage: ''
   },
   'Search.HTTPInvalidRequestLine.Results.Anomaly': {
