@@ -16,6 +16,7 @@ import NavBar from '../../components/NavBar'
 import { StackedBarChart } from '../../components/aggregation/mat/StackedBarChart'
 import { FunnelChart } from '../../components/aggregation/mat/FunnelChart'
 import { HeatmapChart } from '../../components/aggregation/mat/HeatMapChart'
+import { GridChart } from '../../components/aggregation/mat/GridChart'
 import { Form } from '../../components/aggregation/mat/Form'
 import { axiosResponseTime } from '../../components/axios-plugins'
 
@@ -39,6 +40,7 @@ export const getServerSideProps = async () => {
 
 const swrOptions = {
   revalidateOnFocus: false,
+  // dedupingInterval: 10 * 60 * 1000,
 }
 
 const fetcher = (query) => {
@@ -139,9 +141,10 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
             </Box>
           }
           {chartMeta && chartMeta.dimensionCount > 1 &&
-            <Flex alignItems='center' flexDirection='column'>
+            <Flex flexDirection='column'>
               <Box>
-                <HeatmapChart data={data.data.result} query={query} />
+                {/* <HeatmapChart data={data.data.result} query={query} /> */}
+                <GridChart data={data.data.result} query={query} />
               </Box>
             </Flex>
           }
