@@ -5,3 +5,4 @@ ignore/
 .DS_Store
 package-lock.json
 public/static/lang/.messages/
+.env*.local

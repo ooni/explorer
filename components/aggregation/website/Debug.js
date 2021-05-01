@@ -24,7 +24,7 @@ export const Debug = ({ params, children }) => {
             Statistics for <Bold>{input}</Bold> { probe_cc && `in ${probe_cc} `}from <Bold>{since}</Bold> until <Bold>{until}</Bold>
           </Heading>
           <Box my={2}>
-            Query: <Bold>{process.env.MEASUREMENTS_URL}/api/aggregation?{paramsToQuery(params)}</Bold>
+            Query: <Bold>{process.env.NEXT_PUBLIC_MEASUREMENTS_URL}/api/aggregation?{paramsToQuery(params)}</Bold>
           </Box>
           <Box>
             {React.Children.only(children)}

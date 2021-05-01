@@ -16,7 +16,7 @@ import { StackedBarChart } from '../../components/aggregation/mat/Charts'
 import { Form } from '../../components/aggregation/mat/Form'
 import { axiosResponseTime } from '../../components/axios-plugins'
 
-const baseURL = process.env.MEASUREMENTS_URL
+const baseURL = process.env.NEXT_PUBLIC_MEASUREMENTS_URL
 axiosResponseTime(axios)
 
 export const getServerSideProps = async () => {

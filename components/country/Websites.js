@@ -29,7 +29,7 @@ class WebsitesSection extends React.Component {
 
   async componentDidMount() {
     const { countryCode } = this.props
-    const client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
+    const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
     const result = await client.get('/api/_/website_networks', {
       params: {
         probe_cc: countryCode

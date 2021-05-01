@@ -164,7 +164,7 @@ class Countries extends React.Component {
   }
 
   static async getInitialProps () {
-    const client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
+    const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
     const result = await client.get('/api/_/countries')
 
     // Sort countries by name (instead of by country codes)
