@@ -229,7 +229,7 @@ export default class LandingPage extends React.Component {
               <FormattedMessage id='Home.Search&Filter.SummaryText' />
             </FeatureBox>
             <FeatureBox>
-              <ImgBox src='/static/images/searchUpdated.png' alt='Search and Filter' />
+              <ImgBox src='/static/images/search.png' alt='Search and Filter' />
             </FeatureBox>
           </FeatureRow>
           {/* Network Properties */}
