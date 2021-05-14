@@ -21,9 +21,8 @@ import Flag from '../Flag'
 
 const StyledResultTag = styled.div`
   border-radius: 16px;
-  padding: 8px 16px;
-  height: 32px;
-  line-height: 1;
+  padding: 4px 8px;
+  font-size: 12px;
 `
 
 const ResultTagFilled = styled(StyledResultTag)`
@@ -294,7 +293,7 @@ const ResultItem = ({
   anomaly,
   failure
 }) => {
-  const pathMaxLen = 8
+  const pathMaxLen = 10
   let inputLabel = input
   if (input) {
     const p = url.parse(input)
@@ -307,7 +306,7 @@ const ResultItem = ({
       }
 
       // Truncate the domain to ${domainMaxLen}
-      const domainMaxLen = 23
+      const domainMaxLen = 25
       if (p.host && p.host.length > domainMaxLen) {
         p.host = `${p.host.substr(0, domainMaxLen)}…`
       }
