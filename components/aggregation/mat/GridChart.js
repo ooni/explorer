@@ -1,20 +1,11 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
-import RowChart from './RowChart'
 import { Container, Box, Flex } from 'ooni-components'
 
-// import { getHeatMapData } from './HeatMapChart'
+import RowChart from './RowChart'
+import { useDebugContext } from '../DebugContext'
 
 const reshapeData = (data, query) => {
-  /*
-  indexBy = $xAxis
-  keys = [']
-  [
-    {
-
-    }
-  ]
-  */
   const rows = data.reduce((rows, item) => rows.add(item[query.axis_y]), new Set())
 
   const keys = [
@@ -29,7 +20,6 @@ const reshapeData = (data, query) => {
   const reducedData = []
 
   for (const [row] of rows.entries()) {
-    // console.log(row)
     reducedData.push((data.filter(item => item[query.axis_y] === row)))
   }
 
@@ -41,17 +31,25 @@ const reshapeData = (data, query) => {
 }
 
 const GridChart = ({ data, query }) => {
+  const [reshapeTime, setReshapeTime] = useState(0)
+  const { addToDebug } = useDebugContext()
+
   const [keys, reshapedData, indexBy] = useMemo(() => {
-    return reshapeData(data, query)
+    const tBeforeReshape = Date.now()
+    const reshapedData = reshapeData(data, query)
+    const tAfterReshape = Date.now()
+    setReshapeTime(tAfterReshape - tBeforeReshape)
+    return reshapedData
   }, [data, query])
 
-  // console.log(keys, indexBy)
-  // console.log(reshapedData)
+  useEffect(() => {
+    console.log(`reshapeTime changed?: ${reshapeTime}`)
+    addToDebug({ reshapeTime: `${reshapeTime}ms`})
+  }, [reshapeTime])
 
   return (
     <Container>
       <Flex flexDirection='column'>
-        <Box> Size: {data.length} </Box>
         {reshapedData.map((item, index) => (
           <RowChart key={index} data={item} keys={keys} indexBy={indexBy} label={{
             key: query.axis_y,

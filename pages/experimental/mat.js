@@ -1,5 +1,5 @@
 /* global process */
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 import { useRouter } from  'next/router'
@@ -15,10 +15,11 @@ import Layout from '../../components/Layout'
 import NavBar from '../../components/NavBar'
 import { StackedBarChart } from '../../components/aggregation/mat/StackedBarChart'
 import { FunnelChart } from '../../components/aggregation/mat/FunnelChart'
-import { HeatmapChart } from '../../components/aggregation/mat/HeatMapChart'
 import { GridChart } from '../../components/aggregation/mat/GridChart'
 import { Form } from '../../components/aggregation/mat/Form'
 import { axiosResponseTime } from '../../components/axios-plugins'
+import { DebugProvider, useDebugContext } from '../../components/aggregation/DebugContext'
+import { Debug } from '../../components/aggregation/website/Debug'
 
 const baseURL = process.env.NEXT_PUBLIC_MEASUREMENTS_URL
 axiosResponseTime(axios)
@@ -55,10 +56,10 @@ const fetcher = (query) => {
   })
 }
 
-
 const MeasurementAggregationToolkit = ({ testNames }) => {
 
   const router = useRouter()
+  const { debugQuery } = useDebugContext()
 
   const onSubmit = useCallback((data) => {
     let params = {}
@@ -84,35 +85,11 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
     swrOptions
   )
 
-  const chartMeta = useMemo(() => {
-    // TODO Move charting related transformations to Charts.js
-    if (data) {
-      let cols = [
-        'anomaly_count',
-        'confirmed_count',
-        'failure_count',
-        'ok_count',
-      ]
-      let indexBy = ''
-      cols.push(query['axis_x'])
-      indexBy = query['axis_x']
-      let reshapedData = Array.isArray(data.data.result) ? data.data.result.map(d => {
-        d['anomaly_count'] = d.anomaly_count - d.confirmed_count
-        d['ok_count'] = d.measurement_count - d.confirmed_count - d.anomaly_count - d.failure_count
-        return d
-      }) : data.data.result
-      return {
-        data: reshapedData,
-        dimensionCount: data.data.dimension_count,
-        url: data.url,
-        loadTime: data.loadTime,
-        cols,
-        indexBy
-      }
-    } else {
-      return null
-    }
+  useEffect(() => {
+    debugQuery({query, apiResponse: data})
   }, [data, query])
+
+  const showLoadingIndicator = useMemo(() => isValidating)
 
   return (
     <Layout>
@@ -123,38 +100,31 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
       <Container>
         <Heading h={1} my={4} title='This is an experimental feature still undergoing development.'> 🧪 OONI Measurement Aggregation Toolkit</Heading>
         <Form onSubmit={onSubmit} testNames={testNames} query={router.query} />
+        <Debug query={query} />
         <Flex flexDirection='column'>
-          {isValidating &&
+          {showLoadingIndicator &&
             <Box>
               <h2>Loading ...</h2>
             </Box>
           }
-          {chartMeta && chartMeta.dimensionCount == 0 &&
+          {data && data.data.dimension_count == 0 &&
             <Box style={{height: '50vh'}}>
               <FunnelChart data={data.data.result} />
               <pre>{JSON.stringify(data.data.result, null, 2)}</pre>
             </Box>
           }
-          {chartMeta && chartMeta.dimensionCount == 1 &&
+          {data && data.data.dimension_count == 1 &&
             <Box style={{height: '50vh'}}>
               <StackedBarChart data={data} query={query} />
             </Box>
           }
-          {chartMeta && chartMeta.dimensionCount > 1 &&
+          {data && data.data.dimension_count > 1 &&
             <Flex flexDirection='column'>
               <Box>
-                {/* <HeatmapChart data={data.data.result} query={query} /> */}
                 <GridChart data={data.data.result} query={query} />
               </Box>
             </Flex>
           }
-          <Box>
-            {chartMeta && chartMeta.url}
-            {chartMeta && ` (dimensions: ${chartMeta.dimensionCount})`}
-          </Box>
-          <Box>
-            {/* loadTime && <span>Load time: {loadTime} ms</span> */}
-          </Box>
           {error && <Box>
             <Heading h={5} my={4}>Error</Heading>
             <pre>{JSON.stringify(error, null, 2)}</pre>
@@ -174,4 +144,12 @@ MeasurementAggregationToolkit.propTypes = {
   )
 }
 
-export default MeasurementAggregationToolkit
+function DebuggableMAT({ testNames }) {
+  return (
+    <DebugProvider>
+      <MeasurementAggregationToolkit testNames={testNames} />
+    </DebugProvider>
+  )
+}
+
+export default DebuggableMAT
