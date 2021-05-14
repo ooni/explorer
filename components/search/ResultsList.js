@@ -21,9 +21,8 @@ import Flag from '../Flag'
 
 const StyledResultTag = styled.div`
   border-radius: 16px;
-  padding: 8px 16px;
-  height: 32px;
-  line-height: 1;
+  padding: 4px 8px;
+  font-size: 12px;
 `
 
 const ResultTagFilled = styled(StyledResultTag)`
@@ -237,6 +236,7 @@ const getIndicators = ({ test_name, testDisplayName, scores = {}, confirmed, ano
 
     const testName = testDisplayName.replace(/ /gi, '')
     const computedMessageIdPrefix = `Search.${testName}.Results`
+    const blockingType = scores.analysis && scores.analysis.blocking_type;
 
     if (confirmed === true) {
       color = colorConfirmed
@@ -254,6 +254,13 @@ const getIndicators = ({ test_name, testDisplayName, scores = {}, confirmed, ano
         </ResultTagHollow>
       )
     */
+    } else if (blockingType !== undefined) {
+      color = colorAnomaly
+      tag = (
+        <ResultTagHollow>
+          {blockingType}
+        </ResultTagHollow>
+      )
     } else if (anomaly === true) {
       color = colorAnomaly
       tag = (
