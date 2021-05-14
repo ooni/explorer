@@ -237,6 +237,7 @@ const getIndicators = ({ test_name, testDisplayName, scores = {}, confirmed, ano
 
     const testName = testDisplayName.replace(/ /gi, '')
     const computedMessageIdPrefix = `Search.${testName}.Results`
+    const blockingType = scores.analysis && scores.analysis.blocking_type;
 
     if (confirmed === true) {
       color = colorConfirmed
@@ -254,6 +255,13 @@ const getIndicators = ({ test_name, testDisplayName, scores = {}, confirmed, ano
         </ResultTagHollow>
       )
     */
+    } else if (blockingType !== undefined) {
+      color = colorAnomaly
+      tag = (
+        <ResultTagHollow>
+          {blockingType}
+        </ResultTagHollow>
+      )
     } else if (anomaly === true) {
       color = colorAnomaly
       tag = (
@@ -286,7 +294,7 @@ const ResultItem = ({
   anomaly,
   failure
 }) => {
-  const pathMaxLen = 10
+  const pathMaxLen = 8
   let inputLabel = input
   if (input) {
     const p = url.parse(input)
@@ -299,7 +307,7 @@ const ResultItem = ({
       }
 
       // Truncate the domain to ${domainMaxLen}
-      const domainMaxLen = 25
+      const domainMaxLen = 23
       if (p.host && p.host.length > domainMaxLen) {
         p.host = `${p.host.substr(0, domainMaxLen)}…`
       }
