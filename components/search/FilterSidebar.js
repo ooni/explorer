@@ -105,6 +105,7 @@ const testsWithAnomalyStatus = [
   'web_connectivity',
   'telegram',
   'facebook_messenger',
+  'whatsapp',
   'http_header_field_manipulation',
   'http_invalid_request_line',
   'psiphon',
