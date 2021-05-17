@@ -9,14 +9,6 @@ process.env.NODE_ENV = process.env.NODE_ENV || 'production'
 process.env.PORT = process.env.PORT || 3100
 
 const dev = process.env.NODE_ENV === 'development'
-if (dev === true) {
-  process.env.MEASUREMENTS_URL = process.env.MEASUREMENTS_URL || 'http://127.0.0.1:' + process.env.PORT
-} else {
-  process.env.MEASUREMENTS_URL = process.env.MEASUREMENTS_URL || 'https://api.ooni.io'
-}
-if (!process.env.EXPLORER_URL) {
-  process.env.EXPLORER_URL = 'http://127.0.0.1:' + process.env.PORT
-}
 
 const app = next({ dir: '.', dev })
 const handle = app.getRequestHandler()

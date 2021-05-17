@@ -56,7 +56,7 @@ export default class Country extends React.Component {
     }
 
 
-    let client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
+    let client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
     let results = await Promise.all([
       // XXX cc @darkk we should ideally have better dedicated daily dumps for this view
       client.get('/api/_/test_coverage', {params: {'probe_cc': countryCode}}),
@@ -88,7 +88,7 @@ export default class Country extends React.Component {
   }
 
   async fetchTestCoverageData(testGroupList) {
-    let client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
+    let client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
     const result = await client.get('/api/_/test_coverage', {
       params: {
         'probe_cc': this.props.countryCode,

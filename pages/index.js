@@ -136,7 +136,7 @@ const StyledContainer = styled(Container)`
 export default class LandingPage extends React.Component {
 
   static async getInitialProps () {
-    const client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
+    const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
     const result = await client.get('/api/_/global_overview')
     return {
       measurementCount: result.data.measurement_count,

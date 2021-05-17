@@ -17,7 +17,7 @@ const MeasurementNotFound = () => {
           <Box width={1/2}>
             <Heading h={4}>Measurement Not Found</Heading>
             <Text color='gray8'>
-              {`${process.env.EXPLORER_URL}${asPath}`}
+              {`${process.env.NEXT_PUBLIC_EXPLORER_URL}${asPath}`}
             </Text>
           </Box>
         </Flex>

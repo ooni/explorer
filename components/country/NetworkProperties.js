@@ -53,7 +53,7 @@ class NetworkPropertiesSection extends React.Component {
   async fetchNetworkStats() {
     const { countryCode } = this.props
     const { currentPage } = this.state
-    const client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
+    const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
     const result = await client.get('/api/_/network_stats', {
       params: {
         probe_cc: countryCode,

@@ -57,7 +57,7 @@ const CommonDetails = ({
 
   const { query } = useRouter()
   const queryString = new URLSearchParams(query)
-  const rawMsmtDownloadURL = `${process.env.MEASUREMENTS_URL}/api/v1/raw_measurement?${queryString}`
+  const rawMsmtDownloadURL = `${process.env.NEXT_PUBLIC_MEASUREMENTS_URL}/api/v1/raw_measurement?${queryString}`
   const [collapsed, setCollapsed] = useState(1)
 
   const intl = useIntl()

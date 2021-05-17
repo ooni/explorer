@@ -44,7 +44,7 @@ class TestsByCategoryInNetwork extends React.Component {
   async fetchUrlsInNetwork() {
     const { network, countryCode } = this.props
     const { resultsPerPage, currentPage } = this.state
-    const client = axios.create({baseURL: process.env.MEASUREMENTS_URL}) // eslint-disable-line
+    const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
     const result = await client.get('/api/_/website_urls', {
       params: {
         probe_cc: countryCode,
