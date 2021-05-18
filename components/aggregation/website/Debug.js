@@ -1,7 +1,6 @@
 /* global process */
 import React from 'react'
 import { Flex, Heading, Box, Text } from 'ooni-components'
-import { useRouter } from 'next/router'
 
 import { queryToParams, paramsToQuery } from '../../../components/aggregation/website/queryUtils'
 import { DetailsBox } from '../../measurement/DetailsBox'
@@ -14,24 +13,22 @@ const Bold = ({ children }) => (
 )
 
 export const Debug = ({ query, children }) => {
-  const { debuggable } = useDebugContext()
+  const { queryCtx, apiResponse, others, preReshapeTimeRef, reshapeTimeRef, renderTimeRef} = useDebugContext()
 
-  const { query: queryCtx, params } = debuggable
+  let params = {}
 
-  let _params
-
-  if (typeof params === 'string') {
-    _params = queryToParams(params)
-  } else if (query || queryCtx) {
-    _params = queryToParams(query !== undefined ? query : queryCtx)
-  } else {
-    _params = params
+  if (query || queryCtx) {
+    params = queryToParams(query !== undefined ? query : queryCtx)
   }
 
-  const { input, since, until, probe_cc, axis_x, axis_y } = _params
+  const { input, since, until, probe_cc, axis_x, axis_y } = params
+
+  const reshapeTime = (reshapeTimeRef.current > -1) ? Number(reshapeTimeRef.current - preReshapeTimeRef.current).toFixed(3) : undefined
+  const renderTime = (renderTimeRef.current > -1) ? Number(renderTimeRef.current - reshapeTimeRef.current).toFixed(3) : undefined
+
   return (
     <Flex color='gray6' my={3}>
-      <DetailsBox collapsed title='Debugging Information' content={
+      <DetailsBox title='Debugging Information' content={
         <>
           <Heading h={4}>
             Statistics {
@@ -53,18 +50,22 @@ export const Debug = ({ query, children }) => {
             </Box>
           </Flex>
           <Box my={2}>
-            API Query: <Bold>{process.env.NEXT_PUBLIC_MEASUREMENTS_URL}/api/aggregation?{paramsToQuery(_params)}</Bold>
+            API Query: <Bold>{process.env.NEXT_PUBLIC_MEASUREMENTS_URL}/api/aggregation?{paramsToQuery(params)}</Bold>
           </Box>
           <Box>
-            Response Time: {debuggable.apiResponse?.loadTime ?? '...'}ms
             <details>
-              <summary> API Response ({debuggable.apiResponse?.data?.result?.length})</summary>
-              <pre> { JSON.stringify(debuggable.apiResponse?.data, null, 2)} </pre>
+              <summary> API Response ({apiResponse?.data?.result?.length} items)</summary>
+              <pre> { JSON.stringify(apiResponse?.data, null, 2)} </pre>
             </details>
           </Box>
-          <Box my={3} as='pre'>
-            {JSON.stringify(debuggable.others, null, 2)}
+          <Box>
+            <div>Response Time: {apiResponse?.loadTime ?? '...'}ms</div>
+            <div>Reshape Time: {reshapeTime ?? '...'}ms</div>
+            <div>Render Time: {renderTime ?? '...'}ms</div>
           </Box>
+          {others && <Box my={3} as='pre'>
+            {JSON.stringify(others, null, 2)}
+          </Box>}
           <Box>
             {children}
           </Box>

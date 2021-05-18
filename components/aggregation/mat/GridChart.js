@@ -1,6 +1,6 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
-import { Container, Box, Flex } from 'ooni-components'
+import { Container, Flex } from 'ooni-components'
 
 import RowChart from './RowChart'
 import { useDebugContext } from '../DebugContext'
@@ -31,21 +31,19 @@ const reshapeData = (data, query) => {
 }
 
 const GridChart = ({ data, query }) => {
-  const [reshapeTime, setReshapeTime] = useState(0)
-  const { addToDebug } = useDebugContext()
+  const { doneReshaping, doneRendering } = useDebugContext()
 
   const [keys, reshapedData, indexBy] = useMemo(() => {
-    const tBeforeReshape = Date.now()
+    const t0 = performance.now()
     const reshapedData = reshapeData(data, query)
-    const tAfterReshape = Date.now()
-    setReshapeTime(tAfterReshape - tBeforeReshape)
+    const t1 = performance.now()
+    doneReshaping(t0, t1)
     return reshapedData
   }, [data, query])
 
   useEffect(() => {
-    console.log(`reshapeTime changed?: ${reshapeTime}`)
-    addToDebug({ reshapeTime: `${reshapeTime}ms`})
-  }, [reshapeTime])
+    doneRendering(performance.now())
+  })
 
   return (
     <Container>

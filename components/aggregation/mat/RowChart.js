@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Box } from 'ooni-components'
-import { Bar, ResponsiveBar } from '@nivo/bar'
+import { Bar } from '@nivo/bar'
 
 const RowChart = ({ data, keys, indexBy, label }) => {
   return (

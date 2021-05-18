@@ -59,7 +59,7 @@ const fetcher = (query) => {
 const MeasurementAggregationToolkit = ({ testNames }) => {
 
   const router = useRouter()
-  const { debugQuery } = useDebugContext()
+  const { debugQuery, debugApiResponse, doneRendering } = useDebugContext()
 
   const onSubmit = useCallback((data) => {
     let params = {}
@@ -86,10 +86,15 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
   )
 
   useEffect(() => {
-    debugQuery({query, apiResponse: data})
+    debugQuery(query)
+    debugApiResponse(data)
   }, [data, query])
 
   const showLoadingIndicator = useMemo(() => isValidating)
+
+  useEffect(() => {
+    doneRendering(performance.now())
+  })
 
   return (
     <Layout>
