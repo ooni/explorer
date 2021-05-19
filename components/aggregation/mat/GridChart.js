@@ -1,16 +1,31 @@
 import React, { useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
-import { Container, Flex } from 'ooni-components'
+import { Container } from 'ooni-components'
+import { FixedSizeList as List } from 'react-window'
 
 import RowChart from './RowChart'
 import { useDebugContext } from '../DebugContext'
 
-const keys = [
-  'anomaly_count',
-  'confirmed_count',
-  'failure_count',
-  'ok_count',
-]
+// all props are passed by the List component
+const Row = ({ index, style, data }) => {
+  const { reshapedData, rows, indexBy, yAxis } = data
+  const rowKey = rows[index]
+  const rowData = reshapedData[rowKey]
+  // style is passed by the List component to give our Row the correct dimensions
+  return (
+    <div style={style} key={index}>
+      <RowChart
+        key={index}
+        data={rowData}
+        indexBy={indexBy}
+        label={{
+          key: yAxis,
+          value: rowKey
+        }}
+      />
+    </div>
+  )
+}
 
 const reshapeData = (data, query) => {
   const reshapedData = {}
@@ -45,14 +60,15 @@ const GridChart = ({ data, query }) => {
 
   return (
     <Container>
-      <Flex flexDirection='column'>
-        {rows.map((row, index) => (
-          <RowChart key={index} data={reshapedData[row]} keys={keys} indexBy={query.axis_x} label={{
-            key: query.axis_y,
-            value: row
-          }} />
-        ))}
-      </Flex>
+      <List
+        height={800}
+        width={'100%'}
+        itemCount={rows.length}
+        itemSize={250}
+        itemData={{reshapedData, rows, indexBy: query.axis_x, yAxis: query.axis_y}}
+      >
+        {Row}
+      </List>
     </Container>
   )
 }

@@ -3,6 +3,13 @@ import PropTypes from 'prop-types'
 import { Box } from 'ooni-components'
 import { Bar } from '@nivo/bar'
 
+const keys = [
+  'anomaly_count',
+  'confirmed_count',
+  'failure_count',
+  'ok_count',
+]
+
 const colorMap = {
   'confirmed_count': '#f03e3e', // red7,
   'anomaly_count': '#fab005', // yellow6
@@ -12,9 +19,9 @@ const colorMap = {
 
 const colorFunc = (d) => colorMap[d.id] || '#ccc'
 
-const RowChart = ({ data, keys, indexBy, label }) => {
+const RowChart = ({ data, index, style, indexBy, label }) => {
   return (
-    <Box p={3} sx={{ }}>
+    <Box p={3} style={style}>
       {`${label.key}: ${label.value}`}
       <Bar
         width={960}
@@ -43,7 +50,7 @@ const RowChart = ({ data, keys, indexBy, label }) => {
         labelSkipHeight={100}
         labelTextColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
         legends={[]}
-        animate={true}
+        animate={false}
         motionStiffness={90}
         motionDamping={15}
       />
