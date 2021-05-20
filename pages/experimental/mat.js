@@ -19,7 +19,7 @@ import { GridChart } from '../../components/aggregation/mat/GridChart'
 import { Form } from '../../components/aggregation/mat/Form'
 import { axiosResponseTime } from '../../components/axios-plugins'
 import { DebugProvider, useDebugContext } from '../../components/aggregation/DebugContext'
-import { Debug } from '../../components/aggregation/website/Debug'
+import { Debug } from '../../components/aggregation/Debug'
 
 const baseURL = process.env.NEXT_PUBLIC_MEASUREMENTS_URL
 axiosResponseTime(axios)
@@ -41,7 +41,7 @@ export const getServerSideProps = async () => {
 
 const swrOptions = {
   revalidateOnFocus: false,
-  // dedupingInterval: 10 * 60 * 1000,
+  dedupingInterval: 10 * 60 * 1000,
 }
 
 const fetcher = (query) => {
@@ -103,33 +103,27 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
       </Head>
       <NavBar />
       <Container>
-        <Heading h={1} my={4} title='This is an experimental feature still undergoing development.'> 🧪 OONI Measurement Aggregation Toolkit</Heading>
-        <Form onSubmit={onSubmit} testNames={testNames} query={router.query} />
-        <Debug query={query} />
         <Flex flexDirection='column'>
-          {showLoadingIndicator &&
-            <Box>
-              <h2>Loading ...</h2>
-            </Box>
-          }
-          {data && data.data.dimension_count == 0 &&
-            <Box style={{height: '50vh'}}>
-              <FunnelChart data={data.data.result} />
-              <pre>{JSON.stringify(data.data.result, null, 2)}</pre>
-            </Box>
-          }
-          {data && data.data.dimension_count == 1 &&
-            <Box style={{height: '50vh'}}>
-              <StackedBarChart data={data} query={query} />
-            </Box>
-          }
-          {data && data.data.dimension_count > 1 &&
-            <Flex flexDirection='column'>
+          <Heading h={1} my={4} title='This is an experimental feature still undergoing development.'> 🧪 OONI Measurement Aggregation Toolkit</Heading>
+          <Form onSubmit={onSubmit} testNames={testNames} query={router.query} />
+          <Debug query={query} />
+          <Box sx={{ height: '90vh' }}>
+            {showLoadingIndicator &&
               <Box>
-                <GridChart data={data.data.result} query={query} />
+                <h2>Loading ...</h2>
               </Box>
-            </Flex>
-          }
+            }
+            {data && data.data.dimension_count == 0 &&
+              <FunnelChart data={data.data.result} />
+            }
+            {data && data.data.dimension_count == 1 &&
+              <StackedBarChart data={data} query={query} />
+            }
+            {data && data.data.dimension_count > 1 &&
+              <GridChart data={data.data.result} query={query} />
+            }
+          </Box>
+
           {error && <Box>
             <Heading h={5} my={4}>Error</Heading>
             <pre>{JSON.stringify(error, null, 2)}</pre>

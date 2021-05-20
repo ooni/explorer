@@ -46,6 +46,7 @@
     "react-portal-tooltip": "^2.4.7",
     "react-sticky": "^6.0.3",
     "react-table": "^7.0.0-rc.15",
+    "react-virtualized-auto-sizer": "^1.0.5",
     "react-window": "^1.8.6",
     "rebass": "4.0.7",
     "sentry-testkit": "^2.2.0",

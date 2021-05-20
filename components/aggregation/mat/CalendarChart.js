@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ResponsiveCalendar } from '@nivo/calendar'
-import { Flex, Box, Select } from 'ooni-components'
+import { Select } from 'ooni-components'
 import useSWR from 'swr'
 
 // TODO adapt to axios
@@ -11,7 +11,7 @@ const toDate = '2020-05-31'
 const URL = `https://api.ooni.io/api/v1/aggregation?probe_cc=BR&since=${fromDate}&until=${toDate}&axis_x=measurement_start_day`
 
 export const Calendar = () => {
-  const { data, error } = useSWR(URL, fetcher)
+  const { data } = useSWR(URL, fetcher)
   const [dataX, setDataX ] = useState([])
 
   const transformData = () => {

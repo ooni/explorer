@@ -1,6 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Box } from 'ooni-components'
+import { Box, Flex } from 'ooni-components'
 import { Bar } from '@nivo/bar'
 
 const keys = [
@@ -19,43 +19,46 @@ const colorMap = {
 
 const colorFunc = (d) => colorMap[d.id] || '#ccc'
 
-const RowChart = ({ data, index, style, indexBy, label }) => {
+const RowChart = ({ data, indexBy, label, height, /* width, first, last */}) => {
   return (
-    <Box p={3} style={style}>
-      {`${label.key}: ${label.value}`}
-      <Bar
-        width={960}
-        height={130}
-        data={data}
-        keys={keys}
-        indexBy={indexBy}
-        margin={{ top: 10, right: 0, bottom: 60, left: 80 }}
-        padding={0.3}
-        borderColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
-        colors={colorFunc}
-        axisTop={null}
-        axisRight={null}
-        xScale={{ type: 'time' }}
-        axisBottom={{
-          tickSize: 5,
-          tickRotation: 45,
-          format: value => value
-        }}
-        axisLeft={{
-          tickSize: 5,
-          tickPadding: 5,
-          tickValues: 2
-        }}
-        labelSkipWidth={100}
-        labelSkipHeight={100}
-        labelTextColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
-        legends={[]}
-        animate={false}
-        motionStiffness={90}
-        motionDamping={15}
-      />
+    <Flex alignItems='center'>
+      <Box width={2/16}>
+        {label}
+      </Box>
+      <Box>
+        <Bar
+          data={data}
+          keys={keys}
+          indexBy={indexBy}
+          // NOTE: These dimensions are linked to accuracy of the custom axes rendered in
+          // <GridChart />
+          width={1000}
+          height={height}
+          margin={{ top: 4, right: 40, bottom: 4, left: 0 }}
+          padding={0.3}
+          borderColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
+          colors={colorFunc}
+          axisTop={null}
+          axisRight={{
+            enable: true,
+            tickSize: 5,
+            tickPadding: 5,
+            tickValues: 2
+          }}
+          xScale={{ type: 'time' }}
+          axisBottom={null}
+          axisLeft={null}
+          labelSkipWidth={100}
+          labelSkipHeight={100}
+          labelTextColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
+          legends={[]}
+          animate={false}
+          motionStiffness={90}
+          motionDamping={15}
+        />
 
-    </Box>
+      </Box>
+    </Flex>
   )
 }
 RowChart.propTypes = {
@@ -67,7 +70,10 @@ RowChart.propTypes = {
     measurement_count: PropTypes.number,
     measurement_start_day: PropTypes.string,
     ok_count: PropTypes.number,
-  }))
+  })),
+  height: PropTypes.number,
+  indexBy: PropTypes.string,
+  label: PropTypes.element,
 }
 
 export default RowChart

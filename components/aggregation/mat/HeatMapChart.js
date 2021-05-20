@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { HeatMap } from '@nivo/heatmap'
 import { Box, Heading } from 'ooni-components'
 
-import { Debug } from '../website/Debug'
+import { Debug } from '../Debug'
 import {
   colorNormal,
   colorAnomaly,

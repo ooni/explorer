@@ -1,10 +1,11 @@
 /* global process */
 import React from 'react'
+import PropTypes from 'prop-types'
 import { Flex, Heading, Box, Text } from 'ooni-components'
 
-import { queryToParams, paramsToQuery } from '../../../components/aggregation/website/queryUtils'
-import { DetailsBox } from '../../measurement/DetailsBox'
-import { useDebugContext } from '../DebugContext'
+import { queryToParams, paramsToQuery } from './website/queryUtils'
+import { DetailsBox } from '../measurement/DetailsBox'
+import { useDebugContext } from './DebugContext'
 
 const Bold = ({ children }) => (
   <Text as='span' fontWeight='bold' color='gray8'>
@@ -12,8 +13,12 @@ const Bold = ({ children }) => (
   </Text>
 )
 
+Bold.propTypes = {
+  children: PropTypes.any,
+}
+
 export const Debug = ({ query, children }) => {
-  const { queryCtx, apiResponse, others, preReshapeTimeRef, reshapeTimeRef, renderTimeRef} = useDebugContext()
+  const { query: queryCtx, apiResponse, others, preReshapeTimeRef, reshapeTimeRef, renderTimeRef} = useDebugContext()
 
   let params = {}
 
@@ -73,4 +78,9 @@ export const Debug = ({ query, children }) => {
       } />
     </Flex>
   )
+}
+
+Debug.propTypes = {
+  children: PropTypes.any,
+  query: PropTypes.object,
 }

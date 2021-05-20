@@ -63,7 +63,7 @@ export const StackedBarChart = ({ data, query }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 45,
-        legend: 'day',
+        legend: 'measurement date',
         legendPosition: 'start',
         legendOffset: 32
       }}
@@ -75,8 +75,8 @@ export const StackedBarChart = ({ data, query }) => {
         legendPosition: 'middle',
         legendOffset: -60
       }}
-      labelSkipWidth={12}
-      labelSkipHeight={12}
+      labelSkipWidth={80}
+      labelSkipHeight={20}
       labelTextColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
       legends={[
         {

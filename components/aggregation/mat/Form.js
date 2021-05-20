@@ -9,7 +9,7 @@ import {
 import { countryList } from 'country-util'
 import moment from 'moment'
 
-import categoryCodes from './category_codes.json'
+import { categoryCodes } from '../../utils/categoryCodes'
 import DatePicker from '../../DatePicker'
 
 const StyledLabel = styled(Label).attrs({
@@ -180,7 +180,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             )}
           />
         </Box>
-        <Box>
+        <Box width={1/5}>
           <StyledLabel>
             Category Codes
           </StyledLabel>
@@ -190,8 +190,8 @@ export const Form = ({ onSubmit, testNames, query }) => {
             control={control}
           >
             <option value="">ALL</option>
-            {categoryCodes.map((code, idx) => (
-              <option key={idx} value={code}>{code}</option>
+            {categoryCodes.map(([code, label], idx) => (
+              <option key={idx} value={code}>{label}</option>
             ))}
           </Controller>
         </Box>
@@ -224,9 +224,10 @@ export const Form = ({ onSubmit, testNames, query }) => {
           </Controller>
         </Box>
       </Flex>
-      <Box width={1/3} my={4}>
-        <Button type='submit' fontSize={2}>Submit</Button>
-      </Box>
+      <Flex my={4}>
+        <Button type='submit'>Submit</Button>
+      </Flex>
+
     </form>
   )
 }
