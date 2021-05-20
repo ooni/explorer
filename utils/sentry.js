@@ -8,7 +8,7 @@ const SentryIntegrations = require('@sentry/integrations')
 
 module.exports = () => {
   const sentryOptions = {
-    dsn: process.env.SENTRY_DSN,
+    dsn: process.env.NEXT_PUBLIC_SENTRY_DSN,
     maxBreadcrumbs: 50,
     attachStacktrace: true
   }
