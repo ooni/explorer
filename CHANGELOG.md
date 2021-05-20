@@ -1,5 +1,17 @@
 # Changelog
 
+## [2.6.1] - 2021-05-20
+
+### Added
+
+- Enable anomaly search for Signal tests (#592)
+- Link to github repo in footer (#592)
+
+### Fixed
+
+- Fixed broken feedback dialog (#592)
+
+
 ## [2.6.0] - 2021-05-17
 
 ### Added
