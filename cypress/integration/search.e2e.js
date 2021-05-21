@@ -1,5 +1,3 @@
-/* global describe, it, cy, before, Cypress, expect */
-
 describe('Seearch Page Tests', () => {
 
   before(() => {
