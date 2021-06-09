@@ -1,7 +1,7 @@
 /* global process */
 
 import React from 'react'
-import { Flex, Box, Text, Heading } from 'ooni-components'
+import { Flex, Box, Text } from 'ooni-components'
 import { VictoryChart, VictoryStack, VictoryBar, VictoryAxis, VictoryLabel, VictoryTooltip, VictoryVoronoiContainer } from 'victory'
 import { theme } from 'ooni-components'
 import useSWR from 'swr'
@@ -9,7 +9,7 @@ import countryUtil from 'country-util'
 import styled from 'styled-components'
 
 // import wdata from './website-data'  // static data for offline mode
-import { Debug } from './Debug'
+import { Debug } from '../Debug'
 import { paramsToQuery } from './queryUtils'
 import VictoryTheme from '../../VictoryTheme'
 import WebsiteStatsChartLoader from './ChartLoader'

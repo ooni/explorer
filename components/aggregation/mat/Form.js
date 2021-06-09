@@ -9,14 +9,13 @@ import {
 import { countryList } from 'country-util'
 import moment from 'moment'
 
-import categoryCodes from './category_codes.json'
+import { categoryCodes } from '../../utils/categoryCodes'
 import DatePicker from '../../DatePicker'
 
 const StyledLabel = styled(Label).attrs({
   my: 2,
   color: 'blue5',
 })`
-  text:
 `
 
 const optionsAxis = [
@@ -48,6 +47,9 @@ export const Form = ({ onSubmit, testNames, query }) => {
   const { handleSubmit, control, getValues } = useForm({
     defaultValues
   })
+  const sortedCountries = countryList
+    .sort((a,b) => (a.iso3166_name < b.iso3166_name) ? -1 : (a.iso3166_name > b.iso3166_name) ? 1 : 0)
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex my={2} alignItems='center'>
@@ -61,8 +63,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             control={control}
           >
             <option value=''>All Countries</option>
-            {countryList
-              .sort((a,b) => a.iso3166_name > b.iso3166_name)
+            {sortedCountries
               .map((c, idx) =>(
                 <option key={idx} value={c.iso3166_alpha2}>{c.iso3166_name}</option>
               ))
@@ -179,7 +180,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             )}
           />
         </Box>
-        <Box>
+        <Box width={1/5}>
           <StyledLabel>
             Category Codes
           </StyledLabel>
@@ -189,8 +190,8 @@ export const Form = ({ onSubmit, testNames, query }) => {
             control={control}
           >
             <option value="">ALL</option>
-            {categoryCodes.map((code, idx) => (
-              <option key={idx} value={code}>{code}</option>
+            {categoryCodes.map(([code, label], idx) => (
+              <option key={idx} value={code}>{label}</option>
             ))}
           </Controller>
         </Box>
@@ -223,14 +224,25 @@ export const Form = ({ onSubmit, testNames, query }) => {
           </Controller>
         </Box>
       </Flex>
-      <Box width={1/3} my={4}>
-        <Button type='submit' fontSize={2}>Submit</Button>
-      </Box>
+      <Flex my={4}>
+        <Button type='submit'>Submit</Button>
+      </Flex>
+
     </form>
   )
 }
 
 Form.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  testNames: PropTypes.array
+  testNames: PropTypes.array,
+  query: PropTypes.shape({
+    axis_x: PropTypes.string,
+    axis_y: PropTypes.string,
+    since: PropTypes.string,
+    until: PropTypes.string,
+    test_name: PropTypes.string,
+    input: PropTypes.string,
+    probe_cc: PropTypes.string,
+    category_code: PropTypes.string,
+  })
 }

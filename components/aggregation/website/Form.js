@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React, { useCallback } from 'react'
 import { Flex, Box, Input, Button, Label, Text } from 'ooni-components'
 import { useForm, Controller } from 'react-hook-form'
@@ -124,6 +125,11 @@ const Form = ({ onSubmit, initialValues }) => {
       </Flex>
     </form>
   )
+}
+
+Form.propTypes = {
+  initialValues: PropTypes.object,
+  onSubmit: PropTypes.func
 }
 
 export default Form

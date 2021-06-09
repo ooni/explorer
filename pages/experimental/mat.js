@@ -1,20 +1,25 @@
 /* global process */
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
+import PropTypes from 'prop-types'
 import Head from 'next/head'
 import { useRouter } from  'next/router'
 import axios from 'axios'
 import {
   Container,
   Heading,
-  Flex, Box, Text
+  Flex, Box,
 } from 'ooni-components'
 import useSWR from 'swr'
 
 import Layout from '../../components/Layout'
 import NavBar from '../../components/NavBar'
-import { StackedBarChart } from '../../components/aggregation/mat/Charts'
+import { StackedBarChart } from '../../components/aggregation/mat/StackedBarChart'
+import { FunnelChart } from '../../components/aggregation/mat/FunnelChart'
+import { GridChart } from '../../components/aggregation/mat/GridChart'
 import { Form } from '../../components/aggregation/mat/Form'
 import { axiosResponseTime } from '../../components/axios-plugins'
+import { DebugProvider, useDebugContext } from '../../components/aggregation/DebugContext'
+import { Debug } from '../../components/aggregation/Debug'
 
 const baseURL = process.env.NEXT_PUBLIC_MEASUREMENTS_URL
 axiosResponseTime(axios)
@@ -29,13 +34,14 @@ export const getServerSideProps = async () => {
     }
   } else {
     return {
-      testNames: []
+      props: { testNames: [] }
     }
   }
 }
 
 const swrOptions = {
   revalidateOnFocus: false,
+  dedupingInterval: 10 * 60 * 1000,
 }
 
 const fetcher = (query) => {
@@ -50,10 +56,10 @@ const fetcher = (query) => {
   })
 }
 
-
 const MeasurementAggregationToolkit = ({ testNames }) => {
 
   const router = useRouter()
+  const { debugQuery, debugApiResponse, doneRendering } = useDebugContext()
 
   const onSubmit = useCallback((data) => {
     let params = {}
@@ -79,34 +85,16 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
     swrOptions
   )
 
-  const chartMeta = useMemo(() => {
-    // TODO Move charting related transformations to Charts.js
-    if (data) {
-      let cols = [
-        'anomaly_count',
-        'confirmed_count',
-        'failure_count',
-        'ok_count',
-      ]
-      let indexBy = ''
-      cols.push(query['axis_x'])
-      indexBy = query['axis_x']
-      let reshapedData = data.data.result.map(d => {
-        d['ok_count'] = d.measurement_count - d.confirmed_count - d.anomaly_count
-        return d
-      })
-      return {
-        data: reshapedData,
-        dimensionCount: data.data.dimension_count,
-        url: data.url,
-        loadTime: data.loadTime,
-        cols,
-        indexBy
-      }
-    } else {
-      return null
-    }
+  useEffect(() => {
+    debugQuery(query)
+    debugApiResponse(data)
   }, [data, query])
+
+  const showLoadingIndicator = useMemo(() => isValidating)
+
+  useEffect(() => {
+    doneRendering(performance.now())
+  })
 
   return (
     <Layout>
@@ -115,39 +103,27 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
       </Head>
       <NavBar />
       <Container>
-        <Heading h={1} my={4} title='This is an experimental feature still undergoing development.'> 🧪 OONI Measurement Aggregation Toolkit</Heading>
-        <Form onSubmit={onSubmit} testNames={testNames} query={router.query} />
         <Flex flexDirection='column'>
-          {isValidating &&
-            <Box>
-              <h2>Loading ...</h2>
-            </Box>
-          }
-          {chartMeta && chartMeta.dimensionCount == 1 &&
-            <Box style={{height: '50vh'}}>
-              <StackedBarChart data={chartMeta.data} cols={chartMeta.cols} indexBy={chartMeta.indexBy} />
-            </Box>
-          }
-          {chartMeta && chartMeta.dimensionCount > 1 &&
-            <Flex alignItems='center' justifyContent='center' flexWrap='wrap'>
-              <Text fontSize={64}>🚧</Text>
-              <Heading h={3}  mx={4}>
-                Two dimensional charts coming soon.
-              </Heading>
-              <Text fontSize={64}>🚧</Text>
-              <br />
-              <Box width={1} style={{height: '30vh', 'overflow-y': 'scroll'}} >
-                <pre>{JSON.stringify(chartMeta, null, 2)}</pre>
+          <Heading h={1} my={4} title='This is an experimental feature still undergoing development.'> 🧪 OONI Measurement Aggregation Toolkit</Heading>
+          <Form onSubmit={onSubmit} testNames={testNames} query={router.query} />
+          <Debug query={query} />
+          <Box sx={{ height: '90vh' }}>
+            {showLoadingIndicator &&
+              <Box>
+                <h2>Loading ...</h2>
               </Box>
-            </Flex>
-          }
-          <Box>
-            {chartMeta && chartMeta.url}
-            {chartMeta && ` (dimensions: ${chartMeta.dimensionCount})`}
+            }
+            {data && data.data.dimension_count == 0 &&
+              <FunnelChart data={data.data.result} />
+            }
+            {data && data.data.dimension_count == 1 &&
+              <StackedBarChart data={data} query={query} />
+            }
+            {data && data.data.dimension_count > 1 &&
+              <GridChart data={data.data.result} query={query} />
+            }
           </Box>
-          <Box>
-            {/* loadTime && <span>Load time: {loadTime} ms</span> */}
-          </Box>
+
           {error && <Box>
             <Heading h={5} my={4}>Error</Heading>
             <pre>{JSON.stringify(error, null, 2)}</pre>
@@ -158,4 +134,21 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
   )
 }
 
-export default MeasurementAggregationToolkit
+MeasurementAggregationToolkit.propTypes = {
+  testNames: PropTypes.arrayOf(
+    PropTypes.shape({
+      id: PropTypes.string,
+      name: PropTypes.string
+    })
+  )
+}
+
+function DebuggableMAT({ testNames }) {
+  return (
+    <DebugProvider>
+      <MeasurementAggregationToolkit testNames={testNames} />
+    </DebugProvider>
+  )
+}
+
+export default DebuggableMAT
