@@ -76,7 +76,18 @@ const getRowLabel = (key, yAxis) => {
   }
 }
 
+function getDatesBetween(startDate, endDate) {
+  const dateArray = new Set()
+  var currentDate = startDate
+  while (currentDate <= endDate) {
+    dateArray.add(currentDate.toISOString().slice(0, 10))
+    currentDate.setDate(currentDate.getDate() + 1)
+  }
+  return dateArray
+}
+
 const reshapeData = (data, query) => {
+  const dateSet = getDatesBetween(new Date(query.since), new Date(query.until))
   const reshapedData = {}
   const rows = []
   const rowLabels = {}
@@ -91,6 +102,27 @@ const reshapeData = (data, query) => {
       rowLabels[key] = getRowLabel(key, query.axis_y)
     }
   })
+
+  for (const y in reshapedData) {
+    const datesInRow = new Set(reshapedData[y].map(i => i.measurement_start_day))
+    const missingDates = new Set(
+      [...dateSet].filter(x => !datesInRow.has(x))
+    )
+    // Add empty datapoints for dates where measurements are not available
+    for (let date of missingDates) {
+      reshapedData[y].push({
+        // use any (first) column data to popuplate yAxis value e.g `input` | `probe_cc`
+        // and then overwrite with zero-data for that missing date
+        ...reshapedData[y][0],
+        measurement_start_day: date,
+        anomaly_count: 0,
+        confirmed_count: 0,
+        failure_count: 0,
+        measurement_count: 0,
+        ok_count: 0,
+      })
+    }
+  }
   return [reshapedData, rows, rowLabels]
 }
 
