@@ -106,7 +106,6 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
         <Flex flexDirection='column'>
           <Heading h={1} my={4} title='This is an experimental feature still undergoing development.'> 🧪 OONI Measurement Aggregation Toolkit</Heading>
           <Form onSubmit={onSubmit} testNames={testNames} query={router.query} />
-          <Debug query={query} />
           <Box sx={{ height: '90vh' }}>
             {showLoadingIndicator &&
               <Box>
@@ -123,6 +122,7 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
               <GridChart data={data.data.result} query={query} />
             }
           </Box>
+          <Debug query={query} mt={5} />
 
           {error && <Box>
             <Heading h={5} my={4}>Error</Heading>

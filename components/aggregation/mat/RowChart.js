@@ -21,7 +21,7 @@ const colorFunc = (d) => colorMap[d.id] || '#ccc'
 
 const RowChart = ({ data, indexBy, label, height, /* width, first, last */}) => {
   return (
-    <Flex alignItems='center'>
+    <Flex alignItems='center' sx={{ borderBottom: '1px solid grey'}}>
       <Box width={2/16}>
         {label}
       </Box>
@@ -73,7 +73,7 @@ RowChart.propTypes = {
   })),
   height: PropTypes.number,
   indexBy: PropTypes.string,
-  label: PropTypes.element,
+  label: PropTypes.node,
 }
 
 export default RowChart

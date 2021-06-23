@@ -17,7 +17,7 @@ Bold.propTypes = {
   children: PropTypes.any,
 }
 
-export const Debug = ({ query, children }) => {
+export const Debug = ({ query, children, ...rest }) => {
   const { query: queryCtx, apiResponse, others, preReshapeTimeRef, reshapeTimeRef, renderTimeRef} = useDebugContext()
 
   let params = {}
@@ -32,7 +32,7 @@ export const Debug = ({ query, children }) => {
   const renderTime = (renderTimeRef.current > -1) ? Number(renderTimeRef.current - reshapeTimeRef.current).toFixed(3) : undefined
 
   return (
-    <Flex color='gray6' my={3}>
+    <Flex color='gray6' my={3} {...rest}>
       <DetailsBox title='Debugging Information' content={
         <>
           <Heading h={4}>
