@@ -8,6 +8,7 @@ import { useDebugContext } from '../DebugContext'
 import { Flex, Box } from 'ooni-components'
 import { getCategoryCodesMap } from '../../utils/categoryCodes'
 import countryUtil from 'country-util'
+import { Bar } from '@nivo/bar'
 
 // all props are passed by the List component
 const Row = ({ index, style, data }) => {
@@ -152,16 +153,27 @@ const GridChart = ({ data, query }) => {
       <Flex>
         <Box width={2/16}>
         </Box>
-        <Flex pb={2} sx={{ width: '1000px', borderBottom: '1px solid black' }} justifyContent='space-between'>
-          <Box>
-            {dateSet[0]}
-          </Box>
-          <Box>
-            {dateSet[Math.floor(dateSet.length/2)]}
-          </Box>
-          <Box>
-            {dateSet[dateSet.length - 1]}
-          </Box>
+        <Flex sx={{ width: '1000px' }} justifyContent='space-between'>
+          <Bar
+            data={reshapedData[rows[0]]}
+            indexBy={query.axis_x}
+            width={1000}
+            height={70}
+            margin={{ top: 60, right: 40, bottom: 0, left: 0 }}
+            padding={0.3}
+            layers={['axes']}
+            axisTop={{
+              enable: true,
+              tickSize: 5,
+              tickPadding: 5,
+              tickRotation: -45,
+              tickValues: dateSet
+            }}
+            xScale={{ type: 'time' }}
+            axisBottom={null}
+            axisLeft={null}
+            axisRight={null}
+          />
         </Flex>
       </Flex>
       <AutoSizer>

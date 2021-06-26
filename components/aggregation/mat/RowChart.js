@@ -43,11 +43,11 @@ const CustomToolTip = ({
 
 const RowChart = ({ data, indexBy, label, height, /* width, first, last */}) => {
   return (
-    <Flex alignItems='center' sx={{ borderBottom: '1px solid grey'}}>
+    <Flex alignItems='center' >
       <Box width={2/16}>
         {label}
       </Box>
-      <Box>
+      <Box sx={{ borderBottom: '0px solid grey'}}>
         <Bar
           data={data}
           keys={keys}
@@ -70,6 +70,7 @@ const RowChart = ({ data, indexBy, label, height, /* width, first, last */}) => 
           xScale={{ type: 'time' }}
           axisBottom={null}
           axisLeft={null}
+          enableGridX={true}
           labelSkipWidth={100}
           labelSkipHeight={100}
           labelTextColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
