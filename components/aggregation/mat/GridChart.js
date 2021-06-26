@@ -104,15 +104,14 @@ const reshapeData = (data, query) => {
   })
 
   for (const y in reshapedData) {
-    const datesInRow = new Set(reshapedData[y].map(i => i.measurement_start_day))
-    const missingDates = new Set(
-      [...dateSet].filter(x => !datesInRow.has(x))
-    )
+    const datesInRow = reshapedData[y].map(i => i.measurement_start_day)
+    const missingDates = [...dateSet].filter(x => !datesInRow.includes(x))
+
     // Add empty datapoints for dates where measurements are not available
-    for (let date of missingDates) {
-      reshapedData[y].push({
-        // use any (first) column data to popuplate yAxis value e.g `input` | `probe_cc`
-        // and then overwrite with zero-data for that missing date
+    missingDates.forEach((date) => {
+      // use any (first) column data to popuplate yAxis value e.g `input` | `probe_cc`
+      // and then overwrite with zero-data for that missing date
+      reshapedData[y].splice([...dateSet].indexOf(date), 0, {
         ...reshapedData[y][0],
         measurement_start_day: date,
         anomaly_count: 0,
@@ -121,8 +120,9 @@ const reshapeData = (data, query) => {
         measurement_count: 0,
         ok_count: 0,
       })
-    }
+    })
   }
+
   return [reshapedData, rows, rowLabels]
 }
 
@@ -144,7 +144,7 @@ const GridChart = ({ data, query }) => {
   // FIX: Use the first row to generate the static xAxis outside the charts.
   //  * it is dependent on the width of the charts which is hard coded in `RowChart.js`
   //  * it may not work well if the first row has little or no data
-  const sampleRow = reshapedData[rows[0]]
+  const dateSet = [...getDatesBetween(new Date(query.since), new Date(query.until))]
 
   return (
     <Flex flexDirection='column' sx={{ height: '100%'}}>
@@ -154,13 +154,13 @@ const GridChart = ({ data, query }) => {
         </Box>
         <Flex pb={2} sx={{ width: '1000px', borderBottom: '1px solid black' }} justifyContent='space-between'>
           <Box>
-            {sampleRow[0]['measurement_start_day']}
+            {dateSet[0]}
           </Box>
           <Box>
-            {sampleRow[Math.floor(sampleRow.length/2)]['measurement_start_day']}
+            {dateSet[Math.floor(dateSet.length/2)]}
           </Box>
           <Box>
-            {sampleRow[sampleRow.length-1]['measurement_start_day']}
+            {dateSet[dateSet.length - 1]}
           </Box>
         </Flex>
       </Flex>
