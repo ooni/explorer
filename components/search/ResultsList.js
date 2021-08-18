@@ -388,12 +388,13 @@ const ResultContainer = styled(Box)`
   overflow: hidden;
 `
 
-const ResultsList = ({results, testNamesKeyed}) => {
+const ResultsList = ({results, testNames}) => {
+  const testNamesMap = testNames.reduce((o, i) => ({...o, [i.id]: i.name}), {})
   return (
     <Flex>
       <ResultContainer my={4} width={1} data-test-id='results-list'>
         {results.map((msmt, idx) => {
-          msmt.testDisplayName = testNamesKeyed[msmt.test_name]
+          msmt.testDisplayName = testNamesMap[msmt.test_name]
           return <ResultItem key={idx} {...msmt} />
         })}
       </ResultContainer>
@@ -403,7 +404,7 @@ const ResultsList = ({results, testNamesKeyed}) => {
 
 ResultsList.propTypes = {
   results: PropTypes.array,
-  testNamesKeyed: PropTypes.object,
+  testNames: PropTypes.array,
 }
 
 export default ResultsList
