@@ -148,6 +148,12 @@ export const testNames = {
     id: 'Tests.Tor.Name',
     info: 'https://ooni.org/nettest/tor/'
   },
+  'torsf': {
+    group: 'circumvention',
+    name: <FormattedMessage id='Tests.TorSF.Name' />,
+    id: 'Tests.Tor.Name',
+    info: 'https://ooni.org/nettest/torsf/'
+  },
   'riseupvpn': {
     group: 'circumvention',
     name: <FormattedMessage id='Tests.RiseupVPN.Name' />,

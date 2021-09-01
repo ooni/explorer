@@ -42,7 +42,8 @@ const testsWithStates = [
   'whatsapp',
   'facebook_messenger',
   'tor',
-  'psiphon',
+  'torsf',
+  'psiphon',  
   'http_header_field_manipulation',
   'http_invalid_request_line',
 ]
@@ -153,6 +154,14 @@ const messages = defineMessages({
   'Search.Tor.Results.Anomaly': {
     id: 'Search.Tor.Results.Anomaly',
     defaultMessage: ''
+  },
+  'Search.TorSnowflake.Results.Reachable': {
+    id: 'Search.TorSnowflake.Results.Reachable',
+    defaultMessage: 'Reachable'
+  },
+  'Search.TorSnowflake.Results.Anomaly': {
+    id: 'Search.TorSnowflake.Results.Anomaly',
+    defaultMessage: 'Anomaly'
   },
   'Search.Psiphon.Results.Reachable': {
     id: 'Search.Psiphon.Results.Reachable',
