@@ -150,7 +150,7 @@ export const testNames = {
   },
   'torsf': {
     group: 'circumvention',
-    name: <FormattedMessage id='Tests.TorSF.Name' />,
+    name: <FormattedMessage id='Tests.TorSnowflake.Name' />,
     id: 'Tests.Tor.Name',
     info: 'https://ooni.org/nettest/torsf/'
   },

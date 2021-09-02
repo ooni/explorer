@@ -51,7 +51,7 @@ const TorSnowflakeDetails = ({ isAnomaly, isFailure, measurement, render }) => {
           <React.Fragment>
             <Container>
               <Flex>
-                { failure &&
+                { isAnomaly &&
                     <AccessPointStatus
                       label={<FormattedMessage id='Measurement.Details.TorSnowflake.Error.Label' />}
                       content={failure}
@@ -59,7 +59,7 @@ const TorSnowflakeDetails = ({ isAnomaly, isFailure, measurement, render }) => {
                     />
                 }
                 {
-                  !failure && bootstrap_time &&
+                  !isAnomaly && !isFailure && bootstrap_time !== null &&
                     <AccessPointStatus
                       icon={<MdTimer />}
                       label={<FormattedMessage id='Measurement.Details.TorSnowflake.BootstrapTime.Label' />}

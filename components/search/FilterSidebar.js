@@ -111,6 +111,8 @@ const testsWithAnomalyStatus = [
   'http_invalid_request_line',
   'psiphon',
   'tor',
+  'riseupvpn',
+  'torsf'
 ]
 
 const testsWithConfirmedStatus = [
