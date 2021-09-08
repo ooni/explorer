@@ -1,0 +1,8 @@
+{
+  "rewrites": [
+    {
+      "source": "/measurement/:report_id",
+      "destination": "/measurement"
+    }
+  ]
+}
