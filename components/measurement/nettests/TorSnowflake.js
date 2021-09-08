@@ -9,11 +9,15 @@ import AccessPointStatus from '../AccessPointStatus'
 const messages = defineMessages({
   reachable: {
     id: 'Measurement.Metadata.TorSnowflake.Reachable',
-    defaultMessage: 'Telegram was reachable in {country}'
+    defaultMessage: ''
   },
   unReachable: {
     id: 'Measurement.Metadata.TorSnowflake.UnReachable',
-    defaultMessage: 'Telegram was NOT reachable in {country}'
+    defaultMessage: ''
+  },
+  error: {
+    id: 'Measurement.Metadata.TorSnowflake.Error',
+    defaultMessage: ''
   }
 })
 
@@ -31,14 +35,17 @@ const TorSnowflakeDetails = ({ isAnomaly, isFailure, measurement, render }) => {
     status = 'error'
     hint = <FormattedMessage id='Measurement.Status.Hint.TorSnowflake.Error' />
     summaryText = 'Measurement.Details.SummaryText.TorSnowflake.Error'
+    metaText = messages.error
   } else if (isAnomaly) {
     status = 'anomaly'
     hint = <FormattedMessage id='Measurement.Status.Hint.TorSnowflake.Blocked' />
     summaryText = 'Measurement.Details.SummaryText.TorSnowflake.Blocked'
+    metaText = messages.unReachable
   } else {
     status = 'reachable'
     hint = <FormattedMessage id='Measurement.Status.Hint.TorSnowflake.Reachable' />
     summaryText = 'Measurement.Details.SummaryText.TorSnowflake.OK'
+    metaText = messages.reachable
   }
 
   return (
@@ -47,6 +54,10 @@ const TorSnowflakeDetails = ({ isAnomaly, isFailure, measurement, render }) => {
         status: status,
         statusInfo: hint,
         summaryText: summaryText,
+        headMetadata: {
+          message: metaText,
+          formatted: false
+        },
         details: (
           <React.Fragment>
             <Container>
