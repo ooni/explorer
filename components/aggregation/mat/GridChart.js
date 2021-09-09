@@ -12,7 +12,7 @@ import { Bar } from '@nivo/bar'
 
 // all props are passed by the List component
 const Row = ({ index, style, data }) => {
-  const { reshapedData, rows, rowLabels, indexBy, showTooltipAt, tooltipIndex/* yAxis */} = data
+  const { reshapedData, rows, rowLabels, indexBy, showTooltipInRow, tooltipIndex/* yAxis */} = data
   const rowKey = rows[index]
   const rowData = reshapedData[rowKey]
   const rowLabel = rowLabels[rowKey]
@@ -22,7 +22,7 @@ const Row = ({ index, style, data }) => {
       <RowChart
         key={index}
         rowIndex={index}
-        showTooltipAt={showTooltipAt}
+        showTooltipInRow={showTooltipInRow}
         showTooltip={tooltipIndex === index}
         first={index === 0}
         last={index === rows.length}
@@ -135,7 +135,7 @@ const GridChart = ({ data, query }) => {
   
   const [tooltipIndex, setTooltipIndex] = useState(-1)
 
-  const showTooltipAt = useCallback((index) => {
+  const showTooltipInRow = useCallback((index) => {
     setTooltipIndex(index)
   }, [])
 
@@ -192,7 +192,7 @@ const GridChart = ({ data, query }) => {
             width={width}
             itemCount={rows.length}
             itemSize={72}
-            itemData={{reshapedData, rows, rowLabels, indexBy: query.axis_x, yAxis: query.axis_y, tooltipIndex, showTooltipAt }}
+            itemData={{reshapedData, rows, rowLabels, indexBy: query.axis_x, yAxis: query.axis_y, tooltipIndex, showTooltipInRow }}
           >
             {Row}
           </List>

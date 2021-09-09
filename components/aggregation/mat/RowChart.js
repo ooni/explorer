@@ -1,7 +1,9 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Box, Flex, Text } from 'ooni-components'
-import { Bar, BarItem } from '@nivo/bar'
+import { Bar } from '@nivo/bar'
+import { FaGlobe } from 'react-icons/fa'
+import styled from 'styled-components'
 
 const keys = [
   'anomaly_count',
@@ -27,45 +29,48 @@ const TooltipRow = ({ color, label, value }) => (
   </Flex>
 )
 
-const CustomToolTip = ({
-  data
-}) => {
+const TooltipContainer = styled(Flex)`
+  z-index: 10;
+  position: absolute;
+  left: ${props => props.left}px;
+  top: ${props => props.top}px;
+  border: 1px solid ${props => props.theme.colors.gray1};
+  box-shadow: 1px 1px 3px black;
+`
+
+const CustomToolTip = ({ data, x, y }) => {
+  const left = x - 160
+  const top = 0 - 120
+  // console.log(x, y)
   return (
-    <Flex flexDirection='column'>
+    <TooltipContainer flexDirection='column' bg='white' p={2} top={top} left={left}>
       <Text mr={2} fontWeight='bold'>{data['measurement_start_day']}</Text>
       {keys.map((k, index) => (
         <TooltipRow key={index} color={colorMap[k]} label={k} value={data[k]} />
       ))}
       <TooltipRow label='Total' value={data['measurement_count']} />
-    </Flex>
+      <a href='/search'><FaGlobe />Show measurements</a>
+      {x} {y}
+    </TooltipContainer>
   )
 }
 
-const CustomFixedToolTip = () => {
-  return (
-    <Flex sx={{ position: 'absolute', right: 0 }}>
-      <a href='/search?test_name=web_coonectivity'>Link to measurements</a>
-    </Flex>
-  )
-}
+const MemoizedTooltip = React.memo(CustomToolTip)
 
-const CustomBarComponent = () => {
-  const onMouseMove = useCallback(() => {
-    console.log('onMouseMove in BarComponent')
-  }, [])
-  return (
-    <BarItem
-      onMouseMove={onMouseMove}
-    />
-  )
-}
+const CustomEmptyTooltip = () => <React.Fragment />
 
-const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipAt, showTooltip /* width, first, last */}) => {
-  const handleClick = useCallback((d) => {
-    showTooltipAt(rowIndex)
-  }, [rowIndex, showTooltipAt])
+const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, showTooltip /* width, first, last */}) => {
+  const [tooltipPos, setTooltipPos] = useState([-1, -1])
+
+  const handleClick = useCallback((d, e) => {
+    console.log(e)
+    console.log(e.clientX, e.clientY)
+    setTooltipPos([e.clientX, e.clientY])
+    showTooltipInRow(rowIndex)
+  }, [rowIndex, showTooltipInRow])
+
   return (
-    <Flex alignItems='center' >
+    <Flex alignItems='center' sx={{ position: 'relative' }}>
       <Box width={2/16}>
         {label}
       </Box>
@@ -101,10 +106,10 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipAt, showT
           motionStiffness={90}
           motionDamping={15}
           onClick={handleClick}
-          tooltip={CustomToolTip}
+          tooltip={CustomEmptyTooltip}
         />
       </Box>
-      {showTooltip && <CustomFixedToolTip data={data[rowIndex]} />}
+      {showTooltip && <MemoizedTooltip data={data} x={tooltipPos[0]} y={tooltipPos[1]} />}
     </Flex>
   )
 }
