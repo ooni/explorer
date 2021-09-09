@@ -1,7 +1,7 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { Box, Flex, Text } from 'ooni-components'
-import { Bar } from '@nivo/bar'
+import { Bar, BarItem } from '@nivo/bar'
 
 const keys = [
   'anomaly_count',
@@ -41,7 +41,29 @@ const CustomToolTip = ({
   )
 }
 
-const RowChart = ({ data, indexBy, label, height, /* width, first, last */}) => {
+const CustomFixedToolTip = () => {
+  return (
+    <Flex sx={{ position: 'absolute', right: 0 }}>
+      <a href='/search?test_name=web_coonectivity'>Link to measurements</a>
+    </Flex>
+  )
+}
+
+const CustomBarComponent = () => {
+  const onMouseMove = useCallback(() => {
+    console.log('onMouseMove in BarComponent')
+  }, [])
+  return (
+    <BarItem
+      onMouseMove={onMouseMove}
+    />
+  )
+}
+
+const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipAt, showTooltip /* width, first, last */}) => {
+  const handleClick = useCallback((d) => {
+    showTooltipAt(rowIndex)
+  }, [rowIndex, showTooltipAt])
   return (
     <Flex alignItems='center' >
       <Box width={2/16}>
@@ -56,7 +78,7 @@ const RowChart = ({ data, indexBy, label, height, /* width, first, last */}) => 
           // <GridChart />
           width={1000}
           height={height}
-          margin={{ top: 4, right: 40, bottom: 4, left: 0 }}
+          margin={{ top: 4, right: 100, bottom: 4, left: 0 }}
           padding={0.3}
           borderColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
           colors={colorFunc}
@@ -78,10 +100,11 @@ const RowChart = ({ data, indexBy, label, height, /* width, first, last */}) => 
           animate={false}
           motionStiffness={90}
           motionDamping={15}
+          onClick={handleClick}
           tooltip={CustomToolTip}
         />
-
       </Box>
+      {showTooltip && <CustomFixedToolTip data={data[rowIndex]} />}
     </Flex>
   )
 }

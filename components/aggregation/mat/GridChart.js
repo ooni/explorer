@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import { FixedSizeList as List } from 'react-window'
 import AutoSizer from 'react-virtualized-auto-sizer'
@@ -12,7 +12,7 @@ import { Bar } from '@nivo/bar'
 
 // all props are passed by the List component
 const Row = ({ index, style, data }) => {
-  const { reshapedData, rows, rowLabels, indexBy, /* yAxis */} = data
+  const { reshapedData, rows, rowLabels, indexBy, showTooltipAt, tooltipIndex/* yAxis */} = data
   const rowKey = rows[index]
   const rowData = reshapedData[rowKey]
   const rowLabel = rowLabels[rowKey]
@@ -21,6 +21,9 @@ const Row = ({ index, style, data }) => {
     <div style={style} key={index}>
       <RowChart
         key={index}
+        rowIndex={index}
+        showTooltipAt={showTooltipAt}
+        showTooltip={tooltipIndex === index}
         first={index === 0}
         last={index === rows.length}
         data={rowData}
@@ -129,6 +132,12 @@ const reshapeData = (data, query) => {
 
 const GridChart = ({ data, query }) => {
   const { doneReshaping, doneRendering } = useDebugContext()
+  
+  const [tooltipIndex, setTooltipIndex] = useState(-1)
+
+  const showTooltipAt = useCallback((index) => {
+    setTooltipIndex(index)
+  }, [])
 
   const [reshapedData, rows, rowLabels] = useMemo(() => {
     const t0 = performance.now()
@@ -183,7 +192,7 @@ const GridChart = ({ data, query }) => {
             width={width}
             itemCount={rows.length}
             itemSize={72}
-            itemData={{reshapedData, rows, rowLabels, indexBy: query.axis_x, yAxis: query.axis_y}}
+            itemData={{reshapedData, rows, rowLabels, indexBy: query.axis_x, yAxis: query.axis_y, tooltipIndex, showTooltipAt }}
           >
             {Row}
           </List>
