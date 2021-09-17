@@ -139,20 +139,6 @@ const GridChart = ({ data, query }) => {
     setTooltipIndex(index)
   }, [])
 
-  const onItemsRendered = useCallback(({
-    overscanStartIndex,
-    overscanStopIndex,
-    visibleStartIndex,
-    visibleStopIndex
-  }) => {
-    console.log({
-      overscanStartIndex,
-      overscanStopIndex,
-      visibleStartIndex,
-      visibleStopIndex
-    })
-  },[])
-
   const [reshapedData, rows, rowLabels] = useMemo(() => {
     const t0 = performance.now()
     const [reshapedData, rows, rowLabels] = reshapeData(data, query)

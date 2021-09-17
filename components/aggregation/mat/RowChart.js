@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { Box, Flex, Text } from 'ooni-components'
 import { Bar } from '@nivo/bar'
 import { FaGlobe } from 'react-icons/fa'
-import styled from 'styled-components'
 import { BasicTooltip, TableTooltip, Chip } from '@nivo/tooltip'
 
 import { CustomBarItem } from './CustomBarItem'
@@ -41,7 +40,7 @@ const CustomToolTip = React.memo(({ data, onClose }) => {
       k,
       data[k]]
     )
-  }, [])
+  }, [data])
   return (
     <TableTooltip title={<TooltipHeader date={data.measurement_start_day} onClose={onClose} />} rows={rows} style={{ zIndex: 200 }} />
   )
@@ -49,14 +48,10 @@ const CustomToolTip = React.memo(({ data, onClose }) => {
 CustomToolTip.displayName = 'CustomTooltip'
 
 const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, showTooltip /* width, first, last */}) => {
-  const [tooltipPos, setTooltipPos] = useState([-1, -1])
-
-  const handleClick = useCallback((d, e) => {
-    console.log(e)
-    console.log(e.clientX, e.clientY)
-    setTooltipPos([e.clientX, e.clientY])
+  const handleClick = useCallback(() => {
     showTooltipInRow(rowIndex)
   }, [rowIndex, showTooltipInRow])
+
 
   return (
     <Flex alignItems='center' sx={{ position: 'relative' }}>
@@ -66,7 +61,6 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
       <Box>
         <Bar
           data={data}
-          rowIndex={rowIndex}
           keys={keys}
           indexBy={indexBy}
           // NOTE: These dimensions are linked to accuracy of the custom axes rendered in
@@ -92,6 +86,7 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
           labelSkipHeight={100}
           labelTextColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
           tooltip={CustomToolTip}
+          // onClick={handleClick}
           barComponent={CustomBarItem}
           theme={{
             tooltip: {
