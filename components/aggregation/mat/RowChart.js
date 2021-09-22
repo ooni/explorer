@@ -1,9 +1,9 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { Box, Flex, Text } from 'ooni-components'
 import { Bar } from '@nivo/bar'
 import { FaGlobe } from 'react-icons/fa'
-import { BasicTooltip, TableTooltip, Chip } from '@nivo/tooltip'
+import { TableTooltip, Chip } from '@nivo/tooltip'
 
 import { CustomBarItem } from './CustomBarItem'
 
@@ -48,10 +48,10 @@ const CustomToolTip = React.memo(({ data, onClose }) => {
 CustomToolTip.displayName = 'CustomTooltip'
 
 const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, showTooltip /* width, first, last */}) => {
+
   const handleClick = useCallback(() => {
     showTooltipInRow(rowIndex)
   }, [rowIndex, showTooltipInRow])
-
 
   return (
     <Flex alignItems='center' sx={{ position: 'relative' }}>
@@ -86,7 +86,7 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
           labelSkipHeight={100}
           labelTextColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
           tooltip={CustomToolTip}
-          // onClick={handleClick}
+          onClick={handleClick}
           barComponent={CustomBarItem}
           theme={{
             tooltip: {
@@ -95,6 +95,8 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
               }
             }
           }}
+          // We send the `showTooltip` boolean into the barComponent to control visibiliyt of tooltip
+          enableLabel={showTooltip}
         />
       </Box>
     </Flex>

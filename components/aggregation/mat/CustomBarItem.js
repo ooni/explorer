@@ -1,4 +1,4 @@
-import React, { createElement, useCallback, useMemo } from 'react'
+import React, { createElement, useCallback, useEffect, useMemo } from 'react'
 import { animated, to } from '@react-spring/web'
 import { useTheme } from '@nivo/core'
 import { useTooltip } from '@nivo/tooltip'
@@ -20,7 +20,7 @@ export const CustomBarItem = ({
 
   borderRadius,
   borderWidth,
-
+  enableLabel,
   label,
   shouldRenderLabel,
 
@@ -38,6 +38,13 @@ export const CustomBarItem = ({
     hideTooltip()
   }
 
+  useEffect(() => {
+    // We hijack `enableLabel` to pass down whether the bar component should hide the tooltip or not.
+    if (enableLabel === false) {
+      hideTooltip()
+    }
+  }, [enableLabel])
+
   const renderTooltip = useMemo(
     // eslint-disable-next-line react/display-name
     () => () => createElement(tooltip, { ...bar, ...data, onClose }),
@@ -49,11 +56,15 @@ export const CustomBarItem = ({
       onClick?.({ color: bar.color, ...data }, event)
       // If the clicked bar is located near the upper edge of the react-window container,
       // then anchor the tooltip to the bottom of the bar
-      const yOffset = event.clientY - event.target.getBoundingClientRect().top
+
+      // console.log(event.nativeEvent.target.ownerSVGElement.getClientRects()[0])
+      // console.log(event.nativeEvent.target.ownerSVGElement.getBoundingClientRect().y)
+      // console.log(event.clientY, event.nativeEvent.target.ownerSVGElement.getBoundingClientRect().y - event.clientY)
+      // const yOffset = event.clientY - event.target.getBoundingClientRect().top
       showTooltipAt(
         renderTooltip(),
         [bar.x + bar.width / 2, bar.y],
-        yOffset > 20 ? 'top' : 'bottom'
+        event.clientY > 250 ? 'top' : 'bottom'
       )
 
     },
