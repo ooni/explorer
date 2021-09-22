@@ -64,7 +64,7 @@ export const CustomBarItem = ({
       showTooltipAt(
         renderTooltip(),
         [bar.x + bar.width / 2, bar.y],
-        event.clientY > 250 ? 'top' : 'bottom'
+        event.clientY > 350 ? 'top' : 'bottom'
       )
 
     },
