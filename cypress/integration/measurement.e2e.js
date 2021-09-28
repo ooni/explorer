@@ -126,7 +126,7 @@ describe('Measurement Page Tests', () => {
     // })
   })
 
-  describe.only('Signal Tests', () => {
+  describe('Signal Tests', () => {
     it('renders an accessible measurement', () => {
       cy.visit('/measurement/20210414T233239Z_signal_BR_271354_n1_zCvPVXKJT7kxPQI4')
       cy.heroHasColor(normalColor)

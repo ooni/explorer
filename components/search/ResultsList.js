@@ -41,8 +41,11 @@ const testsWithStates = [
   'telegram',
   'whatsapp',
   'facebook_messenger',
+  'signal',
   'tor',
+  'torsf',
   'psiphon',
+  'riseupvpn',
   'http_header_field_manipulation',
   'http_invalid_request_line',
 ]
@@ -106,6 +109,18 @@ const messages = defineMessages({
     id: 'Search.Telegram.Results.Error',
     defaultMessage: ''
   },
+  'Search.Signal.Results.Reachable': {
+    id: 'Search.Signal.Results.Reachable',
+    defaultMessage: ''
+  },
+  'Search.Signal.Results.Anomaly': {
+    id: 'Search.Signal.Results.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.Signal.Results.Error': {
+    id: 'Search.Signal.Results.Error',
+    defaultMessage: ''
+  },
   'Search.HTTPInvalidRequestLine.Results.Anomaly': {
     id: 'Search.HTTPInvalidRequestLine.Results.Anomaly',
     defaultMessage: ''
@@ -154,12 +169,28 @@ const messages = defineMessages({
     id: 'Search.Tor.Results.Anomaly',
     defaultMessage: ''
   },
+  'Search.TorSnowflake.Results.Reachable': {
+    id: 'Search.TorSnowflake.Results.Reachable',
+    defaultMessage: 'Reachable'
+  },
+  'Search.TorSnowflake.Results.Anomaly': {
+    id: 'Search.TorSnowflake.Results.Anomaly',
+    defaultMessage: 'Anomaly'
+  },
   'Search.Psiphon.Results.Reachable': {
     id: 'Search.Psiphon.Results.Reachable',
     defaultMessage: ''
   },
   'Search.Psiphon.Results.Anomaly': {
     id: 'Search.Psiphon.Results.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.RiseupVPN.Results.Reachable': {
+    id: 'Search.RiseupVPN.Results.Reachable',
+    defaultMessage: ''
+  },
+  'Search.RiseupVPN.Results.Anomaly': {
+    id: 'Search.RiseupVPN.Results.Anomaly',
     defaultMessage: ''
   },
 })

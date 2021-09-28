@@ -77,6 +77,7 @@ export async function getServerSideProps({ query }) {
       try {
         initialProps['raw_measurement'] = JSON.parse(initialProps['raw_measurement'])
       } catch (e) {
+        console.error(e)
         throw new Error(`Failed to parse raw_measurement: ${e.toString()}`)
       }
 

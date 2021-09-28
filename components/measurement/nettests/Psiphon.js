@@ -71,7 +71,7 @@ const PsiphonDetails = ({
                     <AccessPointStatus
                       icon={<MdTimer />}
                       label={<FormattedMessage id='Measurement.Details.Psiphon.BootstrapTime.Label' />}
-                      content={bootstrap_time.toFixed(2)}
+                      content={Number(bootstrap_time).toFixed(2)}
                       ok={true}
                     />
                 }

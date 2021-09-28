@@ -6,3 +6,4 @@ ignore/
 package-lock.json
 public/static/lang/.messages/
 .env*.local
+.vercel

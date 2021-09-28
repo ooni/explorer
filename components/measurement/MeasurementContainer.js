@@ -16,6 +16,7 @@ import TorDetails from './nettests/Tor'
 import RiseupVPNDetails from './nettests/RiseupVPN'
 
 import DefaultTestDetails from './nettests/Default'
+import TorSnowflakeDetails from './nettests/TorSnowflake'
 
 const mapTestDetails = {
   web_connectivity: WebConnectivityDetails,
@@ -31,6 +32,7 @@ const mapTestDetails = {
   psiphon: PsiphonDetails,
   tor: TorDetails,
   riseupvpn: RiseupVPNDetails,
+  torsf: TorSnowflakeDetails
 }
 
 
