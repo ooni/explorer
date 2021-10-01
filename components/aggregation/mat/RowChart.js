@@ -2,8 +2,8 @@ import React, { useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { Box, Flex, Text } from 'ooni-components'
 import { Bar } from '@nivo/bar'
-import { FaGlobe } from 'react-icons/fa'
 import { TableTooltip, Chip } from '@nivo/tooltip'
+import { FaSearch } from 'react-icons/fa'
 
 import { CustomBarItem } from './CustomBarItem'
 
@@ -26,6 +26,7 @@ const colorFunc = (d) => colorMap[d.id] || '#ccc'
 const TooltipHeader = React.memo(({ date, onClose }) => (
   <Flex justifyContent='space-between' alignItems='center'>
     <Text fontWeight='bold'>{date}</Text>
+    <a href='/search'> <FaSearch /> </a>
     <button onClick={onClose}>X</button>
   </Flex>
 ))
@@ -42,7 +43,7 @@ const CustomToolTip = React.memo(({ data, onClose }) => {
     )
   }, [data])
   return (
-    <TableTooltip title={<TooltipHeader date={data.measurement_start_day} onClose={onClose} />} rows={rows} style={{ zIndex: 200 }} />
+    <TableTooltip title={<TooltipHeader date={data.measurement_start_day} onClose={onClose} />} rows={rows} />
   )
 })
 CustomToolTip.displayName = 'CustomTooltip'
@@ -95,8 +96,9 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
               }
             }
           }}
-          // We send the `showTooltip` boolean into the barComponent to control visibiliyt of tooltip
+          // We send the `showTooltip` boolean into the barComponent to control visibility of tooltip
           enableLabel={showTooltip}
+          animate={true}
         />
       </Box>
     </Flex>
