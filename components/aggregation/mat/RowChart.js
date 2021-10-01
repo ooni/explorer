@@ -1,11 +1,11 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
-import { Box, Flex, Text } from 'ooni-components'
+import { Box, Flex, theme } from 'ooni-components'
 import { Bar } from '@nivo/bar'
-import { TableTooltip, Chip } from '@nivo/tooltip'
-import { FaSearch } from 'react-icons/fa'
 
 import { CustomBarItem } from './CustomBarItem'
+import { CustomToolTip } from './CustomTooltip'
+import { colorMap } from './colorMap'
 
 const keys = [
   'anomaly_count',
@@ -14,39 +14,7 @@ const keys = [
   'ok_count',
 ]
 
-const colorMap = {
-  'confirmed_count': '#f03e3e', // red7,
-  'anomaly_count': '#fab005', // yellow6
-  'failure_count': '#ced4da', // gray4
-  'ok_count': '#51cf66' // green5
-}
-
 const colorFunc = (d) => colorMap[d.id] || '#ccc'
-
-const TooltipHeader = React.memo(({ date, onClose }) => (
-  <Flex justifyContent='space-between' alignItems='center'>
-    <Text fontWeight='bold'>{date}</Text>
-    <a href='/search'> <FaSearch /> </a>
-    <button onClick={onClose}>X</button>
-  </Flex>
-))
-
-TooltipHeader.displayName = 'TooltipHeader'
-
-const CustomToolTip = React.memo(({ data, onClose }) => {
-  const rows = useMemo(() => {
-    const dataKeysToShow = ['anomaly_count', 'confirmed_count', 'failure_count', 'ok_count']
-    return dataKeysToShow.map(k => [
-      <Chip key={k} color={colorMap[k]} />,
-      k,
-      data[k]]
-    )
-  }, [data])
-  return (
-    <TableTooltip title={<TooltipHeader date={data.measurement_start_day} onClose={onClose} />} rows={rows} />
-  )
-})
-CustomToolTip.displayName = 'CustomTooltip'
 
 const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, showTooltip /* width, first, last */}) => {
 
@@ -93,6 +61,7 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
             tooltip: {
               container: {
                 pointerEvents: 'initial',
+                boxShadow: `1px 1px 4px 1px ${theme.colors.gray6}`
               }
             }
           }}
