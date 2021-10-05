@@ -41,7 +41,7 @@
     "react-json-view": "^1.16.0",
     "react-portal-tooltip": "^2.4.7",
     "react-sticky": "^6.0.3",
-    "react-table": "^7.0.0-rc.15",
+    "react-table": "^7.7.0",
     "react-virtualized-auto-sizer": "^1.0.5",
     "react-window": "^1.8.6",
     "rebass": "4.0.7",
