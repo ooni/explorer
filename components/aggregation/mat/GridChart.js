@@ -2,13 +2,14 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import { FixedSizeList as List } from 'react-window'
 import AutoSizer from 'react-virtualized-auto-sizer'
+import { Bar } from '@nivo/bar'
+import countryUtil from 'country-util'
+import { Flex, Box } from 'ooni-components'
 
 import RowChart from './RowChart'
 import { useDebugContext } from '../DebugContext'
-import { Flex, Box } from 'ooni-components'
 import { getCategoryCodesMap } from '../../utils/categoryCodes'
-import countryUtil from 'country-util'
-import { Bar } from '@nivo/bar'
+import TableView from './TableView'
 
 // all props are passed by the List component
 const Row = ({ index, style, data }) => {
@@ -172,48 +173,54 @@ const GridChart = ({ data, query }) => {
   const dateSet = [...getDatesBetween(new Date(query.since), new Date(query.until))]
 
   return (
-    <Flex flexDirection='column' sx={{ height: '100%'}}>
-      {/* Fake axis on top of list. Possible alternative: dummy chart with axis and valid tickValues */}
-      <Flex>
-        <Box width={2/16}>
-        </Box>
-        <Flex sx={{ width: '1000px' }} justifyContent='space-between'>
-          <Bar
-            data={reshapedData[rows[0]]}
-            indexBy={query.axis_x}
-            width={1000}
-            height={70}
-            margin={{ top: 60, right: 40, bottom: 0, left: 0 }}
-            padding={0.3}
-            layers={['axes']}
-            axisTop={{
-              enable: true,
-              tickSize: 5,
-              tickPadding: 5,
-              tickRotation: -45,
-              tickValues: dateSet
-            }}
-            xScale={{ type: 'time' }}
-            axisBottom={null}
-            axisLeft={null}
-            axisRight={null}
-          />
+    <Flex flexDirection='column' sx={{ height: '100vh' }}>
+      <Flex flexDirection='column' sx={{ height: '50%' }} my={4}>
+        {/* Fake axis on top of list. Possible alternative: dummy chart with axis and valid tickValues */}
+        <Flex>
+          <Box width={2/16}>
+          </Box>
+          <Flex sx={{ width: '1000px' }} justifyContent='space-between'>
+            <Bar
+              data={reshapedData[rows[0]]}
+              indexBy={query.axis_x}
+              width={1000}
+              height={70}
+              margin={{ top: 60, right: 40, bottom: 0, left: 0 }}
+              padding={0.3}
+              layers={['axes']}
+              axisTop={{
+                enable: true,
+                tickSize: 5,
+                tickPadding: 5,
+                tickRotation: -45,
+                tickValues: dateSet
+              }}
+              xScale={{ type: 'time' }}
+              axisBottom={null}
+              axisLeft={null}
+              axisRight={null}
+            />
+          </Flex>
+        </Flex>
+        <Flex sx={{ height: '100%' }}>
+          <AutoSizer>
+            {({ width, height }) => (
+              <List
+                height={height}
+                width={width}
+                itemCount={rows.length}
+                itemSize={72}
+                itemData={{reshapedData, rows, rowLabels, indexBy: query.axis_x, yAxis: query.axis_y, tooltipIndex, showTooltipInRow }}
+              >
+                {Row}
+              </List>
+            )}
+          </AutoSizer>
         </Flex>
       </Flex>
-      <AutoSizer>
-        {({ width, height }) => (
-          <List
-            className='outerListElement'
-            height={height}
-            width={width}
-            itemCount={rows.length}
-            itemSize={72}
-            itemData={{reshapedData, rows, rowLabels, indexBy: query.axis_x, yAxis: query.axis_y, tooltipIndex, showTooltipInRow }}
-          >
-            {Row}
-          </List>
-        )}
-      </AutoSizer>
+      <Flex my={4}>
+        <TableView data={data} yAxis={query.axis_y} />
+      </Flex>
     </Flex>
   )
 }
