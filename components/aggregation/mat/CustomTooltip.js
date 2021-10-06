@@ -10,12 +10,6 @@ import { MdClear } from 'react-icons/md'
 const CustomToolTip = React.memo(({ data, onClose }) => {
   const theme = useTheme()
   const dataKeysToShow = ['anomaly_count', 'confirmed_count', 'failure_count', 'ok_count']
-  // dataKeysToShow.map(k => [
-  //   <Chip key={k} color={colorMap[k]} />,
-  //   k,
-  //   data[k]]
-  // )
-  // }, [data])
   
   return (
     <Flex flexDirection='column' style={theme.tooltip.container}>

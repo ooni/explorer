@@ -188,6 +188,7 @@ const GridChart = ({ data, query }) => {
       <AutoSizer>
         {({ width, height }) => (
           <List
+            className='outerListElement'
             height={height}
             width={width}
             itemCount={rows.length}

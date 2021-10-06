@@ -61,10 +61,11 @@ export const CustomBarItem = ({
       onClick?.({ color: bar.color, ...data }, event)
       // If the clicked bar is located near the upper edge of the react-window container,
       // then anchor the tooltip to the bottom of the bar
+      const {y: chartContainerY} = event.currentTarget.closest('.outerListElement').getBoundingClientRect()
       showTooltipAt(
         renderTooltip(),
         [bar.x + bar.width / 2, bar.y],
-        event.clientY > 350 ? 'top' : 'bottom'
+        (event.clientY - chartContainerY) > 200 ? 'top' : 'bottom'
       )
       setExtraBorderWidth(2)
     },
