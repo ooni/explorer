@@ -1,20 +1,21 @@
 import React, { useCallback, useMemo } from 'react'
-import { useTable, useFlexLayout } from 'react-table'
+import { useTable, useFlexLayout, useRowSelect, useFilters, useGroupBy } from 'react-table'
 import { FormattedMessage, useIntl } from 'react-intl'
 import styled from 'styled-components'
 import { FixedSizeList } from 'react-window'
+import { Flex } from 'ooni-components'
+import { groupBy } from 'lodash'
 
 const TableContainer = styled.div`
   padding: 1rem;
   ${'' /* These styles are suggested for the table fill all available space in its containing element */}
-  display: block;
+  flex: 1;
   ${'' /* These styles are required for a horizontaly scrollable table overflow */}
   overflow: auto;
 `
 
 const Table = styled.div`
   border-spacing: 0;
-
 `
 
 const Cell = styled.div`
@@ -30,7 +31,7 @@ const Cell = styled.div`
   }
 `
 
-const TableRow = styled.div`
+const TableRow = styled(Flex)`
   &:last-child {
     ${Cell} {
       border-bottom: 0;
@@ -44,46 +45,108 @@ const TableHeader = styled.div`
   overflow-y: auto;
   overflow-x: hidden;
   ${TableRow} {
-    border-bottom: 2px double black;
+    padding-bottom: 8px;
+    border-bottom: 1px solid black;
   }
 `
 
-const TableBody = styled.div`
-  ${'' /* These styles are required for a scrollable table body */}
-  overflow-y: scroll;
-  overflow-x: hidden;
-  height: 400px;
-`
+const IndeterminateCheckbox = React.forwardRef(
+  ({ indeterminate, ...rest }, ref) => {
+    const defaultRef = React.useRef()
+    const resolvedRef = ref || defaultRef
+
+    React.useEffect(() => {
+      resolvedRef.current.indeterminate = indeterminate
+    }, [resolvedRef, indeterminate])
+
+    return (
+      <>
+        <input type="checkbox" ref={resolvedRef} {...rest} />
+      </>
+    )
+  }
+)
+IndeterminateCheckbox.displayName = 'IndeterminateCheckbox'
+
+const SearchFilter = ({
+  column: { filterValue, preFilteredRows, setFilter },
+}) => {
+  const count = preFilteredRows.length
+
+  return (
+    <input
+      value={filterValue || ''}
+      onChange={e => {
+        setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
+      }}
+      placeholder={`Search ${count} records...`}
+    />
+  )
+}
 
 const TableView = ({ data, yAxis }) => {
   const intl = useIntl()
+
   const defaultColumn = React.useMemo(
     () => ({
       // When using the useFlexLayout:
-      width: 250, // width is used for both the flex-basis and flex-grow
+      width: 200, // width is used for both the flex-basis and flex-grow
+      Filter: SearchFilter,
     }),
     []
   )
+
+  const filterTypes = React.useMemo(
+    () => ({
+      // default text filter to use "startWith"
+      text: (rows, id, filterValue) => {
+        return rows.filter(row => {
+          const rowValue = row.values[id]
+          return rowValue !== undefined
+            ? String(rowValue)
+              .toLowerCase()
+              .startsWith(String(filterValue).toLowerCase())
+            : true
+        })
+      },
+    }),
+    []
+  )
+  
+  // Aggregate by the first column
+  const initialState = React.useMemo(() => ({
+    groupBy: [yAxis]
+  }),[])
+
   const columns = useMemo(() => [
     {
       Header: intl.formatMessage({ id: `MAT.Table.Header.${yAxis}`}),
-      accessor: yAxis
+      accessor: yAxis,
+      filter: 'text',
     },
     {
       Header: <FormattedMessage id='MAT.Table.Header.anomaly_count' />,
-      accessor: 'anomaly_count'
+      accessor: 'anomaly_count',
+      aggregate: 'sum',
+      disableFilters: true,
     },
     {
       Header: <FormattedMessage id='MAT.Table.Header.confirmed_count' />,
-      accessor: 'confirmed_count'
+      accessor: 'confirmed_count',
+      aggregate: 'sum',
+      disableFilters: true,
     },
     {
       Header: <FormattedMessage id='MAT.Table.Header.failure_count' />,
       accessor: 'failure_count',
+      aggregate: 'sum',
+      disableFilters: true,
     },
     {
       Header: <FormattedMessage id='MAT.Table.Header.measurement_count' />,
       accessor: 'measurement_count',
+      aggregate: 'sum',
+      disableFilters: true,
     }
   ], [])
 
@@ -97,10 +160,40 @@ const TableView = ({ data, yAxis }) => {
     {
       columns,
       data,
-      defaultColumn
+      initialState,
+      defaultColumn,
+      filterTypes,
     },
     useFlexLayout,
-    // useRowSelect
+    useFilters,
+    useGroupBy,
+    useRowSelect,
+    (hooks) => {
+      hooks.visibleColumns.push((columns) => [
+        // Let's make a column for selection
+        {
+          id: 'selection',
+          width: 50,
+          // The header can use the table's getToggleAllRowsSelectedProps method
+          // to render a checkbox
+          // eslint-disable-next-line react/display-name
+          Header: ({ getToggleAllRowsSelectedProps }) => (
+            <div>
+              <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
+            </div>
+          ),
+          // The cell can use the individual row's getToggleRowSelectedProps method
+          // to the render a checkbox
+          // eslint-disable-next-line react/display-name
+          Cell: ({ row }) => (
+            <div>
+              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
+            </div>
+          )
+        },
+        ...columns
+      ])
+    }
   )
 
   const RenderRow = useCallback(
@@ -108,9 +201,9 @@ const TableView = ({ data, yAxis }) => {
     (rows) => ({ index, style }) => {
       const row = rows[index]
       prepareRow(row)
-      index === 0 && console.log(row.getRowProps)
+      // index === 0 && console.log(row.getRowProps())
       return (
-        <TableRow
+        <TableRow alignItems='center'
           {...row.getRowProps({
             style,
           })}
@@ -136,18 +229,23 @@ const TableView = ({ data, yAxis }) => {
         <TableHeader>
           {headerGroups.map(headerGroup => (
             <TableRow {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => (
-                <Cell
-                  {...column.getHeaderProps()}
-                >
-                  {column.render('Header')}
-                </Cell>
-              ))}
+              {headerGroup.headers.map(column => {
+                console.log(column)
+                return (
+                  <Cell
+                    {...column.getHeaderProps()}
+                  >
+                    {column.render('Header')}
+                    {/* Column Filter */}
+                    <div>{column.canFilter ? column.render('Filter') : null}</div>
+                  </Cell>
+                )}
+              )}
             </TableRow>
           ))}
         </TableHeader>
-        <TableBody {...getTableBodyProps()}>
-          {/*rows.map(row => {
+        <div {...getTableBodyProps()}>
+          {rows.map(row => {
             prepareRow(row)
             return (
               <TableRow {...row.getRowProps()}>
@@ -162,16 +260,15 @@ const TableView = ({ data, yAxis }) => {
                 })}
               </TableRow>
             )
-          })*/}
-          <FixedSizeList
+          })}
+          {/* <FixedSizeList
             height={400}
             itemCount={data.length}
-            itemSize={40}
-            width='100%'
+            itemSize={32}
           >
             {RenderRow(rows)}
-          </FixedSizeList>
-        </TableBody>
+          </FixedSizeList> */}
+        </div>
       </Table>
       {/* eslint-enable react/jsx-key */}
     </TableContainer>
