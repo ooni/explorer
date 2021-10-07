@@ -1,7 +1,7 @@
 // Based on BarItem.tsx in @nivo/bar @v0.73.1
 // https://github.com/plouc/nivo/blob/7ff0e72ebf823231cc341d8fc0d544768a9a458b/packages/bar/src/BarItem.tsx
 
-import React, { createElement, useCallback, useEffect, useState } from 'react'
+import React, { createElement, useCallback, useEffect } from 'react'
 import { animated, to } from '@react-spring/web'
 import { useTheme } from '@nivo/core'
 import { useTooltip } from '@nivo/tooltip'
@@ -36,20 +36,18 @@ export const CustomBarItem = ({
 }) => {
   const theme = useTheme()
   const { showTooltipAt, hideTooltip } = useTooltip()
-  const [extraBorderWidth, setExtraBorderWidth] = useState(0)
-
+  const extraBorderWidth = data.data.highlight ? 2 : 0
+  
   const onClose = useCallback(() => {
     hideTooltip()
-    setExtraBorderWidth(0)
-  }, [hideTooltip, setExtraBorderWidth])
+  }, [hideTooltip])
 
   useEffect(() => {
     // We hijack `enableLabel` to pass down whether the bar component should hide the tooltip or not.
     if (enableLabel === false) {
       hideTooltip()
-      setExtraBorderWidth(0)
     }
-  }, [enableLabel, setExtraBorderWidth, hideTooltip])
+  }, [enableLabel, hideTooltip])
 
   const renderTooltip = useCallback(() =>
     // eslint-disable-next-line react/display-name
@@ -58,18 +56,18 @@ export const CustomBarItem = ({
 
   const handleClick = useCallback(
     (event) => {
-      onClick?.({ color: bar.color, ...data }, event)
+      onClick?.({ color: bar.color, column: bar.key, ...data }, event)
       // If the clicked bar is located near the upper edge of the react-window container,
       // then anchor the tooltip to the bottom of the bar
       const {y: chartContainerY} = event.currentTarget.closest('.outerListElement').getBoundingClientRect()
+      const nearTopEdge = (event.clientY - chartContainerY) < 200
       showTooltipAt(
         renderTooltip(),
-        [bar.x + bar.width / 2, bar.y],
-        (event.clientY - chartContainerY) > 200 ? 'top' : 'bottom'
+        nearTopEdge ? [bar.x + bar.width / 2, bar.y + bar.height] :[bar.x + bar.width / 2, bar.y],
+        nearTopEdge ? 'bottom' : 'top'
       )
-      setExtraBorderWidth(2)
     },
-    [bar, data, onClick, setExtraBorderWidth]
+    [bar, data, onClick]
   )
   // Disable events upon mouse movement events
   // const handleTooltip = useCallback(

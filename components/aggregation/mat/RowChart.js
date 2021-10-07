@@ -18,8 +18,8 @@ const colorFunc = (d) => colorMap[d.id] || '#ccc'
 
 const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, showTooltip /* width, first, last */}) => {
 
-  const handleClick = useCallback(() => {
-    showTooltipInRow(rowIndex)
+  const handleClick = useCallback(({ column }) => {
+    showTooltipInRow(rowIndex, column)
   }, [rowIndex, showTooltipInRow])
 
   return (
@@ -67,7 +67,10 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
           }}
           // We send the `showTooltip` boolean into the barComponent to control visibility of tooltip
           enableLabel={showTooltip}
-          animate={true}
+          animate={false}
+          motionConfig={{
+            duration: 0
+          }}
         />
       </Box>
     </Flex>

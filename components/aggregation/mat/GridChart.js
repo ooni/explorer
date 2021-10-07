@@ -14,7 +14,19 @@ import { Bar } from '@nivo/bar'
 const Row = ({ index, style, data }) => {
   const { reshapedData, rows, rowLabels, indexBy, showTooltipInRow, tooltipIndex/* yAxis */} = data
   const rowKey = rows[index]
-  const rowData = reshapedData[rowKey]
+  const rowData = React.useMemo(() => {
+    const dataWithHighlights = reshapedData[rowKey].map(d => {
+      /* For data points in the hightlighted row and column, enable the highlight flag */
+      d.highlight =
+      (tooltipIndex[0] === index && Object.keys(d).some(k => `${k}.${d[indexBy]}` === tooltipIndex[1] )) ? (
+        true
+      ) : (
+        false
+      )
+      return d
+    })
+    return dataWithHighlights
+  }, [tooltipIndex])
   const rowLabel = rowLabels[rowKey]
   // style is passed by the List component to give the correct dimensions to Row component
   return (
@@ -23,7 +35,7 @@ const Row = ({ index, style, data }) => {
         key={index}
         rowIndex={index}
         showTooltipInRow={showTooltipInRow}
-        showTooltip={tooltipIndex === index}
+        showTooltip={tooltipIndex[0] === index}
         first={index === 0}
         last={index === rows.length}
         data={rowData}
@@ -133,11 +145,14 @@ const reshapeData = (data, query) => {
 const GridChart = ({ data, query }) => {
   const { doneReshaping, doneRendering } = useDebugContext()
   
-  const [tooltipIndex, setTooltipIndex] = useState(-1)
+  // [rowIndex, columnKey] for the bar where click was detected
+  // and tooltip is to be shown
+  const [tooltipIndex, setTooltipIndex] = useState([-1, ''])
 
-  const showTooltipInRow = useCallback((index) => {
-    setTooltipIndex(index)
-  }, [])
+  const showTooltipInRow = useCallback((index, column) => {
+    console.log(`Registering: ${index}, ${column} to show tooltip`)
+    setTooltipIndex([index, column])
+  }, [setTooltipIndex])
 
   const [reshapedData, rows, rowLabels] = useMemo(() => {
     const t0 = performance.now()
