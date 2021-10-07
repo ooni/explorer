@@ -1,7 +1,11 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
-import { Box, Flex } from 'ooni-components'
+import { Box, Flex, theme } from 'ooni-components'
 import { Bar } from '@nivo/bar'
+
+import { CustomBarItem } from './CustomBarItem'
+import { CustomToolTip } from './CustomTooltip'
+import { colorMap } from './colorMap'
 
 const keys = [
   'anomaly_count',
@@ -10,18 +14,16 @@ const keys = [
   'ok_count',
 ]
 
-const colorMap = {
-  'confirmed_count': '#f03e3e', // red7,
-  'anomaly_count': '#fab005', // yellow6
-  'failure_count': '#ced4da', // gray4
-  'ok_count': '#51cf66' // green5
-}
-
 const colorFunc = (d) => colorMap[d.id] || '#ccc'
 
-const RowChart = ({ data, indexBy, label, height, /* width, first, last */}) => {
+const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, showTooltip /* width, first, last */}) => {
+
+  const handleClick = useCallback(({ column }) => {
+    showTooltipInRow(rowIndex, column)
+  }, [rowIndex, showTooltipInRow])
+
   return (
-    <Flex alignItems='center'>
+    <Flex alignItems='center' sx={{ position: 'relative' }}>
       <Box width={2/16}>
         {label}
       </Box>
@@ -34,7 +36,7 @@ const RowChart = ({ data, indexBy, label, height, /* width, first, last */}) => 
           // <GridChart />
           width={1000}
           height={height}
-          margin={{ top: 4, right: 40, bottom: 4, left: 0 }}
+          margin={{ top: 4, right: 100, bottom: 4, left: 0 }}
           padding={0.3}
           borderColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
           colors={colorFunc}
@@ -48,15 +50,28 @@ const RowChart = ({ data, indexBy, label, height, /* width, first, last */}) => 
           xScale={{ type: 'time' }}
           axisBottom={null}
           axisLeft={null}
+          enableGridX={true}
           labelSkipWidth={100}
           labelSkipHeight={100}
           labelTextColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
-          legends={[]}
+          tooltip={CustomToolTip}
+          onClick={handleClick}
+          barComponent={CustomBarItem}
+          theme={{
+            tooltip: {
+              container: {
+                pointerEvents: 'initial',
+                boxShadow: `1px 1px 4px 1px ${theme.colors.gray6}`
+              }
+            }
+          }}
+          // We send the `showTooltip` boolean into the barComponent to control visibility of tooltip
+          enableLabel={showTooltip}
           animate={false}
-          motionStiffness={90}
-          motionDamping={15}
+          motionConfig={{
+            duration: 0
+          }}
         />
-
       </Box>
     </Flex>
   )
@@ -73,7 +88,7 @@ RowChart.propTypes = {
   })),
   height: PropTypes.number,
   indexBy: PropTypes.string,
-  label: PropTypes.element,
+  label: PropTypes.node,
 }
 
 export default RowChart
