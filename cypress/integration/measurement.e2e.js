@@ -1,4 +1,3 @@
-/* global describe, it, cy */
 describe('Measurement Page Tests', () => {
 
   const normalColor = 'rgb(47, 158, 68)'

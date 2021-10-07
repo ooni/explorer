@@ -1,5 +1,3 @@
-/* global describe, it, cy, before */
-
 describe('Home Page Tests', () => {
 
   before(() => {
