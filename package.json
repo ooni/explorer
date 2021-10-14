@@ -76,6 +76,7 @@
     "eslint": "^7.20.0",
     "eslint-plugin-cypress": "^2.11.3",
     "eslint-plugin-react": "^7.22.0",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "glob": "^7.1.6",
     "mustache": "^2.3.0",
     "start-server-and-test": "^1.10.8"

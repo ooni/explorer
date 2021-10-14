@@ -6,7 +6,8 @@
   "extends": [
     "eslint:recommended",
     "plugin:react/recommended",
-    "plugin:cypress/recommended"
+    "plugin:cypress/recommended",
+    "plugin:react-hooks/recommended"
   ],
   "parserOptions": {
     "ecmaFeatures": {
