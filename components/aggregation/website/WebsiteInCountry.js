@@ -13,7 +13,7 @@ import { paramsToQuery } from './queryUtils'
 import VictoryTheme from '../../VictoryTheme'
 import WebsiteStatsChartLoader from './ChartLoader'
 
-const AGGREGATION_API = `${process.env.NEXT_PUBLIC_MEASUREMENTS_URL}/api/v1/aggregation?`
+const AGGREGATION_API = `${process.env.NEXT_PUBLIC_AGGREGATION_API || process.env.NEXT_PUBLIC_MEASUREMENTS_URL}/api/v1/aggregation?`
 
 const dataFetcher = url => (
   fetch(AGGREGATION_API + url).then(r => r.json())

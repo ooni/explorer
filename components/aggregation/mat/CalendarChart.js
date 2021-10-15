@@ -1,14 +1,18 @@
+/* global process */
 import React, { useEffect, useState } from 'react'
 import { ResponsiveCalendar } from '@nivo/calendar'
 import { Select } from 'ooni-components'
 import useSWR from 'swr'
 
+
+const AGGREGATION_API = `${process.env.NEXT_PUBLIC_AGGREGATION_API || process.env.NEXT_PUBLIC_MEASUREMENTS_URL}/api/v1/aggregation?`
+
 // TODO adapt to axios
-const fetcher = url => fetch(url).then(r => r.json())
+const fetcher = url => fetch(AGGREGATION_API + url).then(r => r.json())
 
 const fromDate = '2019-06-01'
 const toDate = '2020-05-31'
-const URL = `https://api.ooni.io/api/v1/aggregation?probe_cc=BR&since=${fromDate}&until=${toDate}&axis_x=measurement_start_day`
+const URL = `probe_cc=BR&since=${fromDate}&until=${toDate}&axis_x=measurement_start_day`
 
 export const Calendar = () => {
   const { data } = useSWR(URL, fetcher)
