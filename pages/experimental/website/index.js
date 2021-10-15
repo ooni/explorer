@@ -18,7 +18,7 @@ import { withDebugProvider } from '../../../components/aggregation/DebugContext'
 
 const Form = React.memo(FForm)
 
-const AGGREGATION_API = `${process.env.NEXT_PUBLIC_MEASUREMENTS_URL}/api/v1/aggregation?`
+const AGGREGATION_API = `${process.env.NEXT_PUBLIC_AGGREGATION_API || process.env.NEXT_PUBLIC_MEASUREMENTS_URL}/api/v1/aggregation?`
 
 const swrOptions = {
   revalidateOnFocus: false,
