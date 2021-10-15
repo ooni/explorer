@@ -106,7 +106,7 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
         <Flex flexDirection='column'>
           <Heading h={1} my={4} title='This is an experimental feature still undergoing development.'> 🧪 OONI Measurement Aggregation Toolkit</Heading>
           <Form onSubmit={onSubmit} testNames={testNames} query={router.query} />
-          <Box sx={{ height: '90vh' }}>
+          <Box sx={{ height: '500px' }}>
             {showLoadingIndicator &&
               <Box>
                 <h2>Loading ...</h2>
