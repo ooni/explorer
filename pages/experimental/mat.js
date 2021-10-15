@@ -46,7 +46,7 @@ const swrOptions = {
 
 const fetcher = (query) => {
   const qs = new URLSearchParams(query).toString()
-  const reqUrl = `${baseURL}/api/v1/aggregation?${qs}`
+  const reqUrl = `${process.env.NEXT_PUBLIC_AGGREGATION_API || process.env.NEXT_PUBLIC_MEASUREMENTS_URL}/api/v1/aggregation?${qs}`
   return axios.get(reqUrl).then(r => {
     return {
       data: r.data,

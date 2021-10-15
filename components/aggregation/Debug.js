@@ -55,7 +55,7 @@ export const Debug = ({ query, children, ...rest }) => {
             </Box>
           </Flex>
           <Box my={2}>
-            API Query: <Bold>{process.env.NEXT_PUBLIC_MEASUREMENTS_URL}/api/aggregation?{paramsToQuery(params)}</Bold>
+            API Query: <Bold>{process.env.NEXT_PUBLIC_AGGREGATION_API || process.env.NEXT_PUBLIC_MEASUREMENTS_URL}/api/v1/aggregation?{paramsToQuery(params)}</Bold>
           </Box>
           <Box>
             <details>
