@@ -81,7 +81,7 @@
     "start-server-and-test": "^1.10.8"
   },
   "scripts": {
-    "dev": "NODE_ENV=development node index.js",
+    "dev": "next dev -p 3100",
     "build-translations": "node ./scripts/build-translations.js",
     "extract-i18n-keys": "yarn build && node ./scripts/extract-react-intl-keys.js",
     "build": "next build",
@@ -90,6 +90,6 @@
     "test:e2e": "yarn build && start-server-and-test start http://localhost:3100 cypress:run",
     "cypress:run": "cypress run",
     "test": "echo nothing interesting",
-    "start": "node index.js"
+    "start": "next start -p 3100"
   }
 }
