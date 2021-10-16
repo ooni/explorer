@@ -1,11 +1,10 @@
-/* global require, module */
-const withSourceMaps = require('@zeit/next-source-maps')
-
-module.exports = withSourceMaps({
+/* global module */
+module.exports = {
+  productionBrowserSourceMaps: true,
   webpack: (config, {isServer}) => {
     if (!isServer) {
       config.resolve.alias['@sentry/node'] = '@sentry/browser'
     }
     return config
   }
-})
+}

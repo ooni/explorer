@@ -17,7 +17,6 @@
     "@sentry/browser": "^5.0.8",
     "@sentry/integrations": "^5.0.8",
     "@sentry/node": "^5.0.8",
-    "@zeit/next-source-maps": "0.0.3",
     "axios": "^0.21.1",
     "babel-plugin-inline-react-svg": "1.1.0",
     "babel-plugin-styled-components": "^1.10.7",
@@ -51,7 +50,6 @@
     "sentry-testkit": "^2.2.0",
     "styled-components": "5.1.1",
     "swr": "^0.2.3",
-    "url": "^0.11.0",
     "use-clipboard-copy": "^0.1.2",
     "victory": "^32.0.2"
   },
