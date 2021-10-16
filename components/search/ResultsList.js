@@ -257,9 +257,8 @@ const ResultInput = styled.div`
   color: ${props => props.theme.colors.gray5};
 `
 
-const getIndicators = ({ test_name, testDisplayName, scores = {}, confirmed, anomaly }) => {
+const getIndicators = ({ test_name, testDisplayName, scores = {}, confirmed, anomaly, intl }) => {
   let color = '', tag = null
-  const intl = useIntl()
   if (testsWithStates.includes(test_name)) {
     if (imTests.includes(test_name) && Object.entries(scores).length === 0) {
       return [color, tag]
@@ -267,7 +266,7 @@ const getIndicators = ({ test_name, testDisplayName, scores = {}, confirmed, ano
 
     const testName = testDisplayName.replace(/ /gi, '')
     const computedMessageIdPrefix = `Search.${testName}.Results`
-    const blockingType = scores.analysis && scores.analysis.blocking_type;
+    const blockingType = scores.analysis && scores.analysis.blocking_type
 
     if (confirmed === true) {
       color = colorConfirmed
@@ -324,6 +323,7 @@ const ResultItem = ({
   anomaly,
   failure
 }) => {
+  const intl = useIntl()
   const pathMaxLen = 10
   let inputLabel = input
   if (input) {
@@ -348,7 +348,7 @@ const ResultItem = ({
     }
   }
 
-  const [indicatorColor, tag] = getIndicators({test_name, testDisplayName, scores, confirmed, anomaly, failure})
+  const [indicatorColor, tag] = getIndicators({test_name, testDisplayName, scores, confirmed, anomaly, failure, intl})
 
   return (
     <ViewDetailsLink reportId={report_id} input={input}>

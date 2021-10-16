@@ -123,7 +123,7 @@ const Table = ({ columns, data }) => {
         )}
       </tbody>
     </table>
-    /* eslint-enable react/js-key */
+    /* eslint-enable react/jsx-key */
 
   )
 }

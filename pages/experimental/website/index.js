@@ -10,7 +10,6 @@ import axios from 'axios'
 import Layout from '../../../components/Layout'
 import NavBar from '../../../components/NavBar'
 
-// import gdata from '../../../components/aggregation/website/global-data'  // static data for offline mode
 import Global from '../../../components/aggregation/website/Global'
 import FForm from '../../../components/aggregation/website/Form'
 import { paramsToQuery, queryToParams } from '../../../components/aggregation/website/queryUtils'

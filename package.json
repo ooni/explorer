@@ -70,8 +70,8 @@
     "babel-plugin-react-intl": "^3.2.0",
     "cypress": "^5.2.0",
     "eslint": "^7.20.0",
+    "eslint-config-next": "11.1.2",
     "eslint-plugin-cypress": "^2.11.3",
-    "eslint-plugin-react": "^7.22.0",
     "glob": "^7.1.6",
     "mustache": "^2.3.0",
     "start-server-and-test": "^1.10.8"
@@ -82,7 +82,7 @@
     "extract-i18n-keys": "yarn build && node ./scripts/extract-react-intl-keys.js",
     "build": "next build",
     "export": "next export",
-    "lint": "eslint --ignore-path .gitignore .",
+    "lint": "next lint",
     "test:e2e": "yarn build && start-server-and-test start http://localhost:3100 cypress:run",
     "cypress:run": "cypress run",
     "test": "echo nothing interesting",
