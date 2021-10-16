@@ -6,6 +6,7 @@ import { Container } from 'ooni-components'
 import Layout from '../../../components/Layout'
 import NavBar from '../../../components/NavBar'
 import WebsiteInCountry from '../../../components/aggregation/website/WebsiteInCountry'
+import { withDebugProvider } from '../../../components/aggregation/DebugContext'
 
 const WebsiteInCountryPage = () => {
   const router = useRouter()
@@ -26,4 +27,4 @@ const WebsiteInCountryPage = () => {
   )
 }
 
-export default WebsiteInCountryPage
+export default withDebugProvider(WebsiteInCountryPage)

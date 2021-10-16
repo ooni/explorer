@@ -15,6 +15,7 @@ import Global from '../../../components/aggregation/website/Global'
 import FForm from '../../../components/aggregation/website/Form'
 import { paramsToQuery, queryToParams } from '../../../components/aggregation/website/queryUtils'
 import { Debug } from '../../../components/aggregation/Debug'
+import { withDebugProvider } from '../../../components/aggregation/DebugContext'
 
 const Form = React.memo(FForm)
 
@@ -91,4 +92,4 @@ const WebsiteAnalytics = () => {
   )
 }
 
-export default WebsiteAnalytics
+export default withDebugProvider(WebsiteAnalytics)

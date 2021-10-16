@@ -41,4 +41,13 @@ export const DebugProvider = ({ children }) => {
   )
 }
 
+export const withDebugProvider = (Component) => {
+  const WithDebugProvider = ({ ...props }) => (
+    <DebugProvider>
+      <Component {...props} />
+    </DebugProvider>
+  )
+  return WithDebugProvider
+}
+
 export const useDebugContext = () => useContext(DebugContext)

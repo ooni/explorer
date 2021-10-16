@@ -18,7 +18,7 @@ import { FunnelChart } from '../../components/aggregation/mat/FunnelChart'
 import { GridChart } from '../../components/aggregation/mat/GridChart'
 import { Form } from '../../components/aggregation/mat/Form'
 import { axiosResponseTime } from '../../components/axios-plugins'
-import { DebugProvider, useDebugContext } from '../../components/aggregation/DebugContext'
+import { withDebugProvider, useDebugContext } from '../../components/aggregation/DebugContext'
 import { Debug } from '../../components/aggregation/Debug'
 
 const baseURL = process.env.NEXT_PUBLIC_MEASUREMENTS_URL
@@ -143,12 +143,12 @@ MeasurementAggregationToolkit.propTypes = {
   )
 }
 
-function DebuggableMAT({ testNames }) {
-  return (
-    <DebugProvider>
-      <MeasurementAggregationToolkit testNames={testNames} />
-    </DebugProvider>
-  )
-}
+// function DebuggableMAT({ testNames }) {
+//   return (
+//     <DebugProvider>
+//       <MeasurementAggregationToolkit testNames={testNames} />
+//     </DebugProvider>
+//   )
+// }
 
-export default DebuggableMAT
+export default withDebugProvider(MeasurementAggregationToolkit)
