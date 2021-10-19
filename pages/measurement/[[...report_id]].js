@@ -6,18 +6,18 @@ import countryUtil from 'country-util'
 import axios from 'axios'
 import { Container, theme } from 'ooni-components'
 
-import Hero from '../components/measurement/Hero'
-import CommonSummary from '../components/measurement/CommonSummary'
-import DetailsHeader from '../components/measurement/DetailsHeader'
-import SummaryText from '../components/measurement/SummaryText'
-import CommonDetails from '../components/measurement/CommonDetails'
-import MeasurementContainer from '../components/measurement/MeasurementContainer'
-import MeasurementNotFound from '../components/measurement/MeasurementNotFound'
-import HeadMetadata from '../components/measurement/HeadMetadata'
+import Hero from '../../components/measurement/Hero'
+import CommonSummary from '../../components/measurement/CommonSummary'
+import DetailsHeader from '../../components/measurement/DetailsHeader'
+import SummaryText from '../../components/measurement/SummaryText'
+import CommonDetails from '../../components/measurement/CommonDetails'
+import MeasurementContainer from '../../components/measurement/MeasurementContainer'
+import MeasurementNotFound from '../../components/measurement/MeasurementNotFound'
+import HeadMetadata from '../../components/measurement/HeadMetadata'
 
-import Layout from '../components/Layout'
-import NavBar from '../components/NavBar'
-import ErrorPage from './_error'
+import Layout from '../../components/Layout'
+import NavBar from '../../components/NavBar'
+import ErrorPage from '../_error'
 
 const pageColors = {
   default: theme.colors.base,
@@ -33,8 +33,14 @@ export async function getServerSideProps({ query }) {
     errors: []
   }
 
+  // Get `report_id` using optional catch all dynamic route of Next.js
+  // Doc: https://nextjs.org/docs/routing/dynamic-routes#optional-catch-all-routes 
+  // e.g /measurement/20211015T162758Z_webconnectivity_TH_23969_n1_d11S0T15FaOuXgFO
+  // It can also catch /measurement/report_id/extra/segments
+  // in which case, the extra segments are available inside query.report_id[1+]
+  const report_id = query?.report_id?.[0]
   // If there is no report_id to use, fail early with MeasurementNotFound
-  if (typeof query.report_id !== 'string' || query.report_id.length < 1) {
+  if (typeof report_id !== 'string' || report_id.length < 1) {
     initialProps.notFound = true
     return {
       props: initialProps
@@ -46,7 +52,7 @@ export async function getServerSideProps({ query }) {
   try {
     client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
     let params = {
-      report_id: query.report_id,
+      report_id: report_id,
       full: true
     }
     if (query.input) {
