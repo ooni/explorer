@@ -60,7 +60,7 @@ const WebsiteAnalytics = () => {
   useEffect(() => {
     const url = `${router.pathname}?${query}`
     router.push( url, url, { shallow: true })
-  }, [query])
+  }, [query, router])
 
   const derivedParams = useMemo(() => {
     return queryToParams(query)

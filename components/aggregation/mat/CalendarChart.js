@@ -14,17 +14,13 @@ export const Calendar = () => {
   const { data } = useSWR(URL, fetcher)
   const [dataX, setDataX ] = useState([])
 
-  const transformData = () => {
+  useEffect(() => {
     if (data) {
       setDataX(data.result.map(item => ({
         day: item.measurement_start_day,
         value: item.measurement_count
       })))
     }
-  }
-
-  useEffect(() => {
-    transformData()
   }, [data])
 
   if (!data) {

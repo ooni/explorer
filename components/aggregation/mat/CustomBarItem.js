@@ -52,7 +52,7 @@ export const CustomBarItem = ({
   const renderTooltip = useCallback(() =>
     // eslint-disable-next-line react/display-name
     createElement(tooltip, { ...bar, ...data, onClose }),
-  [tooltip, bar, data])
+  [tooltip, bar, data, onClose])
 
   const handleClick = useCallback(
     (event) => {
@@ -67,7 +67,7 @@ export const CustomBarItem = ({
         nearTopEdge ? 'bottom' : 'top'
       )
     },
-    [bar, data, onClick]
+    [bar.color, bar.height, bar.key, bar.width, bar.x, bar.y, data, onClick, renderTooltip, showTooltipAt]
   )
   // Disable events upon mouse movement events
   // const handleTooltip = useCallback(

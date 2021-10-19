@@ -105,9 +105,6 @@ const Country = ({ countryCode, countryName, overviewStats, reports, ...coverage
 
   const { testCoverage, networkCoverage } = newData !== false ? newData : coverageDataSSR
 
-  console.log('testCoverage')
-  console.log(testCoverage[0].count)
-
   return (
     <Layout>
       <CountryHead countryName={countryName} measurementCount={overviewStats.measurement_count} measuredSince={overviewStats.first_bucket_date} networkCount={overviewStats.network_count} />
