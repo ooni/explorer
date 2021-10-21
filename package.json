@@ -74,15 +74,20 @@
     "start-server-and-test": "^1.10.8"
   },
   "scripts": {
-    "dev": "next dev -p 3100",
-    "build-translations": "node ./scripts/build-translations.js",
-    "extract-i18n-keys": "yarn build && node ./scripts/extract-react-intl-keys.js",
+    "dev": ". ./scripts/populate-git-env.sh && next dev -p 3100",
+    "start": "next start -p 3100",
     "build": "next build",
     "export": "next export",
     "lint": "next lint",
     "test:e2e": "yarn build && start-server-and-test start http://localhost:3100 cypress:run",
     "cypress:run": "cypress run",
-    "test": "echo nothing interesting",
-    "start": "next start -p 3100"
+    "test": "yarn run test:e2e",
+    "script:build-translations": "node ./scripts/build-translations.js",
+    "script:extract-i18n-keys": "yarn build && node ./scripts/extract-react-intl-keys.js",
+    "script:populate-git-env:print": ". ./scripts/populate-git-env.sh && echo 'SHA: '${GIT_COMMIT_SHA} && echo 'SHA (short): '${GIT_COMMIT_SHA_SHORT} && echo 'REF (current branch/tag): '${GIT_COMMIT_REF} && echo 'TAGS: '${GIT_COMMIT_TAGS}",
+    "git:getReleasesAndTags": "git tag --points-at HEAD | tr '\\r\\n' ' '",
+    "git:getCommitSHA": "git rev-parse HEAD",
+    "git:getCommitSHA:short": "git rev-parse --short HEAD",
+    "git:getCommitRef": "git symbolic-ref HEAD"
   }
 }
