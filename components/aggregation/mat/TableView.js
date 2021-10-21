@@ -116,7 +116,7 @@ const TableView = ({ data, yAxis }) => {
   // Aggregate by the first column
   const initialState = React.useMemo(() => ({
     groupBy: [yAxis]
-  }),[])
+  }),[yAxis])
 
   const columns = useMemo(() => [
     {
@@ -148,7 +148,7 @@ const TableView = ({ data, yAxis }) => {
       aggregate: 'sum',
       disableFilters: true,
     }
-  ], [])
+  ], [intl, yAxis])
 
   const {
     getTableProps,
@@ -218,7 +218,7 @@ const TableView = ({ data, yAxis }) => {
         </TableRow>
       )
     },
-    [prepareRow, rows]
+    [prepareRow]
   )
 
 
@@ -230,7 +230,6 @@ const TableView = ({ data, yAxis }) => {
           {headerGroups.map(headerGroup => (
             <TableRow {...headerGroup.getHeaderGroupProps()}>
               {headerGroup.headers.map(column => {
-                console.log(column)
                 return (
                   <Cell
                     {...column.getHeaderProps()}

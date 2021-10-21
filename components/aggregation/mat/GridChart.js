@@ -173,8 +173,8 @@ const GridChart = ({ data, query }) => {
   const dateSet = [...getDatesBetween(new Date(query.since), new Date(query.until))]
 
   return (
-    <Flex flexDirection='column' sx={{ height: '100vh' }}>
-      <Flex flexDirection='column' sx={{ height: '50%' }} my={4}>
+    <Flex flexDirection='column' >
+      <Flex flexDirection='column' my={4}>
         {/* Fake axis on top of list. Possible alternative: dummy chart with axis and valid tickValues */}
         <Flex>
           <Box width={2/16}>
@@ -202,10 +202,11 @@ const GridChart = ({ data, query }) => {
             />
           </Flex>
         </Flex>
-        <Flex sx={{ height: '100%' }}>
+        <Flex sx={{ height: '40vh' }}>
           <AutoSizer>
             {({ width, height }) => (
               <List
+                className='outerListElement'
                 height={height}
                 width={width}
                 itemCount={rows.length}
@@ -218,7 +219,7 @@ const GridChart = ({ data, query }) => {
           </AutoSizer>
         </Flex>
       </Flex>
-      <Flex my={4}>
+      <Flex my={4} sx={{ height: '40vh' }}>
         <TableView data={data} yAxis={query.axis_y} />
       </Flex>
     </Flex>

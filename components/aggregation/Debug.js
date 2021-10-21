@@ -32,7 +32,7 @@ export const Debug = ({ query, children, ...rest }) => {
   const renderTime = (renderTimeRef.current > -1) ? Number(renderTimeRef.current - reshapeTimeRef.current).toFixed(3) : undefined
 
   return (
-    <Flex color='gray6' my={3} {...rest}>
+    <Flex color='gray6' {...rest}>
       <DetailsBox title='Debugging Information' content={
         <>
           <Heading h={4}>

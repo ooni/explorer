@@ -106,7 +106,7 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
         <Flex flexDirection='column'>
           <Heading h={1} my={4} title='This is an experimental feature still undergoing development.'> 🧪 OONI Measurement Aggregation Toolkit</Heading>
           <Form onSubmit={onSubmit} testNames={testNames} query={router.query} />
-          <Box sx={{ height: '500px' }}>
+          <Box sx={{ }}>
             {showLoadingIndicator &&
               <Box>
                 <h2>Loading ...</h2>
@@ -116,10 +116,14 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
               <FunnelChart data={data.data.result} />
             }
             {data && data.data.dimension_count == 1 &&
-              <StackedBarChart data={data} query={query} />
+              <Box sx={{ height: '500px' }}>
+                <StackedBarChart data={data} query={query} />
+              </Box>
             }
             {data && data.data.dimension_count > 1 &&
-              <GridChart data={data.data.result} query={query} />
+              <Box sx={{ minHeight: '500px' }}>
+                <GridChart data={data.data.result} query={query} />
+              </Box>
             }
           </Box>
           <Debug query={query} mt={5} />
