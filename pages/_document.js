@@ -18,7 +18,6 @@ export default class MyDocument extends Document {
         </Head>
         <body>
           <Main />
-          <script src='/static/lang/translations.js' />
           <NextScript />
         </body>
       </Html>

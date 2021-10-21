@@ -26,7 +26,7 @@ const Row = ({ index, style, data }) => {
       return d
     })
     return dataWithHighlights
-  }, [tooltipIndex])
+  }, [index, indexBy, reshapedData, rowKey, tooltipIndex])
   const rowLabel = rowLabels[rowKey]
   // style is passed by the List component to give the correct dimensions to Row component
   return (
@@ -160,7 +160,7 @@ const GridChart = ({ data, query }) => {
     const t1 = performance.now()
     doneReshaping(t0, t1)
     return [reshapedData, rows, rowLabels]
-  }, [data, query])
+  }, [data, doneReshaping, query])
 
   useEffect(() => {
     doneRendering(performance.now())

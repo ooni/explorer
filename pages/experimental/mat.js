@@ -74,7 +74,7 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
     }
     return router.push(href, href, { shallow: true })
 
-  }, [router.pathname])
+  }, [router])
 
   const shouldFetchData = router.pathname !== router.asPath
   const query = router.query
@@ -88,9 +88,9 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
   useEffect(() => {
     debugQuery(query)
     debugApiResponse(data)
-  }, [data, query])
+  }, [data, debugApiResponse, debugQuery, query])
 
-  const showLoadingIndicator = useMemo(() => isValidating)
+  const showLoadingIndicator = useMemo(() => isValidating, [isValidating])
 
   useEffect(() => {
     doneRendering(performance.now())

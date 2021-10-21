@@ -4,7 +4,6 @@ import styled from 'styled-components'
 import { Flex, Box, Container, Link } from 'ooni-components'
 import ExplorerLogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochromeInverted.svg'
 import { useIntl } from 'react-intl'
-import { version } from '../package.json'
 
 const StyledFooter = styled.footer`
   background-color: ${props => props.theme.colors.blue9};
@@ -95,7 +94,7 @@ const Footer = () => {
             <small>
               <Box mb={1}>{intl.formatMessage({ id: 'Footer.Text.Copyright' })}</Box>
               <FooterLink href='https://github.com/ooni/license' label={intl.formatMessage({ id: 'Footer.Text.CCommons'})} />
-              <FooterText>{intl.formatMessage({ id: 'Footer.Text.Version' }) }: {version}</FooterText>
+              <FooterText>{intl.formatMessage({ id: 'Footer.Text.Version' }) }: {process.env.GIT_COMMIT_SHA_SHORT}</FooterText>
             </small>
           </FooterBox>
         </Flex>

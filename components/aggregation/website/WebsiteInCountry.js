@@ -8,7 +8,6 @@ import useSWR from 'swr'
 import countryUtil from 'country-util'
 import styled from 'styled-components'
 
-// import wdata from './website-data'  // static data for offline mode
 import { Debug } from '../Debug'
 import { paramsToQuery } from './queryUtils'
 import VictoryTheme from '../../VictoryTheme'

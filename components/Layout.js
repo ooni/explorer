@@ -7,7 +7,7 @@ import { theme } from 'ooni-components'
 import Header from './Header'
 import Footer from './Footer'
 import withIntl from './withIntl'
-import FeedbackButton from '../components/FeedbackFloat'
+// import FeedbackButton from '../components/FeedbackFloat'
 
 theme.maxWidth = 1024
 
@@ -66,7 +66,7 @@ const Layout = ({ children, disableFooter = false }) => {
           </div>
           {!disableFooter && <Footer />}
         </div>
-        <FeedbackButton />
+        {/* <FeedbackButton /> */}
       </ThemeProvider>
     </MatomoProvider>
   )

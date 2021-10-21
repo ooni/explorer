@@ -1,28 +1,13 @@
 {
-  "env": {
-    "browser": true,
-    "es6": true
-  },
+  "plugins": ["cypress"],
   "extends": [
-    "eslint:recommended",
-    "plugin:react/recommended",
+    "next/core-web-vitals",
     "plugin:cypress/recommended"
   ],
-  "parserOptions": {
-    "ecmaFeatures": {
-      "experimentalObjectRestSpread": true,
-      "jsx": true
-    },
-    "ecmaVersion": 2020,
-    "sourceType": "module"
-  },
-  "plugins": ["react", "cypress"],
   "rules": {
-    "indent": ["error", 2],
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "single"],
-    "semi": ["error", "never"],
-    "react/prop-types": ["warn"]
+    "semi": ["error", "never"]
   },
   "ignorePatterns": ["components/vendor", "static"]
 }
