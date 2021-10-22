@@ -31,6 +31,8 @@ export const Debug = ({ query, children, ...rest }) => {
   const reshapeTime = (reshapeTimeRef.current > -1) ? Number(reshapeTimeRef.current - preReshapeTimeRef.current).toFixed(3) : undefined
   const renderTime = (renderTimeRef.current > -1) ? Number(renderTimeRef.current - reshapeTimeRef.current).toFixed(3) : undefined
 
+  const apiQuery = `${process.env.NEXT_PUBLIC_AGGREGATION_API || process.env.NEXT_PUBLIC_MEASUREMENTS_URL}/api/v1/aggregation?${paramsToQuery(params)}`
+
   return (
     <Flex color='gray6' {...rest}>
       <DetailsBox title='Debugging Information' content={
@@ -55,12 +57,21 @@ export const Debug = ({ query, children, ...rest }) => {
             </Box>
           </Flex>
           <Box my={2}>
-            API Query: <Bold>{process.env.NEXT_PUBLIC_AGGREGATION_API || process.env.NEXT_PUBLIC_MEASUREMENTS_URL}/api/v1/aggregation?{paramsToQuery(params)}</Bold>
+            API Query: <Bold><a href={apiQuery} target='_blank' rel='noreferrer'>{apiQuery}</a></Bold>
           </Box>
           <Box>
             <details>
               <summary> API Response ({apiResponse?.data?.result?.length} items)</summary>
-              <pre> { JSON.stringify(apiResponse?.data, null, 2)} </pre>
+              {apiResponse?.data.result.length > 1000 ? (
+                <pre>
+                  <Box>That is a lot of data to show. <a rel='noreferrer' target='_blank' href={apiQuery} title='API Query'>Click</a> to fetch this data in a new tab.</Box>
+                </pre>
+              ):(
+                <pre> 
+                  {JSON.stringify(apiResponse?.data, null, 2)}
+                </pre>
+              )
+              }
             </details>
           </Box>
           <Box>
