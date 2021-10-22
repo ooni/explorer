@@ -303,9 +303,9 @@ const TableView = ({ data, query }) => {
 
   return (
     <Flex flexDirection='column'>
-      <Flex>
+      <Box>
         <GridChart data={rows} query={query} />
-      </Flex>
+      </Box>
       <Flex my={4} sx={{ height: '40vh' }}>
         <TableContainer>
           {/* eslint-disable react/jsx-key */}
