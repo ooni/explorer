@@ -20,6 +20,7 @@ import { Form } from '../../components/aggregation/mat/Form'
 import { axiosResponseTime } from '../../components/axios-plugins'
 import { withDebugProvider, useDebugContext } from '../../components/aggregation/DebugContext'
 import { Debug } from '../../components/aggregation/Debug'
+import TableView from 'components/aggregation/mat/TableView'
 
 const baseURL = process.env.NEXT_PUBLIC_MEASUREMENTS_URL
 axiosResponseTime(axios)
@@ -122,7 +123,8 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
             }
             {data && data.data.dimension_count > 1 &&
               <Box sx={{ minHeight: '500px' }}>
-                <GridChart data={data.data.result} query={query} />
+                <TableView data={data.data.result} query={query} />
+                {/* <GridChart data={data.data.result} query={query} /> */}
               </Box>
             }
           </Box>

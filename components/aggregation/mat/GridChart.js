@@ -85,7 +85,8 @@ const getRowLabel = (key, yAxis) => {
   case 'probe_cc':
     return countryUtil.territoryNames[key]
   case 'category_code':
-    return categoryCodesMap.get(key).name
+    console.log(key, yAxis)
+    return categoryCodesMap.get(key)?.name
   case 'input':
     return (<InputRowLabel input={key} />)
   default:
@@ -108,7 +109,7 @@ const reshapeData = (data, query) => {
   const rows = []
   const rowLabels = {}
 
-  data.forEach((item) => {
+  data.forEach(({ values: item }) => {
     const key = item[query.axis_y]
     // 1. Attach `ok_count` to all the data items
     item['ok_count'] = item.measurement_count - item.confirmed_count - item.anomaly_count
@@ -232,9 +233,6 @@ const GridChart = ({ data, query }) => {
             )}
           </AutoSizer>
         </Flex>
-      </Flex>
-      <Flex my={4} sx={{ height: '40vh' }}>
-        <TableView data={data} yAxis={query.axis_y} rowLabels={rowLabels} />
       </Flex>
     </Flex>
   )
