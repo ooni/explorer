@@ -1,12 +1,14 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
+import PropTypes from 'prop-types'
 import { useTable, useFlexLayout, useRowSelect, useFilters, useGroupBy } from 'react-table'
 import { FormattedMessage, useIntl } from 'react-intl'
 import styled from 'styled-components'
-import { FixedSizeList } from 'react-window'
-import { Flex } from 'ooni-components'
-import { groupBy } from 'lodash'
-import { Box } from 'rebass'
+import { Flex, Box } from 'ooni-components'
+import countryUtil from 'country-util'
+
 import { GridChart } from './GridChart'
+import { useDebugContext } from '../DebugContext'
+import { getCategoryCodesMap } from '../../utils/categoryCodes'
 
 const TableContainer = styled.div`
   padding: 1rem;
@@ -86,9 +88,67 @@ const SearchFilter = ({
   )
 }
 
+// From GridChart
+
+const InputRowLabel = ({ input }) => {
+  const trucatedInput = input
+  return (
+    <Box title={input} sx={{
+      overflow: 'hidden',
+      textOverflow: 'ellipsis'
+    }}>
+      {trucatedInput}
+    </Box>
+  )
+}
+
+InputRowLabel.propTypes = {
+  input: PropTypes.string,
+}
+
+const categoryCodesMap = getCategoryCodesMap()
+
+const getRowLabel = (key, yAxis) => {
+  switch (yAxis) {
+  case 'probe_cc':
+    return countryUtil.territoryNames[key]
+  case 'category_code':
+    return categoryCodesMap.get(key)?.name
+  case 'input':
+    return (<InputRowLabel input={key} />)
+  default:
+    return key
+  }
+}
+
+export function getDatesBetween(startDate, endDate) {
+  const dateArray = new Set()
+  var currentDate = startDate
+  while (currentDate <= endDate) {
+    dateArray.add(currentDate.toISOString().slice(0, 10))
+    currentDate.setDate(currentDate.getDate() + 1)
+  }
+  return dateArray
+}
+
+const reshapeTableData = (data, query) => {
+  const reshapedData = data.map((item) => {
+    const key = item[query.axis_y]
+    // 1. Attach `ok_count` to all the data items
+    item['ok_count'] = item.measurement_count - item.confirmed_count - item.anomaly_count
+    item['rowLabel'] = getRowLabel(key, query.axis_y)
+    return item
+  })
+  return reshapedData
+}
+// End From GridChart
+
 const TableView = ({ data, query }) => {
   const intl = useIntl()
   const yAxis = query.axis_y
+
+  const { doneReshaping, doneRendering } = useDebugContext()
+
   const defaultColumn = React.useMemo(
     () => ({
       // When using the useFlexLayout:
@@ -229,6 +289,17 @@ const TableView = ({ data, query }) => {
     [prepareRow]
   )
 
+  const reshapedTableData = useMemo(() => {
+    const t0 = performance.now()
+    const reshapedData = reshapeTableData(data, query)
+    const t1 = performance.now()
+    doneReshaping(t0, t1)
+    return reshapedData
+  }, [doneReshaping, query, data])
+
+  useEffect(() => {
+    doneRendering(performance.now())
+  })
 
   return (
     <Flex flexDirection='column'>

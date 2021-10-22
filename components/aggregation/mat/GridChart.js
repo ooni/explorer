@@ -3,13 +3,10 @@ import PropTypes from 'prop-types'
 import { FixedSizeList as List } from 'react-window'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { Bar } from '@nivo/bar'
-import countryUtil from 'country-util'
 import { Flex, Box } from 'ooni-components'
 
 import RowChart from './RowChart'
-import { useDebugContext } from '../DebugContext'
 import { getCategoryCodesMap } from '../../utils/categoryCodes'
-import TableView from './TableView'
 
 // all props are passed by the List component
 const Row = ({ index, style, data }) => {
@@ -62,8 +59,6 @@ Row.propTypes = {
   style: PropTypes.object,
 }
 
-const categoryCodesMap = getCategoryCodesMap()
-
 const InputRowLabel = ({ input }) => {
   const trucatedInput = input
   return (
@@ -80,6 +75,8 @@ InputRowLabel.propTypes = {
   input: PropTypes.string,
 }
 
+const categoryCodesMap = getCategoryCodesMap()
+
 const getRowLabel = (key, yAxis) => {
   switch (yAxis) {
   case 'probe_cc':
@@ -94,7 +91,7 @@ const getRowLabel = (key, yAxis) => {
   }
 }
 
-function getDatesBetween(startDate, endDate) {
+export function getDatesBetween(startDate, endDate) {
   const dateArray = new Set()
   var currentDate = startDate
   while (currentDate <= endDate) {
@@ -104,30 +101,14 @@ function getDatesBetween(startDate, endDate) {
   return dateArray
 }
 
-const reshapeData = (data, query) => {
-  const reshapedData = {}
+const reshapeChartData = (data, query) => {
   const rows = []
   const rowLabels = {}
-
-  data.forEach(({ values: item }) => {
-    const key = item[query.axis_y]
-    // 1. Attach `ok_count` to all the data items
-    item['ok_count'] = item.measurement_count - item.confirmed_count - item.anomaly_count
-    item['rowLabel'] = getRowLabel(key, query.axis_y)
-
-    // 2. reshape to map with grouped by y-axis values
-    // {
-    //   yaxis_value_1: [{}, {}, {}],
-    //   yaxis_value_2: [{}, {}, {}}],...
-    // }
-    if (key in reshapedData) {
-      reshapedData[key].push(item)
-    } else {
-      rows.push(key)
-      reshapedData[key] = [item]
-      rowLabels[key] = getRowLabel(key, query.axis_y)
-    }
-  })
+  const reshapedData = data.reduce((d, groupedRow, i) => {
+    rows.push(groupedRow.groupByVal)
+    rowLabels[groupedRow.groupByVal] = groupedRow.leafRows[0].original.rowLabel
+    return {...d, [groupedRow.groupByVal]: groupedRow.leafRows.map(r => r.original)}
+  }, {})
 
   // 3. If x-axis is `measurment_start_date`, fill will zero values where there is no data
   if (query.axis_x === 'measurement_start_date') {
@@ -157,7 +138,6 @@ const reshapeData = (data, query) => {
 
 const GridChart = ({ data, query }) => {
   const [isStaticChart, setStaticChart] = useState(true)
-  const { doneReshaping, doneRendering } = useDebugContext()
   
   // [rowIndex, columnKey] for the bar where click was detected
   // and tooltip is to be shown
@@ -167,17 +147,13 @@ const GridChart = ({ data, query }) => {
     setTooltipIndex([index, column])
   }, [setTooltipIndex])
 
-  const [reshapedData, rows, rowLabels] = useMemo(() => {
+  const [reshapedChartData, rows, rowLabels] = useMemo(() => {
     const t0 = performance.now()
-    const [reshapedData, rows, rowLabels] = reshapeData(data, query)
+    const [reshapedData, rows, rowLabels] = reshapeChartData(data, query)
     const t1 = performance.now()
-    doneReshaping(t0, t1)
+    // doneReshaping(t0, t1)
     return [reshapedData, rows, rowLabels]
-  }, [data, doneReshaping, query])
-
-  useEffect(() => {
-    doneRendering(performance.now())
-  })
+  }, [data, query])
 
   // FIX: Use the first row to generate the static xAxis outside the charts.
   //  * it is dependent on the width of the charts which is hard coded in `RowChart.js`
@@ -196,7 +172,7 @@ const GridChart = ({ data, query }) => {
           </Box>
           <Flex sx={{ width: '1000px' }} justifyContent='space-between'>
             <Bar
-              data={reshapedData[rows[0]]}
+              data={reshapedChartData[rows[0]]}
               indexBy={query.axis_x}
               width={1000}
               height={70}
@@ -226,7 +202,7 @@ const GridChart = ({ data, query }) => {
                 width={width}
                 itemCount={rows.length}
                 itemSize={72}
-                itemData={{reshapedData, rows, rowLabels, indexBy: query.axis_x, yAxis: query.axis_y, tooltipIndex, showTooltipInRow, isStaticChart }}
+                itemData={{reshapedData: reshapedChartData, rows, rowLabels, indexBy: query.axis_x, yAxis: query.axis_y, tooltipIndex, showTooltipInRow, isStaticChart }}
               >
                 {Row}
               </List>
