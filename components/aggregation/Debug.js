@@ -17,6 +17,19 @@ Bold.propTypes = {
   children: PropTypes.any,
 }
 
+const getCircularReplacer = () => {
+  const seen = new WeakSet()
+  return (key, value) => {
+    if (typeof value === 'object' && value !== null) {
+      if (seen.has(value)) {
+        return
+      }
+      seen.add(value)
+    }
+    return value
+  }
+}
+
 export const Debug = ({ query, children, ...rest }) => {
   const { query: queryCtx, apiResponse, others, preReshapeTimeRef, reshapeTimeRef, renderTimeRef} = useDebugContext()
 
@@ -67,8 +80,8 @@ export const Debug = ({ query, children, ...rest }) => {
                   <Box>That is a lot of data to show. <a rel='noreferrer' target='_blank' href={apiQuery} title='API Query'>Click</a> to fetch this data in a new tab.</Box>
                 </pre>
               ):(
-                <pre> 
-                  {JSON.stringify(apiResponse?.data, null, 2)}
+                <pre>
+                  {JSON.stringify(apiResponse?.data, getCircularReplacer(), 2)}
                 </pre>
               )
               }
