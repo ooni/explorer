@@ -10,7 +10,7 @@ import { getCategoryCodesMap } from '../../utils/categoryCodes'
 
 // all props are passed by the List component
 const Row = ({ index, style, data }) => {
-  const { reshapedData, rows, rowLabels, indexBy, showTooltipInRow, tooltipIndex/* yAxis */} = data
+  const { reshapedData, rows, rowLabels, indexBy, showTooltipInRow, tooltipIndex, isStaticChart /* yAxis */} = data
   const rowKey = rows[index]
   const rowData = React.useMemo(() => {
     const dataWithHighlights = reshapedData[rowKey].map(d => {
@@ -40,6 +40,7 @@ const Row = ({ index, style, data }) => {
         indexBy={indexBy}
         {...style}
         label={rowLabel}
+        isStaticChart={isStaticChart}
       />
     </div>
   )
