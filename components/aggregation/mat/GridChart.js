@@ -104,13 +104,21 @@ function getDatesBetween(startDate, endDate) {
 }
 
 const reshapeData = (data, query) => {
-  const dateSet = getDatesBetween(new Date(query.since), new Date(query.until))
   const reshapedData = {}
   const rows = []
   const rowLabels = {}
+
   data.forEach((item) => {
     const key = item[query.axis_y]
+    // 1. Attach `ok_count` to all the data items
     item['ok_count'] = item.measurement_count - item.confirmed_count - item.anomaly_count
+    item['rowLabel'] = getRowLabel(key, query.axis_y)
+
+    // 2. reshape to map with grouped by y-axis values
+    // {
+    //   yaxis_value_1: [{}, {}, {}],
+    //   yaxis_value_2: [{}, {}, {}}],...
+    // }
     if (key in reshapedData) {
       reshapedData[key].push(item)
     } else {
@@ -120,30 +128,34 @@ const reshapeData = (data, query) => {
     }
   })
 
-  for (const y in reshapedData) {
-    const datesInRow = reshapedData[y].map(i => i.measurement_start_day)
-    const missingDates = [...dateSet].filter(x => !datesInRow.includes(x))
+  // 3. If x-axis is `measurment_start_date`, fill will zero values where there is no data
+  if (query.axis_x === 'measurement_start_date') {
+    const dateSet = getDatesBetween(new Date(query.since), new Date(query.until))
+    for (const y in reshapedData) {
+      const datesInRow = reshapedData[y].map(i => i.measurement_start_day)
+      const missingDates = [...dateSet].filter(x => !datesInRow.includes(x))
 
-    // Add empty datapoints for dates where measurements are not available
-    missingDates.forEach((date) => {
-      // use any (first) column data to popuplate yAxis value e.g `input` | `probe_cc`
-      // and then overwrite with zero-data for that missing date
-      reshapedData[y].splice([...dateSet].indexOf(date), 0, {
-        ...reshapedData[y][0],
-        measurement_start_day: date,
-        anomaly_count: 0,
-        confirmed_count: 0,
-        failure_count: 0,
-        measurement_count: 0,
-        ok_count: 0,
+      // Add empty datapoints for dates where measurements are not available
+      missingDates.forEach((date) => {
+        // use any (first) column data to popuplate yAxis value e.g `input` | `probe_cc`
+        // and then overwrite with zero-data for that missing date
+        reshapedData[y].splice([...dateSet].indexOf(date), 0, {
+          ...reshapedData[y][0],
+          measurement_start_day: date,
+          anomaly_count: 0,
+          confirmed_count: 0,
+          failure_count: 0,
+          measurement_count: 0,
+          ok_count: 0,
+        })
       })
-    })
+    }
   }
-
   return [reshapedData, rows, rowLabels]
 }
 
 const GridChart = ({ data, query }) => {
+  const [isStaticChart, setStaticChart] = useState(true)
   const { doneReshaping, doneRendering } = useDebugContext()
   
   // [rowIndex, columnKey] for the bar where click was detected
@@ -151,7 +163,6 @@ const GridChart = ({ data, query }) => {
   const [tooltipIndex, setTooltipIndex] = useState([-1, ''])
 
   const showTooltipInRow = useCallback((index, column) => {
-    console.log(`Registering: ${index}, ${column} to show tooltip`)
     setTooltipIndex([index, column])
   }, [setTooltipIndex])
 
@@ -174,6 +185,9 @@ const GridChart = ({ data, query }) => {
 
   return (
     <Flex flexDirection='column' >
+      <Flex justifyContent='flex-end'>
+        <Box><input type='checkbox' name='isStaticChart' checked={isStaticChart} onChange={(e) => setStaticChart(e.target.checked)}/> Static Charts (dev-only) </Box>
+      </Flex>
       <Flex flexDirection='column' my={4}>
         {/* Fake axis on top of list. Possible alternative: dummy chart with axis and valid tickValues */}
         <Flex>
@@ -211,7 +225,7 @@ const GridChart = ({ data, query }) => {
                 width={width}
                 itemCount={rows.length}
                 itemSize={72}
-                itemData={{reshapedData, rows, rowLabels, indexBy: query.axis_x, yAxis: query.axis_y, tooltipIndex, showTooltipInRow }}
+                itemData={{reshapedData, rows, rowLabels, indexBy: query.axis_x, yAxis: query.axis_y, tooltipIndex, showTooltipInRow, isStaticChart }}
               >
                 {Row}
               </List>
@@ -220,7 +234,7 @@ const GridChart = ({ data, query }) => {
         </Flex>
       </Flex>
       <Flex my={4} sx={{ height: '40vh' }}>
-        <TableView data={data} yAxis={query.axis_y} />
+        <TableView data={data} yAxis={query.axis_y} rowLabels={rowLabels} />
       </Flex>
     </Flex>
   )

@@ -84,7 +84,7 @@ const SearchFilter = ({
   )
 }
 
-const TableView = ({ data, yAxis }) => {
+const TableView = ({ data, yAxis, rowLabels }) => {
   const intl = useIntl()
 
   const defaultColumn = React.useMemo(
@@ -100,12 +100,11 @@ const TableView = ({ data, yAxis }) => {
     () => ({
       // default text filter to use "startWith"
       text: (rows, id, filterValue) => {
+        const regex = new RegExp(filterValue, 'i')
         return rows.filter(row => {
           const rowValue = row.values[id]
           return rowValue !== undefined
-            ? String(rowValue)
-              .toLowerCase()
-              .startsWith(String(filterValue).toLowerCase())
+            ? regex.test(String(rowValue))
             : true
         })
       },
@@ -115,14 +114,22 @@ const TableView = ({ data, yAxis }) => {
   
   // Aggregate by the first column
   const initialState = React.useMemo(() => ({
-    groupBy: [yAxis]
-  }),[yAxis])
+    groupBy: ['yAxisCode'],
+    hiddenColumns: ['yAxisCode']
+  }),[])
 
   const columns = useMemo(() => [
     {
       Header: intl.formatMessage({ id: `MAT.Table.Header.${yAxis}`}),
-      accessor: yAxis,
+      id: 'yAxisLabel',
+      accessor: 'rowLabel',
+      aggregate: (values) => values[0],
       filter: 'text',
+    },
+    {
+      id: 'yAxisCode',
+      accessor: yAxis,
+      disableFilters: true,
     },
     {
       Header: <FormattedMessage id='MAT.Table.Header.anomaly_count' />,
@@ -154,7 +161,7 @@ const TableView = ({ data, yAxis }) => {
     getTableProps,
     getTableBodyProps,
     headerGroups,
-    rows,
+    rows, // contains filtered rows
     prepareRow
   } = useTable(
     {
@@ -201,7 +208,6 @@ const TableView = ({ data, yAxis }) => {
     (rows) => ({ index, style }) => {
       const row = rows[index]
       prepareRow(row)
-      // index === 0 && console.log(row.getRowProps())
       return (
         <TableRow alignItems='center'
           {...row.getRowProps({

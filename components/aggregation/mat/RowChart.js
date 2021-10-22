@@ -16,7 +16,7 @@ const keys = [
 
 const colorFunc = (d) => colorMap[d.id] || '#ccc'
 
-const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, showTooltip /* width, first, last */}) => {
+const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, showTooltip, isStaticChart /* width, first, last */}) => {
 
   const handleClick = useCallback(({ column }) => {
     showTooltipInRow(rowIndex, column)
@@ -71,6 +71,7 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
           motionConfig={{
             duration: 0
           }}
+          isInteractive={!isStaticChart}
         />
       </Box>
     </Flex>
