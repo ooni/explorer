@@ -5,6 +5,8 @@ import styled from 'styled-components'
 import { FixedSizeList } from 'react-window'
 import { Flex } from 'ooni-components'
 import { groupBy } from 'lodash'
+import { Box } from 'rebass'
+import { GridChart } from './GridChart'
 
 const TableContainer = styled.div`
   padding: 1rem;
@@ -84,9 +86,9 @@ const SearchFilter = ({
   )
 }
 
-const TableView = ({ data, yAxis, rowLabels }) => {
+const TableView = ({ data, query }) => {
   const intl = useIntl()
-
+  const yAxis = query.axis_y
   const defaultColumn = React.useMemo(
     () => ({
       // When using the useFlexLayout:
@@ -229,54 +231,61 @@ const TableView = ({ data, yAxis, rowLabels }) => {
 
 
   return (
-    <TableContainer>
-      {/* eslint-disable react/jsx-key */}
-      <Table {...getTableProps()}>
-        <TableHeader>
-          {headerGroups.map(headerGroup => (
-            <TableRow {...headerGroup.getHeaderGroupProps()}>
-              {headerGroup.headers.map(column => {
+    <Flex flexDirection='column'>
+      <Flex>
+        <GridChart data={rows} query={query} />
+      </Flex>
+      <Flex my={4} sx={{ height: '40vh' }}>
+        <TableContainer>
+          {/* eslint-disable react/jsx-key */}
+          <Table {...getTableProps()}>
+            <TableHeader>
+              {headerGroups.map(headerGroup => (
+                <TableRow {...headerGroup.getHeaderGroupProps()}>
+                  {headerGroup.headers.map(column => {
+                    return (
+                      <Cell
+                        {...column.getHeaderProps()}
+                      >
+                        {column.render('Header')}
+                        {/* Column Filter */}
+                        <div>{column.canFilter ? column.render('Filter') : null}</div>
+                      </Cell>
+                    )}
+                  )}
+                </TableRow>
+              ))}
+            </TableHeader>
+            <div {...getTableBodyProps()}>
+              {rows.map(row => {
+                prepareRow(row)
                 return (
-                  <Cell
-                    {...column.getHeaderProps()}
-                  >
-                    {column.render('Header')}
-                    {/* Column Filter */}
-                    <div>{column.canFilter ? column.render('Filter') : null}</div>
-                  </Cell>
-                )}
-              )}
-            </TableRow>
-          ))}
-        </TableHeader>
-        <div {...getTableBodyProps()}>
-          {rows.map(row => {
-            prepareRow(row)
-            return (
-              <TableRow {...row.getRowProps()}>
-                {row.cells.map(cell => {
-                  return (
-                    <Cell
-                      {...cell.getCellProps()}
-                    >
-                      {cell.render('Cell')}
-                    </Cell>
-                  )
-                })}
-              </TableRow>
-            )
-          })}
-          {/* <FixedSizeList
-            height={400}
-            itemCount={data.length}
-            itemSize={32}
-          >
-            {RenderRow(rows)}
-          </FixedSizeList> */}
-        </div>
-      </Table>
-      {/* eslint-enable react/jsx-key */}
-    </TableContainer>
+                  <TableRow {...row.getRowProps()}>
+                    {row.cells.map(cell => {
+                      return (
+                        <Cell
+                          {...cell.getCellProps()}
+                        >
+                          {cell.render('Cell')}
+                        </Cell>
+                      )
+                    })}
+                  </TableRow>
+                )
+              })}
+              {/* <FixedSizeList
+                height={400}
+                itemCount={data.length}
+                itemSize={32}
+              >
+                {RenderRow(rows)}
+              </FixedSizeList> */}
+            </div>
+          </Table>
+          {/* eslint-enable react/jsx-key */}
+        </TableContainer>
+      </Flex>
+    </Flex>
   )
 }
 
