@@ -112,7 +112,7 @@ const reshapeChartData = (data, query) => {
   }, {})
 
   // 3. If x-axis is `measurment_start_date`, fill will zero values where there is no data
-  if (query.axis_x === 'measurement_start_date') {
+  if (query.axis_x === 'measurement_start_day') {
     const dateSet = getDatesBetween(new Date(query.since), new Date(query.until))
     for (const y in reshapedData) {
       const datesInRow = reshapedData[y].map(i => i.measurement_start_day)
