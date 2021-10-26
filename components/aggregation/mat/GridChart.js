@@ -111,8 +111,8 @@ const reshapeChartData = (data, query) => {
     return {...d, [groupedRow.groupByVal]: groupedRow.leafRows.map(r => r.original)}
   }, {})
 
-  // 3. If x-axis is `measurment_start_date`, fill will zero values where there is no data
-  if (query.axis_x === 'measurement_start_date') {
+  // 3. If x-axis is `measurement_start_day`, fill will zero values where there is no data
+  if (query.axis_x === 'measurement_start_day') {
     const dateSet = getDatesBetween(new Date(query.since), new Date(query.until))
     for (const y in reshapedData) {
       const datesInRow = reshapedData[y].map(i => i.measurement_start_day)
