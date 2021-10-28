@@ -23,6 +23,7 @@ import {
 
 import Tooltip from './Tooltip'
 import { WebsiteChartLoader } from './WebsiteChartLoader'
+import { axiosPluginLogRequest } from 'components/axios-plugins'
 
 const Circle = styled.div`
   position: relative;
@@ -118,6 +119,7 @@ class URLChart extends React.Component {
   async fetchURLChartData() {
     const { metadata, network, countryCode } = this.props
     const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
+    axiosPluginLogRequest(client)
     const result = await client.get('/api/_/website_stats', {
       params: {
         probe_cc: countryCode,
