@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { Box, Flex, theme } from 'ooni-components'
-import { Bar } from '@nivo/bar'
+import { ResponsiveBar as Bar } from '@nivo/bar'
 
 import { CustomBarItem } from './CustomBarItem'
 import { CustomToolTip } from './CustomTooltip'
@@ -16,6 +16,17 @@ const keys = [
 
 const colorFunc = (d) => colorMap[d.id] || '#ccc'
 
+const barLayers = ['grid', 'bars']
+
+const barThemeForTooltip = {
+  tooltip: {
+    container: {
+      pointerEvents: 'initial',
+      boxShadow: `1px 1px 4px 1px ${theme.colors.gray6}`
+    }
+  }
+}
+
 const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, showTooltip, isStaticChart /* width, first, last */}) => {
   const handleClick = useCallback(({ column }) => {
     showTooltipInRow(rowIndex, column)
@@ -26,15 +37,13 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
       <Box width={2/16}>
         {label}
       </Box>
-      <Box>
+      <Box sx={{ height: height, width: '100%' }}>
         <Bar
           data={data}
           keys={keys}
           indexBy={indexBy}
           // NOTE: These dimensions are linked to accuracy of the custom axes rendered in
           // <GridChart />
-          width={1000}
-          height={height}
           margin={{ top: 4, right: 100, bottom: 4, left: 0 }}
           padding={0.3}
           borderColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
@@ -56,14 +65,7 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
           tooltip={CustomToolTip}
           onClick={handleClick}
           barComponent={CustomBarItem}
-          theme={{
-            tooltip: {
-              container: {
-                pointerEvents: 'initial',
-                boxShadow: `1px 1px 4px 1px ${theme.colors.gray6}`
-              }
-            }
-          }}
+          theme={barThemeForTooltip}
           // We send the `showTooltip` boolean into the barComponent to control visibility of tooltip
           enableLabel={showTooltip}
           animate={false}
@@ -71,6 +73,7 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
             duration: 0
           }}
           isInteractive={!isStaticChart}
+          layers={barLayers}
         />
       </Box>
     </Flex>
