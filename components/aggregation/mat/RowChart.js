@@ -17,7 +17,6 @@ const keys = [
 const colorFunc = (d) => colorMap[d.id] || '#ccc'
 
 const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, showTooltip, isStaticChart /* width, first, last */}) => {
-
   const handleClick = useCallback(({ column }) => {
     showTooltipInRow(rowIndex, column)
   }, [rowIndex, showTooltipInRow])
@@ -77,6 +76,7 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
     </Flex>
   )
 }
+
 RowChart.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
     anomaly_count: PropTypes.number,
@@ -92,4 +92,4 @@ RowChart.propTypes = {
   label: PropTypes.node,
 }
 
-export default RowChart
+export default React.memo(RowChart)

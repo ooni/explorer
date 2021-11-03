@@ -1,6 +1,6 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
-import { FixedSizeList as List } from 'react-window'
+import { FixedSizeList as List, areEqual } from 'react-window'
 import AutoSizer from 'react-virtualized-auto-sizer'
 import { Bar } from '@nivo/bar'
 import { Flex, Box } from 'ooni-components'
@@ -8,24 +8,33 @@ import { Flex, Box } from 'ooni-components'
 import RowChart from './RowChart'
 import { getCategoryCodesMap } from '../../utils/categoryCodes'
 
+const GRID_ROW_CSS_SELECTOR = 'outerListElement'
+
 // all props are passed by the List component
-const Row = ({ index, style, data }) => {
+const Row = React.memo(({ index, style, data }) => {
+  // console.log(`Rendering Row for row ${index}`)
+
   const { reshapedData, rows, rowLabels, indexBy, showTooltipInRow, tooltipIndex, isStaticChart /* yAxis */} = data
   const rowKey = rows[index]
-  const rowData = React.useMemo(() => {
-    const dataWithHighlights = reshapedData[rowKey].map(d => {
-      /* For data points in the hightlighted row and column, enable the highlight flag */
-      d.highlight =
-      (tooltipIndex[0] === index && Object.keys(d).some(k => `${k}.${d[indexBy]}` === tooltipIndex[1] )) ? (
-        true
-      ) : (
-        false
-      )
-      return d
-    })
-    return dataWithHighlights
-  }, [index, indexBy, reshapedData, rowKey, tooltipIndex])
+  // const rowData = React.useMemo(() => {
+  //   console.log(`generating rowData for ${index} to add highlight flag`)
+  //   const dataWithHighlights = reshapedData[rowKey].map(d => {
+  //     /* For data points in the hightlighted row and column, enable the highlight flag */
+  //     d.highlight =
+  //     (tooltipIndex[0] === index && Object.keys(d).some(k => `${k}.${d[indexBy]}` === tooltipIndex[1] )) ? (
+  //       true
+  //     ) : (
+  //       false
+  //     )
+  //     return d
+  //   })
+  //   return dataWithHighlights
+  // }, [index, indexBy, reshapedData, rowKey, tooltipIndex])
+
   const rowLabel = rowLabels[rowKey]
+
+  const showTooltip = tooltipIndex[0] === index
+
   // style is passed by the List component to give the correct dimensions to Row component
   return (
     <div style={style} key={index}>
@@ -33,18 +42,18 @@ const Row = ({ index, style, data }) => {
         key={index}
         rowIndex={index}
         showTooltipInRow={showTooltipInRow}
-        showTooltip={tooltipIndex[0] === index}
-        first={index === 0}
-        last={index === rows.length}
-        data={rowData}
+        showTooltip={showTooltip}
+        data={reshapedData[rowKey]}
         indexBy={indexBy}
-        {...style}
+        height={style.height}
         label={rowLabel}
         isStaticChart={isStaticChart}
       />
     </div>
   )
-}
+}, areEqual)
+
+Row.displayName = 'Row'
 
 Row.propTypes = {
   data: PropTypes.shape({
@@ -139,7 +148,7 @@ const reshapeChartData = (data, query) => {
 
 const GridChart = ({ data, query }) => {
   const [isStaticChart, setStaticChart] = useState(true)
-  
+  const onStaticChecked = useCallback((e) => setStaticChart(e.target.checked), [])
   // [rowIndex, columnKey] for the bar where click was detected
   // and tooltip is to be shown
   const [tooltipIndex, setTooltipIndex] = useState([-1, ''])
@@ -148,23 +157,33 @@ const GridChart = ({ data, query }) => {
     setTooltipIndex([index, column])
   }, [setTooltipIndex])
 
-  const [reshapedChartData, rows, rowLabels] = useMemo(() => {
+  const itemData = useMemo(() => {
+    console.log('Reshaping filtered table data for charting in \'reshapeChartData()\'')
     const t0 = performance.now()
     const [reshapedData, rows, rowLabels] = reshapeChartData(data, query)
     const t1 = performance.now()
     // doneReshaping(t0, t1)
-    return [reshapedData, rows, rowLabels]
-  }, [data, query])
+    return {reshapedData, rows, rowLabels, indexBy: query.axis_x, yAxis: query.axis_y, tooltipIndex, showTooltipInRow, isStaticChart }
+  }, [data, isStaticChart, query, showTooltipInRow, tooltipIndex])
 
   // FIX: Use the first row to generate the static xAxis outside the charts.
   //  * it is dependent on the width of the charts which is hard coded in `RowChart.js`
   //  * it may not work well if the first row has little or no data
   const dateSet = [...getDatesBetween(new Date(query.since), new Date(query.until))]
 
+  const xAxisData = itemData.reshapedData[itemData.rows[0]]
+  const xAxisMargins = { top: 60, right: 40, bottom: 0, left: 0 }
+  const axisTop = {
+    enable: true,
+    tickSize: 5,
+    tickPadding: 5,
+    tickRotation: -45,
+    tickValues: dateSet
+  }
   return (
     <Flex flexDirection='column' >
       <Flex justifyContent='flex-end'>
-        <Box><input type='checkbox' name='isStaticChart' checked={isStaticChart} onChange={(e) => setStaticChart(e.target.checked)}/> Static Charts (dev-only) </Box>
+        <Box><input type='checkbox' name='isStaticChart' checked={isStaticChart} onChange={onStaticChecked}/> Static Charts (dev-only) </Box>
       </Flex>
       <Flex flexDirection='column' my={4}>
         {/* Fake axis on top of list. Possible alternative: dummy chart with axis and valid tickValues */}
@@ -173,24 +192,19 @@ const GridChart = ({ data, query }) => {
           </Box>
           <Flex sx={{ width: '1000px' }} justifyContent='space-between'>
             <Bar
-              data={reshapedChartData[rows[0]]}
+              data={xAxisData}
               indexBy={query.axis_x}
               width={1000}
               height={70}
-              margin={{ top: 60, right: 40, bottom: 0, left: 0 }}
+              margin={xAxisMargins}
               padding={0.3}
               layers={['axes']}
-              axisTop={{
-                enable: true,
-                tickSize: 5,
-                tickPadding: 5,
-                tickRotation: -45,
-                tickValues: dateSet
-              }}
+              axisTop={axisTop}
               xScale={{ type: 'time' }}
               axisBottom={null}
               axisLeft={null}
               axisRight={null}
+              animate={false}
             />
           </Flex>
         </Flex>
@@ -198,12 +212,13 @@ const GridChart = ({ data, query }) => {
           <AutoSizer>
             {({ width, height }) => (
               <List
-                className='outerListElement'
+                className={GRID_ROW_CSS_SELECTOR}
                 height={height}
                 width={width}
-                itemCount={rows.length}
+                itemCount={itemData.rows.length}
                 itemSize={72}
-                itemData={{reshapedData: reshapedChartData, rows, rowLabels, indexBy: query.axis_x, yAxis: query.axis_y, tooltipIndex, showTooltipInRow, isStaticChart }}
+                itemData={itemData}
+                overscanCount={4}
               >
                 {Row}
               </List>

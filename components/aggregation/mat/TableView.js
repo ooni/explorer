@@ -344,13 +344,6 @@ const TableView = ({ data, query }) => {
                   </TableRow>
                 )
               })}
-              {/* <FixedSizeList
-                height={400}
-                itemCount={data.length}
-                itemSize={32}
-              >
-                {RenderRow(rows)}
-              </FixedSizeList> */}
             </div>
           </Table>
           {/* eslint-enable react/jsx-key */}
