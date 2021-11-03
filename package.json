@@ -64,6 +64,7 @@
     "http-proxy": "^1.18.1"
   },
   "devDependencies": {
+    "@welldone-software/why-did-you-render": "^6.2.1",
     "babel-plugin-react-intl": "^3.2.0",
     "cypress": "^5.2.0",
     "eslint": "^7.20.0",
