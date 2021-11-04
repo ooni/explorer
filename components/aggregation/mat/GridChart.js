@@ -243,6 +243,4 @@ GridChart.propTypes = {
   query: PropTypes.object
 }
 
-export {
-  GridChart
-}
+export default React.memo(GridChart)

@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import { Flex, Box } from 'ooni-components'
 import countryUtil from 'country-util'
 
-import { GridChart } from './GridChart'
+import GridChart from './GridChart'
 import { useDebugContext } from '../DebugContext'
 import { getCategoryCodesMap } from '../../utils/categoryCodes'
 
