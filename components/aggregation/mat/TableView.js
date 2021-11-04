@@ -147,7 +147,7 @@ const TableView = ({ data, query }) => {
   const intl = useIntl()
   const yAxis = query.axis_y
 
-  const { doneReshaping, doneRendering } = useDebugContext()
+  const { doneTableReshaping } = useDebugContext()
 
   const defaultColumn = React.useMemo(
     () => ({
@@ -219,16 +219,30 @@ const TableView = ({ data, query }) => {
     }
   ], [intl, yAxis])
 
+  const reshapedTableData = useMemo(() => {
+    const t0 = performance.now()
+    const reshapedData = reshapeTableData(data, query)
+    const t1 = performance.now()
+    doneTableReshaping(t0, t1)
+    console.debug(`Table reshaping: ${t1} - ${t0} = ${t1-t0}ms`)
+    return reshapedData
+  }, [doneTableReshaping, query, data])
+
   const {
     getTableProps,
     getTableBodyProps,
     headerGroups,
     rows, // contains filtered rows
+    flatRows,
+    filteredFlatRows,
+    groupedFlatRows,
+    onlyGroupedFlatRows,
+    nonGroupedFlatRows,
     prepareRow
   } = useTable(
     {
       columns,
-      data,
+      data: reshapedTableData,
       initialState,
       defaultColumn,
       filterTypes,
@@ -265,41 +279,8 @@ const TableView = ({ data, query }) => {
     }
   )
 
-  const RenderRow = useCallback(
-    // eslint-disable-next-line react/display-name
-    (rows) => ({ index, style }) => {
-      const row = rows[index]
-      prepareRow(row)
-      return (
-        <TableRow alignItems='center'
-          {...row.getRowProps({
-            style,
-          })}
-        >
-          {row.cells.map((cell, index) => {
-            return (
-              <Cell key={index} {...cell.getCellProps()}>
-                {cell.render('Cell')}
-              </Cell>
-            )
-          })}
-        </TableRow>
-      )
-    },
-    [prepareRow]
-  )
+  console.log(rows.length, flatRows.length, filteredFlatRows.length, groupedFlatRows.length, onlyGroupedFlatRows.length, nonGroupedFlatRows.length)
 
-  const reshapedTableData = useMemo(() => {
-    const t0 = performance.now()
-    const reshapedData = reshapeTableData(data, query)
-    const t1 = performance.now()
-    doneReshaping(t0, t1)
-    return reshapedData
-  }, [doneReshaping, query, data])
-
-  useEffect(() => {
-    doneRendering(performance.now())
-  })
 
   return (
     <Flex flexDirection='column'>

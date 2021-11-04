@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { Box, Flex, theme } from 'ooni-components'
 import { ResponsiveBar as Bar } from '@nivo/bar'
@@ -6,6 +6,7 @@ import { ResponsiveBar as Bar } from '@nivo/bar'
 import { CustomBarItem } from './CustomBarItem'
 import { CustomToolTip } from './CustomTooltip'
 import { colorMap } from './colorMap'
+import { useDebugContext } from '../DebugContext'
 
 const keys = [
   'anomaly_count',
@@ -31,6 +32,12 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
   const handleClick = useCallback(({ column }) => {
     showTooltipInRow(rowIndex, column)
   }, [rowIndex, showTooltipInRow])
+
+  const { doneRendering } = useDebugContext()
+
+  useEffect(() => {
+    doneRendering(performance.now())
+  })
 
   return (
     <Flex alignItems='center' sx={{ position: 'relative' }}>

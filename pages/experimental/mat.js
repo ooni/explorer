@@ -15,7 +15,6 @@ import Layout from '../../components/Layout'
 import NavBar from '../../components/NavBar'
 import { StackedBarChart } from '../../components/aggregation/mat/StackedBarChart'
 import { FunnelChart } from '../../components/aggregation/mat/FunnelChart'
-import { GridChart } from '../../components/aggregation/mat/GridChart'
 import { Form } from '../../components/aggregation/mat/Form'
 import { axiosResponseTime } from '../../components/axios-plugins'
 import { withDebugProvider, useDebugContext } from '../../components/aggregation/DebugContext'
@@ -60,7 +59,7 @@ const fetcher = (query) => {
 const MeasurementAggregationToolkit = ({ testNames }) => {
 
   const router = useRouter()
-  const { debugQuery, debugApiResponse, doneRendering } = useDebugContext()
+  const { debugQuery, debugApiResponse } = useDebugContext()
 
   const onSubmit = useCallback((data) => {
     let params = {}
@@ -93,10 +92,6 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
 
   const showLoadingIndicator = useMemo(() => isValidating, [isValidating])
 
-  useEffect(() => {
-    doneRendering(performance.now())
-  })
-
   return (
     <Layout>
       <Head>
@@ -124,7 +119,6 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
             {data && data.data.dimension_count > 1 &&
               <Box sx={{ minHeight: '500px' }}>
                 <TableView data={data.data.result} query={query} />
-                {/* <GridChart data={data.data.result} query={query} /> */}
               </Box>
             }
           </Box>

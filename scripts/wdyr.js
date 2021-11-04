@@ -12,9 +12,8 @@ if (process.env.NODE_ENV === 'development' && process.env.WDYR === '1') {
       exclude: [
         /^AxisTick/
       ],
-      trackExtraHooks: [
-        'useDebugContext'
-      ]
+      // trackExtraHooks: [
+      // ]
     })
   }
 }

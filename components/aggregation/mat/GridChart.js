@@ -7,6 +7,7 @@ import { Flex, Box } from 'ooni-components'
 
 import RowChart from './RowChart'
 import { getCategoryCodesMap } from '../../utils/categoryCodes'
+import { useDebugContext } from '../DebugContext'
 
 const GRID_ROW_CSS_SELECTOR = 'outerListElement'
 
@@ -114,12 +115,14 @@ export function getDatesBetween(startDate, endDate) {
 const reshapeChartData = (data, query) => {
   const rows = []
   const rowLabels = {}
+  const t0 = performance.now()
   const reshapedData = data.reduce((d, groupedRow, i) => {
     rows.push(groupedRow.groupByVal)
     rowLabels[groupedRow.groupByVal] = groupedRow.leafRows[0].original.rowLabel
     return {...d, [groupedRow.groupByVal]: groupedRow.leafRows.map(r => r.original)}
   }, {})
-
+  const t1 = performance.now()
+  console.log(`ReshapeChartData: Step 1 took: ${(t1-t0)}ms` )
   // 3. If x-axis is `measurement_start_day`, fill will zero values where there is no data
   if (query.axis_x === 'measurement_start_day') {
     const dateSet = getDatesBetween(new Date(query.since), new Date(query.until))
@@ -143,10 +146,14 @@ const reshapeChartData = (data, query) => {
       })
     }
   }
+  const t2 = performance.now()
+  console.log(`ReshapeChartData: Step 2 took: ${(t2-t1)}ms` )
   return [reshapedData, rows, rowLabels]
 }
 
 const GridChart = ({ data, query }) => {
+  const { doneChartReshaping } = useDebugContext()
+
   const [isStaticChart, setStaticChart] = useState(true)
   const onStaticChecked = useCallback((e) => setStaticChart(e.target.checked), [])
   // [rowIndex, columnKey] for the bar where click was detected
@@ -158,13 +165,13 @@ const GridChart = ({ data, query }) => {
   }, [setTooltipIndex])
 
   const itemData = useMemo(() => {
-    console.log('Reshaping filtered table data for charting in \'reshapeChartData()\'')
     const t0 = performance.now()
     const [reshapedData, rows, rowLabels] = reshapeChartData(data, query)
     const t1 = performance.now()
-    // doneReshaping(t0, t1)
+    console.debug(`Charts reshaping: ${t1} - ${t0} = ${t1-t0}ms`)
+    doneChartReshaping(t0, t1)
     return {reshapedData, rows, rowLabels, indexBy: query.axis_x, yAxis: query.axis_y, tooltipIndex, showTooltipInRow, isStaticChart }
-  }, [data, isStaticChart, query, showTooltipInRow, tooltipIndex])
+  }, [data, doneChartReshaping, isStaticChart, query, showTooltipInRow, tooltipIndex])
 
   // FIX: Use the first row to generate the static xAxis outside the charts.
   //  * it is dependent on the width of the charts which is hard coded in `RowChart.js`
@@ -180,6 +187,7 @@ const GridChart = ({ data, query }) => {
     tickRotation: -45,
     tickValues: dateSet
   }
+
   return (
     <Flex flexDirection='column' >
       <Flex justifyContent='flex-end'>
