@@ -51,7 +51,7 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
           indexBy={indexBy}
           // NOTE: These dimensions are linked to accuracy of the custom axes rendered in
           // <GridChart />
-          margin={{ top: 4, right: 100, bottom: 4, left: 0 }}
+          margin={{ top: 4, right: 0, bottom: 4, left: 0 }}
           padding={0.3}
           borderColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
           colors={colorFunc}

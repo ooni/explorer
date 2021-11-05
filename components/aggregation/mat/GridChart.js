@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import { FixedSizeList as List, areEqual } from 'react-window'
 import AutoSizer from 'react-virtualized-auto-sizer'
-import { Bar } from '@nivo/bar'
+import { ResponsiveBar } from '@nivo/bar'
 import { Flex, Box } from 'ooni-components'
 
 import RowChart from './RowChart'
@@ -179,13 +179,13 @@ const GridChart = ({ data, query }) => {
   const dateSet = [...getDatesBetween(new Date(query.since), new Date(query.until))]
 
   const xAxisData = itemData.reshapedData[itemData.rows[0]]
-  const xAxisMargins = { top: 60, right: 40, bottom: 0, left: 0 }
+  const xAxisMargins = { top: 60, right: 0, bottom: 0, left: 0 }
   const axisTop = {
     enable: true,
     tickSize: 5,
     tickPadding: 5,
     tickRotation: -45,
-    tickValues: dateSet
+    tickValues: 'every 5 days'
   }
 
   return (
@@ -198,23 +198,23 @@ const GridChart = ({ data, query }) => {
         <Flex>
           <Box width={2/16}>
           </Box>
-          <Flex sx={{ width: '1000px' }} justifyContent='space-between'>
-            <Bar
+          <Box className='xAxis' sx={{ width: '100%', height: '70px' }}>
+            <ResponsiveBar
               data={xAxisData}
               indexBy={query.axis_x}
-              width={1000}
-              height={70}
+              // width={'100%'}
+              // height={70}
               margin={xAxisMargins}
               padding={0.3}
               layers={['axes']}
               axisTop={axisTop}
-              xScale={{ type: 'time' }}
+              xScale={{ type: 'time', format: '%Y-%m-%d', precision: 'day' }}
               axisBottom={null}
               axisLeft={null}
               axisRight={null}
               animate={false}
             />
-          </Flex>
+          </Box>
         </Flex>
         <Flex sx={{ height: '40vh' }}>
           <AutoSizer>

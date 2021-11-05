@@ -285,7 +285,7 @@ const TableView = ({ data, query }) => {
   return (
     <Flex flexDirection='column'>
       <Box>
-        <GridChart data={rows} query={query} />
+        <GridChart data={onlyGroupedFlatRows} query={query} />
       </Box>
       <Flex my={4} sx={{ height: '40vh' }}>
         <TableContainer>
