@@ -7,6 +7,7 @@ import { FormattedMessage } from 'react-intl'
 import { inCountry } from './CountryContext'
 import AppsStatRow from './AppsStatsRow'
 import { AppSectionLoader } from './WebsiteChartLoader'
+import { axiosPluginLogRequest } from 'components/axios-plugins'
 
 const AppGroupHeading = styled(Box)`
   border: 1px solid ${props => props.theme.colors.gray3};
@@ -34,6 +35,7 @@ class AppsStatsGroup extends React.Component {
   async fetchIMNetworks() {
     const { countryCode } = this.props
     const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
+    axiosPluginLogRequest(client)
     const result = await client.get('/api/_/im_networks', {
       params: {
         probe_cc: countryCode

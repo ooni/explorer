@@ -24,6 +24,7 @@ import { toCompactNumberUnit } from '../utils'
 import HighlightSection from '../components/landing/HighlightsSection'
 import highlightContent from '../components/landing/highlights.json'
 import CoverageChart from '../components/landing/Stats'
+import { axiosPluginLogRequest } from 'components/axios-plugins'
 
 const HeroUnit = styled.div`
   background: linear-gradient(
@@ -137,6 +138,7 @@ export default class LandingPage extends React.Component {
 
   static async getInitialProps () {
     const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
+    axiosPluginLogRequest(client)
     const result = await client.get('/api/_/global_overview')
     return {
       measurementCount: result.data.measurement_count,

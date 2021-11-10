@@ -23,6 +23,8 @@ import { Loader } from '../components/search/Loader'
 import FormattedMarkdown from '../components/FormattedMarkdown'
 
 import { sortByKey } from '../utils'
+import { axiosPluginLogRequest } from 'components/axios-plugins'
+axiosPluginLogRequest(axios)
 
 const queryToParams = ({ query }) => {
   // XXX do better validation
@@ -50,6 +52,7 @@ const queryToParams = ({ query }) => {
 
 const getMeasurements = (query) => {
   let client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL})  // eslint-disable-line
+  axiosPluginLogRequest(client)
   const params = queryToParams({ query })
   return client.get('/api/v1/measurements', {params})
 }
@@ -134,6 +137,7 @@ class Search extends React.Component {
   static async getInitialProps ({ query }) {
     let msmtR, testNamesR, countriesR
     let client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL})  // eslint-disable-line
+    axiosPluginLogRequest(client)
 
     // By default, on '/search' show measurements published until today
     // including the measurements of today (so the date of tomorrow).
@@ -186,6 +190,8 @@ class Search extends React.Component {
     const measurements = msmtR.data
     // drop results with probe_asn === 'AS0'
     const results = measurements.results.filter(item => item.probe_asn !== 'AS0')
+    
+    const responseUrl = msmtR?.request?.res?.responseUrl
 
     return {
       error: null,
@@ -194,6 +200,9 @@ class Search extends React.Component {
       testNamesKeyed,
       testNames,
       countries,
+      // searchReqConfig: { url, method, headers, params, baseURL, data },
+      ssrRequests: [{...msmtR.config, responseUrl}, testNamesR.config, countriesR.config]
+
     }
   }
 
@@ -228,6 +237,7 @@ class Search extends React.Component {
       query
     }
     replace(href, href, { shallow: true })
+    console.log(this.props.ssrRequests)
   }
 
   shouldComponentUpdate (nextProps, nextState) {

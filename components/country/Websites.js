@@ -9,6 +9,7 @@ import { SimpleBox } from './boxes'
 import PeriodFilter from './PeriodFilter'
 import TestsByCategoryInNetwork from './WebsitesCharts'
 import FormattedMarkdown from '../FormattedMarkdown'
+import { axiosPluginLogRequest } from 'components/axios-plugins'
 
 class WebsitesSection extends React.Component {
   constructor(props) {
@@ -30,6 +31,7 @@ class WebsitesSection extends React.Component {
   async componentDidMount() {
     const { countryCode } = this.props
     const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
+    axiosPluginLogRequest(client)
     const result = await client.get('/api/_/website_networks', {
       params: {
         probe_cc: countryCode
