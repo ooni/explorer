@@ -257,7 +257,7 @@ const ResultInput = styled.div`
   color: ${props => props.theme.colors.gray5};
 `
 
-const getIndicators = ({ test_name, testDisplayName, scores = {}, confirmed, anomaly, intl }) => {
+const getIndicators = ({ test_name, testDisplayName, scores = {}, confirmed, anomaly, failure, intl }) => {
   let color = '', tag = null
   if (testsWithStates.includes(test_name)) {
     if (imTests.includes(test_name) && Object.entries(scores).length === 0) {
@@ -275,15 +275,13 @@ const getIndicators = ({ test_name, testDisplayName, scores = {}, confirmed, ano
           {intl.formatMessage(messages[`${computedMessageIdPrefix}.Blocked`])}
         </ResultTagFilled>
       )
-    /* XXX hotfix due to all measurements showing failures
-    } else if (msmt.failure === true) {
+    } else if (failure === true) {
       color = colorError
       tag = (
         <ResultTagHollow>
           {intl.formatMessage(messages[`${computedMessageIdPrefix}.Error`])}
         </ResultTagHollow>
       )
-    */
     } else if (blockingType !== undefined) {
       color = colorAnomaly
       tag = (
