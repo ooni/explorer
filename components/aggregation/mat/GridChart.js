@@ -8,6 +8,7 @@ import { Flex, Box } from 'ooni-components'
 import RowChart from './RowChart'
 import { getCategoryCodesMap } from '../../utils/categoryCodes'
 import { useDebugContext } from '../DebugContext'
+import { Profiler, profilerLog } from 'components/utils/profiler'
 
 const GRID_ROW_CSS_SELECTOR = 'outerListElement'
 
@@ -39,6 +40,7 @@ const Row = React.memo(({ index, style, data }) => {
   // style is passed by the List component to give the correct dimensions to Row component
   return (
     <div style={style} key={index}>
+      <Profiler>
       <RowChart
         key={index}
         rowIndex={index}
@@ -50,6 +52,7 @@ const Row = React.memo(({ index, style, data }) => {
         label={rowLabel}
         isStaticChart={isStaticChart}
       />
+      </Profiler>
     </div>
   )
 }, areEqual)
