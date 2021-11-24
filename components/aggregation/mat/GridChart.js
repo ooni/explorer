@@ -155,6 +155,21 @@ const reshapeChartData = (data, query) => {
   return [reshapedData, rows, rowLabels]
 }
 
+const useKeepMountedRangeExtractor = () => {
+  const renderedRef = React.useRef(new Set())
+
+  const rangeExtractor = React.useCallback(range => {
+    renderedRef.current = new Set([
+      ...renderedRef.current,
+      ...defaultRangeExtractor(range)
+    ])
+    return Array.from(renderedRef.current)
+  }, [])
+
+  return rangeExtractor
+}
+
+
 const GridChart = ({ data, query }) => {
   const { doneChartReshaping } = useDebugContext()
 
@@ -197,7 +212,7 @@ const GridChart = ({ data, query }) => {
     parentRef,
     estimateSize: React.useCallback(() => 70, []),
     overscan: 10,
-    rangeExtractor: defaultRangeExtractor
+    rangeExtractor: useKeepMountedRangeExtractor()
   })
 
   return (
