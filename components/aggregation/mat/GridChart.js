@@ -8,7 +8,8 @@ import { Flex, Box } from 'ooni-components'
 import RowChart from './RowChart'
 import { getCategoryCodesMap } from '../../utils/categoryCodes'
 import { useDebugContext } from '../DebugContext'
-import { Profiler, profilerLog } from 'components/utils/profiler'
+import { Profiler } from 'components/utils/profiler'
+import { defaultRangeExtractor, useVirtual } from 'react-virtual'
 
 const GRID_ROW_CSS_SELECTOR = 'outerListElement'
 
@@ -179,8 +180,6 @@ const GridChart = ({ data, query }) => {
   // FIX: Use the first row to generate the static xAxis outside the charts.
   //  * it is dependent on the width of the charts which is hard coded in `RowChart.js`
   //  * it may not work well if the first row has little or no data
-  const dateSet = [...getDatesBetween(new Date(query.since), new Date(query.until))]
-
   const xAxisData = itemData.reshapedData[itemData.rows[0]]
   const xAxisMargins = { top: 60, right: 0, bottom: 0, left: 0 }
   const axisTop = {
@@ -190,6 +189,16 @@ const GridChart = ({ data, query }) => {
     tickRotation: -45,
     tickValues: 'every 5 days'
   }
+
+  const parentRef = React.useRef()
+
+  const rowVirtualizer = useVirtual({
+    size: itemData.rows.length,
+    parentRef,
+    estimateSize: React.useCallback(() => 70, []),
+    overscan: 10,
+    rangeExtractor: defaultRangeExtractor
+  })
 
   return (
     <Flex flexDirection='column' >
@@ -205,8 +214,6 @@ const GridChart = ({ data, query }) => {
             <ResponsiveBar
               data={xAxisData}
               indexBy={query.axis_x}
-              // width={'100%'}
-              // height={70}
               margin={xAxisMargins}
               padding={0.3}
               layers={['axes']}
@@ -219,22 +226,42 @@ const GridChart = ({ data, query }) => {
             />
           </Box>
         </Flex>
-        <Flex sx={{ height: '40vh' }}>
-          <AutoSizer>
-            {({ width, height }) => (
-              <List
-                className={GRID_ROW_CSS_SELECTOR}
-                height={height}
-                width={width}
-                itemCount={itemData.rows.length}
-                itemSize={72}
-                itemData={itemData}
-                overscanCount={4}
+        <Flex>
+        <div
+          ref={parentRef}
+          className="List"
+          style={{
+            height: '40vh',
+            width: '100%',
+            overflow: 'auto'
+          }}
+        >
+          <div
+            style={{
+              height: `${rowVirtualizer.totalSize}px`,
+              width: '100%',
+              position: 'relative'
+            }}
+          >
+            {rowVirtualizer.virtualItems.map((virtualRow) => (
+              <div
+                key={virtualRow.index}
+                className={virtualRow.index % 2 ? 'ListItemOdd' : 'ListItemEven'}
+                style={{
+                  position: 'absolute',
+                  top: 0,
+                  left: 0,
+                  width: '100%',
+                  height: `${virtualRow.size}px`,
+                  transform: `translateY(${virtualRow.start}px)`
+                }}
               >
-                {Row}
-              </List>
-            )}
-          </AutoSizer>
+                <Row index={virtualRow.index} style={{ width: '100%', height: `${virtualRow.size}px` }} data={itemData} />
+                {/* Row {virtualRow.index} */}
+              </div>
+            ))}
+            </div>
+          </div>
         </Flex>
       </Flex>
     </Flex>

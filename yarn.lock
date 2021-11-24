@@ -806,6 +806,11 @@
     "@nodelib/fs.scandir" "2.1.5"
     fastq "^1.6.0"
 
+"@reach/observe-rect@^1.1.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@reach/observe-rect/-/observe-rect-1.2.0.tgz#d7a6013b8aafcc64c778a0ccb83355a11204d3b2"
+  integrity sha512-Ba7HmkFgfQxZqqaeIWWkNK0rEhpxVQHIoVyW1YDSkGsGIXzcaW4deC8B0pZrNSSyLTdIk7y+5olKt5+g0GmFIQ==
+
 "@react-spring/animated@~9.2.0":
   version "9.2.4"
   resolved "https://registry.yarnpkg.com/@react-spring/animated/-/animated-9.2.4.tgz#062ecc0fdfef89f2541a42d8500428b70035f879"
@@ -5577,6 +5582,13 @@ react-textarea-autosize@^6.1.0:
   integrity sha512-F6bI1dgib6fSvG8so1HuArPUv+iVEfPliuLWusLF+gAKz0FbB4jLrWUrTAeq1afnPT2c9toEZYUdz/y1uKMy4A==
   dependencies:
     prop-types "^15.6.0"
+
+react-virtual@^2.8.2:
+  version "2.8.2"
+  resolved "https://registry.yarnpkg.com/react-virtual/-/react-virtual-2.8.2.tgz#e204b30c57c426bd260ed1ac49f8b1099e92b7cb"
+  integrity sha512-CwnvF/3Jev4M14S9S7fgzGc0UFQ/bG/VXbrUCq+AB0zH8WGnVDTG0lQT7O3jPY76YLPzTHBu+AMl64Stp8+exg==
+  dependencies:
+    "@reach/observe-rect" "^1.1.0"
 
 react-virtualized-auto-sizer@^1.0.5:
   version "1.0.5"

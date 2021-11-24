@@ -102,4 +102,6 @@ RowChart.propTypes = {
   label: PropTypes.node,
 }
 
+RowChart.displayName = 'RowChart'
+
 export default React.memo(RowChart)
