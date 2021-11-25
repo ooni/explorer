@@ -211,7 +211,7 @@ const GridChart = ({ data, query }) => {
     size: itemData.rows.length,
     parentRef,
     estimateSize: React.useCallback(() => 70, []),
-    overscan: 10,
+    overscan: 2,
     rangeExtractor: useKeepMountedRangeExtractor()
   })
 
