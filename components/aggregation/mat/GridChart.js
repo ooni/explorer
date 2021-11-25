@@ -244,7 +244,7 @@ const GridChart = ({ data, query }) => {
         <Flex>
         <div
           ref={parentRef}
-          className="List"
+          className="outerListElement"
           style={{
             height: '40vh',
             width: '100%',
@@ -261,7 +261,6 @@ const GridChart = ({ data, query }) => {
             {rowVirtualizer.virtualItems.map((virtualRow) => (
               <div
                 key={virtualRow.index}
-                className={virtualRow.index % 2 ? 'ListItemOdd' : 'ListItemEven'}
                 style={{
                   position: 'absolute',
                   top: 0,
