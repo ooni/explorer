@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
 import PropTypes from 'prop-types'
-import { useTable, useFlexLayout, useRowSelect, useFilters, useGroupBy } from 'react-table'
+import { useTable, useFlexLayout, useRowSelect, useFilters, useGroupBy, useSortBy } from 'react-table'
 import { FormattedMessage, useIntl } from 'react-intl'
 import styled from 'styled-components'
 import { Flex, Box } from 'ooni-components'
@@ -177,7 +177,8 @@ const TableView = ({ data, query }) => {
   // Aggregate by the first column
   const initialState = React.useMemo(() => ({
     groupBy: ['yAxisCode'],
-    hiddenColumns: ['yAxisCode']
+    hiddenColumns: ['yAxisCode'],
+    sortBy: [{ id: 'yAxisLabel', desc: false }]
   }),[])
 
   const columns = useMemo(() => [
@@ -250,6 +251,7 @@ const TableView = ({ data, query }) => {
     useFlexLayout,
     useFilters,
     useGroupBy,
+    useSortBy,
     useRowSelect,
     (hooks) => {
       hooks.visibleColumns.push((columns) => [
@@ -279,13 +281,10 @@ const TableView = ({ data, query }) => {
     }
   )
 
-  console.log(rows.length, flatRows.length, filteredFlatRows.length, groupedFlatRows.length, onlyGroupedFlatRows.length, nonGroupedFlatRows.length)
-
-
   return (
     <Flex flexDirection='column'>
       <Box>
-        <GridChart data={onlyGroupedFlatRows} query={query} />
+        <GridChart data={rows} query={query} />
       </Box>
       <Flex my={4} sx={{ height: '40vh' }}>
         <TableContainer>
