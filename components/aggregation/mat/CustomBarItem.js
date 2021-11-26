@@ -64,7 +64,6 @@ export const CustomBarItem = ({
         return
       }
       const {y: chartContainerY} = outerListElement.getBoundingClientRect()
-      console.log(event.clientY, chartContainerY)
       const nearTopEdge = (event.clientY - chartContainerY) < 200
       showTooltipAt(
         renderTooltip(),

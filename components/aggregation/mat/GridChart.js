@@ -17,7 +17,7 @@ const GRID_ROW_CSS_SELECTOR = 'outerListElement'
 const Row = React.memo(({ index, style, data }) => {
   // console.log(`Rendering Row for row ${index}`)
 
-  const { reshapedData, rows, rowLabels, indexBy, showTooltipInRow, tooltipIndex, isStaticChart /* yAxis */} = data
+  const { reshapedData, rows, rowLabels, indexBy, showTooltipInRow, tooltipIndex /* yAxis */} = data
   const rowKey = rows[index]
   // const rowData = React.useMemo(() => {
   //   console.log(`generating rowData for ${index} to add highlight flag`)
@@ -51,7 +51,6 @@ const Row = React.memo(({ index, style, data }) => {
         indexBy={indexBy}
         height={style.height}
         label={rowLabel}
-        isStaticChart={isStaticChart}
       />
       </Profiler>
     </div>
@@ -171,10 +170,14 @@ const useKeepMountedRangeExtractor = () => {
 
 
 const GridChart = ({ data, query }) => {
+  // development-only flags for debugging/tweaking etc
   const { doneChartReshaping } = useDebugContext()
+  const [overScanValue, setOverScanValue] = useState(0)
+  const [enableAnimation, setEnableAnimation] = useState(false)
+  const [keepMountedRows, setKeepMountedRows] = useState(false)
+  const keepMountedRangeExtractor = useKeepMountedRangeExtractor()
 
-  const [isStaticChart, setStaticChart] = useState(true)
-  const onStaticChecked = useCallback((e) => setStaticChart(e.target.checked), [])
+
   // [rowIndex, columnKey] for the bar where click was detected
   // and tooltip is to be shown
   const [tooltipIndex, setTooltipIndex] = useState([-1, ''])
@@ -189,8 +192,8 @@ const GridChart = ({ data, query }) => {
     const t1 = performance.now()
     console.debug(`Charts reshaping: ${t1} - ${t0} = ${t1-t0}ms`)
     doneChartReshaping(t0, t1)
-    return {reshapedData, rows, rowLabels, indexBy: query.axis_x, yAxis: query.axis_y, tooltipIndex, showTooltipInRow, isStaticChart }
-  }, [data, doneChartReshaping, isStaticChart, query, showTooltipInRow, tooltipIndex])
+    return {reshapedData, rows, rowLabels, indexBy: query.axis_x, yAxis: query.axis_y, tooltipIndex, showTooltipInRow }
+  }, [data, doneChartReshaping, query, showTooltipInRow, tooltipIndex])
 
   // FIX: Use the first row to generate the static xAxis outside the charts.
   //  * it is dependent on the width of the charts which is hard coded in `RowChart.js`
@@ -211,14 +214,18 @@ const GridChart = ({ data, query }) => {
     size: itemData.rows.length,
     parentRef,
     estimateSize: React.useCallback(() => 70, []),
-    overscan: 2,
-    rangeExtractor: useKeepMountedRangeExtractor()
+    overscan: overScanValue,
+    rangeExtractor: keepMountedRows ? keepMountedRangeExtractor : defaultRangeExtractor
   })
+
+  const {reshapedData, rows, rowLabels, indexBy, yAxis } = itemData
 
   return (
     <Flex flexDirection='column' >
-      <Flex justifyContent='flex-end'>
-        <Box><input type='checkbox' name='isStaticChart' checked={isStaticChart} onChange={onStaticChecked}/> Static Charts (dev-only) </Box>
+      <Flex bg='red1' p={2} justifyContent='space-around'>
+        <Box><input type='checkbox' name='keepMountedRows' checked={keepMountedRows} onChange={(e) => setKeepMountedRows(e.target.checked)}/> Keep Mounted Rows </Box>
+        <Box><input type='checkbox' name='enableAnimation' checked={enableAnimation} onChange={(e) => setEnableAnimation(e.target.checked)}/> Enable animation (duration:1) </Box>
+        <Box>Virtualizer Overscan<input type='number' min={0} max={itemData.rows.length} name='overScanValue' value={overScanValue} onChange={(e) => setOverScanValue(e.target.value)}/></Box>
       </Flex>
       <Flex flexDirection='column' my={4}>
         {/* Fake axis on top of list. Possible alternative: dummy chart with axis and valid tickValues */}
@@ -270,8 +277,15 @@ const GridChart = ({ data, query }) => {
                   transform: `translateY(${virtualRow.start}px)`
                 }}
               >
-                <Row index={virtualRow.index} style={{ width: '100%', height: `${virtualRow.size}px` }} data={itemData} />
-                {/* Row {virtualRow.index} */}
+                <RowChart
+                  rowIndex={virtualRow.index}
+                  showTooltipInRow={showTooltipInRow}
+                  showTooltip={tooltipIndex[0] === virtualRow.index}
+                  data={reshapedData[rows[virtualRow.index]]}
+                  indexBy={indexBy}
+                  height={virtualRow.size}
+                  label={rowLabels[rows[virtualRow.index]]}
+                />
               </div>
             ))}
             </div>
