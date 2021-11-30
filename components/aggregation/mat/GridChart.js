@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import { FixedSizeList as List, areEqual } from 'react-window'
 import { ResponsiveBar } from '@nivo/bar'
-import { Flex, Box } from 'ooni-components'
+import { Heading, Flex, Box } from 'ooni-components'
 
 import RowChart from './RowChart'
 import { useDebugContext } from '../DebugContext'
@@ -201,6 +201,17 @@ const GridChart = ({ data, query }) => {
   })
 
   const {reshapedData, rows, rowLabels, indexBy, yAxis } = itemData
+
+  if (data.length < 1) {
+    console.log('{data} received from Table')
+    console.log(data)
+    return (
+      <Flex flexDirection='column' justifyContent='center' sx={{ height: '100%' }}>
+        <Heading h={5}> No enough data for charts </Heading>
+        <Heading h={6}> Check browser console to inspect received data.</Heading>
+      </Flex>
+    )
+  }
 
   return (
     <Flex flexDirection='column' >
