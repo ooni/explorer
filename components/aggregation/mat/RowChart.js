@@ -70,7 +70,7 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
     labelTextColor: { from: 'color', modifiers: [ [ 'darker', 1.6 ] ] },
     // We send the `showTooltip` boolean into the barComponent to control visibility of tooltip
     motionConfig: {
-      duration: 0
+      duration: 1
     },
     isInteractive: true,
     layers: barLayers,
@@ -119,7 +119,7 @@ RowChart.propTypes = {
   indexBy: PropTypes.string,
   label: PropTypes.node,
   rowIndex: PropTypes.number,
-  showTooltip: PropTypes.func,
+  showTooltip: PropTypes.bool,
   showTooltipInRow: PropTypes.func,
 }
 

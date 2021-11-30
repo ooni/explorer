@@ -1,91 +1,13 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
-import { FixedSizeList as List, areEqual } from 'react-window'
 import { ResponsiveBar } from '@nivo/bar'
 import { Heading, Flex, Box } from 'ooni-components'
 
 import RowChart from './RowChart'
 import { useDebugContext } from '../DebugContext'
-import { Profiler } from 'components/utils/profiler'
 import { defaultRangeExtractor, useVirtual } from 'react-virtual'
 
 const GRID_ROW_CSS_SELECTOR = 'outerListElement'
-
-// all props are passed by the List component
-const Row = React.memo(({ index, style, data }) => {
-  // console.log(`Rendering Row for row ${index}`)
-
-  const { reshapedData, rows, rowLabels, indexBy, showTooltipInRow, tooltipIndex /* yAxis */} = data
-  const rowKey = rows[index]
-  // const rowData = React.useMemo(() => {
-  //   console.log(`generating rowData for ${index} to add highlight flag`)
-  //   const dataWithHighlights = reshapedData[rowKey].map(d => {
-  //     /* For data points in the hightlighted row and column, enable the highlight flag */
-  //     d.highlight =
-  //     (tooltipIndex[0] === index && Object.keys(d).some(k => `${k}.${d[indexBy]}` === tooltipIndex[1] )) ? (
-  //       true
-  //     ) : (
-  //       false
-  //     )
-  //     return d
-  //   })
-  //   return dataWithHighlights
-  // }, [index, indexBy, reshapedData, rowKey, tooltipIndex])
-
-  const rowLabel = rowLabels[rowKey]
-
-  const showTooltip = tooltipIndex[0] === index
-
-  // style is passed by the List component to give the correct dimensions to Row component
-  return (
-    <div style={style} key={index}>
-      <Profiler>
-      <RowChart
-        key={index}
-        rowIndex={index}
-        showTooltipInRow={showTooltipInRow}
-        showTooltip={showTooltip}
-        data={reshapedData[rowKey]}
-        indexBy={indexBy}
-        height={style.height}
-        label={rowLabel}
-      />
-      </Profiler>
-    </div>
-  )
-}, areEqual)
-
-Row.displayName = 'Row'
-
-Row.propTypes = {
-  data: PropTypes.shape({
-    indexBy: PropTypes.string,
-    reshapedData: PropTypes.oneOfType([
-      PropTypes.array,
-      PropTypes.object
-    ]),
-    rowLabels: PropTypes.object,
-    rows: PropTypes.array,
-  }),
-  index: PropTypes.number,
-  style: PropTypes.object,
-}
-
-const InputRowLabel = ({ input }) => {
-  const trucatedInput = input
-  return (
-    <Box title={input} sx={{
-      overflow: 'hidden',
-      textOverflow: 'ellipsis'
-    }}>
-      {trucatedInput}
-    </Box>
-  )
-}
-
-InputRowLabel.propTypes = {
-  input: PropTypes.string,
-}
 
 export function getDatesBetween(startDate, endDate) {
   const dateArray = new Set()
@@ -108,7 +30,7 @@ const reshapeChartData = (data, query) => {
   }, {})
   const t1 = performance.now()
   console.log(`ReshapeChartData: Step 1 took: ${(t1-t0)}ms` )
-  // 3. If x-axis is `measurement_start_day`, fill will zero values where there is no data
+  // 3. If x-axis is `measurement_start_day`, fill with zero values where there is no data
   if (query.axis_x === 'measurement_start_day') {
     const dateSet = getDatesBetween(new Date(query.since), new Date(query.until))
     for (const y in reshapedData) {
@@ -174,8 +96,8 @@ const GridChart = ({ data, query }) => {
     const t1 = performance.now()
     console.debug(`Charts reshaping: ${t1} - ${t0} = ${t1-t0}ms`)
     doneChartReshaping(t0, t1)
-    return {reshapedData, rows, rowLabels, indexBy: query.axis_x, yAxis: query.axis_y, tooltipIndex, showTooltipInRow }
-  }, [data, doneChartReshaping, query, showTooltipInRow, tooltipIndex])
+    return {reshapedData, rows, rowLabels, indexBy: query.axis_x, yAxis: query.axis_y }
+  }, [data, doneChartReshaping, query])
 
   // FIX: Use the first row to generate the static xAxis outside the charts.
   //  * it is dependent on the width of the charts which is hard coded in `RowChart.js`
