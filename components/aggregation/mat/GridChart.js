@@ -1,12 +1,10 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import { FixedSizeList as List, areEqual } from 'react-window'
-import AutoSizer from 'react-virtualized-auto-sizer'
 import { ResponsiveBar } from '@nivo/bar'
 import { Flex, Box } from 'ooni-components'
 
 import RowChart from './RowChart'
-import { getCategoryCodesMap } from '../../utils/categoryCodes'
 import { useDebugContext } from '../DebugContext'
 import { Profiler } from 'components/utils/profiler'
 import { defaultRangeExtractor, useVirtual } from 'react-virtual'
@@ -87,22 +85,6 @@ const InputRowLabel = ({ input }) => {
 
 InputRowLabel.propTypes = {
   input: PropTypes.string,
-}
-
-const categoryCodesMap = getCategoryCodesMap()
-
-const getRowLabel = (key, yAxis) => {
-  switch (yAxis) {
-  case 'probe_cc':
-    return countryUtil.territoryNames[key]
-  case 'category_code':
-    console.log(key, yAxis)
-    return categoryCodesMap.get(key)?.name
-  case 'input':
-    return (<InputRowLabel input={key} />)
-  default:
-    return key
-  }
 }
 
 export function getDatesBetween(startDate, endDate) {
@@ -251,7 +233,7 @@ const GridChart = ({ data, query }) => {
         <Flex>
         <div
           ref={parentRef}
-          className="outerListElement"
+          className={GRID_ROW_CSS_SELECTOR}
           style={{
             height: '40vh',
             width: '100%',

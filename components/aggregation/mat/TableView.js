@@ -1,14 +1,12 @@
-import React, { useCallback, useEffect, useMemo } from 'react'
-import PropTypes from 'prop-types'
+import React, { useMemo } from 'react'
 import { useTable, useFlexLayout, useRowSelect, useFilters, useGroupBy, useSortBy } from 'react-table'
 import { FormattedMessage, useIntl } from 'react-intl'
 import styled from 'styled-components'
 import { Flex, Box } from 'ooni-components'
-import countryUtil from 'country-util'
 
 import GridChart from './GridChart'
 import { useDebugContext } from '../DebugContext'
-import { getCategoryCodesMap } from '../../utils/categoryCodes'
+import { getRowLabel } from './labels'
 
 const TableContainer = styled.div`
   padding: 1rem;
@@ -88,38 +86,6 @@ const SearchFilter = ({
   )
 }
 
-// From GridChart
-
-const InputRowLabel = ({ input }) => {
-  const trucatedInput = input
-  return (
-    <Box title={input} sx={{
-      overflow: 'hidden',
-      textOverflow: 'ellipsis'
-    }}>
-      {trucatedInput}
-    </Box>
-  )
-}
-
-InputRowLabel.propTypes = {
-  input: PropTypes.string,
-}
-
-const categoryCodesMap = getCategoryCodesMap()
-
-const getRowLabel = (key, yAxis) => {
-  switch (yAxis) {
-  case 'probe_cc':
-    return countryUtil.territoryNames[key]
-  case 'category_code':
-    return categoryCodesMap.get(key)?.name
-  case 'input':
-    return (<InputRowLabel input={key} />)
-  default:
-    return key
-  }
-}
 
 export function getDatesBetween(startDate, endDate) {
   const dateArray = new Set()

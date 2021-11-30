@@ -475,5 +475,6 @@
   "MAT.Table.Header.input": "URL",
   "MAT.Table.Header.category_code": "Category Code",
   "MAT.Table.Header.probe_cc": "Country",
-  "MAT.Table.Header.probe_asn": "ASN"
+  "MAT.Table.Header.probe_asn": "ASN",
+  "MAT.Table.Header.blocking_type": "Blocking Type"
 }
