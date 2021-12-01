@@ -1,5 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
-
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { useIntl } from 'react-intl'
 import {
@@ -10,6 +9,8 @@ import {
   Label,
 } from 'ooni-components'
 import moment from 'moment'
+import { useForm, Controller } from 'react-hook-form'
+import { DevTool } from '@hookform/devtools'
 
 import DatePicker from '../DatePicker'
 import {
@@ -53,8 +54,6 @@ const StyledFilterSidebar = styled.div`
 
 const TestNameOptions = ({testNames}) => {
   const intl = useIntl()
-
-  // console.log(testNames)
   const groupedTestNameOptions = testNames
     .reduce((grouped, test) => {
       const group = test.id in testNamesIntl ? testNamesIntl[test.id].group : 'legacy'
@@ -125,25 +124,30 @@ function isValidFilterForTestname(testName = 'XX', arrayWithMapping) {
   return arrayWithMapping.includes(testName)
 }
 
+const tomorrowUTC = moment.utc().add(1, 'day').format('YYYY-MM-DD')
+
+const asnRegEx = /^(AS)?([1-9][0-9]*)$/
+const domainRegEx = /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,7}(:[0-9]{1,5})?$/
+const ipRegEx = /^(([0-9]{1,3})\.){3}([0-9]{1,3})$/
 
 
 const FilterSidebar = ({
   testNames,
   countries,
-  domainFilter,
-  onlyFilter,
-  testNameFilter,
-  countryFilter,
-  asnFilter,
+  domainFilter = '',
+  onlyFilter = 'all',
+  testNameFilter = 'XX',
+  countryFilter = 'XX',
+  asnFilter = '',
   sinceFilter,
-  untilFilter,
+  untilFilter = tomorrowUTC,
   onApplyFilter
 }) => {
   const intl = useIntl()
   // Display `${tomorrow}` as the end date for default search
   // to include the measurements of `${today}` as well.
-  const tomorrowUTC = moment.utc().add(1, 'day').format('YYYY-MM-DD')
-  const [state, setState] = useState({
+
+  const defaultValues = {
     domainFilter,
     onlyFilter,
     testNameFilter,
@@ -151,166 +155,68 @@ const FilterSidebar = ({
     asnFilter,
     sinceFilter,
     untilFilter,
+  }
+
+  const { handleSubmit, control, watch, resetField, formState } = useForm({
+    defaultValues
   })
-  const [isFilterDirty, setFilterDirty] = useState(false)
-  const [asnError, setAsnError] = useState(false)
-  const [domainError, setDomainError] = useState(false)
+  const { errors } = formState
 
-  const showDomain = useMemo(() => isValidFilterForTestname(testNameFilter, testsWithValidDomain), [testNameFilter])
-  const showAnomalyFilter = useMemo(() => isValidFilterForTestname(testNameFilter, testsWithAnomalyStatus), [testNameFilter])
-  const showConfirmedFilter = useMemo(() => isValidFilterForTestname(testNameFilter, testsWithConfirmedStatus), [testNameFilter])
+  const testNameFilterValue = watch('testNameFilter')
+  const onlyFilterValue = watch('onlyFilter')
+  const [untilFilterValue, sinceFilterValue] = watch(['untilFilter', 'sinceFilter'])
 
-  const getStateForFilterChange = useCallback((filterName, newValue) => {
-  //   const newState = {}
-  //   // Calculate changes when test name changes
-  //   if (filterName === 'testNameFilter') {
-  //     const isTestWithValidDomain = this.isValidFilterForTestname(newValue, testsWithValidDomain)
-  //     newState['showDomain'] = isTestWithValidDomain
+  // Does the selected testName need a domain filter
+  const showDomain = useMemo(() => isValidFilterForTestname(testNameFilterValue, testsWithValidDomain), [testNameFilterValue])
+  // to avoid bad queries, blank out the `domain` field when it is shown/hidden
+  useEffect(() => {
+    resetField('domainFilter')
+  }, [resetField, showDomain])
 
-  //     // If not, then blank out the `domain` parameter to avoid bad queries
-  //     if (!isTestWithValidDomain) {
-  //       newState['domainFilter'] = ''
-  //     }
-
-  //     // Can we filter out anomalies or confirmed for this test_name
-  //     const showAnomalyFilter = this.isValidFilterForTestname(newValue, testsWithAnomalyStatus)
-  //     const showConfirmedFilter = this.isValidFilterForTestname(newValue, testsWithConfirmedStatus)
-  //     newState['showAnomalyFilter'] = showAnomalyFilter
-  //     newState['showConfirmedFilter'] = showConfirmedFilter
-
-  //     // Reset status filter to 'all' if selected state isn't relevant
-  //     // e.g 'anomalies' for 'NDT', 'confirmed' for 'telegram'
-  //     if ((!showAnomalyFilter && this.state.onlyFilter === 'anomalies')) {
-  //       newState['onlyFilter'] = 'all'
-  //     } else if (!showConfirmedFilter && this.state.onlyFilter === 'confirmed') {
-  //       newState['onlyFilter'] = 'all'
-  //     }
-  //   }
-
-  //   return newState
-  }, [])
-
-  function onChangeFilter (filterName) {
-  //   return ((e) => {
-  //     const { intl } = this.props
-  //     // Get updates to state based on test name change
-  //     let stateChanges = this.getStateForFilterChange(filterName, e.target.value)
-  //     // Input Validations
-  //     switch(filterName) {
-  //     case 'asnFilter':
-  //       var asnValue = e.target.value
-  //       // Accepts only formats like AS1234 or 1234
-  //       // https://regex101.com/r/DnkspD/latest
-  //       var asnRegEx = /^(AS)?([1-9][0-9]*)$/
-  //       if (
-  //         typeof asnValue === 'string' &&
-  //         (asnValue === '' || asnValue.match(asnRegEx) !== null)
-  //       ) {
-  //         stateChanges = {...stateChanges,
-  //           asnError: false,
-  //           isFilterDirty: true
-  //         }
-  //       } else {
-  //         stateChanges = {...stateChanges,
-  //           asnError: intl.formatMessage({id: 'Search.Sidebar.ASN.Error'}),
-  //           isFilterDirty: false
-  //         }
-  //       }
-  //       break
-  //     case 'domainFilter':
-  //       var domainValue = e.target.value
-  //       // eslint-disable-next-line no-useless-escape
-  //       var domainRegEx = /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,7}(:[0-9]{1,5})?(\/)?$/
-  //       var ipRegEx = /^(([0-9]{1,3})\.){3}([0-9]{1,3})/
-  //       if (domainValue && domainValue.match(domainRegEx) === null
-  //       && domainValue.match(ipRegEx) === null) {
-  //         stateChanges = {...stateChanges,
-  //           domainError: intl.formatMessage({id: 'Search.Sidebar.Domain.Error'}),
-  //           isFilterDirty: false
-  //         }
-  //       } else {
-  //         stateChanges = {...stateChanges,
-  //           domainError: false,
-  //           isFilterDirty: true
-  //         }
-  //       }
-  //       break
-
-  //     default:
-  //       stateChanges = {...stateChanges,
-  //         isFilterDirty: true
-  //       }
-  //     }
-
-  //     this.setState({
-  //       [filterName]: e.target.value,
-  //       ...stateChanges
-  //     })
-  //   }).bind(this)
-  }
-
-  function onDateChangeFilter (filterName) {
-  //   return ((date) => {
-  //     if (moment.utc(new Date(date)).isValid() || date === '') {
-  //       const newDate = moment.isMoment(date) ? date.format('YYYY-MM-DD') : date
-  //       this.setState({
-  //         [filterName]: newDate,
-  //         isFilterDirty: true
-  //       })
-  //     } else {
-  //       this.setState({
-  //         [filterName]: date,
-  //         isFilterDirty: false
-  //       })
-  //     }
-  //   })
-  }
-
-  function onRadioChangeFilter (filterName) {
-  //   return ((value) => {
-  //     this.setState({
-  //       [filterName]: value,
-  //       isFilterDirty: true
-  //     })
-  //   })
-  }
+  // Can we filter out anomalies or confirmed for this test_name
+  const showAnomalyFilter = useMemo(() => isValidFilterForTestname(testNameFilterValue, testsWithAnomalyStatus), [testNameFilterValue])
+  const showConfirmedFilter = useMemo(() => isValidFilterForTestname(testNameFilterValue, testsWithConfirmedStatus), [testNameFilterValue])
+  // Reset status filter to 'all' if selected state isn't relevant
+  // e.g 'anomalies' isn't relevant for `ndt`, or 'confirmed' for `telegram`
+  // But retain the state in some cases e.g 'anomalies' is relevant for `telegram` and `psiphon`
+  useEffect(() => {
+    if(onlyFilterValue === 'anomalies' && !showAnomalyFilter) {
+      resetField('onlyFilter')
+    }
+  }, [onlyFilterValue, resetField, showAnomalyFilter])
+  useEffect(() => {
+    if (onlyFilterValue === 'confirmed' && !showConfirmedFilter) {
+      resetField('onlyFilter')
+    }
+  }, [onlyFilterValue, resetField, showConfirmedFilter])
 
   function isSinceValid(currentDate) {
-  //   // Valid dates for start of date range
-  //   // 1. Before the end of date range (untilFilter), if provided
-  //   // 2. Until tomorrow
-  //   const tomorrow = moment.utc().add(1, 'day')
-  //   const { untilFilter } = this.state
-  //   if (untilFilter.length !== 0) {
-  //     return currentDate.isBefore(untilFilter)
-  //   } else {
-  //     return currentDate.isSameOrBefore(tomorrow)
-  //   }
+    // Valid dates for start of date range
+    // 1. Before the 'Until' date, if provided
+    // 2. Until tomorrow
+    const tomorrow = moment.utc().add(1, 'day')
+    if (untilFilterValue.length !== 0) {
+      return currentDate.isBefore(untilFilterValue)
+    } else {
+      return currentDate.isSameOrBefore(tomorrow)
+    }
   }
 
   function isUntilValid(currentDate) {
-  //   const tomorrow = moment.utc().add(1, 'day')
-  //   const { sinceFilter } = this.state
-  //   if (sinceFilter.length !== 0) {
-  //     return currentDate.isAfter(sinceFilter) && currentDate.isSameOrBefore(tomorrow)
-  //   } else {
-  //     return currentDate.isSameOrBefore(tomorrow)
-  //   }
+    // Valid dates for end of date range
+    // 1. After the 'Since' date if provided
+    // 2. Until tomorrow
+    const tomorrow = moment.utc().add(1, 'day')
+    if (sinceFilterValue.length !== 0) {
+      return currentDate.isAfter(sinceFilterValue) && currentDate.isSameOrBefore(tomorrow)
+    } else {
+      return currentDate.isSameOrBefore(tomorrow)
+    }
   }
 
-  const onClickApplyFilter = useCallback(() => {
-    onApplyFilter({
-      domainFilter: state.domainFilter,
-      onlyFilter: state.onlyFilter,
-      testNameFilter: state.testNameFilter,
-      countryFilter: state.countryFilter,
-      asnFilter: state.asnFilter,
-      sinceFilter: state.sinceFilter,
-      untilFilter: state.untilFilter
-    })
-    
-    setFilterDirty(false)
-  }, [onApplyFilter, state.asnFilter, state.countryFilter, state.domainFilter, state.onlyFilter, state.sinceFilter, state.testNameFilter, state.untilFilter])
+  const onSubmit = (data) => {
+    onApplyFilter(data)
+  }
 
   //Insert an 'Any' option to test name filter
   // testNameOptions.unshift({name: intl.formatMessage({id: 'Search.Sidebar.TestName.AllTests'}), id: 'XX'})
@@ -319,123 +225,173 @@ const FilterSidebar = ({
   countryOptions.unshift({name: intl.formatMessage({id: 'Search.Sidebar.Country.AllCountries'}), alpha_2: 'XX'})
 
   return (
-    <StyledFilterSidebar>
-      <SelectWithLabel
-        pt={2}
-        label={intl.formatMessage({id: 'Search.Sidebar.Country'})}
-        value={countryFilter}
-        name="countryFilter"
-        data-test-id='country-filter'
-        onChange={onChangeFilter('countryFilter')}>
-        {countryOptions.map((v, idx) => {
-          return (
-            <option key={idx} value={v.alpha_2}>{v.name}</option>
-          )
-        })}
-      </SelectWithLabel>
-
-      <InputWithLabel
-        label={intl.formatMessage({id: 'Search.Sidebar.ASN'})}
-        value={asnFilter}
-        error={asnError}
-        name="asnFilter"
-        data-test-id='asn-filter'
-        onChange={onChangeFilter('asnFilter')}
-        placeholder={intl.formatMessage({id: 'Search.Sidebar.ASN.example'})}
-      />
-
-      <Flex>
-        <Box width={1/2} pr={1}>
-          <StyledLabel>
-            {intl.formatMessage({id: 'Search.Sidebar.From'})}
-          </StyledLabel>
-          <DatePicker
-            value={sinceFilter}
-            onChange={onDateChangeFilter('sinceFilter')}
-            dateFormat='YYYY-MM-DD'
-            utc={true}
-            timeFormat={false}
-            isValidDate={isSinceValid}
-            inputProps={{id: 'since-filter'}}
-          />
-        </Box>
-        <Box width={1/2} pl={1}>
-          <StyledLabel>
-            {intl.formatMessage({id: 'Search.Sidebar.Until'})}
-          </StyledLabel>
-          <DatePicker
-            value={untilFilter}
-            onChange={onDateChangeFilter('untilFilter')}
-            dateFormat='YYYY-MM-DD'
-            utc={true}
-            timeFormat={false}
-            isValidDate={isUntilValid}
-            inputProps={{id: 'until-filter'}}
-          />
-        </Box>
-      </Flex>
-
-      <SelectWithLabel
-        pt={2}
-        label={intl.formatMessage({id: 'Search.Sidebar.TestName'})}
-        name='testNameFilter'
-        data-test-id='testname-filter'
-        value={testNameFilter}
-        onChange={onChangeFilter('testNameFilter')}
-      >
-        <TestNameOptions testNames={testNames} />
-      </SelectWithLabel>
-
-      {
-        showDomain &&
-        <InputWithLabel
-          label={intl.formatMessage({id: 'Search.Sidebar.Domain'})}
-          name='domainFilter'
-          data-test-id='domain-filter'
-          value={domainFilter}
-          error={domainError}
-          onChange={onChangeFilter('domainFilter')}
-          placeholder={intl.formatMessage({id: 'Search.Sidebar.Domain.Placeholder'})}
-          type="text"
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <DevTool control={control} />
+      <StyledFilterSidebar>
+        <Controller
+          control={control}
+          name='countryFilter'
+          render={({field}) => (
+            <SelectWithLabel
+              {...field}
+              pt={2}
+              label={intl.formatMessage({id: 'Search.Sidebar.Country'})}
+              data-test-id='country-filter'
+            >
+              {countryOptions.map((v, idx) => {
+                return (
+                  <option key={idx} value={v.alpha_2}>{v.name}</option>
+                )
+              })}
+            </SelectWithLabel>
+          )}
         />
-      }
 
-      {(showConfirmedFilter || showAnomalyFilter) && (<>
-        <StyledLabel>
-          {intl.formatMessage({id: 'Search.Sidebar.Status'})}
-        </StyledLabel>
-
-        <RadioGroup
-          onChange={onRadioChangeFilter('onlyFilter')}
-          value={onlyFilter}
-        >
-          <RadioButton
-            label={intl.formatMessage({id: 'Search.FilterButton.AllResults'}) }
-            value='all'
+        <Controller
+          control={control}
+          name='asnFilter'
+          render={({field}) => (
+            <InputWithLabel
+            {...field}
+            label={intl.formatMessage({id: 'Search.Sidebar.ASN'})}
+            error={errors?.asnFilter?.message}
+            data-test-id='asn-filter'
+            placeholder={intl.formatMessage({id: 'Search.Sidebar.ASN.example'})}
           />
-          {showConfirmedFilter ? (
-            <RadioButton
-              label={intl.formatMessage({id: 'Search.FilterButton.Confirmed'}) }
-              value='confirmed'
-            />
-          ) : <div/>}
-          {showAnomalyFilter ? (
-            <RadioButton
-              label={intl.formatMessage({id: 'Search.FilterButton.Anomalies'}) }
-              value='anomalies'
-            />
-          ) : <div/>}
-        </RadioGroup>
-      </>)}
+          )}
+          rules={{
+            pattern: {
+              value: asnRegEx,
+              message: intl.formatMessage({id: 'Search.Sidebar.ASN.Error'})
+            }
+          }}
+        />
 
-      <Button
-        mt={3}
-        onClick={onClickApplyFilter}
-        disabled={!isFilterDirty}
-      >
-        {intl.formatMessage({id: 'Search.Sidebar.Button.FilterResults'})}
-      </Button>
-    </StyledFilterSidebar>
+        <Flex flexDirection={['column', 'row']}>
+          <Box width={1/2} pr={1}>
+            <StyledLabel>
+              {intl.formatMessage({id: 'Search.Sidebar.From'})}
+            </StyledLabel>
+            <Controller
+              control={control}
+              name='sinceFilter'
+              render={({field}) => (
+                <DatePicker
+                  {...field}
+                  onChange={(value) => 
+                    field.onChange(value.format('YYYY-MM-DD'))
+                  }
+                  dateFormat='YYYY-MM-DD'
+                  utc={true}
+                  timeFormat={false}
+                  isValidDate={isSinceValid}
+                  inputProps={{id: 'since-filter'}}
+                />
+              )}
+            />
+          </Box>
+          <Box width={1/2} pl={1}>
+            <StyledLabel>
+              {intl.formatMessage({id: 'Search.Sidebar.Until'})}
+            </StyledLabel>
+            <Controller
+              control={control}
+              name='untilFilter'
+              render={({field}) => (
+                <DatePicker
+                  {...field}
+                  onChange={(value) => 
+                    field.onChange(value.format('YYYY-MM-DD'))
+                  }
+                  dateFormat='YYYY-MM-DD'
+                  utc={true}
+                  timeFormat={false}
+                  isValidDate={isUntilValid}
+                  inputProps={{id: 'until-filter'}}
+                />
+              )}
+            />
+          </Box>
+        </Flex>
+
+        <Controller
+          control={control}
+          name='testNameFilter'
+          render={({field}) => (
+            <SelectWithLabel
+              {...field}
+              pt={2}
+              label={intl.formatMessage({id: 'Search.Sidebar.TestName'})}
+              data-test-id='testname-filter'
+            >
+              <TestNameOptions testNames={testNames} />
+            </SelectWithLabel>
+  
+          )}
+        />
+
+        {
+          showDomain &&
+          <Controller
+          control={control}
+          name='domainFilter'
+          render={({field}) => (
+            <InputWithLabel
+              {...field}
+              label={intl.formatMessage({id: 'Search.Sidebar.Domain'})}
+              data-test-id='domain-filter'
+              error={errors?.domainFilter?.message}
+              placeholder={intl.formatMessage({id: 'Search.Sidebar.Domain.Placeholder'})}
+              type="text"
+            />
+          )}
+          rules={{
+            validate: (value) => 
+              (String(value).length === 0 || domainRegEx.test(value) || ipRegEx.test(value)) 
+              || intl.formatMessage({id: 'Search.Sidebar.Domain.Error'})
+          }}
+        />
+        }
+
+        {(showConfirmedFilter || showAnomalyFilter) && (<>
+          <StyledLabel>
+            {intl.formatMessage({id: 'Search.Sidebar.Status'})}
+          </StyledLabel>
+
+          <Controller
+            control={control}
+            name='onlyFilter'
+            render={({field}) => (
+              <RadioGroup {...field}>
+                <RadioButton
+                  label={intl.formatMessage({id: 'Search.FilterButton.AllResults'}) }
+                  value='all'
+                />
+                {showConfirmedFilter ? (
+                  <RadioButton
+                    label={intl.formatMessage({id: 'Search.FilterButton.Confirmed'}) }
+                    value='confirmed'
+                  />
+                ) : <div/>}
+                {showAnomalyFilter ? (
+                  <RadioButton
+                    label={intl.formatMessage({id: 'Search.FilterButton.Anomalies'}) }
+                    value='anomalies'
+                  />
+                ) : <div/>}
+              </RadioGroup>
+            )}
+          />
+        </>)}
+
+        <Button
+          mt={3}
+          type='submit'
+        >
+          {intl.formatMessage({id: 'Search.Sidebar.Button.FilterResults'})}
+        </Button>
+      </StyledFilterSidebar>
+    </form>
   )
 }
 
