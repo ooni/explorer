@@ -49,7 +49,7 @@ const Form = ({ onSubmit, initialValues }) => {
     } else {
       return value.isSameOrBefore(today)
     }
-  }, [since])
+  }, [since, until.length])
 
   return (
     <form onSubmit={handleSubmit(beforeSubmit)}>
@@ -57,11 +57,12 @@ const Form = ({ onSubmit, initialValues }) => {
         <Box width={[1, 1/2]} px={2} my={[2, 2]}>
           <Label color='blue5'> Website </Label>
           <Controller
-            as={
+            render={({field}) => (
               <Input
+                {...field}
                 placeholder='e.g ooni.org'
               />
-            }
+            )}
             name='input'
             control={control}
             rules={{
@@ -80,16 +81,15 @@ const Form = ({ onSubmit, initialValues }) => {
             <Box mr={2}>
               <Label color='blue5'> Since </Label>
               <Controller
-                as={
+                render={(field) => (
                   <DatePicker
-                    name='since'
-                    onChange={() => {}}
+                    {...field}
                     dateFormat='YYYY-MM-DD'
                     utc={true}
                     timeFormat={false}
                     isValidDate={isValidSinceDate}
                   />
-                }
+                )}
                 name='since'
                 control={control}
                 rules={{
@@ -101,16 +101,15 @@ const Form = ({ onSubmit, initialValues }) => {
             <Box>
               <Label color='blue5'> Until </Label>
               <Controller
-                as={
+                render={({field}) => (
                   <DatePicker
-                    name='until'
-                    onChange={() => {}}
+                    {...field}
                     dateFormat='YYYY-MM-DD'
                     utc={true}
                     timeFormat={false}
                     isValidDate={isValidUntilDate}
                   />
-                }
+                )}
                 name='until'
                 control={control}
                 rules={{

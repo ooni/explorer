@@ -58,17 +58,17 @@ export const Form = ({ onSubmit, testNames, query }) => {
             Country
           </StyledLabel>
           <Controller
-            as={Select}
+            render={({field}) => (
+              <Select {...field}>
+                <option value=''>All Countries</option>
+                {sortedCountries.map((c, idx) =>(
+                  <option key={idx} value={c.iso3166_alpha2}>{c.iso3166_name}</option>
+                ))}
+              </Select>
+            )}
             name='probe_cc'
             control={control}
-          >
-            <option value=''>All Countries</option>
-            {sortedCountries
-              .map((c, idx) =>(
-                <option key={idx} value={c.iso3166_alpha2}>{c.iso3166_name}</option>
-              ))
-            }
-          </Controller>
+          />
         </Box>
         <Box width={1/6}>
           <StyledLabel>
@@ -157,12 +157,14 @@ export const Form = ({ onSubmit, testNames, query }) => {
           <Controller
             name='test_name'
             control={control}
-            as={Select}
-          >
-            {testNames.map((test, idx) => (
-              <option key={idx} value={test.id}>{test.name}</option>
-            ))}
-          </Controller>
+            render={({field}) => (
+              <Select {...field}>
+                {testNames.map((test, idx) => (
+                  <option key={idx} value={test.id}>{test.name}</option>
+                ))}
+              </Select>
+            )}
+          />
         </Box>
         <Box>
           <StyledLabel>
@@ -185,43 +187,49 @@ export const Form = ({ onSubmit, testNames, query }) => {
             Category Codes
           </StyledLabel>
           <Controller
-            as={Select}
             name='category_code'
             control={control}
-          >
-            <option value="">ALL</option>
-            {categoryCodes.map(([code, label], idx) => (
-              <option key={idx} value={code}>{label}</option>
-            ))}
-          </Controller>
+            render={({field}) => (
+              <Select {...field}>
+                <option value="">ALL</option>
+                {categoryCodes.map(([code, label], idx) => (
+                  <option key={idx} value={code}>{label}</option>
+                ))}
+              </Select>
+            )}
+          />
         </Box>
         <Box>
           <StyledLabel>
             X Axis
           </StyledLabel>
           <Controller
-            as={Select}
             name='axis_x'
             control={control}
-          >
-            {optionsAxis.map((option, idx) => (
-              <option key={idx} value={option}>{option}</option>
-            ))}
-          </Controller>
+            render={({field}) => (
+              <Select {...field}>
+                {optionsAxis.map((option, idx) => (
+                  <option key={idx} value={option}>{option}</option>
+                ))}
+              </Select>
+            )}
+          />
         </Box>
         <Box>
           <StyledLabel>
             Y Axis
           </StyledLabel>
           <Controller
-            as={Select}
             name='axis_y'
             control={control}
-          >
-            {optionsAxis.map((option, idx) => (
-              <option key={idx} value={option}>{option}</option>
-            ))}
-          </Controller>
+            render={({field}) => (
+              <Select {...field}>
+                {optionsAxis.map((option, idx) => (
+                  <option key={idx} value={option}>{option}</option>
+                ))}
+              </Select>
+            )}
+          />
         </Box>
       </Flex>
       <Flex my={4}>
