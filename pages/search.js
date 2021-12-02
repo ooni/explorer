@@ -155,8 +155,12 @@ class Search extends React.Component {
       query.until = until
     }
 
+    // If there is no 'failure' in query, default to a false
     if ('failure' in query === false) {
       query.failure = false
+    } else {
+      // Convert the string param into boolean
+      query.failure = !(query.failure === 'false')
     }
 
     [testNamesR, countriesR] = await Promise.all([
