@@ -32,12 +32,18 @@ const queryToParams = ({ query }) => {
   if (query.show) {
     show = parseInt(query.show)
   }
-  supportedParams.forEach((p) => {
-    if (query[p]) {
+  params['limit'] = show
+
+  // Allow only `failure=false`. `true` results in showing only failures
+  if ('failure' in query && query['failure'] === false) {
+    params['failure'] = false
+  }
+
+  for (const p of supportedParams) {
+    if (p in query && query[p] !== undefined) {
       params[p] = query[p]
     }
-  })
-  params['limit'] = show
+  }
   if (query.only) {
     if (query.only === 'anomalies') {
       params['anomaly'] = true
@@ -139,14 +145,18 @@ class Search extends React.Component {
     // including the measurements of today (so the date of tomorrow).
     // This prevents the search page from showing time-travelling future
     // measurements from showing up
-    const until = moment.utc().add(1, 'day').format('YYYY-MM-DD')
-    if (!query.until) {
-      query.until = until
-    }
-
     const since = moment(query.until).utc().subtract(30, 'day').format('YYYY-MM-DD')
     if (!query.since) {
       query.since = since
+    }
+
+    const until = moment.utc().add(1, 'day').format('YYYY-MM-DD')
+    if ('until' in query === false) {
+      query.until = until
+    }
+
+    if ('failure' in query === false) {
+      query.failure = false
     }
 
     [testNamesR, countriesR] = await Promise.all([
@@ -206,12 +216,10 @@ class Search extends React.Component {
       asnFilter: props.router.query.probe_asn,
       sinceFilter: props.router.query.since,
       untilFilter: props.router.query.until,
+      onlyFilter: props.router.query.only || 'all',
+      hideFailed: true,
       results: props.results,
       nextURL: props.nextURL,
-
-      onlyFilter: props.router.query.only || 'all',
-
-      search: null,
       error: props.error,
 
       loading: false
@@ -301,25 +309,33 @@ class Search extends React.Component {
       ['testNameFilter', 'test_name'],
       ['sinceFilter', 'since'],
       ['untilFilter', 'until'],
-      ['onlyFilter', 'only']
+      ['onlyFilter', 'only'],
+      ['hideFailed', 'failure']
     ]
     let query = {...this.props.router.query}
-    mappings.forEach((m) => {
-      if (!this.state[m[0]] || this.state[m[0]] === 'XX') {
+    for (const [key, queryParam] of mappings) {
+      if (this.state[key] === undefined || this.state[key] === 'XX') {
         // If it's unset or marked as XX, let's be sure the path is clean
-        if (query[m[1]]) {
-          delete query[m[1]]
+        if (query[queryParam]) {
+          delete query[queryParam]
         }
-      } else if (m[0] === 'onlyFilter' && this.state[m[0]] == 'all') {
+      } else if (key === 'onlyFilter' && this.state[key] == 'all') {
         // If the onlyFilter is not set to 'confirmed' or 'anomalies'
         // remove it from the path
-        if (query[m[1]]) {
-          delete query[m[1]]
+        if (query[queryParam]) {
+          delete query[queryParam]
+        }
+      } else if (key === 'hideFailed') {
+        if (this.state[key] === true) {
+          // When `hideFailure` is true, add `failure=false` in the query
+          query[queryParam] = false
+        } else {
+          delete query[queryParam]
         }
       } else {
-        query[m[1]] = this.state[m[0]]
+        query[queryParam] = this.state[key]
       }
-    })
+    }
     return query
   }
 
@@ -340,7 +356,8 @@ class Search extends React.Component {
       countryFilter,
       asnFilter,
       sinceFilter,
-      untilFilter
+      untilFilter,
+      hideFailed
     } = this.state
 
     return (
@@ -362,6 +379,7 @@ class Search extends React.Component {
                 sinceFilter={sinceFilter}
                 untilFilter={untilFilter}
                 onlyFilter={onlyFilter}
+                hideFailed={hideFailed}
                 onApplyFilter={this.onApplyFilter}
                 testNames={testNames}
                 countries={countries}

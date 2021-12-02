@@ -127,20 +127,20 @@ function isValidFilterForTestname(testName = 'XX', arrayWithMapping) {
 const tomorrowUTC = moment.utc().add(1, 'day').format('YYYY-MM-DD')
 
 const asnRegEx = /^(AS)?([1-9][0-9]*)$/
-const domainRegEx = /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,7}(:[0-9]{1,5})?$/
-const ipRegEx = /^(([0-9]{1,3})\.){3}([0-9]{1,3})$/
-
+const domainRegEx = /(^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,7}(:[0-9]{1,5})?$)|(^(([0-9]{1,3})\.){3}([0-9]{1,3}))/
+// const ipRegEx = /^(([0-9]{1,3})\.){3}([0-9]{1,3})$/
 
 const FilterSidebar = ({
   testNames,
   countries,
-  domainFilter = '',
+  domainFilter,
   onlyFilter = 'all',
   testNameFilter = 'XX',
   countryFilter = 'XX',
-  asnFilter = '',
+  asnFilter,
   sinceFilter,
   untilFilter = tomorrowUTC,
+  hideFailed = true,
   onApplyFilter
 }) => {
   const intl = useIntl()
@@ -155,6 +155,7 @@ const FilterSidebar = ({
     asnFilter,
     sinceFilter,
     untilFilter,
+    hideFailed
   }
 
   const { handleSubmit, control, watch, resetField, formState } = useForm({
@@ -252,12 +253,12 @@ const FilterSidebar = ({
           name='asnFilter'
           render={({field}) => (
             <InputWithLabel
-            {...field}
-            label={intl.formatMessage({id: 'Search.Sidebar.ASN'})}
-            error={errors?.asnFilter?.message}
-            data-test-id='asn-filter'
-            placeholder={intl.formatMessage({id: 'Search.Sidebar.ASN.example'})}
-          />
+              {...field}
+              label={intl.formatMessage({id: 'Search.Sidebar.ASN'})}
+              error={errors?.asnFilter?.message}
+              data-test-id='asn-filter'
+              placeholder={intl.formatMessage({id: 'Search.Sidebar.ASN.example'})}
+            />
           )}
           rules={{
             pattern: {
@@ -346,8 +347,8 @@ const FilterSidebar = ({
             />
           )}
           rules={{
-            validate: (value) => 
-              (String(value).length === 0 || domainRegEx.test(value) || ipRegEx.test(value)) 
+            validate: (value = '') =>
+              (String(value).length === 0 || domainRegEx.test(value))
               || intl.formatMessage({id: 'Search.Sidebar.Domain.Error'})
           }}
         />
@@ -383,7 +384,16 @@ const FilterSidebar = ({
             )}
           />
         </>)}
-
+          <Label htmlFor='hideFailed' alignItems='center'>
+            <Controller
+              control={control}
+              name='hideFailed'
+              render={({field}) => (
+                <input {...field} type='checkbox' id='hideFailed' checked={field.value} />
+              )}
+            />
+            <Box mx={1}>{intl.formatMessage({id: 'Search.Sidebar.HideFailed'})}</Box>
+          </Label>
         <Button
           mt={3}
           type='submit'
