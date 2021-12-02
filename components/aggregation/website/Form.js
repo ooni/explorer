@@ -14,13 +14,13 @@ const ErrorMessage = styled(Text)`
   padding-top: 4px;
 `
 const Form = ({ onSubmit, initialValues }) => {
-  const { handleSubmit, control, errors, watch, formState } = useForm({
+  const { handleSubmit, control, watch, formState } = useForm({
     defaultValues: initialValues,
     mode: 'onBlur'
   })
 
   const { since, until } = watch(['since', 'until'])
-  const { dirty, isValid, isSubmitting } = formState
+  const { dirty, isValid, isSubmitting, errors } = formState
 
   const beforeSubmit = (values) => {
     const ret = Object.assign({}, values)
@@ -35,7 +35,7 @@ const Form = ({ onSubmit, initialValues }) => {
 
   const isValidSinceDate = useCallback((value) => {
     const today = moment.utc()
-    if (until.length !== 0) {
+    if (typeof until === 'string' && until.length !== 0) {
       return value.isBefore(until)
     } else {
       return value.isSameOrBefore(today)
@@ -44,12 +44,12 @@ const Form = ({ onSubmit, initialValues }) => {
 
   const isValidUntilDate = useCallback((value) => {
     const today = moment.utc()
-    if (until.length !== 0) {
+    if (typeof until === 'string' && until.length !== 0) {
       return value.isAfter(since) && value.isSameOrBefore(today)
     } else {
       return value.isSameOrBefore(today)
     }
-  }, [since, until.length])
+  }, [since, until])
 
   return (
     <form onSubmit={handleSubmit(beforeSubmit)}>
@@ -74,7 +74,7 @@ const Form = ({ onSubmit, initialValues }) => {
               }
             }}
           />
-          <ErrorMessage>{errors.input && errors.input.message}</ErrorMessage>
+          <ErrorMessage>{errors?.input?.message}</ErrorMessage>
         </Box>
         <Box width={[1, 1/2]} px={2} my={[2, 0]}>
           <Flex>
@@ -96,7 +96,7 @@ const Form = ({ onSubmit, initialValues }) => {
                   required: 'cannot be empty'
                 }}
               />
-              <ErrorMessage>{errors.since && errors.since.message}</ErrorMessage>
+              <ErrorMessage>{errors?.since?.message}</ErrorMessage>
             </Box>
             <Box>
               <Label color='blue5'> Until </Label>
@@ -116,7 +116,7 @@ const Form = ({ onSubmit, initialValues }) => {
                   required: 'cannot be empty'
                 }}
               />
-              <ErrorMessage>{errors.until && errors.until.message}</ErrorMessage>
+              <ErrorMessage>{errors?.until?.message}</ErrorMessage>
             </Box>
           </Flex>
         </Box>
