@@ -124,11 +124,25 @@ function isValidFilterForTestname(testName = 'XX', arrayWithMapping) {
   return arrayWithMapping.includes(testName)
 }
 
+// Display `${tomorrow}` as the end date for default search
+// to include the measurements of `${today}` as well.
 const tomorrowUTC = moment.utc().add(1, 'day').format('YYYY-MM-DD')
 
 const asnRegEx = /^(AS)?([1-9][0-9]*)$/
 const domainRegEx = /(^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,7}(:[0-9]{1,5})?$)|(^(([0-9]{1,3})\.){3}([0-9]{1,3}))/
-// const ipRegEx = /^(([0-9]{1,3})\.){3}([0-9]{1,3})$/
+
+export const queryToFilterMap = {
+  domain: [ 'domainFilter', ''],
+  probe_cc: [ 'countryFilter', ''],
+  probe_asn: [ 'asnFilter', ''],
+  test_name: [ 'testNameFilter', 'XX'],
+  since: [ 'sinceFilter', ''],
+  until: [ 'untilFilter', ''],
+  only: [ 'onlyFilter', 'all'],
+  failure: [ 'hideFailed', true]
+}
+
+
 
 const FilterSidebar = ({
   testNames,
@@ -144,8 +158,6 @@ const FilterSidebar = ({
   onApplyFilter
 }) => {
   const intl = useIntl()
-  // Display `${tomorrow}` as the end date for default search
-  // to include the measurements of `${today}` as well.
 
   const defaultValues = {
     domainFilter,

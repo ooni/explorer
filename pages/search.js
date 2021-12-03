@@ -18,7 +18,7 @@ import NavBar from '../components/NavBar'
 import Layout from '../components/Layout'
 
 import ResultsList from '../components/search/ResultsList'
-import FilterSidebar from '../components/search/FilterSidebar'
+import FilterSidebar, { queryToFilterMap } from '../components/search/FilterSidebar'
 import { Loader } from '../components/search/Loader'
 import FormattedMarkdown from '../components/FormattedMarkdown'
 
@@ -28,7 +28,7 @@ const queryToParams = ({ query }) => {
   // XXX do better validation
   let params = {},
     show = 50
-  const supportedParams = ['probe_cc', 'domain', 'probe_asn', 'test_name', 'since', 'until']
+  const supportedParams = ['probe_cc', 'domain', 'probe_asn', 'test_name', 'since', 'until', 'failure']
   if (query.show) {
     show = parseInt(query.show)
   }
@@ -40,7 +40,7 @@ const queryToParams = ({ query }) => {
   }
 
   for (const p of supportedParams) {
-    if (p in query && query[p] !== undefined) {
+    if (p in query &&  query[p] !== queryToFilterMap[p][1]) {
       params[p] = query[p]
     }
   }
@@ -306,27 +306,18 @@ class Search extends React.Component {
   }
 
   getFilterQuery () {
-    const mappings = [
-      ['domainFilter', 'domain'],
-      ['countryFilter', 'probe_cc'],
-      ['asnFilter', 'probe_asn'],
-      ['testNameFilter', 'test_name'],
-      ['sinceFilter', 'since'],
-      ['untilFilter', 'until'],
-      ['onlyFilter', 'only'],
-      ['hideFailed', 'failure']
-    ]
     let query = {...this.props.router.query}
-    for (const [key, queryParam] of mappings) {
-      if (this.state[key] === undefined || this.state[key] === 'XX') {
-        // If it's unset or marked as XX, let's be sure the path is clean
-        if (query[queryParam]) {
+    const resetValues = [undefined, 'XX', '']
+    for (const [queryParam, [key]] of Object.entries(queryToFilterMap)) {
+      // If it's unset or marked as XX, let's be sure the path is clean
+      if (resetValues.includes(this.state[key])) {
+        if (queryParam in query) {
           delete query[queryParam]
         }
       } else if (key === 'onlyFilter' && this.state[key] == 'all') {
         // If the onlyFilter is not set to 'confirmed' or 'anomalies'
         // remove it from the path
-        if (query[queryParam]) {
+        if (queryParam in query) {
           delete query[queryParam]
         }
       } else if (key === 'hideFailed') {
