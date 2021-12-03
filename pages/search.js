@@ -75,18 +75,18 @@ const getCircularReplacer = () => {
   }
 }
 
-const formatError = (error) => {
-  let errorString = ''
-  if (error.code) {
-    errorString += `Error code: ${error.code}`
+
+const serializeError = (err) => {
+  const { name, message, stack, config = {} } = err.toJSON()
+  const { baseURL, url, params } = config
+  const { data, status, statusText } = err.response ?? {}
+  return {
+    name,
+    message,
+    data, status, statusText,
+    baseURL, url, params,
+    stack
   }
-  if (error.errno) {
-    errorString += ` (${error.errno})`
-  }
-  if (errorString === '') {
-    errorString = JSON.stringify(error, getCircularReplacer())
-  }
-  return errorString
 }
 
 const StyledPre = styled.pre`
@@ -102,6 +102,8 @@ const ErrorBox = ({ error }) => {
     return <div></div>
   }
 
+  const { stack, ...restOfError } = error
+
   return (
     <Box width={[1, 2/3]} mx='auto'>
       <Flex justifyContent='center' flexDirection='column'>
@@ -111,9 +113,14 @@ const ErrorBox = ({ error }) => {
         <Heading h={5}>
           <FormattedMessage id='Search.Error.Details.Label' />
         </Heading>
-        <Box p={[1, 3]} bg='gray3'>
+        <Box p={[1, 3]} bg='gray3' my={[1, 2]}>
           <StyledPre>
-            {JSON.stringify(error, null, '  ')}
+            {JSON.stringify(restOfError, null, '  ')}
+          </StyledPre>
+        </Box>
+        <Box p={[1, 3]} bg='gray3' my={[1, 2]}>
+          <StyledPre>
+            {stack}
           </StyledPre>
         </Box>
       </Flex>
@@ -267,8 +274,11 @@ class Search extends React.Component {
         })
       })
       .catch((err) => {
+        console.error(err)
+        const error = serializeError(err)
         this.setState({
-          error: err
+          error,
+          loading: false
         })
       })
   }
@@ -296,8 +306,10 @@ class Search extends React.Component {
             })
           })
           .catch((err) => {
+            console.error(err)
+            const error = serializeError(err)
             this.setState({
-              error: err,
+              error,
               loading: false
             })
           })
