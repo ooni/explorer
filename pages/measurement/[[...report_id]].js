@@ -118,10 +118,11 @@ const Measurement = ({
   input,
   raw_measurement,
   report_id,
+  scores,
   ...rest
 }) => {
 
-  // Add the 'AS' prefix to probe_asn when APi chooses to snd just the number
+  // Add the 'AS' prefix to probe_asn when API chooses to send just the number
   probe_asn = typeof probe_asn === 'number' ? `AS${probe_asn}` : probe_asn
 
   if (errors.length > 0) {
@@ -148,6 +149,7 @@ const Measurement = ({
           input={input}
           test_start_time={test_start_time}
           probe_asn={probe_asn}
+          scores={scores}
           {...rest}
 
           render={({
@@ -159,58 +161,62 @@ const Measurement = ({
             summaryText,
             headMetadata,
             details
-          }) => (
-            <React.Fragment>
-              {headMetadata &&
-                <HeadMetadata
-                  content={headMetadata}
-                  testName={test_name}
-                  testUrl={input}
-                  country={country}
-                  date={test_start_time}
-                />
-              }
-              <NavBar color={pageColors[status]} />
-              <Hero
-                color={pageColors[status]}
-                status={status}
-                icon={statusIcon}
-                label={statusLabel}
-                info={statusInfo}
-              />
-              <CommonSummary
-                test_start_time={test_start_time}
-                probe_asn={probe_asn}
-                probe_cc={probe_cc}
-                color={pageColors[status]}
-                country={country}
-              />
-
-              <Container>
-                <DetailsHeader
-                  testName={test_name}
-                  runtime={raw_measurement?.test_runtime}
-                  notice={legacy}
-                  url={`measurement/${report_id}`}
-                />
-                {summaryText &&
-                  <SummaryText
+          }) => {
+            const color = failure === true ? pageColors['error'] : pageColors[status]
+            const info = scores?.msg ?? statusInfo
+            return (
+              <React.Fragment>
+                {headMetadata &&
+                  <HeadMetadata
+                    content={headMetadata}
                     testName={test_name}
                     testUrl={input}
-                    network={probe_asn}
                     country={country}
                     date={test_start_time}
-                    content={summaryText}
                   />
                 }
-                {details}
-                <CommonDetails
-                  measurement={raw_measurement}
-                  reportId={report_id}
+                <NavBar color={color} />
+                <Hero
+                  color={color}
+                  status={status}
+                  icon={statusIcon}
+                  label={statusLabel}
+                  info={info}
                 />
-              </Container>
-            </React.Fragment>
-          )} />
+                <CommonSummary
+                  test_start_time={test_start_time}
+                  probe_asn={probe_asn}
+                  probe_cc={probe_cc}
+                  color={color}
+                  country={country}
+                />
+
+                <Container>
+                  <DetailsHeader
+                    testName={test_name}
+                    runtime={raw_measurement?.test_runtime}
+                    notice={legacy}
+                    url={`measurement/${report_id}`}
+                  />
+                  {summaryText &&
+                    <SummaryText
+                      testName={test_name}
+                      testUrl={input}
+                      network={probe_asn}
+                      country={country}
+                      date={test_start_time}
+                      content={summaryText}
+                    />
+                  }
+                  {details}
+                  <CommonDetails
+                    measurement={raw_measurement}
+                    reportId={report_id}
+                  />
+                </Container>
+              </React.Fragment>
+            )
+          }} />
       )}
     </Layout>
   )

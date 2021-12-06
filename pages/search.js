@@ -18,7 +18,7 @@ import NavBar from '../components/NavBar'
 import Layout from '../components/Layout'
 
 import ResultsList from '../components/search/ResultsList'
-import FilterSidebar from '../components/search/FilterSidebar'
+import FilterSidebar, { queryToFilterMap } from '../components/search/FilterSidebar'
 import { Loader } from '../components/search/Loader'
 import FormattedMarkdown from '../components/FormattedMarkdown'
 
@@ -28,16 +28,22 @@ const queryToParams = ({ query }) => {
   // XXX do better validation
   let params = {},
     show = 50
-  const supportedParams = ['probe_cc', 'domain', 'probe_asn', 'test_name', 'since', 'until']
+  const supportedParams = ['probe_cc', 'domain', 'probe_asn', 'test_name', 'since', 'until', 'failure']
   if (query.show) {
     show = parseInt(query.show)
   }
-  supportedParams.forEach((p) => {
-    if (query[p]) {
+  params['limit'] = show
+
+  // Allow only `failure=false`. `true` results in showing only failures
+  if ('failure' in query && query['failure'] === false) {
+    params['failure'] = false
+  }
+
+  for (const p of supportedParams) {
+    if (p in query &&  query[p] !== queryToFilterMap[p][1]) {
       params[p] = query[p]
     }
-  })
-  params['limit'] = show
+  }
   if (query.only) {
     if (query.only === 'anomalies') {
       params['anomaly'] = true
@@ -69,18 +75,18 @@ const getCircularReplacer = () => {
   }
 }
 
-const formatError = (error) => {
-  let errorString = ''
-  if (error.code) {
-    errorString += `Error code: ${error.code}`
+
+const serializeError = (err) => {
+  const { name, message, stack, config = {} } = err.toJSON()
+  const { baseURL, url, params } = config
+  const { data, status, statusText } = err.response ?? {}
+  return {
+    name,
+    message,
+    data, status, statusText,
+    baseURL, url, params,
+    stack
   }
-  if (error.errno) {
-    errorString += ` (${error.errno})`
-  }
-  if (errorString === '') {
-    errorString = JSON.stringify(error, getCircularReplacer())
-  }
-  return errorString
 }
 
 const StyledPre = styled.pre`
@@ -96,6 +102,8 @@ const ErrorBox = ({ error }) => {
     return <div></div>
   }
 
+  const { stack, ...restOfError } = error
+
   return (
     <Box width={[1, 2/3]} mx='auto'>
       <Flex justifyContent='center' flexDirection='column'>
@@ -105,9 +113,14 @@ const ErrorBox = ({ error }) => {
         <Heading h={5}>
           <FormattedMessage id='Search.Error.Details.Label' />
         </Heading>
-        <Box p={[1, 3]} bg='gray3'>
+        <Box p={[1, 3]} bg='gray3' my={[1, 2]}>
           <StyledPre>
-            {JSON.stringify(error, null, '  ')}
+            {JSON.stringify(restOfError, null, '  ')}
+          </StyledPre>
+        </Box>
+        <Box p={[1, 3]} bg='gray3' my={[1, 2]}>
+          <StyledPre>
+            {stack}
           </StyledPre>
         </Box>
       </Flex>
@@ -139,14 +152,22 @@ class Search extends React.Component {
     // including the measurements of today (so the date of tomorrow).
     // This prevents the search page from showing time-travelling future
     // measurements from showing up
-    const until = moment.utc().add(1, 'day').format('YYYY-MM-DD')
-    if (!query.until) {
-      query.until = until
-    }
-
     const since = moment(query.until).utc().subtract(30, 'day').format('YYYY-MM-DD')
     if (!query.since) {
       query.since = since
+    }
+
+    const until = moment.utc().add(1, 'day').format('YYYY-MM-DD')
+    if ('until' in query === false) {
+      query.until = until
+    }
+
+    // If there is no 'failure' in query, default to a false
+    if ('failure' in query === false) {
+      query.failure = false
+    } else {
+      // Convert the string param into boolean
+      query.failure = !(query.failure === 'false')
     }
 
     [testNamesR, countriesR] = await Promise.all([
@@ -206,12 +227,10 @@ class Search extends React.Component {
       asnFilter: props.router.query.probe_asn,
       sinceFilter: props.router.query.since,
       untilFilter: props.router.query.until,
+      onlyFilter: props.router.query.only || 'all',
+      hideFailed: true,
       results: props.results,
       nextURL: props.nextURL,
-
-      onlyFilter: props.router.query.only || 'all',
-
-      search: null,
       error: props.error,
 
       loading: false
@@ -255,8 +274,11 @@ class Search extends React.Component {
         })
       })
       .catch((err) => {
+        console.error(err)
+        const error = serializeError(err)
         this.setState({
-          error: err
+          error,
+          loading: false
         })
       })
   }
@@ -284,8 +306,10 @@ class Search extends React.Component {
             })
           })
           .catch((err) => {
+            console.error(err)
+            const error = serializeError(err)
             this.setState({
-              error: err,
+              error,
               loading: false
             })
           })
@@ -294,32 +318,31 @@ class Search extends React.Component {
   }
 
   getFilterQuery () {
-    const mappings = [
-      ['domainFilter', 'domain'],
-      ['countryFilter', 'probe_cc'],
-      ['asnFilter', 'probe_asn'],
-      ['testNameFilter', 'test_name'],
-      ['sinceFilter', 'since'],
-      ['untilFilter', 'until'],
-      ['onlyFilter', 'only']
-    ]
     let query = {...this.props.router.query}
-    mappings.forEach((m) => {
-      if (!this.state[m[0]] || this.state[m[0]] === 'XX') {
-        // If it's unset or marked as XX, let's be sure the path is clean
-        if (query[m[1]]) {
-          delete query[m[1]]
+    const resetValues = [undefined, 'XX', '']
+    for (const [queryParam, [key]] of Object.entries(queryToFilterMap)) {
+      // If it's unset or marked as XX, let's be sure the path is clean
+      if (resetValues.includes(this.state[key])) {
+        if (queryParam in query) {
+          delete query[queryParam]
         }
-      } else if (m[0] === 'onlyFilter' && this.state[m[0]] == 'all') {
+      } else if (key === 'onlyFilter' && this.state[key] == 'all') {
         // If the onlyFilter is not set to 'confirmed' or 'anomalies'
         // remove it from the path
-        if (query[m[1]]) {
-          delete query[m[1]]
+        if (queryParam in query) {
+          delete query[queryParam]
+        }
+      } else if (key === 'hideFailed') {
+        if (this.state[key] === true) {
+          // When `hideFailure` is true, add `failure=false` in the query
+          query[queryParam] = false
+        } else {
+          delete query[queryParam]
         }
       } else {
-        query[m[1]] = this.state[m[0]]
+        query[queryParam] = this.state[key]
       }
-    })
+    }
     return query
   }
 
@@ -340,7 +363,8 @@ class Search extends React.Component {
       countryFilter,
       asnFilter,
       sinceFilter,
-      untilFilter
+      untilFilter,
+      hideFailed
     } = this.state
 
     return (
@@ -362,6 +386,7 @@ class Search extends React.Component {
                 sinceFilter={sinceFilter}
                 untilFilter={untilFilter}
                 onlyFilter={onlyFilter}
+                hideFailed={hideFailed}
                 onApplyFilter={this.onApplyFilter}
                 testNames={testNames}
                 countries={countries}

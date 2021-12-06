@@ -177,6 +177,10 @@ const messages = defineMessages({
     id: 'Search.TorSnowflake.Results.Anomaly',
     defaultMessage: 'Anomaly'
   },
+  'Search.TorSnowflake.Results.Error': {
+    id: 'Search.TorSnowflake.Results.Anomaly',
+    defaultMessage: 'Anomaly'
+  },
   'Search.Psiphon.Results.Reachable': {
     id: 'Search.Psiphon.Results.Reachable',
     defaultMessage: ''
@@ -185,12 +189,20 @@ const messages = defineMessages({
     id: 'Search.Psiphon.Results.Anomaly',
     defaultMessage: ''
   },
+  'Search.Psiphon.Results.Error': {
+    id: 'Search.Psiphon.Results.Error',
+    defaultMessage: ''
+  },
   'Search.RiseupVPN.Results.Reachable': {
     id: 'Search.RiseupVPN.Results.Reachable',
     defaultMessage: ''
   },
   'Search.RiseupVPN.Results.Anomaly': {
     id: 'Search.RiseupVPN.Results.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.RiseupVPN.Results.Error': {
+    id: 'Search.RiseupVPN.Results.Error',
     defaultMessage: ''
   },
 })
@@ -268,19 +280,19 @@ const getIndicators = ({ test_name, testDisplayName, scores = {}, confirmed, ano
     const computedMessageIdPrefix = `Search.${testName}.Results`
     const blockingType = scores.analysis && scores.analysis.blocking_type
 
-    if (confirmed === true) {
-      color = colorConfirmed
-      tag = (
-        <ResultTagFilled>
-          {intl.formatMessage(messages[`${computedMessageIdPrefix}.Blocked`])}
-        </ResultTagFilled>
-      )
-    } else if (failure === true) {
+    if (failure === true) {
       color = colorError
       tag = (
         <ResultTagHollow>
           {intl.formatMessage(messages[`${computedMessageIdPrefix}.Error`])}
         </ResultTagHollow>
+      )
+    } else if (confirmed === true) {
+      color = colorConfirmed
+      tag = (
+        <ResultTagFilled>
+          {intl.formatMessage(messages[`${computedMessageIdPrefix}.Blocked`])}
+        </ResultTagFilled>
       )
     } else if (blockingType !== undefined) {
       color = colorAnomaly
