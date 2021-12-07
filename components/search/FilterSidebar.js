@@ -10,7 +10,6 @@ import {
 } from 'ooni-components'
 import moment from 'moment'
 import { useForm, Controller } from 'react-hook-form'
-import { DevTool } from '@hookform/devtools'
 
 import DatePicker from '../DatePicker'
 import {
@@ -239,7 +238,6 @@ const FilterSidebar = ({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <DevTool control={control} />
       <StyledFilterSidebar>
         <Controller
           control={control}

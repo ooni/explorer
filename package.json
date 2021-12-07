@@ -64,7 +64,6 @@
     "http-proxy": "^1.18.1"
   },
   "devDependencies": {
-    "@hookform/devtools": "^4.0.1",
     "babel-plugin-react-intl": "^3.2.0",
     "cypress": "^5.2.0",
     "eslint": "^7.20.0",
