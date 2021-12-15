@@ -2,6 +2,7 @@ import React, { useCallback, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import { ResponsiveBar } from '@nivo/bar'
 import { Heading, Flex, Box } from 'ooni-components'
+import OONILogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochrome.svg'
 
 import RowChart from './RowChart'
 import { useDebugContext } from '../DebugContext'
@@ -136,7 +137,7 @@ const GridChart = ({ data, query }) => {
   }
 
   return (
-    <Flex flexDirection='column' >
+    <Flex flexDirection='column' sx={{ position: 'relative' }}>
       <Flex bg='red1' p={2} justifyContent='space-around'>
         <Box><input type='checkbox' name='keepMountedRows' checked={keepMountedRows} onChange={(e) => setKeepMountedRows(e.target.checked)}/> Keep Mounted Rows </Box>
         <Box><input type='checkbox' name='enableAnimation' checked={enableAnimation} onChange={(e) => setEnableAnimation(e.target.checked)}/> Enable animation (duration:1) </Box>
@@ -207,6 +208,9 @@ const GridChart = ({ data, query }) => {
           </div>
         </Flex>
       </Flex>
+      <Box alignSelf='flex-end' sx={{ position: 'absolute', opacity: 0.8, bottom: -8, right: 16 }}>
+        <OONILogo height='32px' />
+      </Box>
     </Flex>
   )
 }

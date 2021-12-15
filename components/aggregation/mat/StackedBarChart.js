@@ -1,8 +1,13 @@
-import React, { useMemo } from 'react'
+import React, { useState, useMemo, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { ResponsiveBar } from '@nivo/bar'
+import { Box, Flex, Link } from 'ooni-components'
+import { IoMdGlobe } from 'react-icons/io'
+import NLink from 'next/link'
+import { useIntl } from 'react-intl'
 
 import { colorMap } from './colorMap'
+import { generateSearchQuery, CustomTooltipNoLink} from './CustomTooltip'
 
 const colorFunc = (d) => colorMap[d.id] || '#ccc'
 
@@ -10,6 +15,16 @@ const colorFunc = (d) => colorMap[d.id] || '#ccc'
 // const formatDay = d3.timeFormat("%Y-%m-%d")
 
 export const StackedBarChart = ({ data, query }) => {
+  const intl = useIntl()
+  const [link, setLink] = useState(false)
+
+  const onClick = useCallback(({ data }) => {
+    const searchQuery = generateSearchQuery(data, query)
+    const queryString = new URLSearchParams(searchQuery).toString()
+    const linkLabel = `Show ${query.test_name} measurements for ${data[query.axis_x]} (${intl.formatNumber(data.measurement_count)})`
+    setLink(<NLink href={`/search?${queryString}`} passHref><Link> {linkLabel} </Link></NLink>)
+  }, [intl, query])
+
   const chartMeta = useMemo(() => {
     // TODO Move charting related transformations to Charts.js
     if (data) {
@@ -22,7 +37,7 @@ export const StackedBarChart = ({ data, query }) => {
       let indexBy = ''
       indexBy = query['axis_x']
       let reshapedData = Array.isArray(data.data.result) ? data.data.result.map(d => {
-        d['ok_count'] = d.measurement_count - d.confirmed_count - d.anomaly_count
+        d['ok_count'] = d.measurement_count - d.anomaly_count - d.failure_count
         return d
       }) : data.data.result
       return {
@@ -30,7 +45,7 @@ export const StackedBarChart = ({ data, query }) => {
         dimensionCount: data.data.dimension_count,
         url: data.url,
         loadTime: data.loadTime,
-        cols,
+        cols: (indexBy === 'blocking_type') ? ['measurement_count'] : cols,
         indexBy
       }
     } else {
@@ -43,6 +58,22 @@ export const StackedBarChart = ({ data, query }) => {
   }
 
   return (
+    <Flex flexDirection={['column']} height={'100%'}>
+    <Box alignSelf={'flex-end'}>
+      {link ? (
+      <Flex alignItems='center'>
+        <Box mx={1}>
+          <IoMdGlobe size={18} />
+        </Box>
+        <Box>
+          {link}
+        </Box>
+      </Flex>
+      ): (
+        <Box> Click on a bar to explore the measurements aggregated in the column </Box>
+      )}
+    </Box>
+    <Box height={'100%'}>
     <ResponsiveBar
       data={chartMeta.data}
       keys={chartMeta.cols}
@@ -57,9 +88,9 @@ export const StackedBarChart = ({ data, query }) => {
         tickSize: 5,
         tickPadding: 5,
         tickRotation: 45,
-        legend: `axis_x: ${chartMeta.indexBy}`,
-        legendPosition: 'start',
-        legendOffset: 32
+        legend: `${chartMeta.indexBy}`,
+        legendPosition: 'middle',
+        legendOffset: 60
       }}
       axisLeft={{
         tickSize: 5,
@@ -75,17 +106,17 @@ export const StackedBarChart = ({ data, query }) => {
       legends={[
         {
           dataFrom: 'keys',
-          anchor: 'bottom-right',
-          direction: 'column',
+          anchor: 'bottom',
+          direction: 'row',
           justify: false,
-          translateX: 120,
-          translateY: 0,
+          translateX: 0,
+          translateY: 100,
           itemsSpacing: 2,
-          itemWidth: 100,
+          itemWidth: 200,
           itemHeight: 20,
           itemDirection: 'left-to-right',
           itemOpacity: 0.85,
-          symbolSize: 20,
+          onClick: (d, e) => { alert(`Toggle ${JSON.stringify(d)}`)},
           effects: [
             {
               on: 'hover',
@@ -99,7 +130,11 @@ export const StackedBarChart = ({ data, query }) => {
       animate={true}
       motionStiffness={90}
       motionDamping={15}
+      tooltip={CustomTooltipNoLink}
+      onClick={onClick}
     />
+    </Box>
+    </Flex>
   )
 }
 
