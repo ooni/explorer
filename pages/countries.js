@@ -172,9 +172,16 @@ class Countries extends React.Component {
     // Sort countries by name (instead of by country codes)
     result.data.countries.sort((a,b) => a.name < b.name ? -1 : 1)
 
+    const responseUrl = result?.request?.res?.responseUrl
+
     return {
-      countries: result.data.countries
+      countries: result.data.countries,
+      ssrRequests: [{...result.config, responseUrl}]
     }
+  }
+
+  componentDidMount () {
+    console.log(this.props.ssrRequests)
   }
 
   onSearchChange (searchTerm) {
