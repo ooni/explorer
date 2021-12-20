@@ -21,7 +21,7 @@ export const generateSearchQuery = (data, query) => {
   if ('measurement_start_day' in data) {
     sinceFilter = data.measurement_start_day
     const untilPlus1 = new Date(Date.parse(sinceFilter))
-    untilPlus1.setUTCDate(untilDate.getUTCDate() + 1)
+    untilPlus1.setUTCDate(untilPlus1.getUTCDate() + 1)
     untilFilter = untilPlus1.toISOString().split('T')[0]
   }
 
