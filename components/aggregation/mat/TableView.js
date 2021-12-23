@@ -74,8 +74,9 @@ IndeterminateCheckbox.displayName = 'IndeterminateCheckbox'
 
 const SearchFilter = ({
   column: { filterValue, preFilteredRows, setFilter },
+  groupedRows,
 }) => {
-  const count = preFilteredRows.length
+  const count = groupedRows.length
 
   return (
     <input
@@ -202,7 +203,8 @@ const TableView = ({ data, query }) => {
     getTableBodyProps,
     headerGroups,
     rows, // contains filtered rows
-    flatRows,
+    preFilteredRows,
+    selectedFlatRows,
     filteredFlatRows,
     groupedFlatRows,
     onlyGroupedFlatRows,
@@ -249,7 +251,15 @@ const TableView = ({ data, query }) => {
     }
   )
 
-  const [chartPanelHeight, setChartPanelHeight] = useState(500)
+  const dataForCharts = useMemo(() => {
+    if (selectedFlatRows.length > 0) {
+      return selectedFlatRows
+    }
+
+    return rows
+  }, [rows, selectedFlatRows])
+
+  const [chartPanelHeight, setChartPanelHeight] = useState(250)
 
   const onPanelResize = useCallback((width, height) => {
     console.log(`resized height: ${height}`)
@@ -259,7 +269,7 @@ const TableView = ({ data, query }) => {
   return (
     <Flex flexDirection='column'>
       <ResizableBox onResize={onPanelResize}>
-        <GridChart data={rows} query={query} height={chartPanelHeight} />
+        <GridChart data={dataForCharts} query={query} height={chartPanelHeight} />
       </ResizableBox>
       <Flex my={4} sx={{ height: '50vh' }}>
         <TableContainer>
