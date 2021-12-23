@@ -1,12 +1,14 @@
-import React, { useMemo } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import { useTable, useFlexLayout, useRowSelect, useFilters, useGroupBy, useSortBy } from 'react-table'
 import { FormattedMessage, useIntl } from 'react-intl'
 import styled from 'styled-components'
 import { Flex, Box } from 'ooni-components'
+import ReactResizeDetector from 'react-resize-detector'
 
 import GridChart from './GridChart'
 import { useDebugContext } from '../DebugContext'
 import { getRowLabel } from './labels'
+import { ResizableBox } from './Resizable'
 
 const TableContainer = styled.div`
   padding: 1rem;
@@ -247,11 +249,18 @@ const TableView = ({ data, query }) => {
     }
   )
 
+  const [chartPanelHeight, setChartPanelHeight] = useState(500)
+
+  const onPanelResize = useCallback((width, height) => {
+    console.log(`resized height: ${height}`)
+    setChartPanelHeight(height)
+  }, [])
+
   return (
     <Flex flexDirection='column'>
-      <Box sx={{ height: '50vh' }}>
-        <GridChart data={rows} query={query} />
-      </Box>
+      <ResizableBox onResize={onPanelResize}>
+        <GridChart data={rows} query={query} height={chartPanelHeight} />
+      </ResizableBox>
       <Flex my={4} sx={{ height: '50vh' }}>
         <TableContainer>
           {/* eslint-disable react/jsx-key */}

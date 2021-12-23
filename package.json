@@ -40,6 +40,7 @@
     "react-intl": "3.3.2",
     "react-json-view": "^1.16.0",
     "react-portal-tooltip": "^2.4.7",
+    "react-resize-detector": "^6.7.6",
     "react-sticky": "^6.0.3",
     "react-table": "^7.7.0",
     "react-virtual": "^2.8.2",

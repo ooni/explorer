@@ -74,14 +74,13 @@ const useKeepMountedRangeExtractor = () => {
 }
 
 
-const GridChart = ({ data, query }) => {
+const GridChart = ({ data, query, height }) => {
   // development-only flags for debugging/tweaking etc
   const { doneChartReshaping } = useDebugContext()
   const [overScanValue, setOverScanValue] = useState(0)
   const [enableAnimation, setEnableAnimation] = useState(false)
   const [keepMountedRows, setKeepMountedRows] = useState(false)
   const keepMountedRangeExtractor = useKeepMountedRangeExtractor()
-
 
   // [rowIndex, columnKey] for the bar where click was detected
   // and tooltip is to be shown
@@ -126,8 +125,6 @@ const GridChart = ({ data, query }) => {
   const {reshapedData, rows, rowLabels, indexBy, yAxis } = itemData
 
   if (data.length < 1) {
-    console.log('{data} received from Table')
-    console.log(data)
     return (
       <Flex flexDirection='column' justifyContent='center' sx={{ height: '100%' }}>
         <Heading h={5}> No enough data for charts </Heading>
@@ -138,6 +135,9 @@ const GridChart = ({ data, query }) => {
 
   return (
     <Flex flexDirection='column' sx={{ position: 'relative' }}>
+      <Box alignSelf='flex-end' sx={{ position: 'absolute', opacity: 0.8, bottom: -8, right: 16 }}>
+        <OONILogo height='32px' />
+      </Box>
       <Flex bg='red1' p={2} justifyContent='space-around'>
         <Box><input type='checkbox' name='keepMountedRows' checked={keepMountedRows} onChange={(e) => setKeepMountedRows(e.target.checked)}/> Keep Mounted Rows </Box>
         <Box><input type='checkbox' name='enableAnimation' checked={enableAnimation} onChange={(e) => setEnableAnimation(e.target.checked)}/> Enable animation (duration:1) </Box>
@@ -165,52 +165,49 @@ const GridChart = ({ data, query }) => {
           </Box>
         </Flex>
         <Flex>
-        <div
-          ref={parentRef}
-          className={GRID_ROW_CSS_SELECTOR}
-          style={{
-            height: '40vh',
-            width: '100%',
-            overflow: 'auto'
-          }}
-        >
           <div
+            ref={parentRef}
+            className={GRID_ROW_CSS_SELECTOR}
             style={{
-              height: `${rowVirtualizer.totalSize}px`,
+              height: height,
               width: '100%',
-              position: 'relative'
+              overflow: 'auto'
             }}
           >
-            {rowVirtualizer.virtualItems.map((virtualRow) => (
-              <div
-                key={virtualRow.index}
-                style={{
-                  position: 'absolute',
-                  top: 0,
-                  left: 0,
-                  width: '100%',
-                  height: `${virtualRow.size}px`,
-                  transform: `translateY(${virtualRow.start}px)`
-                }}
-              >
-                <RowChart
-                  rowIndex={virtualRow.index}
-                  showTooltipInRow={showTooltipInRow}
-                  showTooltip={tooltipIndex[0] === virtualRow.index}
-                  data={reshapedData[rows[virtualRow.index]]}
-                  indexBy={indexBy}
-                  height={virtualRow.size}
-                  label={rowLabels[rows[virtualRow.index]]}
-                />
+            <div
+              style={{
+                height: `${rowVirtualizer.totalSize}px`,
+                width: '100%',
+                position: 'relative'
+              }}
+            >
+              {rowVirtualizer.virtualItems.map((virtualRow) => (
+                <div
+                  key={virtualRow.index}
+                  style={{
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: `${virtualRow.size}px`,
+                    transform: `translateY(${virtualRow.start}px)`
+                  }}
+                >
+                  <RowChart
+                    rowIndex={virtualRow.index}
+                    showTooltipInRow={showTooltipInRow}
+                    showTooltip={tooltipIndex[0] === virtualRow.index}
+                    data={reshapedData[rows[virtualRow.index]]}
+                    indexBy={indexBy}
+                    height={virtualRow.size}
+                    label={rowLabels[rows[virtualRow.index]]}
+                  />
+                </div>
+              ))}
               </div>
-            ))}
             </div>
-          </div>
         </Flex>
       </Flex>
-      <Box alignSelf='flex-end' sx={{ position: 'absolute', opacity: 0.8, bottom: -8, right: 16 }}>
-        <OONILogo height='32px' />
-      </Box>
     </Flex>
   )
 }
