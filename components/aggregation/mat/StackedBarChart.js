@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { ResponsiveBar } from '@nivo/bar'
-import { Box, Flex, Link } from 'ooni-components'
+import { Box, Flex, Heading, Link } from 'ooni-components'
 import { IoMdGlobe } from 'react-icons/io'
 import NLink from 'next/link'
 import { useIntl } from 'react-intl'
@@ -9,6 +9,7 @@ import OONILogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonoc
 
 import { colorMap } from './colorMap'
 import { generateSearchQuery, CustomTooltipNoLink} from './CustomTooltip'
+import CountryNameLabel from './CountryNameLabel'
 
 const colorFunc = (d) => colorMap[d.id] || '#ccc'
 
@@ -60,21 +61,24 @@ export const StackedBarChart = ({ data, query }) => {
 
   return (
     <Flex flexDirection={['column']} height={'100%'} sx={{ position: 'relative' }}>
-      <Box alignSelf={'flex-end'}>
-        {link ? (
-        <Flex alignItems='center'>
-          <Box mx={1}>
-            <IoMdGlobe size={18} />
-          </Box>
-          <Box>
-            {link}
-          </Box>
-        </Flex>
-        ): (
-          <div />
-          // <Box> Click on a bar to explore the measurements aggregated in the column </Box>
-        )}
-      </Box>
+      <Flex justifyContent='space-between' alignItems='center'>
+        <Heading h={3}><CountryNameLabel countryCode={query.probe_cc} /></Heading>
+        <Box>
+          {link ? (
+          <Flex alignItems='center'>
+            <Box mx={1}>
+              <IoMdGlobe size={18} />
+            </Box>
+            <Box>
+              {link}
+            </Box>
+          </Flex>
+          ): (
+            <div />
+            // <Box> Click on a bar to explore the measurements aggregated in the column </Box>
+          )}
+        </Box>
+      </Flex>
       <Box height={'100%'}>
         <ResponsiveBar
           data={chartMeta.data}
@@ -136,7 +140,7 @@ export const StackedBarChart = ({ data, query }) => {
           onClick={onClick}
         />
       </Box>
-      <Box alignSelf='flex-end' sx={{ position: 'absolute', bottom: -10, right: 10 }}>
+      <Box sx={{ position: 'absolute', opacity: 0.8, bottom: -70, right: 0 }}>
         <OONILogo height='32px' />
       </Box>
     </Flex>

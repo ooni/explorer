@@ -122,7 +122,7 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
               </Box>
             }
           </Box>
-          <Debug query={query} mt={5} />
+          <Debug query={query} mt={6} />
 
           {error && <Box>
             <Heading h={5} my={4}>Error</Heading>
