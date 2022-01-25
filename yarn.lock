@@ -5558,6 +5558,11 @@ react-motion@^0.5.2:
     prop-types "^15.5.8"
     raf "^3.1.0"
 
+react-multi-select-component@^4.2.1:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/react-multi-select-component/-/react-multi-select-component-4.2.1.tgz#db4f2c9e8578b2832d46f1224b1d71664242cd6e"
+  integrity sha512-wRteBq1pqKLlYX/ob8I1aBapPokQiRzOJzVqJDVVTHb0Ap/QWXVE4OXE2xwhVf3qmmYvOguvOKQQbQiEYxhONA==
+
 react-onclickoutside@^6.5.0:
   version "6.7.1"
   resolved "https://registry.yarnpkg.com/react-onclickoutside/-/react-onclickoutside-6.7.1.tgz#6a5b5b8b4eae6b776259712c89c8a2b36b17be93"
