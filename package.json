@@ -39,6 +39,7 @@
     "react-icons": "4.2.0",
     "react-intl": "3.3.2",
     "react-json-view": "^1.16.0",
+    "react-multi-select-component": "^4.2.1",
     "react-portal-tooltip": "^2.4.7",
     "react-resize-detector": "^6.7.6",
     "react-sticky": "^6.0.3",

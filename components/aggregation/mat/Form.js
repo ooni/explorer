@@ -12,7 +12,7 @@ import moment from 'moment'
 import { categoryCodes } from '../../utils/categoryCodes'
 import DatePicker from '../../DatePicker'
 
-const StyledLabel = styled(Label).attrs({
+export const StyledLabel = styled(Label).attrs({
   my: 2,
   color: 'blue5',
 })`
