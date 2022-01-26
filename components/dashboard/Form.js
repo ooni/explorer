@@ -6,8 +6,8 @@ import { MultiSelect } from 'react-multi-select-component'
 
 import { StyledLabel } from '../aggregation/mat/Form'
 import DatePicker from '../DatePicker'
-import { FormattedMessage } from 'react-intl'
-import { useCallback, useMemo, useState } from 'react'
+import { FormattedMessage, useIntl } from 'react-intl'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
 const tomorrow = moment.utc().add(1, 'day').format('YYYY-MM-DD')
 const lastMonthToday = moment.utc().subtract(30, 'day').format('YYYY-MM-DD')
@@ -15,50 +15,74 @@ const lastMonthToday = moment.utc().subtract(30, 'day').format('YYYY-MM-DD')
 const defaultDefaultValues = {
   since: lastMonthToday,
   until: tomorrow,
-  countries: [],
+  probe_cc: [],
 }
 
-export const Form = ({ onSubmit, query }) => {
-  const defaultValues = Object.assign({}, defaultDefaultValues, query)
+const countryOptions = countryList
+  .sort((a,b) => (a.iso3166_name < b.iso3166_name) ? -1 : (a.iso3166_name > b.iso3166_name) ? 1 : 0)
+  .map(country => ({
+    label: country.iso3166_name,
+    value: country.iso3166_alpha2
+  }))
+
+const query2formValues = (query) => {
+  const countriesInQuery = query.probe_cc?.split(',') ?? []
+  return {
+    since: query?.since ?? defaultDefaultValues.since,
+    until: query?.until ?? defaultDefaultValues.until,
+    probe_cc: countryOptions.filter(country => countriesInQuery.includes(country.value))
+  }
+}
+
+export const Form = ({ onChange, query }) => {
+  const intl = useIntl()
+
+  const multiSelectStrings = useMemo(() => ({
+    'allItemsAreSelected': intl.formatMessage({ id: 'ReachabilityDash.Form.Label.CountrySelect.AllSelected' }),
+    // 'clearSearch': 'Clear Search',
+    // 'clearSelected': 'Clear Selected',
+    // 'noOptions': 'No options',
+    'search': intl.formatMessage({ id: 'ReachabilityDash.Form.Label.CountrySelect.SearchPlaceholder' }),
+    'selectAll': intl.formatMessage({ id: 'ReachabilityDash.Form.Label.CountrySelect.SelectAll' }),
+    'selectAllFiltered': intl.formatMessage({ id: 'ReachabilityDash.Form.Label.CountrySelect.SelectAllFiltered' }),
+    'selectSomeItems': intl.formatMessage({ id: 'ReachabilityDash.Form.Label.CountrySelect.InputPlaceholder' }),
+    // 'create': 'Create',
+  }), [intl])
 
   const { handleSubmit, control, getValues, watch } = useForm({
-    defaultValues
+    defaultValues: query2formValues(query)
   })
 
-  const countryOptions = useMemo(() => {
-    const options = countryList
-      .sort((a,b) => (a.iso3166_name < b.iso3166_name) ? -1 : (a.iso3166_name > b.iso3166_name) ? 1 : 0)
-      .map(country => ({
-        label: country.iso3166_name,
-        value: country.iso3166_alpha2
-      }))
-    return options
-  }, [])
-
-  const beforeSubmit = useCallback((data) => {
+  const {since, until, probe_cc} = watch()
+  
+  useEffect(() => {
     const cleanedUpData = {
-      ...data,
-      countries: data.countries.map(d => d.value)
+      since,
+      until,
+      probe_cc: probe_cc.map(d => d.value)
     }
-    onSubmit(cleanedUpData)
-  }, [onSubmit])
+    onChange(cleanedUpData)
+  }, [onChange, since, until, probe_cc])
 
   return (
-    <form onSubmit={handleSubmit(beforeSubmit)}>
+    <form>
       <Flex alignItems={['center']}>
         <Box width={1/4} mr={3}>
           <StyledLabel>Country</StyledLabel>
-          <Controller
+          {<Controller
             render={({field}) => (
               <MultiSelect
                 options={countryOptions}
-                labelledBy={<FormattedMessage id='ReachabilityDash.Form.Label.Country' />}
-                {...field}
+                labelledBy={intl.formatMessage({ id: 'ReachabilityDash.Form.Label.Country' })}
+                overrideStrings={multiSelectStrings}
+                name={field.name}
+                value={field.value}
+                onChange={field.onChange}
               />
             )}
-            name='countries'
+            name='probe_cc'
             control={control}
-          />
+          />}
         </Box>
 
         <Box mr={3}>
@@ -66,9 +90,9 @@ export const Form = ({ onSubmit, query }) => {
           <Controller
             name='since'
             control={control}
-            render={({field: {onChange}}) => (
+            render={({field: {value, onChange}}) => (
               <DatePicker
-                defaultValue={defaultValues.since}
+                defaultValue={value}
                 dateFormat='YYYY-MM-DD'
                 utc={true}
                 timeFormat={false}
@@ -95,9 +119,9 @@ export const Form = ({ onSubmit, query }) => {
           <Controller
             name='until'
             control={control}
-            render={({field: {onChange}}) => (
+            render={({field: {value, onChange}}) => (
               <DatePicker
-                defaultValue={defaultValues.until}
+                defaultValue={value}
                 dateFormat='YYYY-MM-DD'
                 utc={true}
                 timeFormat={false}
@@ -119,7 +143,6 @@ export const Form = ({ onSubmit, query }) => {
             )}
           />
         </Box>
-        <Button type='submit'>Submit</Button>
       </Flex>
     </form>
   )
