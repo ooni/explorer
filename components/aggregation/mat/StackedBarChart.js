@@ -47,7 +47,7 @@ export const StackedBarChart = ({ data, query }) => {
         dimensionCount: data.data.dimension_count,
         url: data.url,
         loadTime: data.loadTime,
-        cols: (indexBy === 'blocking_type') ? ['measurement_count'] : cols,
+        cols,
         indexBy
       }
     } else {

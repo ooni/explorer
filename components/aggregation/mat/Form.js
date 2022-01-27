@@ -24,7 +24,6 @@ const optionsAxis = [
   'category_code',
   'probe_cc',
   'probe_asn',
-  'blocking_type',
   ''
 ]
 
