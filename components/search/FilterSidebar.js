@@ -289,8 +289,11 @@ const FilterSidebar = ({
               render={({field}) => (
                 <DatePicker
                   {...field}
-                  onChange={(value) => 
-                    field.onChange(value.format('YYYY-MM-DD'))
+                  onChange={(date) =>
+                    field.onChange(moment.isMoment(date)
+                      ? date.format('YYYY-MM-DD')
+                      : date
+                    )
                   }
                   dateFormat='YYYY-MM-DD'
                   utc={true}
@@ -311,8 +314,11 @@ const FilterSidebar = ({
               render={({field}) => (
                 <DatePicker
                   {...field}
-                  onChange={(value) => 
-                    field.onChange(value.format('YYYY-MM-DD'))
+                  onChange={(date) =>
+                    field.onChange(moment.isMoment(date)
+                      ? date.format('YYYY-MM-DD')
+                      : date
+                    )
                   }
                   dateFormat='YYYY-MM-DD'
                   utc={true}
