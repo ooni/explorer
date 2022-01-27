@@ -18,7 +18,6 @@ import HeadMetadata from '../../components/measurement/HeadMetadata'
 import Layout from '../../components/Layout'
 import NavBar from '../../components/NavBar'
 import ErrorPage from '../_error'
-import { axiosPluginLogRequest } from 'components/axios-plugins'
 
 const pageColors = {
   default: theme.colors.base,
@@ -29,10 +28,9 @@ const pageColors = {
   confirmed: theme.colors.red7
 }
 
-async function getInitialProps({ query }) {
+export async function getServerSideProps({ query }) {
   let initialProps = {
-    errors: [],
-    ssrRequests: {}
+    errors: []
   }
 
   // Get `report_id` using optional catch all dynamic route of Next.js
@@ -44,11 +42,8 @@ async function getInitialProps({ query }) {
   // If there is no report_id to use, fail early with MeasurementNotFound
   if (typeof report_id !== 'string' || report_id.length < 1) {
     initialProps.notFound = true
-    initialProps.ssrRequests = {
-      message: `failed early. could not find a report_id: ${report_id} (${typeof report_id})`
-    }
     return {
-      ...initialProps
+      props: initialProps
     }
   }
 
@@ -56,7 +51,6 @@ async function getInitialProps({ query }) {
   let client
   try {
     client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
-    axiosPluginLogRequest(axios)
     let params = {
       report_id: report_id,
       full: true
@@ -67,25 +61,10 @@ async function getInitialProps({ query }) {
 
     try {
       response = await client.get('/api/v1/measurement_meta', {
-        params: params
+        params
       })
-    } catch (error) {
-      if (error.response) {
-        // The request was made and the server responded with a status code
-        // that falls out of the range of 2xx
-        console.log(error.response.data)
-        console.log(error.response.status)
-        console.log(error.response.headers)
-      } else if (error.request) {
-        // The request was made but no response was received
-        // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
-        // http.ClientRequest in node.js
-        console.log(error.message)
-      } else {
-        // Something happened in setting up the request that triggered an Error
-        console.log('Error', error.message)
-      }
-      throw error
+    } catch (e) {
+      throw new Error(`Failed to fetch measurement data. Server message: ${e.response.status}, ${e.response.statusText}`)
     }
 
     // If response `data` is an empty object, the measurement was
@@ -97,18 +76,15 @@ async function getInitialProps({ query }) {
         try {
           initialProps['scores'] = JSON.parse(initialProps['scores'])
         } catch (e) {
-          const scoresParseError = new Error(`Failed to parse JSON in scores: ${e.toString()}`)
-          scoresParseError.data = response.data
-          throw scoresParseError
+          throw new Error(`Failed to parse JSON in scores: ${e.toString()}`)
         }
       }
 
       try {
         initialProps['raw_measurement'] = JSON.parse(initialProps['raw_measurement'])
       } catch (e) {
-        const rawMeasurementParseError = new Error(`Failed to parse raw_measurement: ${e.toString()}`)
-        rawMeasurementParseError.data = response.data
-        throw rawMeasurementParseError
+        console.error(e)
+        throw new Error(`Failed to parse raw_measurement: ${e.toString()}`)
       }
 
       const { probe_cc } = response.data
@@ -119,42 +95,12 @@ async function getInitialProps({ query }) {
     } else {
       // Measurement not found
       initialProps.notFound = true
-      const notFoundError = new Error('response.data was empty')
-      notFoundError.data = response?.data
-      throw notFoundError
     }
   } catch (e) {
     initialProps.errors.push(e.message)
-    if (response?.config) {
-      const { url, method, headers, params, baseURL } = response?.config
-      const responseUrl = response?.request?.res?.responseUrl
-      const serverError = response?.data?.error ?? response?.message ?? 'nothing in `response.data.error` or `$exception.message`'
-      const config = { url, method, headers, params, baseURL, responseUrl, serverError }
-      initialProps.ssrRequests = {
-        ...initialProps.ssrRequests,
-        ...config
-      }
-    }
-    response = e
   }
-
-  // searchReqConfig:
-  if (response?.config) {
-    const { url, method, headers, params, baseURL } = response?.config
-    const responseUrl = response?.request?.res?.responseUrl
-    const serverError = response?.data?.error ?? response?.message ?? 'nothing in `response.data.error` or `$exception.message`'
-    initialProps.ssrRequests.config = { url, method, headers, params, baseURL, responseUrl, serverError }
-  } else {
-    console.log('last step in getServerSidProps', Object.keys(response))
-    initialProps.ssrRequests = {
-      ...initialProps.ssrRequests,
-      message: response?.message,
-      data: response.data
-    }
-  }
-
   return {
-    ...initialProps
+    props: initialProps
   }
 }
 
@@ -173,19 +119,15 @@ const Measurement = ({
   raw_measurement,
   report_id,
   scores,
-  ssrRequests,
   ...rest
 }) => {
 
   // Add the 'AS' prefix to probe_asn when API chooses to send just the number
   probe_asn = typeof probe_asn === 'number' ? `AS${probe_asn}` : probe_asn
 
-  console.log('server side requests:')
-  console.log(ssrRequests)
-
   if (errors.length > 0) {
     return (
-      <ErrorPage err={errors} />
+      <ErrorPage errorCode={501} errors={errors} />
     )
   }
 
@@ -295,7 +237,5 @@ Measurement.propTypes = {
   test_name: PropTypes.string,
   test_start_time: PropTypes.string
 }
-
-Measurement.getInitialProps = getInitialProps
 
 export default Measurement

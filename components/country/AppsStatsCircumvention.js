@@ -6,7 +6,6 @@ import axios from 'axios'
 import { inCountry } from './CountryContext'
 import AppsStatsRowCircumvention from './AppsStatsCircumventionRow'
 import { AppSectionLoader } from './WebsiteChartLoader'
-import { axiosPluginLogRequest } from 'components/axios-plugins'
 
 const AppGroupHeading = styled(Box)`
   border: 1px solid ${props => props.theme.colors.gray3};
@@ -34,7 +33,6 @@ class AppsStatsCircumvention extends React.Component {
   async fetchCircumventionStats() {
     const { countryCode } = this.props
     const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
-    axiosPluginLogRequest(client)
     const result = await client.get('/api/_/vanilla_tor_stats', {
       params: {
         probe_cc: countryCode

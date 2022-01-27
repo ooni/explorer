@@ -20,7 +20,6 @@ import AppsSection from '../../components/country/Apps'
 // import NetworkPropertiesSection from '../../components/country/NetworkProperties'
 import { CountryContextProvider } from '../../components/country/CountryContext'
 import CountryHead from '../../components/country/CountryHead'
-import { axiosPluginLogRequest } from 'components/axios-plugins'
 
 const getCountryReports = (countryCode, data) => {
   const reports = data.filter((article) => (
@@ -55,8 +54,6 @@ export async function getServerSideProps ({ res, query }) {
 
 
   let client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
-  axiosPluginLogRequest(axios)
-
   let results = await Promise.all([
     // XXX cc @darkk we should ideally have better dedicated daily dumps for this view
     client.get('/api/_/test_coverage', {params: {'probe_cc': countryCode}}),
@@ -90,8 +87,6 @@ const Country = ({ countryCode, countryName, overviewStats, reports, ...coverage
     console.log(testGroupList)
     const fetcher = async (testGroupList) => {
       let client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
-      axiosPluginLogRequest(axios)
-
       const result = await client.get('/api/_/test_coverage', {
         params: {
           'probe_cc': countryCode,

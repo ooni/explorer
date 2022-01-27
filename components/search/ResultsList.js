@@ -227,7 +227,7 @@ const StyledViewDetailsLink = styled(Link)`
 `
 
 const ViewDetailsLink = ({reportId, input, children}) => {
-  let href = `/msmt/${reportId}`
+  let href = `/measurement/${reportId}`
   if (input) {
     href += `?input=${encodeURIComponent(input)}`
   }

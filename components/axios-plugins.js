@@ -11,20 +11,6 @@ export const axiosResponseTime = (instance) => {
   })
 }
 
-export const axiosPluginLogRequest = (instance) => {
-  // instance.create = () => console.log('BOOOO!!!!!')
-  instance.interceptors.request.use((config) => {
-    console.log(config)
-    return config
-  })
-}
-
-// export const axiosPluginLogRequest = (instance) => {
-//   instance.interceptors.request.use((request) => {
-//     console.log(request)
-//     return request
-//   })
-// }
 
 /*
 https://stackoverflow.com/questions/62186171/measure-network-latency-in-react-native/62257712#62257712
