@@ -49,7 +49,7 @@ export const Debug = ({ query, children, ...rest }) => {
 
   return (
     <Flex color='gray6' {...rest}>
-      <DetailsBox title='Debugging Information' content={
+      <DetailsBox collapsed={true} title='Debugging Information' content={
         <>
           <Heading h={4}>
             Statistics {

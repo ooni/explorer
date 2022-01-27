@@ -5,11 +5,12 @@ import { useResizeDetector } from 'react-resize-detector'
 
 export const ResizableYBox = styled(Box)`
   position: relative;
-  border: 5px dotted ${props => props.theme.colors.gray1};
+  border: 2px solid ${props => props.theme.colors.gray1};
   overflow: hidden;
   resize: vertical;
   min-height: ${props => props.minHeight ?? 250}px;
   max-height: 100vh;
+  padding: 16px;
 `
 
 export const ResizableBox = ({ children, onResize, ...props}) => {

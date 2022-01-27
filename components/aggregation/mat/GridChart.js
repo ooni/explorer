@@ -135,14 +135,9 @@ const GridChart = ({ data, query, height }) => {
 
   return (
     <Flex flexDirection='column' sx={{ position: 'relative' }}>
-      <Box alignSelf='flex-end' sx={{ position: 'absolute', opacity: 0.8, bottom: -8, right: 16 }}>
+      <Box alignSelf='flex-end' sx={{ position: 'absolute', opacity: 0.8, top: 16, left: 16 }}>
         <OONILogo height='32px' />
       </Box>
-      <Flex bg='red1' p={2} justifyContent='space-around'>
-        <Box><input type='checkbox' name='keepMountedRows' checked={keepMountedRows} onChange={(e) => setKeepMountedRows(e.target.checked)}/> Keep Mounted Rows </Box>
-        <Box><input type='checkbox' name='enableAnimation' checked={enableAnimation} onChange={(e) => setEnableAnimation(e.target.checked)}/> Enable animation (duration:1) </Box>
-        <Box>Virtualizer Overscan<input type='number' min={0} max={itemData.rows.length} name='overScanValue' value={overScanValue} onChange={(e) => setOverScanValue(e.target.value)}/></Box>
-      </Flex>
       <Flex flexDirection='column' my={4}>
         {/* Fake axis on top of list. Possible alternative: dummy chart with axis and valid tickValues */}
         <Flex>
