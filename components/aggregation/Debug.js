@@ -78,7 +78,7 @@ export const Debug = ({ query, children, ...rest }) => {
 
             <details>
               <summary> API Response ({apiResponse?.data?.result?.length} items)</summary>
-              {apiResponse?.data.result.length > 1000 ? (
+              {apiResponse?.data?.result?.length > 1000 ? (
                 <pre>
                   <Box>That is a lot of data to show. <a rel='noreferrer' target='_blank' href={apiQuery} title='API Query'>Click</a> to fetch this data in a new tab.</Box>
                 </pre>

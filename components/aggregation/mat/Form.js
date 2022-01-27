@@ -78,11 +78,10 @@ export const Form = ({ onSubmit, testNames, query }) => {
           <Controller
             name='probe_asn'
             control={control}
-            render={({onChange, value}) => (
+            render={({field}) => (
               <Input
                 placeholder='AS1234'
-                onChange={(e) => onChange(e)}
-                value={value}
+                {...field}
               />
             )}
           />
@@ -174,11 +173,10 @@ export const Form = ({ onSubmit, testNames, query }) => {
           <Controller
             name='input'
             control={control}
-            render={({onChange, value}) => (
+            render={({field}) => (
               <Input
                 placeholder='https://twitter.com/OpenObservatory'
-                onChange={(e) => onChange(e)}
-                value={value}
+                {...field}
               />
             )}
           />
