@@ -104,7 +104,7 @@ const reshapeTableData = (data, query) => {
   const reshapedData = data.map((item) => {
     const key = item[query.axis_y]
     // 1. Attach `ok_count` to all the data items
-    item['ok_count'] = item.measurement_count - item.confirmed_count - item.anomaly_count
+    item['ok_count'] = item.measurement_count - item.anomaly_count
     item['rowLabel'] = getRowLabel(key, query.axis_y)
     return item
   })
