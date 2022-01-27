@@ -40,8 +40,10 @@
     "react-intl": "3.3.2",
     "react-json-view": "^1.16.0",
     "react-portal-tooltip": "^2.4.7",
+    "react-resize-detector": "^6.7.6",
     "react-sticky": "^6.0.3",
-    "react-table": "^7.0.0-rc.15",
+    "react-table": "^7.7.0",
+    "react-virtual": "^2.8.2",
     "react-virtualized-auto-sizer": "^1.0.5",
     "react-window": "^1.8.6",
     "rebass": "4.0.7",
@@ -64,6 +66,7 @@
     "http-proxy": "^1.18.1"
   },
   "devDependencies": {
+    "@welldone-software/why-did-you-render": "^6.2.1",
     "babel-plugin-react-intl": "^3.2.0",
     "cypress": "^5.2.0",
     "eslint": "^7.20.0",
@@ -75,6 +78,7 @@
   },
   "scripts": {
     "dev": ". ./scripts/populate-git-env.sh && next dev -p 3100",
+    "debug": ". ./scripts/populate-git-env.sh && WDYR=1 NODE_OPTIONS='--inspect' next dev -p 3100",
     "start": "next start -p 3100",
     "build": "next build",
     "export": "next export",

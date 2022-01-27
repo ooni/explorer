@@ -1,11 +1,12 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Box, Flex, theme } from 'ooni-components'
-import { Bar } from '@nivo/bar'
+import { ResponsiveBar as Bar } from '@nivo/bar'
 
 import { CustomBarItem } from './CustomBarItem'
 import { CustomToolTip } from './CustomTooltip'
 import { colorMap } from './colorMap'
+import { useDebugContext } from '../DebugContext'
 
 const keys = [
   'anomaly_count',
@@ -16,66 +17,94 @@ const keys = [
 
 const colorFunc = (d) => colorMap[d.id] || '#ccc'
 
-const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, showTooltip /* width, first, last */}) => {
+const barLayers = ['grid', 'bars']
 
+const barThemeForTooltip = {
+  tooltip: {
+    container: {
+      pointerEvents: 'initial',
+      boxShadow: `1px 1px 4px 1px ${theme.colors.gray6}`
+    }
+  }
+}
+
+const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, showTooltip, enableAnimation /* width, first, last */}) => {
   const handleClick = useCallback(({ column }) => {
     showTooltipInRow(rowIndex, column)
   }, [rowIndex, showTooltipInRow])
+
+  const { doneRendering } = useDebugContext()
+
+  // Load the chart with an empty data to avoid
+  // react-spring from working on the actual data during
+  // first render. This forces an update after 1ms with
+  // real data, which appears quick enough with animation disabled
+  const [chartData, setChartData] = useState([])
+  useEffect(() => {
+    let animation = setTimeout(() => setChartData(data), 1)
+
+    return () => {
+      clearTimeout(animation)
+    }
+  }, [data])
+
+  const chartProps = useMemo(() => ({
+    // NOTE: These dimensions are linked to accuracy of the custom axes rendered in
+    // <GridChart />
+    margin: { top: 4, right: 0, bottom: 4, left: 0 },
+    padding: 0.3,
+    borderColor: { from: 'color', modifiers: [ [ 'darker', 1.6 ] ] },
+    colors: colorFunc,
+    axisTop: null,
+    axisRight: {
+      enable: true,
+      tickSize: 5,
+      tickPadding: 5,
+      tickValues: 2
+    },
+    axisBottom: null,
+    axisLeft: null,
+    enableGridX: true,
+    labelSkipWidth: 100,
+    labelSkipHeight: 100,
+    labelTextColor: { from: 'color', modifiers: [ [ 'darker', 1.6 ] ] },
+    // We send the `showTooltip` boolean into the barComponent to control visibility of tooltip
+    motionConfig: {
+      duration: 1
+    },
+    isInteractive: true,
+    layers: barLayers,
+  }), [])
+
+  useEffect(() => {
+    doneRendering(performance.now())
+  })
 
   return (
     <Flex alignItems='center' sx={{ position: 'relative' }}>
       <Box width={2/16}>
         {label}
       </Box>
-      <Box>
+      <Box sx={{ height: height, width: '100%' }}>
         <Bar
-          data={data}
+          data={chartData}
           keys={keys}
           indexBy={indexBy}
-          // NOTE: These dimensions are linked to accuracy of the custom axes rendered in
-          // <GridChart />
-          width={1000}
-          height={height}
-          margin={{ top: 4, right: 100, bottom: 4, left: 0 }}
-          padding={0.3}
-          borderColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
-          colors={colorFunc}
-          axisTop={null}
-          axisRight={{
-            enable: true,
-            tickSize: 5,
-            tickPadding: 5,
-            tickValues: 2
-          }}
           xScale={{ type: 'time' }}
-          axisBottom={null}
-          axisLeft={null}
-          enableGridX={true}
-          labelSkipWidth={100}
-          labelSkipHeight={100}
-          labelTextColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
           tooltip={CustomToolTip}
           onClick={handleClick}
           barComponent={CustomBarItem}
-          theme={{
-            tooltip: {
-              container: {
-                pointerEvents: 'initial',
-                boxShadow: `1px 1px 4px 1px ${theme.colors.gray6}`
-              }
-            }
-          }}
+          theme={barThemeForTooltip}
           // We send the `showTooltip` boolean into the barComponent to control visibility of tooltip
           enableLabel={showTooltip}
-          animate={false}
-          motionConfig={{
-            duration: 0
-          }}
+          animate={enableAnimation}
+          {...chartProps}
         />
       </Box>
     </Flex>
   )
 }
+
 RowChart.propTypes = {
   data: PropTypes.arrayOf(PropTypes.shape({
     anomaly_count: PropTypes.number,
@@ -89,6 +118,11 @@ RowChart.propTypes = {
   height: PropTypes.number,
   indexBy: PropTypes.string,
   label: PropTypes.node,
+  rowIndex: PropTypes.number,
+  showTooltip: PropTypes.bool,
+  showTooltipInRow: PropTypes.func,
 }
 
-export default RowChart
+RowChart.displayName = 'RowChart'
+
+export default React.memo(RowChart)

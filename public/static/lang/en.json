@@ -467,5 +467,14 @@
   "Error.404.Heading": "The requested page does not exist",
   "Error.404.Message": "We could not find the content you were looking for. Maybe try {measurmentLink} or look at {homePageLink}.",
   "Error.404.MeasurmentLinkText": "exploring some measurement",
-  "Error.404.HomepageLinkText": "the homepage"
+  "Error.404.HomepageLinkText": "the homepage",
+  "MAT.Table.Header.anomaly_count": "Anomaly Count",
+  "MAT.Table.Header.confirmed_count": "Confirmed Count",
+  "MAT.Table.Header.failure_count": "Failure Count",
+  "MAT.Table.Header.measurement_count": "Measurement Count",
+  "MAT.Table.Header.input": "URL",
+  "MAT.Table.Header.category_code": "Category Code",
+  "MAT.Table.Header.probe_cc": "Country",
+  "MAT.Table.Header.probe_asn": "ASN",
+  "MAT.Table.Header.blocking_type": "Blocking Type"
 }

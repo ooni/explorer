@@ -7,45 +7,75 @@ import NLink from 'next/link'
 import { colorMap } from './colorMap'
 import { MdClear } from 'react-icons/md'
 import { useRouter } from 'next/router'
+import { useIntl } from 'react-intl'
 
 
 const urlToDomain = (url) => new URL(url).hostname
 
-const CustomToolTip = React.memo(({ data, onClose }) => {
+export const generateSearchQuery = (data, query) => {
+  const { since, until, axis_x, axis_y } = query
+
+  let sinceFilter = since
+  let untilFilter = until
+
+  if ('measurement_start_day' in data) {
+    sinceFilter = data.measurement_start_day
+    const untilPlus1 = new Date(Date.parse(sinceFilter))
+    untilPlus1.setUTCDate(untilPlus1.getUTCDate() + 1)
+    untilFilter = untilPlus1.toISOString().split('T')[0]
+  }
+
+  const queryObj = ['probe_cc', 'test_name', 'category_code', 'probe_asn', 'input'].reduce((q, k) => {
+    if (k in data)
+      q[k] = data[k]
+    else if (k in query)
+      q[k] = query[k]
+    return q
+  }, {})
+  if (axis_y === 'input') {
+    queryObj.domain = urlToDomain(data.input)
+  }
+
+  // Filter for anomalies if blocking_type is set
+  const isBlockingType = Object.values(query).includes('blocking_type') && 'blocking_type' in data
+  if (isBlockingType) {
+    queryObj.only = 'anomalies'
+  }
+
+
+  return {
+    since: sinceFilter,
+    until: untilFilter,
+    ...queryObj,
+  }
+}
+
+const CustomToolTip = React.memo(({ data, onClose, link = true }) => {
   const theme = useTheme()
-  const { query: { probe_cc, axis_y } } = useRouter()
+  const intl = useIntl()
+  const { query } = useRouter()
   const dataKeysToShow = ['anomaly_count', 'confirmed_count', 'failure_count', 'ok_count']
 
-  const linkToMeasurements = useMemo(() => {
-
-    const untilDate = new Date(Date.parse(data.measurement_start_day))
-    const untilPlus1 = new Date(untilDate)
-    untilPlus1.setUTCDate(untilDate.getUTCDate() + 1)
-    const nextDay = untilPlus1.toISOString().split('T')[0]
-
-    const yAxisFilter = axis_y === 'input' ? (
-      { domain: urlToDomain(data[axis_y]) }
-    ) : (
-      { [axis_y]: data[axis_y] }
-    )
-
-    let urlObj = {
+  const [linkToMeasurements, title] = useMemo(() => {
+    const searchQuery = generateSearchQuery(data, query)
+    const linkObj = {
       pathname: '/search',
-      query: {
-        probe_cc,
-        test_name: 'web_connectivity',
-        since: data.measurement_start_day,
-        until: nextDay,
-        ...yAxisFilter
-      }
+      query: searchQuery
     }
-    return urlObj
-  }, [axis_y, data, probe_cc])
-  
+
+
+    const title = `${data[query.axis_x]} ${'axis_y' in query ? ` - ${data[query.axis_y]}` : ''}`
+
+    return [
+      linkObj,
+      title,
+    ]
+  }, [data, query])
+
   return (
-    <Flex flexDirection='column' style={theme.tooltip.container}>
+    <Flex flexDirection='column' style={{...theme.tooltip.container}}>
       <Flex my={1} fontSize={16}>
-        <Text fontWeight='bolder' mr='auto'>{data.measurement_start_day}</Text>
+        <Text fontWeight='bolder' mr='auto'>{title}</Text>
         <MdClear title='Close' strokeWidth={2} onClick={onClose} />
       </Flex>
       <Flex flexDirection='column' pr={3} my={1}>
@@ -54,16 +84,20 @@ const CustomToolTip = React.memo(({ data, onClose }) => {
             <Flex alignItems='center'>
               <Box mr={3}><Chip color={colorMap[k]} /></Box>
               <Text mr={4}>{k}</Text>
-              <Text ml='auto'>{data[k]}</Text>
+              <Text ml='auto'>{intl.formatNumber(Number(data[k] ?? 0))}</Text>
             </Flex>
           </Box>
         ))}
       </Flex>
-      <NLink passHref href={linkToMeasurements}><Link my={2} ml='auto' pr={3}>view measurements &gt;</Link></NLink>
+      {link && <NLink passHref href={linkToMeasurements}><Link my={2} ml='auto' pr={3}>view measurements &gt;</Link></NLink>}
     </Flex>
   )
 })
 
 CustomToolTip.displayName = 'CustomTooltip'
 
-export { CustomToolTip }
+const CustomTooltipNoLink = React.memo((props) => React.createElement(CustomToolTip, {...props, link: false }))
+CustomTooltipNoLink.displayName = 'CustomTooltip'
+
+
+export { CustomToolTip, CustomTooltipNoLink }

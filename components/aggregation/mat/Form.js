@@ -77,11 +77,10 @@ export const Form = ({ onSubmit, testNames, query }) => {
           <Controller
             name='probe_asn'
             control={control}
-            render={({onChange, value}) => (
+            render={({field}) => (
               <Input
                 placeholder='AS1234'
-                onChange={(e) => onChange(e)}
-                value={value}
+                {...field}
               />
             )}
           />
@@ -93,7 +92,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
           <Controller
             name='since'
             control={control}
-            render={({onChange}) => (
+            render={({field: {onChange}}) => (
               <DatePicker
                 defaultValue={defaultValues.since}
                 dateFormat='YYYY-MM-DD'
@@ -124,7 +123,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
           <Controller
             name='until'
             control={control}
-            render={({onChange}) => (
+            render={({field: {onChange}}) => (
               <DatePicker
                 defaultValue={defaultValues.until}
                 dateFormat='YYYY-MM-DD'
@@ -173,11 +172,10 @@ export const Form = ({ onSubmit, testNames, query }) => {
           <Controller
             name='input'
             control={control}
-            render={({onChange, value}) => (
+            render={({field}) => (
               <Input
                 placeholder='https://twitter.com/OpenObservatory'
-                onChange={(e) => onChange(e)}
-                value={value}
+                {...field}
               />
             )}
           />

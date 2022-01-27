@@ -15,11 +15,11 @@ import Layout from '../../components/Layout'
 import NavBar from '../../components/NavBar'
 import { StackedBarChart } from '../../components/aggregation/mat/StackedBarChart'
 import { FunnelChart } from '../../components/aggregation/mat/FunnelChart'
-import { GridChart } from '../../components/aggregation/mat/GridChart'
 import { Form } from '../../components/aggregation/mat/Form'
 import { axiosResponseTime } from '../../components/axios-plugins'
 import { withDebugProvider, useDebugContext } from '../../components/aggregation/DebugContext'
 import { Debug } from '../../components/aggregation/Debug'
+import TableView from 'components/aggregation/mat/TableView'
 
 const baseURL = process.env.NEXT_PUBLIC_MEASUREMENTS_URL
 axiosResponseTime(axios)
@@ -46,7 +46,7 @@ const swrOptions = {
 
 const fetcher = (query) => {
   const qs = new URLSearchParams(query).toString()
-  const reqUrl = `${baseURL}/api/v1/aggregation?${qs}`
+  const reqUrl = `${process.env.NEXT_PUBLIC_AGGREGATION_API || process.env.NEXT_PUBLIC_MEASUREMENTS_URL}/api/v1/aggregation?${qs}`
   return axios.get(reqUrl).then(r => {
     return {
       data: r.data,
@@ -59,7 +59,7 @@ const fetcher = (query) => {
 const MeasurementAggregationToolkit = ({ testNames }) => {
 
   const router = useRouter()
-  const { debugQuery, debugApiResponse, doneRendering } = useDebugContext()
+  const { debugQuery, debugApiResponse } = useDebugContext()
 
   const onSubmit = useCallback((data) => {
     let params = {}
@@ -92,10 +92,6 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
 
   const showLoadingIndicator = useMemo(() => isValidating, [isValidating])
 
-  useEffect(() => {
-    doneRendering(performance.now())
-  })
-
   return (
     <Layout>
       <Head>
@@ -106,7 +102,7 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
         <Flex flexDirection='column'>
           <Heading h={1} my={4} title='This is an experimental feature still undergoing development.'> 🧪 OONI Measurement Aggregation Toolkit</Heading>
           <Form onSubmit={onSubmit} testNames={testNames} query={router.query} />
-          <Box sx={{ height: '90vh' }}>
+          <Box sx={{ }}>
             {showLoadingIndicator &&
               <Box>
                 <h2>Loading ...</h2>
@@ -116,13 +112,17 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
               <FunnelChart data={data.data.result} />
             }
             {data && data.data.dimension_count == 1 &&
-              <StackedBarChart data={data} query={query} />
+              <Box sx={{ height: '500px' }}>
+                <StackedBarChart data={data} query={query} />
+              </Box>
             }
             {data && data.data.dimension_count > 1 &&
-              <GridChart data={data.data.result} query={query} />
+              <Box sx={{ minHeight: '500px' }}>
+                <TableView data={data.data.result} query={query} />
+              </Box>
             }
           </Box>
-          <Debug query={query} mt={5} />
+          <Debug query={query} mt={6} />
 
           {error && <Box>
             <Heading h={5} my={4}>Error</Heading>

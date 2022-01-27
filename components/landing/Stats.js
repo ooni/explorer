@@ -40,6 +40,15 @@ const swrOptions = {
   revalidateOnFocus: false,
 }
 
+const getLastMonthData = (collection) => {
+  const cc = collection.filter(d => {
+    const dt = new Date(Date.parse(d.date))
+    const today = new Date()
+    return (dt.getUTCFullYear() === today.getUTCFullYear()) && (today.getUTCMonth() - dt.getUTCMonth() === 1)
+  })
+  return cc.length === 0 ? 0 : cc[0]?.value ?? 0
+}
+
 const CoverageChart = () => {
 
   const { data, isValidating } = useSWR('/api/_/global_overview_by_month', dataFetcher, swrOptions)
@@ -58,9 +67,9 @@ const CoverageChart = () => {
 
     // API responses are ordered by date, with most recent month at the end
     const lastMonth = {
-      countryCount: countryCoverage[countryCoverage.length - 2].value,
-      networkCount: networkCoverage[networkCoverage.length - 2].value,
-      measurementCount: measurementsByMonth[measurementsByMonth.length - 2].value
+      countryCount: getLastMonthData(countryCoverage),
+      networkCount: getLastMonthData(networkCoverage),
+      measurementCount: getLastMonthData(measurementsByMonth)
     }
 
     // Determine the maximum value for each data set
