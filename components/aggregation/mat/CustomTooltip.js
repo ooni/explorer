@@ -73,7 +73,7 @@ const CustomToolTip = React.memo(({ data, onClose, link = true }) => {
   }, [data, query])
   
   return (
-    <Flex flexDirection='column' style={{...theme.tooltip.container, zIndex: 200}}>
+    <Flex flexDirection='column' style={{...theme.tooltip.container}}>
       <Flex my={1} fontSize={16}>
         <Text fontWeight='bolder' mr='auto'>{title}</Text>
         <MdClear title='Close' strokeWidth={2} onClick={onClose} />

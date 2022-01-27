@@ -191,7 +191,7 @@ const GridChart = ({ data, query, height }) => {
                     width: '100%',
                     height: `${virtualRow.size}px`,
                     transform: `translateY(${virtualRow.start}px)`,
-                    zIndex: 100,
+                    zIndex: tooltipIndex[0] === virtualRow.index ? 1 : 0
                   }}
                 >
                   <RowChart
