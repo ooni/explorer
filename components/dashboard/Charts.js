@@ -48,7 +48,7 @@ const Chart = ({ testName }) => {
     return qs
   }, [derivedQuery])
 
-  const { data, error, isValidating } = useSWR(
+  const { data, error } = useSWR(
     apiQuery,
     fetcher,
     swrOptions
@@ -66,17 +66,22 @@ const Chart = ({ testName }) => {
     return null
   }, [data, query.probe_cc])
 
-
   return (
-    <Flex flexDirection='column' my={2}>
-      <Box><Heading h={2}>{testNames[testName].name}</Heading></Box>
+    <Flex flexDirection='column' mt={3}>
+      <Box><Heading h={3}>{testNames[testName].name}</Heading></Box>
       <Box sx={{ height: `${250}px` }}>
-        {chartData && 
-          <GridChart
-            data={chartData}
-            query={derivedQuery}
-          />
-        }
+        {(!chartData && !error) ? (
+          <div> Loading ...</div>
+        ) : (
+          chartData === null || chartData.length === 0 ? (
+            <Heading h={5}>No Data</Heading>
+          ) : (
+            <GridChart
+              data={chartData}
+              query={derivedQuery}
+            />
+          )
+        )}
       </Box>
     </Flex>
   )
