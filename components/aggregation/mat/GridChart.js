@@ -13,7 +13,7 @@ const GRID_ROW_CSS_SELECTOR = 'outerListElement'
 export function getDatesBetween(startDate, endDate) {
   const dateArray = new Set()
   var currentDate = startDate
-  while (currentDate <= endDate) {
+  while (currentDate < endDate) {
     dateArray.add(currentDate.toISOString().slice(0, 10))
     currentDate.setDate(currentDate.getDate() + 1)
   }

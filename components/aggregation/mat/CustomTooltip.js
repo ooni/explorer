@@ -71,7 +71,7 @@ const CustomToolTip = React.memo(({ data, onClose, link = true }) => {
       title,
     ]
   }, [data, query])
-  
+
   return (
     <Flex flexDirection='column' style={{...theme.tooltip.container}}>
       <Flex my={1} fontSize={16}>
@@ -84,7 +84,7 @@ const CustomToolTip = React.memo(({ data, onClose, link = true }) => {
             <Flex alignItems='center'>
               <Box mr={3}><Chip color={colorMap[k]} /></Box>
               <Text mr={4}>{k}</Text>
-              <Text ml='auto'>{intl.formatNumber(data[k])}</Text>
+              <Text ml='auto'>{intl.formatNumber(Number(data[k] ?? 0))}</Text>
             </Flex>
           </Box>
         ))}
