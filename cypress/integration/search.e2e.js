@@ -1,3 +1,5 @@
+import moment from 'moment'
+
 describe('Seearch Page Tests', () => {
 
   before(() => {
@@ -27,14 +29,18 @@ describe('Seearch Page Tests', () => {
   })
 
   it('fetches more results when "Load More" button is clicked', () => {
+    cy.intercept('/api/v1/*').as('searchAPI')
     cy.get('[data-test-id="load-more-button"]').click()
-    cy.get('[data-test-id="results-list"]').children('a').should('have.length', 100)
+    cy.wait('@searchAPI')
+    cy.get('[data-test-id="results-list"]', { timeout: 10000 }).children('a').should('have.length', 100)
   })
 
   it('results loaded by "Load More" button are valid', () => {
+    cy.intercept('/api/v1/*').as('searchAPI')
     cy.get('[data-test-id="results-list"] > a:nth-child(51)').click()
     cy.url().should('include', '/measurement/')
     cy.go('back')
+    cy.wait('@searchAPI')
   })
 
 
@@ -49,7 +55,7 @@ describe('Seearch Page Tests', () => {
         cy.wrap($firstRow).contains(/31|30|29|28/).click()
       })
     cy.get('#since-filter').should(($sinceDate) => {
-      const firstOfMonth = Cypress.moment().startOf('month')
+      const firstOfMonth = moment().startOf('month')
       const selectedSinceDate = $sinceDate.val()
       expect(firstOfMonth.isAfter(selectedSinceDate)).to.be.true
     })
@@ -58,7 +64,7 @@ describe('Seearch Page Tests', () => {
     cy.get('#until-filter').click()
     cy.get('.rdt.rdtOpen .rdtToday').click()
     cy.get('#until-filter').should(($untilDate) => {
-      const firstOfMonth = Cypress.moment().startOf('month')
+      const firstOfMonth = moment().startOf('month')
       const selectedUntilDate = $untilDate.val()
       expect(firstOfMonth.isSameOrBefore(selectedUntilDate)).to.be.true
     })
@@ -70,7 +76,7 @@ describe('Seearch Page Tests', () => {
   })
 
   it('conditional filters are hidden and shown depending on selections', () => {
-    cy.get('[data-test-id="domain-filter"]').should('not.be.visible')
+    cy.get('[data-test-id="domain-filter"]').should('not.exist')
     cy.get('[data-test-id="testname-filter"]').select('Web Connectivity')
     cy.get('[data-test-id="domain-filter"]').should('be.visible')
   })
