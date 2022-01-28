@@ -8,10 +8,9 @@ import RowChart from './RowChart'
 import { useDebugContext } from '../DebugContext'
 import { defaultRangeExtractor, useVirtual } from 'react-virtual'
 import { colorMap } from './colorMap'
-
 import { getSubtitleStr } from './StackedBarChart'
-
 import CountryNameLabel from './CountryNameLabel'
+import { getRowLabel } from './labels'
 
 const GRID_ROW_CSS_SELECTOR = 'outerListElement'
 
@@ -37,17 +36,36 @@ const Legend = ({label, color}) => {
     </Flex>
   )
 }
-const reshapeChartData = (data, query) => {
+const reshapeChartData = (data, query, isGrouped) => {
   const rows = []
   const rowLabels = {}
+  let reshapedData = {}
+
   const t0 = performance.now()
-  const reshapedData = data.reduce((d, groupedRow, i) => {
-    rows.push(groupedRow.groupByVal)
-    rowLabels[groupedRow.groupByVal] = groupedRow.leafRows[0].original.rowLabel
-    return {...d, [groupedRow.groupByVal]: groupedRow.leafRows.map(r => r.original)}
-  }, {})
+
+  // Flat arrays need to be converted to collection grouped by `axis_y`
+  if (isGrouped) {
+    reshapedData = data.reduce((d, groupedRow, i) => {
+      rows.push(groupedRow.groupByVal)
+      rowLabels[groupedRow.groupByVal] = groupedRow.leafRows[0].original.rowLabel
+      return {...d, [groupedRow.groupByVal]: groupedRow.leafRows.map(r => r.original)}
+    }, {})
+  } else {
+    data.forEach((item) => {
+      const key = item[query.axis_y]
+      item['ok_count'] = item.measurement_count - item.confirmed_count - item.anomaly_count
+      if (key in reshapedData) {
+        reshapedData[key].push(item)
+      } else {
+        rows.push(key)
+        reshapedData[key] = [item]
+        rowLabels[key] = getRowLabel(key, query.axis_y)
+      }
+    })
+  }
+
   const t1 = performance.now()
-  console.log(`ReshapeChartData: Step 1 took: ${(t1-t0)}ms` )
+
   // 3. If x-axis is `measurement_start_day`, fill with zero values where there is no data
   if (query.axis_x === 'measurement_start_day') {
     const dateSet = getDatesBetween(new Date(query.since), new Date(query.until))
@@ -91,7 +109,7 @@ const useKeepMountedRangeExtractor = () => {
 }
 
 
-const GridChart = ({ data, query, height }) => {
+const GridChart = ({ data, isGrouped = true, query, height }) => {
   // development-only flags for debugging/tweaking etc
   const { doneChartReshaping } = useDebugContext()
   const [overScanValue, setOverScanValue] = useState(0)
@@ -109,12 +127,12 @@ const GridChart = ({ data, query, height }) => {
 
   const itemData = useMemo(() => {
     const t0 = performance.now()
-    const [reshapedData, rows, rowLabels] = reshapeChartData(data, query)
+    const [reshapedData, rows, rowLabels] = reshapeChartData(data, query, isGrouped)
     const t1 = performance.now()
     console.debug(`Charts reshaping: ${t1} - ${t0} = ${t1-t0}ms`)
     doneChartReshaping(t0, t1)
     return {reshapedData, rows, rowLabels, indexBy: query.axis_x, yAxis: query.axis_y }
-  }, [data, doneChartReshaping, query])
+  }, [data, doneChartReshaping, isGrouped, query])
 
   // FIX: Use the first row to generate the static xAxis outside the charts.
   //  * it is dependent on the width of the charts which is hard coded in `RowChart.js`

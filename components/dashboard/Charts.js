@@ -4,7 +4,7 @@ import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import axios from 'axios'
 
-import { GridChart } from '../aggregation/mat/GridChart'
+import GridChart from '../aggregation/mat/GridChart'
 import { withDebugProvider } from '../aggregation/DebugContext'
 import { axiosResponseTime } from '../axios-plugins'
 import { testNames } from '../test-info'
@@ -54,22 +54,28 @@ const Chart = ({ testName }) => {
     swrOptions
   )
   
-  const chartData = useMemo(() => {
-    if (data?.data?.result) {
-      const selectedCountries = query?.probe_cc.length > 1 ? query?.probe_cc.split(',') : []
-      if (selectedCountries.length > 0) {
-        return data?.data?.result.filter(d => selectedCountries.includes(d.probe_cc))
-      } else {
-        return data?.data?.result
-      }
+  const [chartData, chartHeight] = useMemo(() => {
+    if (!data?.data?.result) {
+      return [null, 0]
     }
-    return null
+
+    let chartData = data?.data?.result
+    let chartHeight = 300 // arbitrary default that becomes a minHeight
+
+    const selectedCountries = query?.probe_cc.length > 1 ? query?.probe_cc.split(',') : []
+    if (selectedCountries.length > 0) {
+      chartData = data?.data?.result.filter(d => selectedCountries.includes(d.probe_cc))
+      chartHeight = (selectedCountries.length * 70 ) + 50
+    }
+
+    return [chartData, chartHeight]
+
   }, [data, query.probe_cc])
 
   return (
     <Flex flexDirection='column' mt={3}>
       <Box><Heading h={3}>{testNames[testName].name}</Heading></Box>
-      <Box sx={{ height: `${250}px` }}>
+      <Box>
         {(!chartData && !error) ? (
           <div> Loading ...</div>
         ) : (
@@ -78,7 +84,9 @@ const Chart = ({ testName }) => {
           ) : (
             <GridChart
               data={chartData}
+              isGrouped={false}
               query={derivedQuery}
+              height={500}
             />
           )
         )}
