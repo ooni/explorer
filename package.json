@@ -68,13 +68,13 @@
   "devDependencies": {
     "@welldone-software/why-did-you-render": "^6.2.1",
     "babel-plugin-react-intl": "^3.2.0",
-    "cypress": "^5.2.0",
+    "cypress": "^9.3.1",
     "eslint": "^7.20.0",
     "eslint-config-next": "11.1.2",
     "eslint-plugin-cypress": "^2.11.3",
     "glob": "^7.1.6",
     "mustache": "^2.3.0",
-    "start-server-and-test": "^1.10.8"
+    "start-server-and-test": "^1.14.0"
   },
   "scripts": {
     "dev": ". ./scripts/populate-git-env.sh && next dev -p 3100",
