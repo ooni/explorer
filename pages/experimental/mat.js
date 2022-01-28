@@ -109,7 +109,9 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
               </Box>
             }
             {data && data.data.dimension_count == 0 &&
-              <FunnelChart data={data.data.result} />
+              <Box sx={{ height: '500px' }}>
+                <FunnelChart data={data.data.result} />
+              </Box>
             }
             {data && data.data.dimension_count == 1 &&
               <Box sx={{ height: '500px' }}>

@@ -12,7 +12,7 @@ const stateColors = {
 const reshapeData = (data) => {
   const withOKMsmts = {
     ...data,
-    'ok_count': data.measurement_count - data.confirmed_count - data.anomaly_count
+    'ok_count': data.measurement_count - data.failure_count - data.anomaly_count
   }
   return Object.entries(withOKMsmts).map((entry) => ({
     'id': entry[0],
