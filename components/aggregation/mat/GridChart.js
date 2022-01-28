@@ -90,7 +90,7 @@ const reshapeChartData = (data, query, isGrouped) => {
     }
   }
   const t2 = performance.now()
-  console.log(`ReshapeChartData: Step 2 took: ${(t2-t1)}ms` )
+  console.debug(`ReshapeChartData: Step 2 took: ${(t2-t1)}ms` )
   return [reshapedData, rows, rowLabels]
 }
 

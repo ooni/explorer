@@ -65,7 +65,7 @@ const Chart = ({ testName }) => {
     const selectedCountries = query?.probe_cc.length > 1 ? query?.probe_cc.split(',') : []
     if (selectedCountries.length > 0) {
       chartData = data?.data?.result.filter(d => selectedCountries.includes(d.probe_cc))
-      chartHeight = (selectedCountries.length * 70 ) + 50
+      chartHeight = Math.min(300, selectedCountries.length * 60)
     }
 
     return [chartData, chartHeight]
@@ -86,7 +86,7 @@ const Chart = ({ testName }) => {
               data={chartData}
               isGrouped={false}
               query={derivedQuery}
-              height={500}
+              height={chartHeight}
             />
           )
         )}
