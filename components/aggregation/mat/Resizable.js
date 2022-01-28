@@ -9,7 +9,7 @@ export const ResizableYBox = styled(Box)`
   overflow: hidden;
   resize: vertical;
   min-height: ${props => props.minHeight ?? 250}px;
-  max-height: 100vh;
+  /* max-height: 100vh; */
   padding: 16px;
 `
 
