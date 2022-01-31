@@ -9,6 +9,7 @@ import { SimpleBox } from './boxes'
 import NetworkStats from './NetworkStats'
 import SpinLoader from '../vendor/SpinLoader'
 import FormattedMarkdown from '../FormattedMarkdown'
+import { axiosPluginLogRequest } from 'components/axios-plugins'
 
 const NETWORK_STATS_PER_PAGE = 4
 
@@ -54,6 +55,7 @@ class NetworkPropertiesSection extends React.Component {
     const { countryCode } = this.props
     const { currentPage } = this.state
     const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
+    axiosPluginLogRequest(client)
     const result = await client.get('/api/_/network_stats', {
       params: {
         probe_cc: countryCode,

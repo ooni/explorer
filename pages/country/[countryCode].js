@@ -1,5 +1,5 @@
 /* global process */
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 import {
   Container,
@@ -20,6 +20,7 @@ import AppsSection from '../../components/country/Apps'
 // import NetworkPropertiesSection from '../../components/country/NetworkProperties'
 import { CountryContextProvider } from '../../components/country/CountryContext'
 import CountryHead from '../../components/country/CountryHead'
+import { axiosPluginLogRequest } from 'components/axios-plugins'
 
 const getCountryReports = (countryCode, data) => {
   const reports = data.filter((article) => (
@@ -54,6 +55,8 @@ export async function getServerSideProps ({ res, query }) {
 
 
   let client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
+  axiosPluginLogRequest(client)
+
   let results = await Promise.all([
     // XXX cc @darkk we should ideally have better dedicated daily dumps for this view
     client.get('/api/_/test_coverage', {params: {'probe_cc': countryCode}}),
@@ -68,6 +71,7 @@ export async function getServerSideProps ({ res, query }) {
 
   return {
     props: {
+      ssrRequests: [results[0].debugAPI, results[1].debugAPI, results[2].debugAPI],
       testCoverage,
       networkCoverage,
       overviewStats,
@@ -80,13 +84,22 @@ export async function getServerSideProps ({ res, query }) {
 
 
 
-const Country = ({ countryCode, countryName, overviewStats, reports, ...coverageDataSSR }) => {
+const Country = ({ ssrRequests, countryCode, countryName, overviewStats, reports, ...coverageDataSSR }) => {
   const [newData, setNewData] = useState(false)
+
+  useEffect(() => {
+    console.debug('Server side requests:')
+    ssrRequests.forEach(req => {
+      console.debug(req.name, req)
+    })
+  }, [])
 
   const fetchTestCoverageData = useCallback((testGroupList) => {
     console.log(testGroupList)
     const fetcher = async (testGroupList) => {
       let client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
+      axiosPluginLogRequest(client, { logImmediately: true })
+
       const result = await client.get('/api/_/test_coverage', {
         params: {
           'probe_cc': countryCode,

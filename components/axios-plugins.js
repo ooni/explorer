@@ -11,6 +11,31 @@ export const axiosResponseTime = (instance) => {
   })
 }
 
+export const axiosPluginLogRequest = (instance, options) => {
+  instance.interceptors.response.use((response) => {
+    response.debugAPI = {
+      name: response.config.url,
+      url: response.request?.res?.responseUrl || response.request?.responseUrl,
+      status: response.status,
+      statusText: response.statusText,
+      headers: response.headers,
+      data: response.data
+    }
+    if (options?.logImmediately) {
+      console.debug(response.debugAPI)
+    }
+    return response
+  }, (error) => {
+    console.error(error)
+  })
+}
+
+// export const axiosPluginLogRequest = (instance) => {
+//   instance.interceptors.request.use((request) => {
+//     console.log(request)
+//     return request
+//   })
+// }
 
 /*
 https://stackoverflow.com/questions/62186171/measure-network-latency-in-react-native/62257712#62257712

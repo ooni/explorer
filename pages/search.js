@@ -23,6 +23,7 @@ import { Loader } from '../components/search/Loader'
 import FormattedMarkdown from '../components/FormattedMarkdown'
 
 import { sortByKey } from '../utils'
+import { axiosPluginLogRequest } from 'components/axios-plugins'
 
 const queryToParams = ({ query }) => {
   // XXX do better validation
@@ -56,6 +57,7 @@ const queryToParams = ({ query }) => {
 
 const getMeasurements = (query) => {
   let client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL})  // eslint-disable-line
+  axiosPluginLogRequest(client)
   const params = queryToParams({ query })
   return client.get('/api/v1/measurements', {params})
 }
@@ -77,7 +79,8 @@ const getCircularReplacer = () => {
 
 
 const serializeError = (err) => {
-  const { name, message, stack, config = {} } = err.toJSON()
+  debugger
+  const { name, message, stack, config = {} } = err?.toJSON()
   const { baseURL, url, params } = config
   const { data, status, statusText } = err.response ?? {}
   return {
@@ -147,6 +150,7 @@ class Search extends React.Component {
   static async getInitialProps ({ query }) {
     let msmtR, testNamesR, countriesR
     let client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL})  // eslint-disable-line
+    axiosPluginLogRequest(client)
 
     // By default, on '/search' show measurements published until today
     // including the measurements of today (so the date of tomorrow).
@@ -207,7 +211,7 @@ class Search extends React.Component {
     const measurements = msmtR.data
     // drop results with probe_asn === 'AS0'
     const results = measurements.results.filter(item => item.probe_asn !== 'AS0')
-
+    
     return {
       error: null,
       results,
@@ -215,6 +219,9 @@ class Search extends React.Component {
       testNamesKeyed,
       testNames,
       countries,
+      // searchReqConfig: { url, method, headers, params, baseURL, data },
+      ssrRequests: [msmtR.debugAPI, testNamesR.debugAPI, countriesR.debugAPI]
+
     }
   }
 
@@ -247,6 +254,10 @@ class Search extends React.Component {
       query
     }
     replace(href, href, { shallow: true })
+    console.debug('Server side requests:')
+    this.props.ssrRequests.forEach(req => {
+      console.debug(req.name, req)
+    })
   }
 
   shouldComponentUpdate (nextProps, nextState) {

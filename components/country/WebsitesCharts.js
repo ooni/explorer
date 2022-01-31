@@ -6,6 +6,7 @@ import axios from 'axios'
 import URLChart from './URLChart'
 import ASNSelector from './ASNSelector'
 import { WebsiteSectionLoader, WebsiteChartLoader } from './WebsiteChartLoader'
+import { axiosPluginLogRequest } from 'components/axios-plugins'
 
 const defaultState = {
   resultsPerPage: 5,
@@ -45,6 +46,7 @@ class TestsByCategoryInNetwork extends React.Component {
     const { network, countryCode } = this.props
     const { resultsPerPage, currentPage } = this.state
     const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
+    axiosPluginLogRequest(client)
     const result = await client.get('/api/_/website_urls', {
       params: {
         probe_cc: countryCode,

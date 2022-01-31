@@ -18,6 +18,7 @@ import Layout from '../components/Layout'
 import NavBar from '../components/NavBar'
 
 import countryUtil from 'country-util'
+import { axiosPluginLogRequest } from 'components/axios-plugins'
 
 const CountryLink = styled(Link)`
   color: ${props => props.theme.colors.black};
@@ -165,6 +166,7 @@ class Countries extends React.Component {
 
   static async getInitialProps () {
     const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
+    axiosPluginLogRequest(client)
     const result = await client.get('/api/_/countries')
 
     // Sort countries by name (instead of by country codes)
@@ -174,12 +176,15 @@ class Countries extends React.Component {
 
     return {
       countries: result.data.countries,
-      ssrRequests: [{...result.config, responseUrl}]
+      ssrRequests: [result.debugAPI]
     }
   }
 
   componentDidMount () {
-    console.log(this.props.ssrRequests)
+    console.debug('Server side requests:')
+    this.props.ssrRequests.forEach(req => {
+      console.debug(req.name, req)
+    })
   }
 
   onSearchChange (searchTerm) {

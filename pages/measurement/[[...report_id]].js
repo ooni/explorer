@@ -1,23 +1,18 @@
-/* global process */
-import React from 'react'
-import PropTypes from 'prop-types'
-import Head from 'next/head'
-import countryUtil from 'country-util'
+import React, { useEffect } from 'react'
 import axios from 'axios'
-import { Container, theme } from 'ooni-components'
-
+import Layout from 'components/Layout'
+import Head from 'next/head'
+import { Container, theme, Box } from 'ooni-components'
 import Hero from '../../components/measurement/Hero'
 import CommonSummary from '../../components/measurement/CommonSummary'
 import DetailsHeader from '../../components/measurement/DetailsHeader'
 import SummaryText from '../../components/measurement/SummaryText'
 import CommonDetails from '../../components/measurement/CommonDetails'
 import MeasurementContainer from '../../components/measurement/MeasurementContainer'
-import MeasurementNotFound from '../../components/measurement/MeasurementNotFound'
 import HeadMetadata from '../../components/measurement/HeadMetadata'
-
-import Layout from '../../components/Layout'
 import NavBar from '../../components/NavBar'
-import ErrorPage from '../_error'
+import countryUtil from 'country-util'
+import { axiosPluginLogRequest } from 'components/axios-plugins'
 
 const pageColors = {
   default: theme.colors.base,
@@ -28,117 +23,74 @@ const pageColors = {
   confirmed: theme.colors.red7
 }
 
-export async function getServerSideProps({ query }) {
-  let initialProps = {
-    errors: []
-  }
+const MeasurementPage = (props) => {
+  const {
+    errors,
+    country,
+    confirmed,
+    anomaly,
+    failure,
+    test_name,
+    test_start_time,
+    probe_cc,
+    probe_asn,
+    notFound = false,
+    input,
+    raw_measurement,
+    report_id,
+    ssrRequests,
+    ...rest
+  } = props
 
-  // Get `report_id` using optional catch all dynamic route of Next.js
-  // Doc: https://nextjs.org/docs/routing/dynamic-routes#optional-catch-all-routes 
-  // e.g /measurement/20211015T162758Z_webconnectivity_TH_23969_n1_d11S0T15FaOuXgFO
-  // It can also catch /measurement/report_id/extra/segments
-  // in which case, the extra segments are available inside query.report_id[1+]
-  const report_id = query?.report_id?.[0]
-  // If there is no report_id to use, fail early with MeasurementNotFound
-  if (typeof report_id !== 'string' || report_id.length < 1) {
-    initialProps.notFound = true
-    return {
-      props: initialProps
-    }
-  }
+  useEffect(() => {
+    console.debug('Server side requests:')
+    ssrRequests.forEach(req => {
+      console.debug(req.name, req)
+    })
+  }, [])
 
-  let response
-  let client
-  try {
-    client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
-    let params = {
-      report_id: report_id,
-      full: true
-    }
-    if (query.input) {
-      params['input'] = query.input
-    }
-
-    try {
-      response = await client.get('/api/v1/measurement_meta', {
-        params
-      })
-    } catch (e) {
-      throw new Error(`Failed to fetch measurement data. Server message: ${e.response.status}, ${e.response.statusText}`)
-    }
-
-    // If response `data` is an empty object, the measurement was
-    // probably not found
-    if (Object.prototype.hasOwnProperty.call(response, 'data') && Object.keys(response.data).length !== 0) {
-      initialProps = {...initialProps, ...response.data}
-
-      if (typeof initialProps['scores'] === 'string') {
-        try {
-          initialProps['scores'] = JSON.parse(initialProps['scores'])
-        } catch (e) {
-          throw new Error(`Failed to parse JSON in scores: ${e.toString()}`)
-        }
-      }
-
-      try {
-        initialProps['raw_measurement'] = JSON.parse(initialProps['raw_measurement'])
-      } catch (e) {
-        console.error(e)
-        throw new Error(`Failed to parse raw_measurement: ${e.toString()}`)
-      }
-
-      const { probe_cc } = response.data
-      const countryObj = countryUtil.countryList.find(country => (
-        country.iso3166_alpha2 === probe_cc
-      ))
-      initialProps['country'] = countryObj?.name || 'Unknown'
-    } else {
-      // Measurement not found
-      initialProps.notFound = true
-    }
-  } catch (e) {
-    initialProps.errors.push(e.message)
-  }
-  return {
-    props: initialProps
-  }
-}
-
-const Measurement = ({
-  errors,
-  country,
-  confirmed,
-  anomaly,
-  failure,
-  test_name,
-  test_start_time,
-  probe_cc,
-  probe_asn,
-  notFound = false,
-  input,
-  raw_measurement,
-  report_id,
-  scores,
-  ...rest
-}) => {
-
-  // Add the 'AS' prefix to probe_asn when API chooses to send just the number
-  probe_asn = typeof probe_asn === 'number' ? `AS${probe_asn}` : probe_asn
-
-  if (errors.length > 0) {
+  if (!raw_measurement)
+  {
     return (
-      <ErrorPage errorCode={501} errors={errors} />
+      <Layout>
+        <NavBar color={pageColors.default} />
+        <Hero
+          color={pageColors.default}
+        />
+        <CommonSummary
+          color={pageColors.default}
+          test_start_time={test_start_time}
+          probe_asn={probe_asn}
+          probe_cc={probe_cc}
+          country={country}
+        />
+        <Container>
+          <DetailsHeader
+            testName={test_name}
+            runtime={raw_measurement?.test_runtime}
+            notice={false}
+            url={`measurement/${report_id}`}
+          />
+          <SummaryText
+            testName={test_name}
+            testUrl={input}
+            network={probe_asn}
+            country={country}
+            date={test_start_time}
+            content={null}
+          />
+          <Box bg='gray2'> Cannot render full page without `raw_measurment`
+            <pre> { JSON.stringify(props, null, 2)} </pre>
+          </Box>
+        </Container>
+      </Layout>
     )
   }
-
   return (
     <Layout>
       <Head>
         <title>OONI Explorer</title>
       </Head>
-      {notFound ? (
-        <MeasurementNotFound />
-      ): (
         <MeasurementContainer
           isConfirmed={confirmed}
           isAnomaly={anomaly}
@@ -149,7 +101,6 @@ const Measurement = ({
           input={input}
           test_start_time={test_start_time}
           probe_asn={probe_asn}
-          scores={scores}
           {...rest}
 
           render={({
@@ -161,81 +112,106 @@ const Measurement = ({
             summaryText,
             headMetadata,
             details
-          }) => {
-            const color = failure === true ? pageColors['error'] : pageColors[status]
-            const info = scores?.msg ?? statusInfo
-            return (
-              <React.Fragment>
-                {headMetadata &&
-                  <HeadMetadata
-                    content={headMetadata}
+          }) => (
+            <React.Fragment>
+              {headMetadata &&
+                <HeadMetadata
+                  content={headMetadata}
+                  testName={test_name}
+                  testUrl={input}
+                  country={country}
+                  date={test_start_time}
+                />
+              }
+              <NavBar color={pageColors[status]} />
+              <Hero
+                color={pageColors[status]}
+                status={status}
+                icon={statusIcon}
+                label={statusLabel}
+                info={statusInfo}
+              />
+              <CommonSummary
+                test_start_time={test_start_time}
+                probe_asn={probe_asn}
+                probe_cc={probe_cc}
+                color={pageColors[status]}
+                country={country}
+              />
+
+              <Container>
+                <DetailsHeader
+                  testName={test_name}
+                  runtime={raw_measurement?.test_runtime}
+                  notice={legacy}
+                  url={`measurement/${report_id}`}
+                />
+                {summaryText &&
+                  <SummaryText
                     testName={test_name}
                     testUrl={input}
+                    network={probe_asn}
                     country={country}
                     date={test_start_time}
+                    content={summaryText}
                   />
                 }
-                <NavBar color={color} />
-                <Hero
-                  color={color}
-                  status={status}
-                  icon={statusIcon}
-                  label={statusLabel}
-                  info={info}
+                {details}
+                <CommonDetails
+                  measurement={raw_measurement}
+                  reportId={report_id}
                 />
-                <CommonSummary
-                  test_start_time={test_start_time}
-                  probe_asn={probe_asn}
-                  probe_cc={probe_cc}
-                  color={color}
-                  country={country}
-                />
-
-                <Container>
-                  <DetailsHeader
-                    testName={test_name}
-                    runtime={raw_measurement?.test_runtime}
-                    notice={legacy}
-                    url={`measurement/${report_id}`}
-                  />
-                  {summaryText &&
-                    <SummaryText
-                      testName={test_name}
-                      testUrl={input}
-                      network={probe_asn}
-                      country={country}
-                      date={test_start_time}
-                      content={summaryText}
-                    />
-                  }
-                  {details}
-                  <CommonDetails
-                    measurement={raw_measurement}
-                    reportId={report_id}
-                  />
-                </Container>
-              </React.Fragment>
-            )
-          }} />
-      )}
+              </Container>
+            </React.Fragment>
+          )} />
     </Layout>
   )
 }
 
-Measurement.propTypes = {
-  anomaly: PropTypes.bool,
-  confirmed: PropTypes.bool,
-  country: PropTypes.string,
-  errors: PropTypes.arrayOf(PropTypes.string),
-  failure: PropTypes.bool,
-  input: PropTypes.any,
-  notFound: PropTypes.bool,
-  probe_asn: PropTypes.any,
-  probe_cc: PropTypes.string,
-  raw_measurement: PropTypes.object,
-  report_id: PropTypes.string,
-  test_name: PropTypes.string,
-  test_start_time: PropTypes.string
+export async function getServerSideProps({ query }) {
+  console.log('getServerSideProps', query)
+  let response
+  let initialProps = { init: 0, notFound: false, ssrRequests: [] }
+  const report_id = query.report_id[0]
+  const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
+  axiosPluginLogRequest(client)
+  let params = {
+    report_id: report_id,
+    full: true
+  }
+  if (query.input) {
+    params['input'] = query.input
+  }
+
+  try {
+    response = await client.get('/api/v1/measurement_meta', {
+      params: params
+    })
+
+    initialProps.ssrRequests.push(response.debugAPI)
+    
+    initialProps = {...initialProps, ...response.data}
+    initialProps['raw_measurement'] = JSON.parse(initialProps['raw_measurement'])
+    initialProps['scores'] = JSON.parse(initialProps['scores'])
+
+    const { probe_cc } = response.data
+    const countryObj = countryUtil.countryList.find(country => (
+      country.iso3166_alpha2 === probe_cc
+    ))
+    initialProps['country'] = countryObj?.name || 'Unknown'
+
+    if (response?.config) {
+      const { url, method, headers, params, baseURL } = response?.config
+      const responseUrl = response?.request?.res?.responseUrl
+      const serverError = response?.data?.error ?? response?.message ?? 'nothing in `response.data.error` or `$exception.message`'
+      initialProps.ssrRequests.config = { url, method, headers, params, baseURL, responseUrl, serverError }
+    }
+  } catch (error) {
+    console.error(error)
+  }
+  return {
+    props: initialProps
+  }
 }
 
-export default Measurement
+export default MeasurementPage

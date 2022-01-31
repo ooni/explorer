@@ -9,6 +9,10 @@ import 'fontsource-fira-sans/latin.css'
 
 import '../public/static/nprogress.css'
 
+import axios from 'axios'
+import { axiosPluginLogRequest } from '../components/axios-plugins'
+axiosPluginLogRequest(axios, { logImmediately: true })
+
 export default function App({ Component, pageProps, err }) {
   const router = useRouter()
 

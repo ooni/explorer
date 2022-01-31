@@ -12,6 +12,7 @@ import { theme } from 'ooni-components'
 import { inCountry } from './CountryContext'
 import Tooltip from './Tooltip'
 import { AppsChartLoader } from './WebsiteChartLoader'
+import { axiosPluginLogRequest } from 'components/axios-plugins'
 
 class AppsStatChart extends React.Component {
   constructor(props) {
@@ -29,6 +30,7 @@ class AppsStatChart extends React.Component {
   async fetchAppNetworkStats() {
     const { countryCode, app, asn } = this.props
     const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
+    axiosPluginLogRequest(client)
     const result = await client.get('/api/_/im_stats', {
       params: {
         probe_cc: countryCode,
