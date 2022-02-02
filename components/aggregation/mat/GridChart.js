@@ -98,7 +98,7 @@ const GridChart = ({ data, isGrouped = true, query, height }) => {
   // development-only flags for debugging/tweaking etc
   const { doneChartReshaping } = useDebugContext()
   const [overScanValue, setOverScanValue] = useState(0)
-  const [enableAnimation, setEnableAnimation] = useState(false)
+  const [enableAnimation, setEnableAnimation] = useState(true)
   const [keepMountedRows, setKeepMountedRows] = useState(false)
   const keepMountedRangeExtractor = useKeepMountedRangeExtractor()
 
@@ -179,8 +179,22 @@ const GridChart = ({ data, isGrouped = true, query, height }) => {
             />
           </Box>
         </Flex>
-        <Flex>
-          <div
+        <Flex flexDirection='column'>
+          {enableAnimation && (
+            itemData.rows.map((row, idx) => (
+              <RowChart
+                key={idx}
+                rowIndex={idx}
+                showTooltipInRow={showTooltipInRow}
+                showTooltip={tooltipIndex[0] === idx}
+                data={reshapedData[rows[idx]]}
+                indexBy={indexBy}
+                height={70}
+                label={rowLabels[rows[idx]]}
+              />)
+            )
+          )}
+          {/* <div
             ref={parentRef}
             className={GRID_ROW_CSS_SELECTOR}
             style={{
@@ -221,7 +235,7 @@ const GridChart = ({ data, isGrouped = true, query, height }) => {
                 </div>
               ))}
               </div>
-            </div>
+            </div> */}
         </Flex>
       </Flex>
     </Flex>

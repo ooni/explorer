@@ -81,7 +81,7 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
   })
 
   return (
-    <Flex alignItems='center' sx={{ position: 'relative' }}>
+    <Flex alignItems='center' >
       <Box width={2/16}>
         {label}
       </Box>
