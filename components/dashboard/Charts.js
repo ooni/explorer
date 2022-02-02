@@ -3,6 +3,7 @@ import { Flex, Box, Heading } from 'ooni-components'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import axios from 'axios'
+import { territoryNames } from 'country-util'
 
 import GridChart from '../aggregation/mat/GridChart'
 import { withDebugProvider } from '../aggregation/DebugContext'
@@ -59,12 +60,12 @@ const Chart = ({ testName }) => {
       return [null, 0]
     }
 
-    let chartData = data?.data?.result
+    let chartData = data?.data?.result.sort((a, b) => (territoryNames[a.probe_cc] > territoryNames[b.probe_cc]))
     let chartHeight = 300 // arbitrary default that becomes a minHeight
 
     const selectedCountries = query?.probe_cc.length > 1 ? query?.probe_cc.split(',') : []
     if (selectedCountries.length > 0) {
-      chartData = data?.data?.result.filter(d => selectedCountries.includes(d.probe_cc))
+      chartData = chartData.filter(d => selectedCountries.includes(d.probe_cc))
       chartHeight = Math.min(300, selectedCountries.length * 60)
     }
 

@@ -1,13 +1,13 @@
 import { countryList } from 'country-util'
 import { useForm, Controller } from 'react-hook-form'
-import { Box, Button, Flex, Select } from 'ooni-components'
+import { Box, Flex } from 'ooni-components'
 import moment from 'moment'
 import { MultiSelect } from 'react-multi-select-component'
 
 import { StyledLabel } from '../aggregation/mat/Form'
 import DatePicker from '../DatePicker'
-import { FormattedMessage, useIntl } from 'react-intl'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useIntl } from 'react-intl'
+import { useEffect, useMemo } from 'react'
 
 const tomorrow = moment.utc().add(1, 'day').format('YYYY-MM-DD')
 const lastMonthToday = moment.utc().subtract(30, 'day').format('YYYY-MM-DD')
@@ -49,7 +49,7 @@ export const Form = ({ onChange, query }) => {
     // 'create': 'Create',
   }), [intl])
 
-  const { handleSubmit, control, getValues, watch } = useForm({
+  const { control, getValues, watch } = useForm({
     defaultValues: query2formValues(query)
   })
 
