@@ -1,26 +1,15 @@
 import React, { useCallback, useEffect, useMemo } from 'react'
-import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { Box, Container, Heading } from 'ooni-components'
-import { FormattedMessage } from 'react-intl'
+import { useIntl, FormattedMessage } from 'react-intl'
 
 import Layout from '../components/Layout'
 import NavBar from '../components/NavBar'
+import { MetaTags } from '../components/dashboard/MetaTags'
 import { Form } from '../components/dashboard/Form'
 import Charts from '../components/dashboard/Charts'
 
-
-const Debug = ({ summary, details }) => (
-  <Box my={2}>
-    <details>
-      <summary>{summary}</summary>
-      <pre>{details}</pre>
-    </details>
-  </Box>
-)
-
 const DashboardCircumvention = () => {
-
   const router = useRouter()
   const query = router.query
 
@@ -45,9 +34,7 @@ const DashboardCircumvention = () => {
 
   return (
     <Layout>
-      <Head>
-        <title>Internet Censorship around the world | OONI Explorer</title>
-      </Head>
+      <MetaTags />
       <NavBar />
       <Container>
         <Heading h={1}><FormattedMessage id='ReachabilityDash.Heading.CircumventionTools' /></Heading>
