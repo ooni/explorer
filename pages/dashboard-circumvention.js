@@ -4,11 +4,11 @@ import { Container, Heading } from 'ooni-components'
 import { FormattedMessage } from 'react-intl'
 import axios from 'axios'
 
-import Layout from '../components/Layout'
-import NavBar from '../components/NavBar'
-import { MetaTags } from '../components/dashboard/MetaTags'
-import { Form } from '../components/dashboard/Form'
-import Charts from '../components/dashboard/Charts'
+import Layout from 'components/Layout'
+import NavBar from 'components/NavBar'
+import { MetaTags } from 'components/dashboard/MetaTags'
+import { Form } from 'components/dashboard/Form'
+import Charts from 'components/dashboard/Charts'
 
 const DashboardCircumvention = ({ availableCountries }) => {
   const router = useRouter()
