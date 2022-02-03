@@ -484,5 +484,5 @@
   "ReachabilityDash.Form.Label.CountrySelect.SelectAll": "Select All",
   "ReachabilityDash.Form.Label.CountrySelect.SelectAllFiltered": "Select All (Filtered)",
   "ReachabilityDash.Form.Label.CountrySelect.InputPlaceholder": "Select Countries...",
-  "ReachabilityDash.Meta.Description": "Description here"
+  "ReachabilityDash.Meta.Description": "View the accessibility of censorship circumvention tools around the world through OONI data."
 }
