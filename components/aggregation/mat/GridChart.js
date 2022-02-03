@@ -53,7 +53,6 @@ const reshapeChartData = (data, query, isGrouped) => {
   } else {
     data.forEach((item) => {
       const key = item[query.axis_y]
-      item['ok_count'] = item.measurement_count - item.confirmed_count - item.anomaly_count
       if (key in reshapedData) {
         reshapedData[key].push(item)
       } else {

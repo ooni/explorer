@@ -52,8 +52,9 @@ export const StackedBarChart = ({ data, query }) => {
       ]
       let indexBy = ''
       indexBy = query['axis_x']
+      const reshapedData = Array.isArray(data.data.result) ? data.data.result : []
       return {
-        data: data.data.result,
+        data: reshapedData,
         dimensionCount: data.data.dimension_count,
         url: data.url,
         loadTime: data.loadTime,
