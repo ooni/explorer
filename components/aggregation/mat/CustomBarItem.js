@@ -1,7 +1,7 @@
-// Based on BarItem.tsx in @nivo/bar @v0.73.1
-// https://github.com/plouc/nivo/blob/7ff0e72ebf823231cc341d8fc0d544768a9a458b/packages/bar/src/BarItem.tsx
+// Based on BarItem.tsx in @nivo/bar @v0.79.1
+// https://github.com/plouc/nivo/blob/f0a673005e918b2e2d3e635c6f214aa088bac5e1/packages/bar/src/BarItem.tsx
 
-import React, { createElement, useCallback, useEffect } from 'react'
+import { createElement, useCallback, useMemo, useEffect } from 'react'
 import { animated, to } from '@react-spring/web'
 import { useTheme } from '@nivo/core'
 import { useTooltip } from '@nivo/tooltip'
@@ -33,11 +33,16 @@ export const CustomBarItem = ({
   onMouseLeave,
 
   tooltip,
+
+  isFocusable,
+  ariaLabel,
+  ariaLabelledBy,
+  ariaDescribedBy,
 }) => {
   const theme = useTheme()
   const { showTooltipAt, hideTooltip } = useTooltip()
   const extraBorderWidth = data.data.highlight ? 2 : 0
-  
+
   const onClose = useCallback(() => {
     hideTooltip()
   }, [hideTooltip])
@@ -50,7 +55,6 @@ export const CustomBarItem = ({
   }, [enableLabel, hideTooltip])
 
   const renderTooltip = useCallback(() =>
-    // eslint-disable-next-line react/display-name
     createElement(tooltip, { ...bar, ...data, onClose }),
   [tooltip, bar, data, onClose])
 
@@ -71,20 +75,19 @@ export const CustomBarItem = ({
         nearTopEdge ? 'bottom' : 'top'
       )
     },
-    [bar.color, bar.height, bar.key, bar.width, bar.x, bar.y, data, onClick, renderTooltip, showTooltipAt]
+    [bar, data, onClick, renderTooltip, showTooltipAt]
   )
   // Disable events upon mouse movement events
   // const handleTooltip = useCallback(
-  //   (event) =>
-  //     showTooltipFromEvent(createElement(tooltip, { ...bar, ...data }), event),
-  //   [bar, data, showTooltipFromEvent, tooltip]
+  //   (event) => showTooltipFromEvent(renderTooltip(), event),
+  //   [showTooltipFromEvent, renderTooltip]
   // )
   // const handleMouseEnter = useCallback(
   //   (event) => {
   //     onMouseEnter?.(data, event)
-  //     showTooltipFromEvent(createElement(tooltip, { ...bar, ...data }), event)
+  //     showTooltipFromEvent(renderTooltip(), event)
   //   },
-  //   [bar, data, onMouseEnter, showTooltipFromEvent, tooltip]
+  //   [data, onMouseEnter, showTooltipFromEvent, renderTooltip]
   // )
   // const handleMouseLeave = useCallback(
   //   (event) => {
@@ -93,6 +96,14 @@ export const CustomBarItem = ({
   //   },
   //   [data, hideTooltip, onMouseLeave]
   // )
+
+  // extra handlers to allow keyboard navigation
+  const handleFocus = useCallback(() => {
+      showTooltipAt(renderTooltip(), [bar.absX + bar.width / 2, bar.absY])
+  }, [showTooltipAt, renderTooltip, bar])
+  const handleBlur = useCallback(() => {
+      hideTooltip()
+  }, [hideTooltip])
 
   return (
     <animated.g transform={transform}>
@@ -104,10 +115,17 @@ export const CustomBarItem = ({
         fill={data.fill ?? color}
         strokeWidth={borderWidth + extraBorderWidth}
         stroke={borderColor}
+        focusable={isFocusable}
+        tabIndex={isFocusable ? 0 : undefined}
+        aria-label={ariaLabel ? ariaLabel(data) : undefined}
+        aria-labelledby={ariaLabelledBy ? ariaLabelledBy(data) : undefined}
+        aria-describedby={ariaDescribedBy ? ariaDescribedBy(data) : undefined}
         // onMouseEnter={isInteractive ? handleMouseEnter : undefined}
         // onMouseMove={isInteractive ? handleTooltip : undefined}
         // onMouseLeave={isInteractive ? handleMouseLeave : undefined}
         onClick={isInteractive ? handleClick : undefined}
+        onFocus={isInteractive && isFocusable ? handleFocus : undefined}
+        onBlur={isInteractive && isFocusable ? handleBlur : undefined}
       />
       {shouldRenderLabel && (
         <animated.text
@@ -128,4 +146,3 @@ export const CustomBarItem = ({
     </animated.g>
   )
 }
-
