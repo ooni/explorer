@@ -42,6 +42,7 @@ export const CustomBarItem = ({
   const theme = useTheme()
   const { showTooltipAt, hideTooltip } = useTooltip()
   const [extraBorderWidth, setExtraBorderWidth] = useState(0)
+  const [isHovering, setIsHovering] = useState(false)
 
   const onClose = useCallback(() => {
     hideTooltip()
@@ -90,20 +91,21 @@ export const CustomBarItem = ({
   //   (event) => showTooltipFromEvent(renderTooltip(), event),
   //   [showTooltipFromEvent, renderTooltip]
   // )
-  // const handleMouseEnter = useCallback(
-  //   (event) => {
-  //     onMouseEnter?.(data, event)
-  //     showTooltipFromEvent(renderTooltip(), event)
-  //   },
-  //   [data, onMouseEnter, showTooltipFromEvent, renderTooltip]
-  // )
-  // const handleMouseLeave = useCallback(
-  //   (event) => {
-  //     onMouseLeave?.(data, event)
-  //     hideTooltip()
-  //   },
-  //   [data, hideTooltip, onMouseLeave]
-  // )
+  const handleMouseEnter = useCallback(
+    (event) => {
+      onMouseEnter?.(data, event)
+      setIsHovering(true)
+    },
+    [data, onMouseEnter]
+  )
+  const handleMouseLeave = useCallback(
+    (event) => {
+      onMouseLeave?.(data, event)
+      setIsHovering(false)
+      // hideTooltip()
+    },
+    [data, onMouseLeave]
+  )
 
   // extra handlers to allow keyboard navigation
   const handleFocus = useCallback(() => {
@@ -121,6 +123,7 @@ export const CustomBarItem = ({
         rx={borderRadius}
         ry={borderRadius}
         fill={data.fill ?? color}
+        opacity={0.8 + (Number(isHovering) * 0.2)}
         strokeWidth={borderWidth + extraBorderWidth}
         stroke={borderColor}
         focusable={isFocusable}
@@ -128,9 +131,9 @@ export const CustomBarItem = ({
         aria-label={ariaLabel ? ariaLabel(data) : undefined}
         aria-labelledby={ariaLabelledBy ? ariaLabelledBy(data) : undefined}
         aria-describedby={ariaDescribedBy ? ariaDescribedBy(data) : undefined}
-        // onMouseEnter={isInteractive ? handleMouseEnter : undefined}
+        onMouseEnter={isInteractive ? handleMouseEnter : undefined}
         // onMouseMove={isInteractive ? handleTooltip : undefined}
-        // onMouseLeave={isInteractive ? handleMouseLeave : undefined}
+        onMouseLeave={isInteractive ? handleMouseLeave : undefined}
         onClick={isInteractive ? handleClick : undefined}
         onFocus={isInteractive && isFocusable ? handleFocus : undefined}
         onBlur={isInteractive && isFocusable ? handleBlur : undefined}
