@@ -1,7 +1,7 @@
 // Based on BarItem.tsx in @nivo/bar @v0.79.1
 // https://github.com/plouc/nivo/blob/f0a673005e918b2e2d3e635c6f214aa088bac5e1/packages/bar/src/BarItem.tsx
 
-import { createElement, useCallback, useMemo, useEffect } from 'react'
+import { createElement, useCallback, useState, useEffect } from 'react'
 import { animated, to } from '@react-spring/web'
 import { useTheme } from '@nivo/core'
 import { useTooltip } from '@nivo/tooltip'
@@ -41,18 +41,26 @@ export const CustomBarItem = ({
 }) => {
   const theme = useTheme()
   const { showTooltipAt, hideTooltip } = useTooltip()
-  const extraBorderWidth = data.data.highlight ? 2 : 0
+  const [extraBorderWidth, setExtraBorderWidth] = useState(0)
 
   const onClose = useCallback(() => {
     hideTooltip()
-  }, [hideTooltip])
+    // Use the onclick handler to reset the tooltip column
+    // without this setExtraBorderWidth(0) only affects
+    // the clicked bar in the stack (e.g ok_count)
+    onClick({ column: '' })
+  }, [hideTooltip, onClick])
 
   useEffect(() => {
-    // We hijack `enableLabel` to pass down whether the bar component should hide the tooltip or not.
-    if (enableLabel === false) {
+    // We receive tooltip coordinates in `enableLabel` 
+    // to determine if a tooltip is enabled and if the column should be highlighted.
+    if (enableLabel[0] === false) {
       hideTooltip()
+      setExtraBorderWidth(0)
+    } else {
+      setExtraBorderWidth(enableLabel[1] === data.indexValue ? 2 : 0)
     }
-  }, [enableLabel, hideTooltip])
+  }, [data.indexValue, enableLabel, hideTooltip])
 
   const renderTooltip = useCallback(() =>
     createElement(tooltip, { ...bar, ...data, onClose }),
@@ -60,7 +68,7 @@ export const CustomBarItem = ({
 
   const handleClick = useCallback(
     (event) => {
-      onClick?.({ color: bar.color, column: bar.key, ...data }, event)
+      onClick?.({ color: bar.color, column: data.indexValue, ...data }, event)
       // If the clicked bar is located near the upper edge of the react-window container,
       // then anchor the tooltip to the bottom of the bar
       const outerListElement = event.currentTarget.closest('.outerListElement')

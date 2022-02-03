@@ -253,7 +253,7 @@ const GridChart = ({ data, isGrouped = true, query, height }) => {
                   <RowChart
                     rowIndex={virtualRow.index}
                     showTooltipInRow={showTooltipInRow}
-                    showTooltip={tooltipIndex[0] === virtualRow.index}
+                    showTooltip={[tooltipIndex[0] === virtualRow.index, tooltipIndex[1]]}
                     data={reshapedData[rows[virtualRow.index]]}
                     indexBy={indexBy}
                     height={virtualRow.size}
