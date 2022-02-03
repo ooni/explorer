@@ -66,7 +66,7 @@ const Chart = ({ testName }) => {
     const selectedCountries = query?.probe_cc?.length > 1 ? query?.probe_cc.split(',') : []
     if (selectedCountries.length > 0) {
       chartData = chartData.filter(d => selectedCountries.includes(d.probe_cc))
-      chartHeight = Math.min(300, selectedCountries.length * 60)
+      chartHeight = selectedCountries.length * 60 + 100
     }
 
     return [chartData, chartHeight]
