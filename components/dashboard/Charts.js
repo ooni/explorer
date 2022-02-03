@@ -63,7 +63,7 @@ const Chart = ({ testName }) => {
     let chartData = data?.data?.result.sort((a, b) => (territoryNames[a.probe_cc] > territoryNames[b.probe_cc]))
     let chartHeight = 300 // arbitrary default that becomes a minHeight
 
-    const selectedCountries = query?.probe_cc.length > 1 ? query?.probe_cc.split(',') : []
+    const selectedCountries = query?.probe_cc?.length > 1 ? query?.probe_cc.split(',') : []
     if (selectedCountries.length > 0) {
       chartData = chartData.filter(d => selectedCountries.includes(d.probe_cc))
       chartHeight = Math.min(300, selectedCountries.length * 60)

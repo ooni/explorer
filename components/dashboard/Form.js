@@ -15,7 +15,7 @@ const lastMonthToday = moment.utc().subtract(30, 'day').format('YYYY-MM-DD')
 const defaultDefaultValues = {
   since: lastMonthToday,
   until: tomorrow,
-  probe_cc: [],
+  probe_cc: [], // ['IR', 'CU', 'SA', 'MY']
 }
 
 export const Form = ({ onChange, query, availableCountries }) => {
@@ -30,7 +30,7 @@ export const Form = ({ onChange, query, availableCountries }) => {
   , [availableCountries])
 
   const query2formValues = (query) => {
-    const countriesInQuery = query.probe_cc?.split(',') ?? []
+    const countriesInQuery = query.probe_cc?.split(',') ?? defaultDefaultValues.probe_cc
     return {
       since: query?.since ?? defaultDefaultValues.since,
       until: query?.until ?? defaultDefaultValues.until,
@@ -60,7 +60,7 @@ export const Form = ({ onChange, query, availableCountries }) => {
     const cleanedUpData = {
       since,
       until,
-      probe_cc: probe_cc.map(d => d.value)
+      probe_cc: probe_cc.length > 0 ? probe_cc.map(d => d.value).join(',') : undefined
     }
     onChange(cleanedUpData)
   }, [onChange, since, until, probe_cc])

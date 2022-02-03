@@ -14,20 +14,26 @@ const DashboardCircumvention = ({ availableCountries }) => {
   const router = useRouter()
   const query = router.query
 
+  // Sync page URL params with changes from form values
   const onChange = useCallback(({ since, until, probe_cc }) => {
-    // Use since,until from form 
-    // Use country list as probe_cc=CN,AL,IN
-    const probe_ccFlat = probe_cc.join(',')
+    // since: "2022-01-02",
+    // until: "2022-02-01",
+    // probe_cc: "IT,AL,IR"
     const params = {
       since,
-      until,
-      probe_cc: probe_ccFlat
+      until
+    }
+    if (probe_cc) {
+      params['probe_cc'] = probe_cc
     }
     const href = {
       pathname: router.pathname,
       query: params,
     }
-    if (query.since !== since || query.until !== until || query.probe_cc !== probe_ccFlat) {
+    if (query.since !== since
+      || query.until !== until
+      || query.probe_cc !== probe_cc
+    ) {
       router.push(href, href, { shallow: true })
     }
 
@@ -48,6 +54,8 @@ const DashboardCircumvention = ({ availableCountries }) => {
   )
 }
 
+// Fetch list of countries for which we have data for circumvention tools
+// Used to populate the country selection list in the form
 export async function getServerSideProps () {
   let availableCountries = []
   try {
