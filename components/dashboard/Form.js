@@ -15,7 +15,7 @@ const lastMonthToday = moment.utc().subtract(30, 'day').format('YYYY-MM-DD')
 const defaultDefaultValues = {
   since: lastMonthToday,
   until: tomorrow,
-  probe_cc: [], // ['IR', 'CU', 'SA', 'MY']
+  probe_cc: ['CN', 'IR', 'RU']
 }
 
 export const Form = ({ onChange, query, availableCountries }) => {
