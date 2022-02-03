@@ -100,7 +100,7 @@ const ChartsContainer = () => {
   return (
     <>
       <Chart testName='psiphon' />
-      <Chart testName='riseupvpn' />
+      {/* <Chart testName='riseupvpn' /> */}
       <Chart testName='torsf' />
       <Chart testName='tor' />
     </>
