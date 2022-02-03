@@ -4,7 +4,7 @@ import { ResponsiveBar } from '@nivo/bar'
 import { Heading, Flex, Box, Text } from 'ooni-components'
 import OONILogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochrome.svg'
 
-import RowChart from './RowChart'
+import RowChart, { chartMargins } from './RowChart'
 import { useDebugContext } from '../DebugContext'
 import { defaultRangeExtractor, useVirtual } from 'react-virtual'
 import { colorMap } from './colorMap'
@@ -138,7 +138,7 @@ const GridChart = ({ data, isGrouped = true, query, height }) => {
   //  * it is dependent on the width of the charts which is hard coded in `RowChart.js`
   //  * it may not work well if the first row has little or no data
   const xAxisData = itemData.reshapedData[itemData.rows[0]]
-  const xAxisMargins = { top: 60, right: 0, bottom: 0, left: 0 }
+  const xAxisMargins = {...chartMargins, top: 60, bottom: 0}
   const axisTop = {
     enable: true,
     tickSize: 5,

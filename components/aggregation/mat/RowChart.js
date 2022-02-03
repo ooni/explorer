@@ -17,7 +17,8 @@ const keys = [
 
 const colorFunc = (d) => colorMap[d.id] || '#ccc'
 
-const barLayers = ['grid', 'bars']
+const barLayers = ['grid', 'axes', 'bars']
+export const chartMargins = { top: 4, right: 50, bottom: 4, left: 0 }
 
 const barThemeForTooltip = {
   tooltip: {
@@ -51,7 +52,7 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
   const chartProps = useMemo(() => ({
     // NOTE: These dimensions are linked to accuracy of the custom axes rendered in
     // <GridChart />
-    margin: { top: 4, right: 0, bottom: 4, left: 0 },
+    margin: chartMargins,
     padding: 0.3,
     borderColor: { from: 'color', modifiers: [ [ 'darker', 1.6 ] ] },
     colors: colorFunc,
