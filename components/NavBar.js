@@ -84,7 +84,7 @@ export const NavBar = ({color}) => (
           <Flex flexDirection={['column', 'row']} >
             <NavItem label={<FormattedMessage id='Navbar.Search' />} href='/search' />
             <NavItem label={<FormattedMessage id='Navbar.Countries' />} href='/countries' />
-            <NavItem label={<FormattedMessage id='Navbar.Charts.Circumvention' />} href='/charts/circumvention' />
+            <NavItem label={<FormattedMessage id='Navbar.Charts.Circumvention' />} href='/chart/circumvention' />
           </Flex>
         </Box>
       </Flex>
