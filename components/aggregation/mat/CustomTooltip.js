@@ -50,7 +50,7 @@ export const generateSearchQuery = (data, query) => {
   }
 }
 
-const CustomToolTip = React.memo(({ data, onClose, link = true }) => {
+const CustomToolTip = React.memo(({ data, onClose, indexValue, link = true }) => {
   const theme = useTheme()
   const intl = useIntl()
   const { query } = useRouter()
@@ -64,13 +64,13 @@ const CustomToolTip = React.memo(({ data, onClose, link = true }) => {
     }
 
 
-    const title = `${data[query.axis_x]} ${'axis_y' in query ? ` - ${data[query.axis_y]}` : ''}`
+    const title = `${indexValue} ${'axis_y' in query ? ` - ${data[query.axis_y]}` : ''}`
 
     return [
       linkObj,
       title,
     ]
-  }, [data, query])
+  }, [data, query, indexValue])
 
   return (
     <Flex flexDirection='column' style={{...theme.tooltip.container}}>
