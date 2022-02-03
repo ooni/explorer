@@ -1,13 +1,13 @@
-import { countryList } from 'country-util'
+import { useEffect, useMemo, useState } from 'react'
+import { territoryNames } from 'country-util'
 import { useForm, Controller } from 'react-hook-form'
 import { Box, Flex } from 'ooni-components'
 import moment from 'moment'
 import { MultiSelect } from 'react-multi-select-component'
+import { useIntl } from 'react-intl'
 
 import { StyledLabel } from '../aggregation/mat/Form'
 import DatePicker from '../DatePicker'
-import { useIntl } from 'react-intl'
-import { useEffect, useMemo } from 'react'
 
 const tomorrow = moment.utc().add(1, 'day').format('YYYY-MM-DD')
 const lastMonthToday = moment.utc().subtract(30, 'day').format('YYYY-MM-DD')
@@ -18,24 +18,25 @@ const defaultDefaultValues = {
   probe_cc: [],
 }
 
-const countryOptions = countryList
-  .sort((a,b) => (a.iso3166_name < b.iso3166_name) ? -1 : (a.iso3166_name > b.iso3166_name) ? 1 : 0)
-  .map(country => ({
-    label: country.iso3166_name,
-    value: country.iso3166_alpha2
-  }))
-
-const query2formValues = (query) => {
-  const countriesInQuery = query.probe_cc?.split(',') ?? []
-  return {
-    since: query?.since ?? defaultDefaultValues.since,
-    until: query?.until ?? defaultDefaultValues.until,
-    probe_cc: countryOptions.filter(country => countriesInQuery.includes(country.value))
-  }
-}
-
-export const Form = ({ onChange, query }) => {
+export const Form = ({ onChange, query, availableCountries }) => {
   const intl = useIntl()
+
+  const countryOptions = useMemo(() => availableCountries
+    .sort((a,b) => (territoryNames[a] < territoryNames[b]) ? -1 : (territoryNames[a] > territoryNames[b]) ? 1 : 0)
+    .map(cc => ({
+      label: territoryNames[cc],
+      value: cc
+    }))
+  , [availableCountries])
+
+  const query2formValues = (query) => {
+    const countriesInQuery = query.probe_cc?.split(',') ?? []
+    return {
+      since: query?.since ?? defaultDefaultValues.since,
+      until: query?.until ?? defaultDefaultValues.until,
+      probe_cc: countryOptions.filter(country => countriesInQuery.includes(country.value))
+    }
+  }
 
   const multiSelectStrings = useMemo(() => ({
     'allItemsAreSelected': intl.formatMessage({ id: 'ReachabilityDash.Form.Label.CountrySelect.AllSelected' }),
@@ -73,7 +74,6 @@ export const Form = ({ onChange, query }) => {
             render={({field}) => (
               <MultiSelect
                 options={countryOptions}
-                labelledBy={intl.formatMessage({ id: 'ReachabilityDash.Form.Label.Country' })}
                 overrideStrings={multiSelectStrings}
                 name={field.name}
                 value={field.value}
