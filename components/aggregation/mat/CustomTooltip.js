@@ -32,8 +32,8 @@ export const generateSearchQuery = (data, query) => {
       q[k] = query[k]
     return q
   }, {})
-  if (axis_y === 'input') {
-    queryObj.domain = urlToDomain(data.input)
+  if (data.input || query.input) {
+    queryObj.domain = urlToDomain(data.input ?? query.input)
   }
 
   // Filter for anomalies if blocking_type is set
