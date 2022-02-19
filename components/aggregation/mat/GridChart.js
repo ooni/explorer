@@ -109,11 +109,10 @@ const useKeepMountedRangeExtractor = () => {
 }
 
 
-const GridChart = ({ data, isGrouped = true, query, height }) => {
+const GridChart = ({ data, isGrouped = true, query, height = 'auto' }) => {
   // development-only flags for debugging/tweaking etc
   const { doneChartReshaping } = useDebugContext()
   const [overScanValue, setOverScanValue] = useState(0)
-  const [enableAnimation, setEnableAnimation] = useState(false)
   const [keepMountedRows, setKeepMountedRows] = useState(false)
   const keepMountedRangeExtractor = useKeepMountedRangeExtractor()
 
@@ -128,11 +127,17 @@ const GridChart = ({ data, isGrouped = true, query, height }) => {
   const itemData = useMemo(() => {
     const t0 = performance.now()
     const [reshapedData, rows, rowLabels] = reshapeChartData(data, query, isGrouped)
+    
+    let gridHeight = height
+    if (height === 'auto') {
+      gridHeight = Math.min(rows.length * 70, 600)
+    }
+    
     const t1 = performance.now()
     console.debug(`Charts reshaping: ${t1} - ${t0} = ${t1-t0}ms`)
     doneChartReshaping(t0, t1)
-    return {reshapedData, rows, rowLabels, indexBy: query.axis_x, yAxis: query.axis_y }
-  }, [data, doneChartReshaping, isGrouped, query])
+    return {reshapedData, rows, rowLabels, gridHeight, indexBy: query.axis_x, yAxis: query.axis_y }
+  }, [data, doneChartReshaping, height, isGrouped, query])
 
   // FIX: Use the first row to generate the static xAxis outside the charts.
   //  * it is dependent on the width of the charts which is hard coded in `RowChart.js`
@@ -166,7 +171,7 @@ const GridChart = ({ data, isGrouped = true, query, height }) => {
     rangeExtractor: keepMountedRows ? keepMountedRangeExtractor : defaultRangeExtractor
   })
 
-  const {reshapedData, rows, rowLabels, indexBy, yAxis } = itemData
+  const {reshapedData, rows, rowLabels, gridHeight, indexBy, yAxis } = itemData
 
   if (data.length < 1) {
     return (
@@ -233,7 +238,7 @@ const GridChart = ({ data, isGrouped = true, query, height }) => {
             ref={parentRef}
             className={GRID_ROW_CSS_SELECTOR}
             style={{
-              height: height,
+              height: gridHeight,
               width: '100%',
               overflow: 'auto'
             }}

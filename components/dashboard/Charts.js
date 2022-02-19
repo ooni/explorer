@@ -55,21 +55,19 @@ const Chart = ({ testName }) => {
     swrOptions
   )
   
-  const [chartData, chartHeight] = useMemo(() => {
+  const [chartData] = useMemo(() => {
     if (!data?.data?.result) {
       return [null, 0]
     }
 
     let chartData = data?.data?.result.sort((a, b) => (territoryNames[a.probe_cc] < territoryNames[b.probe_cc]) ? -1 : (territoryNames[a.probe_cc] < territoryNames[b.probe_cc]) ? 1 : 0)
-    let chartHeight = 300 // arbitrary default that becomes a minHeight
 
     const selectedCountries = query?.probe_cc?.length > 1 ? query?.probe_cc.split(',') : []
     if (selectedCountries.length > 0) {
       chartData = chartData.filter(d => selectedCountries.includes(d.probe_cc))
-      chartHeight = selectedCountries.length * 60 + 100
     }
 
-    return [chartData, chartHeight]
+    return [chartData]
 
   }, [data, query.probe_cc])
 
@@ -87,7 +85,6 @@ const Chart = ({ testName }) => {
               data={chartData}
               isGrouped={false}
               query={derivedQuery}
-              height={chartHeight}
             />
           )
         )}

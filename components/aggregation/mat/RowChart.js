@@ -29,7 +29,7 @@ const barThemeForTooltip = {
   }
 }
 
-const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, showTooltip, enableAnimation /* width, first, last */}) => {
+const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, showTooltip /* width, first, last */}) => {
   const handleClick = useCallback(({ column }) => {
     showTooltipInRow(rowIndex, column)
   }, [rowIndex, showTooltipInRow])
@@ -73,6 +73,7 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
     motionConfig: {
       duration: 1
     },
+    animate: true,
     isInteractive: true,
     layers: barLayers,
   }), [])
@@ -100,7 +101,6 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
           // `enableLabel` prop to pass in the tooltip coordinates (row, col_index) from `GridChart`
           // `showTooltip` contains `[rowHasTooltip, columnwithTooltip]` e.g `[true, '2022-02-01']`
           enableLabel={showTooltip}
-          animate={enableAnimation}
           {...chartProps}
         />
       </Box>
