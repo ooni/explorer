@@ -3,6 +3,7 @@ import PropTypes from 'prop-types'
 import { ResponsiveBar } from '@nivo/bar'
 import { Heading, Flex, Box, Text } from 'ooni-components'
 import OONILogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochrome.svg'
+import { scaleTime } from 'd3-scale'
 
 import RowChart, { chartMargins } from './RowChart'
 import { useDebugContext } from '../DebugContext'
@@ -136,6 +137,15 @@ const GridChart = ({ data, isGrouped = true, query, height }) => {
   // FIX: Use the first row to generate the static xAxis outside the charts.
   //  * it is dependent on the width of the charts which is hard coded in `RowChart.js`
   //  * it may not work well if the first row has little or no data
+  const dateDomain = [...getDatesBetween(new Date(query.since), new Date(query.until))].map(d => new Date(d))
+  const xScale = scaleTime().domain([dateDomain[0], dateDomain[dateDomain.length-1]])
+  const xAxisTickValues = [
+    dateDomain[0],
+    ...xScale.ticks(9),
+    dateDomain[dateDomain.length-1]
+  ].map(d => d.toISOString().split('T')[0])
+
+
   const xAxisData = itemData.reshapedData[itemData.rows[0]]
   const xAxisMargins = {...chartMargins, top: 60, bottom: 0}
   const axisTop = {
@@ -143,7 +153,7 @@ const GridChart = ({ data, isGrouped = true, query, height }) => {
     tickSize: 5,
     tickPadding: 5,
     tickRotation: -45,
-    tickValues: 'every 5 days'
+    tickValues: xAxisTickValues
   }
 
   const parentRef = React.useRef()
@@ -211,7 +221,6 @@ const GridChart = ({ data, isGrouped = true, query, height }) => {
               padding={0.3}
               layers={['axes']}
               axisTop={axisTop}
-              xScale={{ type: 'time', format: '%Y-%m-%d', precision: 'day' }}
               axisBottom={null}
               axisLeft={null}
               axisRight={null}
