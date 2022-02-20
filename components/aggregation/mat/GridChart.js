@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { ResponsiveBar } from '@nivo/bar'
 import { Heading, Flex, Box, Text } from 'ooni-components'
 import OONILogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochrome.svg'
-import { scaleTime } from 'd3-scale'
+import { scaleUtc } from 'd3-scale'
 
 import RowChart, { chartMargins } from './RowChart'
 import { useDebugContext } from '../DebugContext'
@@ -14,6 +14,9 @@ import CountryNameLabel from './CountryNameLabel'
 import { getRowLabel } from './labels'
 
 const GRID_ROW_CSS_SELECTOR = 'outerListElement'
+const ROW_HEIGHT = 70
+const GRID_MAX_HEIGHT = 600
+const retainMountedRows = false
 
 export function getDatesBetween(startDate, endDate) {
   const dateArray = new Set()
@@ -112,8 +115,6 @@ const useKeepMountedRangeExtractor = () => {
 const GridChart = ({ data, isGrouped = true, query, height = 'auto' }) => {
   // development-only flags for debugging/tweaking etc
   const { doneChartReshaping } = useDebugContext()
-  const [overScanValue, setOverScanValue] = useState(0)
-  const [keepMountedRows, setKeepMountedRows] = useState(false)
   const keepMountedRangeExtractor = useKeepMountedRangeExtractor()
 
   // [rowIndex, columnKey] for the bar where click was detected
@@ -130,7 +131,7 @@ const GridChart = ({ data, isGrouped = true, query, height = 'auto' }) => {
     
     let gridHeight = height
     if (height === 'auto') {
-      gridHeight = Math.min(rows.length * 70, 600)
+      gridHeight = Math.min( 20 + (rows.length * ROW_HEIGHT), GRID_MAX_HEIGHT)
     }
     
     const t1 = performance.now()
@@ -143,11 +144,11 @@ const GridChart = ({ data, isGrouped = true, query, height = 'auto' }) => {
   //  * it is dependent on the width of the charts which is hard coded in `RowChart.js`
   //  * it may not work well if the first row has little or no data
   const dateDomain = [...getDatesBetween(new Date(query.since), new Date(query.until))].map(d => new Date(d))
-  const xScale = scaleTime().domain([dateDomain[0], dateDomain[dateDomain.length-1]])
-  const xAxisTickValues = [
-    dateDomain[0],
-    ...xScale.ticks(9),
-    dateDomain[dateDomain.length-1]
+  const xScale = scaleUtc().domain([dateDomain[0], dateDomain[dateDomain.length-1]])
+  const xAxisTickValues = dateDomain.length < 30 ? null : [
+    // dateDomain[0],
+    ...xScale.ticks(20),
+    // dateDomain[dateDomain.length-1]
   ].map(d => d.toISOString().split('T')[0])
 
 
@@ -166,9 +167,9 @@ const GridChart = ({ data, isGrouped = true, query, height = 'auto' }) => {
   const rowVirtualizer = useVirtual({
     size: itemData.rows.length,
     parentRef,
-    estimateSize: React.useCallback(() => 70, []),
-    overscan: overScanValue,
-    rangeExtractor: keepMountedRows ? keepMountedRangeExtractor : defaultRangeExtractor
+    estimateSize: useCallback(() => ROW_HEIGHT, []),
+    overscan: 3,
+    rangeExtractor: retainMountedRows ? keepMountedRangeExtractor : defaultRangeExtractor
   })
 
   const {reshapedData, rows, rowLabels, gridHeight, indexBy, yAxis } = itemData
