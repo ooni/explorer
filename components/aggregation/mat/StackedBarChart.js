@@ -104,12 +104,12 @@ export const StackedBarChart = ({ data, query }) => {
           )}
         </Box>
       </Flex>
-      <Box height={'100%'}>
+      <Box height={'100%'} mx={[1, 3]}>
         <ResponsiveBar
           data={chartMeta.data}
           keys={chartMeta.cols}
           indexBy={chartMeta.indexBy}
-          margin={{ top: 50, right: 80, bottom: 100, left: 80 }}
+          margin={{ top: 50, right: 30, bottom: 100, left: 80 }}
           padding={0.3}
           colors={colorFunc}
           borderColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
