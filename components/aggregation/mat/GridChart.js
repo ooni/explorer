@@ -11,7 +11,7 @@ import { colorMap } from './colorMap'
 import { getSubtitleStr } from './StackedBarChart'
 import CountryNameLabel from './CountryNameLabel'
 import { getRowLabel } from './labels'
-import { getDatesBetween } from './computations'
+import { fillDataInMissingDates, getDatesBetween } from './computations'
 import { getXAxisTicks } from './TimeScaleXAxis'
 
 const GRID_ROW_CSS_SELECTOR = 'outerListElement'
@@ -60,32 +60,24 @@ const reshapeChartData = (data, query, isGrouped) => {
 
   const t1 = performance.now()
 
+  let reshapedDataWithoutHoles = {}
+
   // 3. If x-axis is `measurement_start_day`, fill with zero values where there is no data
   if (query.axis_x === 'measurement_start_day') {
     const dateSet = getDatesBetween(new Date(query.since), new Date(query.until))
-    for (const y in reshapedData) {
-      const datesInRow = reshapedData[y].map(i => i.measurement_start_day)
-      const missingDates = [...dateSet].filter(x => !datesInRow.includes(x))
 
-      // Add empty datapoints for dates where measurements are not available
-      missingDates.forEach((date) => {
-        // use any (first) column data to popuplate yAxis value e.g `input` | `probe_cc`
-        // and then overwrite with zero-data for that missing date
-        reshapedData[y].splice([...dateSet].indexOf(date), 0, {
-          ...reshapedData[y][0],
-          measurement_start_day: date,
-          anomaly_count: 0,
-          confirmed_count: 0,
-          failure_count: 0,
-          measurement_count: 0,
-          ok_count: 0,
-        })
-      })
-    }
+    // Object transformation, works like Array.map
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/fromEntries#object_transformations
+    reshapedDataWithoutHoles = Object.fromEntries(
+      Object.entries(reshapedData)
+        .map(([ key, rowData ]) => [ key, fillDataInMissingDates(rowData, query.since, query.until, dateSet) ])
+    )
+  } else {
+    reshapedDataWithoutHoles = reshapedData
   }
   const t2 = performance.now()
   console.debug(`ReshapeChartData: Step 2 took: ${(t2-t1)}ms` )
-  return [reshapedData, rows, rowLabels]
+  return [reshapedDataWithoutHoles, rows, rowLabels]
 }
 
 const useKeepMountedRangeExtractor = () => {
@@ -148,7 +140,7 @@ const GridChart = ({ data, isGrouped = true, query, height = 'auto' }) => {
     size: itemData.rows.length,
     parentRef,
     estimateSize: useCallback(() => ROW_HEIGHT, []),
-    overscan: 3,
+    overscan: 0,
     rangeExtractor: retainMountedRows ? keepMountedRangeExtractor : defaultRangeExtractor
   })
 

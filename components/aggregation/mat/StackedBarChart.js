@@ -11,6 +11,7 @@ import { colorMap } from './colorMap'
 import { generateSearchQuery, CustomTooltipNoLink} from './CustomTooltip'
 import CountryNameLabel from './CountryNameLabel'
 import { getXAxisTicks } from './TimeScaleXAxis'
+import { fillDataInMissingDates } from './computations'
 
 const colorFunc = (d) => colorMap[d.id] || '#ccc'
 
@@ -45,22 +46,26 @@ export const StackedBarChart = ({ data, query }) => {
   const chartMeta = useMemo(() => {
     // TODO Move charting related transformations to Charts.js
     if (data) {
-      let cols = [
+      const cols = [
         'anomaly_count',
         'confirmed_count',
         'failure_count',
         'ok_count',
       ]
-      let indexBy = ''
-      indexBy = query['axis_x']
-      const reshapedData = Array.isArray(data.data.result) ? data.data.result : []
+      let indexBy = query.axis_x ?? ''
+
+      const dataReceived = Array.isArray(data.data.result) ? data.data.result : []
+      const dataWithNoHoles = fillDataInMissingDates(dataReceived, query.since, query.until)
+
+      const xAxisTicks = getXAxisTicks(query.since, query.until)
+
       return {
-        data: reshapedData,
-        dimensionCount: data.data.dimension_count,
+        data: dataWithNoHoles,
         url: data.url,
         loadTime: data.loadTime,
         cols,
-        indexBy
+        indexBy,
+        xAxisTicks
       }
     } else {
       return null
@@ -71,7 +76,6 @@ export const StackedBarChart = ({ data, query }) => {
     return (<div />)
   }
 
-  const ticks = getXAxisTicks(query.since, query.until)
 
   return (
     <Flex flexDirection={['column']} height={'100%'} sx={{ position: 'relative' }}>
@@ -115,7 +119,7 @@ export const StackedBarChart = ({ data, query }) => {
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 45,
-            tickValues: ticks,
+            tickValues: chartMeta.xAxisTicks,
             legend: `${chartMeta.indexBy}`,
             legendPosition: 'middle',
             legendOffset: 60
