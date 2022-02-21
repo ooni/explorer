@@ -10,6 +10,7 @@ import OONILogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonoc
 import { colorMap } from './colorMap'
 import { generateSearchQuery, CustomTooltipNoLink} from './CustomTooltip'
 import CountryNameLabel from './CountryNameLabel'
+import { getXAxisTicks } from './TimeScaleXAxis'
 
 const colorFunc = (d) => colorMap[d.id] || '#ccc'
 
@@ -70,6 +71,8 @@ export const StackedBarChart = ({ data, query }) => {
     return (<div />)
   }
 
+  const ticks = getXAxisTicks(query.since, query.until)
+
   return (
     <Flex flexDirection={['column']} height={'100%'} sx={{ position: 'relative' }}>
       <Flex justifyContent='space-between' alignItems='center'>
@@ -112,6 +115,7 @@ export const StackedBarChart = ({ data, query }) => {
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 45,
+            tickValues: ticks,
             legend: `${chartMeta.indexBy}`,
             legendPosition: 'middle',
             legendOffset: 60

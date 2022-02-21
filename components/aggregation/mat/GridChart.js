@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { ResponsiveBar } from '@nivo/bar'
 import { Heading, Flex, Box, Text } from 'ooni-components'
 import OONILogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochrome.svg'
-import { scaleUtc } from 'd3-scale'
 
 import RowChart, { chartMargins } from './RowChart'
 import { useDebugContext } from '../DebugContext'
@@ -12,21 +11,13 @@ import { colorMap } from './colorMap'
 import { getSubtitleStr } from './StackedBarChart'
 import CountryNameLabel from './CountryNameLabel'
 import { getRowLabel } from './labels'
+import { getDatesBetween } from './computations'
+import { getXAxisTicks } from './TimeScaleXAxis'
 
 const GRID_ROW_CSS_SELECTOR = 'outerListElement'
 const ROW_HEIGHT = 70
 const GRID_MAX_HEIGHT = 600
 const retainMountedRows = false
-
-export function getDatesBetween(startDate, endDate) {
-  const dateArray = new Set()
-  var currentDate = startDate
-  while (currentDate < endDate) {
-    dateArray.add(currentDate.toISOString().slice(0, 10))
-    currentDate.setDate(currentDate.getDate() + 1)
-  }
-  return dateArray
-}
 
 const Legend = ({label, color}) => {
   return (
@@ -111,7 +102,6 @@ const useKeepMountedRangeExtractor = () => {
   return rangeExtractor
 }
 
-
 const GridChart = ({ data, isGrouped = true, query, height = 'auto' }) => {
   // development-only flags for debugging/tweaking etc
   const { doneChartReshaping } = useDebugContext()
@@ -140,17 +130,7 @@ const GridChart = ({ data, isGrouped = true, query, height = 'auto' }) => {
     return {reshapedData, rows, rowLabels, gridHeight, indexBy: query.axis_x, yAxis: query.axis_y }
   }, [data, doneChartReshaping, height, isGrouped, query])
 
-  // FIX: Use the first row to generate the static xAxis outside the charts.
-  //  * it is dependent on the width of the charts which is hard coded in `RowChart.js`
-  //  * it may not work well if the first row has little or no data
-  const dateDomain = [...getDatesBetween(new Date(query.since), new Date(query.until))].map(d => new Date(d))
-  const xScale = scaleUtc().domain([dateDomain[0], dateDomain[dateDomain.length-1]])
-  const xAxisTickValues = dateDomain.length < 30 ? null : [
-    // dateDomain[0],
-    ...xScale.ticks(20),
-    // dateDomain[dateDomain.length-1]
-  ].map(d => d.toISOString().split('T')[0])
-
+  const xAxisTickValues = getXAxisTicks(query.since, query.until, 10)
 
   const xAxisData = itemData.reshapedData[itemData.rows[0]]
   const xAxisMargins = {...chartMargins, top: 60, bottom: 0}
