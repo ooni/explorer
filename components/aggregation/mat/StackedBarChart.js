@@ -10,7 +10,7 @@ import OONILogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonoc
 import { colorMap } from './colorMap'
 import { generateSearchQuery, CustomTooltipNoLink} from './CustomTooltip'
 import CountryNameLabel from './CountryNameLabel'
-import { getXAxisTicks } from './TimeScaleXAxis'
+import { getXAxisTicks } from './timeScaleXAxis'
 import { fillDataInMissingDates } from './computations'
 
 const colorFunc = (d) => colorMap[d.id] || '#ccc'

@@ -12,7 +12,7 @@ import { getSubtitleStr } from './StackedBarChart'
 import CountryNameLabel from './CountryNameLabel'
 import { getRowLabel } from './labels'
 import { fillDataInMissingDates, getDatesBetween } from './computations'
-import { getXAxisTicks } from './TimeScaleXAxis'
+import { getXAxisTicks } from './timeScaleXAxis'
 
 const GRID_ROW_CSS_SELECTOR = 'outerListElement'
 const ROW_HEIGHT = 70
