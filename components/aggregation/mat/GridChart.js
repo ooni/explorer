@@ -122,7 +122,7 @@ const GridChart = ({ data, isGrouped = true, query, height = 'auto' }) => {
     return {reshapedData, rows, rowLabels, gridHeight, indexBy: query.axis_x, yAxis: query.axis_y }
   }, [data, doneChartReshaping, height, isGrouped, query])
 
-  const xAxisTickValues = getXAxisTicks(query.since, query.until, 10)
+  const xAxisTickValues = getXAxisTicks(query.since, query.until, 30)
 
   const xAxisData = itemData.reshapedData[itemData.rows[0]]
   const xAxisMargins = {...chartMargins, top: 60, bottom: 0}

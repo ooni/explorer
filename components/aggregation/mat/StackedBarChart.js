@@ -57,7 +57,7 @@ export const StackedBarChart = ({ data, query }) => {
       const dataReceived = Array.isArray(data.data.result) ? data.data.result : []
       const dataWithNoHoles = fillDataInMissingDates(dataReceived, query.since, query.until)
 
-      const xAxisTicks = getXAxisTicks(query.since, query.until)
+      const xAxisTicks = getXAxisTicks(query.since, query.until, 30)
 
       return {
         data: dataWithNoHoles,
