@@ -13,6 +13,7 @@ import CountryNameLabel from './CountryNameLabel'
 import { getRowLabel } from './labels'
 import { fillDataInMissingDates, getDatesBetween } from './computations'
 import { getXAxisTicks } from './timeScaleXAxis'
+import { useMATContext } from './MATContext'
 
 const GRID_ROW_CSS_SELECTOR = 'outerListElement'
 const ROW_HEIGHT = 70
@@ -94,10 +95,12 @@ const useKeepMountedRangeExtractor = () => {
   return rangeExtractor
 }
 
-const GridChart = ({ data, isGrouped = true, query, height = 'auto' }) => {
+const GridChart = ({ data, isGrouped = true, height = 'auto' }) => {
   // development-only flags for debugging/tweaking etc
   const { doneChartReshaping } = useDebugContext()
   const keepMountedRangeExtractor = useKeepMountedRangeExtractor()
+
+  const [query, updateMATContext] = useMATContext()
 
   // [rowIndex, columnKey] for the bar where click was detected
   // and tooltip is to be shown

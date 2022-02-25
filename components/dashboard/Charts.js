@@ -6,6 +6,7 @@ import axios from 'axios'
 import { territoryNames } from 'country-util'
 
 import GridChart from '../aggregation/mat/GridChart'
+import { MATContextProvider, useMATContext } from '../aggregation/mat/MATContext'
 import { withDebugProvider } from '../aggregation/DebugContext'
 import { axiosResponseTime } from '../axios-plugins'
 import { testNames } from '../test-info'
@@ -36,6 +37,7 @@ const fixedQuery = {
 
 const Chart = ({ testName }) => {
   const { query } = useRouter()
+  const [ctx, updateMATContext] = useMATContext()
 
   const derivedQuery = useMemo(() => ({
     ...fixedQuery,
@@ -95,12 +97,11 @@ const Chart = ({ testName }) => {
 
 const ChartsContainer = () => {
   return (
-    <>
-      <Chart testName='psiphon' />
-      {/* <Chart testName='riseupvpn' /> */}
-      <Chart testName='torsf' />
-      <Chart testName='tor' />
-    </>
+    ['psiphon', 'torsf', 'tor'].map(testName => (
+      <MATContextProvider key={testName} test_name={testName} {...fixedQuery}>
+        <Chart testName={testName} />
+      </MATContextProvider>
+    ))
   )
 }
 

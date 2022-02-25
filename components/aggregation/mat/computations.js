@@ -10,7 +10,6 @@ export function getDatesBetween(startDate, endDate) {
 
 /* dateSet is an optional precomputed set from `getDatesBetween` */
 export function fillDataInMissingDates (data, startDate, endDate, dateSet = null) {
-  console.log(`in: ${data.length}`)
   const newData = [...data]
   
   const dateRange = dateSet || getDatesBetween(new Date(startDate), new Date(endDate))
@@ -34,8 +33,6 @@ export function fillDataInMissingDates (data, startDate, endDate, dateSet = null
       ok_count: 0,
     })
   })
-
-  console.log(`out: ${newData.length}`)
 
   return newData
 }
