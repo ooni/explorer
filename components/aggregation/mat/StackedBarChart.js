@@ -16,7 +16,7 @@ const colorFunc = (d) => colorMap[d.id] || '#ccc'
 // const parseDate = d3.timeParse("%Y-%m-%d %H:%M:%S")
 // const formatDay = d3.timeFormat("%Y-%m-%d")
 
-const getSubtitleStr = (query) => {
+export const getSubtitleStr = (query) => {
   let str = `${query.test_name}`
   if (query.input) {
     str += `, ${query.input}`

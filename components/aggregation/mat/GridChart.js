@@ -1,12 +1,17 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import { ResponsiveBar } from '@nivo/bar'
-import { Heading, Flex, Box } from 'ooni-components'
+import { Heading, Flex, Box, Text } from 'ooni-components'
 import OONILogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochrome.svg'
 
 import RowChart from './RowChart'
 import { useDebugContext } from '../DebugContext'
 import { defaultRangeExtractor, useVirtual } from 'react-virtual'
+import { colorMap } from './colorMap'
+
+import { getSubtitleStr } from './StackedBarChart'
+
+import CountryNameLabel from './CountryNameLabel'
 
 const GRID_ROW_CSS_SELECTOR = 'outerListElement'
 
@@ -20,6 +25,18 @@ export function getDatesBetween(startDate, endDate) {
   return dateArray
 }
 
+const Legend = ({label, color}) => {
+  return (
+    <Flex alignItems='center'>
+      <Box pr={2}>
+        <div style={{ width: '10px', height: '10px', backgroundColor: color }} />
+      </Box>
+      <Box>
+        <Text>{label}</Text>
+      </Box>
+    </Flex>
+  )
+}
 const reshapeChartData = (data, query) => {
   const rows = []
   const rowLabels = {}
@@ -138,12 +155,32 @@ const GridChart = ({ data, query, height }) => {
       <Box alignSelf='flex-end' sx={{ position: 'absolute', opacity: 0.8, top: 16, left: 16 }}>
         <OONILogo height='32px' />
       </Box>
-      <Flex flexDirection='column' my={4}>
+      <Flex flexDirection='column'>
         {/* Fake axis on top of list. Possible alternative: dummy chart with axis and valid tickValues */}
         <Flex>
           <Box width={2/16}>
           </Box>
-          <Box className='xAxis' sx={{ width: '100%', height: '70px' }}>
+          <Box className='xAxis' sx={{ width: '100%', height: '170px' }}>
+            <Heading h={3} textAlign='center'>
+              <CountryNameLabel countryCode={query.probe_cc} />
+            </Heading>
+            <Heading h={5} fontWeight='normal' textAlign='center'>
+              {getSubtitleStr(query)}
+            </Heading>
+            <Flex justifyContent='center' my={2}>
+              <Box pr={2}>
+                <Legend label='ok_count' color={colorMap['ok_count']} />
+              </Box>
+              <Box pr={2}>
+                <Legend label='confirmed_count' color={colorMap['confirmed_count']} />
+              </Box>
+              <Box pr={2}>
+                <Legend label='anomaly_count' color={colorMap['anomaly_count']} />
+              </Box>
+              <Box pr={2}>
+                <Legend label='failure_count' color={colorMap['failure_count']} />
+              </Box>
+            </Flex>
             <ResponsiveBar
               data={xAxisData}
               indexBy={query.axis_x}
