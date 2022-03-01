@@ -68,7 +68,7 @@ export const Form = ({ onChange, query, availableCountries }) => {
   return (
     <form>
       <Flex alignItems={['center']}>
-        <Box width={1/4} mr={3}>
+        <Box width={1/4} mr={3} sx={{ zIndex: 2 }}>
           <StyledLabel>Country</StyledLabel>
           {<Controller
             render={({field}) => (
