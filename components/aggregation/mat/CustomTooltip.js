@@ -6,18 +6,20 @@ import NLink from 'next/link'
 
 import { colorMap } from './colorMap'
 import { MdClear } from 'react-icons/md'
-import { useRouter } from 'next/router'
 import { useIntl } from 'react-intl'
+import { useMATContext } from './MATContext'
 
 
 const urlToDomain = (url) => new URL(url).hostname
 
 export const generateSearchQuery = (data, query) => {
-  const { since, until, axis_x, axis_y } = query
+  const { since, until } = query
 
   let sinceFilter = since
   let untilFilter = until
 
+  // For charts with data indexed by `measurement_start_day`,
+  // use that value to limit date range on `/search` page
   if ('measurement_start_day' in data) {
     sinceFilter = data.measurement_start_day
     const untilPlus1 = new Date(Date.parse(sinceFilter))
@@ -28,12 +30,12 @@ export const generateSearchQuery = (data, query) => {
   const queryObj = ['probe_cc', 'test_name', 'category_code', 'probe_asn', 'input'].reduce((q, k) => {
     if (k in data)
       q[k] = data[k]
-    else if (k in query)
+    else if (query[k])
       q[k] = query[k]
     return q
   }, {})
-  if (axis_y === 'input') {
-    queryObj.domain = urlToDomain(data.input)
+  if (data.input || query.input) {
+    queryObj.domain = urlToDomain(data.input ?? query.input)
   }
 
   // Filter for anomalies if blocking_type is set
@@ -50,10 +52,10 @@ export const generateSearchQuery = (data, query) => {
   }
 }
 
-const CustomToolTip = React.memo(({ data, onClose, link = true }) => {
+const CustomToolTip = React.memo(({ data, onClose, indexValue, link = true }) => {
   const theme = useTheme()
   const intl = useIntl()
-  const { query } = useRouter()
+  const [query] = useMATContext()
   const dataKeysToShow = ['anomaly_count', 'confirmed_count', 'failure_count', 'ok_count']
 
   const [linkToMeasurements, title] = useMemo(() => {
@@ -64,13 +66,13 @@ const CustomToolTip = React.memo(({ data, onClose, link = true }) => {
     }
 
 
-    const title = `${data[query.axis_x]} ${'axis_y' in query ? ` - ${data[query.axis_y]}` : ''}`
+    const title = `${indexValue} ${'axis_y' in query ? ` - ${data[query.axis_y]}` : ''}`
 
     return [
       linkObj,
       title,
     ]
-  }, [data, query])
+  }, [data, query, indexValue])
 
   return (
     <Flex flexDirection='column' style={{...theme.tooltip.container}}>

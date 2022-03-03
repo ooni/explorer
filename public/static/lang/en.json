@@ -208,6 +208,7 @@
   "Measurement.Hero.Status.Default": "Measurement Report",
   "Navbar.Search": "Search",
   "Navbar.Countries": "Countries",
+  "Navbar.Charts.Circumvention": "Circumvention Charts",
   "Footer.Text.Slogan": "Global community measuring internet censorship around the world.",
   "Footer.Heading.About": "About",
   "Footer.Heading.OONIProbe": "OONI Probe",
@@ -476,5 +477,12 @@
   "MAT.Table.Header.category_code": "Category Code",
   "MAT.Table.Header.probe_cc": "Country",
   "MAT.Table.Header.probe_asn": "ASN",
-  "MAT.Table.Header.blocking_type": "Blocking Type"
+  "MAT.Table.Header.blocking_type": "Blocking Type",
+  "ReachabilityDash.Heading.CircumventionTools": "Reachability of Censorship Circumvention Tools",
+  "ReachabilityDash.Form.Label.CountrySelect.AllSelected": "All countries selected",
+  "ReachabilityDash.Form.Label.CountrySelect.SearchPlaceholder": "Search",
+  "ReachabilityDash.Form.Label.CountrySelect.SelectAll": "Select All",
+  "ReachabilityDash.Form.Label.CountrySelect.SelectAllFiltered": "Select All (Filtered)",
+  "ReachabilityDash.Form.Label.CountrySelect.InputPlaceholder": "Select Countries...",
+  "ReachabilityDash.Meta.Description": "View the accessibility of censorship circumvention tools around the world through OONI data."
 }

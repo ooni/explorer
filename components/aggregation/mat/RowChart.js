@@ -17,7 +17,8 @@ const keys = [
 
 const colorFunc = (d) => colorMap[d.id] || '#ccc'
 
-const barLayers = ['grid', 'bars']
+const barLayers = ['grid', 'axes', 'bars']
+export const chartMargins = { top: 4, right: 50, bottom: 4, left: 0 }
 
 const barThemeForTooltip = {
   tooltip: {
@@ -28,7 +29,7 @@ const barThemeForTooltip = {
   }
 }
 
-const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, showTooltip, enableAnimation /* width, first, last */}) => {
+const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, showTooltip /* width, first, last */}) => {
   const handleClick = useCallback(({ column }) => {
     showTooltipInRow(rowIndex, column)
   }, [rowIndex, showTooltipInRow])
@@ -51,7 +52,7 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
   const chartProps = useMemo(() => ({
     // NOTE: These dimensions are linked to accuracy of the custom axes rendered in
     // <GridChart />
-    margin: { top: 4, right: 0, bottom: 4, left: 0 },
+    margin: chartMargins,
     padding: 0.3,
     borderColor: { from: 'color', modifiers: [ [ 'darker', 1.6 ] ] },
     colors: colorFunc,
@@ -65,6 +66,7 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
     axisBottom: null,
     axisLeft: null,
     enableGridX: true,
+    enableGridY: true,
     labelSkipWidth: 100,
     labelSkipHeight: 100,
     labelTextColor: { from: 'color', modifiers: [ [ 'darker', 1.6 ] ] },
@@ -72,6 +74,7 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
     motionConfig: {
       duration: 1
     },
+    animate: true,
     isInteractive: true,
     layers: barLayers,
   }), [])
@@ -95,9 +98,10 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
           onClick={handleClick}
           barComponent={CustomBarItem}
           theme={barThemeForTooltip}
-          // We send the `showTooltip` boolean into the barComponent to control visibility of tooltip
+          // HACK: To show the tooltip, we hijack the 
+          // `enableLabel` prop to pass in the tooltip coordinates (row, col_index) from `GridChart`
+          // `showTooltip` contains `[rowHasTooltip, columnwithTooltip]` e.g `[true, '2022-02-01']`
           enableLabel={showTooltip}
-          animate={enableAnimation}
           {...chartProps}
         />
       </Box>
@@ -119,7 +123,7 @@ RowChart.propTypes = {
   indexBy: PropTypes.string,
   label: PropTypes.node,
   rowIndex: PropTypes.number,
-  showTooltip: PropTypes.bool,
+  showTooltip: PropTypes.array,
   showTooltipInRow: PropTypes.func,
 }
 

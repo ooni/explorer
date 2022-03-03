@@ -4,26 +4,21 @@ import { ResponsiveBar } from '@nivo/bar'
 import { Heading, Flex, Box, Text } from 'ooni-components'
 import OONILogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochrome.svg'
 
-import RowChart from './RowChart'
+import RowChart, { chartMargins } from './RowChart'
 import { useDebugContext } from '../DebugContext'
 import { defaultRangeExtractor, useVirtual } from 'react-virtual'
 import { colorMap } from './colorMap'
-
 import { getSubtitleStr } from './StackedBarChart'
-
 import CountryNameLabel from './CountryNameLabel'
+import { getRowLabel } from './labels'
+import { fillDataInMissingDates, getDatesBetween } from './computations'
+import { getXAxisTicks } from './timeScaleXAxis'
+import { useMATContext } from './MATContext'
 
 const GRID_ROW_CSS_SELECTOR = 'outerListElement'
-
-export function getDatesBetween(startDate, endDate) {
-  const dateArray = new Set()
-  var currentDate = startDate
-  while (currentDate < endDate) {
-    dateArray.add(currentDate.toISOString().slice(0, 10))
-    currentDate.setDate(currentDate.getDate() + 1)
-  }
-  return dateArray
-}
+const ROW_HEIGHT = 70
+const GRID_MAX_HEIGHT = 600
+const retainMountedRows = false
 
 const Legend = ({label, color}) => {
   return (
@@ -37,43 +32,53 @@ const Legend = ({label, color}) => {
     </Flex>
   )
 }
-const reshapeChartData = (data, query) => {
+const reshapeChartData = (data, query, isGrouped) => {
   const rows = []
   const rowLabels = {}
+  let reshapedData = {}
+
   const t0 = performance.now()
-  const reshapedData = data.reduce((d, groupedRow, i) => {
-    rows.push(groupedRow.groupByVal)
-    rowLabels[groupedRow.groupByVal] = groupedRow.leafRows[0].original.rowLabel
-    return {...d, [groupedRow.groupByVal]: groupedRow.leafRows.map(r => r.original)}
-  }, {})
+
+  // Flat arrays need to be converted to collection grouped by `axis_y`
+  if (isGrouped) {
+    reshapedData = data.reduce((d, groupedRow, i) => {
+      rows.push(groupedRow.groupByVal)
+      rowLabels[groupedRow.groupByVal] = groupedRow.leafRows[0].original.rowLabel
+      return {...d, [groupedRow.groupByVal]: groupedRow.leafRows.map(r => r.original)}
+    }, {})
+  } else {
+    data.forEach((item) => {
+      const key = item[query.axis_y]
+      if (key in reshapedData) {
+        reshapedData[key].push(item)
+      } else {
+        rows.push(key)
+        reshapedData[key] = [item]
+        rowLabels[key] = getRowLabel(key, query.axis_y)
+      }
+    })
+  }
+
   const t1 = performance.now()
-  console.log(`ReshapeChartData: Step 1 took: ${(t1-t0)}ms` )
+
+  let reshapedDataWithoutHoles = {}
+
   // 3. If x-axis is `measurement_start_day`, fill with zero values where there is no data
   if (query.axis_x === 'measurement_start_day') {
     const dateSet = getDatesBetween(new Date(query.since), new Date(query.until))
-    for (const y in reshapedData) {
-      const datesInRow = reshapedData[y].map(i => i.measurement_start_day)
-      const missingDates = [...dateSet].filter(x => !datesInRow.includes(x))
 
-      // Add empty datapoints for dates where measurements are not available
-      missingDates.forEach((date) => {
-        // use any (first) column data to popuplate yAxis value e.g `input` | `probe_cc`
-        // and then overwrite with zero-data for that missing date
-        reshapedData[y].splice([...dateSet].indexOf(date), 0, {
-          ...reshapedData[y][0],
-          measurement_start_day: date,
-          anomaly_count: 0,
-          confirmed_count: 0,
-          failure_count: 0,
-          measurement_count: 0,
-          ok_count: 0,
-        })
-      })
-    }
+    // Object transformation, works like Array.map
+    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/fromEntries#object_transformations
+    reshapedDataWithoutHoles = Object.fromEntries(
+      Object.entries(reshapedData)
+        .map(([ key, rowData ]) => [ key, fillDataInMissingDates(rowData, query.since, query.until, dateSet) ])
+    )
+  } else {
+    reshapedDataWithoutHoles = reshapedData
   }
   const t2 = performance.now()
-  console.log(`ReshapeChartData: Step 2 took: ${(t2-t1)}ms` )
-  return [reshapedData, rows, rowLabels]
+  console.debug(`ReshapeChartData: Step 2 took: ${(t2-t1)}ms` )
+  return [reshapedDataWithoutHoles, rows, rowLabels]
 }
 
 const useKeepMountedRangeExtractor = () => {
@@ -90,14 +95,12 @@ const useKeepMountedRangeExtractor = () => {
   return rangeExtractor
 }
 
-
-const GridChart = ({ data, query, height }) => {
+const GridChart = ({ data, isGrouped = true, height = 'auto' }) => {
   // development-only flags for debugging/tweaking etc
   const { doneChartReshaping } = useDebugContext()
-  const [overScanValue, setOverScanValue] = useState(0)
-  const [enableAnimation, setEnableAnimation] = useState(false)
-  const [keepMountedRows, setKeepMountedRows] = useState(false)
   const keepMountedRangeExtractor = useKeepMountedRangeExtractor()
+
+  const [query, updateMATContext] = useMATContext()
 
   // [rowIndex, columnKey] for the bar where click was detected
   // and tooltip is to be shown
@@ -109,24 +112,29 @@ const GridChart = ({ data, query, height }) => {
 
   const itemData = useMemo(() => {
     const t0 = performance.now()
-    const [reshapedData, rows, rowLabels] = reshapeChartData(data, query)
+    const [reshapedData, rows, rowLabels] = reshapeChartData(data, query, isGrouped)
+    
+    let gridHeight = height
+    if (height === 'auto') {
+      gridHeight = Math.min( 20 + (rows.length * ROW_HEIGHT), GRID_MAX_HEIGHT)
+    }
+    
     const t1 = performance.now()
     console.debug(`Charts reshaping: ${t1} - ${t0} = ${t1-t0}ms`)
     doneChartReshaping(t0, t1)
-    return {reshapedData, rows, rowLabels, indexBy: query.axis_x, yAxis: query.axis_y }
-  }, [data, doneChartReshaping, query])
+    return {reshapedData, rows, rowLabels, gridHeight, indexBy: query.axis_x, yAxis: query.axis_y }
+  }, [data, doneChartReshaping, height, isGrouped, query])
 
-  // FIX: Use the first row to generate the static xAxis outside the charts.
-  //  * it is dependent on the width of the charts which is hard coded in `RowChart.js`
-  //  * it may not work well if the first row has little or no data
+  const xAxisTickValues = getXAxisTicks(query.since, query.until, 30)
+
   const xAxisData = itemData.reshapedData[itemData.rows[0]]
-  const xAxisMargins = { top: 60, right: 0, bottom: 0, left: 0 }
+  const xAxisMargins = {...chartMargins, top: 60, bottom: 0}
   const axisTop = {
     enable: true,
     tickSize: 5,
     tickPadding: 5,
     tickRotation: -45,
-    tickValues: 'every 5 days'
+    tickValues: xAxisTickValues
   }
 
   const parentRef = React.useRef()
@@ -134,12 +142,12 @@ const GridChart = ({ data, query, height }) => {
   const rowVirtualizer = useVirtual({
     size: itemData.rows.length,
     parentRef,
-    estimateSize: React.useCallback(() => 70, []),
-    overscan: overScanValue,
-    rangeExtractor: keepMountedRows ? keepMountedRangeExtractor : defaultRangeExtractor
+    estimateSize: useCallback(() => ROW_HEIGHT, []),
+    overscan: 0,
+    rangeExtractor: retainMountedRows ? keepMountedRangeExtractor : defaultRangeExtractor
   })
 
-  const {reshapedData, rows, rowLabels, indexBy, yAxis } = itemData
+  const {reshapedData, rows, rowLabels, gridHeight, indexBy, yAxis } = itemData
 
   if (data.length < 1) {
     return (
@@ -186,7 +194,7 @@ const GridChart = ({ data, query, height }) => {
         <Flex>
           <Box width={2/16}>
           </Box>
-          <Box className='xAxis' sx={{ width: '100%', height: '70px' }}>
+          <Box className='xAxis' sx={{ width: '100%', height: '62px' }}>
             <ResponsiveBar
               data={xAxisData}
               indexBy={query.axis_x}
@@ -194,7 +202,6 @@ const GridChart = ({ data, query, height }) => {
               padding={0.3}
               layers={['axes']}
               axisTop={axisTop}
-              xScale={{ type: 'time', format: '%Y-%m-%d', precision: 'day' }}
               axisBottom={null}
               axisLeft={null}
               axisRight={null}
@@ -207,7 +214,7 @@ const GridChart = ({ data, query, height }) => {
             ref={parentRef}
             className={GRID_ROW_CSS_SELECTOR}
             style={{
-              height: height,
+              height: gridHeight,
               width: '100%',
               overflow: 'auto'
             }}
@@ -235,7 +242,7 @@ const GridChart = ({ data, query, height }) => {
                   <RowChart
                     rowIndex={virtualRow.index}
                     showTooltipInRow={showTooltipInRow}
-                    showTooltip={tooltipIndex[0] === virtualRow.index}
+                    showTooltip={[tooltipIndex[0] === virtualRow.index, tooltipIndex[1]]}
                     data={reshapedData[rows[virtualRow.index]]}
                     indexBy={indexBy}
                     height={virtualRow.size}

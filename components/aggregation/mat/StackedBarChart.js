@@ -10,6 +10,8 @@ import OONILogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonoc
 import { colorMap } from './colorMap'
 import { generateSearchQuery, CustomTooltipNoLink} from './CustomTooltip'
 import CountryNameLabel from './CountryNameLabel'
+import { getXAxisTicks } from './timeScaleXAxis'
+import { fillDataInMissingDates } from './computations'
 
 const colorFunc = (d) => colorMap[d.id] || '#ccc'
 
@@ -44,21 +46,26 @@ export const StackedBarChart = ({ data, query }) => {
   const chartMeta = useMemo(() => {
     // TODO Move charting related transformations to Charts.js
     if (data) {
-      let cols = [
+      const cols = [
         'anomaly_count',
         'confirmed_count',
         'failure_count',
         'ok_count',
       ]
-      let indexBy = ''
-      indexBy = query['axis_x']
+      let indexBy = query.axis_x ?? ''
+
+      const dataReceived = Array.isArray(data.data.result) ? data.data.result : []
+      const dataWithNoHoles = fillDataInMissingDates(dataReceived, query.since, query.until)
+
+      const xAxisTicks = getXAxisTicks(query.since, query.until, 30)
+
       return {
-        data: data.data.result,
-        dimensionCount: data.data.dimension_count,
+        data: dataWithNoHoles,
         url: data.url,
         loadTime: data.loadTime,
         cols,
-        indexBy
+        indexBy,
+        xAxisTicks
       }
     } else {
       return null
@@ -68,6 +75,7 @@ export const StackedBarChart = ({ data, query }) => {
   if (chartMeta === null) {
     return (<div />)
   }
+
 
   return (
     <Flex flexDirection={['column']} height={'100%'} sx={{ position: 'relative' }}>
@@ -96,12 +104,12 @@ export const StackedBarChart = ({ data, query }) => {
           )}
         </Box>
       </Flex>
-      <Box height={'100%'}>
+      <Box height={'500px'} mx={[1, 3]}>
         <ResponsiveBar
           data={chartMeta.data}
           keys={chartMeta.cols}
           indexBy={chartMeta.indexBy}
-          margin={{ top: 50, right: 80, bottom: 100, left: 80 }}
+          margin={{ top: 50, right: 30, bottom: 100, left: 80 }}
           padding={0.3}
           colors={colorFunc}
           borderColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
@@ -111,6 +119,7 @@ export const StackedBarChart = ({ data, query }) => {
             tickSize: 5,
             tickPadding: 5,
             tickRotation: 45,
+            tickValues: chartMeta.xAxisTicks,
             legend: `${chartMeta.indexBy}`,
             legendPosition: 'middle',
             legendOffset: 60

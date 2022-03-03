@@ -3,7 +3,6 @@ import { useTable, useFlexLayout, useRowSelect, useFilters, useGroupBy, useSortB
 import { FormattedMessage, useIntl } from 'react-intl'
 import styled from 'styled-components'
 import { Flex, Box } from 'ooni-components'
-import ReactResizeDetector from 'react-resize-detector'
 
 import GridChart from './GridChart'
 import { useDebugContext } from '../DebugContext'
@@ -87,17 +86,6 @@ const SearchFilter = ({
       placeholder={`Search ${count} records...`}
     />
   )
-}
-
-
-export function getDatesBetween(startDate, endDate) {
-  const dateArray = new Set()
-  var currentDate = startDate
-  while (currentDate <= endDate) {
-    dateArray.add(currentDate.toISOString().slice(0, 10))
-    currentDate.setDate(currentDate.getDate() + 1)
-  }
-  return dateArray
 }
 
 const reshapeTableData = (data, query) => {
@@ -261,13 +249,18 @@ const TableView = ({ data, query }) => {
 
   const onPanelResize = useCallback((width, height) => {
     console.log(`resized height: ${height}`)
-    setChartPanelHeight(height)
+    setChartPanelHeight(height - 100)
   }, [])
 
   return (
     <Flex flexDirection='column'>
       <ResizableBox onResize={onPanelResize}>
-        <GridChart data={dataForCharts} query={query} height={chartPanelHeight} />
+        <GridChart
+          data={dataForCharts}
+          isGrouped={true}
+          query={query}
+          height={chartPanelHeight}
+        />
       </ResizableBox>
       <Flex my={4} sx={{ height: '50vh' }}>
         <TableContainer>
