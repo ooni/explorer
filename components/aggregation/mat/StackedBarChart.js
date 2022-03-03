@@ -104,7 +104,7 @@ export const StackedBarChart = ({ data, query }) => {
           )}
         </Box>
       </Flex>
-      <Box height={'100%'} mx={[1, 3]}>
+      <Box height={'500px'} mx={[1, 3]}>
         <ResponsiveBar
           data={chartMeta.data}
           keys={chartMeta.cols}

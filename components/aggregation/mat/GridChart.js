@@ -194,7 +194,7 @@ const GridChart = ({ data, isGrouped = true, height = 'auto' }) => {
         <Flex>
           <Box width={2/16}>
           </Box>
-          <Box className='xAxis' sx={{ width: '100%', height: '70px' }}>
+          <Box className='xAxis' sx={{ width: '100%', height: '62px' }}>
             <ResponsiveBar
               data={xAxisData}
               indexBy={query.axis_x}

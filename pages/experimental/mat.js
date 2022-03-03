@@ -116,7 +116,7 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
                 </Box>
               }
               {data && data.data.dimension_count == 1 &&
-                <Box sx={{ height: '500px' }}>
+                <Box sx={{ height: '600px' }}>
                   <StackedBarChart data={data} query={query} />
                 </Box>
               }

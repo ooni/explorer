@@ -65,7 +65,7 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
     },
     axisBottom: null,
     axisLeft: null,
-    enableGridX: false,
+    enableGridX: true,
     enableGridY: true,
     labelSkipWidth: 100,
     labelSkipHeight: 100,
