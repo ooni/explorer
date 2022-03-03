@@ -157,10 +157,10 @@ const GridChart = ({ data, query, height }) => {
       </Box>
       <Flex flexDirection='column'>
         {/* Fake axis on top of list. Possible alternative: dummy chart with axis and valid tickValues */}
-        <Flex>
+        <Flex justifyContent={'center'}>
           <Box width={2/16}>
           </Box>
-          <Box className='xAxis' sx={{ width: '100%', height: '170px' }}>
+          <Flex flexDirection={['column']}>
             <Heading h={3} textAlign='center'>
               <CountryNameLabel countryCode={query.probe_cc} />
             </Heading>
@@ -181,6 +181,12 @@ const GridChart = ({ data, query, height }) => {
                 <Legend label='failure_count' color={colorMap['failure_count']} />
               </Box>
             </Flex>
+          </Flex>
+        </Flex>
+        <Flex>
+          <Box width={2/16}>
+          </Box>
+          <Box className='xAxis' sx={{ width: '100%', height: '70px' }}>
             <ResponsiveBar
               data={xAxisData}
               indexBy={query.axis_x}
