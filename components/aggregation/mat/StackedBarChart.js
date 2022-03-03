@@ -16,6 +16,20 @@ const colorFunc = (d) => colorMap[d.id] || '#ccc'
 // const parseDate = d3.timeParse("%Y-%m-%d %H:%M:%S")
 // const formatDay = d3.timeFormat("%Y-%m-%d")
 
+export const getSubtitleStr = (query) => {
+  let str = `${query.test_name}`
+  if (query.input) {
+    str += `, ${query.input}`
+  }
+  if (query.category_code) {
+    str += `, ${query.category_code}`
+  }
+  if (query.probe_asn) {
+    str += `, ${query.probe_asn}`
+  }
+  return str
+}
+
 export const StackedBarChart = ({ data, query }) => {
   const intl = useIntl()
   const [link, setLink] = useState(false)
@@ -58,7 +72,14 @@ export const StackedBarChart = ({ data, query }) => {
   return (
     <Flex flexDirection={['column']} height={'100%'} sx={{ position: 'relative' }}>
       <Flex justifyContent='space-between' alignItems='center'>
-        <Heading h={3}><CountryNameLabel countryCode={query.probe_cc} /></Heading>
+        <Box>
+        <Heading h={3}>
+          <CountryNameLabel countryCode={query.probe_cc} />
+        </Heading>
+        <Heading h={5} fontWeight='normal'>
+          {getSubtitleStr(query)}
+        </Heading>
+        </Box>
         <Box>
           {link ? (
           <Flex alignItems='center'>
@@ -136,7 +157,7 @@ export const StackedBarChart = ({ data, query }) => {
           onClick={onClick}
         />
       </Box>
-      <Box sx={{ position: 'absolute', opacity: 0.8, bottom: -70, right: 0 }}>
+      <Box sx={{ position: 'absolute', opacity: 0.8, bottom: -85, right: 0 }}>
         <OONILogo height='32px' />
       </Box>
     </Flex>
