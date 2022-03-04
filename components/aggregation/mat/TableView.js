@@ -248,7 +248,7 @@ const TableView = ({ data, query }) => {
   const [chartPanelHeight, setChartPanelHeight] = useState(800)
 
   const onPanelResize = useCallback((width, height) => {
-    console.log(`resized height: ${height}`)
+    console.debug(`resized height: ${height}`)
     setChartPanelHeight(height - 100)
   }, [])
 

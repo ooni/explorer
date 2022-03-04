@@ -1,7 +1,7 @@
 import React, { useState, useMemo, useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { ResponsiveBar } from '@nivo/bar'
-import { Box, Flex, Heading, Link } from 'ooni-components'
+import { Box, Flex, Link } from 'ooni-components'
 import { IoMdGlobe } from 'react-icons/io'
 import NLink from 'next/link'
 import { useIntl } from 'react-intl'
@@ -9,28 +9,14 @@ import OONILogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonoc
 
 import { colorMap } from './colorMap'
 import { generateSearchQuery, CustomTooltipNoLink} from './CustomTooltip'
-import CountryNameLabel from './CountryNameLabel'
 import { getXAxisTicks } from './timeScaleXAxis'
 import { fillDataInMissingDates } from './computations'
+import { ChartHeader } from './ChartHeader'
 
 const colorFunc = (d) => colorMap[d.id] || '#ccc'
 
 // const parseDate = d3.timeParse("%Y-%m-%d %H:%M:%S")
 // const formatDay = d3.timeFormat("%Y-%m-%d")
-
-export const getSubtitleStr = (query) => {
-  let str = `${query.test_name}`
-  if (query.input) {
-    str += `, ${query.input}`
-  }
-  if (query.category_code) {
-    str += `, ${query.category_code}`
-  }
-  if (query.probe_asn) {
-    str += `, ${query.probe_asn}`
-  }
-  return str
-}
 
 export const StackedBarChart = ({ data, query }) => {
   const intl = useIntl()
@@ -79,15 +65,8 @@ export const StackedBarChart = ({ data, query }) => {
 
   return (
     <Flex flexDirection={['column']} height={'100%'} sx={{ position: 'relative' }}>
+      <ChartHeader />
       <Flex justifyContent='space-between' alignItems='center'>
-        <Box>
-        <Heading h={3}>
-          <CountryNameLabel countryCode={query.probe_cc} />
-        </Heading>
-        <Heading h={5} fontWeight='normal'>
-          {getSubtitleStr(query)}
-        </Heading>
-        </Box>
         <Box>
           {link ? (
           <Flex alignItems='center'>

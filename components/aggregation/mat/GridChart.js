@@ -7,31 +7,17 @@ import OONILogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonoc
 import RowChart, { chartMargins } from './RowChart'
 import { useDebugContext } from '../DebugContext'
 import { defaultRangeExtractor, useVirtual } from 'react-virtual'
-import { colorMap } from './colorMap'
-import { getSubtitleStr } from './StackedBarChart'
-import CountryNameLabel from './CountryNameLabel'
-import { getRowLabel } from './labels'
 import { fillDataInMissingDates, getDatesBetween } from './computations'
 import { getXAxisTicks } from './timeScaleXAxis'
 import { useMATContext } from './MATContext'
+import { ChartHeader } from './ChartHeader'
+import { getRowLabel } from './labels'
 
 const GRID_ROW_CSS_SELECTOR = 'outerListElement'
 const ROW_HEIGHT = 70
 const GRID_MAX_HEIGHT = 600
 const retainMountedRows = false
 
-const Legend = ({label, color}) => {
-  return (
-    <Flex alignItems='center'>
-      <Box pr={2}>
-        <div style={{ width: '10px', height: '10px', backgroundColor: color }} />
-      </Box>
-      <Box>
-        <Text>{label}</Text>
-      </Box>
-    </Flex>
-  )
-}
 const reshapeChartData = (data, query, isGrouped) => {
   const rows = []
   const rowLabels = {}
@@ -168,28 +154,8 @@ const GridChart = ({ data, isGrouped = true, height = 'auto' }) => {
         <Flex justifyContent={'center'}>
           <Box width={2/16}>
           </Box>
-          <Flex flexDirection={['column']}>
-            <Heading h={3} textAlign='center'>
-              <CountryNameLabel countryCode={query.probe_cc} />
-            </Heading>
-            <Heading h={5} fontWeight='normal' textAlign='center'>
-              {getSubtitleStr(query)}
-            </Heading>
-            <Flex justifyContent='center' my={2}>
-              <Box pr={2}>
-                <Legend label='ok_count' color={colorMap['ok_count']} />
-              </Box>
-              <Box pr={2}>
-                <Legend label='confirmed_count' color={colorMap['confirmed_count']} />
-              </Box>
-              <Box pr={2}>
-                <Legend label='anomaly_count' color={colorMap['anomaly_count']} />
-              </Box>
-              <Box pr={2}>
-                <Legend label='failure_count' color={colorMap['failure_count']} />
-              </Box>
-            </Flex>
-          </Flex>
+          <ChartHeader />
+
         </Flex>
         <Flex>
           <Box width={2/16}>

@@ -15,8 +15,8 @@ export const defaultMATContext = {
   category_code: ''
 }
 
-export const MATContextProvider = ({ children, ...initalContext }) => {
-  const [state, setState] = useState({...defaultMATContext, ...initalContext})
+export const MATContextProvider = ({ children, ...initialContext }) => {
+  const [state, setState] = useState({...defaultMATContext, ...initialContext})
 
   const { query } = useRouter()
 
@@ -24,19 +24,16 @@ export const MATContextProvider = ({ children, ...initalContext }) => {
     setState(state =>
       Object.assign({},
         state,
-        Object.keys(defaultMATContext).reduce((o, k) => {
-          if (updates[k]) {
-            o[k] = updates[k]
-          }
-          return o
-        }, {})
+        defaultMATContext,
+        initialContext,
+        updates
       )
     )
-  }, [])
+  }, [initialContext])
 
   useEffect(() => {
     stateReducer(query)
-  }, [query, stateReducer])
+  }, [query])
 
   return (
     <MATStateContext.Provider value={{...state, updateMATContext: stateReducer}}>
