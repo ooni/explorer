@@ -27,16 +27,13 @@ export const generateSearchQuery = (data, query) => {
     untilFilter = untilPlus1.toISOString().split('T')[0]
   }
 
-  const queryObj = ['probe_cc', 'test_name', 'category_code', 'probe_asn', 'input'].reduce((q, k) => {
+  const queryObj = ['probe_cc', 'test_name', 'category_code', 'probe_asn', 'input', 'domain'].reduce((q, k) => {
     if (k in data)
       q[k] = data[k]
     else if (query[k])
       q[k] = query[k]
     return q
   }, {})
-  if (data.input || query.input) {
-    queryObj.domain = urlToDomain(data.input ?? query.input)
-  }
 
   // Filter for anomalies if blocking_type is set
   const isBlockingType = Object.values(query).includes('blocking_type') && 'blocking_type' in data

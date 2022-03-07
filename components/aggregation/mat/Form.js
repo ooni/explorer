@@ -20,7 +20,7 @@ export const StyledLabel = styled(Label).attrs({
 
 const optionsAxis = [
   'measurement_start_day',
-  'input',
+  'domain',
   'category_code',
   'probe_cc',
   'probe_asn',
@@ -34,7 +34,7 @@ const defaultDefaultValues = {
   probe_cc: '',
   probe_asn: '',
   test_name: 'web_connectivity',
-  input: '',
+  domain: '',
   category_code: '',
   since: lastMonthToday,
   until: tomorrow,
@@ -167,14 +167,14 @@ export const Form = ({ onSubmit, testNames, query }) => {
         </Box>
         <Box>
           <StyledLabel>
-            Input
+            Domain
           </StyledLabel>
           <Controller
-            name='input'
+            name='domain'
             control={control}
             render={({field}) => (
               <Input
-                placeholder='https://twitter.com/OpenObservatory'
+                placeholder='twitter.com'
                 {...field}
               />
             )}
@@ -247,7 +247,7 @@ Form.propTypes = {
     since: PropTypes.string,
     until: PropTypes.string,
     test_name: PropTypes.string,
-    input: PropTypes.string,
+    domain: PropTypes.string,
     probe_cc: PropTypes.string,
     category_code: PropTypes.string,
   })

@@ -21,6 +21,9 @@ const Legend = ({label, color}) => {
 
 export const getSubtitleStr = (query) => {
   let str = `${query.test_name}`
+  if (query.domain) {
+    str += `, ${query.domain}`
+  }
   if (query.input) {
     str += `, ${query.input}`
   }
