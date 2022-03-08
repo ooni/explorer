@@ -55,11 +55,11 @@ export const CustomBarItem = ({
   useEffect(() => {
     // We receive tooltip coordinates in `enableLabel` 
     // to determine if a tooltip is enabled and if the column should be highlighted.
-    if (enableLabel[0] === false) {
+    if (enableLabel === false) {
       hideTooltip()
       setExtraBorderWidth(0)
     } else {
-      setExtraBorderWidth(enableLabel[1] === data.indexValue ? 2 : 0)
+      setExtraBorderWidth(enableLabel === data.indexValue ? 2 : 0)
     }
   }, [data.indexValue, enableLabel, hideTooltip])
 

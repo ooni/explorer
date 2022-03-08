@@ -6,7 +6,7 @@ import axios from 'axios'
 import { territoryNames } from 'country-util'
 
 import GridChart from '../aggregation/mat/GridChart'
-import { MATContextProvider, useMATContext } from '../aggregation/mat/MATContext'
+import { MATContextProvider } from '../aggregation/mat/MATContext'
 import { withDebugProvider } from '../aggregation/DebugContext'
 import { axiosResponseTime } from '../axios-plugins'
 import { testNames } from '../test-info'
@@ -16,7 +16,7 @@ const swrOptions = {
   dedupingInterval: 10 * 60 * 1000,
 }
 
-const baseURL = process.env.NEXT_PUBLIC_MEASUREMENTS_URL
+const baseURL = process.env.NEXT_PUBLIC_AGGREGATION_API
 axiosResponseTime(axios)
 
 // TODO export from mat.js
@@ -37,7 +37,6 @@ const fixedQuery = {
 
 const Chart = ({ testName }) => {
   const { query } = useRouter()
-  const [ctx, updateMATContext] = useMATContext()
 
   const derivedQuery = useMemo(() => ({
     ...fixedQuery,
@@ -87,6 +86,7 @@ const Chart = ({ testName }) => {
               data={chartData}
               isGrouped={false}
               query={derivedQuery}
+              height={(query?.probe_cc?.split(',').length ?? 10) * 70 }
             />
           )
         )}
