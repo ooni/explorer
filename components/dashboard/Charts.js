@@ -35,7 +35,7 @@ const fixedQuery = {
   axis_y: 'probe_cc',
 }
 
-const Chart = ({ testName }) => {
+const Chart = React.memo(function Chart({ testName }) {
   const { query } = useRouter()
 
   const derivedQuery = useMemo(() => ({
@@ -72,6 +72,8 @@ const Chart = ({ testName }) => {
 
   }, [data, query.probe_cc])
 
+  const headerOptions = { probe_cc: false }
+
   return (
     <Flex flexDirection='column' mt={3}>
       <Box><Heading h={3}>{testNames[testName].name}</Heading></Box>
@@ -87,18 +89,20 @@ const Chart = ({ testName }) => {
               isGrouped={false}
               query={derivedQuery}
               height={(query?.probe_cc?.split(',').length ?? 10) * 70 }
-              header={{ probe_cc: false }}
+              header={headerOptions}
             />
           )
         )}
       </Box>
     </Flex>
   )
-}
+})
+
+const testsOnPage = ['psiphon', 'torsf', 'tor']
 
 const ChartsContainer = () => {
   return (
-    ['psiphon', 'torsf', 'tor'].map(testName => (
+    testsOnPage.map(testName => (
       <MATContextProvider key={testName} test_name={testName} {...fixedQuery}>
         <Chart testName={testName} />
       </MATContextProvider>
