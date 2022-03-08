@@ -106,4 +106,4 @@ const ChartsContainer = () => {
   )
 }
 
-export default withDebugProvider(ChartsContainer)
+export default ChartsContainer

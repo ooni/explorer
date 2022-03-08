@@ -48,6 +48,7 @@ const swrOptions = {
 const fetcher = (query) => {
   const qs = new URLSearchParams(query).toString()
   const reqUrl = `${process.env.NEXT_PUBLIC_AGGREGATION_API || process.env.NEXT_PUBLIC_MEASUREMENTS_URL}/api/v1/aggregation?${qs}`
+  console.debug(`API Query: ${reqUrl}`)
   return axios.get(reqUrl).then(r => {
     return {
       data: r.data,
@@ -60,7 +61,6 @@ const fetcher = (query) => {
 const MeasurementAggregationToolkit = ({ testNames }) => {
 
   const router = useRouter()
-  const { debugQuery, debugApiResponse } = useDebugContext()
 
   const onSubmit = useCallback((data) => {
     let params = {}
@@ -85,11 +85,6 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
     fetcher,
     swrOptions
   )
-
-  useEffect(() => {
-    debugQuery(query)
-    debugApiResponse(data)
-  }, [data, debugApiResponse, debugQuery, query])
 
   const showLoadingIndicator = useMemo(() => isValidating, [isValidating])
 
@@ -126,7 +121,6 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
                 </Box>
               }
             </Box>
-            <Debug query={query} mt={6} />
 
             {error && <Box>
               <Heading h={5} my={4}>Error</Heading>
@@ -156,4 +150,4 @@ MeasurementAggregationToolkit.propTypes = {
 //   )
 // }
 
-export default withDebugProvider(MeasurementAggregationToolkit)
+export default MeasurementAggregationToolkit

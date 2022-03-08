@@ -102,8 +102,6 @@ const TableView = ({ data, query }) => {
   const intl = useIntl()
   const yAxis = query.axis_y
 
-  const { doneTableReshaping } = useDebugContext()
-
   const defaultColumn = React.useMemo(
     () => ({
       // When using the useFlexLayout:
@@ -176,13 +174,9 @@ const TableView = ({ data, query }) => {
   ], [intl, yAxis])
 
   const reshapedTableData = useMemo(() => {
-    const t0 = performance.now()
     const reshapedData = reshapeTableData(data, query)
-    const t1 = performance.now()
-    doneTableReshaping(t0, t1)
-    console.debug(`Table reshaping: ${t1} - ${t0} = ${t1-t0}ms`)
     return reshapedData
-  }, [doneTableReshaping, query, data])
+  }, [query, data])
 
   const {
     getTableProps,

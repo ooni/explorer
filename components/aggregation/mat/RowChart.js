@@ -38,8 +38,6 @@ const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last
     updateMATContext({ tooltipIndex: [rowIndex, column]}, true)
   }, [rowIndex, updateMATContext])
 
-  const { doneRendering } = useDebugContext()
-
   const chartProps = useMemo(() => ({
     // NOTE: These dimensions are linked to accuracy of the custom axes rendered in
     // <GridChart />
@@ -69,10 +67,6 @@ const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last
     isInteractive: true,
     layers: barLayers,
   }), [])
-
-  useEffect(() => {
-    doneRendering(performance.now())
-  })
 
   return (
     <Flex alignItems='center' sx={{ position: 'relative' }}>
