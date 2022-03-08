@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl'
 import { useMATContext } from './MATContext'
 import CountryNameLabel from './CountryNameLabel'
 import { colorMap } from './colorMap'
+import { getRowLabel } from './labels'
 
 const Legend = ({label, color}) => {
   return (
@@ -18,21 +19,28 @@ const Legend = ({label, color}) => {
   )
 }
 
-export const getSubtitleStr = (query) => {
-  let str = `${query.test_name}`
+export const SubtitleStr = ({ query }) => {
+  const intl = useIntl()
+  const params = new Set()
+
+  const testName = intl.formatMessage({id: getRowLabel(query.test_name, 'test_name')})
+  params.add(testName)
+
+
   if (query.domain) {
-    str += `, ${query.domain}`
+    params.add(query.domain)
   }
   if (query.input) {
-    str += `, ${query.input}`
+    params.add(query.input)
   }
   if (query.category_code) {
-    str += `, ${query.category_code}`
+    params.add(getRowLabel(query.category_code, 'category_code'))
   }
   if (query.probe_asn) {
-    str += `, ${query.probe_asn}`
+    params.add(query.probe_asn)
   }
-  return str
+
+  return [...params].join(', ')
 }
 /**
  * ChartHeader generates formatted headings to show above the charts in GridChart
@@ -43,7 +51,7 @@ export const ChartHeader = ({ options = {}}) => {
   const intl = useIntl()
   const [query] = useMATContext()
 
-  const subTitle = getSubtitleStr(query)
+  const subTitle = <SubtitleStr query={query} />
 
   return (
     <Flex flexDirection={['column']}>
