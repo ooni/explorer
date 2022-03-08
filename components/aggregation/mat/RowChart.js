@@ -7,6 +7,7 @@ import { CustomBarItem } from './CustomBarItem'
 import { CustomToolTip } from './CustomTooltip'
 import { colorMap } from './colorMap'
 import { useDebugContext } from '../DebugContext'
+import { useMATContext } from './MATContext'
 
 const keys = [
   'anomaly_count',
@@ -29,10 +30,13 @@ const barThemeForTooltip = {
   }
 }
 
-const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, showTooltip /* width, first, last */}) => {
+const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last */}) => {
+  const [ { tooltipIndex }, updateMATContext ] = useMATContext()
+
+
   const handleClick = useCallback(({ column }) => {
-    showTooltipInRow(rowIndex, column)
-  }, [rowIndex, showTooltipInRow])
+    updateMATContext({ tooltipIndex: [rowIndex, column]}, true)
+  }, [rowIndex, updateMATContext])
 
   const { doneRendering } = useDebugContext()
 
@@ -40,14 +44,14 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
   // react-spring from working on the actual data during
   // first render. This forces an update after 1ms with
   // real data, which appears quick enough with animation disabled
-  const [chartData, setChartData] = useState([])
-  useEffect(() => {
-    let animation = setTimeout(() => setChartData(data), 1)
+  // const [chartData, setChartData] = useState([])
+  // useEffect(() => {
+  //   let animation = setTimeout(() => setChartData(data), 1)
 
-    return () => {
-      clearTimeout(animation)
-    }
-  }, [data])
+  //   return () => {
+  //     clearTimeout(animation)
+  //   }
+  // }, [data])
 
   const chartProps = useMemo(() => ({
     // NOTE: These dimensions are linked to accuracy of the custom axes rendered in
@@ -90,7 +94,7 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
       </Box>
       <Box sx={{ height: height, width: '100%' }}>
         <Bar
-          data={chartData}
+          data={data}
           keys={keys}
           indexBy={indexBy}
           xScale={{ type: 'time' }}
@@ -101,7 +105,7 @@ const RowChart = ({ data, indexBy, label, height, rowIndex, showTooltipInRow, sh
           // HACK: To show the tooltip, we hijack the 
           // `enableLabel` prop to pass in the tooltip coordinates (row, col_index) from `GridChart`
           // `showTooltip` contains `[rowHasTooltip, columnwithTooltip]` e.g `[true, '2022-02-01']`
-          enableLabel={showTooltip}
+          enableLabel={tooltipIndex[0] === rowIndex ? tooltipIndex[1] : false}
           {...chartProps}
         />
       </Box>
@@ -123,8 +127,6 @@ RowChart.propTypes = {
   indexBy: PropTypes.string,
   label: PropTypes.node,
   rowIndex: PropTypes.number,
-  showTooltip: PropTypes.array,
-  showTooltipInRow: PropTypes.func,
 }
 
 RowChart.displayName = 'RowChart'

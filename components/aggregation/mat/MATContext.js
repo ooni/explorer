@@ -12,7 +12,8 @@ export const defaultMATContext = {
   probe_cc: '',
   probe_asn: '',
   input: '',
-  category_code: ''
+  category_code: '',
+  tooltipIndex: [-1, '']
 }
 
 export const MATContextProvider = ({ children, ...initialContext }) => {
@@ -20,13 +21,12 @@ export const MATContextProvider = ({ children, ...initialContext }) => {
 
   const { query } = useRouter()
 
-  const stateReducer = useCallback((updates) => {
+  const stateReducer = useCallback((updates, partial = false) => {
     setState(state =>
-      Object.assign({},
-        state,
-        defaultMATContext,
-        initialContext,
-        updates
+      partial ? (
+        Object.assign({}, state, updates)
+        ) : (
+        Object.assign({}, state, defaultMATContext, initialContext, updates)
       )
     )
   }, [initialContext])

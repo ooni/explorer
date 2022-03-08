@@ -12,11 +12,10 @@ import { getXAxisTicks } from './timeScaleXAxis'
 import { useMATContext } from './MATContext'
 import { ChartHeader } from './ChartHeader'
 import { getRowLabel } from './labels'
+import { VirtualRows } from './VirtualRows'
 
-const GRID_ROW_CSS_SELECTOR = 'outerListElement'
 const ROW_HEIGHT = 70
 const GRID_MAX_HEIGHT = 600
-const retainMountedRows = false
 
 const reshapeChartData = (data, query, isGrouped) => {
   const rows = []
@@ -67,34 +66,13 @@ const reshapeChartData = (data, query, isGrouped) => {
   return [reshapedDataWithoutHoles, rows, rowLabels]
 }
 
-const useKeepMountedRangeExtractor = () => {
-  const renderedRef = React.useRef(new Set())
-
-  const rangeExtractor = React.useCallback(range => {
-    renderedRef.current = new Set([
-      ...renderedRef.current,
-      ...defaultRangeExtractor(range)
-    ])
-    return Array.from(renderedRef.current)
-  }, [])
-
-  return rangeExtractor
-}
 
 const GridChart = ({ data, isGrouped = true, height = 'auto' }) => {
   // development-only flags for debugging/tweaking etc
   const { doneChartReshaping } = useDebugContext()
-  const keepMountedRangeExtractor = useKeepMountedRangeExtractor()
 
-  const [query, updateMATContext] = useMATContext()
-
-  // [rowIndex, columnKey] for the bar where click was detected
-  // and tooltip is to be shown
-  const [tooltipIndex, setTooltipIndex] = useState([-1, ''])
-
-  const showTooltipInRow = useCallback((index, column) => {
-    setTooltipIndex([index, column])
-  }, [setTooltipIndex])
+  const [ query ] = useMATContext()
+  const { tooltipIndex } = query
 
   const itemData = useMemo(() => {
     const t0 = performance.now()
@@ -122,16 +100,6 @@ const GridChart = ({ data, isGrouped = true, height = 'auto' }) => {
     tickRotation: -45,
     tickValues: xAxisTickValues
   }
-
-  const parentRef = React.useRef()
-
-  const rowVirtualizer = useVirtual({
-    size: itemData.rows.length,
-    parentRef,
-    estimateSize: useCallback(() => ROW_HEIGHT, []),
-    overscan: 0,
-    rangeExtractor: retainMountedRows ? keepMountedRangeExtractor : defaultRangeExtractor
-  })
 
   const {reshapedData, rows, rowLabels, gridHeight, indexBy, yAxis } = itemData
 
@@ -175,50 +143,10 @@ const GridChart = ({ data, isGrouped = true, height = 'auto' }) => {
             />
           </Box>
         </Flex>
-        <Flex>
-          <div
-            ref={parentRef}
-            className={GRID_ROW_CSS_SELECTOR}
-            style={{
-              height: gridHeight,
-              width: '100%',
-              overflow: 'auto'
-            }}
-          >
-            <div
-              style={{
-                height: `${rowVirtualizer.totalSize}px`,
-                width: '100%',
-                position: 'relative'
-              }}
-            >
-              {rowVirtualizer.virtualItems.map((virtualRow) => (
-                <div
-                  key={virtualRow.index}
-                  style={{
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    width: '100%',
-                    height: `${virtualRow.size}px`,
-                    transform: `translateY(${virtualRow.start}px)`,
-                    zIndex: tooltipIndex[0] === virtualRow.index ? 1 : 0
-                  }}
-                >
-                  <RowChart
-                    rowIndex={virtualRow.index}
-                    showTooltipInRow={showTooltipInRow}
-                    showTooltip={[tooltipIndex[0] === virtualRow.index, tooltipIndex[1]]}
-                    data={reshapedData[rows[virtualRow.index]]}
-                    indexBy={indexBy}
-                    height={virtualRow.size}
-                    label={rowLabels[rows[virtualRow.index]]}
-                  />
-                </div>
-              ))}
-              </div>
-            </div>
-        </Flex>
+        <VirtualRows
+          itemData={itemData}
+          tooltipIndex={tooltipIndex}
+        />
       </Flex>
     </Flex>
   )

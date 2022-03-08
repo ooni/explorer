@@ -6,7 +6,7 @@ import axios from 'axios'
 import { territoryNames } from 'country-util'
 
 import GridChart from '../aggregation/mat/GridChart'
-import { MATContextProvider, useMATContext } from '../aggregation/mat/MATContext'
+import { MATContextProvider } from '../aggregation/mat/MATContext'
 import { withDebugProvider } from '../aggregation/DebugContext'
 import { axiosResponseTime } from '../axios-plugins'
 import { testNames } from '../test-info'
@@ -37,7 +37,6 @@ const fixedQuery = {
 
 const Chart = ({ testName }) => {
   const { query } = useRouter()
-  const [ctx, updateMATContext] = useMATContext()
 
   const derivedQuery = useMemo(() => ({
     ...fixedQuery,
