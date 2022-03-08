@@ -18,7 +18,6 @@ const Legend = ({label, color}) => {
   )
 }
 
-
 export const getSubtitleStr = (query) => {
   let str = `${query.test_name}`
   if (query.domain) {
@@ -35,8 +34,12 @@ export const getSubtitleStr = (query) => {
   }
   return str
 }
-
-export const ChartHeader = () => {
+/**
+ * ChartHeader generates formatted headings to show above the charts in GridChart
+ * @param {Object} options - Object with flags for header components eg. { probe_cc: false }
+ * @param {boolean} options.probe_cc - Show/hide country name
+ */
+export const ChartHeader = ({ options = {}}) => {
   const intl = useIntl()
   const [query] = useMATContext()
 
@@ -44,9 +47,9 @@ export const ChartHeader = () => {
 
   return (
     <Flex flexDirection={['column']}>
-      <Heading h={3} textAlign='center'>
+      {options.probe_cc !== false && <Heading h={3} textAlign='center'>
         <CountryNameLabel countryCode={query.probe_cc} />
-      </Heading>
+      </Heading>}
       <Heading h={5} fontWeight='normal' textAlign='center'>
         {subTitle}
       </Heading>

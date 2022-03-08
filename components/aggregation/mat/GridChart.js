@@ -67,7 +67,7 @@ const reshapeChartData = (data, query, isGrouped) => {
 }
 
 
-const GridChart = ({ data, isGrouped = true, height = 'auto' }) => {
+const GridChart = ({ data, isGrouped = true, height = 'auto', header }) => {
   // development-only flags for debugging/tweaking etc
   const { doneChartReshaping } = useDebugContext()
 
@@ -122,8 +122,7 @@ const GridChart = ({ data, isGrouped = true, height = 'auto' }) => {
         <Flex justifyContent={'center'}>
           <Box width={2/16}>
           </Box>
-          <ChartHeader />
-
+          <ChartHeader options={header} />
         </Flex>
         <Flex>
           <Box width={2/16}>

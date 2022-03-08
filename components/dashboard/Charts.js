@@ -87,6 +87,7 @@ const Chart = ({ testName }) => {
               isGrouped={false}
               query={derivedQuery}
               height={(query?.probe_cc?.split(',').length ?? 10) * 70 }
+              header={{ probe_cc: false }}
             />
           )
         )}
