@@ -40,19 +40,6 @@ const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last
 
   const { doneRendering } = useDebugContext()
 
-  // Load the chart with an empty data to avoid
-  // react-spring from working on the actual data during
-  // first render. This forces an update after 1ms with
-  // real data, which appears quick enough with animation disabled
-  // const [chartData, setChartData] = useState([])
-  // useEffect(() => {
-  //   let animation = setTimeout(() => setChartData(data), 1)
-
-  //   return () => {
-  //     clearTimeout(animation)
-  //   }
-  // }, [data])
-
   const chartProps = useMemo(() => ({
     // NOTE: These dimensions are linked to accuracy of the custom axes rendered in
     // <GridChart />

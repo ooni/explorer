@@ -143,10 +143,32 @@ const GridChart = ({ data, isGrouped = true, height = 'auto' }) => {
             />
           </Box>
         </Flex>
-        <VirtualRows
-          itemData={itemData}
-          tooltipIndex={tooltipIndex}
-        />
+        {/* Use a virtual list only for higher count of rows */}
+        {rows.length < 10 ? (
+          <Flex
+            className='outerListElement'
+            flexDirection='column'
+            style={{
+              height: gridHeight
+            }}
+          >
+            {rows.map((row, index) => 
+              <RowChart
+                key={row}
+                rowIndex={index}
+                data={reshapedData[row]}
+                indexBy={indexBy}
+                height={70}
+                label={rowLabels[row]}
+              />
+            )}
+          </Flex>
+        ) : (
+          <VirtualRows
+            itemData={itemData}
+            tooltipIndex={tooltipIndex}
+          />
+        )}
       </Flex>
     </Flex>
   )

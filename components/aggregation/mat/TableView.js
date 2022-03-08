@@ -248,8 +248,8 @@ const TableView = ({ data, query }) => {
   const [chartPanelHeight, setChartPanelHeight] = useState(800)
 
   const onPanelResize = useCallback((width, height) => {
-    console.debug(`resized height: ${height}`)
-    setChartPanelHeight(height - 100)
+    // Panel height - (height of ChartHeader + XAxis) = Height of RowCharts
+    setChartPanelHeight(height - (90 + 62))
   }, [])
 
   return (
