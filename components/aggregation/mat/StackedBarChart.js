@@ -1,6 +1,6 @@
 import React, { useState, useMemo, useCallback } from 'react'
 import PropTypes from 'prop-types'
-import { ResponsiveBar } from '@nivo/bar'
+import { ResponsiveBarCanvas } from '@nivo/bar'
 import { Box, Flex, Link } from 'ooni-components'
 import { IoMdGlobe } from 'react-icons/io'
 import NLink from 'next/link'
@@ -84,7 +84,7 @@ export const StackedBarChart = ({ data, query }) => {
         </Box>
       </Flex>
       <Box height={'500px'} mx={[1, 3]}>
-        <ResponsiveBar
+        <ResponsiveBarCanvas
           data={chartMeta.data}
           keys={chartMeta.cols}
           indexBy={chartMeta.indexBy}

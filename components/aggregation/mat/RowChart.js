@@ -1,7 +1,7 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Box, Flex, theme } from 'ooni-components'
-import { ResponsiveBar as Bar } from '@nivo/bar'
+import { ResponsiveBarCanvas as Bar } from '@nivo/bar'
 
 import { CustomBarItem } from './CustomBarItem'
 import { CustomToolTip } from './CustomTooltip'
