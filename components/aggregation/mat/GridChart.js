@@ -1,8 +1,10 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { ResponsiveBar } from '@nivo/bar'
 import { Heading, Flex, Box, Text } from 'ooni-components'
 import OONILogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochrome.svg'
+import { TooltipProvider, Tooltip } from '@nivo/tooltip'
+import { Container } from '@nivo/core'
 
 import RowChart, { chartMargins } from './RowChart'
 import { fillDataInMissingDates, getDatesBetween } from './computations'
@@ -67,6 +69,7 @@ const reshapeChartData = (data, query, isGrouped) => {
 
 const GridChart = ({ data, isGrouped = true, height = 'auto', header }) => {
   // development-only flags for debugging/tweaking etc
+  const container = useRef(null)
 
   const [ query ] = useMATContext()
   const { tooltipIndex } = query
@@ -105,8 +108,20 @@ const GridChart = ({ data, isGrouped = true, height = 'auto', header }) => {
     )
   }
 
+  const barThemeForTooltip = {
+    tooltip: {
+      container: {
+        pointerEvents: 'initial',
+        boxShadow: '1px 1px 4px 1px #868e96'
+      }
+    }
+  }
+
   return (
-    <Flex flexDirection='column' sx={{ position: 'relative' }}>
+    <Container theme={barThemeForTooltip}>
+    <TooltipProvider container={container}>
+
+    <Flex ref={container} flexDirection='column' sx={{ position: 'relative' }}>
       <Box alignSelf='flex-end' sx={{ position: 'absolute', opacity: 0.8, top: 16, left: 16 }}>
         <OONILogo height='32px' />
       </Box>
@@ -163,6 +178,9 @@ const GridChart = ({ data, isGrouped = true, height = 'auto', header }) => {
         )}
       </Flex>
     </Flex>
+    <Tooltip />
+    </TooltipProvider>
+    </Container>
   )
 }
 

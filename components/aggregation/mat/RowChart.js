@@ -1,7 +1,8 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { Box, Flex, theme } from 'ooni-components'
 import { ResponsiveBarCanvas as Bar } from '@nivo/bar'
+import { useTooltip } from '@nivo/tooltip'
 
 import { CustomBarItem } from './CustomBarItem'
 import { CustomToolTip } from './CustomTooltip'
@@ -24,19 +25,38 @@ export const chartMargins = { top: 4, right: 50, bottom: 4, left: 0 }
 const barThemeForTooltip = {
   tooltip: {
     container: {
-      pointerEvents: 'initial',
-      boxShadow: `1px 1px 4px 1px ${theme.colors.gray6}`
+      boxShadow: '',
+      background: ''
     }
   }
 }
 
 const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last */}) => {
   const [ { tooltipIndex }, updateMATContext ] = useMATContext()
+  const { showTooltipFromEvent, hideTooltip } = useTooltip()
 
+  const onMouseEnter = useCallback((data, e) => {
+    console.log(e)
+    e.preventDefault()
 
-  const handleClick = useCallback(({ column }) => {
-    updateMATContext({ tooltipIndex: [rowIndex, column]}, true)
-  }, [rowIndex, updateMATContext])
+  }, [])
+  
+  const onClose = useCallback(() => {
+    hideTooltip()
+  }, [hideTooltip])
+
+  const handleClick = useCallback((data, event) => {
+    updateMATContext({ tooltipIndex: [rowIndex, data.indexValue]}, true)
+    showTooltipFromEvent(
+      React.createElement(CustomToolTip, {
+        ...data,
+        onClose
+      }),
+      event,
+      'left'
+    )
+
+  }, [onClose, rowIndex, showTooltipFromEvent, updateMATContext])
 
   // Load the chart with an empty data to avoid
   // react-spring from working on the actual data during
@@ -79,10 +99,13 @@ const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last
     motionConfig: {
       duration: 1
     },
-    animate: false,
+    animate: true,
     isInteractive: true,
     layers: barLayers,
   }), [])
+
+  const InvisibleTooltip = React.memo(() => <></> )
+  InvisibleTooltip.displayName = 'InvisibleTooltip'
 
   return (
     <Flex alignItems='center' sx={{ position: 'relative' }}>
@@ -95,9 +118,9 @@ const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last
           keys={keys}
           indexBy={indexBy}
           xScale={{ type: 'time' }}
-          tooltip={CustomToolTip}
+          tooltip={InvisibleTooltip}
           onClick={handleClick}
-          barComponent={CustomBarItem}
+          onMouseEnter={onMouseEnter}
           theme={barThemeForTooltip}
           // HACK: To show the tooltip, we hijack the 
           // `enableLabel` prop to pass in the tooltip coordinates (row, col_index) from `GridChart`
