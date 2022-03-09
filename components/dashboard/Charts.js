@@ -84,7 +84,7 @@ const Chart = React.memo(function Chart({ testName }) {
 
   }, [data, probe_cc])
 
-  const headerOptions = { probe_cc: false }
+  const headerOptions = { probe_cc: false, subtitle: false }
 
   return (
     <Flex flexDirection='column' mt={3}>

@@ -58,10 +58,10 @@ export const ChartHeader = ({ options = {}}) => {
       {options.probe_cc !== false && <Heading h={3} textAlign='center'>
         <CountryNameLabel countryCode={query.probe_cc} />
       </Heading>}
-      <Heading h={5} fontWeight='normal' textAlign='center'>
+      {options.subtitle !== false && <Heading h={5} fontWeight='normal' textAlign='center'>
         {subTitle}
-      </Heading>
-      <Flex justifyContent='center' my={2}>
+      </Heading>}
+      {options.legend !== false && <Flex justifyContent='center' my={2}>
         <Box pr={2}>
           <Legend label='ok_count' color={colorMap['ok_count']} />
         </Box>
@@ -74,7 +74,7 @@ export const ChartHeader = ({ options = {}}) => {
         <Box pr={2}>
           <Legend label='failure_count' color={colorMap['failure_count']} />
         </Box>
-      </Flex>
+      </Flex>}
     </Flex>
   )
 }
