@@ -119,7 +119,7 @@ const Chart = React.memo(function Chart({ testName }) {
   )
 })
 
-const testsOnPage = ['psiphon', 'torsf', 'tor']
+const testsOnPage = ['psiphon', 'tor', 'torsf']
 
 const ChartsContainer = () => {
   return (
