@@ -1,7 +1,10 @@
 import PropTypes from 'prop-types'
-import { getCategoryCodesMap } from 'components/utils/categoryCodes'
-import { Box } from 'ooni-components'
+import { useIntl } from 'react-intl'
 import countryUtil from 'country-util'
+import { Box } from 'ooni-components'
+
+import { testNames } from '../../test-info'
+import { getCategoryCodesMap } from '../../utils/categoryCodes'
 
 const InputRowLabel = ({ input }) => {
   const truncatedInput = input
@@ -41,6 +44,8 @@ export const getRowLabel = (key, yAxis) => {
     return blockingTypeLabels[key] ?? key
   case 'probe_asn':
     return `AS${key}`
+  case 'test_name':
+    return testNames[key].id
   default:
     return key
   }

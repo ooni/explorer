@@ -5,8 +5,6 @@ import { Heading, Flex, Box, Text } from 'ooni-components'
 import OONILogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochrome.svg'
 
 import RowChart, { chartMargins } from './RowChart'
-import { useDebugContext } from '../DebugContext'
-import { defaultRangeExtractor, useVirtual } from 'react-virtual'
 import { fillDataInMissingDates, getDatesBetween } from './computations'
 import { getXAxisTicks } from './timeScaleXAxis'
 import { useMATContext } from './MATContext'
@@ -67,15 +65,13 @@ const reshapeChartData = (data, query, isGrouped) => {
 }
 
 
-const GridChart = ({ data, isGrouped = true, height = 'auto' }) => {
+const GridChart = ({ data, isGrouped = true, height = 'auto', header }) => {
   // development-only flags for debugging/tweaking etc
-  const { doneChartReshaping } = useDebugContext()
 
   const [ query ] = useMATContext()
   const { tooltipIndex } = query
 
   const itemData = useMemo(() => {
-    const t0 = performance.now()
     const [reshapedData, rows, rowLabels] = reshapeChartData(data, query, isGrouped)
     
     let gridHeight = height
@@ -83,11 +79,8 @@ const GridChart = ({ data, isGrouped = true, height = 'auto' }) => {
       gridHeight = Math.min( 20 + (rows.length * ROW_HEIGHT), GRID_MAX_HEIGHT)
     }
     
-    const t1 = performance.now()
-    console.debug(`Charts reshaping: ${t1} - ${t0} = ${t1-t0}ms`)
-    doneChartReshaping(t0, t1)
     return {reshapedData, rows, rowLabels, gridHeight, indexBy: query.axis_x, yAxis: query.axis_y }
-  }, [data, doneChartReshaping, height, isGrouped, query])
+  }, [data, height, isGrouped, query])
 
   const xAxisTickValues = getXAxisTicks(query.since, query.until, 30)
 
@@ -122,8 +115,7 @@ const GridChart = ({ data, isGrouped = true, height = 'auto' }) => {
         <Flex justifyContent={'center'}>
           <Box width={2/16}>
           </Box>
-          <ChartHeader />
-
+          <ChartHeader options={header} />
         </Flex>
         <Flex>
           <Box width={2/16}>

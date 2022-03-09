@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl'
 import { useMATContext } from './MATContext'
 import CountryNameLabel from './CountryNameLabel'
 import { colorMap } from './colorMap'
+import { getRowLabel } from './labels'
 
 const Legend = ({label, color}) => {
   return (
@@ -18,39 +19,49 @@ const Legend = ({label, color}) => {
   )
 }
 
+export const SubtitleStr = ({ query }) => {
+  const intl = useIntl()
+  const params = new Set()
 
-export const getSubtitleStr = (query) => {
-  let str = `${query.test_name}`
+  const testName = intl.formatMessage({id: getRowLabel(query.test_name, 'test_name')})
+  params.add(testName)
+
+
   if (query.domain) {
-    str += `, ${query.domain}`
+    params.add(query.domain)
   }
   if (query.input) {
-    str += `, ${query.input}`
+    params.add(query.input)
   }
   if (query.category_code) {
-    str += `, ${query.category_code}`
+    params.add(getRowLabel(query.category_code, 'category_code'))
   }
   if (query.probe_asn) {
-    str += `, ${query.probe_asn}`
+    params.add(query.probe_asn)
   }
-  return str
-}
 
-export const ChartHeader = () => {
+  return [...params].join(', ')
+}
+/**
+ * ChartHeader generates formatted headings to show above the charts in GridChart
+ * @param {Object} options - Object with flags for header components eg. { probe_cc: false }
+ * @param {boolean} options.probe_cc - Show/hide country name
+ */
+export const ChartHeader = ({ options = {}}) => {
   const intl = useIntl()
   const [query] = useMATContext()
 
-  const subTitle = getSubtitleStr(query)
+  const subTitle = <SubtitleStr query={query} />
 
   return (
     <Flex flexDirection={['column']}>
-      <Heading h={3} textAlign='center'>
+      {options.probe_cc !== false && <Heading h={3} textAlign='center'>
         <CountryNameLabel countryCode={query.probe_cc} />
-      </Heading>
-      <Heading h={5} fontWeight='normal' textAlign='center'>
+      </Heading>}
+      {options.subtitle !== false && <Heading h={5} fontWeight='normal' textAlign='center'>
         {subTitle}
-      </Heading>
-      <Flex justifyContent='center' my={2}>
+      </Heading>}
+      {options.legend !== false && <Flex justifyContent='center' my={2}>
         <Box pr={2}>
           <Legend label='ok_count' color={colorMap['ok_count']} />
         </Box>
@@ -63,7 +74,7 @@ export const ChartHeader = () => {
         <Box pr={2}>
           <Legend label='failure_count' color={colorMap['failure_count']} />
         </Box>
-      </Flex>
+      </Flex>}
     </Flex>
   )
 }

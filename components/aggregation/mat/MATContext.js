@@ -12,6 +12,7 @@ export const defaultMATContext = {
   probe_cc: '',
   probe_asn: '',
   input: '',
+  domain: '',
   category_code: '',
   tooltipIndex: [-1, '']
 }
