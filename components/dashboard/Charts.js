@@ -61,7 +61,7 @@ const Chart = React.memo(function Chart({ testName }) {
       return [null, 0]
     }
 
-    let chartData = data?.data?.result.sort((a, b) => (territoryNames[a.probe_cc] < territoryNames[b.probe_cc]) ? -1 : (territoryNames[a.probe_cc] < territoryNames[b.probe_cc]) ? 1 : 0)
+    let chartData = data?.data?.result.sort((a, b) => (territoryNames[a.probe_cc] < territoryNames[b.probe_cc]) ? -1 : (territoryNames[a.probe_cc] > territoryNames[b.probe_cc]) ? 1 : 0)
 
     const selectedCountries = query?.probe_cc?.length > 1 ? query?.probe_cc.split(',') : []
     if (selectedCountries.length > 0) {
