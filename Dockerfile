@@ -18,8 +18,13 @@ FROM node:16.3-alpine3.12 AS builder
 WORKDIR /app
 COPY . .
 COPY --from=deps /app/node_modules ./node_modules
+
 ARG NODE_ENV ${NODE_ENV:-production}
+ARG GIT_COMMIT_SHA_SHORT ${GIT_COMMIT_SHA_SHORT}
+
 ENV NODE_ENV ${NODE_ENV}
+ENV GIT_COMMIT_SHA_SHORT ${GIT_COMMIT_SHA_SHORT}
+
 RUN yarn build && yarn install --production --ignore-scripts --prefer-offline
 
 # Production image, copy all the files and run next

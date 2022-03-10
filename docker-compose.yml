@@ -1,0 +1,22 @@
+version: "3.9"
+services:
+  explorer:
+    image: openobservatory/explorer-next:${DATESTAMP}-${GIT_COMMIT_SHA_SHORT}
+    build:
+      context: .
+      args:
+       - GIT_COMMIT_SHA_SHORT
+    ports:
+      - "3100:3100"
+    container_name: explorer
+#    env_file:
+#      - ./.env.production
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3100"]
+      interval: 10m
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+
