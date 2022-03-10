@@ -9,6 +9,7 @@ import { CustomToolTip } from './CustomTooltip'
 import { colorMap } from './colorMap'
 import { useDebugContext } from '../DebugContext'
 import { useMATContext } from './MATContext'
+import { CustomBarRenderer } from './CustomBarRenderer'
 
 export const chartMargins = { top: 4, right: 50, bottom: 4, left: 0 }
 
@@ -45,12 +46,19 @@ const barThemeForTooltip = {
 const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last */}) => {
   const [ { tooltipIndex }, updateMATContext ] = useMATContext()
   const { showTooltipFromEvent, hideTooltip } = useTooltip()
+  const canvasRef = useRef(null)
+  const [chartData, setChartData] = useState([])
 
   const onClose = useCallback(() => {
     hideTooltip()
-  }, [hideTooltip])
+    const ctx = canvasRef.current.getContext('2d')
+    ctx.highlight = ''
+  }, [hideTooltip, canvasRef])
 
   const handleClick = useCallback((data, event) => {
+    const ctx = canvasRef.current.getContext('2d')
+    ctx.highlight = `${data.indexValue}_${label}`
+
     updateMATContext({ tooltipIndex: [rowIndex, data.indexValue]}, true)
     showTooltipFromEvent(
       React.createElement(CustomToolTip, {
@@ -61,7 +69,7 @@ const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last
       'left'
     )
 
-  }, [onClose, rowIndex, showTooltipFromEvent, updateMATContext])
+  }, [label, onClose, rowIndex, showTooltipFromEvent, updateMATContext, canvasRef])
 
   // Load the chart with an empty data to avoid
   // react-spring from working on the actual data during
@@ -70,7 +78,6 @@ const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last
   // const [chartData, setChartData] = useState([])
   // useEffect(() => {
   //   let animation = setTimeout(() => setChartData(data), 1)
-  const [chartData, setChartData] = useState([])
   useEffect(() => {
     let animation = setTimeout(() => setChartData(data), 1)
 
@@ -113,11 +120,13 @@ const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last
       <LeftStickyLabel>{label}</LeftStickyLabel>
       <Box width='100%' height='100%'>
         <Bar
+          ref={canvasRef}
           data={chartData}
           keys={keys}
           indexBy={indexBy}
           xScale={{ type: 'time' }}
           tooltip={InvisibleTooltip}
+          renderBar={CustomBarRenderer}
           onClick={handleClick}
           theme={barThemeForTooltip}
           // HACK: To show the tooltip, we hijack the 

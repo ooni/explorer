@@ -34,12 +34,14 @@ const reshapeChartData = (data, query, isGrouped) => {
   } else {
     data.forEach((item) => {
       const key = item[query.axis_y]
+      const rowLabel = getRowLabel(key, query.axis_y)
+      item.rowLabel = rowLabel
       if (key in reshapedData) {
         reshapedData[key].push(item)
       } else {
         rows.push(key)
         reshapedData[key] = [item]
-        rowLabels[key] = getRowLabel(key, query.axis_y)
+        rowLabels[key] = rowLabel
       }
     })
   }
@@ -69,7 +71,8 @@ const reshapeChartData = (data, query, isGrouped) => {
 
 const GridChart = ({ data, isGrouped = true, height = 'auto', header }) => {
   // development-only flags for debugging/tweaking etc
-  const [scrollable, setScrollable] = useState(false)
+  const [scrollable, setScrollable] = useState(true)
+  const [barWidth, setBarWidth] = useState(20)
 
   const container = useRef(null)
 
@@ -80,13 +83,13 @@ const GridChart = ({ data, isGrouped = true, height = 'auto', header }) => {
     const [reshapedData, rows, rowLabels] = reshapeChartData(data, query, isGrouped)
     
     let gridHeight = height
-    const gridWidth = scrollable ? reshapedData[rows[0]].length * 10 : '100%'
+    const gridWidth = scrollable ? reshapedData[rows[0]].length * barWidth : '100%'
     if (height === 'auto') {
       gridHeight = Math.min( 20 + (rows.length * ROW_HEIGHT), GRID_MAX_HEIGHT)
     }
     
     return {reshapedData, rows, rowLabels, gridWidth, gridHeight, indexBy: query.axis_x, yAxis: query.axis_y }
-  }, [data, height, isGrouped, query, scrollable])
+  }, [barWidth, data, height, isGrouped, query, scrollable])
 
   const xAxisTickValues = getXAxisTicks(query.since, query.until, 30)
 
@@ -123,8 +126,13 @@ const GridChart = ({ data, isGrouped = true, height = 'auto', header }) => {
   return (
     <Container theme={barThemeForTooltip}>
       <TooltipProvider container={container}>
-        <Flex>
-          <input type='checkbox' checked={scrollable} onChange={() => setScrollable(!scrollable)} /> Try Horizontal Scrolling
+        <Flex flexDirection='row' justifyContent='space-evenly' py={2} bg='red1'>
+          <Box>
+            <input type='checkbox' checked={scrollable} onChange={() => setScrollable(!scrollable)} /> Try Horizontal Scrolling
+          </Box>
+          <Box>
+            Zoom level (bar width) <input type='number' min={1} value={barWidth} onChange={(e) => setBarWidth(e.target.value)} placeholder='bar width' />
+          </Box>
         </Flex>
         <Flex ref={container} flexDirection='column'>
           <Flex flexDirection='column'>
