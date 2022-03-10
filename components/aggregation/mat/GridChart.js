@@ -6,7 +6,7 @@ import OONILogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonoc
 import { TooltipProvider, Tooltip } from '@nivo/tooltip'
 import { Container } from '@nivo/core'
 
-import RowChart, { chartMargins } from './RowChart'
+import RowChart, { chartMargins, LeftStickyLabel } from './RowChart'
 import { fillDataInMissingDates, getDatesBetween } from './computations'
 import { getXAxisTicks } from './timeScaleXAxis'
 import { useMATContext } from './MATContext'
@@ -69,6 +69,8 @@ const reshapeChartData = (data, query, isGrouped) => {
 
 const GridChart = ({ data, isGrouped = true, height = 'auto', header }) => {
   // development-only flags for debugging/tweaking etc
+  const [scrollable, setScrollable] = useState(false)
+
   const container = useRef(null)
 
   const [ query ] = useMATContext()
@@ -78,12 +80,13 @@ const GridChart = ({ data, isGrouped = true, height = 'auto', header }) => {
     const [reshapedData, rows, rowLabels] = reshapeChartData(data, query, isGrouped)
     
     let gridHeight = height
+    const gridWidth = scrollable ? reshapedData[rows[0]].length * 10 : '100%'
     if (height === 'auto') {
       gridHeight = Math.min( 20 + (rows.length * ROW_HEIGHT), GRID_MAX_HEIGHT)
     }
     
-    return {reshapedData, rows, rowLabels, gridHeight, indexBy: query.axis_x, yAxis: query.axis_y }
-  }, [data, height, isGrouped, query])
+    return {reshapedData, rows, rowLabels, gridWidth, gridHeight, indexBy: query.axis_x, yAxis: query.axis_y }
+  }, [data, height, isGrouped, query, scrollable])
 
   const xAxisTickValues = getXAxisTicks(query.since, query.until, 30)
 
@@ -97,7 +100,7 @@ const GridChart = ({ data, isGrouped = true, height = 'auto', header }) => {
     tickValues: xAxisTickValues
   }
 
-  const {reshapedData, rows, rowLabels, gridHeight, indexBy, yAxis } = itemData
+  const {reshapedData, rows, rowLabels, gridHeight, gridWidth, indexBy, yAxis } = itemData
 
   if (data.length < 1) {
     return (
@@ -119,67 +122,71 @@ const GridChart = ({ data, isGrouped = true, height = 'auto', header }) => {
 
   return (
     <Container theme={barThemeForTooltip}>
-    <TooltipProvider container={container}>
-
-    <Flex ref={container} flexDirection='column' sx={{ position: 'relative' }}>
-      <Box alignSelf='flex-end' sx={{ position: 'absolute', opacity: 0.8, top: 16, left: 16 }}>
-        <OONILogo height='32px' />
-      </Box>
-      <Flex flexDirection='column'>
-        {/* Fake axis on top of list. Possible alternative: dummy chart with axis and valid tickValues */}
-        <Flex justifyContent={'center'}>
-          <Box width={2/16}>
-          </Box>
-          <ChartHeader options={header} />
-        </Flex>
+      <TooltipProvider container={container}>
         <Flex>
-          <Box width={2/16}>
-          </Box>
-          <Box className='xAxis' sx={{ width: '100%', height: '62px' }}>
-            <ResponsiveBar
-              data={xAxisData}
-              indexBy={query.axis_x}
-              margin={xAxisMargins}
-              padding={0.3}
-              layers={['axes']}
-              axisTop={axisTop}
-              axisBottom={null}
-              axisLeft={null}
-              axisRight={null}
-              animate={false}
-            />
-          </Box>
+          <input type='checkbox' checked={scrollable} onChange={() => setScrollable(!scrollable)} /> Try Horizontal Scrolling
         </Flex>
-        {/* Use a virtual list only for higher count of rows */}
-        {rows.length < 10 ? (
-          <Flex
-            className='outerListElement'
-            flexDirection='column'
-            style={{
-              height: gridHeight
-            }}
-          >
-            {rows.map((row, index) => 
-              <RowChart
-                key={row}
-                rowIndex={index}
-                data={reshapedData[row]}
-                indexBy={indexBy}
-                height={70}
-                label={rowLabels[row]}
+        <Flex ref={container} flexDirection='column'>
+          <Flex flexDirection='column'>
+            <Flex alignItems={['center']}>
+              <Box p={16} sx={{ opacity: 0.8 }}>
+                <OONILogo height='32px' />
+              </Box>
+              <Box width={14/16}>
+                <ChartHeader options={header} />
+              </Box>
+            </Flex>
+          </Flex>
+          <Flex flexDirection='column' sx={{ overflowX: 'scroll' }}>
+            {/* Fake axis on top of list. Possible alternative: dummy chart with axis and valid tickValues */}
+            <Flex sx={{ width: gridWidth, height: '62px' }}>
+              <LeftStickyLabel></LeftStickyLabel>
+              <Box width={'100%'}>
+              <ResponsiveBar
+                data={xAxisData}
+                indexBy={query.axis_x}
+                margin={xAxisMargins}
+                padding={0}
+                layers={['axes']}
+                axisTop={axisTop}
+                axisBottom={null}
+                axisLeft={null}
+                axisRight={null}
+                animate={false}
+              />
+              </Box>
+            </Flex>
+            {/* Use a virtual list only for higher count of rows */}
+            {rows.length < 10 || scrollable ? (
+              <Flex
+                className='outerListElement'
+                flexDirection='column'
+                style={{
+                  height: gridHeight,
+                  width: gridWidth
+                }}
+              >
+                {rows.map((row, index) =>
+                  <RowChart
+                    key={row}
+                    rowIndex={index}
+                    data={reshapedData[row]}
+                    indexBy={indexBy}
+                    height={70}
+                    label={rowLabels[row]}
+                  />
+                )}
+              </Flex>
+            ) : (
+              <VirtualRows
+                itemData={itemData}
+                tooltipIndex={tooltipIndex}
               />
             )}
           </Flex>
-        ) : (
-          <VirtualRows
-            itemData={itemData}
-            tooltipIndex={tooltipIndex}
-          />
-        )}
-      </Flex>
-    </Flex>
-    <Tooltip />
-    </TooltipProvider>
+        </Flex>
+      <Tooltip />
+      </TooltipProvider>
     </Container>
   )
 }
