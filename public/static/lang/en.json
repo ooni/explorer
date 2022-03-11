@@ -366,6 +366,8 @@
   "Search.Sidebar.Domain": "Domain",
   "Search.Sidebar.Domain.Placeholder": "e.g. twitter.com or 1.1.1.1",
   "Search.Sidebar.Domain.Error": "Please enter a valid domain name or IP address, such as twitter.com or 1.1.1.1",
+  "Search.Sidebar.Categories": "Categories",
+  "Search.Sidebar.Categories.All": "Any",
   "Search.Sidebar.Status": "Status",
   "Search.Sidebar.TestName": "Test Name",
   "Search.Sidebar.TestName.AllTests": "Any",
