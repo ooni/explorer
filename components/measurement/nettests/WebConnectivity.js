@@ -9,7 +9,6 @@ import {
   Text
 } from 'ooni-components'
 
-import moment from 'moment'
 import { Tick, Cross } from 'ooni-components/dist/icons'
 import deepmerge from 'deepmerge'
 import styled from 'styled-components'
@@ -334,7 +333,7 @@ const WebConnectivityDetails = ({
   } = validateMeasurement(measurement ?? {})
 
   const intl = useIntl()
-  const date = intl.formatDate(moment.utc(test_start_time).toDate(), {
+  const date = intl.formatDate(test_start_time, {
     year: 'numeric',
     month: 'long',
     day: '2-digit',

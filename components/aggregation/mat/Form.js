@@ -8,6 +8,7 @@ import {
 } from 'ooni-components'
 import { countryList } from 'country-util'
 import moment from 'moment'
+import dayjs from 'services/dayjs'
 
 import { categoryCodes } from '../../utils/categoryCodes'
 import DatePicker from '../../DatePicker'
@@ -27,8 +28,8 @@ const optionsAxis = [
   ''
 ]
 
-const tomorrow = moment.utc().add(1, 'day').format('YYYY-MM-DD')
-const lastMonthToday = moment.utc().subtract(30, 'day').format('YYYY-MM-DD')
+const tomorrow = dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
+const lastMonthToday = dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD')
 
 const defaultDefaultValues = {
   probe_cc: '',
@@ -107,9 +108,9 @@ export const Form = ({ onSubmit, testNames, query }) => {
                 isValidDate={currentDate => {
                   const untilValue = getValues('until')
                   if (untilValue && untilValue.length !== 0) {
-                    return currentDate.isBefore(untilValue, 'day')
+                    return dayjs(currentDate).isBefore(untilValue, 'day')
                   } else {
-                    return currentDate.isBefore(tomorrow)
+                    return dayjs(currentDate).isBefore(tomorrow)
                   }
                 }}
               />

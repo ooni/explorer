@@ -2,8 +2,9 @@ import PropTypes from 'prop-types'
 import React, { useCallback } from 'react'
 import { Flex, Box, Input, Button, Label, Text } from 'ooni-components'
 import { useForm, Controller } from 'react-hook-form'
-import moment from  'moment'
 import styled from 'styled-components'
+import moment from 'moment'
+import dayjs from 'services/dayjs'
 
 import DatePicker from '../../DatePicker'
 
@@ -34,7 +35,7 @@ const Form = ({ onSubmit, initialValues }) => {
   }
 
   const isValidSinceDate = useCallback((value) => {
-    const today = moment.utc()
+    const today = dayjs.utc()
     if (typeof until === 'string' && until.length !== 0) {
       return value.isBefore(until)
     } else {
@@ -43,7 +44,7 @@ const Form = ({ onSubmit, initialValues }) => {
   }, [until])
 
   const isValidUntilDate = useCallback((value) => {
-    const today = moment.utc()
+    const today = dayjs.utc()
     if (typeof until === 'string' && until.length !== 0) {
       return value.isAfter(since) && value.isSameOrBefore(today)
     } else {

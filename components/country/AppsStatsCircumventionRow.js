@@ -6,7 +6,7 @@ import styled from 'styled-components'
 import {
   NettestVanillaTor
 } from 'ooni-components/dist/icons'
-import moment from 'moment'
+import dayjs from 'services/dayjs'
 
 import { testNames } from '../test-info'
 import { CountryContext } from './CountryContext'
@@ -152,7 +152,7 @@ class AppsStatsCircumventionRow extends React.Component {
               <Box ml='auto'>
                 <FormattedMessage id='Country.Apps.Label.LastTested' />
                 {' '}
-                <strong>{moment.utc(data.last_tested).fromNow()}</strong>
+                <strong>{dayjs.utc(data.last_tested).fromNow()}</strong>
               </Box>
               <Box ml={4}>
                 <CollapseTrigger

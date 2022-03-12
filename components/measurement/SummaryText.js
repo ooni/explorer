@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
 import { useIntl } from 'react-intl'
 import { Flex, Text } from 'ooni-components'
 
@@ -16,7 +15,7 @@ const SummaryText = ({
 }) => {
   const intl = useIntl()
   const metadata = getTestMetadata(testName)
-  const formattedDateTime = intl.formatDate(moment.utc(date).toDate(), {
+  const formattedDateTime = intl.formatDate(date, {
     year: 'numeric',
     month: 'long',
     day: '2-digit',

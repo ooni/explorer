@@ -20,6 +20,7 @@
     "babel-plugin-styled-components": "^1.10.7",
     "buffer-from": "^1.1.1",
     "country-util": "0.1.0",
+    "dayjs": "^1.10.8",
     "deepmerge": "^4.2.2",
     "flag-icon-css": "^2.9.0",
     "fontsource-fira-sans": "^3.0.5",

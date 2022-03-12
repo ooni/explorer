@@ -9,6 +9,7 @@ import {
   Label,
 } from 'ooni-components'
 import moment from 'moment'
+import dayjs from 'services/dayjs'
 import { useForm, Controller } from 'react-hook-form'
 
 import DatePicker from '../DatePicker'
@@ -125,7 +126,7 @@ function isValidFilterForTestname(testName = 'XX', arrayWithMapping) {
 
 // Display `${tomorrow}` as the end date for default search
 // to include the measurements of `${today}` as well.
-const tomorrowUTC = moment.utc().add(1, 'day').format('YYYY-MM-DD')
+const tomorrowUTC = dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
 
 const asnRegEx = /^(AS)?([1-9][0-9]*)$/
 const domainRegEx = /(^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,7}(:[0-9]{1,5})?$)|(^(([0-9]{1,3})\.){3}([0-9]{1,3}))/
@@ -206,7 +207,7 @@ const FilterSidebar = ({
     // Valid dates for start of date range
     // 1. Before the 'Until' date, if provided
     // 2. Until tomorrow
-    const tomorrow = moment.utc().add(1, 'day')
+    const tomorrow = dayjs.utc().add(1, 'day')
     if (untilFilterValue.length !== 0) {
       return currentDate.isBefore(untilFilterValue)
     } else {
@@ -218,7 +219,7 @@ const FilterSidebar = ({
     // Valid dates for end of date range
     // 1. After the 'Since' date if provided
     // 2. Until tomorrow
-    const tomorrow = moment.utc().add(1, 'day')
+    const tomorrow = dayjs.utc().add(1, 'day')
     if (sinceFilterValue.length !== 0) {
       return currentDate.isAfter(sinceFilterValue) && currentDate.isSameOrBefore(tomorrow)
     } else {

@@ -2,15 +2,16 @@ import { useEffect, useMemo, useState } from 'react'
 import { territoryNames } from 'country-util'
 import { useForm, Controller } from 'react-hook-form'
 import { Box, Flex } from 'ooni-components'
-import moment from 'moment'
 import { MultiSelect } from 'react-multi-select-component'
 import { useIntl } from 'react-intl'
+import moment from 'moment'
+import dayjs from 'services/dayjs'
 
 import { StyledLabel } from '../aggregation/mat/Form'
 import DatePicker from '../DatePicker'
 
-const tomorrow = moment.utc().add(1, 'day').format('YYYY-MM-DD')
-const lastMonthToday = moment.utc().subtract(30, 'day').format('YYYY-MM-DD')
+const tomorrow = dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
+const lastMonthToday = dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD')
 
 const defaultDefaultValues = {
   since: lastMonthToday,

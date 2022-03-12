@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import url from 'url'
-import moment from 'moment'
+import dayjs from 'services/dayjs'
 import NLink from 'next/link'
 import styled from 'styled-components'
 import { defineMessages, useIntl } from 'react-intl'
@@ -380,7 +380,7 @@ const ResultItem = ({
                   <ASNBox asn={probe_asn} />
                 </Box>
                 <Box width={5/16}>
-                  {moment.utc(measurement_start_time).format('YYYY-MM-DD HH:mm [UTC]')}
+                  {dayjs.utc(measurement_start_time).format('YYYY-MM-DD HH:mm [UTC]')}
                 </Box>
                 <Box width={5/16}>
                   {testDisplayName}

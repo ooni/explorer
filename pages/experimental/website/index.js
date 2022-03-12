@@ -4,8 +4,8 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { Container, Flex, Box } from 'ooni-components'
 import useSWR from 'swr'
-import moment from 'moment'
 import axios from 'axios'
+import dayjs from 'services/dayjs'
 
 import Layout from '../../../components/Layout'
 import NavBar from '../../../components/NavBar'
@@ -29,8 +29,8 @@ const dataFetcher = url => (
 )
 
 const defaultParams = {
-  'since': moment.utc().subtract(1, 'months').format('YYYY-MM-DD'),
-  'until': moment.utc().format('YYYY-MM-DD'),
+  'since': dayjs.utc().subtract(1, 'month').format('YYYY-MM-DD'),
+  'until': dayjs.utc().format('YYYY-MM-DD'),
   'axis_x': 'probe_cc',
   'test_name': 'web_connectivity',
   'input': 'thepiratebay.org',

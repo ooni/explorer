@@ -9,7 +9,7 @@ import {
   VictoryLegend
 } from 'victory'
 import axios from 'axios'
-import moment from 'moment'
+import dayjs from 'services/dayjs'
 import { Flex, Text, theme } from 'ooni-components'
 import { useIntl } from 'react-intl'
 import useSWR from 'swr'
@@ -148,9 +148,10 @@ const CoverageChart = () => {
               }
             ]}
           />
+          {/* format(parseISO(t), 'MMM\'\'yy' */}
           <VictoryAxis
             tickCount={12}
-            tickFormat={(t) => moment(t).format('MMM[\']YY')}
+            tickFormat={(t) => dayjs(t).format('MMM\'YY')}
           />
           <VictoryAxis
             dependentAxis
