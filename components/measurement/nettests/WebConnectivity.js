@@ -457,7 +457,7 @@ const WebConnectivityDetails = ({
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Down',
-        defaultmessage: '{hostname} was down in {country}'
+        defaultMessage: '{hostname} was down in {country}'
       },
       {
         date: date,
@@ -483,7 +483,7 @@ const WebConnectivityDetails = ({
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Failed',
-        defaultmessage: '{hostname} failed to be measured in {country}'
+        defaultMessage: '{hostname} failed to be measured in {country}'
       },
       {
         date: date,

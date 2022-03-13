@@ -57,7 +57,13 @@ const HeadMetadata = ({
 
 HeadMetadata.propTypes = {
   content: PropTypes.shape({
-    message: PropTypes.string.isRequired,
+    message: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.shape({
+        id: PropTypes.string, 
+        defaultMessage: PropTypes.string
+      })
+    ]).isRequired,
     formatted: PropTypes.bool.isRequired
   })
 }
