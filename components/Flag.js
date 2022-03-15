@@ -48,7 +48,7 @@ export const Flag = ({countryCode, size, border}) => {
   const src = `/static/flags/1x1/${countryCode}.svg`
   return (
     <FlagContainer className='country-flag' size={size} border={border}>
-      <FlagImg src={src} size={size} />
+      <FlagImg src={src} size={size} loading='lazy' />
     </FlagContainer>
   )
 }
