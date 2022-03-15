@@ -14,7 +14,7 @@ export default function App({ Component, pageProps, err }) {
 
   useEffect(() => {
     const handleStart = (url) => {
-      // console.log(`Loading: ${url}`)
+      
       NProgress.start()
     }
     const handleStop = () => {
