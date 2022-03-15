@@ -178,9 +178,7 @@ class Countries extends React.Component {
     }
   }
 
-  // componentDidMount () {
-  //   console.log(this.props.ssrRequests)
-  // }
+  
 
   onSearchChange (searchTerm) {
     const filteredCountries = this.props.countries.filter((country) => (

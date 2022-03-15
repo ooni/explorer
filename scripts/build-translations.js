@@ -13,7 +13,7 @@ const supportedLanguages = glob.sync(`${LANG_DIR}/*.json`).map((f) => basename(f
 
 // Copy latest files from `translations`
 supportedLanguages.forEach((lang) => {
-  // console.log('> Getting latest translations for langugae ✨', lang)
+  
   writeFileSync(`${LANG_DIR}/${lang}.json`, readFileSync(`${TRANSLATED_STRINGS_DIR}/${lang}/strings.json`))
 })
 
@@ -26,4 +26,4 @@ const translationsMap = supportedLanguages
 
 const translationsContent = `window.OONITranslations = ${JSON.stringify(translationsMap)}`
 writeFileSync(`${LANG_DIR}/translations.js`, translationsContent)
-console.log(`> Wrote translations to: ${LANG_DIR}/translations.js`)
+
