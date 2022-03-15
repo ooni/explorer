@@ -84,7 +84,7 @@ const Country = ({ countryCode, countryName, overviewStats, reports, ...coverage
   const [newData, setNewData] = useState(false)
 
   const fetchTestCoverageData = useCallback((testGroupList) => {
-    console.log(testGroupList)
+    // console.log(testGroupList)
     const fetcher = async (testGroupList) => {
       let client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
       const result = await client.get('/api/_/test_coverage', {

@@ -23,4 +23,4 @@ const defaultMessages = glob.sync(`${LANG_DIR}/.messages/**/*.json`)
   }, [])
 
 writeFileSync(`${EXTRACTED_KEYS}`, JSON.stringify(defaultMessages, null, 2))
-console.log(`> Wrote default messages to: "${resolve(`${EXTRACTED_KEYS}`)}"`)
+// console.log(`> Wrote default messages to: "${resolve(`${EXTRACTED_KEYS}`)}"`)
