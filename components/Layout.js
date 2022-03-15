@@ -6,7 +6,7 @@ import { theme } from 'ooni-components'
 
 import Header from './Header'
 import Footer from './Footer'
-import withIntl from './withIntl'
+import { LocaleProvider } from './withIntl'
 // import FeedbackButton from '../components/FeedbackFloat'
 
 theme.maxWidth = 1024
@@ -50,25 +50,27 @@ const matomoInstance = createInstance({
   }
 })
 
-const Layout = ({ children, disableFooter = false }) => {
+const Layout = ({ children, messages, disableFooter = false }) => {
   useEffect(() => {
     matomoInstance.trackPageView()
   }, [])
 
   return (
-    <MatomoProvider value={matomoInstance}>
-      <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <div className="site">
-          <Header />
-          <div className="content">
-            { children }
+    <LocaleProvider messages={messages}>
+      <MatomoProvider value={matomoInstance}>
+        <ThemeProvider theme={theme}>
+          <GlobalStyle />
+          <div className="site">
+            <Header />
+            <div className="content">
+              { children }
+            </div>
+            {!disableFooter && <Footer />}
           </div>
-          {!disableFooter && <Footer />}
-        </div>
-        {/* <FeedbackButton /> */}
-      </ThemeProvider>
-    </MatomoProvider>
+          {/* <FeedbackButton /> */}
+        </ThemeProvider>
+      </MatomoProvider>
+    </LocaleProvider>
   )
 }
 
@@ -77,4 +79,4 @@ Layout.propTypes = {
   disableFooter: PropTypes.bool
 }
 
-export default withIntl(Layout)
+export default Layout

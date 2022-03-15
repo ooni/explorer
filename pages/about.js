@@ -7,14 +7,13 @@ import {
   Container
 } from 'ooni-components'
 
-import Layout from '../components/Layout'
 import NavBar from '../components/NavBar'
 
 export default class About extends React.Component {
   render () {
 
     return (
-      <Layout>
+      <React.Fragment>
         <Head>
           <title>About OONI Explorer</title>
         </Head>
@@ -25,7 +24,7 @@ export default class About extends React.Component {
           <Heading h={2}>XXX Implement Me</Heading>
           <Text>Do we even need an about page?</Text>
         </Container>
-      </Layout>
+      </React.Fragment>
     )
   }
 

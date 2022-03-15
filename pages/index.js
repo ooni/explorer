@@ -18,7 +18,6 @@ import {
   Text
 } from 'ooni-components'
 
-import Layout from '../components/Layout'
 import NavBar from '../components/NavBar'
 import { toCompactNumberUnit } from '../utils'
 import HighlightSection from '../components/landing/HighlightsSection'
@@ -160,7 +159,7 @@ export default class LandingPage extends React.Component {
     asnCount = toCompactNumberUnit(asnCount)
 
     return (
-      <Layout>
+      <React.Fragment>
         <Head>
           <title>OONI Explorer</title>
         </Head>
@@ -301,7 +300,7 @@ export default class LandingPage extends React.Component {
             </Box>
           </Container>
         </Container>
-      </Layout>
+      </React.Fragment>
     )
   }
 }

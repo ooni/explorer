@@ -14,7 +14,6 @@ import {
 import { StickyContainer, Sticky } from 'react-sticky'
 
 import Flag from '../components/Flag'
-import Layout from '../components/Layout'
 import NavBar from '../components/NavBar'
 
 import countryUtil from 'country-util'
@@ -208,7 +207,7 @@ class Countries extends React.Component {
     const regions = ['002', '019', '142', '150', '009', 'AQ']
 
     return (
-      <Layout>
+      <React.Fragment>
         <Head>
           <title>Internet Censorship around the world | OONI Explorer</title>
         </Head>
@@ -254,7 +253,7 @@ class Countries extends React.Component {
             }
           </Container>
         </StickyContainer>
-      </Layout>
+      </React.Fragment>
     )
   }
 }

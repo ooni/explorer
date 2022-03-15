@@ -15,7 +15,6 @@ import MeasurementContainer from '../../components/measurement/MeasurementContai
 import MeasurementNotFound from '../../components/measurement/MeasurementNotFound'
 import HeadMetadata from '../../components/measurement/HeadMetadata'
 
-import Layout from '../../components/Layout'
 import NavBar from '../../components/NavBar'
 import ErrorPage from '../_error'
 
@@ -128,7 +127,7 @@ const Measurement = ({
   }
 
   return (
-    <Layout>
+    <React.Fragment>
       <Head>
         <title>OONI Explorer</title>
       </Head>
@@ -214,7 +213,7 @@ const Measurement = ({
             )
           }} />
       )}
-    </Layout>
+    </React.Fragment>
   )
 }
 

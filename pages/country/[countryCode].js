@@ -12,7 +12,6 @@ import { StickyContainer, Sticky } from 'react-sticky'
 
 import NavBar from '../../components/NavBar'
 import Flag from '../../components/Flag'
-import Layout from '../../components/Layout'
 import PageNavMenu from '../../components/country/PageNavMenu'
 import Overview from '../../components/country/Overview'
 import WebsitesSection from '../../components/country/Websites'
@@ -106,7 +105,7 @@ const Country = ({ countryCode, countryName, overviewStats, reports, ...coverage
   const { testCoverage, networkCoverage } = newData !== false ? newData : coverageDataSSR
 
   return (
-    <Layout>
+    <React.Fragment>
       <CountryHead countryName={countryName} measurementCount={overviewStats.measurement_count} measuredSince={overviewStats.first_bucket_date} networkCount={overviewStats.network_count} />
       <StickyContainer>
         <Sticky>
@@ -160,7 +159,7 @@ const Country = ({ countryCode, countryName, overviewStats, reports, ...coverage
           </Flex>
         </Container>
       </StickyContainer>
-    </Layout>
+    </React.Fragment>
   )
 }
 
