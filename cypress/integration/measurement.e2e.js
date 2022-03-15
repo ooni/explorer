@@ -10,19 +10,19 @@ describe('Measurement Page Tests', () => {
     it('renders a valid accessible og:description', () => {
       cy.visit('/measurement/20200807T220702Z_AS9009_VDIirQFXzvVZXGTDXrRKAd7oQB3CpnKGISOZLs7kQFV6RJNR7n?input=https%3A%2F%2Fwww.theguardian.com%2F')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests www.theguardian.com was accessible in United States on August 7, 2020, 10:42:51 PM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests www.theguardian.com was accessible in United States on August 7, 2020, 10:44:09 PM UTC, find more open data on internet censorship on OONI Explorer.')
     })
 
     it('renders a valid blocked og:description', () => {
       cy.visit('/measurement/20200303T085244Z_AS42668_UThI3Fdoo0IZ6610604dd0CGkhd7oQV6QLWWzZDVLJ35oGxBO4?input=http%3A%2F%2Frutor.org%2F')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests rutor.org was blocked in Russia on March 3, 2020, 8:52:44 AM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests rutor.org was blocked in Russia on March 3, 2020, 9:15:05 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
 
     it('renders a valid anomaly og:description', () => {
       cy.visit('/measurement/20200807T223513Z_AS27364_QJdsvFRG6B98MqqWR3QTey9WheksI7757sefWWMwAe0OHU8hWT?input=http%3A%2F%2Fwww.google.com%2Fsearch%3Fq%3Dlesbian')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests www.google.com was accessible in United States on August 7, 2020, 10:35:09 PM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests www.google.com was accessible in United States on August 7, 2020, 10:36:29 PM UTC, find more open data on internet censorship on OONI Explorer.')
     })
 
     // it('renders a valid website down og:description', () => {
@@ -70,13 +70,13 @@ describe('Measurement Page Tests', () => {
     it('renders a reachable og:description', () => {
       cy.visit('/measurement/20200807T220134Z_AS9009_SOmXTa7NLwrzRniaVS0yxlJ3TbKTDJJxrfaIJkpURTn3GBHiA2')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests Telegram was reachable in United States on August 7, 2020, 10:37:27 PM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests Telegram was reachable in United States on August 7, 2020, 10:37:28 PM UTC, find more open data on internet censorship on OONI Explorer.')
     })
 
     it('renders a unreachable og:description', () => {
       cy.visit('/measurement/20200304T183801Z_AS42610_uehNyFJgkAJBCaq5thzAovFEODIQ1u5vlTTk3D6GDvbaYeoJY8')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests Telegram was NOT reachable in Russia on March 4, 2020, 6:37:57 PM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests Telegram was NOT reachable in Russia on March 4, 2020, 6:57:54 PM UTC, find more open data on internet censorship on OONI Explorer.')
     })
 
     it('renders an accessible measurement', () => {
@@ -102,7 +102,7 @@ describe('Measurement Page Tests', () => {
     it('renders an unreachable og:description', () => {
       cy.visit('/measurement/20200407T024309Z_AS4713_xA9Wh81DQrIFqRe46zwKeyJw4DJQwjyTLBIi2zSQqWUBsfQMJS')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests WhatsApp was likely blocked in Japan on April 7, 2020, 2:43:06 AM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests WhatsApp was likely blocked in Japan on April 7, 2020, 2:43:10 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
 
     it('renders an accessible measurement', () => {
@@ -165,7 +165,7 @@ describe('Measurement Page Tests', () => {
     it('renders a unreachable og:description', () => {
       cy.visit('/measurement/20200304T191012Z_AS42610_fqDY31xiRoWEdKd4GWtV84UYpXG2RlpjBK7kd8rTLHIItqMnej')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests Facebook Messenger was NOT reachable in Russia on March 4, 2020, 5:52:38 AM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests Facebook Messenger was NOT reachable in Russia on March 4, 2020, 6:37:43 PM UTC, find more open data on internet censorship on OONI Explorer.')
     })
   })
 
@@ -188,7 +188,7 @@ describe('Measurement Page Tests', () => {
     it('renders an anomaly og:description', () => {
       cy.visit('/measurement/20190530T141520Z_AS4788_DNqCUqL7CAfijExowyaymigb2sITdpS47gjrieDJCx8kDc1TfO')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests HTTP header manipulation was detected in Malaysia on May 30, 2019, 2:15:15 PM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests HTTP header manipulation was detected in Malaysia on May 30, 2019, 2:15:19 PM UTC, find more open data on internet censorship on OONI Explorer.')
     })
   })
 
@@ -211,7 +211,7 @@ describe('Measurement Page Tests', () => {
     it('render an anomaly og:description', () => {
       cy.visit('/measurement/20170213T160709Z_AS8452_M5qSjOZgYwFrkQYVfdrYmYw2tLc3dzJB7mVbtjVoR1qCdbcEOA')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests Network traffic manipulation was detected in Egypt on February 13, 2017, 4:06:58 PM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests Network traffic manipulation was detected in Egypt on February 13, 2017, 4:07:00 PM UTC, find more open data on internet censorship on OONI Explorer.')
     })
   })
 

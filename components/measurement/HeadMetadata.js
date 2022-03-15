@@ -15,7 +15,7 @@ const HeadMetadata = ({
   const intl = useIntl()
   let description = ''
 
-  const formattedDate = dayjs(date).utc().format('MMMM D, YYYY, h:m A [UTC]')
+  const formattedDate = dayjs(date).utc().format('MMMM D, YYYY, h:mm:ss A [UTC]')
 
   if (content.formatted) {
     description = content.message
