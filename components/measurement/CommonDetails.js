@@ -53,6 +53,9 @@ const CommonDetails = ({
     software_name,
     software_version,
     annotations,
+    resolver_asn,
+    resolver_ip,
+    resolver_network_name,
   } = measurement ?? {}
 
   const { query } = useRouter()
@@ -97,8 +100,24 @@ const CommonDetails = ({
     },
     {
       label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.Engine' }),
-      value: engine ?? intl.formatMessage({ id: 'Measurement.CommonDetails.Value.Unavailable' })
+      value: engine
     }
+  ]
+
+  const showResolverItems = resolver_asn || resolver_ip || resolver_network_name
+  const resolverItems = [
+    {
+      label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.ResolverASN' }),
+      value: resolver_asn ?? unavailable
+    },
+    {
+      label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.ResolverIP' }),
+      value: resolver_ip ?? unavailable
+    },
+    {
+      label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.ResolverNetworkName' }),
+      value: resolver_network_name ?? unavailable
+    },
   ]
 
   const expandAllBtn = (e) => {
@@ -108,6 +127,15 @@ const CommonDetails = ({
 
   return (
     <React.Fragment>
+      {showResolverItems && 
+        <Flex my={4}>
+          {/* Resolver data */}
+          <DetailsBoxTable
+            title={<FormattedMessage id='Measurement.CommonDetails.Label.Resolver' />}
+            items={resolverItems}
+          />
+        </Flex>
+      }
       <Flex my={4}>
         {/* Metadata: platform, probe, MK version etc. */}
         <DetailsBoxTable

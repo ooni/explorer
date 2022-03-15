@@ -33,7 +33,10 @@ export const DetailsBoxTable = ({
 )
 
 DetailsBoxTable.propTypes = {
-  title: PropTypes.string,
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element
+  ]),
   items: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string.isRequired,
     value: PropTypes.string
@@ -84,8 +87,8 @@ export const DetailsBox = ({ title, content, collapsed = false, ...rest }) => {
 DetailsBox.propTypes = {
   title: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.instanceOf(FormattedMessage)
-  ]).isRequired,
+    PropTypes.element
+  ]),
   content: PropTypes.node,
   collapsed: PropTypes.bool
 }
