@@ -111,7 +111,7 @@ const Measurement = ({
   anomaly,
   failure,
   test_name,
-  test_start_time,
+  measurement_start_time,
   probe_cc,
   probe_asn,
   notFound = false,
@@ -147,7 +147,7 @@ const Measurement = ({
           country={country}
           measurement={raw_measurement}
           input={input}
-          test_start_time={test_start_time}
+          measurementStartTime={measurement_start_time}
           probe_asn={probe_asn}
           scores={scores}
           {...rest}
@@ -172,7 +172,7 @@ const Measurement = ({
                     testName={test_name}
                     testUrl={input}
                     country={country}
-                    date={test_start_time}
+                    date={measurement_start_time}
                   />
                 }
                 <NavBar color={color} />
@@ -184,7 +184,7 @@ const Measurement = ({
                   info={info}
                 />
                 <CommonSummary
-                  test_start_time={test_start_time}
+                  measurementStartTime={measurement_start_time}
                   probe_asn={probe_asn}
                   probe_cc={probe_cc}
                   color={color}
@@ -204,7 +204,7 @@ const Measurement = ({
                       testUrl={input}
                       network={probe_asn}
                       country={country}
-                      date={test_start_time}
+                      date={measurement_start_time}
                       content={summaryText}
                     />
                   }
@@ -235,7 +235,7 @@ Measurement.propTypes = {
   raw_measurement: PropTypes.object,
   report_id: PropTypes.string,
   test_name: PropTypes.string,
-  test_start_time: PropTypes.string
+  measurement_start_time: PropTypes.string
 }
 
 export default Measurement
