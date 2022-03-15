@@ -1,7 +1,7 @@
 import React from 'react'
 import Head from 'next/head'
 import PropTypes from 'prop-types'
-import { useIntl } from 'react-intl'
+import dayjs from 'services/dayjs'
 import { getTestMetadata } from '../utils'
 
 const HeadMetadata = ({
@@ -11,15 +11,9 @@ const HeadMetadata = ({
   date,
   content
 }) => {
-  const intl = useIntl()
   let description = ''
 
-  const formattedDate = intl.formatDate(date, {
-    timeZone: 'UTC',
-    timeZoneName: 'short',
-    day: 'numeric', month: 'long', year: 'numeric',
-    hour: 'numeric', minute: 'numeric', second: 'numeric'
-  })
+  const formattedDate = dayjs(date).utc().format('MMMM D, YYYY, h:m A [UTC]')
 
   if (content.formatted) {
     description = content.message

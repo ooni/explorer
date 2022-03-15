@@ -12,6 +12,7 @@ import {
 import { Tick, Cross } from 'ooni-components/dist/icons'
 import deepmerge from 'deepmerge'
 import styled from 'styled-components'
+import dayjs from 'services/dayjs'
 
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 
@@ -333,15 +334,7 @@ const WebConnectivityDetails = ({
   } = validateMeasurement(measurement ?? {})
 
   const intl = useIntl()
-  const date = intl.formatDate(test_start_time, {
-    year: 'numeric',
-    month: 'long',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: 'numeric',
-    timeZone: 'UTC',
-    timeZoneName: 'short'
-  })
+  const date = dayjs(test_start_time).utc().format('MMMM DD, YYYY, hh:mm A [UTC]')
 
   const p = url.parse(input)
   const hostname = p.host
