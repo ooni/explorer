@@ -10,7 +10,7 @@ import OONILogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonoc
 import { colorMap } from './colorMap'
 import { generateSearchQuery, CustomTooltipNoLink} from './CustomTooltip'
 import { getXAxisTicks } from './timeScaleXAxis'
-import { fillDataInMissingDates } from './computations'
+import { fillRowHoles } from './computations'
 import { ChartHeader } from './ChartHeader'
 
 const colorFunc = (d) => colorMap[d.id] || '#ccc'
@@ -41,9 +41,9 @@ export const StackedBarChart = ({ data, query }) => {
       let indexBy = query.axis_x ?? ''
 
       const dataReceived = Array.isArray(data.data.result) ? data.data.result : []
-      const dataWithNoHoles = fillDataInMissingDates(dataReceived, query.since, query.until)
+      const dataWithNoHoles = fillRowHoles(dataReceived, query)
 
-      const xAxisTicks = getXAxisTicks(query.since, query.until, 30)
+      const xAxisTicks = getXAxisTicks(query, 30)
 
       return {
         data: dataWithNoHoles,

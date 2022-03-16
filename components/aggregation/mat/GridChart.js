@@ -5,7 +5,7 @@ import { Heading, Flex, Box, Text } from 'ooni-components'
 import OONILogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochrome.svg'
 
 import RowChart, { chartMargins } from './RowChart'
-import { fillDataInMissingDates, getDatesBetween } from './computations'
+import { fillDataHoles } from './computations'
 import { getXAxisTicks } from './timeScaleXAxis'
 import { useMATContext } from './MATContext'
 import { ChartHeader } from './ChartHeader'
@@ -44,21 +44,9 @@ const reshapeChartData = (data, query, isGrouped) => {
 
   const t1 = performance.now()
 
-  let reshapedDataWithoutHoles = {}
+  let reshapedDataWithoutHoles = fillDataHoles(reshapedData, query)
 
-  // 3. If x-axis is `measurement_start_day`, fill with zero values where there is no data
-  if (query.axis_x === 'measurement_start_day') {
-    const dateSet = getDatesBetween(new Date(query.since), new Date(query.until))
 
-    // Object transformation, works like Array.map
-    // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/fromEntries#object_transformations
-    reshapedDataWithoutHoles = Object.fromEntries(
-      Object.entries(reshapedData)
-        .map(([ key, rowData ]) => [ key, fillDataInMissingDates(rowData, query.since, query.until, dateSet) ])
-    )
-  } else {
-    reshapedDataWithoutHoles = reshapedData
-  }
   const t2 = performance.now()
   console.debug(`ReshapeChartData: Step 2 took: ${(t2-t1)}ms` )
   return [reshapedDataWithoutHoles, rows, rowLabels]
@@ -82,7 +70,7 @@ const GridChart = ({ data, isGrouped = true, height = 'auto', header }) => {
     return {reshapedData, rows, rowLabels, gridHeight, indexBy: query.axis_x, yAxis: query.axis_y }
   }, [data, height, isGrouped, query])
 
-  const xAxisTickValues = getXAxisTicks(query.since, query.until, 30)
+  const xAxisTickValues = getXAxisTicks(query, 30)
 
   const xAxisData = itemData.reshapedData[itemData.rows[0]]
   const xAxisMargins = {...chartMargins, top: 60, bottom: 0}
