@@ -1,5 +1,5 @@
 /* global process */
-import React, { useCallback, useEffect, useMemo } from 'react'
+import React, { useCallback, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 import { useRouter } from  'next/router'
@@ -7,7 +7,7 @@ import axios from 'axios'
 import {
   Container,
   Heading,
-  Flex, Box,
+  Flex, Box, Button
 } from 'ooni-components'
 import useSWR from 'swr'
 
@@ -19,21 +19,17 @@ import { FunnelChart } from 'components/aggregation/mat/FunnelChart'
 import { Form } from 'components/aggregation/mat/Form'
 import { axiosResponseTime } from 'components/axios-plugins'
 import TableView from 'components/aggregation/mat/TableView'
+import { exportToCsv, exportToJson } from 'utils/dataExport'
 
 const baseURL = process.env.NEXT_PUBLIC_MEASUREMENTS_URL
 axiosResponseTime(axios)
 
 export const getServerSideProps = async () => {
   const testNamesR = await axios.get(`${baseURL}/api/_/test_names`)
-  if (Array.isArray(testNamesR.data.test_names)){
-    return {
-      props: {
-        testNames: testNamesR.data.test_names
-      }
-    }
-  } else {
-    return {
-      props: { testNames: [] }
+
+  return {
+    props: {
+      testNames: Array.isArray(testNamesR.data.test_names) ? testNamesR.data.test_names : []
     }
   }
 }
@@ -86,6 +82,51 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
 
   const showLoadingIndicator = useMemo(() => isValidating, [isValidating])
 
+  const renderLoading = () => (
+    <Box>
+      <h2>Loading ...</h2>
+    </Box>
+  )
+
+  const renderData = () => {
+    const { data: { dimension_count } } = data
+    if (dimension_count === 0) {
+      return (
+        <Box sx={{ height: '500px' }}>
+          <FunnelChart data={data.data.result} />
+        </Box>
+      )
+    } else if (dimension_count === 1) {
+      return (
+        <Box sx={{ height: '600px' }}>
+          <StackedBarChart data={data} query={query} />
+        </Box>
+      )
+    } else if (dimension_count > 1) {
+      return (
+        <Box sx={{ minHeight: '500px' }}>
+          <TableView data={data.data.result} query={query} />
+        </Box>
+      )
+    } else {
+      return null;
+    }
+  }
+
+  const renderDownloadButtons = () => (
+    <Flex flexWrap='wrap' justifyContent='space-evenly' mt={100}>
+      <Button mb={15} onClick={() => exportToCsv(query)}>Download CSV</Button>
+      <Button mb={15} onClick={() => exportToJson(data.data.result)}>Download JSON</Button>
+    </Flex>
+  )
+
+  const renderError = () => (
+    <Box>
+      <Heading h={5} my={4}>Error</Heading>
+      <pre>{JSON.stringify(error, null, 2)}</pre>
+    </Box>
+  )
+
   return (
     <MATContextProvider>
       <Layout>
@@ -98,31 +139,11 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
             <Heading h={1} my={4} title='This is an experimental feature still undergoing development.'> 🧪 OONI Measurement Aggregation Toolkit</Heading>
             <Form onSubmit={onSubmit} testNames={testNames} query={router.query} />
             <Box sx={{ }}>
-              {showLoadingIndicator &&
-                <Box>
-                  <h2>Loading ...</h2>
-                </Box>
-              }
-              {data && data.data.dimension_count == 0 &&
-                <Box sx={{ height: '500px' }}>
-                  <FunnelChart data={data.data.result} />
-                </Box>
-              }
-              {data && data.data.dimension_count == 1 &&
-                <Box sx={{ height: '600px' }}>
-                  <StackedBarChart data={data} query={query} />
-                </Box>
-              }
-              {data && data.data.dimension_count > 1 &&
-                <Box sx={{ minHeight: '500px' }}>
-                  <TableView data={data.data.result} query={query} />
-                </Box>
-              }
+              {showLoadingIndicator && renderLoading()}
+              {data && renderData()}
+              {data && renderDownloadButtons()}
             </Box>
-            {error && <Box>
-              <Heading h={5} my={4}>Error</Heading>
-              <pre>{JSON.stringify(error, null, 2)}</pre>
-            </Box>}
+            {error && renderError()}
           </Flex>
         </Container>
       </Layout>
