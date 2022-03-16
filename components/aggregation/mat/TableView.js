@@ -1,5 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react'
-import { useTable, useFlexLayout, useRowSelect, useFilters, useGroupBy, useSortBy } from 'react-table'
+import { useTable, useFlexLayout, useRowSelect, useFilters, useGroupBy, useSortBy, useGlobalFilter, useAsyncDebounce } from 'react-table'
 import { FormattedMessage, useIntl } from 'react-intl'
 import styled from 'styled-components'
 import { Flex, Box, Button, Text } from 'ooni-components'
@@ -30,9 +30,6 @@ const TableRow = styled(Flex)`
   border-bottom: 1px solid black;
   &:last-child {
     border-bottom: 0;
-  }
-  &:hover {
-    background: ${props => props.theme.colors.gray1};
   }
 `
 
@@ -90,6 +87,56 @@ const SearchFilter = ({
       }}
       placeholder={`Search ${count} records...`}
     />
+  )
+}
+
+const StyledGlobalFilter = styled(Box)`
+  margin: 16px;
+  margin-top: 10px;
+  input {
+    border: 0;
+    outline: 0;
+  }
+`
+
+function GlobalFilter({
+  preGlobalFilteredRows,
+  globalFilter,
+  setGlobalFilter,
+}) {
+  const count = preGlobalFilteredRows.length
+  const [value, setValue] = React.useState(globalFilter)
+  const onChange = useAsyncDebounce(value => {
+    setGlobalFilter(value || undefined)
+  }, 200)
+
+  return (
+    <StyledGlobalFilter>
+      Search:{' '}
+      <input
+        value={value || ''}
+        onChange={e => {
+          setValue(e.target.value)
+          onChange(e.target.value)
+        }}
+        placeholder={`Search ${count} records...`}
+        style={{
+          fontSize: '1.1rem',
+          border: '0',
+        }}
+      />
+    </StyledGlobalFilter>
+  )
+}
+
+const SortHandle = ({ isSorted, isSortedDesc }) => {
+  return (
+    <Box as='code' ml={1}>
+      {isSorted ? (
+        isSortedDesc ? '▼' : '▲'
+      ) : (
+        <Box as='code'>&nbsp;</Box>
+    )}</Box>
   )
 }
 
@@ -152,7 +199,7 @@ const TableView = ({ data, query }) => {
       aggregate: (values) => values[0],
       filter: 'text',
       style: {
-        width: '45%'
+        width: '35%'
       }
     },
     {
@@ -164,6 +211,8 @@ const TableView = ({ data, query }) => {
       Header: <FormattedMessage id='MAT.Table.Header.anomaly_count' />,
       accessor: 'anomaly_count',
       aggregate: 'sum',
+      width: 150,
+      sortDescFirst: true,
       disableFilters: true,
       style: {
         textAlign: 'end'
@@ -173,6 +222,8 @@ const TableView = ({ data, query }) => {
       Header: <FormattedMessage id='MAT.Table.Header.confirmed_count' />,
       accessor: 'confirmed_count',
       aggregate: 'sum',
+      width: 150,
+      sortDescFirst: true,
       disableFilters: true,
       style: {
         textAlign: 'end'
@@ -182,6 +233,8 @@ const TableView = ({ data, query }) => {
       Header: <FormattedMessage id='MAT.Table.Header.failure_count' />,
       accessor: 'failure_count',
       aggregate: 'sum',
+      width: 150,
+      sortDescFirst: true,
       disableFilters: true,
       style: {
         textAlign: 'end'
@@ -191,6 +244,8 @@ const TableView = ({ data, query }) => {
       Header: <FormattedMessage id='MAT.Table.Header.measurement_count' />,
       accessor: 'measurement_count',
       aggregate: 'sum',
+      width: 150,
+      sortDescFirst: true,
       disableFilters: true,
       style: {
         textAlign: 'end'
@@ -210,7 +265,12 @@ const TableView = ({ data, query }) => {
     rows, // contains filtered rows
     toggleAllRowsSelected,
     selectedFlatRows,
-    prepareRow
+    prepareRow,
+    setAllFilters,
+    visibleColumns,
+    state,
+    preGlobalFilteredRows,
+    setGlobalFilter,
   } = useTable(
     {
       columns,
@@ -221,6 +281,7 @@ const TableView = ({ data, query }) => {
     },
     useFlexLayout,
     useFilters,
+    useGlobalFilter,
     useGroupBy,
     useSortBy,
     useRowSelect,
@@ -271,14 +332,13 @@ const TableView = ({ data, query }) => {
     }
   }, [rows, selectedFlatRows])
 
-  const showChartsButton = selectedFlatRows.length > 0 && selectedFlatRows.length < rows.length ? (
-    <Button hollow onClick={updateCharts}>Show {selectedFlatRows.length} Charts</Button>
-  ) : (
-    <Text>Select rows to show</Text>      
+  const chartsButton =  (
+    <Button hollow onClick={updateCharts}>Show {selectedFlatRows.length > 0 ? selectedFlatRows.length: 'All'} Charts</Button>
   )
 
   const resetFilter = () => {
     toggleAllRowsSelected(false)
+    setAllFilters()
     setDataForCharts(rows)
     setChartPanelHeight('auto')
   }
@@ -288,7 +348,7 @@ const TableView = ({ data, query }) => {
       <DetailsBox title={'Filters'} collapsed={false}>
         <Flex flexDirection='column'>
           <Flex my={2} alignItems='center'>
-            {showChartsButton}
+            {chartsButton}
             <Button inverted onClick={resetFilter} mx={3} disabled={selectedFlatRows.length === 0}>Reset</Button>
           </Flex>
           <TableContainer>
@@ -304,14 +364,24 @@ const TableView = ({ data, query }) => {
                             style: column.style
                           }
                         ])}>
-                          {column.render('Header')}
-                          {/* Column Filter */}
-                          <div>{column.canFilter ? column.render('Filter') : null}</div>
+                          <span {...column.getSortByToggleProps()}>
+                            {column.render('Header')}
+                            {column.canSort &&
+                              <SortHandle isSorted={column.isSorted} isSortedDesc={column.isSortedDesc} />
+                            }
+                          </span>
                         </Cell>
                       )}
                     )}
                   </TableRow>
                 ))}
+                <TableRow>
+                  <GlobalFilter
+                    preGlobalFilteredRows={rows}
+                    globalFilter={state.globalFilter}
+                    setGlobalFilter={setGlobalFilter}
+                  />
+                </TableRow>
               </TableHeader>
               <TableBody {...getTableBodyProps()}>
                 {rows.map(row => {
