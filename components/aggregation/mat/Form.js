@@ -52,14 +52,18 @@ export const Form = ({ onSubmit, testNames, query }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Flex my={2} alignItems='center'>
-        <Box width={1/3}>
+      <Flex my={2} justifyContent='space-between' sx={{
+        '@media screen and (max-width: 476px)': {
+          flexDirection: 'column',
+        }
+      }}>
+        <Box width={[1, 1/5]}>
           <StyledLabel>
             Country
           </StyledLabel>
           <Controller
             render={({field}) => (
-              <Select {...field}>
+              <Select {...field} sx={{ width: '100%' }}>
                 <option value=''>All Countries</option>
                 {sortedCountries.map((c, idx) =>(
                   <option key={idx} value={c.iso3166_alpha2}>{c.iso3166_name}</option>
@@ -70,7 +74,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             control={control}
           />
         </Box>
-        <Box width={1/6}>
+        <Box width={[1, 1/5]}>
           <StyledLabel>
             ASN
           </StyledLabel>
@@ -85,7 +89,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             )}
           />
         </Box>
-        <Box width={1/5} px={3}>
+        <Box width={[1, 1/5]}>
           <StyledLabel>
             Since
           </StyledLabel>
@@ -116,7 +120,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             )}
           />
         </Box>
-        <Box width={1/4} px={3}>
+        <Box width={[1, 1/5]}>
           <StyledLabel>
             Until
           </StyledLabel>
@@ -148,8 +152,12 @@ export const Form = ({ onSubmit, testNames, query }) => {
           />
         </Box>
       </Flex>
-      <Flex justifyContent='space-between'  alignItems='center'>
-        <Box>
+      <Flex my={2} justifyContent='space-between' sx={{
+        '@media screen and (max-width: 476px)': {
+          flexDirection: 'column',
+        }
+      }}>
+        <Box width={[1, 0.18]}>
           <StyledLabel>
             Test Name
           </StyledLabel>
@@ -157,7 +165,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             name='test_name'
             control={control}
             render={({field}) => (
-              <Select {...field}>
+              <Select {...field} sx={{ width: '100%' }}>
                 {testNames.map((test, idx) => (
                   <option key={idx} value={test.id}>{test.name}</option>
                 ))}
@@ -165,7 +173,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             )}
           />
         </Box>
-        <Box>
+        <Box width={[1, 0.18]}>
           <StyledLabel>
             Domain
           </StyledLabel>
@@ -180,7 +188,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             )}
           />
         </Box>
-        <Box width={1/5}>
+        <Box width={[1, 0.18]}>
           <StyledLabel>
             Category Codes
           </StyledLabel>
@@ -188,7 +196,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             name='category_code'
             control={control}
             render={({field}) => (
-              <Select {...field}>
+              <Select {...field} sx={{ width: '100%' }}>
                 <option value="">ALL</option>
                 {categoryCodes.map(([code, label], idx) => (
                   <option key={idx} value={code}>{label}</option>
@@ -197,7 +205,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             )}
           />
         </Box>
-        <Box>
+        <Box width={[1, 0.18]}>
           <StyledLabel>
             X Axis
           </StyledLabel>
@@ -205,7 +213,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             name='axis_x'
             control={control}
             render={({field}) => (
-              <Select {...field}>
+              <Select {...field} sx={{ width: '100%' }}>
                 {optionsAxis.map((option, idx) => (
                   <option key={idx} value={option}>{option}</option>
                 ))}
@@ -213,7 +221,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             )}
           />
         </Box>
-        <Box>
+        <Box width={[1, 0.18]}>
           <StyledLabel>
             Y Axis
           </StyledLabel>
@@ -221,7 +229,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             name='axis_y'
             control={control}
             render={({field}) => (
-              <Select {...field}>
+              <Select {...field} sx={{ width: '100%' }}>
                 {optionsAxis.map((option, idx) => (
                   <option key={idx} value={option}>{option}</option>
                 ))}
@@ -231,7 +239,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
         </Box>
       </Flex>
       <Flex my={4}>
-        <Button type='submit'>Submit</Button>
+        <Button type='submit' width={[1, 1/8]}>Submit</Button>
       </Flex>
 
     </form>
