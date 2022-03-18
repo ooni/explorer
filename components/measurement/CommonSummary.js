@@ -42,13 +42,13 @@ SummaryItemBox.propTypes = {
 
 const CommonSummary = ({
   color,
-  measurementStartTime,
+  measurement_start_time,
   probe_asn,
   probe_cc,
   country
 }) => {
   const intl = useIntl()
-  const startTime = measurementStartTime
+  const startTime = measurement_start_time
   const network = probe_asn
   const countryCode = probe_cc
 
@@ -92,7 +92,7 @@ const CommonSummary = ({
 }
 
 CommonSummary.propTypes = {
-  measurementStartTime: PropTypes.string.isRequired,
+  measurement_start_time: PropTypes.string.isRequired,
   probe_asn: PropTypes.string.isRequired,
   probe_cc: PropTypes.string.isRequired,
   country: PropTypes.string.isRequired,

@@ -148,7 +148,6 @@ const CoverageChart = () => {
               }
             ]}
           />
-          {/* format(parseISO(t), 'MMM\'\'yy' */}
           <VictoryAxis
             tickCount={12}
             tickFormat={(t) => dayjs(t).format('MMM\'YY')}

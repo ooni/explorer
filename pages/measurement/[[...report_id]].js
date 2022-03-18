@@ -147,7 +147,7 @@ const Measurement = ({
           country={country}
           measurement={raw_measurement}
           input={input}
-          measurementStartTime={measurement_start_time}
+          measurement_start_time={measurement_start_time}
           probe_asn={probe_asn}
           scores={scores}
           {...rest}
@@ -184,7 +184,7 @@ const Measurement = ({
                   info={info}
                 />
                 <CommonSummary
-                  measurementStartTime={measurement_start_time}
+                  measurement_start_time={measurement_start_time}
                   probe_asn={probe_asn}
                   probe_cc={probe_cc}
                   color={color}

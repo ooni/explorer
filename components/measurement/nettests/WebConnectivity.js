@@ -314,7 +314,7 @@ const WebConnectivityDetails = ({
   country,
   measurement,
   scores,
-  measurementStartTime,
+  measurement_start_time,
   probe_asn,
   input,
   render
@@ -334,7 +334,7 @@ const WebConnectivityDetails = ({
   } = validateMeasurement(measurement ?? {})
 
   const intl = useIntl()
-  const date = dayjs(measurementStartTime).utc().format('MMMM DD, YYYY, hh:mm A [UTC]')
+  const date = dayjs(measurement_start_time).utc().format('MMMM DD, YYYY, hh:mm A [UTC]')
 
   const p = url.parse(input)
   const hostname = p.host
@@ -621,7 +621,7 @@ WebConnectivityDetails.propTypes = {
       blocking_type: PropTypes.any
     })
   }),
-  measurementStartTime: PropTypes.any
+  measurement_start_time: PropTypes.any
 }
 
 export default WebConnectivityDetails
