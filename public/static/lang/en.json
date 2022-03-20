@@ -390,6 +390,7 @@
   "Search.Sidebar.ASN.Error": "Valid formats: AS1234, 1234",
   "Search.Sidebar.From": "From",
   "Search.Sidebar.Until": "Until",
+  "Search.Sidebar.DateRange": "Date Range",
   "Search.Sidebar.HideFailed": "Hide failed measurements",
   "Search.Sidebar.Button.FilterResults": "Filter Results",
   "Search.FilterButton.AllResults": "All Results",

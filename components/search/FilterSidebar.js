@@ -2,17 +2,16 @@ import React, { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 import { useIntl } from 'react-intl'
 import {
-  Flex, Box,
+  Box,
   Button,
   Input,
   Select,
   Label,
 } from 'ooni-components'
-import moment from 'moment'
 import dayjs from 'services/dayjs'
-import { useForm, Controller } from 'react-hook-form'
+import { useForm, Controller, FormProvider } from 'react-hook-form'
 
-import DatePicker from '../DatePicker'
+import DateRangePicker from '../DateRangePicker'
 import {
   RadioGroup,
   RadioButton
@@ -104,7 +103,7 @@ function isValidFilterForTestname(testName = 'XX', arrayWithMapping) {
 
 // Display `${tomorrow}` as the end date for default search
 // to include the measurements of `${today}` as well.
-const tomorrowUTC = dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
+const tomorrowUTC = dayjs().utc().add(1, 'day').format('YYYY-MM-DD')
 
 const asnRegEx = /^(AS)?([1-9][0-9]*)$/
 const domainRegEx = /(^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,}(:[0-9]{1,5})?$)|(^(([0-9]{1,3})\.){3}([0-9]{1,3}))/
@@ -139,7 +138,6 @@ const FilterSidebar = ({
   onApplyFilter
 }) => {
   const intl = useIntl()
-
   const defaultValues = {
     domainFilter,
     inputFilter,
@@ -152,17 +150,14 @@ const FilterSidebar = ({
     untilFilter,
     hideFailed
   }
-
-  const { handleSubmit, control, watch, resetField, formState, setValue } = useForm({
-    defaultValues
-  })
+  const methods = useForm({ defaultValues })
+  const { handleSubmit, control, watch, resetField, formState } = methods
   const { errors } = formState
 
   const testNameFilterValue = watch('testNameFilter')
   const debugg = categoryFilter
   //const debugg = watch('categoryFilter')
   const onlyFilterValue = watch('onlyFilter')
-  const [untilFilterValue, sinceFilterValue] = watch(['untilFilter', 'sinceFilter'])
 
   // Does the selected testName need a domain filter
   const showDomain = useMemo(() => isValidFilterForTestname(testNameFilterValue, testsWithValidDomain), [testNameFilterValue])
@@ -191,30 +186,6 @@ const FilterSidebar = ({
     }
   }, [onlyFilterValue, resetField, showConfirmedFilter])
 
-  function isSinceValid(currentDate) {
-    // Valid dates for start of date range
-    // 1. Before the 'Until' date, if provided
-    // 2. Until tomorrow
-    const tomorrow = dayjs.utc().add(1, 'day')
-    if (untilFilterValue.length !== 0) {
-      return currentDate.isBefore(untilFilterValue)
-    } else {
-      return currentDate.isSameOrBefore(tomorrow)
-    }
-  }
-
-  function isUntilValid(currentDate) {
-    // Valid dates for end of date range
-    // 1. After the 'Since' date if provided
-    // 2. Until tomorrow
-    const tomorrow = dayjs.utc().add(1, 'day')
-    if (sinceFilterValue.length !== 0) {
-      return currentDate.isAfter(sinceFilterValue) && currentDate.isSameOrBefore(tomorrow)
-    } else {
-      return currentDate.isSameOrBefore(tomorrow)
-    }
-  }
-
   const onSubmit = (data) => {
     onApplyFilter(data)
   }
@@ -226,225 +197,141 @@ const FilterSidebar = ({
   countryOptions.unshift({name: intl.formatMessage({id: 'Search.Sidebar.Country.AllCountries'}), alpha_2: 'XX'})
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
-      <StyledFilterSidebar>
-        <Controller
-          control={control}
-          name='countryFilter'
-          render={({field}) => (
-            <SelectWithLabel
-              {...field}
-              pt={2}
-              label={intl.formatMessage({id: 'Search.Sidebar.Country'})}
-              data-test-id='country-filter'
-            >
-              {countryOptions.map((v, idx) => {
-                return (
-                  <option key={idx} value={v.alpha_2}>{v.name}</option>
-                )
-              })}
-            </SelectWithLabel>
-          )}
-        />
-
-        <Controller
-          control={control}
-          name='asnFilter'
-          render={({field}) => (
-            <InputWithLabel
-              {...field}
-              label={intl.formatMessage({id: 'Search.Sidebar.ASN'})}
-              error={errors?.asnFilter?.message}
-              data-test-id='asn-filter'
-              placeholder={intl.formatMessage({id: 'Search.Sidebar.ASN.example'})}
-            />
-          )}
-          rules={{
-            pattern: {
-              value: asnRegEx,
-              message: intl.formatMessage({id: 'Search.Sidebar.ASN.Error'})
-            }
-          }}
-        />
-
-        <Flex flexDirection={['column', 'row']}>
-          <Box width={1/2} pr={1}>
-            <StyledLabel>
-              {intl.formatMessage({id: 'Search.Sidebar.From'})}
-            </StyledLabel>
-            <Controller
-              control={control}
-              name='sinceFilter'
-              render={({field}) => (
-                <DatePicker
-                  {...field}
-                  onChange={(date) =>
-                    field.onChange(moment.isMoment(date)
-                      ? date.format('YYYY-MM-DD')
-                      : date
-                    )
-                  }
-                  dateFormat='YYYY-MM-DD'
-                  utc={true}
-                  timeFormat={false}
-                  isValidDate={isSinceValid}
-                  inputProps={{id: 'since-filter'}}
-                />
-              )}
-            />
-          </Box>
-          <Box width={1/2} pl={1}>
-            <StyledLabel>
-              {intl.formatMessage({id: 'Search.Sidebar.Until'})}
-            </StyledLabel>
-            <Controller
-              control={control}
-              name='untilFilter'
-              render={({field}) => (
-                <DatePicker
-                  {...field}
-                  onChange={(date) =>
-                    field.onChange(moment.isMoment(date)
-                      ? date.format('YYYY-MM-DD')
-                      : date
-                    )
-                  }
-                  dateFormat='YYYY-MM-DD'
-                  utc={true}
-                  timeFormat={false}
-                  isValidDate={isUntilValid}
-                  inputProps={{id: 'until-filter'}}
-                />
-              )}
-            />
-          </Box>
-        </Flex>
-
-        <Controller
-          control={control}
-          name='testNameFilter'
-          render={({field}) => (
-            <SelectWithLabel
-              {...field}
-              pt={2}
-              label={intl.formatMessage({id: 'Search.Sidebar.TestName'})}
-              data-test-id='testname-filter'
-            >
-              <TestNameOptions testNames={testNames} />
-            </SelectWithLabel>
-  
-          )}
-        />
-
-        {showConfirmedFilter &&
+    <FormProvider {...methods} >
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <StyledFilterSidebar>
           <Controller
             control={control}
-            name='categoryFilter'
+            name='countryFilter'
             render={({field}) => (
               <SelectWithLabel
                 {...field}
                 pt={2}
-                label={intl.formatMessage({id: 'Search.Sidebar.Categories'})}
-                data-test-id='category-filter'
+                label={intl.formatMessage({id: 'Search.Sidebar.Country'})}
+                data-test-id='country-filter'
               >
-                <CategoryOptions />
-            </SelectWithLabel>
+                {countryOptions.map((v, idx) => {
+                  return (
+                    <option key={idx} value={v.alpha_2}>{v.name}</option>
+                  )
+                })}
+              </SelectWithLabel>
             )}
           />
-        }
-        {
-          showDomain &&
-          <>
-            <Controller
-              control={control}
-              name='domainFilter'
-              render={({field}) => (
-                <InputWithLabel
-                  {...field}
-                  label={intl.formatMessage({id: 'Search.Sidebar.Domain'})}
-                  data-test-id='domain-filter'
-                  error={errors?.domainFilter?.message}
-                  placeholder={intl.formatMessage({id: 'Search.Sidebar.Domain.Placeholder'})}
-                  type="text"
-                />
-              )}
-              rules={{
-                validate: (value = '') =>
-                  (String(value).length === 0 || domainRegEx.test(value))
-                  || intl.formatMessage({id: 'Search.Sidebar.Domain.Error'})
-              }}
-            />
-            <Controller
-              control={control}
-              name='inputFilter'
-              render={({field}) => (
-                <InputWithLabel
-                  {...field}
-                  label={intl.formatMessage({id: 'Search.Sidebar.Input'})}
-                  data-test-id='input-filter'
-                  error={errors?.inputFilter?.message}
-                  placeholder={intl.formatMessage({id: 'Search.Sidebar.Input.Placeholder'})}
-                  type="text"
-                />
-              )}
-              rules={{
-                pattern: {
-                  value: inputRegEx,
-                  message: intl.formatMessage({id: 'Search.Sidebar.Input.Error'})
-                }
-              }}
-            />
-          </>
-        }
-
-        {(showConfirmedFilter || showAnomalyFilter) && (<>
-          <StyledLabel>
-            {intl.formatMessage({id: 'Search.Sidebar.Status'})}
-          </StyledLabel>
 
           <Controller
             control={control}
-            name='onlyFilter'
+            name='asnFilter'
             render={({field}) => (
-              <RadioGroup {...field}>
-                <RadioButton
-                  label={intl.formatMessage({id: 'Search.FilterButton.AllResults'}) }
-                  value='all'
-                />
-                {showConfirmedFilter ? (
-                  <RadioButton
-                    label={intl.formatMessage({id: 'Search.FilterButton.Confirmed'}) }
-                    value='confirmed'
-                  />
-                ) : <div/>}
-                {showAnomalyFilter ? (
-                  <RadioButton
-                    label={intl.formatMessage({id: 'Search.FilterButton.Anomalies'}) }
-                    value='anomalies'
-                  />
-                ) : <div/>}
-              </RadioGroup>
+              <InputWithLabel
+                {...field}
+                label={intl.formatMessage({id: 'Search.Sidebar.ASN'})}
+                error={errors?.asnFilter?.message}
+                data-test-id='asn-filter'
+                placeholder={intl.formatMessage({id: 'Search.Sidebar.ASN.example'})}
+              />
+            )}
+            rules={{
+              pattern: {
+                value: asnRegEx,
+                message: intl.formatMessage({id: 'Search.Sidebar.ASN.Error'})
+              }
+            }}
+          />
+          
+          <StyledLabel>
+            {intl.formatMessage({id: 'Search.Sidebar.DateRange'})}
+          </StyledLabel>
+          <DateRangePicker />
+
+          <Controller
+            control={control}
+            name='testNameFilter'
+            render={({field}) => (
+              <SelectWithLabel
+                {...field}
+                pt={2}
+                label={intl.formatMessage({id: 'Search.Sidebar.TestName'})}
+                data-test-id='testname-filter'
+              >
+                <TestNameOptions testNames={testNames} />
+              </SelectWithLabel>
+    
             )}
           />
-        </>)}
-          <Label htmlFor='hideFailed' alignItems='center'>
+
+          {
+            showDomain &&
+            <Controller
+            control={control}
+            name='domainFilter'
+            render={({field}) => (
+              <InputWithLabel
+                {...field}
+                label={intl.formatMessage({id: 'Search.Sidebar.Domain'})}
+                data-test-id='domain-filter'
+                error={errors?.domainFilter?.message}
+                placeholder={intl.formatMessage({id: 'Search.Sidebar.Domain.Placeholder'})}
+                type="text"
+              />
+            )}
+            rules={{
+              validate: (value = '') =>
+                (String(value).length === 0 || domainRegEx.test(value))
+                || intl.formatMessage({id: 'Search.Sidebar.Domain.Error'})
+            }}
+          />
+          }
+
+          {(showConfirmedFilter || showAnomalyFilter) && (<>
+            <StyledLabel>
+              {intl.formatMessage({id: 'Search.Sidebar.Status'})}
+            </StyledLabel>
+
             <Controller
               control={control}
-              name='hideFailed'
+              name='onlyFilter'
               render={({field}) => (
-                <input {...field} type='checkbox' id='hideFailed' checked={field.value} />
+                <RadioGroup {...field}>
+                  <RadioButton
+                    label={intl.formatMessage({id: 'Search.FilterButton.AllResults'}) }
+                    value='all'
+                  />
+                  {showConfirmedFilter ? (
+                    <RadioButton
+                      label={intl.formatMessage({id: 'Search.FilterButton.Confirmed'}) }
+                      value='confirmed'
+                    />
+                  ) : <div/>}
+                  {showAnomalyFilter ? (
+                    <RadioButton
+                      label={intl.formatMessage({id: 'Search.FilterButton.Anomalies'}) }
+                      value='anomalies'
+                    />
+                  ) : <div/>}
+                </RadioGroup>
               )}
             />
-            <Box mx={1}>{intl.formatMessage({id: 'Search.Sidebar.HideFailed'})}</Box>
-          </Label>
-        <Button
-          mt={3}
-          type='submit'
-        >
-          {intl.formatMessage({id: 'Search.Sidebar.Button.FilterResults'})}
-        </Button>
-      </StyledFilterSidebar>
-    </form>
+          </>)}
+            <Label htmlFor='hideFailed' alignItems='center'>
+              <Controller
+                control={control}
+                name='hideFailed'
+                render={({field}) => (
+                  <input {...field} type='checkbox' id='hideFailed' checked={field.value} />
+                )}
+              />
+              <Box mx={1}>{intl.formatMessage({id: 'Search.Sidebar.HideFailed'})}</Box>
+            </Label>
+          <Button
+            mt={3}
+            type='submit'
+          >
+            {intl.formatMessage({id: 'Search.Sidebar.Button.FilterResults'})}
+          </Button>
+        </StyledFilterSidebar>
+      </form>
+    </FormProvider>
   )
 }
 
