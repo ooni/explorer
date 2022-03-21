@@ -42,8 +42,8 @@ const Triangle = styled.div`
   height: 0;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-  border-top: ${props => props.down ? '12px solid ' + props.theme.colors.gray7 : 'none'};
-  border-bottom: ${props => !props.down ? '12px solid ' + props.theme.colors.gray7 : 'none'};
+  border-top: ${props => props.$down ? '12px solid ' + props.theme.colors.gray7 : 'none'};
+  border-bottom: ${props => !props.$down ? '12px solid ' + props.theme.colors.gray7 : 'none'};
 `
 
 const WrappedText = styled.div`
@@ -83,7 +83,7 @@ const StyledChartRow = styled(Flex)`
 `
 
 const ToggleMinimizeButton = ({ minimized, onToggle }) => (
-  <Circle onClick={onToggle}><Triangle down={minimized} /></Circle>
+  <Circle onClick={onToggle}><Triangle $down={minimized} /></Circle>
 )
 
 const defaultState = {

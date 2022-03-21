@@ -12,7 +12,7 @@ import { useIntl } from 'react-intl'
 import Flag from '../Flag'
 
 const SummaryContainer = styled(Box)`
-  background-color: ${props => props.color};
+  background-color: ${props => props.$color};
   color: white;
 `
 
@@ -72,7 +72,7 @@ const CommonSummary = ({
 
   return (
     <React.Fragment>
-      <SummaryContainer py={4} color={color}>
+      <SummaryContainer py={4} $color={color}>
         <Container>
           <Flex flexWrap='wrap' alignItems='flex-end' justifyContent='space-around'>
             {/*<SummaryItemBox

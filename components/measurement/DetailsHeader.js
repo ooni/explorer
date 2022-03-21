@@ -10,7 +10,7 @@ import Badge from '../Badge'
 import SocialButtons from '../SocialButtons'
 
 const TestGroupBadge = ({icon, name, color}) => (
-  <Badge bg={color} color='white'>
+  <Badge $bg={color} $color='white'>
     <Flex alignItems='center'>
       <Box>
         {React.cloneElement(icon, {size: 32})}

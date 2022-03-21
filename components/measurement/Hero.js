@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import { FormattedMessage } from 'react-intl'
 
 const HeroContainer = styled(Box)`
-  background-color: ${props => props.color};
+  background-color: ${props => props.$color};
   color: white;
 `
 
@@ -46,7 +46,7 @@ const Hero = ({ status, color, icon, label, info }) => {
   }
 
   return (
-    <HeroContainer py={4} color={color} data-test-id='hero'>
+    <HeroContainer py={4} $color={color} data-test-id='hero'>
       <Container>
         <Text fontWeight={600} fontSize={4} as='div'>
           <Flex my={2} justifyContent='center' alignItems='center'>

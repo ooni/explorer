@@ -248,7 +248,7 @@ const ColoredIndicator = styled.div`
   height: 100%;
   width: 5px;
   margin-right: 10px;
-  background-color: ${props => props.color || 'unset'}
+  background-color: ${props => props.$color || 'unset'}
 `
 
 const ResultRow = styled(Flex)`
@@ -364,7 +364,7 @@ const ResultItem = ({
     <ViewDetailsLink reportId={report_id} input={input}>
       <ResultRow flexWrap='wrap' alignItems='stretch'>
         <Box width={1/32}>
-          <ColoredIndicator color={indicatorColor} />
+          <ColoredIndicator $color={indicatorColor} />
         </Box>
         <Box width={31/32} py={3}>
           <Flex flexDirection={['column', 'row']} alignItems='center'>

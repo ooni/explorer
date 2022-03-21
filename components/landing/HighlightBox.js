@@ -12,7 +12,7 @@ const StyledFlex = styled(Flex)`
 `
 
 const FlexGrowBox = styled(Box)`
-  flex-grow: ${props => props.grow || 1};
+  flex-grow: ${props => props.$grow || 1};
 `
 
 const HighlightBox = ({

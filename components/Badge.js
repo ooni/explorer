@@ -7,8 +7,8 @@ const Badge = styled.div`
   padding: 8px 24px;
   line-height: 1;
   font-size: 16px;
-  background-color: ${props => props.bg || props.theme.colors.gray8};
-  color: ${props => props.color || props.theme.colors.white};
+  background-color: ${props => props.$bg || props.theme.colors.gray8};
+  color: ${props => props.$color || props.theme.colors.white};
 `
 
 export default Badge

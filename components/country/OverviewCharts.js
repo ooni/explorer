@@ -23,7 +23,7 @@ const Circle = styled.span`
   height: 16px;
   width: 16px;
   border-radius: 50%;
-  background-color: ${props => props.color};
+  background-color: ${props => props.$color};
 `
 const StyledTestGroupSelector = styled(Flex)`
   cursor: pointer;
@@ -62,7 +62,7 @@ const CallToActionBox = () => {
 
 const TestGroupSelector = ({ testGroup, active, onClick }) => (
   <StyledTestGroupSelector m={2} onClick={() => onClick(testGroup)}>
-    <Circle color={active ? testGroups[testGroup].color : theme.colors.gray4} />
+    <Circle $color={active ? testGroups[testGroup].color : theme.colors.gray4} />
     <Box mx={1} color={!active ? theme.colors.gray4 : 'inherit'}> {testGroups[testGroup].name} </Box>
   </StyledTestGroupSelector>
 )
