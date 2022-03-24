@@ -8,6 +8,7 @@ import {
   Text
 } from 'ooni-components'
 import { useIntl } from 'react-intl'
+import dayjs from 'services/dayjs'
 
 import Flag from '../Flag'
 
@@ -41,13 +42,13 @@ SummaryItemBox.propTypes = {
 
 const CommonSummary = ({
   color,
-  test_start_time,
+  measurement_start_time,
   probe_asn,
   probe_cc,
   country
 }) => {
   const intl = useIntl()
-  const startTime = test_start_time
+  const startTime = measurement_start_time
   const network = probe_asn
   const countryCode = probe_cc
 
@@ -60,15 +61,7 @@ const CommonSummary = ({
     </Box>
   </Flex>
 
-  const formattedDate = intl.formatDate(startTime, {
-    year: 'numeric',
-    month: 'long',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: 'numeric',
-    timeZone: 'UTC',
-    timeZoneName: 'short'
-  })
+  const formattedDate = dayjs(startTime).utc().format('MMMM DD, YYYY, hh:mm A [UTC]')
 
   return (
     <React.Fragment>
@@ -99,7 +92,7 @@ const CommonSummary = ({
 }
 
 CommonSummary.propTypes = {
-  test_start_time: PropTypes.string.isRequired,
+  measurement_start_time: PropTypes.string.isRequired,
   probe_asn: PropTypes.string.isRequired,
   probe_cc: PropTypes.string.isRequired,
   country: PropTypes.string.isRequired,

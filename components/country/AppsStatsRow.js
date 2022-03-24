@@ -8,7 +8,7 @@ import {
   NettestTelegram,
   NettestFacebookMessenger
 } from 'ooni-components/dist/icons'
-import moment from 'moment'
+import dayjs from 'services/dayjs'
 
 import { testNames } from '../test-info'
 import AppsStatChart from './AppsStatsChart'
@@ -36,8 +36,8 @@ const StyledRow = styled(Box)`
 
 const NetworkRow = ({ asn, app }) => {
   const { countryCode } = useContext(CountryContext)
-  const until = moment.utc().add(1, 'day').format('YYYY-MM-DD')
-  const since = moment.utc().subtract(30, 'days').format('YYYY-MM-DD')
+  const until = dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
+  const since = dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD')
 
   const linkToMeasurements = `/search?probe_cc=${countryCode}&probe_asn=AS${asn}&test_name=${app}&since=${since}&until=${until}`
 
@@ -159,7 +159,7 @@ class AppsStatRow extends React.Component {
           <Box ml='auto'>
             <FormattedMessage id='Country.Apps.Label.LastTested' />
             {' '}
-            <strong>{moment.utc(data.last_tested).fromNow()}</strong>
+            <strong>{dayjs.utc(data.last_tested).fromNow()}</strong>
           </Box>
           <Box ml={4}>
             <CollapseTrigger

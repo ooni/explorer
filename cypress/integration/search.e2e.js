@@ -1,4 +1,4 @@
-import moment from 'moment'
+import dayjs from '../../services/dayjs'
 
 describe('Seearch Page Tests', () => {
 
@@ -55,18 +55,18 @@ describe('Seearch Page Tests', () => {
         cy.wrap($firstRow).contains(/31|30|29|28/).click()
       })
     cy.get('#since-filter').should(($sinceDate) => {
-      const firstOfMonth = moment().startOf('month')
+      const firstOfMonth = dayjs().startOf('month')
       const selectedSinceDate = $sinceDate.val()
-      expect(firstOfMonth.isAfter(selectedSinceDate)).to.be.true
+      expect(dayjs(firstOfMonth).isAfter(selectedSinceDate)).to.be.true
     })
 
     // click in the until date filter and select a day before today
     cy.get('#until-filter').click()
     cy.get('.rdt.rdtOpen .rdtToday').click()
     cy.get('#until-filter').should(($untilDate) => {
-      const firstOfMonth = moment().startOf('month')
+      const firstOfMonth = dayjs().startOf('month')
       const selectedUntilDate = $untilDate.val()
-      expect(firstOfMonth.isSameOrBefore(selectedUntilDate)).to.be.true
+      expect(dayjs(firstOfMonth).isSameOrBefore(selectedUntilDate)).to.be.true
     })
 
     cy.get('[data-test-id="testname-filter"]').select('Telegram')

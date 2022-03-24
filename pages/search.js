@@ -2,7 +2,6 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 import { withRouter } from 'next/router'
-import moment from 'moment'
 import axios from 'axios'
 import styled from 'styled-components'
 import {
@@ -13,6 +12,7 @@ import {
   Text
 } from 'ooni-components'
 import { FormattedMessage } from 'react-intl'
+import dayjs from 'services/dayjs'
 
 import NavBar from '../components/NavBar'
 import Layout from '../components/Layout'
@@ -152,12 +152,12 @@ class Search extends React.Component {
     // including the measurements of today (so the date of tomorrow).
     // This prevents the search page from showing time-travelling future
     // measurements from showing up
-    const since = moment(query.until).utc().subtract(30, 'day').format('YYYY-MM-DD')
+    const since = dayjs(query.until).utc().subtract(30, 'day').format('YYYY-MM-DD')
     if (!query.since) {
       query.since = since
     }
 
-    const until = moment.utc().add(1, 'day').format('YYYY-MM-DD')
+    const until = dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
     if ('until' in query === false) {
       query.until = until
     }

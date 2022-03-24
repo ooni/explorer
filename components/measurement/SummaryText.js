@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import moment from 'moment'
-import { useIntl } from 'react-intl'
 import { Flex, Text } from 'ooni-components'
+import dayjs from 'services/dayjs'
 
 import { getTestMetadata } from '../utils'
 import FormattedMarkdown from '../FormattedMarkdown'
@@ -14,17 +13,8 @@ const SummaryText = ({
   date,
   content,
 }) => {
-  const intl = useIntl()
   const metadata = getTestMetadata(testName)
-  const formattedDateTime = intl.formatDate(moment.utc(date).toDate(), {
-    year: 'numeric',
-    month: 'long',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: 'numeric',
-    timeZone: 'UTC',
-    timeZoneName: 'short'
-  })
+  const formattedDateTime = dayjs(date).utc().format('MMMM DD, YYYY, hh:mm A [UTC]')
 
   let textToRender = null
   if (typeof content === 'function') {

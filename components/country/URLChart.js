@@ -11,7 +11,7 @@ import {
 } from 'victory'
 import { FormattedMessage } from 'react-intl'
 import styled from 'styled-components'
-import moment from 'moment'
+import dayjs from 'services/dayjs'
 
 import {
   colorNormal,
@@ -163,8 +163,8 @@ class URLChart extends React.Component {
       )
     }
 
-    const until = moment.utc().add(1, 'day').format('YYYY-MM-DD')
-    const since30days = moment.utc().subtract(30, 'days').format('YYYY-MM-DD')
+    const until = dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
+    const since30days = dayjs.utc().subtract(30, 'days').format('YYYY-MM-DD')
 
     const yMax = data.reduce((max, item) => (
       (item.total_count > max) ? item.total_count : max

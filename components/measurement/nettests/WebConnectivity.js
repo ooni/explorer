@@ -9,10 +9,10 @@ import {
   Text
 } from 'ooni-components'
 
-import moment from 'moment'
 import { Tick, Cross } from 'ooni-components/dist/icons'
 import deepmerge from 'deepmerge'
 import styled from 'styled-components'
+import dayjs from 'services/dayjs'
 
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 
@@ -314,7 +314,7 @@ const WebConnectivityDetails = ({
   country,
   measurement,
   scores,
-  test_start_time,
+  measurement_start_time,
   probe_asn,
   input,
   render
@@ -334,15 +334,7 @@ const WebConnectivityDetails = ({
   } = validateMeasurement(measurement ?? {})
 
   const intl = useIntl()
-  const date = intl.formatDate(moment.utc(test_start_time).toDate(), {
-    year: 'numeric',
-    month: 'long',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: 'numeric',
-    timeZone: 'UTC',
-    timeZoneName: 'short'
-  })
+  const date = dayjs(measurement_start_time).utc().format('MMMM DD, YYYY, hh:mm A [UTC]')
 
   const p = url.parse(input)
   const hostname = p.host
@@ -629,7 +621,7 @@ WebConnectivityDetails.propTypes = {
       blocking_type: PropTypes.any
     })
   }),
-  test_start_time: PropTypes.any
+  measurement_start_time: PropTypes.any
 }
 
 export default WebConnectivityDetails
