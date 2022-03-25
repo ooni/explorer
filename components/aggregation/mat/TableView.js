@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import { useTable, useFlexLayout, useRowSelect, useFilters, useGroupBy, useSortBy, useGlobalFilter, useAsyncDebounce } from 'react-table'
 import { FormattedMessage, useIntl } from 'react-intl'
 import styled from 'styled-components'
@@ -36,6 +36,9 @@ const TableRow = styled(Flex)`
 const TableHeader = styled.div`
   ${TableRow} {
     margin-bottom: 8px;
+    border-bottom: 1px solid black;
+  }
+  &:last-child {
     border-bottom: 2px solid black;
   }
   & ${Cell} {
@@ -110,6 +113,12 @@ function GlobalFilter({
     setGlobalFilter(value || undefined)
   }, 200)
 
+  useEffect(() => {
+    if (!globalFilter || globalFilter === '') {
+      setValue('')
+    }
+  }, [globalFilter])
+
   return (
     <StyledGlobalFilter>
       Search:{' '}
@@ -120,10 +129,6 @@ function GlobalFilter({
           onChange(e.target.value)
         }}
         placeholder={`Search ${count} records...`}
-        style={{
-          fontSize: '1.1rem',
-          border: '0',
-        }}
       />
     </StyledGlobalFilter>
   )
@@ -163,28 +168,14 @@ const TableView = ({ data, query }) => {
     []
   )
 
-  const filterTypes = React.useMemo(
-    () => ({
-      // default text filter to use "startWith"
-      text: (rows, id, filterValue) => {
-        const regex = new RegExp(filterValue, 'i')
-        return rows.filter(row => {
-          const rowValue = row.values[id]
-          return rowValue !== undefined
-            ? regex.test(String(rowValue))
-            : true
-        })
-      },
-    }),
-    []
-  )
-  
   // Aggregate by the first column
   const initialState = React.useMemo(() => ({
     groupBy: ['yAxisCode'],
     hiddenColumns: ['yAxisCode'],
     sortBy: [{ id: 'yAxisLabel', desc: false }]
   }),[])
+
+  const selectedRowsRef = React.useRef(new Set())
 
   const columns = useMemo(() => [
     {
@@ -266,28 +257,33 @@ const TableView = ({ data, query }) => {
     toggleAllRowsSelected,
     selectedFlatRows,
     prepareRow,
-    setAllFilters,
-    visibleColumns,
     state,
-    preGlobalFilteredRows,
     setGlobalFilter,
+    flatRows,
+    preGlobalFilteredRows,
+    preGlobalFilteredFlatRows,
+    globalFilteredRows,
+    preGroupedRows,
+    preGroupedFlatRow,
+    groupedRows,
+    groupedFlatRows,
+    preSortedRows,
+    sortedRows,
   } = useTable(
     {
       columns,
       data: reshapedTableData,
       initialState,
       defaultColumn,
-      filterTypes,
     },
     useFlexLayout,
-    useFilters,
     useGlobalFilter,
     useGroupBy,
     useSortBy,
     useRowSelect,
     (hooks) => {
       hooks.visibleColumns.push((columns) => [
-        // Let's make a column for selection
+        // Pseudo column for selection checkboxes
         {
           id: 'selection',
           width: 30,
@@ -313,6 +309,14 @@ const TableView = ({ data, query }) => {
     }
   )
 
+  useEffect(() => {
+    // console.log('selectedFlatRows', selectedFlatRows.length)
+    selectedFlatRows.forEach(row => {
+      console.log(row.groupByVal)
+      selectedRowsRef.current.add(row.groupByVal)
+    })
+  }, [selectedFlatRows])
+
   const [chartPanelHeight, setChartPanelHeight] = useState(800)
 
   const onPanelResize = useCallback((width, height) => {
@@ -323,14 +327,14 @@ const TableView = ({ data, query }) => {
   const [dataForCharts, setDataForCharts] = useState(rows)
   
   const updateCharts = useCallback(() => {
-    if (selectedFlatRows.length > 0 && selectedFlatRows.length < rows.length) {
-      setDataForCharts(selectedFlatRows)
-      setChartPanelHeight(selectedFlatRows.length * 70)
+    if (selectedRowsRef.current.size > 0) {
+      setDataForCharts(rows.filter(row => selectedRowsRef.current.has(row.groupByVal)))
+      setChartPanelHeight(selectedRowsRef.current.size * 70)
     } else {
       setDataForCharts(rows)
       setChartPanelHeight('auto')
     }
-  }, [rows, selectedFlatRows])
+  }, [rows])
 
   const chartsButton =  (
     <Button hollow onClick={updateCharts}>Show {selectedFlatRows.length > 0 ? selectedFlatRows.length: 'All'} Charts</Button>
@@ -338,9 +342,10 @@ const TableView = ({ data, query }) => {
 
   const resetFilter = () => {
     toggleAllRowsSelected(false)
-    setAllFilters()
+    setGlobalFilter('')
     setDataForCharts(rows)
     setChartPanelHeight('auto')
+    selectedRowsRef.current.clear()
   }
 
   return (
@@ -348,8 +353,9 @@ const TableView = ({ data, query }) => {
       <DetailsBox title={'Filters'} collapsed={false}>
         <Flex flexDirection='column'>
           <Flex my={2} alignItems='center'>
-            {chartsButton}
-            <Button inverted onClick={resetFilter} mx={3} disabled={selectedFlatRows.length === 0}>Reset</Button>
+            {/* {chartsButton} */}
+            <Button hollow onClick={updateCharts}>Apply</Button>
+            <Button inverted onClick={resetFilter} mx={3}>Reset</Button>
           </Flex>
           <TableContainer>
             {/* eslint-disable react/jsx-key */}
