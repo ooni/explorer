@@ -15,6 +15,28 @@ import { VirtualRows } from './VirtualRows'
 const ROW_HEIGHT = 70
 const GRID_MAX_HEIGHT = 600
 
+/** Transforms data received by GridChart into an collection of arrays each of
+ * which is used to generate a RowChart
+ * {
+ *  "YAxisValue1": [{}, {},...],
+ *  "YAxisValue2": [{}, {},...],
+ *  ...
+ * }
+ *
+ * Each item in array looks like this:
+ * {
+    "anomaly_count": 4999,
+    "category_code": "HUMR",
+    "confirmed_count": 528,
+    "failure_count": 1093,
+    "measurement_count": 122795,
+    "measurement_start_day": "2022-02-26",
+    "ok_count": 116175,
+    "rowLabel": "Human Rights Issues"
+   }
+ *
+*/
+
 const reshapeChartData = (data, query, isGrouped) => {
   const rows = []
   const rowLabels = {}
@@ -52,13 +74,31 @@ const reshapeChartData = (data, query, isGrouped) => {
   return [reshapedDataWithoutHoles, rows, rowLabels]
 }
 
-
+/**
+ * Renders the collection of RowCharts. This is either passed down from
+ * TableView or from other components like `<Chart>` (`components/dashboard/Charts.js`)
+ *
+ * data - This is either an array of data points as received from the API response
+ * or an array containing groups of data points produced as a result of using
+ * `useGroupBy` in `useTable()` in `TableView`
+ *
+ * isGrouped - Whether the data is already grouped by y-axis value
+ * If `false`, `reshapeChartData()` will group the data as required
+ *
+ * height - uses a specific height provided by the container (e.g ResizableBox)
+ * If not speicied, it calculates a height based on the number of rows, capped
+ * at GRID_MAX_HEIGHT, which allows <VirtualRows> to render a subset of the data
+ * at a time.
+ *
+ * header - an element showing some summary information on top of the charts
+}
+*/
 const GridChart = ({ data, isGrouped = true, height = 'auto', header }) => {
-  // development-only flags for debugging/tweaking etc
-
+  // Fetch query state from context instead of router
+  // because some params not present in the URL are injected in the context
   const [ query ] = useMATContext()
   const { tooltipIndex } = query
-
+  
   const itemData = useMemo(() => {
     const [reshapedData, rows, rowLabels] = reshapeChartData(data, query, isGrouped)
     
@@ -155,8 +195,13 @@ const GridChart = ({ data, isGrouped = true, height = 'auto', header }) => {
 }
 
 GridChart.propTypes = {
-  data: PropTypes.array,
-  query: PropTypes.object
+  data: PropTypes.array.isRequired,
+  isGrouped: PropTypes.bool,
+  height: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.number
+  ]),
+  header: PropTypes.element
 }
 
 export default React.memo(GridChart)
