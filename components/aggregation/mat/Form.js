@@ -59,7 +59,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
           </StyledLabel>
           <Controller
             render={({field}) => (
-              <Select {...field} sx={{ width: '100%' }}>
+              <Select {...field} width={1}>
                 <option value=''>All Countries</option>
                 {sortedCountries.map((c, idx) =>(
                   <option key={idx} value={c.iso3166_alpha2}>{c.iso3166_name}</option>
