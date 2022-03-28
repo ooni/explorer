@@ -18,6 +18,7 @@ import {
   RadioButton
 } from './Radio'
 import { testGroups, testNames as testNamesIntl } from '../test-info'
+import { categoryCodes } from '../utils/categoryCodes'
 
 const StyledInputWithLabel = styled.div``
 const StyledLabel = styled(Label).attrs({
@@ -91,6 +92,22 @@ const TestNameOptions = ({testNames}) => {
   ])
 }
 
+const CategoryOptions = () => {
+  const intl = useIntl()
+  return (
+    <>
+      <option value="">{intl.formatMessage({id: 'Search.Sidebar.Categories.All'})}</option>
+      {categoryCodes
+        .sort((a, b) => a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0)
+        .map(([code, label], idx) =>
+          <option key={idx} value={code}>
+            {intl.formatMessage({id: `CategoryCode.${code}.Name`})}
+          </option>
+      )}
+    </>
+  )
+}
+
 const testsWithValidDomain = [
   'XX', // We show the field by default (state initialized to 'XX')
   'web_connectivity',
@@ -133,6 +150,7 @@ const domainRegEx = /(^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,7}(:[0-9]{1,5})?$
 
 export const queryToFilterMap = {
   domain: [ 'domainFilter', ''],
+  category_code: [ 'categoryFilter', ''],
   probe_cc: [ 'countryFilter', ''],
   probe_asn: [ 'asnFilter', ''],
   test_name: [ 'testNameFilter', 'XX'],
@@ -148,6 +166,7 @@ const FilterSidebar = ({
   testNames,
   countries,
   domainFilter,
+  categoryFilter,
   onlyFilter = 'all',
   testNameFilter = 'XX',
   countryFilter = 'XX',
@@ -161,6 +180,7 @@ const FilterSidebar = ({
 
   const defaultValues = {
     domainFilter,
+    categoryFilter,
     onlyFilter,
     testNameFilter,
     countryFilter,
@@ -176,6 +196,8 @@ const FilterSidebar = ({
   const { errors } = formState
 
   const testNameFilterValue = watch('testNameFilter')
+  const debugg = categoryFilter
+  //const debugg = watch('categoryFilter')
   const onlyFilterValue = watch('onlyFilter')
   const [untilFilterValue, sinceFilterValue] = watch(['untilFilter', 'sinceFilter'])
 
@@ -348,6 +370,22 @@ const FilterSidebar = ({
           )}
         />
 
+        {showConfirmedFilter &&
+          <Controller
+            control={control}
+            name='categoryFilter'
+            render={({field}) => (
+              <SelectWithLabel
+                {...field}
+                pt={2}
+                label={intl.formatMessage({id: 'Search.Sidebar.Categories'})}
+                data-test-id='category-filter'
+              >
+                <CategoryOptions />
+            </SelectWithLabel>
+            )}
+          />
+        }
         {
           showDomain &&
           <Controller
