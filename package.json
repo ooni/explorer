@@ -60,12 +60,10 @@
     "styled-components": "5.1.1",
     "styled-system": "5.1.5",
     "js-yaml": "^3.13.1",
-    "serialize-javascript": "^3.1.0",
     "https-proxy-agent": "^2.2.3",
-    "kind-of": "^6.0.3",
-    "object-path": "^0.11.5",
-    "node-fetch": "^2.6.1",
-    "http-proxy": "^1.18.1"
+    "minimist": "^1.2.6",
+    "node-fetch": "^2.6.7",
+    "lodash": "^4.17.21"
   },
   "devDependencies": {
     "@welldone-software/why-did-you-render": "^6.2.1",
