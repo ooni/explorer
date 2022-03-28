@@ -52,11 +52,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Flex my={2} justifyContent='space-between' sx={{
-        '@media screen and (max-width: 476px)': {
-          flexDirection: 'column',
-        }
-      }}>
+      <Flex my={2} justifyContent='space-between' flexDirection={['column', 'row']}>
         <Box width={[1, 1/5]}>
           <StyledLabel>
             Country
@@ -152,11 +148,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
           />
         </Box>
       </Flex>
-      <Flex my={2} justifyContent='space-between' sx={{
-        '@media screen and (max-width: 476px)': {
-          flexDirection: 'column',
-        }
-      }}>
+      <Flex my={2} justifyContent='space-between' flexDirection={['column', 'row']}>
         <Box width={[1, 0.18]}>
           <StyledLabel>
             Test Name
@@ -165,7 +157,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             name='test_name'
             control={control}
             render={({field}) => (
-              <Select {...field} sx={{ width: '100%' }}>
+              <Select {...field} width={1}>
                 {testNames.map((test, idx) => (
                   <option key={idx} value={test.id}>{test.name}</option>
                 ))}
@@ -196,7 +188,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             name='category_code'
             control={control}
             render={({field}) => (
-              <Select {...field} sx={{ width: '100%' }}>
+              <Select {...field} width={1}>
                 <option value="">ALL</option>
                 {categoryCodes.map(([code, label], idx) => (
                   <option key={idx} value={code}>{label}</option>
@@ -213,7 +205,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             name='axis_x'
             control={control}
             render={({field}) => (
-              <Select {...field} sx={{ width: '100%' }}>
+              <Select {...field} width={1}>
                 {optionsAxis.map((option, idx) => (
                   <option key={idx} value={option}>{option}</option>
                 ))}
@@ -229,7 +221,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             name='axis_y'
             control={control}
             render={({field}) => (
-              <Select {...field} sx={{ width: '100%' }}>
+              <Select {...field} width={1}>
                 {optionsAxis.map((option, idx) => (
                   <option key={idx} value={option}>{option}</option>
                 ))}
