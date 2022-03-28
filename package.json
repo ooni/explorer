@@ -15,7 +15,7 @@
     "@nivo/heatmap": "^0.79.1",
     "@rebass/forms": "^4.0.6",
     "@sentry/nextjs": "^6.13.3",
-    "axios": "^0.21.1",
+    "axios": "^0.21.2",
     "babel-plugin-inline-react-svg": "1.1.0",
     "babel-plugin-styled-components": "^1.10.7",
     "buffer-from": "^1.1.1",
