@@ -109,7 +109,7 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
         </Box>
       )
     } else {
-      return null;
+      return null
     }
   }
 
