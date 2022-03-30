@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import PropTypes from 'prop-types'
 import { useForm, Controller } from 'react-hook-form'
 import styled from 'styled-components'
@@ -13,6 +13,7 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl'
 
 import { categoryCodes } from '../../utils/categoryCodes'
 import DatePicker from '../../DatePicker'
+import { ConfirmationModal } from './ConfirmationModal'
 
 export const StyledLabel = styled(Label).attrs({
   my: 2,
@@ -89,10 +90,13 @@ const defaultDefaultValues = {
 
 export const Form = ({ onSubmit, testNames, query }) => {
   const intl = useIntl()
+  const [showConfirmation, setShowConfirmation] = useState(false)
+
   const defaultValues = Object.assign({}, defaultDefaultValues, query)
   const { handleSubmit, control, getValues, watch } = useForm({
     defaultValues
   })
+
   const sortedCountries = countryList
     .sort((a,b) => (a.iso3166_name < b.iso3166_name) ? -1 : (a.iso3166_name > b.iso3166_name) ? 1 : 0)
 
@@ -122,10 +126,26 @@ export const Form = ({ onSubmit, testNames, query }) => {
     }
   }, [getValues])
 
+  const maybeWarnBeforeSubmit = (e) => {
+    e.preventDefault()
+    setShowConfirmation(true)
+  }
+
+  const onConfirm = useCallback((e) => {
+    setShowConfirmation(false)
+    handleSubmit(onSubmit)(e)
+  }, [handleSubmit, onSubmit])
+
+  const onCancel = useCallback((e) => {
+    setShowConfirmation(false)
+    e.preventDefault()
+  }, [])
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Flex my={2} justifyContent='space-between' flexDirection={['column', 'row']}>
-        <Box width={[1, 1/5]}>
+      <ConfirmationModal show={showConfirmation} onConfirm={onConfirm} onCancel={onCancel} />
+      <Flex my={2} alignItems='center' flexDirection={['column', 'row']}>
+        <Box width={1/3}>
           <StyledLabel>
             <FormattedMessage id='Search.Sidebar.Country' />
           </StyledLabel>
@@ -243,7 +263,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
         {showCategoriesField &&
           <Box width={[1, 0.18]}>
             <StyledLabel>
-              <FormattedMessage id='Search.Sidebar.Domain' />
+              <FormattedMessage id='Search.Sidebar.Categories' />
             </StyledLabel>
             <Controller
               name='category_code'
@@ -295,7 +315,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
         </Box>
       </Flex>
       <Flex my={4}>
-        <Button type='submit' width={[1, 1/8]}>Submit</Button>
+        <Button width={[1, 1/8]} onClick={maybeWarnBeforeSubmit}><FormattedMessage id='MAT.Form.Submit' /></Button>
       </Flex>
 
     </form>

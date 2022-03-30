@@ -98,9 +98,11 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
         <Container>
           <Flex flexDirection='column'>
             <Heading h={1} mt={3} mb={0}><FormattedMessage id='MAT.Title' /></Heading>
-            <Heading h={5} mt={0} mb={2}><FormattedMessage id='MAT.SubTitle' /></Heading>
+            <Heading h={5} mt={0} mb={2} color='gray9'>
+              <FormattedMessage id='MAT.SubTitle' />
+            </Heading>
             <Form onSubmit={onSubmit} testNames={testNames} query={router.query} />
-            <Box sx={{ }}>
+            <Box>
               {showLoadingIndicator &&
                 <Box>
                   <h2>Loading ...</h2>
