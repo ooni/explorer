@@ -52,8 +52,8 @@ export const Form = ({ onSubmit, testNames, query }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Flex my={2} justifyContent='space-between' flexDirection={['column', 'row']}>
-        <Box width={[1, 1/5]}>
+      <Flex my={2} flexDirection={['column', 'row']}>
+        <Box width={[1, 2/8]} mx={[0, 2]}>
           <StyledLabel>
             Country
           </StyledLabel>
@@ -70,7 +70,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             control={control}
           />
         </Box>
-        <Box width={[1, 1/5]}>
+        <Box width={[1, 1/8]} mx={[0, 2]}>
           <StyledLabel>
             ASN
           </StyledLabel>
@@ -85,7 +85,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             )}
           />
         </Box>
-        <Box width={[1, 1/5]}>
+        <Box width={[1, 1/8]} mx={[0, 2]}>
           <StyledLabel>
             Since
           </StyledLabel>
@@ -116,7 +116,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             )}
           />
         </Box>
-        <Box width={[1, 1/5]}>
+        <Box width={[1, 1/8]} mx={[0, 2]}>
           <StyledLabel>
             Until
           </StyledLabel>
@@ -147,9 +147,41 @@ export const Form = ({ onSubmit, testNames, query }) => {
             )}
           />
         </Box>
+        <Box width={[1, 1/8]} mx={[0, 2]}>
+          <StyledLabel>
+            X Axis
+          </StyledLabel>
+          <Controller
+            name='axis_x'
+            control={control}
+            render={({field}) => (
+              <Select {...field} width={1}>
+                {optionsAxis.map((option, idx) => (
+                  <option key={idx} value={option}>{option}</option>
+                ))}
+              </Select>
+            )}
+          />
+        </Box>
+        <Box width={[1, 1/8]} mx={[0, 2]}>
+          <StyledLabel>
+            Y Axis
+          </StyledLabel>
+          <Controller
+            name='axis_y'
+            control={control}
+            render={({field}) => (
+              <Select {...field} width={1}>
+                {optionsAxis.map((option, idx) => (
+                  <option key={idx} value={option}>{option}</option>
+                ))}
+              </Select>
+            )}
+          />
+        </Box>
       </Flex>
-      <Flex my={2} justifyContent='space-between' flexDirection={['column', 'row']}>
-        <Box width={[1, 0.18]}>
+      <Flex my={2} flexDirection={['column', 'row']}>
+        <Box width={[1, 1/5]} mx={[0, 2]}>
           <StyledLabel>
             Test Name
           </StyledLabel>
@@ -165,7 +197,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             )}
           />
         </Box>
-        <Box width={[1, 0.18]}>
+        <Box width={[1, 1/5]} mx={[0, 2]}>
           <StyledLabel>
             Domain
           </StyledLabel>
@@ -180,7 +212,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             )}
           />
         </Box>
-        <Box width={[1, 0.18]}>
+        <Box width={[1, 1/5]} mx={[0, 2]}>
           <StyledLabel>
             Category Codes
           </StyledLabel>
@@ -197,38 +229,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             )}
           />
         </Box>
-        <Box width={[1, 0.18]}>
-          <StyledLabel>
-            X Axis
-          </StyledLabel>
-          <Controller
-            name='axis_x'
-            control={control}
-            render={({field}) => (
-              <Select {...field} width={1}>
-                {optionsAxis.map((option, idx) => (
-                  <option key={idx} value={option}>{option}</option>
-                ))}
-              </Select>
-            )}
-          />
-        </Box>
-        <Box width={[1, 0.18]}>
-          <StyledLabel>
-            Y Axis
-          </StyledLabel>
-          <Controller
-            name='axis_y'
-            control={control}
-            render={({field}) => (
-              <Select {...field} width={1}>
-                {optionsAxis.map((option, idx) => (
-                  <option key={idx} value={option}>{option}</option>
-                ))}
-              </Select>
-            )}
-          />
-        </Box>
+
       </Flex>
       <Flex my={4}>
         <Button type='submit' width={[1, 1/8]}>Submit</Button>
