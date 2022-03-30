@@ -15,6 +15,8 @@ import { categoryCodes } from '../../utils/categoryCodes'
 import DatePicker from '../../DatePicker'
 import { ConfirmationModal } from './ConfirmationModal'
 
+const THRESHOLD_IN_MONTHS = 12
+
 export const StyledLabel = styled(Label).attrs({
   my: 2,
   color: 'blue5',
@@ -126,11 +128,6 @@ export const Form = ({ onSubmit, testNames, query }) => {
     }
   }, [getValues])
 
-  const maybeWarnBeforeSubmit = (e) => {
-    e.preventDefault()
-    setShowConfirmation(true)
-  }
-
   const onConfirm = useCallback((e) => {
     setShowConfirmation(false)
     handleSubmit(onSubmit)(e)
@@ -140,6 +137,20 @@ export const Form = ({ onSubmit, testNames, query }) => {
     setShowConfirmation(false)
     e.preventDefault()
   }, [])
+
+  const maybeWarnBeforeSubmit = useCallback((e) => {
+    e.preventDefault()
+
+    const [since, until] = getValues(['since', 'until'])
+    const isDurationMoreThanThresold = (dayjs(until).diff(dayjs(since), 'month')) > THRESHOLD_IN_MONTHS
+
+    if (isDurationMoreThanThresold) {
+      setShowConfirmation(true)
+    } else {
+      // Otherwise just continue with submission without interruption
+      onConfirm(e)
+    }
+  }, [getValues, onConfirm])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
