@@ -156,7 +156,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <ConfirmationModal show={showConfirmation} onConfirm={onConfirm} onCancel={onCancel} />
       <Flex my={2} alignItems='center' flexDirection={['column', 'row']}>
-        <Box width={1/3}>
+        <Box width={[1, 2/8]} mx={[0, 2]}>
           <StyledLabel>
             <FormattedMessage id='Search.Sidebar.Country' />
           </StyledLabel>
@@ -173,7 +173,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             control={control}
           />
         </Box>
-        <Box width={[1, 1/5]}>
+        <Box width={[1, 1/8]} mx={[0, 2]}>
           <StyledLabel>
             <FormattedMessage id='Search.Sidebar.ASN' />
           </StyledLabel>
@@ -188,7 +188,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             )}
           />
         </Box>
-        <Box width={[1, 1/5]}>
+        <Box width={[1, 1/8]} mx={[0, 2]}>
           <StyledLabel>
             <FormattedMessage id='Search.Sidebar.From' />
           </StyledLabel>
@@ -212,7 +212,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             )}
           />
         </Box>
-        <Box width={[1, 1/5]}>
+        <Box width={[1, 1/8]} mx={[0, 2]}>
           <StyledLabel>
             <FormattedMessage id='Search.Sidebar.Until' />
           </StyledLabel>
@@ -236,9 +236,41 @@ export const Form = ({ onSubmit, testNames, query }) => {
             )}
           />
         </Box>
+        <Box width={[1, 1/8]} mx={[0, 2]}>
+          <StyledLabel>
+            <FormattedMessage id='MAT.Form.Label.XAxis' />
+          </StyledLabel>
+          <Controller
+            name='axis_x'
+            control={control}
+            render={({field}) => (
+              <Select {...field} width={1}>
+                {xAxisOptions.map((option, idx) => (
+                  <option key={idx} value={option}>{option.length > 0 ? intl.formatMessage(messages[option]) : option}</option>
+                ))}
+              </Select>
+            )}
+          />
+        </Box>
+        <Box width={[1, 1/8]} mx={[0, 2]}>
+          <StyledLabel>
+            <FormattedMessage id='MAT.Form.Label.YAxis' />
+          </StyledLabel>
+          <Controller
+            name='axis_y'
+            control={control}
+            render={({field}) => (
+              <Select {...field} width={1}>
+                {yAxisOptions.map((option, idx) => (
+                  <option key={idx} value={option}>{option.length > 0 ? intl.formatMessage(messages[option]) : option}</option>
+                ))}
+              </Select>
+            )}
+          />
+        </Box>
       </Flex>
-      <Flex my={2} justifyContent='space-between' flexDirection={['column', 'row']}>
-        <Box width={[1, 0.18]}>
+      <Flex my={2} flexDirection={['column', 'row']}>
+        <Box width={[1, 1/5]} mx={[0, 2]}>
           <StyledLabel>
             <FormattedMessage id='Search.Sidebar.TestName' />
           </StyledLabel>
@@ -255,7 +287,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
           />
         </Box>
         {showDomainField &&
-          <Box width={[1, 0.18]}>
+          <Box width={[1, 1/5]} mx={[0, 2]}>
             <StyledLabel>
               <FormattedMessage id='Search.Sidebar.Domain' />
             </StyledLabel>
@@ -272,7 +304,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
           </Box>
         }
         {showCategoriesField &&
-          <Box width={[1, 0.18]}>
+          <Box width={[1, 1/5]} mx={[0, 2]}>
             <StyledLabel>
               <FormattedMessage id='Search.Sidebar.Categories' />
             </StyledLabel>
@@ -292,38 +324,6 @@ export const Form = ({ onSubmit, testNames, query }) => {
             />
           </Box>
         }
-        <Box width={[1, 0.18]}>
-          <StyledLabel>
-            <FormattedMessage id='MAT.Form.Label.XAxis' />
-          </StyledLabel>
-          <Controller
-            name='axis_x'
-            control={control}
-            render={({field}) => (
-              <Select {...field} width={1}>
-                {xAxisOptions.map((option, idx) => (
-                  <option key={idx} value={option}>{option.length > 0 ? intl.formatMessage(messages[option]) : option}</option>
-                ))}
-              </Select>
-            )}
-          />
-        </Box>
-        <Box width={[1, 0.18]}>
-          <StyledLabel>
-            <FormattedMessage id='MAT.Form.Label.YAxis' />
-          </StyledLabel>
-          <Controller
-            name='axis_y'
-            control={control}
-            render={({field}) => (
-              <Select {...field} width={1}>
-                {yAxisOptions.map((option, idx) => (
-                  <option key={idx} value={option}>{option.length > 0 ? intl.formatMessage(messages[option]) : option}</option>
-                ))}
-              </Select>
-            )}
-          />
-        </Box>
       </Flex>
       <Flex my={4}>
         <Button width={[1, 1/8]} onClick={maybeWarnBeforeSubmit}><FormattedMessage id='MAT.Form.Submit' /></Button>
