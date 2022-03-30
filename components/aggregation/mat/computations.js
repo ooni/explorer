@@ -1,3 +1,6 @@
+import { countryList } from 'country-util'
+import { getCategoryCodesMap } from '../../utils/categoryCodes'
+
 export function getDatesBetween(startDate, endDate) {
   const dateSet = new Set()
   var currentDate = startDate
@@ -9,23 +12,44 @@ export function getDatesBetween(startDate, endDate) {
 }
 
 /* dateSet is an optional precomputed set from `getDatesBetween` */
-export function fillDataInMissingDates (data, startDate, endDate, dateSet = null) {
-  const newData = [...data]
+export function fillDataInMissingDates (data, startDate, endDate) {
   
-  const dateRange = dateSet || getDatesBetween(new Date(startDate), new Date(endDate))
+  const dateRange = getDatesBetween(new Date(startDate), new Date(endDate))
 
-  const datesInRow = newData.map(i => i.measurement_start_day)
-  const missingDates = [...dateRange].filter(x => !datesInRow.includes(x))
+  return fillRowHoles(data, 'measurement_start_day', dateRange)
+}
+
+export function fillRowHoles (data, query) {
+  const newData = [...data]
+
+  let domain = null
+
+  switch(query.axis_x) {
+    case 'measurement_start_day':
+      domain = getDatesBetween(new Date(query.since), new Date(query.until))
+      break
+    case 'category_code':
+      domain = [...getCategoryCodesMap().keys()]
+      break
+    case 'probe_cc':
+      domain = countryList.map(cc => cc.iso3166_alpha2)
+      break
+    default:
+      throw new Error(`Unable to cover missing data points for x-axis: ${query.axis_x}`)
+  }
+
+  const colsInRow = newData.map(i => i[query.axis_x])
+  const missingCols = [...domain].filter(x => !colsInRow.includes(x))
 
   const sampleDataPoint = {...newData[0]}
 
-  // Add empty datapoints for dates where measurements are not available
-  missingDates.forEach((date) => {
+  // Add empty datapoints for columns where measurements are not available
+  missingCols.forEach((col) => {
     // use any (first) column data to popuplate yAxis value e.g `input` | `probe_cc`
     // and then overwrite with zero-data for that missing date
-    newData.splice([...dateRange].indexOf(date), 0, {
+    newData.splice([...domain].indexOf(col), 0, {
       ...sampleDataPoint,
-      measurement_start_day: date,
+      [query.axis_x]: col,
       anomaly_count: 0,
       confirmed_count: 0,
       failure_count: 0,
@@ -33,6 +57,17 @@ export function fillDataInMissingDates (data, startDate, endDate, dateSet = null
       ok_count: 0,
     })
   })
+
+  return newData
+}
+
+export function fillDataHoles (data, query) {
+  // Object transformation, works like Array.map
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/fromEntries#object_transformations
+  const newData = Object.fromEntries(
+    Object.entries(data)
+      .map(([ key, rowData ]) => [ key, fillRowHoles(rowData, query) ])
+  )
 
   return newData
 }

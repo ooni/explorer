@@ -56,7 +56,7 @@ const StyledDetailsBoxContent = styled(Box)`
   overflow-x: auto;
 `
 
-export const DetailsBox = ({ title, content, collapsed = false, ...rest }) => {
+export const DetailsBox = ({ title, content, collapsed = false, children, ...rest }) => {
   const [isOpen, setIsOpen] = useState(!collapsed)
 
   const onToggle = useCallback(() => {
@@ -77,7 +77,7 @@ export const DetailsBox = ({ title, content, collapsed = false, ...rest }) => {
       }
       {isOpen &&
         <StyledDetailsBoxContent p={3} flexWrap='wrap'>
-          {content}
+          {content || children}
         </StyledDetailsBoxContent>
       }
     </StyledDetailsBox>

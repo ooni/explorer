@@ -39,6 +39,7 @@ export const getRowLabel = (key, yAxis) => {
   case 'category_code':
     return categoryCodesMap.get(key)?.name ?? key
   case 'input':
+  case 'domain':
     return (<InputRowLabel input={key} />)
   case 'blocking_type':
     return blockingTypeLabels[key] ?? key
