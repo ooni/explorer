@@ -46,7 +46,7 @@ export const getRowLabel = (key, yAxis) => {
   case 'probe_asn':
     return `AS${key}`
   case 'test_name':
-    return testNames[key].id
+    return Object.keys(testNames).includes(key) ? testNames[key].id : key
   default:
     return key
   }

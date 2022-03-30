@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import PropTypes from 'prop-types'
 import { useForm, Controller } from 'react-hook-form'
 import styled from 'styled-components'
@@ -100,6 +100,28 @@ export const Form = ({ onSubmit, testNames, query }) => {
   const showDomainField = isValidFilterForTestname(testNameValue, testsWithValidDomainFilter)
   const showCategoriesField = isValidFilterForTestname(testNameValue, testsWithValidDomainFilter)
 
+  const isValidSinceDate = useCallback((currentDate) => {
+    const current = dayjs(currentDate)
+    const until = dayjs(getValues('until'))
+    if (until.isValid()) {
+      const oneYearBack = until.subtract(1, 'year')
+      return current.isBetween(oneYearBack, until, 'day', '[]')
+    } else {
+      return current.isBefore(tomorrow)
+    }
+  }, [getValues])
+
+  const isValidUntilDate = useCallback((currentDate) => {
+    const current = dayjs(currentDate)
+    const since = dayjs(getValues('since'))
+    if (since.isValid()) {
+      const oneYearAfterSince = since.add(1, 'year')
+      return current.isBetween(since, oneYearAfterSince, 'day', '[]') && current.isSameOrBefore(tomorrow)
+    } else {
+      return current.isSameOrBefore(tomorrow)
+    }
+  }, [getValues])
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex my={2} justifyContent='space-between' flexDirection={['column', 'row']}>
@@ -154,14 +176,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
                     : date
                   )
                 }
-                isValidDate={currentDate => {
-                  const untilValue = getValues('until')
-                  if (untilValue && untilValue.length !== 0) {
-                    return dayjs(currentDate).isBefore(untilValue, 'day')
-                  } else {
-                    return dayjs(currentDate).isBefore(tomorrow)
-                  }
-                }}
+                isValidDate={isValidSinceDate}
               />
             )}
           />
@@ -185,14 +200,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
                     : date
                   )
                 }
-                isValidDate={currentDate => {
-                  const sinceFilter = getValues('since')
-                  if (sinceFilter && sinceFilter.length !== 0) {
-                    return currentDate.isAfter(sinceFilter) && currentDate.isSameOrBefore(tomorrow)
-                  } else {
-                    return currentDate.isSameOrBefore(tomorrow)
-                  }
-                }}
+                isValidDate={isValidUntilDate}
               />
             )}
           />
