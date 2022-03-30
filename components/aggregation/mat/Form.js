@@ -9,7 +9,7 @@ import {
 import { countryList } from 'country-util'
 import moment from 'moment'
 import dayjs from 'services/dayjs'
-import { defineMessages, useIntl } from 'react-intl'
+import { defineMessages, useIntl, FormattedMessage } from 'react-intl'
 
 import { categoryCodes } from '../../utils/categoryCodes'
 import DatePicker from '../../DatePicker'
@@ -59,6 +59,19 @@ const yAxisOptions = [
   ''
 ]
 
+const testsWithValidDomainFilter = [
+  'web_connectivity',
+  'http_requests',
+  'dns_consistency',
+  'tcp_connect'
+]
+
+function isValidFilterForTestname(testName = 'XX', arrayWithMapping) {
+  // whether the dependent filter is valid to show along with `testName`
+  return arrayWithMapping.includes(testName)
+}
+
+
 const tomorrow = dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
 const lastMonthToday = dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD')
 
@@ -77,18 +90,22 @@ const defaultDefaultValues = {
 export const Form = ({ onSubmit, testNames, query }) => {
   const intl = useIntl()
   const defaultValues = Object.assign({}, defaultDefaultValues, query)
-  const { handleSubmit, control, getValues } = useForm({
+  const { handleSubmit, control, getValues, watch } = useForm({
     defaultValues
   })
   const sortedCountries = countryList
     .sort((a,b) => (a.iso3166_name < b.iso3166_name) ? -1 : (a.iso3166_name > b.iso3166_name) ? 1 : 0)
+
+  const testNameValue = watch('test_name')
+  const showDomainField = isValidFilterForTestname(testNameValue, testsWithValidDomainFilter)
+  const showCategoriesField = isValidFilterForTestname(testNameValue, testsWithValidDomainFilter)
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex my={2} justifyContent='space-between' flexDirection={['column', 'row']}>
         <Box width={[1, 1/5]}>
           <StyledLabel>
-            Country
+            <FormattedMessage id='Search.Sidebar.Country' />
           </StyledLabel>
           <Controller
             render={({field}) => (
@@ -105,7 +122,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
         </Box>
         <Box width={[1, 1/5]}>
           <StyledLabel>
-            ASN
+            <FormattedMessage id='Search.Sidebar.ASN' />
           </StyledLabel>
           <Controller
             name='probe_asn'
@@ -120,7 +137,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
         </Box>
         <Box width={[1, 1/5]}>
           <StyledLabel>
-            Since
+            <FormattedMessage id='Search.Sidebar.From' />
           </StyledLabel>
           <Controller
             name='since'
@@ -151,7 +168,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
         </Box>
         <Box width={[1, 1/5]}>
           <StyledLabel>
-            Until
+            <FormattedMessage id='Search.Sidebar.Until' />
           </StyledLabel>
           <Controller
             name='until'
@@ -184,7 +201,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
       <Flex my={2} justifyContent='space-between' flexDirection={['column', 'row']}>
         <Box width={[1, 0.18]}>
           <StyledLabel>
-            Test Name
+            <FormattedMessage id='Search.Sidebar.TestName' />
           </StyledLabel>
           <Controller
             name='test_name'
@@ -198,43 +215,47 @@ export const Form = ({ onSubmit, testNames, query }) => {
             )}
           />
         </Box>
+        {showDomainField &&
+          <Box width={[1, 0.18]}>
+            <StyledLabel>
+              <FormattedMessage id='Search.Sidebar.Domain' />
+            </StyledLabel>
+            <Controller
+              name='domain'
+              control={control}
+              render={({field}) => (
+                <Input
+                  placeholder='twitter.com'
+                  {...field}
+                />
+              )}
+            />
+          </Box>
+        }
+        {showCategoriesField &&
+          <Box width={[1, 0.18]}>
+            <StyledLabel>
+              <FormattedMessage id='Search.Sidebar.Domain' />
+            </StyledLabel>
+            <Controller
+              name='category_code'
+              control={control}
+              render={({field}) => (
+                <Select {...field}>
+                  <option value="">ALL</option>
+                  {categoryCodes
+                    .sort((a, b) => a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0)
+                    .map(([code, label], idx) => (
+                      <option key={idx} value={code}>{label}</option>
+                  ))}
+                </Select>
+              )}
+            />
+          </Box>
+        }
         <Box width={[1, 0.18]}>
           <StyledLabel>
-            Domain
-          </StyledLabel>
-          <Controller
-            name='domain'
-            control={control}
-            render={({field}) => (
-              <Input
-                placeholder='twitter.com'
-                {...field}
-              />
-            )}
-          />
-        </Box>
-        <Box width={[1, 0.18]}>
-          <StyledLabel>
-            Category Codes
-          </StyledLabel>
-          <Controller
-            name='category_code'
-            control={control}
-            render={({field}) => (
-              <Select {...field} width={1}>
-                <option value="">ALL</option>
-                {categoryCodes
-                  .sort((a, b) => a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0)
-                  .map(([code, label], idx) => (
-                    <option key={idx} value={code}>{label}</option>
-                ))}
-              </Select>
-            )}
-          />
-        </Box>
-        <Box width={[1, 0.18]}>
-          <StyledLabel>
-            X Axis
+            <FormattedMessage id='MAT.Form.Label.XAxis' />
           </StyledLabel>
           <Controller
             name='axis_x'
@@ -250,7 +271,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
         </Box>
         <Box width={[1, 0.18]}>
           <StyledLabel>
-            Y Axis
+            <FormattedMessage id='MAT.Form.Label.YAxis' />
           </StyledLabel>
           <Controller
             name='axis_y'
