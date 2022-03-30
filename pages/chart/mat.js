@@ -10,6 +10,7 @@ import {
   Flex, Box,
 } from 'ooni-components'
 import useSWR from 'swr'
+import { FormattedMessage } from 'react-intl'
 
 import Layout from 'components/Layout'
 import NavBar from 'components/NavBar'
@@ -19,6 +20,7 @@ import { FunnelChart } from 'components/aggregation/mat/FunnelChart'
 import { Form } from 'components/aggregation/mat/Form'
 import { axiosResponseTime } from 'components/axios-plugins'
 import TableView from 'components/aggregation/mat/TableView'
+import FormattedMarkdown from 'components/FormattedMarkdown'
 
 const baseURL = process.env.NEXT_PUBLIC_MEASUREMENTS_URL
 axiosResponseTime(axios)
@@ -95,7 +97,8 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
         <NavBar />
         <Container>
           <Flex flexDirection='column'>
-            <Heading h={1} my={4} title='This is an experimental feature still undergoing development.'> 🧪 OONI Measurement Aggregation Toolkit</Heading>
+            <Heading h={1} mt={3} mb={0}><FormattedMessage id='MAT.Title' /></Heading>
+            <Heading h={3} mt={0} mb={2}><FormattedMarkdown id='MAT.SubTitle' /></Heading>
             <Form onSubmit={onSubmit} testNames={testNames} query={router.query} />
             <Box sx={{ }}>
               {showLoadingIndicator &&
