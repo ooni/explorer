@@ -9,6 +9,7 @@ import {
 import { countryList } from 'country-util'
 import moment from 'moment'
 import dayjs from 'services/dayjs'
+import { defineMessages, useIntl } from 'react-intl'
 
 import { categoryCodes } from '../../utils/categoryCodes'
 import DatePicker from '../../DatePicker'
@@ -19,8 +20,38 @@ export const StyledLabel = styled(Label).attrs({
 })`
 `
 
-const optionsAxis = [
+const messages = defineMessages({
+  'measurement_start_day': {
+    id: 'MAT.Form.Label.AxisOption.measurement_start_day',
+    defaultMessage: ''
+  },
+  'domain': {
+    id: 'MAT.Form.Label.AxisOption.domain',
+    defaultMessage: ''
+  },
+  'category_code': {
+    id: 'MAT.Form.Label.AxisOption.category_code',
+    defaultMessage: ''
+  },
+  'probe_cc': {
+    id: 'MAT.Form.Label.AxisOption.probe_cc',
+    defaultMessage: 'D'
+  },
+  'probe_asn': {
+    id: 'MAT.Form.Label.AxisOption.probe_asn',
+    defaultMessage: ''
+  },
+})
+
+
+const xAxisOptions = [
   'measurement_start_day',
+  'category_code',
+  'probe_cc',
+  ''
+]
+
+const yAxisOptions = [
   'domain',
   'category_code',
   'probe_cc',
@@ -44,6 +75,7 @@ const defaultDefaultValues = {
 }
 
 export const Form = ({ onSubmit, testNames, query }) => {
+  const intl = useIntl()
   const defaultValues = Object.assign({}, defaultDefaultValues, query)
   const { handleSubmit, control, getValues } = useForm({
     defaultValues
@@ -191,8 +223,10 @@ export const Form = ({ onSubmit, testNames, query }) => {
             render={({field}) => (
               <Select {...field} width={1}>
                 <option value="">ALL</option>
-                {categoryCodes.map(([code, label], idx) => (
-                  <option key={idx} value={code}>{label}</option>
+                {categoryCodes
+                  .sort((a, b) => a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0)
+                  .map(([code, label], idx) => (
+                    <option key={idx} value={code}>{label}</option>
                 ))}
               </Select>
             )}
@@ -207,8 +241,8 @@ export const Form = ({ onSubmit, testNames, query }) => {
             control={control}
             render={({field}) => (
               <Select {...field} width={1}>
-                {optionsAxis.map((option, idx) => (
-                  <option key={idx} value={option}>{option}</option>
+                {xAxisOptions.map((option, idx) => (
+                  <option key={idx} value={option}>{option.length > 0 ? intl.formatMessage(messages[option]) : option}</option>
                 ))}
               </Select>
             )}
@@ -223,8 +257,8 @@ export const Form = ({ onSubmit, testNames, query }) => {
             control={control}
             render={({field}) => (
               <Select {...field} width={1}>
-                {optionsAxis.map((option, idx) => (
-                  <option key={idx} value={option}>{option}</option>
+                {yAxisOptions.map((option, idx) => (
+                  <option key={idx} value={option}>{option.length > 0 ? intl.formatMessage(messages[option]) : option}</option>
                 ))}
               </Select>
             )}
