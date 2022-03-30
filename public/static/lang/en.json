@@ -476,7 +476,7 @@
   "Error.404.MeasurmentLinkText": "exploring some measurement",
   "Error.404.HomepageLinkText": "the homepage",
   "MAT.Title": "OONI Measurement Aggregation Toolkit",
-  "MAT.SubTitle": "Description here",
+  "MAT.SubTitle": "OONI Explorer is an open data resource on Internet censorship around the world consisting of millions of measurements on network inteference.",
   "MAT.Form.Label.XAxis": "X Axis",
   "MAT.Form.Label.YAxis": "Y Axis",
   "MAT.Form.Label.AxisOption.domain": "Domain",
