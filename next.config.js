@@ -13,6 +13,16 @@ const SentryWebpackPluginOptions = {
 }
 
 module.exports = withSentryConfig({
+  async redirects() {
+    return [
+      {
+        source: '/experimental/mat',
+        destination: '/chart/mat',
+        permanent: true,
+      },
+    ]
+  },
+
   webpack: (config, options) => {
     config.plugins.push(
       new options.webpack.DefinePlugin({
