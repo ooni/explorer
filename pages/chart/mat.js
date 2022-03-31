@@ -11,15 +11,13 @@ import {
 } from 'ooni-components'
 import useSWR from 'swr'
 
-import Layout from '../../components/Layout'
-import NavBar from '../../components/NavBar'
-import { MATContextProvider } from '../../components/aggregation/mat/MATContext'
-import { StackedBarChart } from '../../components/aggregation/mat/StackedBarChart'
-import { FunnelChart } from '../../components/aggregation/mat/FunnelChart'
-import { Form } from '../../components/aggregation/mat/Form'
-import { axiosResponseTime } from '../../components/axios-plugins'
-import { withDebugProvider, useDebugContext } from '../../components/aggregation/DebugContext'
-import { Debug } from '../../components/aggregation/Debug'
+import Layout from 'components/Layout'
+import NavBar from 'components/NavBar'
+import { MATContextProvider } from 'components/aggregation/mat/MATContext'
+import { StackedBarChart } from 'components/aggregation/mat/StackedBarChart'
+import { FunnelChart } from 'components/aggregation/mat/FunnelChart'
+import { Form } from 'components/aggregation/mat/Form'
+import { axiosResponseTime } from 'components/axios-plugins'
 import TableView from 'components/aggregation/mat/TableView'
 
 const baseURL = process.env.NEXT_PUBLIC_MEASUREMENTS_URL
@@ -121,7 +119,6 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
                 </Box>
               }
             </Box>
-
             {error && <Box>
               <Heading h={5} my={4}>Error</Heading>
               <pre>{JSON.stringify(error, null, 2)}</pre>
@@ -141,13 +138,5 @@ MeasurementAggregationToolkit.propTypes = {
     })
   )
 }
-
-// function DebuggableMAT({ testNames }) {
-//   return (
-//     <DebugProvider>
-//       <MeasurementAggregationToolkit testNames={testNames} />
-//     </DebugProvider>
-//   )
-// }
 
 export default MeasurementAggregationToolkit
