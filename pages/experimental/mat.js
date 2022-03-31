@@ -21,6 +21,7 @@ import { axiosResponseTime } from '../../components/axios-plugins'
 import { withDebugProvider, useDebugContext } from '../../components/aggregation/DebugContext'
 import { Debug } from '../../components/aggregation/Debug'
 import TableView from 'components/aggregation/mat/TableView'
+import Help from 'components/aggregation/mat/Help'
 
 const baseURL = process.env.NEXT_PUBLIC_MEASUREMENTS_URL
 axiosResponseTime(axios)
@@ -121,7 +122,7 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
                 </Box>
               }
             </Box>
-
+            <Help />
             {error && <Box>
               <Heading h={5} my={4}>Error</Heading>
               <pre>{JSON.stringify(error, null, 2)}</pre>
