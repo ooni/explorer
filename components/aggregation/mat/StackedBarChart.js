@@ -120,30 +120,6 @@ export const StackedBarChart = ({ data, query }) => {
           labelSkipWidth={80}
           labelSkipHeight={20}
           labelTextColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
-          legends={[
-            {
-              dataFrom: 'keys',
-              anchor: 'bottom',
-              direction: 'row',
-              justify: false,
-              translateX: 0,
-              translateY: 100,
-              itemsSpacing: 2,
-              itemWidth: 200,
-              itemHeight: 20,
-              itemDirection: 'left-to-right',
-              itemOpacity: 0.85,
-              onClick: (d, e) => { alert(`Toggle ${JSON.stringify(d)}`)},
-              effects: [
-                {
-                  on: 'hover',
-                  style: {
-                    itemOpacity: 1
-                  }
-                }
-              ]
-            }
-          ]}
           animate={true}
           motionStiffness={90}
           motionDamping={15}
