@@ -7,7 +7,9 @@ import axios from 'axios'
 import {
   Container,
   Heading,
-  Flex, Box, Button
+  Flex,
+  Box,
+  Link
 } from 'ooni-components'
 import useSWR from 'swr'
 
@@ -19,7 +21,7 @@ import { FunnelChart } from 'components/aggregation/mat/FunnelChart'
 import { Form } from 'components/aggregation/mat/Form'
 import { axiosResponseTime } from 'components/axios-plugins'
 import TableView from 'components/aggregation/mat/TableView'
-import { exportToCsv, exportToJson } from 'utils/dataExport'
+import { exportToCsv, exportToJson, requestUrl } from 'utils/dataExport'
 
 const baseURL = process.env.NEXT_PUBLIC_MEASUREMENTS_URL
 axiosResponseTime(axios)
@@ -115,8 +117,8 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
 
   const renderDownloadButtons = () => (
     <Flex flexWrap='wrap' justifyContent='space-evenly' mt={100}>
-      <Button mb={15} onClick={() => exportToCsv(query)}>Download CSV</Button>
-      <Button mb={15} onClick={() => exportToJson(data.data.result)}>Download JSON</Button>
+      <Link href={requestUrl(query)} onClick={(event) => exportToCsv(event, query)} fontSize={20}>Download CSV</Link>
+      <Link href={requestUrl(query)} onClick={(event) => exportToJson(event, data.data.result)} fontSize={20}>Download JSON</Link>
     </Flex>
   )
 
