@@ -135,16 +135,9 @@ const GridChart = ({ data, isGrouped = true, height = 'auto', header }) => {
 
   return (
     <Flex flexDirection='column' sx={{ position: 'relative' }}>
-      <Box alignSelf='flex-end' sx={{ position: 'absolute', opacity: 0.8, top: 16, left: 16 }}>
-        <OONILogo height='32px' />
-      </Box>
       <Flex flexDirection='column'>
+        <ChartHeader options={header} />
         {/* Fake axis on top of list. Possible alternative: dummy chart with axis and valid tickValues */}
-        <Flex justifyContent={'center'}>
-          <Box width={2/16}>
-          </Box>
-          <ChartHeader options={header} />
-        </Flex>
         <Flex>
           <Box width={2/16}>
           </Box>

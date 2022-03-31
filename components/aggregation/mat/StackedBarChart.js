@@ -5,13 +5,19 @@ import { Box, Flex, Link } from 'ooni-components'
 import { IoMdGlobe } from 'react-icons/io'
 import NLink from 'next/link'
 import { useIntl } from 'react-intl'
-import OONILogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochrome.svg'
+import styled from 'styled-components'
 
 import { colorMap } from './colorMap'
 import { generateSearchQuery, CustomTooltipNoLink} from './CustomTooltip'
 import { getXAxisTicks } from './timeScaleXAxis'
 import { fillRowHoles } from './computations'
 import { ChartHeader } from './ChartHeader'
+
+const ChartContainer = styled(Flex)`
+  position: relative;
+  border: 2px solid ${props => props.theme.colors.gray1};
+  padding: 16px;
+`
 
 const colorFunc = (d) => colorMap[d.id] || '#ccc'
 
@@ -64,7 +70,7 @@ export const StackedBarChart = ({ data, query }) => {
 
 
   return (
-    <Flex flexDirection={['column']} height={'100%'} sx={{ position: 'relative' }}>
+    <ChartContainer flexDirection={['column']}>
       <ChartHeader />
       <Flex justifyContent='space-between' alignItems='center'>
         <Box>
@@ -145,10 +151,7 @@ export const StackedBarChart = ({ data, query }) => {
           onClick={onClick}
         />
       </Box>
-      <Box sx={{ position: 'absolute', opacity: 0.8, bottom: -85, right: 0 }}>
-        <OONILogo height='32px' />
-      </Box>
-    </Flex>
+    </ChartContainer>
   )
 }
 
