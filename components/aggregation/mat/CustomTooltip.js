@@ -63,7 +63,7 @@ const CustomToolTip = React.memo(({ data, onClose, indexValue, link = true }) =>
     }
 
 
-    const title = `${indexValue} ${'axis_y' in query ? ` - ${data[query.axis_y]}` : ''}`
+    const title = `${indexValue} ${query?.axis_y !== '' ? ` - ${data[query.axis_y]}` : ''}`
 
     return [
       linkObj,
