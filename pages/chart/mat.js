@@ -21,6 +21,7 @@ import { Form } from 'components/aggregation/mat/Form'
 import { axiosResponseTime } from 'components/axios-plugins'
 import TableView from 'components/aggregation/mat/TableView'
 import FormattedMarkdown from 'components/FormattedMarkdown'
+import Help from 'components/aggregation/mat/Help'
 
 const baseURL = process.env.NEXT_PUBLIC_MEASUREMENTS_URL
 axiosResponseTime(axios)
@@ -117,6 +118,9 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
               {data && data.data.dimension_count > 1 &&
                   <TableView data={data.data.result} query={query} />
               }
+            </Box>
+            <Box my={4}>
+              <Help />
             </Box>
             {error && <Box>
               <Heading h={5} my={4}>Error</Heading>
