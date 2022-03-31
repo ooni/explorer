@@ -102,26 +102,20 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
               <FormattedMessage id='MAT.SubTitle' />
             </Heading>
             <Form onSubmit={onSubmit} testNames={testNames} query={router.query} />
-            <Box>
+            <Box sx={{ minHeight: '500px' }}>
               {showLoadingIndicator &&
                 <Box>
                   <h2>Loading ...</h2>
                 </Box>
               }
               {data && data.data.dimension_count == 0 &&
-                <Box sx={{ height: '500px' }}>
                   <FunnelChart data={data.data.result} />
-                </Box>
               }
               {data && data.data.dimension_count == 1 &&
-                <Box sx={{ height: '600px' }}>
                   <StackedBarChart data={data} query={query} />
-                </Box>
               }
               {data && data.data.dimension_count > 1 &&
-                <Box sx={{ minHeight: '500px' }}>
                   <TableView data={data.data.result} query={query} />
-                </Box>
               }
             </Box>
             {error && <Box>
