@@ -326,7 +326,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
         }
       </Flex>
       <Flex my={4}>
-        <Button width={[1, 1/8]} onClick={maybeWarnBeforeSubmit}><FormattedMessage id='MAT.Form.Submit' /></Button>
+        <Button width={[1, 'unset']} onClick={maybeWarnBeforeSubmit}><FormattedMessage id='MAT.Form.Submit' /></Button>
       </Flex>
 
     </form>
