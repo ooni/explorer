@@ -26,4 +26,4 @@ const translationsMap = supportedLanguages
 
 const translationsContent = `window.OONITranslations = ${JSON.stringify(translationsMap)}`
 writeFileSync(`${LANG_DIR}/translations.js`, translationsContent)
-
+console.log(`> Wrote translations to: ${LANG_DIR}/translations.js`)

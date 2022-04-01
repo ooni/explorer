@@ -26,7 +26,9 @@ const main = () => {
         const jsContent = Mustache.render(tmpl, {alpha2, alpha2Upper})
         const dstPath = path.join(__dirname, '..', 'components', 'flags', `${alpha2}.js`)
         fs.writeFile(dstPath, jsContent, (err) => {
-          
+          if (err) {
+            console.log('Failed to write ' + dstPath, err)
+          }
           return
         })
       })

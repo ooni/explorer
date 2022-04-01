@@ -20,4 +20,4 @@ const defaultMessages = glob.sync(`${LANG_DIR}.messages/**/*.json`)
   }, [])
 
 writeFileSync('./static/lang/en.csv', JSON.stringify(defaultMessages, null, 2))
-
+console.log(`> Wrote default messages to: "${resolve('./static/lang/en.csv')}"`)
