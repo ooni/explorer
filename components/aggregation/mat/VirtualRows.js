@@ -1,3 +1,4 @@
+import PropTypes from 'prop-types'
 import React, { useCallback } from 'react'
 import { Flex } from 'ooni-components'
 
@@ -22,17 +23,19 @@ const useKeepMountedRangeExtractor = () => {
   return rangeExtractor
 }
 
-export const VirtualRows = ({ itemData, tooltipIndex }) => {
+export const VirtualRows = ({ data, rows, rowLabels, gridHeight, indexBy, tooltipIndex }) => {
 
-  const {reshapedData, rows, rowLabels, gridHeight, indexBy, yAxis } = itemData
   const parentRef = React.useRef()
   const keepMountedRangeExtractor = useKeepMountedRangeExtractor()
 
+  const keyExtractor = useCallback((index) => rows[index], [rows])
+
   const rowVirtualizer = useVirtual({
-    size: itemData.rows.length,
+    size: Object.keys(rows).length,
     parentRef,
     estimateSize: useCallback(() => ROW_HEIGHT, []),
     overscan: 0,
+    keyExtractor,
     rangeExtractor: retainMountedRows ? keepMountedRangeExtractor : defaultRangeExtractor
   })
 
@@ -68,8 +71,9 @@ export const VirtualRows = ({ itemData, tooltipIndex }) => {
               }}
             >
               <RowChart
+                key={virtualRow.key}
                 rowIndex={virtualRow.index}
-                data={reshapedData[rows[virtualRow.index]]}
+                data={data[rows[virtualRow.index]]}
                 indexBy={indexBy}
                 height={virtualRow.size}
                 label={rowLabels[rows[virtualRow.index]]}
@@ -80,4 +84,12 @@ export const VirtualRows = ({ itemData, tooltipIndex }) => {
         </div>
     </Flex>
   )
+}
+VirtualRows.propTypes = {
+  data: PropTypes.objectOf(PropTypes.array).isRequired,
+  gridHeight: PropTypes.number.isRequired,
+  indexBy: PropTypes.string.isRequired,
+  rowLabels: PropTypes.objectOf(PropTypes.string).isRequired,
+  rows: PropTypes.arrayOf(PropTypes.string).isRequired,
+  tooltipIndex: PropTypes.array.isRequired,
 }

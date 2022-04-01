@@ -1,8 +1,7 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { ResponsiveBar } from '@nivo/bar'
-import { Heading, Flex, Box, Text } from 'ooni-components'
-import OONILogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochrome.svg'
+import { Heading, Flex, Box } from 'ooni-components'
 
 import RowChart, { chartMargins } from './RowChart'
 import { fillDataHoles } from './computations'
@@ -37,40 +36,24 @@ const GRID_MAX_HEIGHT = 600
  *
 */
 
-const reshapeChartData = (data, query, isGrouped) => {
+export const prepareDataForGridChart = (data, query) => {
   const rows = []
   const rowLabels = {}
   let reshapedData = {}
 
-  const t0 = performance.now()
+  data.forEach((item) => {
+    const key = item[query.axis_y]
+    if (key in reshapedData) {
+      reshapedData[key].push(item)
+    } else {
+      rows.push(key)
+      reshapedData[key] = [item]
+      rowLabels[key] = getRowLabel(key, query.axis_y)
+    }
+  })
 
-  // Flat arrays need to be converted to collection grouped by `axis_y`
-  if (isGrouped) {
-    reshapedData = data.reduce((d, groupedRow, i) => {
-      rows.push(groupedRow.groupByVal)
-      rowLabels[groupedRow.groupByVal] = groupedRow.leafRows[0].original.rowLabel
-      return {...d, [groupedRow.groupByVal]: groupedRow.leafRows.map(r => r.original)}
-    }, {})
-  } else {
-    data.forEach((item) => {
-      const key = item[query.axis_y]
-      if (key in reshapedData) {
-        reshapedData[key].push(item)
-      } else {
-        rows.push(key)
-        reshapedData[key] = [item]
-        rowLabels[key] = getRowLabel(key, query.axis_y)
-      }
-    })
-  }
+  const reshapedDataWithoutHoles = fillDataHoles(reshapedData, query)
 
-  const t1 = performance.now()
-
-  let reshapedDataWithoutHoles = fillDataHoles(reshapedData, query)
-
-
-  const t2 = performance.now()
-  console.debug(`ReshapeChartData: Step 2 took: ${(t2-t1)}ms` )
   return [reshapedDataWithoutHoles, rows, rowLabels]
 }
 
@@ -78,10 +61,15 @@ const reshapeChartData = (data, query, isGrouped) => {
  * Renders the collection of RowCharts. This is either passed down from
  * TableView or from other components like `<Chart>` (`components/dashboard/Charts.js`)
  *
- * data - This is either an array of data points as received from the API response
- * or an array containing groups of data points produced as a result of using
- * `useGroupBy` in `useTable()` in `TableView`
+ * data - An object where each key represents a row in the Grid and
+ *        the value is an array of objects (from aggregation API response)
  *
+ * rowKeys - has the full set of keys available when filtering by selectedRows
+ * 
+ * rowLabels - Labels to render along with the chart in a row
+ * 
+ * selectedRows - a subset of `rowKeys` representing which rows to render in the grid
+ * 
  * isGrouped - Whether the data is already grouped by y-axis value
  * If `false`, `reshapeChartData()` will group the data as required
  *
@@ -93,26 +81,22 @@ const reshapeChartData = (data, query, isGrouped) => {
  * header - an element showing some summary information on top of the charts
 }
 */
-const GridChart = ({ data, isGrouped = true, height = 'auto', header }) => {
+const GridChart = ({ data, rowKeys, rowLabels, isGrouped = true, height = 'auto', header, selectedRows = null }) => {
+
   // Fetch query state from context instead of router
   // because some params not present in the URL are injected in the context
   const [ query ] = useMATContext()
   const { tooltipIndex } = query
-  
-  const itemData = useMemo(() => {
-    const [reshapedData, rows, rowLabels] = reshapeChartData(data, query, isGrouped)
-    
-    let gridHeight = height
-    if (height === 'auto') {
-      gridHeight = Math.min( 20 + (rows.length * ROW_HEIGHT), GRID_MAX_HEIGHT)
-    }
-    
-    return {reshapedData, rows, rowLabels, gridHeight, indexBy: query.axis_x, yAxis: query.axis_y }
-  }, [data, height, isGrouped, query])
+  const indexBy = query.axis_x
+
+  let gridHeight = height
+  if (height === 'auto') {
+    const rowCount = selectedRows?.length ?? rowKeys.length
+    gridHeight = Math.min( 20 + (rowCount * ROW_HEIGHT), GRID_MAX_HEIGHT)
+  }
 
   const xAxisTickValues = getXAxisTicks(query, 30)
-
-  const xAxisData = itemData.reshapedData[itemData.rows[0]]
+  const xAxisData = xAxisTickValues.map(tick => ({ [query.axis_x]: tick}))
   const xAxisMargins = {...chartMargins, top: 60, bottom: 0}
   const axisTop = {
     enable: true,
@@ -122,7 +106,15 @@ const GridChart = ({ data, isGrouped = true, height = 'auto', header }) => {
     tickValues: xAxisTickValues
   }
 
-  const {reshapedData, rows, rowLabels, gridHeight, indexBy, yAxis } = itemData
+  const rowsToRender = useMemo(() => {
+    if (!selectedRows) {
+      return rowKeys
+    }
+
+    if (selectedRows.length > 0) {
+      return selectedRows
+    }
+  }, [rowKeys, selectedRows])
 
   if (data.length < 1) {
     return (
@@ -157,7 +149,7 @@ const GridChart = ({ data, isGrouped = true, height = 'auto', header }) => {
           </Box>
         </Flex>
         {/* Use a virtual list only for higher count of rows */}
-        {rows.length < 10 ? (
+        {rowsToRender.length < 10 ? (
           <Flex
             className='outerListElement'
             flexDirection='column'
@@ -165,20 +157,24 @@ const GridChart = ({ data, isGrouped = true, height = 'auto', header }) => {
               height: gridHeight
             }}
           >
-            {rows.map((row, index) => 
+            {rowsToRender.map((rowKey, index) => 
               <RowChart
-                key={row}
+                key={rowKey}
                 rowIndex={index}
-                data={reshapedData[row]}
+                data={data[rowKey]}
                 indexBy={indexBy}
                 height={70}
-                label={rowLabels[row]}
+                label={rowLabels[rowKey]}
               />
             )}
           </Flex>
         ) : (
           <VirtualRows
-            itemData={itemData}
+            data={data}
+            rows={rowsToRender}
+            rowLabels={rowLabels}
+            gridHeight={gridHeight}
+            indexBy={indexBy}
             tooltipIndex={tooltipIndex}
           />
         )}
@@ -188,7 +184,10 @@ const GridChart = ({ data, isGrouped = true, height = 'auto', header }) => {
 }
 
 GridChart.propTypes = {
-  data: PropTypes.array.isRequired,
+  data: PropTypes.objectOf(PropTypes.array).isRequired,
+  rowKeys: PropTypes.arrayOf(PropTypes.string),
+  rowLabels: PropTypes.objectOf(PropTypes.string),
+  selectedRows: PropTypes.arrayOf(PropTypes.string),
   isGrouped: PropTypes.bool,
   height: PropTypes.oneOfType([
     PropTypes.string,
