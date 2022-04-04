@@ -7,6 +7,7 @@ import { Flex, Box, Button, Text } from 'ooni-components'
 import GridChart, { prepareDataForGridChart } from './GridChart'
 import { ResizableBox } from './Resizable'
 import { DetailsBox } from '../../measurement/DetailsBox'
+import { sortRows } from './computations'
 
 const TableContainer = styled.div`
   ${'' /* These styles are suggested for the table fill all available space in its containing element */}
@@ -329,14 +330,14 @@ const TableView = ({ data, query }) => {
   
   const updateCharts = useCallback(() => {
 
-    const selectedRows = preGlobalFilteredRows.filter(r => r.isSelected).map(r => r.values.yAxisCode)
+    const selectedRows = preGlobalFilteredRows.filter(r => r.isSelected).sort((a,b) => sortRows(a, b, query.axis_y)).map(r => r.values.yAxisCode)
 
     if (selectedRows.length > 0 && selectedRows.length !== preGlobalFilteredRows.length) {
       setDataForCharts(selectedRows)
     } else {
       setDataForCharts(noRowsSelected)
     }
-  }, [preGlobalFilteredRows])
+  }, [preGlobalFilteredRows, query.axis_y])
 
   const resetFilter = () => {
     toggleAllRowsSelected(false)

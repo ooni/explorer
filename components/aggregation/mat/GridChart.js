@@ -4,7 +4,7 @@ import { ResponsiveBar } from '@nivo/bar'
 import { Heading, Flex, Box } from 'ooni-components'
 
 import RowChart, { chartMargins } from './RowChart'
-import { fillDataHoles } from './computations'
+import { sortRows, fillDataHoles } from './computations'
 import { getXAxisTicks } from './timeScaleXAxis'
 import { useMATContext } from './MATContext'
 import { ChartHeader } from './ChartHeader'
@@ -53,6 +53,8 @@ export const prepareDataForGridChart = (data, query) => {
   })
 
   const reshapedDataWithoutHoles = fillDataHoles(reshapedData, query)
+
+  rows.sort((a,b) => sortRows(a, b, query.axis_y))
 
   return [reshapedDataWithoutHoles, rows, rowLabels]
 }
