@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useTable, useFlexLayout, useRowSelect, useSortBy, useGlobalFilter, useAsyncDebounce } from 'react-table'
 import { FormattedMessage, useIntl } from 'react-intl'
 import styled from 'styled-components'
@@ -179,6 +179,7 @@ const noRowsSelected = null
 
 const TableView = ({ data, query }) => {
   const intl = useIntl()
+  const resetTableRef = useRef(false)
   const yAxis = query.axis_y
 
   const defaultColumn = React.useMemo(
@@ -196,10 +197,12 @@ const TableView = ({ data, query }) => {
     sortBy: [{ id: 'yAxisLabel', desc: false }]
   }),[])
 
+  const getRowId = React.useCallback(row => row[query.axis_y], [])
+
   const columns = useMemo(() => [
     {
       Header: intl.formatMessage({ id: `MAT.Table.Header.${yAxis}`}),
-      Cell: ({ value, row, toggleRowSelected }) => (
+      Cell: ({ value, row }) => (
         <Text fontWeight={row.isSelected ? 'bold' : 'initial'}>
           {value}
         </Text>
@@ -286,6 +289,7 @@ const TableView = ({ data, query }) => {
       data: tableData,
       initialState,
       defaultColumn,
+      getRowId,
     },
     useFlexLayout,
     useGlobalFilter,
@@ -329,21 +333,27 @@ const TableView = ({ data, query }) => {
   const [dataForCharts, setDataForCharts] = useState(noRowsSelected)
   
   const updateCharts = useCallback(() => {
-
-    const selectedRows = preGlobalFilteredRows.filter(r => r.isSelected).sort((a,b) => sortRows(a, b, query.axis_y)).map(r => r.values.yAxisCode)
+    const selectedRows = Object.keys(state.selectedRowIds).sort((a,b) => sortRows(a, b, query.axis_y))
 
     if (selectedRows.length > 0 && selectedRows.length !== preGlobalFilteredRows.length) {
       setDataForCharts(selectedRows)
     } else {
       setDataForCharts(noRowsSelected)
     }
-  }, [preGlobalFilteredRows, query.axis_y])
+  }, [preGlobalFilteredRows.length, query.axis_y, state.selectedRowIds])
 
-  const resetFilter = () => {
-    toggleAllRowsSelected(false)
+  const resetFilter = useCallback(() => {
+    resetTableRef.current = true
     setGlobalFilter('')
     setDataForCharts(noRowsSelected)
-  }
+  }, [setGlobalFilter])
+
+  useEffect(() => {
+    if (state.globalFilter == undefined && resetTableRef.current === true) {
+      resetTableRef.current = false
+      toggleAllRowsSelected(false)
+    }
+  }, [state.globalFilter, toggleAllRowsSelected])
 
   return (
     <Flex flexDirection='column'>
