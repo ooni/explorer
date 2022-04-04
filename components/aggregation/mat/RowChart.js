@@ -72,6 +72,10 @@ const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last
     axisLeft: null,
     enableGridX: true,
     enableGridY: true,
+    indexScale: {
+      type: 'band',
+      round: false
+    },
     labelSkipWidth: 100,
     labelSkipHeight: 100,
     labelTextColor: { from: 'color', modifiers: [ [ 'darker', 1.6 ] ] },
@@ -94,7 +98,6 @@ const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last
           data={chartData}
           keys={keys}
           indexBy={indexBy}
-          xScale={{ type: 'time' }}
           tooltip={CustomToolTip}
           onClick={handleClick}
           barComponent={CustomBarItem}

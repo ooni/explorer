@@ -96,7 +96,6 @@ const GridChart = ({ data, rowKeys, rowLabels, isGrouped = true, height = 'auto'
   }
 
   const xAxisTickValues = getXAxisTicks(query, 30)
-  const xAxisData = xAxisTickValues.map(tick => ({ [query.axis_x]: tick}))
   const xAxisMargins = {...chartMargins, top: 60, bottom: 0}
   const axisTop = {
     enable: true,
@@ -105,6 +104,10 @@ const GridChart = ({ data, rowKeys, rowLabels, isGrouped = true, height = 'auto'
     tickRotation: -45,
     tickValues: xAxisTickValues
   }
+  // Generate a data row with only x-axis values 
+  // e.g [ {measurement_start_day: '2022-01-01'}, {measurement_start_day: '2022-01-02'}... ]
+  const xAxisData = data[rowKeys[0]].map(d => ({ [query.axis_x]: d[query.axis_x]}))
+
 
   const rowsToRender = useMemo(() => {
     if (!selectedRows) {
@@ -139,6 +142,10 @@ const GridChart = ({ data, rowKeys, rowLabels, isGrouped = true, height = 'auto'
               indexBy={query.axis_x}
               margin={xAxisMargins}
               padding={0.3}
+              indexScale={{
+                type: 'band',
+                round: false
+              }}
               layers={['axes']}
               axisTop={axisTop}
               axisBottom={null}
