@@ -72,7 +72,6 @@ export const StackedBarChart = ({ data, query }) => {
   const [gridData, rows ] = prepareDataForGridChart(chartMeta.data, query)
 
   return (
-    <>
     <ChartContainer flexDirection={['column']}>
       <GridChart
         data={gridData}
@@ -82,65 +81,6 @@ export const StackedBarChart = ({ data, query }) => {
         noLabels={true}
       />
     </ChartContainer>
-    <ChartContainer flexDirection={['column']} my={3}>
-      <ChartHeader />
-      <Flex justifyContent='space-between' alignItems='center'>
-        <Box>
-          {link ? (
-          <Flex alignItems='center'>
-            <Box mx={1}>
-              <IoMdGlobe size={18} />
-            </Box>
-            <Box>
-              {link}
-            </Box>
-          </Flex>
-          ): (
-            <div />
-            // <Box> Click on a bar to explore the measurements aggregated in the column </Box>
-          )}
-        </Box>
-      </Flex>
-      <Box height={'500px'} mx={[1, 3]}>
-        <ResponsiveBar
-          data={chartMeta.data}
-          keys={chartMeta.cols}
-          indexBy={chartMeta.indexBy}
-          margin={{ top: 50, right: 30, bottom: 100, left: 80 }}
-          padding={0.3}
-          colors={colorFunc}
-          borderColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
-          axisTop={null}
-          axisRight={null}
-          axisBottom={{
-            tickSize: 5,
-            tickPadding: 5,
-            tickRotation: 45,
-            tickValues: chartMeta.xAxisTicks,
-            legend: `${chartMeta.indexBy}`,
-            legendPosition: 'middle',
-            legendOffset: 60
-          }}
-          axisLeft={{
-            tickSize: 5,
-            tickPadding: 5,
-            tickRotation: 0,
-            legend: 'measurement count',
-            legendPosition: 'middle',
-            legendOffset: -60
-          }}
-          labelSkipWidth={80}
-          labelSkipHeight={20}
-          labelTextColor={{ from: 'color', modifiers: [ [ 'darker', 1.6 ] ] }}
-          animate={true}
-          motionStiffness={90}
-          motionDamping={15}
-          tooltip={CustomTooltipNoLink}
-          onClick={onClick}
-        />
-      </Box>
-    </ChartContainer>
-  </>
   )
 }
 
