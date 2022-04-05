@@ -42,7 +42,9 @@ export const prepareDataForGridChart = (data, query) => {
   let reshapedData = {}
 
   data.forEach((item) => {
-    const key = item[query.axis_y]
+    // Convert non-string keys (e.g `probe_asn`) to string
+    // because they get casted to strings during Object transformations
+    const key = String(item[query.axis_y])
     if (key in reshapedData) {
       reshapedData[key].push(item)
     } else {
