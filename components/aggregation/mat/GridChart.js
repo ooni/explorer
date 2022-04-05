@@ -91,10 +91,29 @@ const GridChart = ({ data, rowKeys, rowLabels, isGrouped = true, height = 'auto'
   const { tooltipIndex } = query
   const indexBy = query.axis_x
 
+  const rowsToRender = useMemo(() => {
+    if (!selectedRows) {
+      return rowKeys
+    }
+
+    if (selectedRows.length > 0) {
+      return selectedRows
+    }
+  }, [rowKeys, selectedRows])
+
   let gridHeight = height
   if (height === 'auto') {
     const rowCount = selectedRows?.length ?? rowKeys.length
     gridHeight = Math.min( 20 + (rowCount * ROW_HEIGHT), GRID_MAX_HEIGHT)
+  }
+
+  if (data.size < 1) {
+    return (
+      <Flex flexDirection='column' justifyContent='center' sx={{ height: '100%' }}>
+        <Heading h={5}> No enough data for charts </Heading>
+        <Heading h={6}> Check browser console to inspect received data.</Heading>
+      </Flex>
+    )
   }
 
   const xAxisTickValues = getXAxisTicks(query, 30)
@@ -106,29 +125,10 @@ const GridChart = ({ data, rowKeys, rowLabels, isGrouped = true, height = 'auto'
     tickRotation: -45,
     tickValues: xAxisTickValues
   }
-  // Generate a data row with only x-axis values 
+
+  // To correctly align with the rows, generate a data row with only x-axis values
   // e.g [ {measurement_start_day: '2022-01-01'}, {measurement_start_day: '2022-01-02'}... ]
   const xAxisData = data.get(rowKeys[0]).map(d => ({ [query.axis_x]: d[query.axis_x]}))
-
-
-  const rowsToRender = useMemo(() => {
-    if (!selectedRows) {
-      return rowKeys
-    }
-
-    if (selectedRows.length > 0) {
-      return selectedRows
-    }
-  }, [rowKeys, selectedRows])
-
-  if (data.size < 1) {
-    return (
-      <Flex flexDirection='column' justifyContent='center' sx={{ height: '100%' }}>
-        <Heading h={5}> No enough data for charts </Heading>
-        <Heading h={6}> Check browser console to inspect received data.</Heading>
-      </Flex>
-    )
-  }
 
   return (
     <Flex flexDirection='column' sx={{ position: 'relative' }}>
