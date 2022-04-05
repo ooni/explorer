@@ -12,6 +12,7 @@ import { generateSearchQuery, CustomTooltipNoLink} from './CustomTooltip'
 import { getXAxisTicks } from './timeScaleXAxis'
 import { fillRowHoles } from './computations'
 import { ChartHeader } from './ChartHeader'
+import GridChart, { prepareDataForGridChart } from './GridChart'
 
 const ChartContainer = styled(Flex)`
   position: relative;
@@ -68,9 +69,20 @@ export const StackedBarChart = ({ data, query }) => {
     return (<div />)
   }
 
+  const [gridData, rows ] = prepareDataForGridChart(chartMeta.data, query)
 
   return (
+    <>
     <ChartContainer flexDirection={['column']}>
+      <GridChart
+        data={gridData}
+        rowKeys={rows}
+        rowLabels={[undefined]}
+        height={500}
+        noLabels={true}
+      />
+    </ChartContainer>
+    <ChartContainer flexDirection={['column']} my={3}>
       <ChartHeader />
       <Flex justifyContent='space-between' alignItems='center'>
         <Box>
@@ -128,6 +140,7 @@ export const StackedBarChart = ({ data, query }) => {
         />
       </Box>
     </ChartContainer>
+  </>
   )
 }
 

@@ -4,7 +4,7 @@ import { Box, Flex, theme } from 'ooni-components'
 import { ResponsiveBar as Bar } from '@nivo/bar'
 
 import { CustomBarItem } from './CustomBarItem'
-import { CustomToolTip } from './CustomTooltip'
+import { CustomToolTip, barThemeForTooltip } from './CustomTooltip'
 import { colorMap } from './colorMap'
 import { useDebugContext } from '../DebugContext'
 import { useMATContext } from './MATContext'
@@ -20,15 +20,6 @@ const colorFunc = (d) => colorMap[d.id] || '#ccc'
 
 const barLayers = ['grid', 'axes', 'bars']
 export const chartMargins = { top: 4, right: 50, bottom: 4, left: 0 }
-
-const barThemeForTooltip = {
-  tooltip: {
-    container: {
-      pointerEvents: 'initial',
-      boxShadow: `1px 1px 4px 1px ${theme.colors.gray6}`
-    }
-  }
-}
 
 const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last */}) => {
   const [ { tooltipIndex }, updateMATContext ] = useMATContext()
@@ -90,9 +81,9 @@ const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last
 
   return (
     <Flex alignItems='center' sx={{ position: 'relative' }}>
-      <Box width={2/16}>
+      {label && <Box width={2/16}>
         {label}
-      </Box>
+      </Box>}
       <Box sx={{ height: height, width: '100%' }}>
         <Bar
           data={chartData}

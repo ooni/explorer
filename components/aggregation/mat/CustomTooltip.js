@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { Chip } from '@nivo/tooltip'
 import { useTheme } from '@nivo/core'
-import { Box, Flex, Text, Link } from 'ooni-components'
+import { Box, Flex, Text, Link, theme } from 'ooni-components'
 import NLink from 'next/link'
 
 import { colorMap } from './colorMap'
@@ -9,6 +9,14 @@ import { MdClear } from 'react-icons/md'
 import { useIntl } from 'react-intl'
 import { useMATContext } from './MATContext'
 
+export const barThemeForTooltip = {
+  tooltip: {
+    container: {
+      pointerEvents: 'initial',
+      boxShadow: `1px 1px 4px 1px ${theme.colors.gray6}`
+    }
+  }
+}
 
 const urlToDomain = (url) => new URL(url).hostname
 

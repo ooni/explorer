@@ -85,7 +85,7 @@ export const prepareDataForGridChart = (data, query) => {
  * header - an element showing some summary information on top of the charts
 }
 */
-const GridChart = ({ data, rowKeys, rowLabels, isGrouped = true, height = 'auto', header, selectedRows = null }) => {
+const GridChart = ({ data, rowKeys, rowLabels, isGrouped = true, height = 'auto', header, selectedRows = null, noLabels = false }) => {
 
   // Fetch query state from context instead of router
   // because some params not present in the URL are injected in the context
@@ -132,14 +132,16 @@ const GridChart = ({ data, rowKeys, rowLabels, isGrouped = true, height = 'auto'
   // e.g [ {measurement_start_day: '2022-01-01'}, {measurement_start_day: '2022-01-02'}... ]
   const xAxisData = data.get(rowKeys[0]).map(d => ({ [query.axis_x]: d[query.axis_x]}))
 
+  const rowHeight = noLabels ? 500 : ROW_HEIGHT
+
   return (
     <Flex flexDirection='column' sx={{ position: 'relative' }}>
       <Flex flexDirection='column'>
         <ChartHeader options={header} />
         {/* Fake axis on top of list. Possible alternative: dummy chart with axis and valid tickValues */}
         <Flex>
-          <Box width={2/16}>
-          </Box>
+          {!noLabels && <Box width={2/16}>
+          </Box>}
           <Box className='xAxis' sx={{ width: '100%', height: '62px' }}>
             <ResponsiveBar
               data={xAxisData}
@@ -174,7 +176,7 @@ const GridChart = ({ data, rowKeys, rowLabels, isGrouped = true, height = 'auto'
                 rowIndex={index}
                 data={data.get(rowKey)}
                 indexBy={indexBy}
-                height={70}
+                height={rowHeight}
                 label={rowLabels[rowKey]}
               />
             )}
@@ -204,7 +206,8 @@ GridChart.propTypes = {
     PropTypes.string,
     PropTypes.number
   ]),
-  header: PropTypes.element
+  header: PropTypes.element,
+  noLabels: PropTypes.bool
 }
 
 export default React.memo(GridChart)
