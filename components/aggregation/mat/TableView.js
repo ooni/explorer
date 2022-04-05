@@ -187,6 +187,10 @@ const TableView = ({ data, query }) => {
       // When using the useFlexLayout:
       width: 70, // width is used for both the flex-basis and flex-grow
       Filter: SearchFilter,
+      Cell: ({ value }) => {
+        const intl = useIntl()
+        return typeof value === 'number' ? intl.formatNumber(value, {}) : String(value)
+      }
     }),
     []
   )
