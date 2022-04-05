@@ -88,7 +88,11 @@ const CustomToolTip = React.memo(({ data, onClose, indexValue, link = true }) =>
           </Box>
         ))}
       </Flex>
-      {link && <NLink passHref href={linkToMeasurements}><Link my={2} ml='auto' pr={3}>view measurements &gt;</Link></NLink>}
+      {link &&
+        <NLink passHref href={linkToMeasurements}>
+          <Link target='_blank' my={2} ml='auto' pr={3}>view measurements &gt;</Link>
+        </NLink>
+      }
     </Flex>
   )
 })
