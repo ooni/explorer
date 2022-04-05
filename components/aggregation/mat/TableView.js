@@ -346,11 +346,23 @@ const TableView = ({ data, query }) => {
     }
   }, [preGlobalFilteredRows.length, query.axis_y, state.selectedRowIds])
 
+  /**
+   * Reset the table filter
+   * Note: doesn't reset the sort state
+   */
   const resetFilter = useCallback(() => {
-    resetTableRef.current = true
-    setGlobalFilter('')
+    // toggleAllRowsSelected() doesn't work after calling setGlobalFilter('')
+    // so if globalFilter is set, then use resetTableRef to make it a two-step
+    // reset (step 2 in the below useEffect)
+    // otherwise, just toggle the selected rows and the reset is done
+    if (!state.globalFilter) {
+      toggleAllRowsSelected(false)
+    } else {
+      resetTableRef.current = true
+      setGlobalFilter('')
+    }
     setDataForCharts(noRowsSelected)
-  }, [setGlobalFilter])
+  }, [setGlobalFilter, state.globalFilter, toggleAllRowsSelected])
 
   useEffect(() => {
     if (state.globalFilter == undefined && resetTableRef.current === true) {
