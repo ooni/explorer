@@ -149,7 +149,7 @@ const prepareDataforTable = (data, query) => {
   
   const [reshapedData, rows, rowLabels] = prepareDataForGridChart(data, query)
 
-  Object.keys(reshapedData).map((key) => {
+  for (const [key, rowData] of reshapedData) {
 
     const countKeys = ['anomaly_count', 'confirmed_count', 'failure_count', 'measurement_count']
     
@@ -162,14 +162,14 @@ const prepareDataforTable = (data, query) => {
       measurement_count: 0,
     }
 
-    reshapedData[key].map(datum => {
+    rowData.forEach(d => {
       countKeys.forEach(countKey => {
-        row[countKey] = row[countKey] + datum[countKey]
+        row[countKey] = row[countKey] + d[countKey]
       })
     })
 
     table.push(row)
-  })
+  }
   return [reshapedData, table, rows, rowLabels]
 }
 

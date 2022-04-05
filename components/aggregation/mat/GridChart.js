@@ -63,8 +63,8 @@ export const prepareDataForGridChart = (data, query) => {
  * Renders the collection of RowCharts. This is either passed down from
  * TableView or from other components like `<Chart>` (`components/dashboard/Charts.js`)
  *
- * data - An object where each key represents a row in the Grid and
- *        the value is an array of objects (from aggregation API response)
+ * data - A Map where each key represents a row in the Grid and
+ *        the value is an array of data objects (from aggregation API response) for the row
  *
  * rowKeys - has the full set of keys available when filtering by selectedRows
  * 
@@ -108,7 +108,7 @@ const GridChart = ({ data, rowKeys, rowLabels, isGrouped = true, height = 'auto'
   }
   // Generate a data row with only x-axis values 
   // e.g [ {measurement_start_day: '2022-01-01'}, {measurement_start_day: '2022-01-02'}... ]
-  const xAxisData = data[rowKeys[0]].map(d => ({ [query.axis_x]: d[query.axis_x]}))
+  const xAxisData = data.get(rowKeys[0]).map(d => ({ [query.axis_x]: d[query.axis_x]}))
 
 
   const rowsToRender = useMemo(() => {
@@ -121,7 +121,7 @@ const GridChart = ({ data, rowKeys, rowLabels, isGrouped = true, height = 'auto'
     }
   }, [rowKeys, selectedRows])
 
-  if (data.length < 1) {
+  if (data.size < 1) {
     return (
       <Flex flexDirection='column' justifyContent='center' sx={{ height: '100%' }}>
         <Heading h={5}> No enough data for charts </Heading>
@@ -170,7 +170,7 @@ const GridChart = ({ data, rowKeys, rowLabels, isGrouped = true, height = 'auto'
               <RowChart
                 key={rowKey}
                 rowIndex={index}
-                data={data[rowKey]}
+                data={data.get(rowKey)}
                 indexBy={indexBy}
                 height={70}
                 label={rowLabels[rowKey]}

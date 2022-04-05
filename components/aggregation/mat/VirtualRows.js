@@ -73,7 +73,7 @@ export const VirtualRows = ({ data, rows, rowLabels, gridHeight, indexBy, toolti
               <RowChart
                 key={virtualRow.key}
                 rowIndex={virtualRow.index}
-                data={data[rows[virtualRow.index]]}
+                data={data.get(rows[virtualRow.index])}
                 indexBy={indexBy}
                 height={virtualRow.size}
                 label={rowLabels[rows[virtualRow.index]]}

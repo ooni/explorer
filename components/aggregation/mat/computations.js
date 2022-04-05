@@ -1,6 +1,8 @@
 import { countryList, territoryNames } from 'country-util'
 import { getCategoryCodesMap } from '../../utils/categoryCodes'
 
+const categoryCodesMap = getCategoryCodesMap()
+
 export function getDatesBetween(startDate, endDate) {
   const dateSet = new Set()
   var currentDate = startDate
@@ -64,7 +66,7 @@ export function fillRowHoles (data, query) {
 export function fillDataHoles (data, query) {
   // Object transformation, works like Array.map
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/fromEntries#object_transformations
-  const newData = Object.fromEntries(
+  const newData = new Map(
     Object.entries(data)
       .map(([ key, rowData ]) => [ key, fillRowHoles(rowData, query) ])
   )
