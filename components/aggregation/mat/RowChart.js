@@ -8,6 +8,7 @@ import { CustomToolTip, barThemeForTooltip } from './CustomTooltip'
 import { colorMap } from './colorMap'
 import { useDebugContext } from '../DebugContext'
 import { useMATContext } from './MATContext'
+import { getXAxisTicks } from './timeScaleXAxis'
 
 const keys = [
   'anomaly_count',
@@ -21,9 +22,83 @@ const colorFunc = (d) => colorMap[d.id] || '#ccc'
 const barLayers = ['grid', 'axes', 'bars']
 export const chartMargins = { top: 4, right: 50, bottom: 4, left: 0 }
 
-const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last */}) => {
-  const [ { tooltipIndex }, updateMATContext ] = useMATContext()
+const chartProps1D = {
+  colors: colorFunc,
+  indexScale: {
+    type: 'band',
+    round: false
+  },
+  margin: {
+    top: 50,
+    right: 30,
+    bottom: 100,
+    left: 80
+  },
+  padding: 0.3,
+  borderColor: { from: 'color', modifiers: [ [ 'darker', 1.6 ] ] },
+  axisTop: null,
+  axisRight: null,
+  axisBottom: {
+    tickSize: 5,
+    tickPadding: 5,
+    tickRotation: 45,
+    legend: 'measurement_start_day',
+    legendPosition: 'middle',
+    legendOffset: 60
+  },
+  axisLeft: {
+    tickSize: 5,
+    tickPadding: 5,
+    tickRotation: 0,
+    legend: 'measurement count',
+    legendPosition: 'middle',
+    legendOffset: -60
+  },
+  labelSkipWidth: 80,
+  labelSkipHeight: 20,
+  labelTextColor: { from: 'color', modifiers: [ [ 'darker', 1.6 ] ] },
+  animate: true,
+  motionStiffness: 90,
+  motionDamping: 15,
+}
 
+const chartProps2D = {
+  // NOTE: These dimensions are linked to accuracy of the custom axes rendered in
+  // <GridChart />
+  margin: chartMargins,
+  padding: 0.3,
+  borderColor: { from: 'color', modifiers: [ [ 'darker', 1.6 ] ] },
+  colors: colorFunc,
+  axisTop: null,
+  axisRight: {
+    enable: true,
+    tickSize: 5,
+    tickPadding: 5,
+    tickValues: 2
+  },
+  axisBottom: null,
+  axisLeft: null,
+  enableGridX: true,
+  enableGridY: true,
+  indexScale: {
+    type: 'band',
+    round: false
+  },
+  labelSkipWidth: 100,
+  labelSkipHeight: 100,
+  labelTextColor: { from: 'color', modifiers: [ [ 'darker', 1.6 ] ] },
+  // We send the `showTooltip` boolean into the barComponent to control visibility of tooltip
+  motionConfig: {
+    duration: 1
+  },
+  animate: false,
+  isInteractive: true,
+  layers: barLayers,
+}
+
+const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last */}) => {
+  const [ query, updateMATContext ] = useMATContext()
+  const { tooltipIndex } = query
 
   const handleClick = useCallback(({ column }) => {
     updateMATContext({ tooltipIndex: [rowIndex, column]}, true)
@@ -45,7 +120,13 @@ const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last
     }
   }, [data])
 
-  const chartProps = useMemo(() => ({
+  const chartProps = useMemo(() => {
+    const xAxisTicks = getXAxisTicks(query)
+    chartProps1D.axisBottom.tickValues = xAxisTicks
+    return label === undefined ? chartProps1D : chartProps2D
+  }, [label, query])
+
+  const chartPropsNull = useMemo(() => ({
     // NOTE: These dimensions are linked to accuracy of the custom axes rendered in
     // <GridChart />
     margin: chartMargins,

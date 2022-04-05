@@ -10,6 +10,7 @@ import { useMATContext } from './MATContext'
 import { ChartHeader } from './ChartHeader'
 import { getRowLabel } from './labels'
 import { VirtualRows } from './VirtualRows'
+import { XAxis } from './XAxis'
 
 const ROW_HEIGHT = 70
 const GRID_MAX_HEIGHT = 600
@@ -139,28 +140,7 @@ const GridChart = ({ data, rowKeys, rowLabels, isGrouped = true, height = 'auto'
       <Flex flexDirection='column'>
         <ChartHeader options={header} />
         {/* Fake axis on top of list. Possible alternative: dummy chart with axis and valid tickValues */}
-        <Flex>
-          {!noLabels && <Box width={2/16}>
-          </Box>}
-          <Box className='xAxis' sx={{ width: '100%', height: '62px' }}>
-            <ResponsiveBar
-              data={xAxisData}
-              indexBy={query.axis_x}
-              margin={xAxisMargins}
-              padding={0.3}
-              indexScale={{
-                type: 'band',
-                round: false
-              }}
-              layers={['axes']}
-              axisTop={axisTop}
-              axisBottom={null}
-              axisLeft={null}
-              axisRight={null}
-              animate={false}
-            />
-          </Box>
-        </Flex>
+        {!noLabels && <XAxis data={xAxisData} />}
         {/* Use a virtual list only for higher count of rows */}
         {rowsToRender.length < 10 ? (
           <Flex
