@@ -2093,10 +2093,10 @@ cosmiconfig@^6.0.0:
     path-type "^4.0.0"
     yaml "^1.7.2"
 
-country-util@0.1.0:
-  version "0.1.0"
-  resolved "https://registry.yarnpkg.com/country-util/-/country-util-0.1.0.tgz#05b8e7b514c8c29cba1b1ae444925710a5b90964"
-  integrity sha512-zfKVHzT/dSHRQAnqr7alGBvAm495mMdFTdJHw1GqWr6piT8VkA2jQHKeaISCYfiO4GzAGXb1fnbgQBIcg55hIg==
+country-util@^0.2.0:
+  version "0.2.0"
+  resolved "https://registry.yarnpkg.com/country-util/-/country-util-0.2.0.tgz#28570f922c0ace7bcc59d11073f996fab79c5cfb"
+  integrity sha512-cFp/5kLUxZgFEt5rab4NVaemjneRp0pvteR9BHiipiPxoPgBSFNaV+ewC91JH93sWuB6WYonmaq1rFtVaJdRXA==
 
 create-ecdh@^4.0.0:
   version "4.0.4"
@@ -4536,7 +4536,7 @@ needle@^2.2.1:
     iconv-lite "^0.4.4"
     sax "^1.2.4"
 
-next@^11.1.2:
+next@^11.1.4:
   version "11.1.4"
   resolved "https://registry.yarnpkg.com/next/-/next-11.1.4.tgz#2381eeeffae80f58e6d80d8335ab56d2e157064e"
   integrity sha512-GWQJrWYkfAKP8vmrzJcCfRSKv955Khyjqd5jipTcVKDGg+SH+NfjDMWFtCwArcQlHPvzisGu1ERLY0+Eoj7G+g==
