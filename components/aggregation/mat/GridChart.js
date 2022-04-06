@@ -15,6 +15,7 @@ import { XAxis } from './XAxis'
 import { barThemeForTooltip } from './CustomTooltip'
 
 const ROW_HEIGHT = 70
+const XAXIS_HEIGHT = 62
 const GRID_MAX_HEIGHT = 600
 
 /** Transforms data received by GridChart into an collection of arrays each of
@@ -110,7 +111,7 @@ const GridChart = ({ data, rowKeys, rowLabels, isGrouped = true, height = 'auto'
   let gridHeight = height
   if (height === 'auto') {
     const rowCount = selectedRows?.length ?? rowKeys.length
-    gridHeight = Math.min( 20 + (rowCount * ROW_HEIGHT), GRID_MAX_HEIGHT)
+    gridHeight = Math.min( XAXIS_HEIGHT + (rowCount * ROW_HEIGHT), GRID_MAX_HEIGHT)
   }
 
   if (data.size < 1) {
@@ -145,7 +146,6 @@ const GridChart = ({ data, rowKeys, rowLabels, isGrouped = true, height = 'auto'
           <Flex flexDirection='column'>
             <ChartHeader options={header} />
             {/* Fake axis on top of list. Possible alternative: dummy chart with axis and valid tickValues */}
-            {!noLabels && <XAxis data={xAxisData} />}
             {/* Use a virtual list only for higher count of rows */}
             {rowsToRender.length < 10 ? (
               <Flex
@@ -155,6 +155,7 @@ const GridChart = ({ data, rowKeys, rowLabels, isGrouped = true, height = 'auto'
                   height: gridHeight
                 }}
               >
+                {!noLabels && <XAxis data={xAxisData} />}
                 {rowsToRender.map((rowKey, index) => 
                   <RowChart
                     key={rowKey}
@@ -168,6 +169,7 @@ const GridChart = ({ data, rowKeys, rowLabels, isGrouped = true, height = 'auto'
               </Flex>
             ) : (
               <VirtualRows
+                xAxis={!noLabels && <XAxis data={xAxisData} />}
                 data={data}
                 rows={rowsToRender}
                 rowLabels={rowLabels}

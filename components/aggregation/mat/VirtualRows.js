@@ -11,12 +11,14 @@ const ROW_HEIGHT = 70
 const retainMountedRows = false
 
 const FlexWithNoScrollbar = styled(Flex)`
-  scrollbar-width: none;
   width: 100%;
-  overflow-y: scroll;
-  &::-webkit-scrollbar {
-    width: 0px;
-  }
+  overflow-y: auto;
+`
+const StickyRow = styled.div`
+  position: sticky;
+  top: 0px;
+  background: white;
+  z-index: 1;
 `
 
 const useKeepMountedRangeExtractor = () => {
@@ -33,7 +35,7 @@ const useKeepMountedRangeExtractor = () => {
   return rangeExtractor
 }
 
-export const VirtualRows = ({ data, rows, rowLabels, gridHeight, indexBy, tooltipIndex }) => {
+export const VirtualRows = ({ data, rows, rowLabels, gridHeight, indexBy, tooltipIndex, xAxis = null }) => {
 
   const parentRef = React.useRef()
   const keepMountedRangeExtractor = useKeepMountedRangeExtractor()
@@ -44,6 +46,7 @@ export const VirtualRows = ({ data, rows, rowLabels, gridHeight, indexBy, toolti
     size: Object.keys(rows).length,
     parentRef,
     estimateSize: useCallback(() => ROW_HEIGHT, []),
+    paddingStart: 62, // for the sticky x-axis
     overscan: 0,
     keyExtractor,
     rangeExtractor: retainMountedRows ? keepMountedRangeExtractor : defaultRangeExtractor
@@ -64,6 +67,11 @@ export const VirtualRows = ({ data, rows, rowLabels, gridHeight, indexBy, toolti
           position: 'relative'
         }}
       >
+        {xAxis &&
+          <StickyRow>
+            {xAxis}
+          </StickyRow>
+        }
         {rowVirtualizer.virtualItems.map((virtualRow) => (
           <div
             key={virtualRow.index}
