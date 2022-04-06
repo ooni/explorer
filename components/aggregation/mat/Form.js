@@ -14,6 +14,7 @@ import { defineMessages, useIntl, FormattedMessage } from 'react-intl'
 import { categoryCodes } from '../../utils/categoryCodes'
 import DatePicker from '../../DatePicker'
 import { ConfirmationModal } from './ConfirmationModal'
+import { TestNameOptions } from '../../TestNameOptions'
 
 const THRESHOLD_IN_MONTHS = 12
 
@@ -279,9 +280,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             control={control}
             render={({field}) => (
               <Select {...field} width={1}>
-                {testNames.map((test, idx) => (
-                  <option key={idx} value={test.id}>{test.name}</option>
-                ))}
+                <TestNameOptions testNames={testNames} includeAllOption={false} />
               </Select>
             )}
           />

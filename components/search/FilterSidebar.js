@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 import { useIntl } from 'react-intl'
 import {
@@ -17,7 +17,7 @@ import {
   RadioGroup,
   RadioButton
 } from './Radio'
-import { testGroups, testNames as testNamesIntl } from '../test-info'
+import { TestNameOptions } from '../TestNameOptions'
 import { categoryCodes } from '../utils/categoryCodes'
 
 const StyledInputWithLabel = styled.div``
@@ -52,45 +52,6 @@ const SelectWithLabel = (props) => (
 
 const StyledFilterSidebar = styled.div`
 `
-
-const TestNameOptions = ({testNames}) => {
-  const intl = useIntl()
-  const groupedTestNameOptions = testNames
-    .reduce((grouped, test) => {
-      const group = test.id in testNamesIntl ? testNamesIntl[test.id].group : 'legacy'
-      const option = {
-        id: test.id,
-        name: test.name,
-        group
-      }
-      if (group in grouped) {
-        grouped[group].push(option)
-      } else {
-        grouped[group] = [option]
-      }
-      return grouped
-    }, {})
-
-  const sortedGroupedTestNameOptions = new Map()
-
-  for (const group of Object.keys(testGroups).values()) {
-    if (group in groupedTestNameOptions) {
-      sortedGroupedTestNameOptions.set(group, groupedTestNameOptions[group])
-    }
-  }
-
-  return ([
-    // Insert an 'Any' option to test name filter
-    <option key='XX' value='XX'>{intl.formatMessage({id: 'Search.Sidebar.TestName.AllTests'})}</option>,
-    [...sortedGroupedTestNameOptions].map(([group, tests]) => {
-      const groupName = group in testGroups ? intl.formatMessage({id: testGroups[group].id}) : group
-      const testOptions = tests.map(({id, name}) => (
-        <option key={id} value={id}>{name}</option>
-      ))
-      return [<optgroup key={group} label={groupName} />, ...testOptions]
-    })
-  ])
-}
 
 const CategoryOptions = () => {
   const intl = useIntl()
