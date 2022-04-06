@@ -110,7 +110,7 @@ const GridChart = ({ data, rowKeys, rowLabels, isGrouped = true, height = 'auto'
   let gridHeight = height
   if (height === 'auto') {
     const rowCount = selectedRows?.length ?? rowKeys.length
-    gridHeight = Math.min( 20 + (rowCount * ROW_HEIGHT) + 200, GRID_MAX_HEIGHT)
+    gridHeight = Math.min( 20 + (rowCount * ROW_HEIGHT), GRID_MAX_HEIGHT)
   }
 
   if (data.size < 1) {
