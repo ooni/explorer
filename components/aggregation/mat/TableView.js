@@ -375,7 +375,7 @@ const TableView = ({ data, query }) => {
     <Flex flexDirection='column'>
       <DetailsBox title={'Filters'} collapsed={false}>
         <Flex flexDirection='column'>
-          <Flex my={2} alignItems='center'>
+          <Flex mb={3} alignItems='center'>
             {/* {chartsButton} */}
             <Button hollow onClick={updateCharts}>Apply</Button>
             <Button inverted onClick={resetFilter} mx={3}>Reset</Button>
