@@ -1,6 +1,7 @@
-import React, { useMemo } from 'react'
+import React, { useMemo, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { ResponsiveBar } from '@nivo/bar'
+import { TooltipProvider, Tooltip } from '@nivo/tooltip'
+import { Container } from '@nivo/core'
 import { Heading, Flex, Box } from 'ooni-components'
 
 import RowChart, { chartMargins } from './RowChart'
@@ -11,6 +12,7 @@ import { ChartHeader } from './ChartHeader'
 import { getRowLabel } from './labels'
 import { VirtualRows } from './VirtualRows'
 import { XAxis } from './XAxis'
+import { barThemeForTooltip } from './CustomTooltip'
 
 const ROW_HEIGHT = 70
 const GRID_MAX_HEIGHT = 600
@@ -93,6 +95,7 @@ const GridChart = ({ data, rowKeys, rowLabels, isGrouped = true, height = 'auto'
   const [ query ] = useMATContext()
   const { tooltipIndex } = query
   const indexBy = query.axis_x
+  const tooltipContainer = useRef(null)
 
   const rowsToRender = useMemo(() => {
     if (!selectedRows) {
@@ -136,43 +139,48 @@ const GridChart = ({ data, rowKeys, rowLabels, isGrouped = true, height = 'auto'
   const rowHeight = noLabels ? 500 : ROW_HEIGHT
 
   return (
-    <Flex flexDirection='column' sx={{ position: 'relative' }}>
-      <Flex flexDirection='column'>
-        <ChartHeader options={header} />
-        {/* Fake axis on top of list. Possible alternative: dummy chart with axis and valid tickValues */}
-        {!noLabels && <XAxis data={xAxisData} />}
-        {/* Use a virtual list only for higher count of rows */}
-        {rowsToRender.length < 10 ? (
-          <Flex
-            className='outerListElement'
-            flexDirection='column'
-            style={{
-              height: gridHeight
-            }}
-          >
-            {rowsToRender.map((rowKey, index) => 
-              <RowChart
-                key={rowKey}
-                rowIndex={index}
-                data={data.get(rowKey)}
+    <Container theme={barThemeForTooltip}>
+      <TooltipProvider container={tooltipContainer}>
+        <Flex ref={tooltipContainer} flexDirection='column'>
+          <Flex flexDirection='column'>
+            <ChartHeader options={header} />
+            {/* Fake axis on top of list. Possible alternative: dummy chart with axis and valid tickValues */}
+            {!noLabels && <XAxis data={xAxisData} />}
+            {/* Use a virtual list only for higher count of rows */}
+            {rowsToRender.length < 10 ? (
+              <Flex
+                className='outerListElement'
+                flexDirection='column'
+                style={{
+                  height: gridHeight
+                }}
+              >
+                {rowsToRender.map((rowKey, index) => 
+                  <RowChart
+                    key={rowKey}
+                    rowIndex={index}
+                    data={data.get(rowKey)}
+                    indexBy={indexBy}
+                    height={rowHeight}
+                    label={rowLabels[rowKey]}
+                  />
+                )}
+              </Flex>
+            ) : (
+              <VirtualRows
+                data={data}
+                rows={rowsToRender}
+                rowLabels={rowLabels}
+                gridHeight={gridHeight}
                 indexBy={indexBy}
-                height={rowHeight}
-                label={rowLabels[rowKey]}
+                tooltipIndex={tooltipIndex}
               />
             )}
           </Flex>
-        ) : (
-          <VirtualRows
-            data={data}
-            rows={rowsToRender}
-            rowLabels={rowLabels}
-            gridHeight={gridHeight}
-            indexBy={indexBy}
-            tooltipIndex={tooltipIndex}
-          />
-        )}
-      </Flex>
-    </Flex>
+        </Flex>
+        <Tooltip />
+      </TooltipProvider>
+    </Container>
   )
 }
 

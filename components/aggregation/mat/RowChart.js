@@ -1,10 +1,11 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { Box, Flex, theme } from 'ooni-components'
 import { ResponsiveBar as Bar } from '@nivo/bar'
+import { useTooltip } from '@nivo/tooltip'
 
 import { CustomBarItem } from './CustomBarItem'
-import { CustomToolTip, barThemeForTooltip } from './CustomTooltip'
+import { CustomToolTip, InvisibleTooltip, themeForInvisibleTooltip } from './CustomTooltip'
 import { colorMap } from './colorMap'
 import { useDebugContext } from '../DebugContext'
 import { useMATContext } from './MATContext'
@@ -99,10 +100,25 @@ const chartProps2D = {
 const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last */}) => {
   const [ query, updateMATContext ] = useMATContext()
   const { tooltipIndex } = query
+  const { showTooltipFromEvent, hideTooltip } = useTooltip()
 
-  const handleClick = useCallback(({ column }) => {
+  const onClose = useCallback(() => {
+    hideTooltip()
+  }, [hideTooltip])
+
+  const handleClick = useCallback(({ data }) => {
+    const column = data[query.axis_x]
     updateMATContext({ tooltipIndex: [rowIndex, column]}, true)
-  }, [rowIndex, updateMATContext])
+    showTooltipFromEvent(
+      React.createElement(CustomToolTip, {
+        data: data,
+        onClose
+      }),
+      event,
+      'top'
+    )
+
+  }, [onClose, query.axis_x, rowIndex, showTooltipFromEvent, updateMATContext])
 
   // Load the chart with an empty data to avoid
   // react-spring from working on the actual data during
@@ -126,40 +142,6 @@ const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last
     return label === undefined ? chartProps1D : chartProps2D
   }, [label, query])
 
-  const chartPropsNull = useMemo(() => ({
-    // NOTE: These dimensions are linked to accuracy of the custom axes rendered in
-    // <GridChart />
-    margin: chartMargins,
-    padding: 0.3,
-    borderColor: { from: 'color', modifiers: [ [ 'darker', 1.6 ] ] },
-    colors: colorFunc,
-    axisTop: null,
-    axisRight: {
-      enable: true,
-      tickSize: 5,
-      tickPadding: 5,
-      tickValues: 2
-    },
-    axisBottom: null,
-    axisLeft: null,
-    enableGridX: true,
-    enableGridY: true,
-    indexScale: {
-      type: 'band',
-      round: false
-    },
-    labelSkipWidth: 100,
-    labelSkipHeight: 100,
-    labelTextColor: { from: 'color', modifiers: [ [ 'darker', 1.6 ] ] },
-    // We send the `showTooltip` boolean into the barComponent to control visibility of tooltip
-    motionConfig: {
-      duration: 1
-    },
-    animate: false,
-    isInteractive: true,
-    layers: barLayers,
-  }), [])
-
   return (
     <Flex alignItems='center' sx={{ position: 'relative' }}>
       {label && <Box width={2/16}>
@@ -170,10 +152,10 @@ const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last
           data={chartData}
           keys={keys}
           indexBy={indexBy}
-          tooltip={CustomToolTip}
+          tooltip={InvisibleTooltip}
           onClick={handleClick}
           barComponent={CustomBarItem}
-          theme={barThemeForTooltip}
+          theme={themeForInvisibleTooltip}
           // HACK: To show the tooltip, we hijack the 
           // `enableLabel` prop to pass in the tooltip coordinates (row, col_index) from `GridChart`
           // `showTooltip` contains `[rowHasTooltip, columnwithTooltip]` e.g `[true, '2022-02-01']`

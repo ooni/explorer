@@ -9,6 +9,17 @@ import { MdClear } from 'react-icons/md'
 import { useIntl } from 'react-intl'
 import { useMATContext } from './MATContext'
 
+export const themeForInvisibleTooltip = {
+  tooltip: {
+    container: {
+      boxShadow: '',
+      background: ''
+    }
+  }
+}
+
+export const InvisibleTooltip = () => <></>
+
 export const barThemeForTooltip = {
   tooltip: {
     container: {
@@ -57,13 +68,13 @@ export const generateSearchQuery = (data, query) => {
   }
 }
 
-const CustomToolTip = React.memo(({ data, onClose, indexValue, link = true }) => {
+const CustomToolTip = React.memo(({ data, onClose, title, link = true }) => {
   const theme = useTheme()
   const intl = useIntl()
   const [query] = useMATContext()
   const dataKeysToShow = ['anomaly_count', 'confirmed_count', 'failure_count', 'ok_count']
 
-  const [linkToMeasurements, title] = useMemo(() => {
+  const [linkToMeasurements, derivedTitle] = useMemo(() => {
     const searchQuery = generateSearchQuery(data, query)
     const linkObj = {
       pathname: '/search',
@@ -71,18 +82,18 @@ const CustomToolTip = React.memo(({ data, onClose, indexValue, link = true }) =>
     }
 
 
-    const title = `${indexValue} ${query?.axis_y !== '' ? ` - ${data[query.axis_y]}` : ''}`
+    const derivedTitle = title ?? `${data[query?.axis_x]} ${query?.axis_y !== '' ? ` - ${data[query.axis_y]}` : ''}`
 
     return [
       linkObj,
-      title,
+      derivedTitle,
     ]
-  }, [data, query, indexValue])
+  }, [data, query, title])
 
   return (
     <Flex flexDirection='column' style={{...theme.tooltip.container}}>
       <Flex my={1} fontSize={16}>
-        <Text fontWeight='bolder' mr='auto'>{title}</Text>
+        <Text fontWeight='bolder' mr='auto'>{derivedTitle}</Text>
         <MdClear title='Close' strokeWidth={2} onClick={onClose} />
       </Flex>
       <Flex flexDirection='column' pr={3} my={1}>

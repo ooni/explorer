@@ -69,22 +69,9 @@ export const CustomBarItem = ({
 
   const handleClick = useCallback(
     (event) => {
-      onClick?.({ color: bar.color, column: data.indexValue, ...data }, event)
-      // If the clicked bar is located near the upper edge of the react-window container,
-      // then anchor the tooltip to the bottom of the bar
-      const outerListElement = event.currentTarget.closest('.outerListElement')
-      if (!outerListElement) {
-        return
-      }
-      const {y: chartContainerY} = outerListElement.getBoundingClientRect()
-      const nearTopEdge = (event.clientY - chartContainerY) < 200
-      showTooltipAt(
-        renderTooltip(),
-        nearTopEdge ? [bar.x + bar.width / 2, bar.y + bar.height] :[bar.x + bar.width / 2, bar.y],
-        nearTopEdge ? 'bottom' : 'top'
-      )
+      onClick?.({ color: bar.color, ...data }, event)
     },
-    [bar, data, onClick, renderTooltip, showTooltipAt]
+    [bar, data, onClick]
   )
   // Disable events upon mouse movement events
   // const handleTooltip = useCallback(
