@@ -1,6 +1,6 @@
 import dayjs from '../../services/dayjs'
 
-describe('Seearch Page Tests', () => {
+describe('Search Page Tests', () => {
 
   before(() => {
     cy.visit('/search')
