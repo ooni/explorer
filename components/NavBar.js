@@ -83,8 +83,9 @@ export const NavBar = ({color}) => (
         <Box ml={[0,'auto']} mt={[2, 0]}>
           <Flex flexDirection={['column', 'row']} >
             <NavItem label={<FormattedMessage id='Navbar.Search' />} href='/search' />
-            <NavItem label={<FormattedMessage id='Navbar.Countries' />} href='/countries' />
+            <NavItem label={<FormattedMessage id='Navbar.Charts.MAT' />} href='/chart/mat' />
             <NavItem label={<FormattedMessage id='Navbar.Charts.Circumvention' />} href='/chart/circumvention' />
+            <NavItem label={<FormattedMessage id='Navbar.Countries' />} href='/countries' />
           </Flex>
         </Box>
       </Flex>
