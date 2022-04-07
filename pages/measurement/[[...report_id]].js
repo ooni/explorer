@@ -11,7 +11,7 @@ import CommonSummary from '../../components/measurement/CommonSummary'
 import DetailsHeader from '../../components/measurement/DetailsHeader'
 import SummaryText from '../../components/measurement/SummaryText'
 import CommonDetails from '../../components/measurement/CommonDetails'
-import MeasurementContainer from '../../components/measurement/MeasurementContainer'
+import MeasurementContainer, { useMeasurement } from '../../components/measurement/MeasurementContainer'
 import MeasurementNotFound from '../../components/measurement/MeasurementNotFound'
 import HeadMetadata from '../../components/measurement/HeadMetadata'
 
@@ -122,8 +122,33 @@ const Measurement = ({
   ...rest
 }) => {
 
+  const {
+    status = 'default',
+    statusIcon,
+    statusLabel,
+    statusInfo,
+    legacy = false,
+    summaryText,
+    headMetadata,
+    details
+  } = useMeasurement({
+    testName: test_name,
+    confirmed,
+    anomaly,
+    failure,
+    country,
+    measurement: raw_measurement,
+    scores,
+    measurement_start_time,
+    probe_asn,
+    input
+  })
+
   // Add the 'AS' prefix to probe_asn when API chooses to send just the number
   probe_asn = typeof probe_asn === 'number' ? `AS${probe_asn}` : probe_asn
+  const color = failure === true ? pageColors['error'] : pageColors[status]
+  const info = scores?.msg ?? statusInfo
+
 
   if (errors.length > 0) {
     return (
@@ -131,15 +156,22 @@ const Measurement = ({
     )
   }
 
+  if (notFound) {
+    return (
+      <Layout>
+        <MeasurementNotFound />
+      </Layout>
+    )
+  }
+
+
+
   return (
     <Layout>
       <Head>
         <title>OONI Explorer</title>
       </Head>
-      {notFound ? (
-        <MeasurementNotFound />
-      ): (
-        <MeasurementContainer
+        {/* <MeasurementContainer
           isConfirmed={confirmed}
           isAnomaly={anomaly}
           isFailure={failure}
@@ -151,73 +183,55 @@ const Measurement = ({
           probe_asn={probe_asn}
           scores={scores}
           {...rest}
+        /> */}
+        {headMetadata &&
+          <HeadMetadata
+            content={headMetadata}
+            testName={test_name}
+            testUrl={input}
+            country={country}
+            date={measurement_start_time}
+          />
+        }
+        <NavBar color={color} />
+        <Hero
+          color={color}
+          status={status}
+          icon={statusIcon}
+          label={statusLabel}
+          info={info}
+        />
+        <CommonSummary
+          measurement_start_time={measurement_start_time}
+          probe_asn={probe_asn}
+          probe_cc={probe_cc}
+          color={color}
+          country={country}
+        />
 
-          render={({
-            status = 'default',
-            statusIcon,
-            statusLabel,
-            statusInfo,
-            legacy = false,
-            summaryText,
-            headMetadata,
-            details
-          }) => {
-            const color = failure === true ? pageColors['error'] : pageColors[status]
-            const info = scores?.msg ?? statusInfo
-            return (
-              <React.Fragment>
-                {headMetadata &&
-                  <HeadMetadata
-                    content={headMetadata}
-                    testName={test_name}
-                    testUrl={input}
-                    country={country}
-                    date={measurement_start_time}
-                  />
-                }
-                <NavBar color={color} />
-                <Hero
-                  color={color}
-                  status={status}
-                  icon={statusIcon}
-                  label={statusLabel}
-                  info={info}
-                />
-                <CommonSummary
-                  measurement_start_time={measurement_start_time}
-                  probe_asn={probe_asn}
-                  probe_cc={probe_cc}
-                  color={color}
-                  country={country}
-                />
-
-                <Container>
-                  <DetailsHeader
-                    testName={test_name}
-                    runtime={raw_measurement?.test_runtime}
-                    notice={legacy}
-                    url={`measurement/${report_id}`}
-                  />
-                  {summaryText &&
-                    <SummaryText
-                      testName={test_name}
-                      testUrl={input}
-                      network={probe_asn}
-                      country={country}
-                      date={measurement_start_time}
-                      content={summaryText}
-                    />
-                  }
-                  {details}
-                  <CommonDetails
-                    measurement={raw_measurement}
-                    reportId={report_id}
-                  />
-                </Container>
-              </React.Fragment>
-            )
-          }} />
-      )}
+        <Container>
+          <DetailsHeader
+            testName={test_name}
+            runtime={raw_measurement?.test_runtime}
+            notice={legacy}
+            url={`measurement/${report_id}`}
+          />
+          {summaryText &&
+            <SummaryText
+              testName={test_name}
+              testUrl={input}
+              network={probe_asn}
+              country={country}
+              date={measurement_start_time}
+              content={summaryText}
+            />
+          }
+          {details}
+          <CommonDetails
+            measurement={raw_measurement}
+            reportId={report_id}
+          />
+        </Container>
     </Layout>
   )
 }

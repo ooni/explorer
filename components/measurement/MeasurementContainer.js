@@ -50,4 +50,51 @@ MeasurementContainer.propTypes = {
   testName: PropTypes.any
 }
 
+export const useMeasurement = (props) => {
+
+  const {
+    testName,
+    confirmed,
+    anomaly,
+    failure,
+    country,
+    measurement,
+    scores,
+    measurement_start_time,
+    probe_asn,
+    input
+  } = props
+
+  const getTestDetails = testName in mapTestDetails ? mapTestDetails[testName] : DefaultTestDetails
+
+  /**
+   * 
+   */
+  const {
+    status,
+    statusIcon = undefined,
+    statusLabel = undefined,
+    statusInfo = undefined,
+    legacy = false,
+    summaryText,
+    headMetadata,
+    details
+  } = getTestDetails({...props})
+
+  const where = typeof window === 'undefined' ? 'server' : 'client'
+
+  console.log(where, status)
+
+  return {
+    status,
+    statusIcon,
+    statusLabel,
+    statusInfo,
+    legacy,
+    summaryText,
+    headMetadata,
+    details
+  }
+}
+
 export default MeasurementContainer

@@ -62,7 +62,7 @@ const WhatsAppDetails = ({ isAnomaly, scores, measurement, render }) => {
     }
   }
 
-  return render({
+  return {
     status: status,
     statusInfo: info,
     summaryText: summaryText,
@@ -122,7 +122,7 @@ const WhatsAppDetails = ({ isAnomaly, scores, measurement, render }) => {
         }
       </React.Fragment>
     )
-  })
+  }
 }
 
 WhatsAppDetails.propTypes = {
