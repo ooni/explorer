@@ -38,8 +38,6 @@ const Help = () => {
           </Row>
         ))}
       </Flex>
-
-      <Text><a rel="noreferrer" target='_blank' href='https://github.com/citizenlab/test-lists'>https://github.com/citizenlab/test-lists</a> </Text>
     </DetailsBox>
   )
 }

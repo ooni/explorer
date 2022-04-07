@@ -10,7 +10,8 @@ import {
   NettestGroupInstantMessaging,
   NettestGroupMiddleBoxes,
   NettestGroupPerformance,
-  NettestGroupCircumvention
+  NettestGroupCircumvention,
+  NettestGroupExperimental
 } from 'ooni-components/dist/icons'
 import { FormattedMessage } from 'react-intl'
 
@@ -45,6 +46,12 @@ export const testGroups = {
     'id': 'Tests.Groups.Circumvention.Name',
     'name': <FormattedMessage id='Tests.Groups.Circumvention.Name' />,
     'icon': <NettestGroupCircumvention />
+  },
+  'experimental': {
+    'color': theme.colors.gray5,
+    'id': 'Tests.Groups.Experimental.Name',
+    'name': <FormattedMessage id='Tests.Groups.Experimental.Name' />,
+    'icon': <NettestGroupExperimental />
   },
   'legacy': {
     'color': theme.colors.gray5,
@@ -125,13 +132,13 @@ export const testNames = {
 
   /* Censorship circumvention */
   'vanilla_tor': {
-    group: 'circumvention',
+    group: 'legacy',
     name: <FormattedMessage id='Tests.TorVanilla.Name' />,
     id: 'Tests.TorVanilla.Name',
     info: 'https://ooni.org/nettest/vanilla-tor/'
   },
   'bridge_reachability': {
-    group: 'circumvention',
+    group: 'legacy',
     name: <FormattedMessage id='Tests.BridgeReachability.Name' />,
     id: 'Tests.BridgeReachability.Name',
     info: 'https://ooni.org/nettest/tor-bridge-reachability/'
@@ -180,4 +187,24 @@ export const testNames = {
     id: 'Tests.HTTPRequests.Name',
     info: 'https://ooni.org/nettest/http-requests/'
   },
+
+  /* Experimental tests */
+  'dnscheck': {
+    group: 'experimental',
+    name: <FormattedMessage id='Tests.DNSCheck.Name' />,
+    id: 'Tests.HTTPRequests.Name',
+    info: 'https://ooni.org/nettest/http-requests/'
+  },
+  'stunreachability': {
+    group: 'experimental',
+    name: <FormattedMessage id='Tests.StunReachability.Name' />,
+    id: 'Tests.StunReachability.Name',
+    info: 'https://ooni.org/nettest/http-requests/'
+  },
+  'urlgetter': {
+    group: 'experimental',
+    name: <FormattedMessage id='Tests.URLGetter.Name' />,
+    id: 'Tests.URLGetter.Name',
+    info: 'https://ooni.org/nettest/http-requests/'
+  }
 }
