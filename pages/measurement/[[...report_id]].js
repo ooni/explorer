@@ -97,7 +97,7 @@ export async function getServerSideProps({ query }) {
       initialProps.notFound = true
     }
   } catch (e) {
-    initialProps.errors.push(e.message)
+    initialProps.errors.push({message: e.message, stack: e.stack})
   }
   return {
     props: initialProps
@@ -127,7 +127,7 @@ const Measurement = ({
 
   if (errors.length > 0) {
     return (
-      <ErrorPage errorCode={501} errors={errors} />
+      <ErrorPage statusCode={501} err={errors[0]} />
     )
   }
 
