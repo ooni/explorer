@@ -157,7 +157,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <ConfirmationModal show={showConfirmation} onConfirm={onConfirm} onCancel={onCancel} />
       <Flex my={2} alignItems='center' flexDirection={['column', 'row']}>
-        <Box width={[1, 2/8]} mx={[0, 2]}>
+        <Box width={[1, 3/12]} mx={[0, 2]}>
           <StyledLabel>
             <FormattedMessage id='Search.Sidebar.Country' />
           </StyledLabel>
@@ -174,7 +174,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             control={control}
           />
         </Box>
-        <Box width={[1, 1/8]} mx={[0, 2]}>
+        <Box width={[1, 1/12]} mx={[0, 2]}>
           <StyledLabel>
             <FormattedMessage id='Search.Sidebar.ASN' />
           </StyledLabel>
@@ -189,7 +189,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             )}
           />
         </Box>
-        <Box width={[1, 1/8]} mx={[0, 2]}>
+        <Box width={[1, 2/12]} mx={[0, 2]}>
           <StyledLabel>
             <FormattedMessage id='Search.Sidebar.From' />
           </StyledLabel>
@@ -213,7 +213,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             )}
           />
         </Box>
-        <Box width={[1, 1/8]} mx={[0, 2]}>
+        <Box width={[1, 2/12]} mx={[0, 2]}>
           <StyledLabel>
             <FormattedMessage id='Search.Sidebar.Until' />
           </StyledLabel>
@@ -237,7 +237,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             )}
           />
         </Box>
-        <Box width={[1, 1/8]} mx={[0, 2]}>
+        <Box width={[1, 2/12]} mx={[0, 2]}>
           <StyledLabel>
             <FormattedMessage id='MAT.Form.Label.XAxis' />
           </StyledLabel>
@@ -253,7 +253,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             )}
           />
         </Box>
-        <Box width={[1, 1/8]} mx={[0, 2]}>
+        <Box width={[1, 2/12]} mx={[0, 2]}>
           <StyledLabel>
             <FormattedMessage id='MAT.Form.Label.YAxis' />
           </StyledLabel>

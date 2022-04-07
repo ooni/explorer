@@ -1,15 +1,30 @@
 import React, { useCallback, useEffect, useMemo, useState, useRef } from 'react'
 import PropTypes from 'prop-types'
-import { Box, Flex, theme } from 'ooni-components'
+import { Box, Flex } from 'ooni-components'
 import { ResponsiveBar as Bar } from '@nivo/bar'
 import { useTooltip } from '@nivo/tooltip'
 
 import { CustomBarItem } from './CustomBarItem'
 import { CustomToolTip, InvisibleTooltip, themeForInvisibleTooltip } from './CustomTooltip'
 import { colorMap } from './colorMap'
-import { useDebugContext } from '../DebugContext'
 import { useMATContext } from './MATContext'
 import { getXAxisTicks } from './timeScaleXAxis'
+import { defineMessages, useIntl } from 'react-intl'
+
+const messages = defineMessages({
+  'x_axis.measurement_start_day': {
+    id: 'MAT.Form.Label.AxisOption.measurement_start_day',
+    defaultMessage: ''
+  },
+  'x_axis.category_code': {
+    id: 'MAT.Form.Label.AxisOption.category_code',
+    defaultMessage: ''
+  },
+  'x_axis.probe_cc': {
+    id: 'MAT.Form.Label.AxisOption.probe_cc',
+    defaultMessage: ''
+  }
+})
 
 const keys = [
   'anomaly_count',
@@ -43,7 +58,6 @@ const chartProps1D = {
     tickSize: 5,
     tickPadding: 5,
     tickRotation: 45,
-    legend: 'measurement_start_day',
     legendPosition: 'middle',
     legendOffset: 60
   },
@@ -51,7 +65,6 @@ const chartProps1D = {
     tickSize: 5,
     tickPadding: 5,
     tickRotation: 0,
-    legend: 'measurement count',
     legendPosition: 'middle',
     legendOffset: -60
   },
@@ -98,6 +111,7 @@ const chartProps2D = {
 }
 
 const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last */}) => {
+  const intl = useIntl()
   const [ query, updateMATContext ] = useMATContext()
   const { tooltipIndex } = query
   const { showTooltipFromEvent, hideTooltip } = useTooltip()
@@ -139,8 +153,9 @@ const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last
   const chartProps = useMemo(() => {
     const xAxisTicks = getXAxisTicks(query)
     chartProps1D.axisBottom.tickValues = xAxisTicks
+    chartProps1D.axisBottom.legend = intl.formatMessage(messages[`x_axis.${query.axis_x}`])
     return label === undefined ? chartProps1D : chartProps2D
-  }, [label, query])
+  }, [intl, label, query])
 
   return (
     <Flex alignItems='center' sx={{ position: 'relative' }}>
