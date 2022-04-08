@@ -173,7 +173,7 @@ export default class LandingPage extends React.Component {
               </Heading>
               <Text fontSize={[18, 24]} color='blue1'><FormattedMessage id='Home.Banner.Subtitle.ExploreCensorshipEvents' /></Text>
               <ExploreButton mt={48} px={5} hollow fontSize={24} onClick={() => (
-                Router.push('/countries')
+                Router.push('/chart/mat')
               )}>
                 <FormattedMessage id='Home.Banner.Button.Explore' />
               </ExploreButton>
