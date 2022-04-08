@@ -27,9 +27,9 @@ describe('MAT Tests', () => {
       cy.get('h1').contains('Measurement Aggregation Toolkit')
     })
 
-    it('Clicking Submit button loads table and charts', () => {
-      cy.get('form button ').click()
-      cy.get('h5').contains('Web Connectivity')
+    it.only('Clicking Submit button loads table and charts', () => {
+      cy.get('button[data-test-id=mat-form-submit]').click()
+      cy.contains('Web Connectivity Test')
     })
   })
 })

@@ -5,7 +5,7 @@ import useSWR from 'swr'
 import axios from 'axios'
 import { territoryNames } from 'country-util'
 
-import GridChart from '../aggregation/mat/GridChart'
+import GridChart, { prepareDataForGridChart } from '../aggregation/mat/GridChart'
 import { MATContextProvider } from '../aggregation/mat/MATContext'
 import { axiosResponseTime } from '../axios-plugins'
 import { testNames } from '../test-info'
@@ -68,7 +68,7 @@ const Chart = React.memo(function Chart({ testName }) {
     swrOptions
   )
   
-  const [chartData] = useMemo(() => {
+  const [chartData, rowKeys, rowLabels] = useMemo(() => {
     if (!data) {
       return [null, 0]
     }
@@ -80,9 +80,12 @@ const Chart = React.memo(function Chart({ testName }) {
       chartData = chartData.filter(d => selectedCountries.includes(d.probe_cc))
     }
 
-    return [chartData]
+    const [reshapedData, rowKeys, rowLabels] = prepareDataForGridChart(chartData, query)
 
-  }, [data, probe_cc])
+    return [reshapedData, rowKeys, rowLabels]
+
+  }, [data, probe_cc, query])
+
 
   const headerOptions = { probe_cc: false, subtitle: false }
 
@@ -98,6 +101,8 @@ const Chart = React.memo(function Chart({ testName }) {
           ) : (
             <GridChart
               data={chartData}
+              rowKeys={rowKeys}
+              rowLabels={rowLabels}
               isGrouped={false}
               header={headerOptions}
             />

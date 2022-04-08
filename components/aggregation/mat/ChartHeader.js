@@ -1,5 +1,6 @@
 import { Heading, Flex, Box, Text } from 'ooni-components'
 import { useIntl } from 'react-intl'
+import OONILogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochrome.svg'
 
 import { useMATContext } from './MATContext'
 import CountryNameLabel from './CountryNameLabel'
@@ -54,27 +55,34 @@ export const ChartHeader = ({ options = {}}) => {
   const subTitle = <SubtitleStr query={query} />
 
   return (
-    <Flex flexDirection={['column']}>
-      {options.probe_cc !== false && <Heading h={3} textAlign='center'>
-        <CountryNameLabel countryCode={query.probe_cc} />
-      </Heading>}
-      {options.subtitle !== false && <Heading h={5} fontWeight='normal' textAlign='center'>
-        {subTitle}
-      </Heading>}
-      {options.legend !== false && <Flex justifyContent='center' my={2}>
-        <Box pr={2}>
-          <Legend label='ok_count' color={colorMap['ok_count']} />
-        </Box>
-        <Box pr={2}>
-          <Legend label='confirmed_count' color={colorMap['confirmed_count']} />
-        </Box>
-        <Box pr={2}>
-          <Legend label='anomaly_count' color={colorMap['anomaly_count']} />
-        </Box>
-        <Box pr={2}>
-          <Legend label='failure_count' color={colorMap['failure_count']} />
-        </Box>
-      </Flex>}
+    <Flex alignItems={['center']}>
+      <Box width={2/16} sx={{ opacity: 0.8 }}>
+        <OONILogo height='32px' />
+      </Box>
+      <Box width={14/16}>
+        <Flex flexDirection={['column']}>
+          {options.probe_cc !== false && <Heading h={3} textAlign='center'>
+            <CountryNameLabel countryCode={query.probe_cc} />
+          </Heading>}
+          {options.subtitle !== false && <Heading h={5} fontWeight='normal' textAlign='center'>
+            {subTitle}
+          </Heading>}
+          {options.legend !== false && <Flex justifyContent='center' my={2}>
+            <Box pr={2}>
+              <Legend label='ok_count' color={colorMap['ok_count']} />
+            </Box>
+            <Box pr={2}>
+              <Legend label='confirmed_count' color={colorMap['confirmed_count']} />
+            </Box>
+            <Box pr={2}>
+              <Legend label='anomaly_count' color={colorMap['anomaly_count']} />
+            </Box>
+            <Box pr={2}>
+              <Legend label='failure_count' color={colorMap['failure_count']} />
+            </Box>
+          </Flex>}
+        </Flex>
+      </Box>
     </Flex>
   )
 }

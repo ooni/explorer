@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react'
 import { useRouter } from 'next/router'
-import { Container, Heading } from 'ooni-components'
+import { Container, Heading, Box } from 'ooni-components'
 import { FormattedMessage } from 'react-intl'
 import axios from 'axios'
 
@@ -9,6 +9,7 @@ import NavBar from 'components/NavBar'
 import { MetaTags } from 'components/dashboard/MetaTags'
 import { Form } from 'components/dashboard/Form'
 import Charts from 'components/dashboard/Charts'
+import FormattedMarkdown from 'components/FormattedMarkdown'
 
 const DashboardCircumvention = ({ availableCountries }) => {
   const router = useRouter()
@@ -46,6 +47,9 @@ const DashboardCircumvention = ({ availableCountries }) => {
       <Container>
         <Heading h={1}><FormattedMessage id='ReachabilityDash.Heading.CircumventionTools' /></Heading>
         {router.isReady && <React.Fragment>
+          <Box my={2} bg='gray0' p={3}>
+            <FormattedMarkdown id='ReachabilityDash.CircumventionTools.Description' />
+          </Box>
           <Form onChange={onChange} query={query} availableCountries={availableCountries} />
           <Charts />
         </React.Fragment>}

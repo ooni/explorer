@@ -1,5 +1,7 @@
-import { countryList } from 'country-util'
+import { countryList, territoryNames } from 'country-util'
 import { getCategoryCodesMap } from '../../utils/categoryCodes'
+
+const categoryCodesMap = getCategoryCodesMap()
 
 export function getDatesBetween(startDate, endDate) {
   const dateSet = new Set()
@@ -64,10 +66,23 @@ export function fillRowHoles (data, query) {
 export function fillDataHoles (data, query) {
   // Object transformation, works like Array.map
   // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/fromEntries#object_transformations
-  const newData = Object.fromEntries(
+  const newData = new Map(
     Object.entries(data)
       .map(([ key, rowData ]) => [ key, fillRowHoles(rowData, query) ])
   )
 
   return newData
+}
+
+export const sortRows = (a, b, type) => {
+  switch(type) {
+    case 'probe_cc':
+      return territoryNames[a] < territoryNames[b] ? -1 : territoryNames[a] > territoryNames[b] ? 1 : 0
+    case 'category_code':
+      const A = categoryCodesMap.get(a).name
+      const B = categoryCodesMap.get(b).name
+      return  A < B ? -1 : A > B ? 1 : 0
+    default:
+      return a < b ? -1 : a > b ? 1 : 0
+  }
 }
