@@ -5,6 +5,7 @@ services:
     build:
       context: .
       args:
+       - DATESTAMP
        - GIT_COMMIT_SHA_SHORT
     ports:
       - "3100:3100"
