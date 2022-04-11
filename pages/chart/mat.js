@@ -79,7 +79,9 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
 
   }, [router])
 
-  React.useEffect(() => {
+  // Upon mount, check if the page was accessed without query params
+  // In that case, trigger a shallow navigation that shows a chart
+  useEffect(() => {
     const { query } = router
     if (Object.keys(query).length === 0) {
       const today = dayjs.utc().add(1, 'day')
@@ -88,9 +90,9 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
         pathname: router.pathname,
         query: {
           test_name: 'web_connectivity',
-          // domain: 'twitter.com',
+          domain: 'twitter.com',
           axis_x: 'measurement_start_day',
-          // axis_y: 'probe_cc',
+          axis_y: 'probe_cc',
           since: monthAgo.format('YYYY-MM-DD'),
           until: today.format('YYYY-MM-DD'),
         },
