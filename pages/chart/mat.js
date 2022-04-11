@@ -88,13 +88,18 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
         pathname: router.pathname,
         query: {
           test_name: 'web_connectivity',
+          domain: 'twitter.com',
           axis_x: 'measurement_start_day',
+          axis_y: 'probe_cc',
           since: monthAgo.format('YYYY-MM-DD'),
-          unti: today.format('YYYY-MM-DD'),
+          until: today.format('YYYY-MM-DD'),
         },
       }
       router.push(href, href, { shallow: true })
     }
+  // Ignore the dependency on `router` because we want
+  // this effect to run only once, on mount, if query is empty.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const shouldFetchData = router.pathname !== router.asPath
