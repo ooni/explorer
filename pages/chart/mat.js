@@ -22,6 +22,7 @@ import { axiosResponseTime } from 'components/axios-plugins'
 import TableView from 'components/aggregation/mat/TableView'
 import FormattedMarkdown from 'components/FormattedMarkdown'
 import Help from 'components/aggregation/mat/Help'
+import dayjs from 'services/dayjs'
 
 const baseURL = process.env.NEXT_PUBLIC_MEASUREMENTS_URL
 axiosResponseTime(axios)
@@ -77,6 +78,29 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
     return router.push(href, href, { shallow: true })
 
   }, [router])
+
+  React.useEffect(() => {
+    const { query } = router
+    if (Object.keys(query).length === 0) {
+      const today = dayjs.utc().add(1, 'day')
+      const monthAgo = dayjs.utc(today).subtract(1, 'month')
+      const href = {
+        pathname: router.pathname,
+        query: {
+          test_name: 'web_connectivity',
+          // domain: 'twitter.com',
+          axis_x: 'measurement_start_day',
+          // axis_y: 'probe_cc',
+          since: monthAgo.format('YYYY-MM-DD'),
+          until: today.format('YYYY-MM-DD'),
+        },
+      }
+      router.push(href, href, { shallow: true })
+    }
+  // Ignore the dependency on `router` because we want
+  // this effect to run only once, on mount, if query is empty.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   const shouldFetchData = router.pathname !== router.asPath
   const query = router.query
