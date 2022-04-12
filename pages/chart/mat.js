@@ -90,9 +90,7 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
         pathname: router.pathname,
         query: {
           test_name: 'web_connectivity',
-          domain: 'twitter.com',
           axis_x: 'measurement_start_day',
-          axis_y: 'probe_cc',
           since: monthAgo.format('YYYY-MM-DD'),
           until: today.format('YYYY-MM-DD'),
         },
