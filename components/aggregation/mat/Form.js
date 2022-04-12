@@ -52,7 +52,6 @@ const xAxisOptions = [
   'measurement_start_day',
   'category_code',
   'probe_cc',
-  ''
 ]
 
 const yAxisOptions = [

@@ -23,6 +23,7 @@ import TableView from 'components/aggregation/mat/TableView'
 import FormattedMarkdown from 'components/FormattedMarkdown'
 import Help from 'components/aggregation/mat/Help'
 import dayjs from 'services/dayjs'
+import { NoCharts } from 'components/aggregation/mat/NoCharts'
 
 const baseURL = process.env.NEXT_PUBLIC_MEASUREMENTS_URL
 axiosResponseTime(axios)
@@ -57,6 +58,13 @@ const fetcher = (query) => {
       loadTime: r.loadTime,
       url: r.config.url
     }
+  }).catch(e => {
+    // throw new Error(e?.response?.data?.error ?? e.message)
+    const error = new Error('An error occurred while fetching the data.')
+    // Attach extra info to the error object.
+    error.info = e.response.data.error
+    error.status = e.response.status
+    throw error
   })
 }
 
@@ -127,6 +135,9 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
               <FormattedMessage id='MAT.SubTitle' />
             </Heading>
             <Form onSubmit={onSubmit} testNames={testNames} query={router.query} />
+            {error &&
+              <NoCharts message={error?.info ?? error} />
+            }
             <Box sx={{ minHeight: '500px' }}>
               {showLoadingIndicator &&
                 <Box>
@@ -143,13 +154,10 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
                   <TableView data={data.data.result} query={query} />
               }
             </Box>
+
             <Box my={4}>
               <Help />
             </Box>
-            {error && <Box>
-              <Heading h={5} my={4}>Error</Heading>
-              <pre>{JSON.stringify(error, null, 2)}</pre>
-            </Box>}
           </Flex>
         </Container>
       </Layout>
