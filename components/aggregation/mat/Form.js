@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState, useRef } from 'react'
 import PropTypes from 'prop-types'
 import { useForm, Controller } from 'react-hook-form'
 import styled from 'styled-components'
@@ -91,13 +91,26 @@ const defaultDefaultValues = {
 }
 
 export const Form = ({ onSubmit, testNames, query }) => {
+  const isInitialMount = useRef(true)
   const intl = useIntl()
   const [showConfirmation, setShowConfirmation] = useState(false)
 
   const defaultValues = Object.assign({}, defaultDefaultValues, query)
-  const { handleSubmit, control, getValues, watch } = useForm({
+  const { handleSubmit, control, getValues, watch, reset } = useForm({
     defaultValues
   })
+
+  // If `query` changes after the page mounts, reset the form to use default
+  // values based on new `query`
+  useEffect(() => {
+    // Skip running this on mount to avoid unnecessary re-renders
+    // Based on: https://reactjs.org/docs/hooks-faq.html#can-i-run-an-effect-only-on-updates
+    if (isInitialMount.current) {
+      isInitialMount.current = false
+    } else {
+      reset(query)
+    }
+  }, [reset, query])
 
   const sortedCountries = countryList
     .sort((a,b) => (a.iso3166_name < b.iso3166_name) ? -1 : (a.iso3166_name > b.iso3166_name) ? 1 : 0)
