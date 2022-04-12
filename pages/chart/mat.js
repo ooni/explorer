@@ -7,7 +7,8 @@ import axios from 'axios'
 import {
   Container,
   Heading,
-  Flex, Box,
+  Flex, Box, Button,
+  Link
 } from 'ooni-components'
 import useSWR from 'swr'
 import { FormattedMessage } from 'react-intl'
@@ -20,6 +21,7 @@ import { FunnelChart } from 'components/aggregation/mat/FunnelChart'
 import { Form } from 'components/aggregation/mat/Form'
 import { axiosResponseTime } from 'components/axios-plugins'
 import TableView from 'components/aggregation/mat/TableView'
+import { FaExternalLinkAlt } from 'react-icons/fa'
 import FormattedMarkdown from 'components/FormattedMarkdown'
 import Help from 'components/aggregation/mat/Help'
 import dayjs from 'services/dayjs'
@@ -121,6 +123,13 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
 
   const showLoadingIndicator = useMemo(() => isValidating, [isValidating])
 
+  let linkToAPIQuery = null
+  try {
+    linkToAPIQuery = `${process.env.NEXT_PUBLIC_AGGREGATION_API}/api/v1/aggregation?${new URLSearchParams(query).toString()}`
+  } catch (e) {
+    console.error(`Failed to construct API query link: ${e.message}`)
+  }
+
   return (
     <MATContextProvider>
       <Layout>
@@ -154,7 +163,22 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
                   <TableView data={data.data.result} query={query} />
               }
             </Box>
-
+            {linkToAPIQuery &&
+              <Box mt={[3]} ml={['unset', 'auto']}>
+                <Flex>
+                  <Box>
+                    <Link as='a' href={linkToAPIQuery} target='_blank' title='opens in new tab'>
+                      JSON Data <FaExternalLinkAlt />
+                    </Link>
+                  </Box>
+                  <Box ml={2}>
+                    <Link href={`${linkToAPIQuery}&format=CSV`} target='_blank' title='opens in new tab'>
+                    CSV Data <FaExternalLinkAlt />
+                    </Link>
+                  </Box>
+                </Flex>
+              </Box>
+            }
             <Box my={4}>
               <Help />
             </Box>
