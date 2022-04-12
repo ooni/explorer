@@ -272,7 +272,11 @@ const TableView = ({ data, query }) => {
   //   displayed in GridChart. It allows to easily filter and sort aggregate data
   // - indexes - 
   const [reshapedData, tableData, rowKeys, rowLabels] = useMemo(() => {
-    return prepareDataforTable(data, query)
+    try {
+      return prepareDataforTable(data, query)
+    } catch (e) {
+      return [null, [], [], {}]
+    }
   }, [query, data])
 
   const {

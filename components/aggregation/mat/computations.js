@@ -37,7 +37,7 @@ export function fillRowHoles (data, query) {
       domain = countryList.map(cc => cc.iso3166_alpha2)
       break
     default:
-      throw new Error(`Unable to cover missing data points for x-axis: ${query.axis_x}`)
+      throw new Error(`x-axis: ${query.axis_x}. Please select a valid value for X-Axis.`)
   }
 
   const colsInRow = newData.map(i => i[query.axis_x])
