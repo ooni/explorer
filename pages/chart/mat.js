@@ -8,6 +8,7 @@ import {
   Container,
   Heading,
   Flex, Box, Button,
+  Link
 } from 'ooni-components'
 import useSWR from 'swr'
 import { FormattedMessage } from 'react-intl'
@@ -164,9 +165,18 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
             </Box>
             {linkToAPIQuery &&
               <Box mt={[3]} ml={['unset', 'auto']}>
-                <Button as='a' href={linkToAPIQuery} target='_blank' rel='noreferrer' title='opens in new tab'>
-                  JSON Data <FaExternalLinkAlt size='10' />
-                </Button>
+                <Flex>
+                  <Box>
+                    <Link as='a' href={linkToAPIQuery} target='_blank' title='opens in new tab'>
+                      JSON Data <FaExternalLinkAlt />
+                    </Link>
+                  </Box>
+                  <Box ml={2}>
+                    <Link href={`${linkToAPIQuery}&format=CSV`} target='_blank' title='opens in new tab'>
+                    CSV Data <FaExternalLinkAlt />
+                    </Link>
+                  </Box>
+                </Flex>
               </Box>
             }
             <Box my={4}>
