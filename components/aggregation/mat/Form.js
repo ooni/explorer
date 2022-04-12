@@ -108,7 +108,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
     if (isInitialMount.current) {
       isInitialMount.current = false
     } else {
-      reset(query)
+      reset(Object.assign({}, defaultDefaultValues, query))
     }
   }, [reset, query])
 
