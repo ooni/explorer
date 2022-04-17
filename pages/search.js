@@ -39,6 +39,8 @@ const queryToParams = ({ query }) => {
     params['failure'] = false
   }
 
+  
+
   for (const p of supportedParams) {
     if (p in query &&  query[p] !== queryToFilterMap[p][1]) {
       params[p] = query[p]
@@ -338,7 +340,7 @@ class Search extends React.Component {
           // When `hideFailure` is true, add `failure=false` in the query
           query[queryParam] = false
         } else {
-          delete query[queryParam]
+          query[queryParam] = true
         }
       } else {
         query[queryParam] = this.state[key]
