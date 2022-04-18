@@ -15,7 +15,6 @@ import { useForm, Controller, FormProvider } from 'react-hook-form'
 import DateRangePicker from '../DateRangePicker'
 import { format } from 'date-fns'
 import { DayPicker } from 'react-day-picker'
-import 'react-day-picker/dist/style.css'
 import {
   RadioGroup,
   RadioButton

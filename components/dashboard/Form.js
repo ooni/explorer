@@ -1,14 +1,15 @@
 import { useEffect, useMemo, useState } from 'react'
 import { territoryNames } from 'country-util'
 import { useForm, Controller } from 'react-hook-form'
-import { Box, Flex } from 'ooni-components'
+import { Box, Flex, Input } from 'ooni-components'
 import { MultiSelect } from 'react-multi-select-component'
 import { useIntl } from 'react-intl'
 import moment from 'moment'
 import dayjs from 'services/dayjs'
+import { format } from 'date-fns'
 
 import { StyledLabel } from '../aggregation/mat/Form'
-import DatePicker from '../DatePicker'
+import DateRangePicker from '../DateRangePicker'
 
 const tomorrow = dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
 const lastMonthToday = dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD')
@@ -51,9 +52,24 @@ export const Form = ({ onChange, query, availableCountries }) => {
     // 'create': 'Create',
   }), [intl])
 
-  const { control, getValues, watch } = useForm({
+  const { control, getValues, watch, setValue } = useForm({
     defaultValues: query2formValues(query)
   })
+
+  const [showDatePicker, setShowDatePicker] = useState(false)
+  const handleRangeSelect = (range) => {
+    if (range?.from) {
+      setValue('since', format(range.from, 'y-MM-dd'))
+    } else {
+      setValue('since', '')
+    }
+    if (range?.to) {
+      setValue('until', format(range.to, 'y-MM-dd'))
+    } else {
+      setValue('until', '')
+    }
+    setShowDatePicker(false)
+  }
 
   const {since, until, probe_cc} = watch()
   
@@ -68,8 +84,8 @@ export const Form = ({ onChange, query, availableCountries }) => {
 
   return (
     <form>
-      <Flex alignItems={['center']}>
-        <Box width={1/4} mr={3} sx={{ zIndex: 2 }}>
+      <Flex alignItems={['center']} flexDirection={['column', 'row']}>
+        <Box width={[1, 1/4]} mr={3} sx={{ zIndex: 2 }}>
           <StyledLabel>Country</StyledLabel>
           {<Controller
             render={({field}) => (
@@ -85,64 +101,44 @@ export const Form = ({ onChange, query, availableCountries }) => {
             control={control}
           />}
         </Box>
-
-        <Box mr={3}>
-          <StyledLabel>Since</StyledLabel>
-          <Controller
-            name='since'
-            control={control}
-            render={({field: {value, onChange}}) => (
-              <DatePicker
-                defaultValue={value}
-                dateFormat='YYYY-MM-DD'
-                utc={true}
-                timeFormat={false}
-                onChange={(date) =>
-                  onChange(moment.isMoment(date)
-                    ? date.format('YYYY-MM-DD')
-                    : date
-                  )
-                }
-                isValidDate={currentDate => {
-                  const untilValue = getValues('until')
-                  if (untilValue && untilValue.length !== 0) {
-                    return currentDate.isBefore(untilValue, 'day')
-                  } else {
-                    return currentDate.isBefore(tomorrow)
-                  }
-                }}
+        <Box width={[1, 1/5]}>
+          <Flex>
+            <Box width={1/2} mr={3}>
+              <StyledLabel>Since</StyledLabel>
+              <Controller
+                name='since'
+                control={control}
+                render={({field}) => (
+                  <Input
+                    {...field}
+                    onFocus={() => setShowDatePicker(true)}
+                    onKeyDown={() => setShowDatePicker(false)}
+                  />
+                )}
               />
-            )}
-          />
-        </Box>
-        <Box mr={3}>
-          <StyledLabel>Until</StyledLabel>
-          <Controller
-            name='until'
-            control={control}
-            render={({field: {value, onChange}}) => (
-              <DatePicker
-                defaultValue={value}
-                dateFormat='YYYY-MM-DD'
-                utc={true}
-                timeFormat={false}
-                onChange={(date) =>
-                  onChange(moment.isMoment(date)
-                    ? date.format('YYYY-MM-DD')
-                    : date
-                  )
-                }
-                isValidDate={currentDate => {
-                  const sinceFilter = getValues('since')
-                  if (sinceFilter && sinceFilter.length !== 0) {
-                    return currentDate.isAfter(sinceFilter) && currentDate.isSameOrBefore(tomorrow)
-                  } else {
-                    return currentDate.isSameOrBefore(tomorrow)
-                  }
-                }}
+            </Box>
+            <Box width={1/2} mr={3}>
+              <StyledLabel>Until</StyledLabel>
+              <Controller
+                name='until'
+                control={control}
+                render={({field}) => (
+                  <Input
+                    {...field}
+                    onFocus={() => setShowDatePicker(true)}
+                    onKeyDown={() => setShowDatePicker(false)}
+                  />
+                )}
               />
-            )}
-          />
+            </Box>
+          </Flex>
+          { showDatePicker &&
+            <DateRangePicker
+              handleRangeSelect={handleRangeSelect}
+              initialRange={{from: getValues('since'), to: getValues('until')}}
+              close={() => setShowDatePicker(false)}
+            />
+          }
         </Box>
       </Flex>
     </form>

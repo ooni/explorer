@@ -1,13 +1,16 @@
 import React, { useState } from 'react'
 import { format, parse, sub, addDays } from 'date-fns'
 import { DayPicker, useInput } from 'react-day-picker'
+import 'react-day-picker/dist/style.css'
 import OutsideClickHandler from 'react-outside-click-handler'
 import { useIntl } from 'react-intl'
 import styled from 'styled-components'
 import { Button } from 'ooni-components'
 
 const StyledDatetime = styled.div`
+z-index: 99999;
 position: absolute;
+max-width: 300px;
 background-color: #ffffff;
 border: 1px solid ${props => props.theme.colors.gray2};
 
@@ -87,8 +90,8 @@ const DateRangePicker = ({handleRangeSelect, initialRange, close, ...props}) => 
   const tomorrow = addDays(new Date(), 1)
 
   return (
-    <OutsideClickHandler onOutsideClick={() => close()}>
-      <StyledDatetime>
+    <StyledDatetime>
+      <OutsideClickHandler onOutsideClick={() => close()}>
         <StyledRangeButtons>{rangesList}</StyledRangeButtons>
         <DayPicker 
           {...props}
@@ -97,8 +100,8 @@ const DateRangePicker = ({handleRangeSelect, initialRange, close, ...props}) => 
           selected={range}
           onSelect={onSelect}
           footer={<Footer/>} />
-      </StyledDatetime>
-    </OutsideClickHandler>
+      </OutsideClickHandler>
+    </StyledDatetime>
   )
 }
 
