@@ -1,201 +1,104 @@
-import React, { useRef, useMemo } from 'react'
+import React, { useState } from 'react'
+import { format, parse, sub, addDays } from 'date-fns'
+import { DayPicker, useInput } from 'react-day-picker'
+import OutsideClickHandler from 'react-outside-click-handler'
+import { useIntl } from 'react-intl'
 import styled from 'styled-components'
-import DayPickerInput from 'react-day-picker/DayPickerInput'
-import 'react-day-picker/lib/style.css'
-import {
-  Flex,
-  Box,
-  Button,
-} from 'ooni-components'
-import dayjs from 'services/dayjs'
-import { Controller, useFormContext } from 'react-hook-form'
+import { Button } from 'ooni-components'
 
-const BaseDatetimeStyle = styled.div`
-.DayPicker-Day--selected:not(.DayPicker-Day--start):not(.DayPicker-Day--end):not(.DayPicker-Day--outside) {
-  background-color: #f0f8ff !important;
-  color: #4a90e2;
-}
-.DayPicker-Day {
-  border-radius: 0 !important;
-}
-.DayPicker-Day--start {
-  border-top-left-radius: 50% !important;
-  border-bottom-left-radius: 50% !important;
-}
-.DayPicker-Day--end {
-  border-top-right-radius: 50% !important;
-  border-bottom-right-radius: 50% !important;
+const StyledDatetime = styled.div`
+position: absolute;
+background-color: #ffffff;
+border: 1px solid ${props => props.theme.colors.gray2};
+
+.rdp-day_selected:not([disabled]),
+.rdp-day_selected:focus:not([disabled]),
+.rdp-day_selected:active:not([disabled]),
+.rdp-day_selected:hover:not([disabled]) {
+  background-color: ${props => props.theme.colors.blue5};
 }
 `
 
-const StyledDatetime = styled(BaseDatetimeStyle)`
-input {
-  padding: 8px;
-  display: block;
-  border: none;
-  border-bottom: 1px solid #ccc;
-  width: 100%;
-}
-
-.dateRangeSelector {
-  position: relative;
-}
-
-.DayPickerInput-OverlayWrapper {
-  position: static;
-}
-
-.DayPickerInput-Overlay {
-  width: 100%;
-}
-
-.DayPicker {
-  display: block;
-  margin: 0 auto;
-}
-
-.rangeButtonsWrapper {
-  margin: 6px 10px 0;
-}
-
-.rangeButton {
-  padding: 4px 10px;
-  margin: 4px;
-  font-size: 14px;
-}
-
-.divider {
-  margin: 7px 10px 0;
+const StyledRangeButtons = styled.div`
+margin: 1em 1em 0;
+display: flex;
+gap: 6px;
+flex-wrap: wrap;
+button {
+  padding: 4px 6px;
 }
 `
 
-const CustomOverlay = ({ classNames, selectedDay, children, onChange, ranges, ...props }) => {
-  const rangesList = ranges.map((range) => <Button className='rangeButton' hollow={true} key={range} onClick={() => onChange(range)}>{range}</Button>)
+const StyledFooter = styled.div`
+display: flex;
+justify-content: right;
+gap: 6px;
+`
 
-  return (
-    <div
-      className={classNames.overlayWrapper}
-      {...props}
-    >
-      <div className={classNames.overlay}>
-        <div className='rangeButtonsWrapper'>{rangesList}</div>
-        {children}
-      </div>
-    </div>
-  )
-}
+const DateRangePicker = ({handleRangeSelect, initialRange, close, ...props}) => {
+  const intl = useIntl()
 
-const DateRangePicker = (props) => {
-  const { control, watch, setValue, ...rest } = useFormContext()
-  const toRef = useRef(null)
-  const fromRef = useRef(null)
-
-  const [sinceFilter, untilFilter] = watch(['sinceFilter', 'untilFilter'])
-
-  const from = useMemo(() => dayjs(sinceFilter).utc().toDate(), [sinceFilter])
-  const to = useMemo(() => dayjs(untilFilter).utc().toDate(), [untilFilter])
-
-  const modifiers = { start: from, end: to }
-
-  const ranges = ['today', 'lastWeek', 'lastMonth', 'lastYear']
-
-  const setValues = (from, to) => {
-    setValue('sinceFilter', from)
-    setValue('untilFilter', to)
-  }
-
-  const dateFormat = 'YYYY-MM-DD'
-
+  const ranges = ['Today', 'LastWeek', 'LastMonth', 'LastYear']
   const selectRange = (range) => {
     switch (range) {
-      case 'today':
-        setValues(dayjs().utc().format(dateFormat), dayjs().utc().format(dateFormat))
+      case 'Today':
+        handleRangeSelect({from: new Date(), to: new Date()})
         break
-      case 'lastWeek':
-        setValues(dayjs().utc().subtract(1, 'week').format(dateFormat), dayjs().utc().format(dateFormat))
+      case 'LastWeek':
+        handleRangeSelect({from: sub(new Date(), {weeks: 1}) , to: new Date()})
         break
-      case 'lastMonth':
-        setValues(dayjs().utc().subtract(1, 'month').format(dateFormat), dayjs().utc().format(dateFormat))
+      case 'LastMonth':
+        handleRangeSelect({from: sub(new Date(), {months: 1}) , to: new Date()})
         break
-      case 'lastYear':
-        setValues(dayjs().utc().subtract(1, 'year').format(dateFormat), dayjs().utc().format(dateFormat))
+      case 'LastYear':
+        handleRangeSelect({from: sub(new Date(), {years: 1}) , to: new Date()})
         break
     }
-    toRef.current.hideDayPicker()
-    fromRef.current.hideDayPicker()
   }
 
-  const formatDate = (date) => dayjs(date).format(dateFormat)
-  const parseDate = (date) => dayjs(date).utc().toDate()
+  const rangesList = ranges.map((range) => 
+    <Button
+      hollow
+      key={range}
+      onClick={(e) => {
+        e.preventDefault()
+        selectRange(range)
+      }}>{intl.formatMessage({id: `Search.Sidebar.DateRange.${range}`})}</Button>
+  )
+  const [range, setRange] = useState({from: parse(initialRange.from, 'yyyy-MM-dd', new Date()), to: parse(initialRange.to, 'yyyy-MM-dd', new Date())})
+  const Footer = () => (
+    <StyledFooter>
+      <Button onClick={(e) => {
+        e.preventDefault()
+        handleRangeSelect(range)}
+        }>{intl.formatMessage({id: 'Search.Sidebar.DateRange.Apply'})}</Button>
+      <Button
+        hollow
+        onClick={(e) => {
+          e.preventDefault()
+          close()}
+        }>{intl.formatMessage({id: 'Search.Sidebar.DateRange.Cancel'})}</Button>
+    </StyledFooter>
+  )
+  const onSelect = (range) => {
+    setRange(range)
+  }
+
+  const tomorrow = addDays(new Date(), 1)
 
   return (
-    <StyledDatetime>
-      <Flex className='dateRangeSelector' flexDirection={['column', 'row']}>
-        <Box width={1/2} pr={1}>
-          <Controller
-            control={control}
-            name='sinceFilter'
-            render={({field}) => (
-              <DayPickerInput 
-                {...field}
-                ref={fromRef}
-                onDayChange={(date) => field.onChange(dayjs(date).format(dateFormat))}
-                format={dateFormat}
-                formatDate={formatDate}
-                parseDate={parseDate}
-                keepFocus={false}
-                dayPickerProps={{
-                  selectedDays: [from, { from, to }],
-                  disabledDays: { after: dayjs().utc().add(1, 'day').toDate() },
-                  toMonth: dayjs().utc().add(1, 'day').toDate(),
-                  modifiers,
-                  onDayClick: () => toRef.current.input.focus(),
-                }}
-                overlayComponent={props => (
-                  <CustomOverlay
-                    {...props}
-                    onChange={selectRange}
-                    ranges={ranges}
-                  />
-                )}
-                {...rest} />
-            )}
-          />
-        </Box>
-        <span className='divider'>—</span>
-        <Box width={1/2} pl={1}>
-          <Controller
-            control={control}
-            name='untilFilter'
-            render={({field}) => (
-              <DayPickerInput
-                {...field}
-                ref={toRef}
-                onDayChange={(date) => field.onChange(dayjs(date).format(dateFormat))}
-                keepFocus={false}
-                dayPickerProps={{
-                  selectedDays: [from, { from, to }],
-                  disabledDays: { before: from, after: dayjs().utc().add(1, 'day').toDate()  },
-                  modifiers,
-                  month: from,
-                  fromMonth: from,
-                }}
-                format={dateFormat}
-                formatDate={formatDate}
-                parseDate={parseDate}
-                overlayComponent={props => (
-                  <CustomOverlay
-                    {...props}
-                    onChange={selectRange}
-                    ranges={ranges}
-                  />
-                )}
-                {...rest} />
-            )}
-          />
-        </Box>
-      </Flex>
-    </StyledDatetime>
+    <OutsideClickHandler onOutsideClick={() => close()}>
+      <StyledDatetime>
+        <StyledRangeButtons>{rangesList}</StyledRangeButtons>
+        <DayPicker 
+          {...props}
+          mode="range"
+          toDate={tomorrow}
+          selected={range}
+          onSelect={onSelect}
+          footer={<Footer/>} />
+      </StyledDatetime>
+    </OutsideClickHandler>
   )
 }
 
