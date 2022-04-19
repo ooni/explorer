@@ -71,7 +71,7 @@ const DateRangePicker = ({handleRangeSelect, initialRange, close, ...props}) => 
   const [range, setRange] = useState({from: parse(initialRange.from, 'yyyy-MM-dd', new Date()), to: parse(initialRange.to, 'yyyy-MM-dd', new Date())})
   const Footer = () => (
     <StyledFooter>
-      <Button onClick={(e) => {
+      <Button id='apply-range' onClick={(e) => {
         e.preventDefault()
         handleRangeSelect(range)}
         }>{intl.formatMessage({id: 'Search.Sidebar.DateRange.Apply'})}</Button>
