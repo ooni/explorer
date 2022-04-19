@@ -14,7 +14,6 @@ import { useForm, Controller } from 'react-hook-form'
 
 import DateRangePicker from '../DateRangePicker'
 import { format } from 'date-fns'
-import { DayPicker } from 'react-day-picker'
 import {
   RadioGroup,
   RadioButton
@@ -110,7 +109,7 @@ function isValidFilterForTestname(testName = 'XX', arrayWithMapping) {
 
 // Display `${tomorrow}` as the end date for default search
 // to include the measurements of `${today}` as well.
-const tomorrowUTC = dayjs().utc().add(1, 'day').format('YYYY-MM-DD')
+const tomorrowUTC = dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
 
 const asnRegEx = /^(AS)?([1-9][0-9]*)$/
 const domainRegEx = /(^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,}(:[0-9]{1,5})?$)|(^(([0-9]{1,3})\.){3}([0-9]{1,3}))/
@@ -321,6 +320,22 @@ const FilterSidebar = ({
           )}
         />
 
+        {showConfirmedFilter &&
+          <Controller
+            control={control}
+            name='categoryFilter'
+            render={({field}) => (
+              <SelectWithLabel
+                {...field}
+                pt={2}
+                label={intl.formatMessage({id: 'Search.Sidebar.Categories'})}
+                data-test-id='category-filter'
+              >
+                <CategoryOptions />
+            </SelectWithLabel>
+            )}
+          />
+        }
         {
           showDomain &&
           <Controller
