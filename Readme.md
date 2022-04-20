@@ -33,3 +33,27 @@ yarn run start
 ```
 
 We also provide a `Dockerfile` for easy deployment.
+
+## Managing translations
+
+You should have checked out the https://github.com/ooni/translations
+repository.
+
+From inside of `ooni/translation` to update the transifex master copy (this is
+done when edits to the master spreadsheet are done), you should run:
+```
+./update-explorer-source.sh && explorer-sync-csv-source.sh
+```
+
+Then when the translations have been done and you want to pull in the
+translated versions, run:
+```
+XXX what is the command for this?
+```
+
+From inside of the ooni/explorer repo you should then run:
+```
+yarn run script:build-translations
+```
+
+(this assumes you have `ooni/translations` checked out in the parent directory)
