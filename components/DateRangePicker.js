@@ -66,7 +66,7 @@ const DateRangePicker = ({handleRangeSelect, initialRange, close, ...props}) => 
       onClick={(e) => {
         e.preventDefault()
         selectRange(range)
-      }}>{intl.formatMessage({id: `Search.Sidebar.DateRange.${range}`})}</Button>
+      }}>{intl.formatMessage({id: `DateRange.${range}`})}</Button>
   )
   const [range, setRange] = useState({from: parse(initialRange.from, 'yyyy-MM-dd', new Date()), to: parse(initialRange.to, 'yyyy-MM-dd', new Date())})
   const Footer = () => (
@@ -74,13 +74,13 @@ const DateRangePicker = ({handleRangeSelect, initialRange, close, ...props}) => 
       <Button id='apply-range' onClick={(e) => {
         e.preventDefault()
         handleRangeSelect(range)}
-        }>{intl.formatMessage({id: 'Search.Sidebar.DateRange.Apply'})}</Button>
+        }>{intl.formatMessage({id: 'DateRange.Apply'})}</Button>
       <Button
         hollow
         onClick={(e) => {
           e.preventDefault()
           close()}
-        }>{intl.formatMessage({id: 'Search.Sidebar.DateRange.Cancel'})}</Button>
+        }>{intl.formatMessage({id: 'DateRange.Cancel'})}</Button>
     </StyledFooter>
   )
   const onSelect = (range) => {
