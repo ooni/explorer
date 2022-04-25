@@ -1,19 +1,16 @@
 /* eslint-disable no-console */
-/* global require */
 const glob = require('glob')
-const { basename, resolve } = require('path')
-// const csvParse = require('csv-parse/lib/sync')
+const { basename } = require('path')
 const { readFileSync, writeFileSync } = require('fs')
 
 const LANG_DIR = './public/static/lang/'
-const DEFAULT_LOCALE = 'en'
 const TRANSLATED_STRINGS_DIR = '../translations/explorer'
 
-const supportedLanguages = glob.sync(`${LANG_DIR}/*.json`).map((f) => basename(f, '.json'))
+const supportedLanguages = glob.sync(`${TRANSLATED_STRINGS_DIR}/*`).map((f) => basename(f, '.json'))
 
 // Copy latest files from `translations`
 supportedLanguages.forEach((lang) => {
-  console.log('> Getting latest translations for langugae ✨', lang)
+  console.log('> Getting latest translations for:', lang)
   writeFileSync(`${LANG_DIR}/${lang}.json`, readFileSync(`${TRANSLATED_STRINGS_DIR}/${lang}/strings.json`))
 })
 

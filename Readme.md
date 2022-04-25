@@ -39,16 +39,16 @@ We also provide a `Dockerfile` for easy deployment.
 You should have checked out the https://github.com/ooni/translations
 repository.
 
-From inside of `ooni/translation` to update the transifex master copy (this is
+From inside of `ooni/translations` to update the transifex master copy (this is
 done when edits to the master spreadsheet are done), you should run:
 ```
-./update-explorer-source.sh && explorer-sync-csv-source.sh
+./update-explorer-source.sh
 ```
 
 Then when the translations have been done and you want to pull in the
 translated versions, run:
 ```
-XXX what is the command for this?
+./update-explorer-translations.sh
 ```
 
 From inside of the ooni/explorer repo you should then run:
