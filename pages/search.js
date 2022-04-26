@@ -188,12 +188,7 @@ class Search extends React.Component {
     try {
       msmtR = await getMeasurements(query)
     } catch (err) {
-      let error
-      if (err.response) {
-        error = err.response.data
-      } else {
-        error = err.message
-      }
+      const error = serializeError(err)
       return {
         error,
         results: [],
