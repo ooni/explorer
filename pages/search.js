@@ -340,7 +340,7 @@ class Search extends React.Component {
           // When `hideFailure` is true, add `failure=false` in the query
           query[queryParam] = false
         } else {
-          query[queryParam] = true
+          delete query[queryParam]
         }
       } else {
         query[queryParam] = this.state[key]
