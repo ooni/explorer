@@ -105,7 +105,8 @@ export const Form = ({ onSubmit, testNames, query }) => {
 
   const defaultValues = Object.assign({}, defaultDefaultValues, query)
   const { handleSubmit, control, getValues, watch, reset, setValue } = useForm({
-    defaultValues
+    defaultValues,
+    shouldUnregister: true,
   })
 
   // If `query` changes after the page mounts, reset the form to use default
