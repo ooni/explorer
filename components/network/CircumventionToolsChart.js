@@ -7,6 +7,7 @@ import useSWR from 'swr'
 import GridChart, { prepareDataForGridChart } from 'components/aggregation/mat/GridChart'
 import { DetailsBox } from 'components/measurement/DetailsBox'
 import { MATContextProvider } from 'components/aggregation/mat/MATContext'
+import { FormattedMessage } from 'react-intl'
 
 const swrOptions = {
   revalidateOnFocus: false,
@@ -89,7 +90,7 @@ const CircumventionChart = React.memo(function MessagingChart() {
   return (
     <MATContextProvider key={testName} test_name={testName} {...queryParams}>
       <Flex flexDirection='column' mt={3}>
-        <Box><Heading h={3}>{testName}</Heading></Box>
+        <Box><Heading h={3}><FormattedMessage id='Tests.Groups.Circumvention.Name' /></Heading></Box>
         <Box>
           {(!chartData && !error) ? (
             <div> Loading ...</div>

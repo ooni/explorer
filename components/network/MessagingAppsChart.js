@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react'
 import { useRouter } from 'next/router'
+import { FormattedMessage } from 'react-intl'
 import { Heading, Box, Flex } from 'ooni-components'
 import axios from 'axios'
 
@@ -93,7 +94,7 @@ const MessagingChart = React.memo(function MessagingChart() {
   return (
     <MATContextProvider key={testName} test_name={testName} {...queryParams}>
       <Flex flexDirection='column' mt={3}>
-        <Box><Heading h={3}>{testName}</Heading></Box>
+        <Box><Heading h={3}><FormattedMessage id='Tests.Groups.Instant Messagging.Name' /></Heading></Box>
         <Box>
           {(!chartData && !error) ? (
             <div> Loading ...</div>
