@@ -45,3 +45,8 @@ export const truncateString = (s, maxStart, maxEnd) => {
   truncatedString += s.substr(s.length - maxEnd, s.length)
   return truncatedString
 }
+
+export const getRange = (start, end) => {
+  if(start === end) return [start]
+  return [start, ...getRange(start + 1, end)]
+}
