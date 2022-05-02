@@ -1,32 +1,36 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { useRouter } from 'next/router'
+import { FormattedMessage } from 'react-intl'
 import { Heading, Box, Flex } from 'ooni-components'
 import useSWR from 'swr'
 import GridChart, { prepareDataForGridChart } from 'components/aggregation/mat/GridChart'
 import { DetailsBox } from 'components/measurement/DetailsBox'
 import { MATContextProvider } from 'components/aggregation/mat/MATContext'
-import { FormattedMessage } from 'react-intl'
-import { MATFetcher as fetcher } from 'services/fetchers'
+import { MATMultipleFetcher, MATFetcher } from 'services/fetchers'
 
 const swrOptions = {
   revalidateOnFocus: false,
   dedupingInterval: 10 * 60 * 1000,
 }
 
-const testName = 'web_connectivity'
-const queryParams = { axis_x: 'measurement_start_day', axis_y: 'domain' }
-
-const Chart = React.memo(function Chart() {
+const Chart = React.memo(function Chart({testName, testGroup = null, title, queryParams = {}}) {
   const router = useRouter()
   const { query: {since, until, asn} } = router
-  
-  const query = useMemo(() => ({
+
+  const name = testName || testGroup.name
+
+  const params = useMemo(() => ({
     ...queryParams,
+    axis_x: 'measurement_start_day'
+  }), [queryParams])
+
+  const query = useMemo(() => ({
+    ...params,
     probe_asn: asn,
-    test_name: testName,
     since: since,
-    until: until
-  }), [since, until, asn])
+    until: until,
+    ...testName && {test_name: testName}
+  }), [since, until, asn, params, testName])
 
   const apiQuery = useMemo(() => {
     const qs = new URLSearchParams(query).toString()
@@ -34,26 +38,29 @@ const Chart = React.memo(function Chart() {
   }, [query])
 
   const { data, error } = useSWR(
-    apiQuery,
-    fetcher,
+    testGroup ? { query: apiQuery, 
+      testNames: testGroup.tests, 
+      groupKey: name
+    } : apiQuery,
+    testGroup ? MATMultipleFetcher : MATFetcher,
     swrOptions
   )
-
   const [chartData, rowKeys, rowLabels] = useMemo(() => {
     if (!data) {
       return [null, 0]
     }
-    let chartData = data.data
-    const [reshapedData, rowKeys, rowLabels] = prepareDataForGridChart(chartData, query)
+    let chartData = testGroup ? data : data.data
+    const graphQuery = testGroup ? {...query, axis_y: name} : query
+    const [reshapedData, rowKeys, rowLabels] = prepareDataForGridChart(chartData, graphQuery)
     return [reshapedData, rowKeys, rowLabels]
-  }, [data, query])
+  }, [data, query, name, testGroup])
 
   const headerOptions = { probe_cc: false, subtitle: false }
 
   return (
-    <MATContextProvider key={testName} test_name={testName} {...queryParams}>
+    <MATContextProvider key={name} test_name={name} {...params}>
       <Flex flexDirection='column' mt={3}>
-        <Box><Heading h={3}><FormattedMessage id='Tests.Groups.Webistes.Name' /></Heading></Box>
+        <Box><Heading h={3}>{title}</Heading></Box>
         <Box>
           {(!chartData && !error) ? (
             <div> Loading ...</div>

@@ -2,19 +2,14 @@ import React, { useCallback, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
 import { Container, Heading, Box, Flex } from 'ooni-components'
-import { FormattedMessage } from 'react-intl'
+import { useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
-import Form from 'components/network/Form'
-import Calendar from 'components/network/Calendar'
-
 import Layout from 'components/Layout'
 import NavBar from 'components/NavBar'
 import { MetaTags } from 'components/dashboard/MetaTags'
-import FormattedMarkdown from 'components/FormattedMarkdown'
-
-import WebConnectivityChart from 'components/network/WebConnectivityChart'
-import MessagingAppsChart from 'components/network/MessagingAppsChart'
-import CircumventionToolChart from 'components/network/CircumventionToolsChart'
+import Form from 'components/network/Form'
+import Chart from 'components/network/Chart'
+import Calendar from 'components/network/Calendar'
 
 const prepareDataForCalendar = (data) => {
   return data.map((r) => ({
@@ -24,12 +19,16 @@ const prepareDataForCalendar = (data) => {
   )
 }
 
+const messagingTestNames = ['signal', 'telegram', 'whatsapp', 'facebook_messenger']
+const circumventionTestNames = ['psiphon', 'tor', 'torsf']
+
 const ChartsContainer = () => {
+  const intl = useIntl()
   return (
-    <>
-      <WebConnectivityChart />
-      <MessagingAppsChart />
-      <CircumventionToolChart />
+    <> 
+      <Chart testName='web_connectivity' title={intl.formatMessage({id: 'Tests.Groups.Webistes.Name'})} queryParams={{axis_y: 'domain'}} />
+      <Chart testGroup={{name: 'messaging_apps', tests: messagingTestNames}} title={intl.formatMessage({id: 'Tests.Groups.Instant Messagging.Name'})} />
+      <Chart testGroup={{name: 'circumvention_tools', tests: circumventionTestNames}} title={intl.formatMessage({id: 'Tests.Groups.Circumvention.Name'})} />
     </>
   )
 }
