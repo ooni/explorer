@@ -1,15 +1,21 @@
-import React, { useCallback, useMemo } from 'react'
+import React, { useCallback } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
-import { Container, Heading, Box, Flex } from 'ooni-components'
+import { Container, Heading, Box, Flex, Text } from 'ooni-components'
 import { useIntl } from 'react-intl'
+import styled from 'styled-components'
 import dayjs from 'services/dayjs'
+import countryUtil from 'country-util'
 import Layout from 'components/Layout'
 import NavBar from 'components/NavBar'
 import { MetaTags } from 'components/dashboard/MetaTags'
 import Form from 'components/network/Form'
 import Chart from 'components/network/Chart'
 import Calendar from 'components/network/Calendar'
+
+const Bold = styled.span`
+  font-weight: bold
+`
 
 const prepareDataForCalendar = (data) => {
   return data.map((r) => ({
@@ -33,7 +39,7 @@ const ChartsContainer = () => {
   )
 }
 
-const NetworkDashboard = ({asn, calendarData, measurementsTotal}) => {
+const NetworkDashboard = ({asn, calendarData, measurementsTotal, countries}) => {
   const router = useRouter()
   const query = router.query
 
@@ -62,10 +68,14 @@ const NetworkDashboard = ({asn, calendarData, measurementsTotal}) => {
       <MetaTags />
       <NavBar />
       <Container>
-        <h1>AS{asn}</h1>
+        <Heading h={1} fontWeight='heading' my={20}>AS{asn}</Heading>
         {router.isReady && 
           <React.Fragment>
+            <Text fontSize={20} my={10}>Total number of measurements: <Bold>{measurementsTotal}</Bold></Text>
+            <Text fontSize={20} my={10}>Date of the first measurement: <Bold>{calendarData[0].day}</Bold></Text>
+            <Text fontSize={20} my={10}>Network observed in countries: <Bold>{countries.map(c => countryUtil.territoryNames[c]).join(', ')}</Bold></Text>
             <Calendar asn={asn} data={calendarData} />
+            <Box as='hr' sx={{bg: 'gray5', border: 0, height: 1}} mt={20} mb={20} />
             <Form onChange={onChange} query={query} />
             <ChartsContainer />
           </React.Fragment>
@@ -80,24 +90,31 @@ export const getServerSideProps = async (context) => {
 
   if (/^[0-9]+$/.test(asn)) {
     const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL})
+    const path = '/api/v1/aggregation'
 
     const measurementsTotal = await client
-      .get('/api/v1/aggregation', {params: {'probe_asn': asn}})
+      .get(path, {params: {'probe_asn': asn}})
       .then((response)=> response?.data?.result.measurement_count)
     
     if (measurementsTotal > 0) {
-      const calendarData = await client.get('/api/v1/aggregation', { params: {
+      const calendarData = await client.get(path, { params: {
         probe_asn: asn,
-        since: dayjs.utc().subtract(1, 'year').format('YYYY-MM-DD'),
+        since: dayjs.utc().subtract(10, 'year').format('YYYY-MM-DD'),
         until: dayjs.utc().format('YYYY-MM-DD'),
         axis_x: 'measurement_start_day',
       }}).then((response) => prepareDataForCalendar(response.data.result))
-    
+
+      const countries = await client.get(path, { params: {
+        probe_asn: asn,
+        axis_x: 'probe_cc'
+      }}).then((response) => (response.data.result.map(res => res.probe_cc)))
+
       return { 
         props: { 
           asn,
           calendarData,
           measurementsTotal,
+          countries,
         }
       }
     }

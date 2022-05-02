@@ -1,8 +1,14 @@
 import React, { useState } from 'react'
 import { ResponsiveCalendar } from '@nivo/calendar'
-import { theme } from 'ooni-components'
+import styled from 'styled-components'
+import { Flex, Box, theme } from 'ooni-components'
 import { getRange } from 'utils'
 
+const StyledCalendar = styled.div`
+height: 180px;
+margin-bottom: 10px;
+margin-top: 40px;
+`
 const colors = theme.colors
 const customColors = [colors.orange3, colors.green2, colors.green5, colors.green8]
 
@@ -15,7 +21,7 @@ const Calendar = React.memo(function Calendar({asn, data}) {
   
   return (
     <>
-      <div style={{height: '180px'}}>
+      <StyledCalendar>
         <ResponsiveCalendar
           data={data}
           from={`${selectedYear}-01-01`}
@@ -27,21 +33,23 @@ const Calendar = React.memo(function Calendar({asn, data}) {
           dayBorderWidth={2}
           dayBorderColor="#ffffff"
         />
-      </div>
-      {yearsOptions.map(year => (
-        <span
-          key={year}
-          style={{
-            display: 'inline-block',
-            padding: '3px 9px',
-            cursor: 'pointer',
-            fontWeight: year === selectedYear ? '800' : '400'
-          }}
-          onClick={() => setSelectedYear(year)}
-        >
-          {year}
-        </span>
-      ))}
+      </StyledCalendar>
+      <Flex justifyContent='right' mb={60}>
+        {yearsOptions.map(year => (
+          <span
+            key={year}
+            style={{
+              display: 'inline-block',
+              padding: '3px 9px',
+              cursor: 'pointer',
+              fontWeight: year === selectedYear ? '800' : '400'
+            }}
+            onClick={() => setSelectedYear(year)}
+          >
+            {year}
+          </span>
+        ))}
+      </Flex>
     </>
   )
 })

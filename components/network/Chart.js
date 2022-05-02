@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react'
 import { useRouter } from 'next/router'
-import { FormattedMessage } from 'react-intl'
 import { Heading, Box, Flex } from 'ooni-components'
 import useSWR from 'swr'
 import GridChart, { prepareDataForGridChart } from 'components/aggregation/mat/GridChart'
@@ -59,8 +58,8 @@ const Chart = React.memo(function Chart({testName, testGroup = null, title, quer
 
   return (
     <MATContextProvider key={name} test_name={name} {...params}>
-      <Flex flexDirection='column' mt={3}>
-        <Box><Heading h={3}>{title}</Heading></Box>
+      <Flex flexDirection='column' mb={60}>
+        <Box><Heading h={3} mt={40} mb={20}>{title}</Heading></Box>
         <Box>
           {(!chartData && !error) ? (
             <div> Loading ...</div>
