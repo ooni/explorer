@@ -21,8 +21,10 @@ const BugBox = styled(Box)`
   padding: 20px;
 `
 
-const WhatsAppDetails = ({ isAnomaly, scores, measurement, render }) => {
+const WhatsAppDetails = ({ scores, measurement, render }) => {
   const testKeys = measurement.test_keys
+  const isAnomaly = testKeys.whatsapp_web_status === 'blocked'
+
   const tcp_connect = testKeys.tcp_connect
   let registrationServerAccessible, webAccessible, endpointsAccessible
   try {
