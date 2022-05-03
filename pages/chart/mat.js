@@ -168,7 +168,7 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
                 <Flex>
                   <Box>
                     <Link as='a' href={linkToAPIQuery} target='_blank' title='opens in new tab'>
-                      JSON Data <FaExternalLinkAlt />
+                      JSON Data!! <FaExternalLinkAlt />
                     </Link>
                   </Box>
                   <Box ml={2}>
