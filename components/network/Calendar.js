@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { ResponsiveCalendar } from '@nivo/calendar'
 import styled from 'styled-components'
-import { Flex, Box, theme } from 'ooni-components'
+import { Flex, theme } from 'ooni-components'
 import { getRange } from 'utils'
 
 const StyledCalendar = styled.div`
