@@ -229,7 +229,7 @@ class Search extends React.Component {
       sinceFilter: props.router.query.since,
       untilFilter: props.router.query.until,
       onlyFilter: props.router.query.only || 'all',
-      hideFailed: true,
+      hideFailed: !props.router.query.failure,
       results: props.results,
       nextURL: props.nextURL,
       error: props.error,
