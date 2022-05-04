@@ -39,8 +39,6 @@ const queryToParams = ({ query }) => {
     params['failure'] = false
   }
 
-  
-
   for (const p of supportedParams) {
     if (p in query &&  query[p] !== queryToFilterMap[p][1]) {
       params[p] = query[p]
