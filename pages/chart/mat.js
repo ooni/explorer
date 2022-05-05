@@ -130,6 +130,27 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
     console.error(`Failed to construct API query link: ${e.message}`)
   }
 
+  const downloadCsv = async (query) => {
+    const linkToAPIQuery = `${process.env.NEXT_PUBLIC_AGGREGATION_API}/api/v1/aggregation?${new URLSearchParams(query).toString()}&format=CSV`;
+    try {
+      const response = await axios.get(linkToAPIQuery);
+      const element = document.createElement('a');
+      element.href = 'data:text/csv;charset=utf-8,' + encodeURIComponent(response.data);
+      element.download = 'data.csv';
+      element.click();
+    } catch (e) {
+      console.error('')
+    }
+  };
+  
+   const downloadJson = (jsonContent) => {
+    const element = document.createElement('a');
+    element.href = 'data:text/json;charset=utf-8,' + encodeURIComponent(JSON.stringify(jsonContent, null, '\t'));
+    element.download = 'data.json';
+    element.click();
+  }
+
+
   return (
     <MATContextProvider>
       <Layout>
@@ -175,6 +196,12 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
                     <Link href={`${linkToAPIQuery}&format=CSV`} target='_blank' title='opens in new tab'>
                     CSV Data <FaExternalLinkAlt />
                     </Link>
+                  </Box>
+                  <Box>
+                  <Button onClick={() => downloadCsv(query)}>Download CSV Data</Button>
+                  </Box>
+                  <Box>
+                  <Button onClick={() => downloadJson(data.data.result)}>Download JSON Data</Button>
                   </Box>
                 </Flex>
               </Box>
