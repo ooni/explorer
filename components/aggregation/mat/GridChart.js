@@ -7,9 +7,8 @@ import { Heading, Flex, Box } from 'ooni-components'
 import { toPng } from 'html-to-image'
 import { download } from 'downloadjs'
 
-import RowChart, { chartMargins } from './RowChart'
+import RowChart from './RowChart'
 import { sortRows, fillDataHoles } from './computations'
-import { getXAxisTicks } from './timeScaleXAxis'
 import { useMATContext } from './MATContext'
 import { ChartHeader } from './ChartHeader'
 import { getRowLabel } from './labels'
@@ -17,6 +16,7 @@ import { VirtualRows } from './VirtualRows'
 import { XAxis } from './XAxis'
 import { barThemeForTooltip } from './CustomTooltip'
 import { Button } from '../../Button'
+import { NoCharts } from './NoCharts'
 
 const ROW_HEIGHT = 70
 const XAXIS_HEIGHT = 62
@@ -121,21 +121,8 @@ const GridChart = ({ data, rowKeys, rowLabels, isGrouped = true, height = 'auto'
 
   if (data.size < 1) {
     return (
-      <Flex flexDirection='column' justifyContent='center' sx={{ height: '100%' }}>
-        <Heading h={5}> No enough data for charts </Heading>
-        <Heading h={6}> Check browser console to inspect received data.</Heading>
-      </Flex>
+      <NoCharts />
     )
-  }
-
-  const xAxisTickValues = getXAxisTicks(query, 30)
-  const xAxisMargins = {...chartMargins, top: 60, bottom: 0}
-  const axisTop = {
-    enable: true,
-    tickSize: 5,
-    tickPadding: 5,
-    tickRotation: -45,
-    tickValues: xAxisTickValues
   }
 
   // To correctly align with the rows, generate a data row with only x-axis values

@@ -7,7 +7,8 @@ import axios from 'axios'
 import {
   Container,
   Heading,
-  Flex, Box,
+  Flex, Box, Button,
+  Link
 } from 'ooni-components'
 import useSWR from 'swr'
 import { FormattedMessage } from 'react-intl'
@@ -20,9 +21,11 @@ import { FunnelChart } from 'components/aggregation/mat/FunnelChart'
 import { Form } from 'components/aggregation/mat/Form'
 import { axiosResponseTime } from 'components/axios-plugins'
 import TableView from 'components/aggregation/mat/TableView'
+import { FaExternalLinkAlt } from 'react-icons/fa'
 import FormattedMarkdown from 'components/FormattedMarkdown'
 import Help from 'components/aggregation/mat/Help'
 import dayjs from 'services/dayjs'
+import { NoCharts } from 'components/aggregation/mat/NoCharts'
 
 const baseURL = process.env.NEXT_PUBLIC_MEASUREMENTS_URL
 axiosResponseTime(axios)
@@ -57,6 +60,13 @@ const fetcher = (query) => {
       loadTime: r.loadTime,
       url: r.config.url
     }
+  }).catch(e => {
+    // throw new Error(e?.response?.data?.error ?? e.message)
+    const error = new Error('An error occurred while fetching the data.')
+    // Attach extra info to the error object.
+    error.info = e.response.data.error
+    error.status = e.response.status
+    throw error
   })
 }
 
@@ -79,7 +89,9 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
 
   }, [router])
 
-  React.useEffect(() => {
+  // Upon mount, check if the page was accessed without query params
+  // In that case, trigger a shallow navigation that shows a chart
+  useEffect(() => {
     const { query } = router
     if (Object.keys(query).length === 0) {
       const today = dayjs.utc().add(1, 'day')
@@ -88,9 +100,7 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
         pathname: router.pathname,
         query: {
           test_name: 'web_connectivity',
-          // domain: 'twitter.com',
           axis_x: 'measurement_start_day',
-          // axis_y: 'probe_cc',
           since: monthAgo.format('YYYY-MM-DD'),
           until: today.format('YYYY-MM-DD'),
         },
@@ -113,6 +123,13 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
 
   const showLoadingIndicator = useMemo(() => isValidating, [isValidating])
 
+  let linkToAPIQuery = null
+  try {
+    linkToAPIQuery = `${process.env.NEXT_PUBLIC_AGGREGATION_API}/api/v1/aggregation?${new URLSearchParams(query).toString()}`
+  } catch (e) {
+    console.error(`Failed to construct API query link: ${e.message}`)
+  }
+
   return (
     <MATContextProvider>
       <Layout>
@@ -127,6 +144,9 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
               <FormattedMessage id='MAT.SubTitle' />
             </Heading>
             <Form onSubmit={onSubmit} testNames={testNames} query={router.query} />
+            {error &&
+              <NoCharts message={error?.info ?? error} />
+            }
             <Box sx={{ minHeight: '500px' }}>
               {showLoadingIndicator &&
                 <Box>
@@ -143,13 +163,25 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
                   <TableView data={data.data.result} query={query} />
               }
             </Box>
+            {linkToAPIQuery &&
+              <Box mt={[3]} ml={['unset', 'auto']}>
+                <Flex>
+                  <Box>
+                    <Link as='a' href={linkToAPIQuery} target='_blank' title='opens in new tab'>
+                      JSON Data <FaExternalLinkAlt />
+                    </Link>
+                  </Box>
+                  <Box ml={2}>
+                    <Link href={`${linkToAPIQuery}&format=CSV`} target='_blank' title='opens in new tab'>
+                    CSV Data <FaExternalLinkAlt />
+                    </Link>
+                  </Box>
+                </Flex>
+              </Box>
+            }
             <Box my={4}>
               <Help />
             </Box>
-            {error && <Box>
-              <Heading h={5} my={4}>Error</Heading>
-              <pre>{JSON.stringify(error, null, 2)}</pre>
-            </Box>}
           </Flex>
         </Container>
       </Layout>
