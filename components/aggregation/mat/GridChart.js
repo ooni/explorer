@@ -1,8 +1,11 @@
-import React, { useMemo, useRef } from 'react'
+import React, { useMemo, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import { TooltipProvider, Tooltip } from '@nivo/tooltip'
 import { Container } from '@nivo/core'
+import { ResponsiveBar, ResponsiveBarCanvas } from '@nivo/bar'
 import { Heading, Flex, Box } from 'ooni-components'
+import { toPng } from 'html-to-image'
+import { download } from 'downloadjs'
 
 import RowChart, { chartMargins } from './RowChart'
 import { sortRows, fillDataHoles } from './computations'
@@ -13,6 +16,7 @@ import { getRowLabel } from './labels'
 import { VirtualRows } from './VirtualRows'
 import { XAxis } from './XAxis'
 import { barThemeForTooltip } from './CustomTooltip'
+import { Button } from '../../Button'
 
 const ROW_HEIGHT = 70
 const XAXIS_HEIGHT = 62
@@ -97,6 +101,7 @@ const GridChart = ({ data, rowKeys, rowLabels, isGrouped = true, height = 'auto'
   const { tooltipIndex } = query
   const indexBy = query.axis_x
   const tooltipContainer = useRef(null)
+  const chart = useRef<HTMLDivElement | null>(null)
 
   const rowsToRender = useMemo(() => {
     if (!selectedRows) {
@@ -141,6 +146,19 @@ const GridChart = ({ data, rowKeys, rowLabels, isGrouped = true, height = 'auto'
 
   return (
     <Container theme={barThemeForTooltip}>
+    <Button
+        onClick={ async () => {
+          if (!chart.current) {
+            return
+          }
+
+          const dataUrl = await toPng(chart.current)
+
+          download(dataUrl, 'chart.png')
+        }}
+      >
+        Download Chart
+    </Button>
       <TooltipProvider container={tooltipContainer}>
         <Flex ref={tooltipContainer} flexDirection='column'>
           <Flex flexDirection='column'>
