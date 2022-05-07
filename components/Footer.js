@@ -4,6 +4,7 @@ import styled from 'styled-components'
 import { Flex, Box, Container, Link } from 'ooni-components'
 import ExplorerLogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochromeInverted.svg'
 import { useIntl } from 'react-intl'
+import dayjs from 'dayjs'
 
 const StyledFooter = styled.footer`
   background-color: ${props => props.theme.colors.blue9};
@@ -54,6 +55,7 @@ const FooterText = styled.div`
 
 const Footer = () => {
   const intl = useIntl()
+  const currentYear = dayjs().get('year')
   return (
     <StyledFooter>
       <Container>
@@ -92,7 +94,7 @@ const Footer = () => {
         <Flex flexWrap='wrap'>
           <FooterBox>
             <small>
-              <Box mb={1}>{intl.formatMessage({ id: 'Footer.Text.Copyright' })}</Box>
+              <Box mb={1}>{intl.formatMessage({ id: 'Footer.Text.Copyright' }, { currentYear })}</Box>
               <FooterLink href='https://github.com/ooni/license' label={intl.formatMessage({ id: 'Footer.Text.CCommons'})} />
               <FooterText>{intl.formatMessage({ id: 'Footer.Text.Version' }) }: {process.env.GIT_COMMIT_SHA_SHORT}</FooterText>
             </small>
