@@ -235,7 +235,7 @@
   "Footer.Link.Twitter": "Twitter",
   "Footer.Link.MailingList": "Mailing list",
   "Footer.Link.Slack": "Slack",
-  "Footer.Text.Copyright": "\u00a9 2019 Open Observatory of Network Interference (OONI)",
+  "Footer.Text.Copyright": "\u00a9 {currentYear} Open Observatory of Network Interference (OONI)",
   "Footer.Text.CCommons": "Content available under a Creative Commons license.",
   "Footer.Text.Version": "Version",
   "CategoryCode.ALDR.Name": "Drugs & Alcohol",
