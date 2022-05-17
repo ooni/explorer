@@ -151,7 +151,7 @@ const FilterSidebar = ({
     hideFailed
   }
 
-  const { handleSubmit, control, watch, resetField, formState } = useForm({
+  const { handleSubmit, control, watch, resetField, formState, setValue } = useForm({
     defaultValues
   })
   const { errors } = formState
@@ -166,8 +166,8 @@ const FilterSidebar = ({
   const showDomain = useMemo(() => isValidFilterForTestname(testNameFilterValue, testsWithValidDomain), [testNameFilterValue])
   // to avoid bad queries, blank out the `domain` field when it is shown/hidden
   useEffect(() => {
-    resetField('domainFilter')
-  }, [resetField, showDomain])
+    setValue('domainFilter', '')
+  }, [setValue, showDomain])
 
   // Can we filter out anomalies or confirmed for this test_name
   const showAnomalyFilter = useMemo(() => isValidFilterForTestname(testNameFilterValue, testsWithAnomalyStatus), [testNameFilterValue])
