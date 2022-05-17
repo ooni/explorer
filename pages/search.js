@@ -28,7 +28,7 @@ const queryToParams = ({ query }) => {
   // XXX do better validation
   let params = {},
     show = 50
-  const supportedParams = ['probe_cc', 'domain', 'category_code', 'probe_asn', 'test_name', 'since', 'until', 'failure']
+  const supportedParams = ['probe_cc', 'domain', 'input','category_code', 'probe_asn', 'test_name', 'since', 'until', 'failure']
   if (query.show) {
     show = parseInt(query.show)
   }
@@ -223,6 +223,7 @@ class Search extends React.Component {
     this.state = {
       testNameFilter: props.router.query.test_name,
       domainFilter: props.router.query.domain,
+      inputFilter: props.router.query.input,
       categoryFilter: props.router.query.category_code,
       countryFilter: props.router.query.probe_cc,
       asnFilter: props.router.query.probe_asn,
@@ -360,6 +361,7 @@ class Search extends React.Component {
       results,
       onlyFilter,
       domainFilter,
+      inputFilter,
       categoryFilter,
       testNameFilter,
       countryFilter,
@@ -382,6 +384,7 @@ class Search extends React.Component {
             <Box width={[1, 1/4]} px={2}>
               <FilterSidebar
                 domainFilter={domainFilter}
+                inputFilter={inputFilter}
                 categoryFilter={categoryFilter}
                 testNameFilter={testNameFilter}
                 countryFilter={countryFilter}
