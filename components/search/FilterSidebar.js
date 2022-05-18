@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useLayoutEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import styled from 'styled-components'
 import { useIntl } from 'react-intl'
 import {
@@ -167,9 +167,11 @@ const FilterSidebar = ({
   // Does the selected testName need a domain filter
   const showDomain = useMemo(() => isValidFilterForTestname(testNameFilterValue, testsWithValidDomain), [testNameFilterValue])
   // to avoid bad queries, blank out the `domain` field when it is shown/hidden
-  useLayoutEffect(() => {
-    setValue('domainFilter', '')
-    setValue('inputFilter', '')
+  useEffect(() => {
+    if (!showDomain) {
+      setValue('domainFilter', '')
+      setValue('inputFilter', '')
+    }
   }, [setValue, showDomain])
 
   // Can we filter out anomalies or confirmed for this test_name
