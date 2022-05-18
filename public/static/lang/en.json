@@ -488,6 +488,7 @@
   "MAT.Form.Label.XAxis": "X Axis",
   "MAT.Form.Label.YAxis": "Y Axis",
   "MAT.Form.Label.AxisOption.domain": "Domain",
+  "MAT.Form.Label.AxisOption.input": "Input",
   "MAT.Form.Label.AxisOption.measurement_start_day": "Measurement Day",
   "MAT.Form.Label.AxisOption.probe_cc": "Countries",
   "MAT.Form.Label.AxisOption.category_code": "Website Categories",
