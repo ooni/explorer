@@ -14,6 +14,10 @@ max-width: 300px;
 background-color: #ffffff;
 border: 1px solid ${props => props.theme.colors.gray2};
 
+.rdp-cell {
+  padding: 2px 0;
+}
+
 .rdp-day_selected:not([disabled]),
 .rdp-day_selected:focus:not([disabled]),
 .rdp-day_selected:active:not([disabled]),
