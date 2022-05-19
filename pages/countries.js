@@ -3,7 +3,7 @@ import Head from 'next/head'
 import NLink from 'next/link'
 import axios from 'axios'
 import styled from 'styled-components'
-import { FormattedMessage, FormattedNumber } from 'react-intl'
+import { FormattedMessage, FormattedNumber, useIntl} from 'react-intl'
 import debounce from 'lodash.debounce'
 import {
   Flex, Box,
@@ -207,6 +207,17 @@ class Countries extends React.Component {
     // Africa Americas Asia Europe Oceania Antarctica
     const regions = ['002', '019', '142', '150', '009', 'AQ']
 
+    const PlaceholderComponent = () => {
+      const intl = useIntl();
+      const placeholder = intl.formatMessage({ id: "Countries.Search.Placeholder" });
+    
+      return  <Input placeholder={placeholder} 
+                    onChange={(e) => this.onSearchChange(e.target.value)}
+                    error={filteredCountries.length === 0}/>;
+                  
+    };
+    
+
     return (
       <Layout>
         <Head>
@@ -226,11 +237,7 @@ class Countries extends React.Component {
                       alignItems={['flex-start', 'center']}
                     >
                       <Box my={2}>
-                        <Input
-                          onChange={(e) => this.onSearchChange(e.target.value)}
-                          placeholder='Search for Countries'
-                          error={filteredCountries.length === 0}
-                        />
+                        <PlaceholderComponent />
                       </Box>
                       <RegionLink href="#Africa" label='Africa' />
                       <RegionLink href="#Americas" label='Americas' />
