@@ -219,6 +219,8 @@
   "Navbar.Charts.Circumvention": "Circumvention Charts",
   "Navbar.Charts.MAT": "MAT Charts",
   "Network.Heading.Summary": "Total number of measurements: **{measurementsTotal}** \n\nDate of the first measurement: **{formattedDate}** \n\nNetwork observed in countries: **{countries}**",
+  "Network.NoData.Title": "Let's collect more data!",
+  "Network.NoData.Text": "We don\u2019t have enough data for this network to show the charts. Run OONI Probe to collect more measurements.",
   "Footer.Text.Slogan": "Global community measuring internet censorship around the world.",
   "Footer.Heading.About": "About",
   "Footer.Heading.OONIProbe": "OONI Probe",

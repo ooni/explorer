@@ -13,6 +13,8 @@ import Form from 'components/network/Form'
 import Chart from 'components/network/Chart'
 import Calendar from 'components/network/Calendar'
 import FormattedMarkdown from 'components/FormattedMarkdown'
+import { FormattedMessage } from 'react-intl'
+import CallToActionBox from 'components/CallToActionBox'
 
 const Bold = styled.span`
   font-weight: bold
@@ -56,9 +58,10 @@ const Summary = ({ measurementsTotal, firstMeasurement, countries }) => {
   )
 }
 
-const NetworkDashboard = ({asn, calendarData, measurementsTotal, countries}) => {
+const NetworkDashboard = ({asn, calendarData = [], measurementsTotal, countries}) => {
   const router = useRouter()
   const query = router.query
+  const displayASN = asn.replace('AS', '')
 
   // Sync page URL params with changes from form values
   const onChange = useCallback(({ since, until }) => {
@@ -85,15 +88,23 @@ const NetworkDashboard = ({asn, calendarData, measurementsTotal, countries}) => 
       <MetaTags />
       <NavBar />
       <Container>
-        <Heading h={1} fontWeight='heading' my={20}>AS{asn}</Heading>
-        {router.isReady && 
-          <React.Fragment>
-            <Summary measurementsTotal={measurementsTotal} countries={countries} firstMeasurement={calendarData[0].day} />
-            <Calendar asn={asn} data={calendarData} />
-            <Box as='hr' sx={{bg: 'gray5', border: 0, height: 1}} mt={20} mb={20} />
-            <Form onChange={onChange} query={query} />
-            <ChartsContainer />
-          </React.Fragment>
+        <Heading h={1} fontWeight='heading' my={20}>AS{displayASN}</Heading>
+        {router.isReady &&
+          <>
+            {!!calendarData.length ? 
+              <>
+                <Summary measurementsTotal={measurementsTotal} countries={countries} firstMeasurement={calendarData[0].day} />
+                <Calendar data={calendarData} />
+                <Box as='hr' sx={{bg: 'gray5', border: 0, height: 1}} mt={20} mb={20} />
+                <Form onChange={onChange} query={query} />
+                <ChartsContainer />
+              </> :
+              <CallToActionBox 
+                title={<FormattedMessage id='Network.NoData.Title' />}
+                text={<FormattedMessage id='Network.NoData.Text' />} 
+              />
+            }
+          </>
         }
       </Container>
     </Layout>
@@ -103,7 +114,7 @@ const NetworkDashboard = ({asn, calendarData, measurementsTotal, countries}) => 
 export const getServerSideProps = async (context) => {
   const { asn } = context.query
 
-  if (/^[0-9]+$/.test(asn)) {
+  if (/^AS[0-9]+$/.test(asn)) {
     const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL})
     const path = '/api/v1/aggregation'
 
@@ -111,26 +122,24 @@ export const getServerSideProps = async (context) => {
       .get(path, {params: {'probe_asn': asn}})
       .then((response)=> response?.data?.result.measurement_count)
     
-    if (measurementsTotal > 0) {
-      const calendarData = await client.get(path, { params: {
-        probe_asn: asn,
-        since: dayjs.utc().subtract(10, 'year').format('YYYY-MM-DD'),
-        until: dayjs.utc().format('YYYY-MM-DD'),
-        axis_x: 'measurement_start_day',
-      }}).then((response) => prepareDataForCalendar(response.data.result))
+    const calendarData = await client.get(path, { params: {
+      probe_asn: asn,
+      since: dayjs.utc().subtract(10, 'year').format('YYYY-MM-DD'),
+      until: dayjs.utc().format('YYYY-MM-DD'),
+      axis_x: 'measurement_start_day',
+    }}).then((response) => prepareDataForCalendar(response.data.result))
 
-      const countries = await client.get(path, { params: {
-        probe_asn: asn,
-        axis_x: 'probe_cc'
-      }}).then((response) => (response.data.result.map(res => res.probe_cc)))
+    const countries = await client.get(path, { params: {
+      probe_asn: asn,
+      axis_x: 'probe_cc'
+    }}).then((response) => (response.data.result.map(res => res.probe_cc)))
 
-      return { 
-        props: { 
-          asn,
-          calendarData,
-          measurementsTotal,
-          countries,
-        }
+    return { 
+      props: { 
+        asn,
+        calendarData,
+        measurementsTotal,
+        countries,
       }
     }
   }
