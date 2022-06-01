@@ -48,25 +48,24 @@ describe('Search Page Tests', () => {
     cy.get('[data-test-id="country-filter"]').select('Italy')
     cy.get('[data-test-id="asn-filter"]').type('12345')
 
-    // click in the since date filter and select last day of prev month
+    // click in the since date filter and select range from first to last day of the previous month
     cy.get('#since-filter').click()
-    cy.get('.rdt.rdtOpen > .rdtPicker > .rdtDays > table > tbody > :nth-child(1)')
-      .within(($firstRow) => {
-        cy.wrap($firstRow).contains(/31|30|29|28/).click()
-      })
+    cy.get('.rdp-nav_button_previous').click()
+    cy.get('.rdp-cell > .rdp-day').first().click()
+    cy.get('.rdp-cell > .rdp-day').last().click()
+
+    cy.get('#apply-range').click()
+
     cy.get('#since-filter').should(($sinceDate) => {
-      const firstOfMonth = dayjs().startOf('month')
+      const firstOfPreviousMonth = dayjs().subtract(1, 'month').startOf('month').format('YYYY-MM-DD')
       const selectedSinceDate = $sinceDate.val()
-      expect(dayjs(firstOfMonth).isAfter(selectedSinceDate)).to.be.true
+      expect(firstOfPreviousMonth).to.equal(selectedSinceDate)
     })
 
-    // click in the until date filter and select a day before today
-    cy.get('#until-filter').click()
-    cy.get('.rdt.rdtOpen .rdtToday').click()
     cy.get('#until-filter').should(($untilDate) => {
-      const firstOfMonth = dayjs().startOf('month')
+      const lastOfPreviousMonth = dayjs().subtract(1, 'month').endOf('month').format('YYYY-MM-DD')
       const selectedUntilDate = $untilDate.val()
-      expect(dayjs(firstOfMonth).isSameOrBefore(selectedUntilDate)).to.be.true
+      expect(lastOfPreviousMonth).to.equal(selectedUntilDate)
     })
 
     cy.get('[data-test-id="testname-filter"]').select('Telegram')

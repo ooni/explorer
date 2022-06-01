@@ -527,5 +527,11 @@
   "ReachabilityDash.Form.Label.CountrySelect.SelectAll": "Select All",
   "ReachabilityDash.Form.Label.CountrySelect.SelectAllFiltered": "Select All (Filtered)",
   "ReachabilityDash.Form.Label.CountrySelect.InputPlaceholder": "Select Countries...",
-  "ReachabilityDash.Meta.Description": "View the accessibility of censorship circumvention tools around the world through OONI data."
+  "ReachabilityDash.Meta.Description": "View the accessibility of censorship circumvention tools around the world through OONI data.",
+  "DateRange.Apply": "Apply",
+  "DateRange.Cancel": "Cancel",
+  "DateRange.Today": "Today",
+  "DateRange.LastWeek": "Last Week",
+  "DateRange.LastMonth": "Last Month",
+  "DateRange.LastYear": "Last Year"
 }

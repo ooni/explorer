@@ -1,18 +1,19 @@
-import React, { useEffect, useMemo } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { useIntl } from 'react-intl'
 import {
-  Flex, Box,
+  Flex,
+  Box,
   Button,
   Input,
   Select,
   Label,
 } from 'ooni-components'
-import moment from 'moment'
 import dayjs from 'services/dayjs'
 import { useForm, Controller } from 'react-hook-form'
 
-import DatePicker from '../DatePicker'
+import DateRangePicker from '../DateRangePicker'
+import { format } from 'date-fns'
 import {
   RadioGroup,
   RadioButton
@@ -51,6 +52,10 @@ const SelectWithLabel = (props) => (
 )
 
 const StyledFilterSidebar = styled.div`
+`
+
+const StyledDateRange = styled.div`
+position: relative;
 `
 
 const CategoryOptions = () => {
@@ -139,7 +144,6 @@ const FilterSidebar = ({
   onApplyFilter
 }) => {
   const intl = useIntl()
-
   const defaultValues = {
     domainFilter,
     inputFilter,
@@ -153,7 +157,7 @@ const FilterSidebar = ({
     hideFailed
   }
 
-  const { handleSubmit, control, watch, resetField, formState, setValue } = useForm({
+  const { handleSubmit, control, watch, resetField, formState, setValue, getValues } = useForm({
     defaultValues
   })
   const { errors } = formState
@@ -162,7 +166,6 @@ const FilterSidebar = ({
   const debugg = categoryFilter
   //const debugg = watch('categoryFilter')
   const onlyFilterValue = watch('onlyFilter')
-  const [untilFilterValue, sinceFilterValue] = watch(['untilFilter', 'sinceFilter'])
 
   // Does the selected testName need a domain filter
   const showDomain = useMemo(() => isValidFilterForTestname(testNameFilterValue, testsWithValidDomain), [testNameFilterValue])
@@ -191,32 +194,24 @@ const FilterSidebar = ({
     }
   }, [onlyFilterValue, resetField, showConfirmedFilter])
 
-  function isSinceValid(currentDate) {
-    // Valid dates for start of date range
-    // 1. Before the 'Until' date, if provided
-    // 2. Until tomorrow
-    const tomorrow = dayjs.utc().add(1, 'day')
-    if (untilFilterValue.length !== 0) {
-      return currentDate.isBefore(untilFilterValue)
-    } else {
-      return currentDate.isSameOrBefore(tomorrow)
-    }
-  }
-
-  function isUntilValid(currentDate) {
-    // Valid dates for end of date range
-    // 1. After the 'Since' date if provided
-    // 2. Until tomorrow
-    const tomorrow = dayjs.utc().add(1, 'day')
-    if (sinceFilterValue.length !== 0) {
-      return currentDate.isAfter(sinceFilterValue) && currentDate.isSameOrBefore(tomorrow)
-    } else {
-      return currentDate.isSameOrBefore(tomorrow)
-    }
-  }
-
   const onSubmit = (data) => {
     onApplyFilter(data)
+  }
+
+  const [showDatePicker, setShowDatePicker] = useState(false)
+
+  const handleRangeSelect = (range) => {
+    if (range?.from) {
+      setValue('sinceFilter', format(range.from, 'y-MM-dd'))
+    } else {
+      setValue('sinceFilter', '')
+    }
+    if (range?.to) {
+      setValue('untilFilter', format(range.to, 'y-MM-dd'))
+    } else {
+      setValue('untilFilter', '')
+    }
+    setShowDatePicker(false)
   }
 
   //Insert an 'Any' option to test name filter
@@ -267,58 +262,48 @@ const FilterSidebar = ({
           }}
         />
 
-        <Flex flexDirection={['column', 'row']}>
-          <Box width={1/2} pr={1}>
-            <StyledLabel>
-              {intl.formatMessage({id: 'Search.Sidebar.From'})}
-            </StyledLabel>
-            <Controller
-              control={control}
-              name='sinceFilter'
-              render={({field}) => (
-                <DatePicker
-                  {...field}
-                  onChange={(date) =>
-                    field.onChange(moment.isMoment(date)
-                      ? date.format('YYYY-MM-DD')
-                      : date
-                    )
-                  }
-                  dateFormat='YYYY-MM-DD'
-                  utc={true}
-                  timeFormat={false}
-                  isValidDate={isSinceValid}
-                  inputProps={{id: 'since-filter'}}
-                />
-              )}
-            />
-          </Box>
-          <Box width={1/2} pl={1}>
-            <StyledLabel>
-              {intl.formatMessage({id: 'Search.Sidebar.Until'})}
-            </StyledLabel>
-            <Controller
-              control={control}
-              name='untilFilter'
-              render={({field}) => (
-                <DatePicker
-                  {...field}
-                  onChange={(date) =>
-                    field.onChange(moment.isMoment(date)
-                      ? date.format('YYYY-MM-DD')
-                      : date
-                    )
-                  }
-                  dateFormat='YYYY-MM-DD'
-                  utc={true}
-                  timeFormat={false}
-                  isValidDate={isUntilValid}
-                  inputProps={{id: 'until-filter'}}
-                />
-              )}
-            />
-          </Box>
-        </Flex>
+        <StyledDateRange>
+          <Flex flexDirection={['column', 'row']}>
+            <Box width={1/2} pr={1}>
+              <Controller
+                control={control}
+                name='sinceFilter'
+                render={({field}) => (
+                  <InputWithLabel
+                    {...field}
+                    onFocus={() => setShowDatePicker(true)}
+                    onKeyDown={() => setShowDatePicker(false)}
+                    label={intl.formatMessage({id: 'Search.Sidebar.From'})}
+                    id='since-filter'
+                  />
+                )}
+              />
+            </Box>
+            <Box width={1/2} pl={1}>
+              <Controller
+                control={control}
+                name='untilFilter'
+                render={({field}) => (
+                  <InputWithLabel
+                    {...field}
+                    onFocus={() => setShowDatePicker(true)}
+                    onKeyDown={() => setShowDatePicker(false)}
+                    label={intl.formatMessage({id: 'Search.Sidebar.Until'})}
+                    id='until-filter'
+                  />
+                )}
+              />
+            </Box>
+          </Flex>
+          {
+            showDatePicker && 
+            <DateRangePicker
+              handleRangeSelect={handleRangeSelect}
+              initialRange={{from: getValues('sinceFilter'), to: getValues('untilFilter')}}
+              close={() => setShowDatePicker(false)}
+              />
+          }
+        </StyledDateRange>
 
         <Controller
           control={control}
@@ -332,7 +317,6 @@ const FilterSidebar = ({
             >
               <TestNameOptions testNames={testNames} />
             </SelectWithLabel>
-  
           )}
         />
 

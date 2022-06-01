@@ -7,16 +7,17 @@ import {
   Label, Input, Select, Button
 } from 'ooni-components'
 import { countryList } from 'country-util'
-import moment from 'moment'
 import dayjs from 'services/dayjs'
+import { format } from 'date-fns'
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl'
 
 import { categoryCodes } from '../../utils/categoryCodes'
-import DatePicker from '../../DatePicker'
+import DateRangePicker from '../../DateRangePicker'
 import { ConfirmationModal } from './ConfirmationModal'
 import { TestNameOptions } from '../../TestNameOptions'
 
 const THRESHOLD_IN_MONTHS = 12
+const MAX_RANGE_DAYS = 31
 
 export const StyledLabel = styled(Label).attrs({
   my: 2,
@@ -129,27 +130,20 @@ export const Form = ({ onSubmit, testNames, query }) => {
     setValue('input', '')
   }, [setValue, showWebConnectivityFilters])
 
-  const isValidSinceDate = useCallback((currentDate) => {
-    const current = dayjs(currentDate)
-    const until = dayjs(getValues('until'))
-    if (until.isValid()) {
-      const oneYearBack = until.subtract(1, 'year')
-      return current.isBetween(oneYearBack, until, 'day', '[]')
+  const [showDatePicker, setShowDatePicker] = useState(false)
+  const handleRangeSelect = (range) => {
+    if (range?.from) {
+      setValue('since', format(range.from, 'y-MM-dd'))
     } else {
-      return current.isBefore(tomorrow)
+      setValue('since', '')
     }
-  }, [getValues])
-
-  const isValidUntilDate = useCallback((currentDate) => {
-    const current = dayjs(currentDate)
-    const since = dayjs(getValues('since'))
-    if (since.isValid()) {
-      const oneYearAfterSince = since.add(1, 'year')
-      return current.isBetween(since, oneYearAfterSince, 'day', '[]') && current.isSameOrBefore(tomorrow)
+    if (range?.to) {
+      setValue('until', format(range.to, 'y-MM-dd'))
     } else {
-      return current.isSameOrBefore(tomorrow)
+      setValue('until', '')
     }
-  }, [getValues])
+    setShowDatePicker(false)
+  }
 
   const onConfirm = useCallback((e) => {
     setShowConfirmation(false)
@@ -212,52 +206,48 @@ export const Form = ({ onSubmit, testNames, query }) => {
           />
         </Box>
         <Box width={[1, 2/12]} mx={[0, 2]}>
-          <StyledLabel>
-            <FormattedMessage id='Search.Sidebar.From' />
-          </StyledLabel>
-          <Controller
-            name='since'
-            control={control}
-            render={({field: {onChange}}) => (
-              <DatePicker
-                defaultValue={defaultValues.since}
-                dateFormat='YYYY-MM-DD'
-                utc={true}
-                timeFormat={false}
-                onChange={(date) =>
-                  onChange(moment.isMoment(date)
-                    ? date.format('YYYY-MM-DD')
-                    : date
-                  )
-                }
-                isValidDate={isValidSinceDate}
+          <Flex>
+            <Box width={1} mx={[0, 2]}>
+              <StyledLabel>
+                <FormattedMessage id='Search.Sidebar.From' />
+              </StyledLabel>
+              <Controller
+                name='since'
+                control={control}
+                render={({field}) => (
+                  <Input
+                    {...field}
+                    onFocus={() => setShowDatePicker(true)}
+                    onKeyDown={() => setShowDatePicker(false)}
+                  />
+                )}
               />
-            )}
-          />
-        </Box>
-        <Box width={[1, 2/12]} mx={[0, 2]}>
-          <StyledLabel>
-            <FormattedMessage id='Search.Sidebar.Until' />
-          </StyledLabel>
-          <Controller
-            name='until'
-            control={control}
-            render={({field: {onChange}}) => (
-              <DatePicker
-                defaultValue={defaultValues.until}
-                dateFormat='YYYY-MM-DD'
-                utc={true}
-                timeFormat={false}
-                onChange={(date) =>
-                  onChange(moment.isMoment(date)
-                    ? date.format('YYYY-MM-DD')
-                    : date
-                  )
-                }
-                isValidDate={isValidUntilDate}
+            </Box>
+            <Box width={1} mx={[0, 2]}>
+              <StyledLabel>
+                <FormattedMessage id='Search.Sidebar.Until' />
+              </StyledLabel>
+              <Controller
+                name='until'
+                control={control}
+                render={({field}) => (
+                  <Input
+                    {...field}
+                    onFocus={() => setShowDatePicker(true)}
+                    onKeyDown={() => setShowDatePicker(false)}
+                  />
+                )}
               />
-            )}
-          />
+            </Box>
+          </Flex>
+          { showDatePicker &&
+            <DateRangePicker
+              max={MAX_RANGE_DAYS}
+              handleRangeSelect={handleRangeSelect}
+              initialRange={{from: getValues('since'), to: getValues('until')}}
+              close={() => setShowDatePicker(false)}
+            />
+          }
         </Box>
         <Box width={[1, 2/12]} mx={[0, 2]}>
           <StyledLabel>
