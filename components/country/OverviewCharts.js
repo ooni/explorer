@@ -18,6 +18,7 @@ import VictoryTheme from '../VictoryTheme'
 import { testGroups } from '../test-info'
 import FormattedMarkdown from '../FormattedMarkdown'
 import { useCountry } from './CountryContext'
+import CTABox from 'components/CallToActionBox'
 
 const Circle = styled.span`
   height: 16px;
@@ -35,28 +36,15 @@ const StyledTestGroupSelector = styled(Flex)`
 const CallToActionBox = () => {
   const { countryName } = useCountry()
   return (
-    <Flex my={4} bg='gray3' flexWrap='wrap'>
-      <Box width={1} mx={4} my={2}>
-        <Heading h={4}>
-          <FormattedMessage id='Country.Overview.NoData.Title' />
-        </Heading>
-        <Text fontSize={2}>
-          <FormattedMarkdown
-            id='Country.Overview.NoData.CallToAction'
-            values={{
-              country: countryName
-            }}
-          />
-        </Text>
-      </Box>
-      <Flex alignItems='center' mx={4} my={4} flexDirection={['column', 'row']}>
-        <Box mr={4} mb={[3, 0]}>
-          <NLink href='https://ooni.org/install'><a>
-            <Button><FormattedMessage id='Country.Overview.NoData.Button.InstallProbe' /></Button>
-          </a></NLink>
-        </Box>
-      </Flex>
-    </Flex>
+    <CTABox
+      title={<FormattedMessage id='Country.Overview.NoData.Title' />}
+      text={<FormattedMarkdown
+        id='Country.Overview.NoData.CallToAction'
+        values={{
+          country: countryName
+        }}
+      />
+    } />
   )
 }
 

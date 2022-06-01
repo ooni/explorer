@@ -1,11 +1,13 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import NLink from 'next/link'
 import {
   Flex,
   Container,
   Box,
-  Text
+  Text,
+  Link,
 } from 'ooni-components'
 import { useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
@@ -23,11 +25,12 @@ const StyledSummaryItemLabel = styled(Text)`
 
 const SummaryItemBox = ({
   label,
-  content
+  content,
+  link = null
 }) => (
   <Box width={[1, 1/3]} px={4} py={2}>
     <Text fontSize={24} fontWeight={300}>
-      {content}
+      {link ? <NLink href={link} passHref><Link color='white'>{content}</Link></NLink> : content}
     </Text>
     <StyledSummaryItemLabel fontSize={16} >
       {label}
@@ -79,6 +82,7 @@ const CommonSummary = ({
             <SummaryItemBox
               label={intl.formatMessage({ id: 'Measurement.CommonSummary.Label.ASN' })}
               content={network}
+              link={`/network/${network}`}
             />
             <SummaryItemBox
               label={intl.formatMessage({ id: 'Measurement.CommonSummary.Label.DateTime' })}
