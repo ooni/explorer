@@ -108,9 +108,11 @@ const tomorrowUTC = dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
 
 const asnRegEx = /^(AS)?([1-9][0-9]*)$/
 const domainRegEx = /(^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,}(:[0-9]{1,5})?$)|(^(([0-9]{1,3})\.){3}([0-9]{1,3}))/
+const inputRegEx = /(^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,}\.[a-zA-Z0-9()]{2,}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$)|(^(([0-9]{1,3})\.){3}([0-9]{1,3}))/
 
 export const queryToFilterMap = {
   domain: [ 'domainFilter', ''],
+  input: [ 'inputFilter', ''],
   category_code: [ 'categoryFilter', ''],
   probe_cc: [ 'countryFilter', ''],
   probe_asn: [ 'asnFilter', ''],
@@ -121,12 +123,11 @@ export const queryToFilterMap = {
   failure: [ 'hideFailed', true]
 }
 
-
-
 const FilterSidebar = ({
   testNames,
   countries,
   domainFilter,
+  inputFilter,
   categoryFilter,
   onlyFilter = 'all',
   testNameFilter = 'XX',
@@ -141,6 +142,7 @@ const FilterSidebar = ({
 
   const defaultValues = {
     domainFilter,
+    inputFilter,
     categoryFilter,
     onlyFilter,
     testNameFilter,
@@ -151,7 +153,7 @@ const FilterSidebar = ({
     hideFailed
   }
 
-  const { handleSubmit, control, watch, resetField, formState } = useForm({
+  const { handleSubmit, control, watch, resetField, formState, setValue } = useForm({
     defaultValues
   })
   const { errors } = formState
@@ -166,8 +168,11 @@ const FilterSidebar = ({
   const showDomain = useMemo(() => isValidFilterForTestname(testNameFilterValue, testsWithValidDomain), [testNameFilterValue])
   // to avoid bad queries, blank out the `domain` field when it is shown/hidden
   useEffect(() => {
-    resetField('domainFilter')
-  }, [resetField, showDomain])
+    if (!showDomain) {
+      setValue('domainFilter', '')
+      setValue('inputFilter', '')
+    }
+  }, [setValue, showDomain])
 
   // Can we filter out anomalies or confirmed for this test_name
   const showAnomalyFilter = useMemo(() => isValidFilterForTestname(testNameFilterValue, testsWithAnomalyStatus), [testNameFilterValue])
@@ -349,25 +354,47 @@ const FilterSidebar = ({
         }
         {
           showDomain &&
-          <Controller
-          control={control}
-          name='domainFilter'
-          render={({field}) => (
-            <InputWithLabel
-              {...field}
-              label={intl.formatMessage({id: 'Search.Sidebar.Domain'})}
-              data-test-id='domain-filter'
-              error={errors?.domainFilter?.message}
-              placeholder={intl.formatMessage({id: 'Search.Sidebar.Domain.Placeholder'})}
-              type="text"
+          <>
+            <Controller
+              control={control}
+              name='domainFilter'
+              render={({field}) => (
+                <InputWithLabel
+                  {...field}
+                  label={intl.formatMessage({id: 'Search.Sidebar.Domain'})}
+                  data-test-id='domain-filter'
+                  error={errors?.domainFilter?.message}
+                  placeholder={intl.formatMessage({id: 'Search.Sidebar.Domain.Placeholder'})}
+                  type="text"
+                />
+              )}
+              rules={{
+                validate: (value = '') =>
+                  (String(value).length === 0 || domainRegEx.test(value))
+                  || intl.formatMessage({id: 'Search.Sidebar.Domain.Error'})
+              }}
             />
-          )}
-          rules={{
-            validate: (value = '') =>
-              (String(value).length === 0 || domainRegEx.test(value))
-              || intl.formatMessage({id: 'Search.Sidebar.Domain.Error'})
-          }}
-        />
+            <Controller
+              control={control}
+              name='inputFilter'
+              render={({field}) => (
+                <InputWithLabel
+                  {...field}
+                  label={intl.formatMessage({id: 'Search.Sidebar.Input'})}
+                  data-test-id='input-filter'
+                  error={errors?.inputFilter?.message}
+                  placeholder={intl.formatMessage({id: 'Search.Sidebar.Input.Placeholder'})}
+                  type="text"
+                />
+              )}
+              rules={{
+                pattern: {
+                  value: inputRegEx,
+                  message: intl.formatMessage({id: 'Search.Sidebar.Input.Error'})
+                }
+              }}
+            />
+          </>
         }
 
         {(showConfirmedFilter || showAnomalyFilter) && (<>

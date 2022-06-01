@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef } from 'react'
+import React, { useCallback, useEffect, useState, useRef, useLayoutEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useForm, Controller } from 'react-hook-form'
 import styled from 'styled-components'
@@ -33,6 +33,10 @@ const messages = defineMessages({
     id: 'MAT.Form.Label.AxisOption.domain',
     defaultMessage: ''
   },
+  'input': {
+    id: 'MAT.Form.Label.AxisOption.input',
+    defaultMessage: ''
+  },
   'category_code': {
     id: 'MAT.Form.Label.AxisOption.category_code',
     defaultMessage: ''
@@ -56,6 +60,7 @@ const xAxisOptions = [
 
 const yAxisOptions = [
   'domain',
+  'input',
   'category_code',
   'probe_cc',
   'probe_asn',
@@ -83,6 +88,7 @@ const defaultDefaultValues = {
   probe_asn: '',
   test_name: 'web_connectivity',
   domain: '',
+  input: '',
   category_code: '',
   since: lastMonthToday,
   until: tomorrow,
@@ -96,7 +102,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
   const [showConfirmation, setShowConfirmation] = useState(false)
 
   const defaultValues = Object.assign({}, defaultDefaultValues, query)
-  const { handleSubmit, control, getValues, watch, reset } = useForm({
+  const { handleSubmit, control, getValues, watch, reset, setValue } = useForm({
     defaultValues
   })
 
@@ -116,8 +122,12 @@ export const Form = ({ onSubmit, testNames, query }) => {
     .sort((a,b) => (a.iso3166_name < b.iso3166_name) ? -1 : (a.iso3166_name > b.iso3166_name) ? 1 : 0)
 
   const testNameValue = watch('test_name')
-  const showDomainField = isValidFilterForTestname(testNameValue, testsWithValidDomainFilter)
-  const showCategoriesField = isValidFilterForTestname(testNameValue, testsWithValidDomainFilter)
+  const showWebConnectivityFilters = isValidFilterForTestname(testNameValue, testsWithValidDomainFilter)
+  // reset domain and input when web_connectivity is deselected
+  useLayoutEffect(() => {
+    setValue('domain', '')
+    setValue('input', '')
+  }, [setValue, showWebConnectivityFilters])
 
   const isValidSinceDate = useCallback((currentDate) => {
     const current = dayjs(currentDate)
@@ -297,43 +307,58 @@ export const Form = ({ onSubmit, testNames, query }) => {
             )}
           />
         </Box>
-        {showDomainField &&
-          <Box width={[1, 1/5]} mx={[0, 2]}>
-            <StyledLabel>
-              <FormattedMessage id='Search.Sidebar.Domain' />
-            </StyledLabel>
-            <Controller
-              name='domain'
-              control={control}
-              render={({field}) => (
-                <Input
-                  placeholder='twitter.com'
-                  {...field}
-                />
-              )}
-            />
-          </Box>
-        }
-        {showCategoriesField &&
-          <Box width={[1, 1/5]} mx={[0, 2]}>
-            <StyledLabel>
-              <FormattedMessage id='Search.Sidebar.Categories' />
-            </StyledLabel>
-            <Controller
-              name='category_code'
-              control={control}
-              render={({field}) => (
-                <Select {...field}>
-                  <option value="">ALL</option>
-                  {categoryCodes
-                    .sort((a, b) => a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0)
-                    .map(([code, label], idx) => (
-                      <option key={idx} value={code}>{label}</option>
-                  ))}
-                </Select>
-              )}
-            />
-          </Box>
+        {showWebConnectivityFilters &&
+          <>
+            <Box width={[1, 1/5]} mx={[0, 2]}>
+              <StyledLabel>
+                <FormattedMessage id='Search.Sidebar.Domain' />
+              </StyledLabel>
+              <Controller
+                name='domain'
+                control={control}
+                render={({field}) => (
+                  <Input
+                    placeholder='twitter.com'
+                    {...field}
+                  />
+                )}
+              />
+            </Box>
+            <Box width={[1, 1/5]} mx={[0, 2]}>
+              <StyledLabel>
+                <FormattedMessage id='Search.Sidebar.Input' />
+              </StyledLabel>
+              <Controller
+                name='input'
+                control={control}
+                render={({field}) => (
+                  <Input
+                    placeholder='https://fbcdn.net/robots.txt'
+                    {...field}
+                  />
+                )}
+              />
+            </Box>
+            <Box width={[1, 1/5]} mx={[0, 2]}>
+              <StyledLabel>
+                <FormattedMessage id='Search.Sidebar.Categories' />
+              </StyledLabel>
+              <Controller
+                name='category_code'
+                control={control}
+                render={({field}) => (
+                  <Select {...field}>
+                    <option value="">ALL</option>
+                    {categoryCodes
+                      .sort((a, b) => a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0)
+                      .map(([code, label], idx) => (
+                        <option key={idx} value={code}>{label}</option>
+                    ))}
+                  </Select>
+                )}
+              />
+            </Box>
+          </>
         }
       </Flex>
       <Flex my={4}>
@@ -356,6 +381,7 @@ Form.propTypes = {
     until: PropTypes.string,
     test_name: PropTypes.string,
     domain: PropTypes.string,
+    input: PropTypes.string,
     probe_cc: PropTypes.string,
     category_code: PropTypes.string,
   })
