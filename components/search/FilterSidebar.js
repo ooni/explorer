@@ -338,25 +338,47 @@ const FilterSidebar = ({
         }
         {
           showDomain &&
-          <Controller
-          control={control}
-          name='domainFilter'
-          render={({field}) => (
-            <InputWithLabel
-              {...field}
-              label={intl.formatMessage({id: 'Search.Sidebar.Domain'})}
-              data-test-id='domain-filter'
-              error={errors?.domainFilter?.message}
-              placeholder={intl.formatMessage({id: 'Search.Sidebar.Domain.Placeholder'})}
-              type="text"
+          <>
+            <Controller
+              control={control}
+              name='domainFilter'
+              render={({field}) => (
+                <InputWithLabel
+                  {...field}
+                  label={intl.formatMessage({id: 'Search.Sidebar.Domain'})}
+                  data-test-id='domain-filter'
+                  error={errors?.domainFilter?.message}
+                  placeholder={intl.formatMessage({id: 'Search.Sidebar.Domain.Placeholder'})}
+                  type="text"
+                />
+              )}
+              rules={{
+                validate: (value = '') =>
+                  (String(value).length === 0 || domainRegEx.test(value))
+                  || intl.formatMessage({id: 'Search.Sidebar.Domain.Error'})
+              }}
             />
-          )}
-          rules={{
-            validate: (value = '') =>
-              (String(value).length === 0 || domainRegEx.test(value))
-              || intl.formatMessage({id: 'Search.Sidebar.Domain.Error'})
-          }}
-        />
+            <Controller
+              control={control}
+              name='inputFilter'
+              render={({field}) => (
+                <InputWithLabel
+                  {...field}
+                  label={intl.formatMessage({id: 'Search.Sidebar.Input'})}
+                  data-test-id='input-filter'
+                  error={errors?.inputFilter?.message}
+                  placeholder={intl.formatMessage({id: 'Search.Sidebar.Input.Placeholder'})}
+                  type="text"
+                />
+              )}
+              rules={{
+                pattern: {
+                  value: inputRegEx,
+                  message: intl.formatMessage({id: 'Search.Sidebar.Input.Error'})
+                }
+              }}
+            />
+          </>
         }
 
         {(showConfirmedFilter || showAnomalyFilter) && (<>
