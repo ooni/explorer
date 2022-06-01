@@ -7,7 +7,6 @@ import {
   Label, Input, Select, Button
 } from 'ooni-components'
 import { countryList } from 'country-util'
-import moment from 'moment'
 import dayjs from 'services/dayjs'
 import { format } from 'date-fns'
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl'

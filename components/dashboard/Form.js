@@ -4,7 +4,6 @@ import { useForm, Controller } from 'react-hook-form'
 import { Box, Flex, Input } from 'ooni-components'
 import { MultiSelect } from 'react-multi-select-component'
 import { useIntl } from 'react-intl'
-import moment from 'moment'
 import dayjs from 'services/dayjs'
 import { format } from 'date-fns'
 
