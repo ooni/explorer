@@ -32,20 +32,22 @@ const prepareDataForCalendar = (data) => {
 const messagingTestNames = ['signal', 'telegram', 'whatsapp', 'facebook_messenger']
 const circumventionTestNames = ['psiphon', 'tor', 'torsf']
 
-const ChartsContainer = () => {
+const ChartsContainer = ({ asn }) => {
   const intl = useIntl()
   return (
     <> 
       <Chart
         testName='web_connectivity'
         title={intl.formatMessage({id: 'Tests.Groups.Webistes.Name'})}
-        queryParams={{axis_y: 'domain'}} />
+        queryParams={{ axis_y: 'domain', asn }} />
       <Chart
         testGroup={{name: 'messaging_apps', tests: messagingTestNames}}
-        title={intl.formatMessage({id: 'Tests.Groups.Instant Messagging.Name'})} />
+        title={intl.formatMessage({id: 'Tests.Groups.Instant Messagging.Name'})}
+        queryParams={{ asn }} />
       <Chart
         testGroup={{name: 'circumvention_tools', tests: circumventionTestNames}}
-        title={intl.formatMessage({id: 'Tests.Groups.Circumvention.Name'})} />
+        title={intl.formatMessage({id: 'Tests.Groups.Circumvention.Name'})}
+        queryParams={{ asn }} />
     </>
   )
 }
@@ -122,7 +124,7 @@ const NetworkDashboard = ({asn, calendarData = [], measurementsTotal, countriesD
                 <Calendar data={calendarData} />
                 <Box as='hr' sx={{bg: 'gray5', border: 0, height: 1}} mt={20} mb={20} />
                 <Form onChange={onChange} query={query} />
-                <ChartsContainer />
+                <ChartsContainer asn={asn} />
               </> :
               <CallToActionBox 
                 title={<FormattedMessage id='Network.NoData.Title' />}

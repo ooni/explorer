@@ -12,9 +12,9 @@ const swrOptions = {
   dedupingInterval: 10 * 60 * 1000,
 }
 
-const Chart = React.memo(function Chart({testName, testGroup = null, title, queryParams = {}}) {
+const Chart = React.memo(function Chart({testName, testGroup = null, title, queryParams = {}, asn, domain }) {
   const router = useRouter()
-  const { query: {since, until, asn} } = router
+  const { query: {since, until} } = router
 
   const name = testName || testGroup.name
 
@@ -25,11 +25,12 @@ const Chart = React.memo(function Chart({testName, testGroup = null, title, quer
 
   const query = useMemo(() => ({
     ...params,
-    probe_asn: asn,
+    ...asn && { probe_asn: asn },
+    ...domain && { domain },
     since: since,
     until: until,
     ...testName && {test_name: testName}
-  }), [since, until, asn, params, testName])
+  }), [since, until, asn, params, testName, domain])
 
   const apiQuery = useMemo(() => {
     const qs = new URLSearchParams(query).toString()
@@ -61,7 +62,7 @@ const Chart = React.memo(function Chart({testName, testGroup = null, title, quer
       <Flex flexDirection='column' mb={60}>
         <Box><Heading h={3} mt={40} mb={20}>{title}</Heading></Box>
         <Box>
-          {(!chartData && !error) ? (
+          {((!chartData && !error) || (!since || !until)) ? (
             <div> Loading ...</div>
           ) : (
             chartData === null || chartData.length === 0 ? (
