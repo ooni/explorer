@@ -109,7 +109,7 @@ const NetworkDashboard = ({asn, calendarData = [], measurementsTotal, countriesD
   }, [router, query, asn])
 
   return (
-    <Layout>
+    <>
       <MetaTags />
       <NavBar />
       <Container>
@@ -132,7 +132,7 @@ const NetworkDashboard = ({asn, calendarData = [], measurementsTotal, countriesD
           </>
         }
       </Container>
-    </Layout>
+    </>
   )
 }
 

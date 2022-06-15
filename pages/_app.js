@@ -12,18 +12,21 @@ import Layout from '../components/Layout'
 
 export default function App({ Component, pageProps, err }) {
   const router = useRouter()
-  const { locale } = router
+  const { locale, defaultLocale } = router
 
   const messages = useMemo(() => {
     try {
       const messages = require(`../public/static/lang/${locale}.json`)
-      return messages
+      const defaultMessages = require(`../public/static/lang/${defaultLocale}.json`)
+
+      const mergedMessages = Object.assign({}, defaultMessages, messages)
+      return mergedMessages
     } catch (e) {
       console.error(`Failed to load messages for ${locale}: ${e.message}`)
-      const defaultMessages = require(`../public/static/lang/${process.env.DEFAULT_LOCALE}.json`)
+      const defaultMessages = require(`../public/static/lang/${defaultLocale}.json`)
       return defaultMessages
     }
-  }, [locale])
+  }, [locale, defaultLocale])
 
   useEffect(() => {
     const handleStart = (url) => {
