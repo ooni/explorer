@@ -36,7 +36,6 @@ export const SubtitleStr = ({ query }) => {
   const testName = intl.formatMessage({id: getRowLabel(query.test_name, 'test_name')})
   params.add(testName)
 
-
   if (query.domain) {
     params.add(query.domain)
   }

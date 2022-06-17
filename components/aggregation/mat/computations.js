@@ -1,5 +1,6 @@
-import { countryList, territoryNames } from 'country-util'
+import { territoryNames } from 'country-util'
 import { getCategoryCodesMap } from '../../utils/categoryCodes'
+import { getLocalisedRegionName } from 'utils/i18nCountries'
 
 const categoryCodesMap = getCategoryCodesMap()
 
@@ -13,15 +14,7 @@ export function getDatesBetween(startDate, endDate) {
   return dateSet
 }
 
-/* dateSet is an optional precomputed set from `getDatesBetween` */
-export function fillDataInMissingDates (data, startDate, endDate) {
-  
-  const dateRange = getDatesBetween(new Date(startDate), new Date(endDate))
-
-  return fillRowHoles(data, 'measurement_start_day', dateRange)
-}
-
-export function fillRowHoles (data, query) {
+export function fillRowHoles (data, query, locale) {
   const newData = [...data]
 
   let domain = null
@@ -34,7 +27,7 @@ export function fillRowHoles (data, query) {
       domain = [...getCategoryCodesMap().keys()]
       break
     case 'probe_cc':
-      domain = countryList.map(cc => cc.iso3166_alpha2)
+      domain = localisedCountries(locale).map(cc => cc.iso3166_alpha2)
       break
     default:
       throw new Error(`x-axis: ${query.axis_x}. Please select a valid value for X-Axis.`)
@@ -74,9 +67,10 @@ export function fillDataHoles (data, query) {
   return newData
 }
 
-export const sortRows = (a, b, type) => {
+export const sortRows = (a, b, type, locale) => {
   switch(type) {
     case 'probe_cc':
+      if (locale) return getLocalisedRegionName(a, locale) < getLocalisedRegionName(b, locale) ? -1 : getLocalisedRegionName(a, locale) > getLocalisedRegionName(b, locale) ? 1 : 0
       return territoryNames[a] < territoryNames[b] ? -1 : territoryNames[a] > territoryNames[b] ? 1 : 0
     case 'category_code':
       const A = categoryCodesMap.get(a).name

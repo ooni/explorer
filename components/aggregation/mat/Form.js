@@ -6,10 +6,10 @@ import {
   Flex, Box,
   Label, Input, Select, Button
 } from 'ooni-components'
-import { countryList } from 'country-util'
 import dayjs from 'services/dayjs'
 import { format } from 'date-fns'
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl'
+import { localisedCountries } from 'utils/i18nCountries'
 
 import { categoryCodes } from '../../utils/categoryCodes'
 import DateRangePicker from '../../DateRangePicker'
@@ -119,9 +119,8 @@ export const Form = ({ onSubmit, testNames, query }) => {
     }
   }, [reset, query])
 
-  const sortedCountries = countryList
+  const sortedCountries = localisedCountries(intl.locale)
     .sort((a,b) => (a.iso3166_name < b.iso3166_name) ? -1 : (a.iso3166_name > b.iso3166_name) ? 1 : 0)
-
   const testNameValue = watch('test_name')
   const showWebConnectivityFilters = isValidFilterForTestname(testNameValue, testsWithValidDomainFilter)
   // reset domain and input when web_connectivity is deselected
@@ -182,7 +181,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
               <Select {...field} width={1}>
                 <option value=''>All Countries</option>
                 {sortedCountries.map((c, idx) =>(
-                  <option key={idx} value={c.iso3166_alpha2}>{c.iso3166_name}</option>
+                  <option key={idx} value={c.iso3166_alpha2}>{c.localisedCountryName}</option>
                 ))}
               </Select>
             )}

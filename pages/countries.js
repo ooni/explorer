@@ -2,6 +2,7 @@ import React from 'react'
 import Head from 'next/head'
 import NLink from 'next/link'
 import axios from 'axios'
+import { useIntl } from 'react-intl'
 import styled from 'styled-components'
 import { FormattedMessage, FormattedNumber } from 'react-intl'
 import debounce from 'lodash.debounce'
@@ -17,6 +18,7 @@ import Flag from '../components/Flag'
 import NavBar from '../components/NavBar'
 
 import countryUtil from 'country-util'
+import { getLocalisedRegionName } from 'utils/i18nCountries'
 
 const CountryLink = styled(Link)`
   color: ${props => props.theme.colors.black};
@@ -36,6 +38,7 @@ const Divider = styled.div`
 `
 
 const CountryBlock = ({countryCode, msmtCount}) => {
+  const intl = useIntl()
   const href = `/country/${countryCode}`
   return (
     <Box width={[1/2, 1/4]} my={3} px={3}>
@@ -44,7 +47,7 @@ const CountryBlock = ({countryCode, msmtCount}) => {
           <CountryLink href={href}>
             <Flex flexDirection='column'>
               <Flag center border countryCode={countryCode} size={48} />
-              <Text py={2} fontSize={[20, 24]} style={{height: '80px'}}>{countryUtil.territoryNames[countryCode]}</Text>
+              <Text py={2} fontSize={[20, 24]} style={{height: '80px'}}>{getLocalisedRegionName(countryCode, intl.locale)}</Text>
               <Divider />
               <Flex alignItems={['flex-start', 'center']} flexDirection={['column', 'row']}>
                 <Text mr={2} fontSize={20} fontWeight={600} color='blue9'><FormattedNumber value={msmtCount} /></Text>
@@ -81,7 +84,10 @@ const RegionHeaderAnchor = styled.div`
 `
 
 const RegionBlock = ({regionCode, countries}) => {
-  const regionName = countryUtil.territoryNames[regionCode]
+  const intl = useIntl()
+  // console.log('countryUtil.territoryNames', countryUtil.territoryNames)
+  // console.log('countryUtil.regions', countryUtil.regions)
+  const regionName = getLocalisedRegionName(regionCode, intl.locale)
   // Select countries in the region where we have measuremennts from
   const measuredCountriesInRegion = countryUtil.regions[regionCode].countries.filter((countryCode) => (
     countries.find((item) => item.alpha_2 === countryCode)

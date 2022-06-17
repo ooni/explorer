@@ -1,10 +1,10 @@
 import PropTypes from 'prop-types'
-import { useIntl } from 'react-intl'
 import countryUtil from 'country-util'
 import { Box } from 'ooni-components'
 
 import { testNames } from '../../test-info'
 import { getCategoryCodesMap } from '../../utils/categoryCodes'
+import { getLocalisedRegionName } from 'utils/i18nCountries'
 
 const InputRowLabel = ({ input }) => {
   const truncatedInput = input
@@ -32,9 +32,10 @@ const blockingTypeLabels = {
   'tcp_ip': 'TCP/IP Blocking'
 }
 
-export const getRowLabel = (key, yAxis) => {
+export const getRowLabel = (key, yAxis, locale) => {
   switch (yAxis) {
   case 'probe_cc':
+    if (locale) return getLocalisedRegionName(key, locale)
     return countryUtil.territoryNames[key] ?? key
   case 'category_code':
     return categoryCodesMap.get(key)?.name ?? key

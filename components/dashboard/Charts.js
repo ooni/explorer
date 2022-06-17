@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import axios from 'axios'
 import { territoryNames } from 'country-util'
+import { useIntl } from 'react-intl'
 
 import GridChart, { prepareDataForGridChart } from '../aggregation/mat/GridChart'
 import { MATContextProvider } from '../aggregation/mat/MATContext'
@@ -45,6 +46,7 @@ const fixedQuery = {
 }
 
 const Chart = React.memo(function Chart({ testName }) {
+  const intl = useIntl()
   const { query: {probe_cc, since, until} } = useRouter()
 
   // Construct a `query` object that matches the router.query
@@ -80,11 +82,11 @@ const Chart = React.memo(function Chart({ testName }) {
       chartData = chartData.filter(d => selectedCountries.includes(d.probe_cc))
     }
 
-    const [reshapedData, rowKeys, rowLabels] = prepareDataForGridChart(chartData, query)
+    const [reshapedData, rowKeys, rowLabels] = prepareDataForGridChart(chartData, query, intl.locale)
 
     return [reshapedData, rowKeys, rowLabels]
 
-  }, [data, probe_cc, query])
+  }, [data, probe_cc, query, intl])
 
 
   const headerOptions = { probe_cc: false, subtitle: false }

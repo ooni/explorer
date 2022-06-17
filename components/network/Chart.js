@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import { useIntl } from 'react-intl'
 import { useRouter } from 'next/router'
 import { Heading, Box, Flex } from 'ooni-components'
 import useSWR from 'swr'
@@ -13,6 +14,7 @@ const swrOptions = {
 }
 
 const Chart = React.memo(function Chart({testName, testGroup = null, title, queryParams = {}}) {
+  const intl = useIntl()
   const router = useRouter()
   const { query: {since, until, asn} } = router
 
@@ -50,9 +52,9 @@ const Chart = React.memo(function Chart({testName, testGroup = null, title, quer
     }
     let chartData = testGroup ? data : data.data
     const graphQuery = testGroup ? {...query, axis_y: name} : query
-    const [reshapedData, rowKeys, rowLabels] = prepareDataForGridChart(chartData, graphQuery)
+    const [reshapedData, rowKeys, rowLabels] = prepareDataForGridChart(chartData, graphQuery, intl.locale)
     return [reshapedData, rowKeys, rowLabels]
-  }, [data, query, name, testGroup])
+  }, [data, query, name, testGroup, intl])
 
   const headerOptions = { probe_cc: false, subtitle: false }
 
