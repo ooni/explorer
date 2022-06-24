@@ -150,6 +150,8 @@
   "Measurement.Details.FacebookMessenger.TCP.Label.Failed": "Failed",
   "Measurement.Details.FacebookMessenger.DNS.Label.Okay": "OK",
   "Measurement.Details.FacebookMessenger.DNS.Label.Failed": "Failed",
+  "Measurement.Details.FacebookMessenger.TCPFailed": "TCP connections failed",
+  "Measurement.Details.FacebookMessenger.DNSFailed": "DNS lookups failed",
   "Measurement.Details.FacebookMessenger.Endpoint.Status.Heading": "Endpoint Status",
   "Measurement.Details.FacebookMessenger.Endpoint.ConnectionTo.Failed": "Connection to {destination} failed.",
   "Measurement.Details.FacebookMessenger.Endpoint.ConnectionTo.Successful": "Connection to {destination} was successful.",
