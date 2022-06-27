@@ -85,8 +85,7 @@ const RegionHeaderAnchor = styled.div`
 
 const RegionBlock = ({regionCode, countries}) => {
   const intl = useIntl()
-  // console.log('countryUtil.territoryNames', countryUtil.territoryNames)
-  // console.log('countryUtil.regions', countryUtil.regions)
+
   const regionName = getLocalisedRegionName(regionCode, intl.locale)
   // Select countries in the region where we have measuremennts from
   const measuredCountriesInRegion = countryUtil.regions[regionCode].countries.filter((countryCode) => (

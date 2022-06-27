@@ -6,9 +6,9 @@ import {
   Heading,
   Flex, Box
 } from 'ooni-components'
-import countryUtil from 'country-util'
 import styled from 'styled-components'
 import { StickyContainer, Sticky } from 'react-sticky'
+import { getLocalisedRegionName } from '../../utils/i18nCountries'
 
 import NavBar from '../../components/NavBar'
 import Flag from '../../components/Flag'
@@ -19,6 +19,7 @@ import AppsSection from '../../components/country/Apps'
 // import NetworkPropertiesSection from '../../components/country/NetworkProperties'
 import { CountryContextProvider } from '../../components/country/CountryContext'
 import CountryHead from '../../components/country/CountryHead'
+import { useIntl } from 'react-intl'
 
 const getCountryReports = (countryCode, data) => {
   const reports = data.filter((article) => (
@@ -72,15 +73,15 @@ export async function getServerSideProps ({ res, query }) {
       overviewStats,
       reports,
       countryCode,
-      countryName: countryUtil.territoryNames[countryCode]
     }
   }
 }
 
 
-
-const Country = ({ countryCode, countryName, overviewStats, reports, ...coverageDataSSR }) => {
+const Country = ({ countryCode, overviewStats, reports, ...coverageDataSSR }) => {
+  const intl = useIntl()
   const [newData, setNewData] = useState(false)
+  const countryName = getLocalisedRegionName(countryCode, intl.locale)
 
   const fetchTestCoverageData = useCallback((testGroupList) => {
     console.log(testGroupList)

@@ -3,7 +3,6 @@ import { Flex, Box, Heading } from 'ooni-components'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import axios from 'axios'
-import { territoryNames } from 'country-util'
 import { useIntl } from 'react-intl'
 
 import GridChart, { prepareDataForGridChart } from '../aggregation/mat/GridChart'
@@ -75,7 +74,7 @@ const Chart = React.memo(function Chart({ testName }) {
       return [null, 0]
     }
 
-    let chartData = data.data.sort((a, b) => (territoryNames[a.probe_cc] < territoryNames[b.probe_cc]) ? -1 : (territoryNames[a.probe_cc] > territoryNames[b.probe_cc]) ? 1 : 0)
+    let chartData = data.data.sort((a, b) => (new Intl.Collator(intl.locale).compare(a.probe_cc, b.probe_cc)))
 
     const selectedCountries = probe_cc?.length > 1 ? probe_cc.split(',') : []
     if (selectedCountries.length > 0) {

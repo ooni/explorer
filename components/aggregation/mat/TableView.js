@@ -339,7 +339,6 @@ const TableView = ({ data, query }) => {
   // }, [])
 
   const [dataForCharts, setDataForCharts] = useState(noRowsSelected)
-  console.log('TABLEVIEW')
   const updateCharts = useCallback(() => {
     const selectedRows = Object.keys(state.selectedRowIds).sort((a,b) => sortRows(a, b, query.axis_y, intl.locale))
 
@@ -348,7 +347,7 @@ const TableView = ({ data, query }) => {
     } else {
       setDataForCharts(noRowsSelected)
     }
-  }, [preGlobalFilteredRows.length, query.axis_y, state.selectedRowIds])
+  }, [preGlobalFilteredRows.length, query.axis_y, state.selectedRowIds, intl.locale])
 
   /**
    * Reset the table filter

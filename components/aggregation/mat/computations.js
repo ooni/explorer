@@ -1,4 +1,3 @@
-import { territoryNames } from 'country-util'
 import { getCategoryCodesMap } from '../../utils/categoryCodes'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
 
@@ -67,11 +66,10 @@ export function fillDataHoles (data, query) {
   return newData
 }
 
-export const sortRows = (a, b, type, locale) => {
+export const sortRows = (a, b, type, locale = 'en') => {
   switch(type) {
     case 'probe_cc':
-      if (locale) return getLocalisedRegionName(a, locale) < getLocalisedRegionName(b, locale) ? -1 : getLocalisedRegionName(a, locale) > getLocalisedRegionName(b, locale) ? 1 : 0
-      return territoryNames[a] < territoryNames[b] ? -1 : territoryNames[a] > territoryNames[b] ? 1 : 0
+      return new Intl.Collator(locale).compare(getLocalisedRegionName(a, locale), getLocalisedRegionName(b, locale))
     case 'category_code':
       const A = categoryCodesMap.get(a).name
       const B = categoryCodesMap.get(b).name

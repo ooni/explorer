@@ -1,5 +1,4 @@
 import PropTypes from 'prop-types'
-import countryUtil from 'country-util'
 import { Box } from 'ooni-components'
 
 import { testNames } from '../../test-info'
@@ -32,11 +31,10 @@ const blockingTypeLabels = {
   'tcp_ip': 'TCP/IP Blocking'
 }
 
-export const getRowLabel = (key, yAxis, locale) => {
+export const getRowLabel = (key, yAxis, locale = 'en') => {
   switch (yAxis) {
   case 'probe_cc':
-    if (locale) return getLocalisedRegionName(key, locale)
-    return countryUtil.territoryNames[key] ?? key
+    return getLocalisedRegionName(key, locale)
   case 'category_code':
     return categoryCodesMap.get(key)?.name ?? key
   case 'input':
