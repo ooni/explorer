@@ -18,6 +18,7 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 
 import { DetailsBox } from '../DetailsBox'
 import FormattedMarkdown from '../../FormattedMarkdown'
+import StatusInfo from '../StatusInfo'
 
 const messages = defineMessages({
   'blockingReason.http-diff': {
@@ -49,22 +50,6 @@ const messages = defineMessages({
     defaultMessage: ''
   },
 })
-
-const StatusInfo = ({ url, message}) => (
-  <Flex flexDirection='column'>
-    <Box mb={3}>
-      <Text textAlign='center' fontSize={28}> {url} </Text>
-    </Box>
-    <Box>
-      <Text textAlign='center' fontSize={20} fontWeight='bold'> {message} </Text>
-    </Box>
-  </Flex>
-)
-
-StatusInfo.propTypes = {
-  url: PropTypes.string,
-  message: PropTypes.string
-}
 
 // From https://css-tricks.com/snippets/css/make-pre-text-wrap/
 const WrappedPre = styled.pre`
@@ -498,7 +483,7 @@ const WebConnectivityDetails = ({
     <React.Fragment>
       {render({
         status: status,
-        statusInfo: <StatusInfo url={input} message={reason} />,
+        statusInfo: <StatusInfo title={input} message={reason} />,
         summaryText: summaryText,
         headMetadata: headMetadata,
         details: (

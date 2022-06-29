@@ -11,6 +11,7 @@ import { defineMessages, FormattedMessage, useIntl } from 'react-intl'
 
 import { DetailsBox } from '../DetailsBox'
 import AccessPointStatus from '../AccessPointStatus'
+import StatusInfo from '../StatusInfo'
 
 export const FacebookMessengerDetails = ({ measurement, render }) => {
   const intl = useIntl()
@@ -39,17 +40,21 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
   })
 
   let summaryText = ''
+  let statusMessage = []
+
   if (!isWorking) {
     if (tcpBlocking) {
       summaryText += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.TCPFailure'})
+      statusMessage.push(intl.formatMessage({id: 'Measurement.Details.FacebookMessenger.TCPFailed'}))
     } else {
       summaryText += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.TCPSuccess'})
     }
 
-    summaryText += ' '
+    summaryText += ''
 
     if (dnsBlocking) {
       summaryText += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.DNSFailure'})
+      statusMessage.push(intl.formatMessage({id: 'Measurement.Details.FacebookMessenger.DNSFailed'}))
     } else {
       summaryText += intl.formatMessage({id: 'Measurement.Details.SummaryText.FacebookMessenger.DNSSuccess'})
     }
@@ -57,12 +62,16 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
     summaryText = 'Measurement.Details.SummaryText.FacebookMessenger.Reachable'
   }
 
+  statusMessage = statusMessage.join('\n')
+
+  const statusTitle = isWorking ? 
+    intl.formatMessage({id: 'Measurement.Status.Hint.FacebookMessenger.Reachable'}) :
+    intl.formatMessage({id: 'Measurement.Status.Hint.FacebookMessenger.Blocked'})
+
   return (
     render({
       status: isWorking ? 'reachable' : 'anomaly',
-      statusInfo: isWorking
-        ? <FormattedMessage id='Measurement.Status.Hint.FacebookMessenger.Reachable' />
-        : <FormattedMessage id='Measurement.Status.Hint.FacebookMessenger.Blocked' />,
+      statusInfo: <StatusInfo title={statusTitle} message={statusMessage} /> ,
       summaryText: summaryText,
       headMetadata: {
         message: isWorking ? messages.reachable : messages.notReachable,
@@ -70,51 +79,49 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
       },
       details: (
         <React.Fragment>
-          <Container>
-            <Flex>
-              <DetailsBox content={
+          <Flex mb={4}>
+            <Box width={1/4}>
+              <AccessPointStatus
+                label={<FormattedMessage id='Measurement.Details.FacebookMessenger.DNS.Label.Title' />}
+                ok={!dnsBlocking}
+              />
+            </Box>
+            <Box width={1/4}>
+              <AccessPointStatus
+                label={<FormattedMessage id='Measurement.Details.FacebookMessenger.TCP.Label.Title' />}
+                ok={!tcpBlocking}
+              />
+            </Box>
+          </Flex>
+          <DetailsBox
+            title={<FormattedMessage id='Measurement.Details.FacebookMessenger.Endpoint.Status.Heading' />}
+            content={
+              <React.Fragment>
+                {Array.isArray(tcpConnections) && tcpConnections.length > 0 &&
                 <React.Fragment>
-                  <Flex>
-                    <Box width={1/4}>
-                      <AccessPointStatus
-                        label={<FormattedMessage id='Measurement.Details.FacebookMessenger.DNS.Label.Title' />}
-                        ok={!dnsBlocking}
-                      />
-                    </Box>
-                    <Box width={1/4}>
-                      <AccessPointStatus
-                        label={<FormattedMessage id='Measurement.Details.FacebookMessenger.TCP.Label.Title' />}
-                        ok={!tcpBlocking}
-                      />
-                    </Box>
-                  </Flex>
-                  {Array.isArray(tcpConnections) && tcpConnections.length > 0 &&
-                  <React.Fragment>
-                    <Heading h={4}> <FormattedMessage id='Measurement.Details.FacebookMessenger.Endpoint.Status.Heading' /> </Heading>
-                    {tcpConnections.map((connection, index) => (
-                      <Flex key={index}>
-                        <Box>
-                          <Text>
-                            {connection.status.failure &&
-                            <FormattedMessage id="Measurement.Details.FacebookMessenger.Endpoint.ConnectionTo.Failed"
+                  {tcpConnections.map((connection, index) => (
+                    <Flex key={index}>
+                      <Box>
+                        <Text>
+                          {connection.status.failure &&
+                          <FormattedMessage id="Measurement.Details.FacebookMessenger.Endpoint.ConnectionTo.Failed"
+                            values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
+                          />
+                          }
+                          {connection.status.success &&
+                            <FormattedMessage id="Measurement.Details.FacebookMessenger.Endpoint.ConnectionTo.Successful"
                               values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
                             />
-                            }
-                            {connection.status.success &&
-                              <FormattedMessage id="Measurement.Details.FacebookMessenger.Endpoint.ConnectionTo.Successful"
-                                values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
-                              />
-                            }
-                          </Text>
-                        </Box>
-                      </Flex>
-                    ))}
-                  </React.Fragment>
-                  }
+                          }
+                        </Text>
+                      </Box>
+                    </Flex>
+                  ))}
                 </React.Fragment>
-              } />
-            </Flex>
-          </Container>
+                }
+              </React.Fragment>
+            }
+          />
         </React.Fragment>
       )
     })
