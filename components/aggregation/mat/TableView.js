@@ -201,7 +201,7 @@ const TableView = ({ data, query }) => {
     sortBy: [{ id: 'yAxisLabel', desc: false }]
   }),[])
 
-  const getRowId = React.useCallback(row => row[query.axis_y], [])
+  const getRowId = React.useCallback(row => row[query.axis_y], [query.axis_y])
 
   const columns = useMemo(() => [
     {
@@ -277,7 +277,7 @@ const TableView = ({ data, query }) => {
     } catch (e) {
       return [null, [], [], {}]
     }
-  }, [query, data])
+  }, [query, data, intl.locale])
 
   const {
     getTableProps,

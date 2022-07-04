@@ -50,13 +50,13 @@ const matomoInstance = createInstance({
   }
 })
 
-const Layout = ({ children, messages, disableFooter = false }) => {
+const Layout = ({ children, disableFooter = false }) => {
   useEffect(() => {
     matomoInstance.trackPageView()
   }, [])
 
   return (
-    <LocaleProvider messages={messages}>
+    <LocaleProvider>
       <MatomoProvider value={matomoInstance}>
         <ThemeProvider theme={theme}>
           <GlobalStyle />

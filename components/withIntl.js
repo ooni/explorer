@@ -1,19 +1,33 @@
 /* global require */
-import React, {useEffect, useState} from 'react'
+import React, { useEffect, useState, useMemo, createContext } from 'react'
 import { IntlProvider } from 'react-intl'
 import { useRouter } from 'next/router'
 
-export const LocaleProvider = ({ children, messages }) => {
+export const LocaleProvider = ({ children }) => {
   const { locale, defaultLocale } = useRouter()
-  const now = Date.now()
 
-  const sanitizedLocaleName = locale.replace('_', '-')
+  const messages = useMemo(() => {
+    try {
+      const messages = require(`../public/static/lang/${locale}.json`)
+      const defaultMessages = require(`../public/static/lang/${defaultLocale}.json`)
+
+      const mergedMessages = Object.assign({}, defaultMessages, messages)
+      return mergedMessages
+    } catch (e) {
+      console.error(`Failed to load messages for ${locale}: ${e.message}`)
+      const defaultMessages = require(`../public/static/lang/${defaultLocale}.json`)
+      return defaultMessages
+    }
+  }, [locale, defaultLocale])
 
   return (
-    <IntlProvider defaultLocale={defaultLocale} locale={sanitizedLocaleName} locales={['en', 'fr', 'de', 'fa', 'tr']} messages={messages} initialNow={now}>
+    <IntlProvider 
+      defaultLocale={defaultLocale}
+      locale={locale}
+      messages={messages}
+      key={locale}
+    >
       {children}
     </IntlProvider>
   )
 }
-
-

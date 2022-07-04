@@ -1,9 +1,10 @@
 import React from 'react'
 
-import { withRouter } from 'next/router'
+import { useRouter, withRouter } from 'next/router'
 import NLink from 'next/link'
 import styled from 'styled-components'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
+import { useLocaleContext } from 'components/withIntl'
 
 import ExplorerLogo from 'ooni-components/components/svgs/logos/Explorer-HorizontalMonochromeInverted.svg'
 
@@ -11,7 +12,7 @@ import {
   Link,
   Flex,
   Box,
-  Container
+  Container,
 } from 'ooni-components'
 
 const StyledNavItem = styled.a`
@@ -66,31 +67,47 @@ const StyledNavBar = styled.div`
   padding-bottom: 20px;
   z-index: 999;
 `
+const languages = ['en', 'de', 'fr']
 
-export const NavBar = ({color}) => (
-  <StyledNavBar color={color}>
-    <Container>
-      <Flex
-        flexDirection={['column', 'row']}
-        justifyContent={['flex-start', 'space-around']}
-        alignItems={['flex-start', 'center']}
-      >
-        <Box style={{zIndex: 1}}>
-          <NLink href='/' passHref>
-            <Link><ExplorerLogo height='26px' /></Link>
-          </NLink>
-        </Box>
-        <Box ml={[0,'auto']} mt={[2, 0]}>
-          <Flex flexDirection={['column', 'row']} >
-            <NavItem label={<FormattedMessage id='Navbar.Search' />} href='/search' />
-            <NavItem label={<FormattedMessage id='Navbar.Charts.MAT' />} href='/chart/mat' />
-            <NavItem label={<FormattedMessage id='Navbar.Charts.Circumvention' />} href='/chart/circumvention' />
-            <NavItem label={<FormattedMessage id='Navbar.Countries' />} href='/countries' />
-          </Flex>
-        </Box>
-      </Flex>
-    </Container>
-  </StyledNavBar>
-)
+export const NavBar = ({color}) => {
+  const { locale } = useIntl()
+  const router = useRouter()
+  const { pathname, asPath, query } = router
+  
+  const handleChange = (event) => {
+    router.push({ pathname, query }, asPath, { locale: event.target.value })
+  }
+
+  return (
+    <StyledNavBar color={color}>
+      <Container>
+        <Flex
+          flexDirection={['column', 'row']}
+          justifyContent={['flex-start', 'space-around']}
+          alignItems={['flex-start', 'center']}
+        >
+          <Box style={{zIndex: 1}}>
+            <NLink href='/' passHref>
+              <Link><ExplorerLogo height='26px' /></Link>
+            </NLink>
+          </Box>
+          <Box ml={[0,'auto']} mt={[2, 0]}>
+            <Flex flexDirection={['column', 'row']} >
+              <NavItem label={<FormattedMessage id='Navbar.Search' />} href='/search' />
+              <NavItem label={<FormattedMessage id='Navbar.Charts.MAT' />} href='/chart/mat' />
+              <NavItem label={<FormattedMessage id='Navbar.Charts.Circumvention' />} href='/chart/circumvention' />
+              <NavItem label={<FormattedMessage id='Navbar.Countries' />} href='/countries' />
+              <select onChange={handleChange} value={locale}>
+                {languages.map((c) => (
+                  <option key={c} value={c}>{c}</option>
+                ))}
+              </select>
+            </Flex>
+          </Box>
+        </Flex>
+      </Container>
+    </StyledNavBar>
+  )
+}
 
 export default NavBar

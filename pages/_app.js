@@ -2,7 +2,7 @@
 // https://github.com/zeit/next.js/blob/master/examples/with-sentry
 // https://github.com/vercel/next.js/blob/canary/examples/with-loading/pages/_app.js
 import 'scripts/wdyr'
-import { useEffect, useMemo } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import NProgress from 'nprogress'
 import { useRouter } from 'next/router'
 import 'fontsource-fira-sans/latin.css'
@@ -12,22 +12,7 @@ import Layout from '../components/Layout'
 
 export default function App({ Component, pageProps, err }) {
   const router = useRouter()
-  const { locale, defaultLocale } = router
-
-  const messages = useMemo(() => {
-    try {
-      const messages = require(`../public/static/lang/${locale}.json`)
-      const defaultMessages = require(`../public/static/lang/${defaultLocale}.json`)
-
-      const mergedMessages = Object.assign({}, defaultMessages, messages)
-      return mergedMessages
-    } catch (e) {
-      console.error(`Failed to load messages for ${locale}: ${e.message}`)
-      const defaultMessages = require(`../public/static/lang/${defaultLocale}.json`)
-      return defaultMessages
-    }
-  }, [locale, defaultLocale])
-
+  console.log('pageProps', pageProps)
   useEffect(() => {
     const handleStart = (url) => {
       console.log(`Loading: ${url}`)
@@ -50,7 +35,7 @@ export default function App({ Component, pageProps, err }) {
 
   // Workaround for https://github.com/vercel/next.js/issues/8592
   return (
-    <Layout messages={messages}>
+    <Layout>
       <Component {...pageProps} err={err} />
     </Layout>
   )
