@@ -7,8 +7,10 @@ import {
   Heading,
   Flex,
   Box,
-  Text
+  Text,
+  Link,
 } from 'ooni-components'
+import NLink from 'next/link'
 
 import { Tick, Cross } from 'ooni-components/dist/icons'
 import deepmerge from 'deepmerge'
@@ -474,7 +476,9 @@ const WebConnectivityDetails = ({
     <React.Fragment>
       {render({
         status: status,
-        statusInfo: <StatusInfo title={input} message={reason} />,
+        statusInfo: <StatusInfo 
+          title={<NLink passHref href={`/domain/${hostname}`} color='white'><Link color='white'>{input}</Link></NLink>} message={reason} 
+        />,
         summaryText: summaryText,
         headMetadata: headMetadata,
         details: (

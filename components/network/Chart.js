@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import { Heading, Box, Flex } from 'ooni-components'
 import useSWR from 'swr'
@@ -12,7 +12,7 @@ const swrOptions = {
   dedupingInterval: 10 * 60 * 1000,
 }
 
-const Chart = React.memo(function Chart({testName, testGroup = null, title, queryParams = {}, asn, domain }) {
+const Chart = React.memo(function Chart({testName, testGroup = null, title, queryParams = {}, asn, domain, setState }) {
   const router = useRouter()
   const { query: {since, until} } = router
 
@@ -45,6 +45,11 @@ const Chart = React.memo(function Chart({testName, testGroup = null, title, quer
     testGroup ? MATMultipleFetcher : MATFetcher,
     swrOptions
   )
+
+  useEffect(()=> {
+    if (setState && data?.data) setState(data.data)
+  }, [data, setState])
+
   const [chartData, rowKeys, rowLabels] = useMemo(() => {
     if (!data) {
       return [null, 0]
