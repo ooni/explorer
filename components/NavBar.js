@@ -13,6 +13,7 @@ import {
   Flex,
   Box,
   Container,
+  Select,
 } from 'ooni-components'
 
 const StyledNavItem = styled.a`
@@ -46,6 +47,13 @@ const Underline = styled.span`
   }
 `
 
+const LanguageSelect = styled.select`
+  color: ${props => props.theme.colors.white};
+  background: none;
+  opacity: 0.6;
+  border: none;
+`
+
 const NavItemComponent = ({router, label, href}) => {
   const active = router.pathname === href
   return (
@@ -74,7 +82,7 @@ export const NavBar = ({color}) => {
   const router = useRouter()
   const { pathname, asPath, query } = router
   
-  const handleChange = (event) => {
+  const handleLocaleChange = (event) => {
     router.push({ pathname, query }, asPath, { locale: event.target.value })
   }
 
@@ -92,16 +100,18 @@ export const NavBar = ({color}) => {
             </NLink>
           </Box>
           <Box ml={[0,'auto']} mt={[2, 0]}>
-            <Flex flexDirection={['column', 'row']} >
+            <Flex flexDirection={['column', 'row']} alignItems={'center'} >
               <NavItem label={<FormattedMessage id='Navbar.Search' />} href='/search' />
               <NavItem label={<FormattedMessage id='Navbar.Charts.MAT' />} href='/chart/mat' />
               <NavItem label={<FormattedMessage id='Navbar.Charts.Circumvention' />} href='/chart/circumvention' />
               <NavItem label={<FormattedMessage id='Navbar.Countries' />} href='/countries' />
-              <select onChange={handleChange} value={locale}>
-                {languages.map((c) => (
-                  <option key={c} value={c}>{c}</option>
-                ))}
-              </select>
+              <Box ml={[0, 4]} my={[2, 0]}>
+                <LanguageSelect ml={[0, 4]} onChange={handleLocaleChange} value={locale}>
+                  {languages.map((c) => (
+                    <option key={c} value={c}>{c}</option>
+                  ))}
+                </LanguageSelect>
+              </Box>
             </Flex>
           </Box>
         </Flex>
