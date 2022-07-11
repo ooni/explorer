@@ -30,7 +30,8 @@ const pageColors = {
 
 export async function getServerSideProps({ query }) {
   let initialProps = {
-    errors: []
+    errors: [],
+    query: query
   }
 
   // Get `report_id` using optional catch all dynamic route of Next.js
@@ -136,6 +137,7 @@ const Measurement = ({
       <Head>
         <title>OONI Explorer</title>
       </Head>
+      <div>{JSON.stringify(rest.query)}</div>
       {notFound ? (
         <MeasurementNotFound />
       ): (
