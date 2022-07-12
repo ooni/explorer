@@ -69,7 +69,7 @@ export async function getServerSideProps({ query }) {
       initialProps['response_error'] = e
       throw new Error(`Failed to fetch measurement data. Server message: ${e.response.status}, ${e.response.statusText}`)
     }
-    initialProps['response'] = response?.data
+    // initialProps['response'] = response?.data
 
     // If response `data` is an empty object, the measurement was
     // probably not found
