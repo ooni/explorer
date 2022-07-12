@@ -80,12 +80,9 @@ export async function getServerSideProps({ query }) {
         }
       }
 
-      try {
-        initialProps['raw_measurement'] = JSON.parse(initialProps['raw_measurement'])
-      } catch (e) {
-        console.error(e)
-        throw new Error(`Failed to parse raw_measurement: ${e.toString()}`)
-      }
+      initialProps['raw_measurement'] ? 
+        initialProps['raw_measurement'] = JSON.parse(initialProps['raw_measurement']) : 
+        initialProps.notFound = true
 
       const { probe_cc } = response.data
       const countryObj = countryUtil.countryList.find(country => (
