@@ -4,4 +4,7 @@ bower_components
 npm-debug.log
 package-lock.json
 yarn-error.log
-ignore
+Dockerfile
+.dockerignore
+.next
+.git
