@@ -40,6 +40,7 @@ export async function getServerSideProps({ query }) {
   // It can also catch /measurement/report_id/extra/segments
   // in which case, the extra segments are available inside query.report_id[1+]
   const report_id = query?.report_id?.[0]
+  initialProps['rrreport_id'] = report_id
   // If there is no report_id to use, fail early with MeasurementNotFound
   if (typeof report_id !== 'string' || report_id.length < 1) {
     initialProps.notFound = true
@@ -65,8 +66,10 @@ export async function getServerSideProps({ query }) {
         params
       })
     } catch (e) {
+      initialProps['response_error'] = e
       throw new Error(`Failed to fetch measurement data. Server message: ${e.response.status}, ${e.response.statusText}`)
     }
+    initialProps['response'] = response?.data
 
     // If response `data` is an empty object, the measurement was
     // probably not found
@@ -137,7 +140,24 @@ const Measurement = ({
       <Head>
         <title>OONI Explorer</title>
       </Head>
-      <div>{JSON.stringify(rest.query)}</div>
+      <div>{JSON.stringify(rest)}</div>
+      <hr />
+      <div>{JSON.stringify({
+        errors,
+        country,
+        confirmed,
+        anomaly,
+        failure,
+        test_name,
+        measurement_start_time,
+        probe_cc,
+        probe_asn,
+        notFound,
+        input,
+        raw_measurement,
+        report_id,
+        scores})}
+      </div>
       {notFound ? (
         <MeasurementNotFound />
       ): (
