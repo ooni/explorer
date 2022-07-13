@@ -6,9 +6,9 @@ module.exports = function (api) {
     'inline-react-svg',
     ['styled-components', {'ssr': true, 'displayName': true, 'preprocess': false}],
     ['react-intl', {
-      'messagesDir': './public/static/lang/.messages',
-      'enforceDescriptions': false,
-      'enforceDefaultMessage': false,
+      // 'messagesDir': './public/static/lang/.messages',
+      // 'enforceDescriptions': false,
+      // 'enforceDefaultMessage': false,
       'extractFromFormatMessageCall': true
     }]
   ]
