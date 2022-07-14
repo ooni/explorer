@@ -1,10 +1,11 @@
 import React from 'react'
-
 import { useRouter, withRouter } from 'next/router'
 import NLink from 'next/link'
 import styled from 'styled-components'
 import { FormattedMessage, useIntl } from 'react-intl'
+
 import { useLocaleContext } from 'components/withIntl'
+import { getLocalisedLanguageName } from 'utils/i18nCountries'
 
 import ExplorerLogo from 'ooni-components/components/svgs/logos/Explorer-HorizontalMonochromeInverted.svg'
 
@@ -75,7 +76,7 @@ const StyledNavBar = styled.div`
   padding-bottom: 20px;
   z-index: 999;
 `
-const languages = ['en', 'de', 'fr']
+const languages = process.env.LOCALES
 
 export const NavBar = ({color}) => {
   const { locale } = useIntl()
@@ -108,7 +109,10 @@ export const NavBar = ({color}) => {
               <Box ml={[0, 4]} my={[2, 0]}>
                 <LanguageSelect ml={[0, 4]} onChange={handleLocaleChange} value={locale}>
                   {languages.map((c) => (
-                    <option key={c} value={c}>{c}</option>
+                    <option key={c} value={c}>
+                      {c}
+                      {/* {getLocalisedLanguageName(c,c)} */}
+                    </option>
                   ))}
                 </LanguageSelect>
               </Box>
