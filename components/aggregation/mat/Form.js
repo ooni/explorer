@@ -179,7 +179,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
           <Controller
             render={({field}) => (
               <Select {...field} width={1}>
-                <option value=''>All Countries</option>
+                <option value=''>{intl.formatMessage({id: 'MAT.Form.AllCountries'})}</option>
                 {sortedCountries.map((c, idx) =>(
                   <option key={idx} value={c.iso3166_alpha2}>{c.localisedCountryName}</option>
                 ))}
@@ -337,11 +337,11 @@ export const Form = ({ onSubmit, testNames, query }) => {
                 control={control}
                 render={({field}) => (
                   <Select {...field}>
-                    <option value="">ALL</option>
+                    <option value="">{intl.formatMessage({id: 'MAT.Form.All'})}</option>
                     {categoryCodes
                       .sort((a, b) => a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0)
                       .map(([code, label], idx) => (
-                        <option key={idx} value={code}>{label}</option>
+                        <option key={idx} value={code}>{intl.formatMessage({id: `CategoryCode.${code}.Name`})}</option>
                     ))}
                   </Select>
                 )}

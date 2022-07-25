@@ -56,6 +56,157 @@ const imTests = [
   'facebook_messenger'
 ]
 
+const messages = defineMessages({
+  'Search.WebConnectivity.Results.Reachable': {
+    id: 'General.Accessible',
+    defaultMessage: ''
+  },
+  'Search.WebConnectivity.Results.Anomaly': {
+    id: 'General.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.WebConnectivity.Results.Blocked': {
+    id: 'Search.WebConnectivity.Results.Blocked',
+    defaultMessage: ''
+  },
+  'Search.WebConnectivity.Results.Error': {
+    id: 'General.Error',
+    defaultMessage: ''
+  },
+  'Search.WhatsApp.Results.Reachable': {
+    id: 'General.Accessible',
+    defaultMessage: ''
+  },
+  'Search.WhatsApp.Results.Anomaly': {
+    id: 'General.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.WhatsApp.Results.Error': {
+    id: 'General.Error',
+    defaultMessage: ''
+  },
+  'Search.FacebookMessenger.Results.Reachable': {
+    id: 'General.Accessible',
+    defaultMessage: ''
+  },
+  'Search.FacebookMessenger.Results.Anomaly': {
+    id: 'General.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.FacebookMessenger.Results.Error': {
+    id: 'General.Error',
+    defaultMessage: ''
+  },
+  'Search.Telegram.Results.Reachable': {
+    id: 'General.Accessible',
+    defaultMessage: ''
+  },
+  'Search.Telegram.Results.Anomaly': {
+    id: 'General.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.Telegram.Results.Error': {
+    id: 'General.Error',
+    defaultMessage: ''
+  },
+  'Search.Signal.Results.Reachable': {
+    id: 'General.Accessible',
+    defaultMessage: ''
+  },
+  'Search.Signal.Results.Anomaly': {
+    id: 'General.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.Signal.Results.Error': {
+    id: 'General.Error',
+    defaultMessage: ''
+  },
+  'Search.HTTPInvalidRequestLine.Results.Anomaly': {
+    id: 'General.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.HTTPInvalidRequestLine.Results.Reachable': {
+    id: 'General.OK',
+    defaultMessage: ''
+  },
+  'Search.HTTPInvalidRequestLine.Results.Error': {
+    id: 'General.Error',
+    defaultMessage: ''
+  },
+  'Search.HTTPHeaderFieldManipulation.Results.Anomaly': {
+    id: 'General.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.HTTPHeaderFieldManipulation.Results.Reachable': {
+    id: 'General.OK',
+    defaultMessage: ''
+  },
+  'Search.HTTPHeaderFieldManipulation.Results.Error': {
+    id: 'General.Error',
+    defaultMessage: ''
+  },
+  'Search.HTTPRequests.Results.Reachable': {
+    id: 'Search.HTTPRequests.Results.Reachable',
+    defaultMessage: ''
+  },
+  'Search.HTTPRequests.Results.Error': {
+    id: 'Search.HTTPRequests.Results.Error',
+    defaultMessage: ''
+  },
+  'Search.HTTPRequests.Results.Blocked': {
+    id: 'Search.HTTPRequests.Results.Blocked',
+    defaultMessage: ''
+  },
+  'Search.HTTPRequests.Results.Anomaly': {
+    id: 'Search.HTTPRequests.Results.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.Tor.Results.Reachable': {
+    id: 'General.OK',
+    defaultMessage: ''
+  },
+  'Search.Tor.Results.Anomaly': {
+    id: 'General.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.TorSnowflake.Results.Reachable': {
+    id: 'Search.TorSnowflake.Results.Reachable',
+    defaultMessage: 'Reachable'
+  },
+  'Search.TorSnowflake.Results.Anomaly': {
+    id: 'Search.TorSnowflake.Results.Anomaly',
+    defaultMessage: 'Anomaly'
+  },
+  'Search.TorSnowflake.Results.Error': {
+    id: 'Search.TorSnowflake.Results.Anomaly',
+    defaultMessage: 'Anomaly'
+  },
+  'Search.Psiphon.Results.Reachable': {
+    id: 'General.OK',
+    defaultMessage: ''
+  },
+  'Search.Psiphon.Results.Anomaly': {
+    id: 'General.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.Psiphon.Results.Error': {
+    id: 'General.Error',
+    defaultMessage: ''
+  },
+  'Search.RiseupVPN.Results.Reachable': {
+    id: 'General.Accessible',
+    defaultMessage: ''
+  },
+  'Search.RiseupVPN.Results.Anomaly': {
+    id: 'General.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.RiseupVPN.Results.Error': {
+    id: 'General.Error',
+    defaultMessage: ''
+  },
+})
+
 const ASNBox = ({asn}) => {
   const justNumber = asn.split('AS')[1]
   return <Text bold color='gray7'>AS {justNumber}</Text>

@@ -11,9 +11,9 @@ const StatusText = styled(Text)`
 const AccessPointStatus = ({ icon, label, ok, content, color, ...props}) => {
   if (content === undefined) {
     if (ok === true) {
-      content = <FormattedMessage id='Measurement.Details.Endpoint.Status.Okay' />
+      content = <FormattedMessage id='General.OK' />
     } else if (ok === false){
-      content = <FormattedMessage id='Measurement.Details.Endpoint.Status.Failed' />
+      content = <FormattedMessage id='General.Failed' />
     } else {
       content = <FormattedMessage id='Measurement.Details.Endpoint.Status.Unknown' />
     }

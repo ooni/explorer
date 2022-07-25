@@ -82,7 +82,7 @@ export const NavBar = ({color}) => {
   const { locale } = useIntl()
   const router = useRouter()
   const { pathname, asPath, query } = router
-  
+
   const handleLocaleChange = (event) => {
     router.push({ pathname, query }, asPath, { locale: event.target.value })
   }
