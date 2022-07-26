@@ -11,21 +11,6 @@ import { useMATContext } from './MATContext'
 import { getXAxisTicks } from './timeScaleXAxis'
 import { defineMessages, useIntl } from 'react-intl'
 
-const messages = defineMessages({
-  'x_axis.measurement_start_day': {
-    id: 'MAT.Form.Label.AxisOption.measurement_start_day',
-    defaultMessage: ''
-  },
-  'x_axis.category_code': {
-    id: 'MAT.Form.Label.AxisOption.category_code',
-    defaultMessage: ''
-  },
-  'x_axis.probe_cc': {
-    id: 'MAT.Form.Label.AxisOption.probe_cc',
-    defaultMessage: ''
-  }
-})
-
 const keys = [
   'anomaly_count',
   'confirmed_count',
@@ -153,7 +138,7 @@ const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last
   const chartProps = useMemo(() => {
     const xAxisTicks = getXAxisTicks(query)
     chartProps1D.axisBottom.tickValues = xAxisTicks
-    chartProps1D.axisBottom.legend = intl.formatMessage(messages[`x_axis.${query.axis_x}`])
+    chartProps1D.axisBottom.legend = intl.formatMessage({id: `MAT.Form.Label.AxisOption.${query.axis_x}`, defaultMessage: ''})
     return label === undefined ? chartProps1D : chartProps2D
   }, [intl, label, query])
 

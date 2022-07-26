@@ -63,14 +63,14 @@ const HighlightBox = ({
           {explore && 
             <Box my={2} width={1/2}>
               <Text fontSize={20}>
-                <NLink href={explore} passHref><Link color='white'>Explore</Link></NLink>
+                <NLink href={explore} passHref><Link color='white'>{intl.formatMessage({id: 'Home.Highlights.Explore'})}</Link></NLink>
               </Text>
             </Box>
           }
           {report && 
             <Box my={2} width={1/2}>
               <Text fontSize={20}>
-                <Link href={report} color='white'> Read Report </Link>
+                <Link href={report} color='white'>{intl.formatMessage({id: 'Home.Highlights.ReadReport'})}</Link>
               </Text>
             </Box>
           }

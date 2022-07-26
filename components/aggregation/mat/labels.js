@@ -33,20 +33,20 @@ const blockingTypeLabels = {
 
 export const getRowLabel = (key, yAxis, locale = 'en') => {
   switch (yAxis) {
-  case 'probe_cc':
-    return getLocalisedRegionName(key, locale)
-  case 'category_code':
-    return categoryCodesMap.get(key)?.name ?? key
-  case 'input':
-  case 'domain':
-    return (<InputRowLabel input={key} />)
-  case 'blocking_type':
-    return blockingTypeLabels[key] ?? key
-  case 'probe_asn':
-    return `AS${key}`
-  case 'test_name':
-    return Object.keys(testNames).includes(key) ? testNames[key].id : key
-  default:
-    return key
+    case 'probe_cc':
+      return getLocalisedRegionName(key, locale)
+    case 'category_code':
+      return categoryCodesMap.get(key)?.name ?? key
+    case 'input':
+    case 'domain':
+      return (<InputRowLabel input={key} />)
+    case 'blocking_type':
+      return blockingTypeLabels[key] ?? key
+    case 'probe_asn':
+      return `AS${key}`
+    case 'test_name':
+      return Object.keys(testNames).includes(key) ? testNames[key].id : key
+    default:
+      return key
   }
 }

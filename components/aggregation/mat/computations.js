@@ -70,11 +70,7 @@ export const sortRows = (a, b, type, locale = 'en') => {
   switch(type) {
     case 'probe_cc':
       return new Intl.Collator(locale).compare(getLocalisedRegionName(a, locale), getLocalisedRegionName(b, locale))
-    // case 'category_code':
-    //   const A = categoryCodesMap.get(a).name
-    //   const B = categoryCodesMap.get(b).name
-    //   return  A < B ? -1 : A > B ? 1 : 0
     default:
-      return a < b ? -1 : a > b ? 1 : 0
+      return new Intl.Collator(locale).compare(a, b)
   }
 }

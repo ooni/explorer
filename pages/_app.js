@@ -12,7 +12,7 @@ import Layout from '../components/Layout'
 
 export default function App({ Component, pageProps, err }) {
   const router = useRouter()
-  console.log('pageProps', pageProps)
+
   useEffect(() => {
     const handleStart = (url) => {
       console.log(`Loading: ${url}`)

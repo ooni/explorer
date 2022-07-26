@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import Head from 'next/head'
 import NLink from 'next/link'
 import axios from 'axios'
@@ -51,7 +51,7 @@ const CountryBlock = ({countryCode, msmtCount}) => {
               <Divider />
               <Flex alignItems={['flex-start', 'center']} flexDirection={['column', 'row']}>
                 <Text mr={2} fontSize={20} fontWeight={600} color='blue9'><FormattedNumber value={msmtCount} /></Text>
-                <Text>Measurements</Text>
+                <Text>{intl.formatMessage({id: 'Home.Banner.Stats.Measurements'})}</Text>
               </Flex>
             </Flex>
           </CountryLink>
@@ -156,19 +156,8 @@ const NoCountriesFound = ({ searchTerm }) => (
   </Flex>
 )
 
-class Countries extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      initial: true,
-      searchTerm: '',
-      filteredCountries: []
-    }
-    this.onSearchChange = debounce(this.onSearchChange, 200)
-  }
-
-  static async getInitialProps () {
-    const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
+export const getServerSideProps = async () => {
+  const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
     const result = await client.get('/api/_/countries')
 
     // Sort countries by name (instead of by country codes)
@@ -177,90 +166,83 @@ class Countries extends React.Component {
     const responseUrl = result?.request?.res?.responseUrl
 
     return {
-      countries: result.data.countries,
-      ssrRequests: [{...result.config, responseUrl}]
+      props: {
+        countries: result.data.countries,
+      }  
     }
-  }
+}
 
-  componentDidMount () {
-    console.log(this.props.ssrRequests)
-  }
+const Countries = ({countries}) => {
+  const intl = useIntl()
+  const [searchInput, setSearchInput] = useState('')
 
-  onSearchChange (searchTerm) {
-    const filteredCountries = this.props.countries.filter((country) => (
-      country.name.toLowerCase().indexOf(searchTerm.toLowerCase()) > -1
+  let filteredCountries = countries
+
+  if (searchInput !== '') {
+    filteredCountries = countries.filter((country) => (
+      country.name.toLowerCase().indexOf(searchInput.toLowerCase()) > -1
     ))
-    this.setState({
-      filteredCountries,
-      searchTerm
-    })
   }
 
-  static getDerivedStateFromProps (props, state) {
-    if (state.filteredCountries.length === 0 && state.initial === true) {
-      return {
-        filteredCountries: props.countries,
-        initial: false
-      }
-    }
-    return state
+  const searchHandler = (searchTerm) => {
+    setSearchInput(searchTerm)
   }
 
-  render () {
-    const { filteredCountries, searchTerm } = this.state
-    // Africa Americas Asia Europe Oceania Antarctica
-    const regions = ['002', '019', '142', '150', '009', 'AQ']
+  const debouncedSearchHandler = useMemo(() => debounce(searchHandler, 200), [])
 
-    return (
-      <React.Fragment>
-        <Head>
-          <title>Internet Censorship around the world | OONI Explorer</title>
-        </Head>
+  // Africa Americas Asia Europe Oceania Antarctica
+  const regions = ['002', '019', '142', '150', '009', 'AQ']
 
-        <StickyContainer>
-          <Sticky>
-            {({ style }) => (
-              <RaisedHeader style={style}>
-                <NavBar />
-                <RegionMenu>
-                  <Container>
-                    <Flex
-                      flexDirection={['column', 'row']}
-                      justifyContent={['flex-start', 'flex-end']}
-                      alignItems={['flex-start', 'center']}
-                    >
-                      <Box my={2}>
-                        <Input
-                          onChange={(e) => this.onSearchChange(e.target.value)}
-                          placeholder='Search for Countries'
-                          error={filteredCountries.length === 0}
-                        />
-                      </Box>
-                      <RegionLink href="#Africa" label='Africa' />
-                      <RegionLink href="#Americas" label='Americas' />
-                      <RegionLink href="#Asia" label='Asia' />
-                      <RegionLink href="#Europe" label='Europe' />
-                      <RegionLink href="#Oceania" label='Oceania' />
-                    </Flex>
-                  </Container>
-                </RegionMenu>
-              </RaisedHeader>
-            )}
-          </Sticky>
-          <Container>
-            {
-              // Show a message when there are no countries to show, when search is empty
-              (filteredCountries.length === 0)
-                ? <NoCountriesFound searchTerm={searchTerm} />
-                : regions.map((regionCode, index) => (
-                  <RegionBlock key={index} regionCode={regionCode} countries={filteredCountries} />
-                ))
-            }
-          </Container>
-        </StickyContainer>
-      </React.Fragment>
-    )
-  }
+  return (
+    <React.Fragment>
+      <Head>
+        <title>Internet Censorship around the world | OONI Explorer</title>
+      </Head>
+
+      <StickyContainer>
+        <Sticky>
+          {({ style }) => (
+            <RaisedHeader style={style}>
+              <NavBar />
+              <RegionMenu>
+                <Container>
+                  <Flex
+                    flexDirection={['column', 'row']}
+                    justifyContent={['flex-start', 'flex-end']}
+                    alignItems={['flex-start', 'center']}
+                  >
+                    <Box my={2}>
+                      <Input
+                        onChange={(e) => debouncedSearchHandler(e.target.value)}
+                        placeholder={intl.formatMessage({id: 'Countries.Search.Placeholder'})}
+                        error={filteredCountries.length === 0}
+                      />
+                    </Box>
+                    <RegionLink href={`#${getLocalisedRegionName('002', intl.locale)}`} label={getLocalisedRegionName('002', intl.locale)} />
+                    <RegionLink href={`#${getLocalisedRegionName('019', intl.locale)}`} label={getLocalisedRegionName('019', intl.locale)} />
+                    <RegionLink href={`#${getLocalisedRegionName('142', intl.locale)}`} label={getLocalisedRegionName('142', intl.locale)} />
+                    <RegionLink href={`#${getLocalisedRegionName('150', intl.locale)}`} label={getLocalisedRegionName('150', intl.locale)} />
+                    <RegionLink href={`#${getLocalisedRegionName('009', intl.locale)}`} label={getLocalisedRegionName('009', intl.locale)} />
+                    <RegionLink href={`#${getLocalisedRegionName('AQ', intl.locale)}`} label={getLocalisedRegionName('AQ', intl.locale)} />
+                  </Flex>
+                </Container>
+              </RegionMenu>
+            </RaisedHeader>
+          )}
+        </Sticky>
+        <Container>
+          {
+            // Show a message when there are no countries to show, when search is empty
+            (filteredCountries.length === 0)
+              ? <NoCountriesFound searchTerm={searchInput} />
+              : regions.map((regionCode, index) => (
+                <RegionBlock key={index} regionCode={regionCode} countries={filteredCountries} />
+              ))
+          }
+        </Container>
+      </StickyContainer>
+    </React.Fragment>
+  )
 }
 
 export default Countries

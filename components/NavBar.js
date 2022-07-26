@@ -110,8 +110,7 @@ export const NavBar = ({color}) => {
                 <LanguageSelect ml={[0, 4]} onChange={handleLocaleChange} value={locale}>
                   {languages.map((c) => (
                     <option key={c} value={c}>
-                      {c}
-                      {/* {getLocalisedLanguageName(c,c)} */}
+                      {getLocalisedLanguageName(c,c)}
                     </option>
                   ))}
                 </LanguageSelect>

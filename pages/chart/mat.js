@@ -11,7 +11,7 @@ import {
   Link
 } from 'ooni-components'
 import useSWR from 'swr'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 import Layout from 'components/Layout'
 import NavBar from 'components/NavBar'
@@ -71,7 +71,7 @@ const fetcher = (query) => {
 }
 
 const MeasurementAggregationToolkit = ({ testNames }) => {
-
+  const intl = useIntl()
   const router = useRouter()
 
   const onSubmit = useCallback((data) => {
@@ -149,7 +149,7 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
           <Box sx={{ minHeight: '500px' }}>
             {showLoadingIndicator &&
               <Box>
-                <h2>Loading ...</h2>
+                <h2>{intl.formatMessage({id: 'General.Loading'})}</h2>
               </Box>
             }
             {data && data.data.dimension_count == 0 &&
@@ -166,13 +166,11 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
             <Box mt={[3]} ml={['unset', 'auto']}>
               <Flex>
                 <Box>
-                  <Link as='a' href={linkToAPIQuery} target='_blank' title='opens in new tab'>
-                    JSON Data <FaExternalLinkAlt />
+                  <Link as='a' href={linkToAPIQuery} target='_blank' title='opens in new tab'>{intl.formatMessage({id: 'MAT.JSONData'})}<FaExternalLinkAlt />
                   </Link>
                 </Box>
                 <Box ml={2}>
-                  <Link href={`${linkToAPIQuery}&format=CSV`} target='_blank' title='opens in new tab'>
-                  CSV Data <FaExternalLinkAlt />
+                  <Link href={`${linkToAPIQuery}&format=CSV`} target='_blank' title='opens in new tab'>{intl.formatMessage({id: 'MAT.CSVData'})}<FaExternalLinkAlt />
                   </Link>
                 </Box>
               </Flex>

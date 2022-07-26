@@ -64,10 +64,10 @@ const Chart = React.memo(function Chart({testName, testGroup = null, title, quer
         <Box><Heading h={3} mt={40} mb={20}>{title}</Heading></Box>
         <Box>
           {(!chartData && !error) ? (
-            <div> Loading ...</div>
+            <div>{intl.formatMessage({id: 'General.Loading'})}</div>
           ) : (
             chartData === null || chartData.length === 0 ? (
-              <Heading h={5}>No Data</Heading>
+              <Heading h={5}>{intl.formatMessage({id: 'General.NoData'})}</Heading>
             ) : (
               <GridChart
                 data={chartData}
