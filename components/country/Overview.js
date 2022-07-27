@@ -11,7 +11,7 @@ import {
   NettestGroupWebsites,
   NettestGroupInstantMessaging,
   NettestGroupMiddleBoxes,
-} from 'ooni-components/dist/icons'
+} from 'ooni-components/icons'
 
 
 const NwInterferenceStatus = styled(Box)`

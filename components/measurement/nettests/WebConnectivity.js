@@ -9,7 +9,7 @@ import {
   Text
 } from 'ooni-components'
 
-import { Tick, Cross } from 'ooni-components/dist/icons'
+import { Tick, Cross } from 'ooni-components/icons'
 import deepmerge from 'deepmerge'
 import styled from 'styled-components'
 import dayjs from 'services/dayjs'

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
 import { Flex, Box, Container, Link } from 'ooni-components'
-import ExplorerLogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochromeInverted.svg'
+import ExplorerLogo from 'ooni-components/svgs/logos/OONI-HorizontalMonochromeInverted.svg'
 import { useIntl } from 'react-intl'
 import dayjs from 'dayjs'
 

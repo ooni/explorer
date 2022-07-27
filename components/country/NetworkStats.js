@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Flex, Box, theme } from 'ooni-components'
 import {
   NettestGroupMiddleBoxes,
-} from 'ooni-components/dist/icons'
+} from 'ooni-components/icons'
 import { MdFileDownload, MdFileUpload } from 'react-icons/md'
 import { FormattedMessage } from 'react-intl'
 import styled from 'styled-components'

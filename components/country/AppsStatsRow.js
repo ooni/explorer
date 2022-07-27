@@ -7,7 +7,7 @@ import {
   NettestWhatsApp,
   NettestTelegram,
   NettestFacebookMessenger
-} from 'ooni-components/dist/icons'
+} from 'ooni-components/icons'
 import dayjs from 'services/dayjs'
 
 import { testNames } from '../test-info'

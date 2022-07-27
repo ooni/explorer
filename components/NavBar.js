@@ -5,7 +5,7 @@ import NLink from 'next/link'
 import styled from 'styled-components'
 import { FormattedMessage } from 'react-intl'
 
-import ExplorerLogo from 'ooni-components/components/svgs/logos/Explorer-HorizontalMonochromeInverted.svg'
+import ExplorerLogo from 'ooni-components/svgs/logos/Explorer-HorizontalMonochromeInverted.svg'
 
 import {
   Link,

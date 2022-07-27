@@ -5,7 +5,7 @@ import { Flex, Box, Link, Text, theme } from 'ooni-components'
 import styled from 'styled-components'
 import {
   NettestVanillaTor
-} from 'ooni-components/dist/icons'
+} from 'ooni-components/icons'
 import dayjs from 'services/dayjs'
 
 import { testNames } from '../test-info'

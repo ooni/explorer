@@ -1,6 +1,6 @@
 import { Heading, Flex, Box, Text } from 'ooni-components'
 import { useIntl } from 'react-intl'
-import OONILogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochrome.svg'
+import OONILogo from 'ooni-components/svgs/logos/OONI-HorizontalMonochrome.svg'
 
 import { useMATContext } from './MATContext'
 import CountryNameLabel from './CountryNameLabel'

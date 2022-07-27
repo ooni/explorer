@@ -4,7 +4,7 @@ import { FormattedMessage, defineMessages } from 'react-intl'
 import { Flex, Text, Container, theme } from 'ooni-components'
 import styled from 'styled-components'
 import { useTable, useSortBy } from 'react-table'
-import { Cross, Tick } from 'ooni-components/dist/icons'
+import { Cross, Tick } from 'ooni-components/icons'
 import { useClipboard } from 'use-clipboard-copy'
 import { FaClipboard } from 'react-icons/fa'
 
