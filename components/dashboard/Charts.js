@@ -113,7 +113,7 @@ const Chart = React.memo(function Chart({ testName }) {
       {error &&
         <DetailsBox collapsed={false} content={<>
           <details>
-            <summary><span>Error: {error.message}</span></summary>
+            <summary><span>{intl.formatMessage({id: 'General.Error'})}: {error.message}</span></summary>
             <Box as='pre'>
               {JSON.stringify(error, null, 2)}
             </Box>
