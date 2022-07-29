@@ -134,7 +134,7 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
     <MATContextProvider>
       <Layout>
         <Head>
-          <title>OONI MAT</title>
+          <title>OONI Measurement Aggregation Toolkit</title>
         </Head>
         <NavBar />
         <Container>
