@@ -99,7 +99,7 @@ const DomainDashboard = ({ domain }) => {
 export const getServerSideProps = async (context) => {
   const { domain } = context.query
 
-  if (/^((xn--)?[a-z0-9]*\.)+((xn--)?[a-z0-9]*)$/.test(domain)) {
+  if (/^((xn--)?[a-z0-9\-]*\.)+((xn--)?[a-z0-9]*)$/.test(domain)) {
     return {
       props: { domain }
     }
