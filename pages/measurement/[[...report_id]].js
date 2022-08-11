@@ -1,10 +1,11 @@
 /* global process */
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 import axios from 'axios'
 import { Container, theme } from 'ooni-components'
 import { getLocalisedRegionName } from '../../utils/i18nCountries'
+import NLink from 'next/link'
 
 import Hero from '../../components/measurement/Hero'
 import CommonSummary from '../../components/measurement/CommonSummary'
@@ -14,10 +15,12 @@ import CommonDetails from '../../components/measurement/CommonDetails'
 import MeasurementContainer from '../../components/measurement/MeasurementContainer'
 import MeasurementNotFound from '../../components/measurement/MeasurementNotFound'
 import HeadMetadata from '../../components/measurement/HeadMetadata'
+import { LoginModal } from 'components/login/LoginForm'
 
 import NavBar from '../../components/NavBar'
 import ErrorPage from '../_error'
 import { useIntl } from 'react-intl'
+import useUser from 'hooks/useUser'
 
 const pageColors = {
   default: theme.colors.base,
@@ -113,6 +116,9 @@ const Measurement = ({
 }) => {
   const intl = useIntl()
   const country = getLocalisedRegionName(probe_cc, intl.locale)
+
+  const { user, submitted, reqError, setSubmitted } = useUser()
+  const [showModal, setShowModal] = useState(false)
   // Add the 'AS' prefix to probe_asn when API chooses to send just the number
   probe_asn = typeof probe_asn === 'number' ? `AS${probe_asn}` : probe_asn
   if (error) {
@@ -129,84 +135,94 @@ const Measurement = ({
       {notFound ? (
         <MeasurementNotFound />
       ): (
-        <MeasurementContainer
-          isConfirmed={confirmed}
-          isAnomaly={anomaly}
-          isFailure={failure}
-          testName={test_name}
-          country={country}
-          measurement={raw_measurement}
-          input={input}
-          measurement_start_time={measurement_start_time}
-          probe_asn={probe_asn}
-          scores={scores}
-          {...rest}
+        <>
+          <LoginModal 
+            isShowing={showModal}
+            hide={() => setShowModal(false)}
+            reqError={reqError}
+            submitted={submitted}
+            onLogin={() => setSubmitted(true)} />
+          <MeasurementContainer
+            isConfirmed={confirmed}
+            isAnomaly={anomaly}
+            isFailure={failure}
+            testName={test_name}
+            country={country}
+            measurement={raw_measurement}
+            input={input}
+            measurement_start_time={measurement_start_time}
+            probe_asn={probe_asn}
+            scores={scores}
+            {...rest}
 
-          render={({
-            status = 'default',
-            statusIcon,
-            statusLabel,
-            statusInfo,
-            legacy = false,
-            summaryText,
-            headMetadata,
-            details
-          }) => {
-            const color = failure === true ? pageColors['error'] : pageColors[status]
-            const info = scores?.msg ?? statusInfo
-            return (
-              <>
-                {headMetadata &&
-                  <HeadMetadata
-                    content={headMetadata}
-                    testName={test_name}
-                    testUrl={input}
-                    country={country}
-                    date={measurement_start_time}
-                  />
-                }
-                <NavBar color={color} />
-                <Hero
-                  color={color}
-                  status={status}
-                  icon={statusIcon}
-                  label={statusLabel}
-                  info={info}
-                />
-                <CommonSummary
-                  measurement_start_time={measurement_start_time}
-                  probe_asn={probe_asn}
-                  probe_cc={probe_cc}
-                  color={color}
-                  country={country}
-                />
-
-                <Container>
-                  <DetailsHeader
-                    testName={test_name}
-                    runtime={raw_measurement?.test_runtime}
-                    notice={legacy}
-                    url={`measurement/${report_id}`}
-                  />
-                  {summaryText &&
-                    <SummaryText
+            render={({
+              status = 'default',
+              statusIcon,
+              statusLabel,
+              statusInfo,
+              legacy = false,
+              summaryText,
+              headMetadata,
+              details
+            }) => {
+              const color = failure === true ? pageColors['error'] : pageColors[status]
+              const info = scores?.msg ?? statusInfo
+              return (
+                <React.Fragment>
+                  {headMetadata &&
+                    <HeadMetadata
+                      content={headMetadata}
                       testName={test_name}
                       testUrl={input}
-                      network={probe_asn}
                       country={country}
                       date={measurement_start_time}
-                      content={summaryText}
                     />
                   }
-                  {details}
-                  <CommonDetails
-                    measurement={raw_measurement}
-                    reportId={report_id}
+                  <NavBar color={color} />
+                  <Hero
+                    color={color}
+                    status={status}
+                    icon={statusIcon}
+                    label={statusLabel}
+                    info={info}
                   />
-                </Container>
-              </>
-            )
-          }} />
+                  <CommonSummary
+                    measurement_start_time={measurement_start_time}
+                    probe_asn={probe_asn}
+                    probe_cc={probe_cc}
+                    color={color}
+                    country={country}
+                  />
+
+                  <Container>
+                    { !user.loggedIn ? <h2>Please <a onClick={() => setShowModal(true)}>login</a> to give feedback about the measurement</h2> : <h2>Leave feedback here</h2> }
+                    <DetailsHeader
+                      testName={test_name}
+                      runtime={raw_measurement?.test_runtime}
+                      notice={legacy}
+                      url={`measurement/${report_id}`}
+                    />
+                    {summaryText &&
+                      <SummaryText
+                        testName={test_name}
+                        testUrl={input}
+                        network={probe_asn}
+                        country={country}
+                        date={measurement_start_time}
+                        content={summaryText}
+                      />
+                    }
+                    {details}
+                    <CommonDetails
+                      measurement={raw_measurement}
+                      reportId={report_id}
+                    />
+                  </Container>
+                </React.Fragment>
+              )
+            }
+          } />
+        </>
       )}
     </>
   )
