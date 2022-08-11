@@ -1,5 +1,5 @@
 import React from 'react'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { Text } from 'ooni-components'
 
 import SectionHeader from './SectionHeader'
@@ -7,7 +7,28 @@ import { SimpleBox } from './boxes'
 // import PeriodFilter from './PeriodFilter'
 import AppsStatsGroup from './AppsStats'
 import AppsStatsCircumvention from './AppsStatsCircumvention'
+import Chart from './Chart'
 import FormattedMarkdown from '../FormattedMarkdown'
+
+const messagingTestNames = ['signal', 'telegram', 'whatsapp', 'facebook_messenger']
+const circumventionTestNames = ['vanilla_tor', 'psiphon', 'tor', 'torsf']
+
+const ChartsContainer = () => {
+  const intl = useIntl()
+
+  return (
+    <>
+      <Chart
+        testGroup={{name: 'messaging_apps', tests: messagingTestNames}}
+        title={intl.formatMessage({id: 'Tests.Groups.Instant Messagging.Name'})}
+      />
+      <Chart
+        testGroup={{name: 'circumvention_tools', tests: circumventionTestNames}}
+        title={intl.formatMessage({id: 'Tests.Groups.Circumvention.Name'})}
+      />
+    </>
+  )
+}
 
 const AppsSection = () => (
   <>
@@ -25,14 +46,15 @@ const AppsSection = () => (
       </Text>
     </SimpleBox>
     {/* App-wise graphs */}
-    <AppsStatsGroup
+    <ChartsContainer />
+    {/* <AppsStatsGroup
       title={<FormattedMessage id='Country.Overview.TestsByClass.InstantMessaging' />}
       testGroup='im'
     />
     {<AppsStatsCircumvention
       title={<FormattedMessage id='Country.Overview.TestsByClass.Circumvention'/>}
       testGroup='circumvention'
-    />}
+    />} */}
   </>
 )
 
