@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import bufferFrom from 'buffer-from'
 import url from 'url'
+import NLink from 'next/link'
 import {
   Heading,
   Flex,
@@ -17,7 +18,6 @@ import dayjs from 'services/dayjs'
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 
 import { DetailsBox } from '../DetailsBox'
-import FormattedMarkdown from '../../FormattedMarkdown'
 import StatusInfo from '../StatusInfo'
 
 const messages = defineMessages({
@@ -257,8 +257,6 @@ QueryContainer.propTypes = {
   query: PropTypes.object
 }
 
-
-
 /*
  * This validation function can either be evolved into a generic one to run before
  * deciding to render a specific component from `measurement/nettests/*`
@@ -291,6 +289,8 @@ const validateMeasurement = (measurement) => {
   }
   return deepmerge(validDefaults, measurement)
 }
+
+const getSearchHref = (input) => (`${process.env.NEXT_PUBLIC_EXPLORER_URL}/search?input=${input}`)
 
 const WebConnectivityDetails = ({
   isConfirmed,
@@ -332,140 +332,131 @@ const WebConnectivityDetails = ({
   if (isFailure) {
     status = 'error'
     reason = null
-    summaryText = (
-      <FormattedMessage
-        id='Measurement.SummaryText.Websites.Failed'
-        values={{
-          date: date,
-          WebsiteURL: input,
-          network: probe_asn,
-          country: country,
-        }}
-      />
-    )
+    summaryText = <FormattedMessage
+      id='Measurement.SummaryText.Websites.Failed'
+      values={{
+        date,
+        WebsiteURL: <NLink href={getSearchHref(input)}><a>{input}</a></NLink>,
+        network: probe_asn,
+        country
+      }}
+    />
   } else if(isConfirmed) {
     status = 'confirmed'
-    summaryText = intl.formatMessage(
-      {
-        id: 'Measurement.SummaryText.Websites.ConfirmedBlocked'
-      },
-      {
-        date: date,
-        WebsiteURL: input,
+    summaryText = <FormattedMessage
+      id='Measurement.SummaryText.Websites.ConfirmedBlocked'
+      values={{
+        date,
+        WebsiteURL: <NLink href={getSearchHref(input)}><a>{input}</a></NLink>,
         network: probe_asn,
-        country: country,
-      }
-    )
+        country
+      }}
+    />
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.ConfirmedBlocked',
         defaultMessage: '{hostname} was blocked in {country}'
       },
       {
-        date: date,
+        date,
         hostname,
-        country: country,
+        country,
       }
     )
   } else if (isAnomaly) {
     status = 'anomaly'
     const blockingReason = blocking ?? scores?.analysis?.blocking_type ?? null
     reason = messages[`blockingReason.${blockingReason}`] && intl.formatMessage(messages[`blockingReason.${blockingReason}`])
-    summaryText = (<FormattedMarkdown
+    summaryText = <FormattedMessage
       id='Measurement.SummaryText.Websites.Anomaly'
       values={{
-        date: date,
-        WebsiteURL: input,
+        date,
+        WebsiteURL: <NLink href={getSearchHref(input)}><a>{input}</a></NLink>,
+        'link-to-docs': (string) => (<a href="https://ooni.org/support/faq/#why-do-false-positives-occur">{string}</a>),
         network: probe_asn,
-        country: country,
-        BlockingReason: reason && `**${reason}**`
+        country,
+        reason
       }}
-    />)
+    />
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Anomaly',
         defaultMessage: '{hostname} showed signs of {reason} in {country}'
       },
       {
-        date: date,
+        date,
         hostname,
-        country: country,
-        reason: reason
+        country,
+        reason
       }
     )
   } else if (accessible) {
     status = 'reachable'
-    summaryText = intl.formatMessage(
-      {
-        id: 'Measurement.SummaryText.Websites.Accessible'
-      },
-      {
-        date: date,
-        WebsiteURL: input,
+    summaryText = <FormattedMessage
+      id='Measurement.SummaryText.Websites.Accessible'
+      values={{
+        date,
+        WebsiteURL: <NLink href={getSearchHref(input)}><a>{input}</a></NLink>,
         network: probe_asn,
-        country: country
-      }
-    )
+        country
+      }}
+    />
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Accessible',
         defaultMessage: '{hostname} was accessible in {country}'
       },
       {
-        date: date,
+        date,
         hostname,
-        country: country,
+        country,
       }
     )
   } else if (blocking === false) {
     // When not accessible, but also not blocking, it must be down
     status = 'down'
-    summaryText = intl.formatMessage(
-      {
-        id: 'Measurement.SummaryText.Websites.Down'
-      },
-      {
-        date: date,
-        WebsiteURL: input,
+    summaryText = <FormattedMessage
+      id='Measurement.SummaryText.Websites.Down'
+      values={{
+        date,
+        WebsiteURL: <NLink href={getSearchHref(input)}><a>{input}</a></NLink>,
         network: probe_asn,
-        country: country
-      }
-    )
+        country
+      }}
+    />
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Down',
         defaultMessage: '{hostname} was down in {country}'
       },
       {
-        date: date,
+        date,
         hostname,
-        country: country,
+        country,
       }
     )
   } else {
     // Fallback condition to handle older measurements not present in fastpath
     // See: https://github.com/ooni/explorer/issues/426#issuecomment-612094244
     status = 'error'
-    summaryText = intl.formatMessage(
-      {
-        id: 'Measurement.SummaryText.Websites.Failed'
-      },
-      {
-        date: date,
-        WebsiteURL: input,
+    summaryText = <FormattedMessage
+      id='Measurement.SummaryText.Websites.Failed'
+      values={{
+        date,
+        WebsiteURL: <NLink href={getSearchHref(input)}><a>{input}</a></NLink>,
         network: probe_asn,
-        country: country
-      }
-    )
+        country
+      }}
+    />
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Failed',
         defaultMessage: '{hostname} failed to be measured in {country}'
       },
       {
-        date: date,
+        date,
         hostname,
-        country: country,
+        country,
       }
     )
   }
