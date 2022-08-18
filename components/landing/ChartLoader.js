@@ -7,8 +7,8 @@ export const ChartLoader = () => (
     height={200}
     width={450}
     speed={1}
-    primaryColor={theme.colors.gray3}
-    secondaryColor={theme.colors.gray5}
+    primarycolor={theme.colors.gray3}
+    secondarycolor={theme.colors.gray5}
   >
     <rect x="20" y="17" rx="0" ry="0" width="1" height="129" />
     <rect x="20" y="146" rx="0" ry="0" width="360" height="1" />
