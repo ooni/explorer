@@ -4,7 +4,7 @@ import url from 'url'
 import dayjs from 'services/dayjs'
 import NLink from 'next/link'
 import styled from 'styled-components'
-import { defineMessages, useIntl } from 'react-intl'
+import { useIntl } from 'react-intl'
 import {
   Flex, Box,
   Link,
@@ -55,157 +55,6 @@ const imTests = [
   'whatsapp',
   'facebook_messenger'
 ]
-
-const messages = defineMessages({
-  'Search.WebConnectivity.Results.Reachable': {
-    id: 'Search.WebConnectivity.Results.Reachable',
-    defaultMessage: ''
-  },
-  'Search.WebConnectivity.Results.Anomaly': {
-    id: 'Search.WebConnectivity.Results.Anomaly',
-    defaultMessage: ''
-  },
-  'Search.WebConnectivity.Results.Blocked': {
-    id: 'Search.WebConnectivity.Results.Blocked',
-    defaultMessage: ''
-  },
-  'Search.WebConnectivity.Results.Error': {
-    id: 'Search.WebConnectivity.Results.Error',
-    defaultMessage: ''
-  },
-  'Search.WhatsApp.Results.Reachable': {
-    id: 'Search.WhatsApp.Results.Reachable',
-    defaultMessage: ''
-  },
-  'Search.WhatsApp.Results.Anomaly': {
-    id: 'Search.WhatsApp.Results.Anomaly',
-    defaultMessage: ''
-  },
-  'Search.WhatsApp.Results.Error': {
-    id: 'Search.WhatsApp.Results.Error',
-    defaultMessage: ''
-  },
-  'Search.FacebookMessenger.Results.Reachable': {
-    id: 'Search.FacebookMessenger.Results.Reachable',
-    defaultMessage: ''
-  },
-  'Search.FacebookMessenger.Results.Anomaly': {
-    id: 'Search.FacebookMessenger.Results.Anomaly',
-    defaultMessage: ''
-  },
-  'Search.FacebookMessenger.Results.Error': {
-    id: 'Search.FacebookMessenger.Results.Error',
-    defaultMessage: ''
-  },
-  'Search.Telegram.Results.Reachable': {
-    id: 'Search.Telegram.Results.Reachable',
-    defaultMessage: ''
-  },
-  'Search.Telegram.Results.Anomaly': {
-    id: 'Search.Telegram.Results.Anomaly',
-    defaultMessage: ''
-  },
-  'Search.Telegram.Results.Error': {
-    id: 'Search.Telegram.Results.Error',
-    defaultMessage: ''
-  },
-  'Search.Signal.Results.Reachable': {
-    id: 'Search.Signal.Results.Reachable',
-    defaultMessage: ''
-  },
-  'Search.Signal.Results.Anomaly': {
-    id: 'Search.Signal.Results.Anomaly',
-    defaultMessage: ''
-  },
-  'Search.Signal.Results.Error': {
-    id: 'Search.Signal.Results.Error',
-    defaultMessage: ''
-  },
-  'Search.HTTPInvalidRequestLine.Results.Anomaly': {
-    id: 'Search.HTTPInvalidRequestLine.Results.Anomaly',
-    defaultMessage: ''
-  },
-  'Search.HTTPInvalidRequestLine.Results.Reachable': {
-    id: 'Search.HTTPInvalidRequestLine.Results.Reachable',
-    defaultMessage: ''
-  },
-  'Search.HTTPInvalidRequestLine.Results.Error': {
-    id: 'Search.HTTPInvalidRequestLine.Results.Error',
-    defaultMessage: ''
-  },
-  'Search.HTTPHeaderFieldManipulation.Results.Anomaly': {
-    id: 'Search.HTTPHeaderFieldManipulation.Results.Anomaly',
-    defaultMessage: ''
-  },
-  'Search.HTTPHeaderFieldManipulation.Results.Reachable': {
-    id: 'Search.HTTPHeaderFieldManipulation.Results.Reachable',
-    defaultMessage: ''
-  },
-  'Search.HTTPHeaderFieldManipulation.Results.Error': {
-    id: 'Search.HTTPHeaderFieldManipulation.Results.Error',
-    defaultMessage: ''
-  },
-  'Search.HTTPRequests.Results.Reachable': {
-    id: 'Search.HTTPRequests.Results.Reachable',
-    defaultMessage: ''
-  },
-  'Search.HTTPRequests.Results.Error': {
-    id: 'Search.HTTPRequests.Results.Error',
-    defaultMessage: ''
-  },
-  'Search.HTTPRequests.Results.Blocked': {
-    id: 'Search.HTTPRequests.Results.Blocked',
-    defaultMessage: ''
-  },
-  'Search.HTTPRequests.Results.Anomaly': {
-    id: 'Search.HTTPRequests.Results.Anomaly',
-    defaultMessage: ''
-  },
-  'Search.Tor.Results.Reachable': {
-    id: 'Search.Tor.Results.Reachable',
-    defaultMessage: ''
-  },
-  'Search.Tor.Results.Anomaly': {
-    id: 'Search.Tor.Results.Anomaly',
-    defaultMessage: ''
-  },
-  'Search.TorSnowflake.Results.Reachable': {
-    id: 'Search.TorSnowflake.Results.Reachable',
-    defaultMessage: 'Reachable'
-  },
-  'Search.TorSnowflake.Results.Anomaly': {
-    id: 'Search.TorSnowflake.Results.Anomaly',
-    defaultMessage: 'Anomaly'
-  },
-  'Search.TorSnowflake.Results.Error': {
-    id: 'Search.TorSnowflake.Results.Anomaly',
-    defaultMessage: 'Anomaly'
-  },
-  'Search.Psiphon.Results.Reachable': {
-    id: 'Search.Psiphon.Results.Reachable',
-    defaultMessage: ''
-  },
-  'Search.Psiphon.Results.Anomaly': {
-    id: 'Search.Psiphon.Results.Anomaly',
-    defaultMessage: ''
-  },
-  'Search.Psiphon.Results.Error': {
-    id: 'Search.Psiphon.Results.Error',
-    defaultMessage: ''
-  },
-  'Search.RiseupVPN.Results.Reachable': {
-    id: 'Search.RiseupVPN.Results.Reachable',
-    defaultMessage: ''
-  },
-  'Search.RiseupVPN.Results.Anomaly': {
-    id: 'Search.RiseupVPN.Results.Anomaly',
-    defaultMessage: ''
-  },
-  'Search.RiseupVPN.Results.Error': {
-    id: 'Search.RiseupVPN.Results.Error',
-    defaultMessage: ''
-  },
-})
 
 const ASNBox = ({asn}) => {
   const justNumber = asn.split('AS')[1]
@@ -284,14 +133,14 @@ const getIndicators = ({ test_name, testDisplayName, scores = {}, confirmed, ano
       color = colorError
       tag = (
         <ResultTagHollow>
-          {intl.formatMessage(messages[`${computedMessageIdPrefix}.Error`])}
+          {intl.formatMessage({id:`${computedMessageIdPrefix}.Error`, defaultMessage: ''})}
         </ResultTagHollow>
       )
     } else if (confirmed === true) {
       color = colorConfirmed
       tag = (
         <ResultTagFilled>
-          {intl.formatMessage(messages[`${computedMessageIdPrefix}.Blocked`])}
+          {intl.formatMessage({id: `${computedMessageIdPrefix}.Blocked`, defaultMessage: ''})}
         </ResultTagFilled>
       )
     } else if (blockingType !== undefined) {
@@ -305,14 +154,14 @@ const getIndicators = ({ test_name, testDisplayName, scores = {}, confirmed, ano
       color = colorAnomaly
       tag = (
         <ResultTagHollow>
-          {intl.formatMessage(messages[`${computedMessageIdPrefix}.Anomaly`])}
+          {intl.formatMessage({id:`${computedMessageIdPrefix}.Anomaly`, defaultMessage: ''})}
         </ResultTagHollow>
       )
     } else {
       color = colorNormal
       tag = (
         <StyledResultTag>
-          {intl.formatMessage(messages[`${computedMessageIdPrefix}.Reachable`])}
+          {intl.formatMessage({id: `${computedMessageIdPrefix}.Reachable`, defaultMessage: ''})}
         </StyledResultTag>
       )
     }
