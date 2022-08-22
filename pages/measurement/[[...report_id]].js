@@ -30,7 +30,7 @@ const pageColors = {
 
 export async function getServerSideProps({ query }) {
   let initialProps = {
-    errors: []
+    error: null
   }
 
   // Get `report_id` using optional catch all dynamic route of Next.js
@@ -94,7 +94,7 @@ export async function getServerSideProps({ query }) {
       initialProps.notFound = true
     }
   } catch (e) {
-    initialProps.errors.push(e.message)
+    initialProps.error = e.message
   }
   return {
     props: initialProps
@@ -102,7 +102,7 @@ export async function getServerSideProps({ query }) {
 }
 
 const Measurement = ({
-  errors,
+  error,
   country,
   confirmed,
   anomaly,
@@ -121,10 +121,9 @@ const Measurement = ({
 
   // Add the 'AS' prefix to probe_asn when API chooses to send just the number
   probe_asn = typeof probe_asn === 'number' ? `AS${probe_asn}` : probe_asn
-
-  if (errors.length > 0) {
+  if (error) {
     return (
-      <ErrorPage errorCode={501} errors={errors} />
+      <ErrorPage statusCode={501} error={error} />
     )
   }
 
@@ -223,7 +222,7 @@ Measurement.propTypes = {
   anomaly: PropTypes.bool,
   confirmed: PropTypes.bool,
   country: PropTypes.string,
-  errors: PropTypes.arrayOf(PropTypes.string),
+  error: PropTypes.string,
   failure: PropTypes.bool,
   input: PropTypes.any,
   notFound: PropTypes.bool,
