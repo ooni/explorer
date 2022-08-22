@@ -9,7 +9,8 @@ import {
   Flex, Box,
   Container,
   Link, Input,
-  Heading, Text
+  Heading, Text,
+  Button
 } from 'ooni-components'
 import { StickyContainer, Sticky } from 'react-sticky'
 
@@ -38,6 +39,28 @@ const Divider = styled.div`
 
 const CountryBlock = ({countryCode, msmtCount}) => {
   const href = `/country/${countryCode}`
+  const [data, setData] = React.useState([])
+  const [loading, setLoading] = React.useState(false)
+
+  let button = (
+    <Button onClick={async () => {
+      setLoading(true)
+      const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
+      const output = []
+      for (let first = new Date().getFullYear() - 4, last = first + 4; first <= last; first++) {
+        let promiseResult = client.get(`api/v1/aggregation?axis_y=probe_cc&since=${first}-01-01&until=${first + 1}-01-01&probe_cc=${countryCode}`)
+          .then(response => response.data.result[0])
+        output.push(promiseResult)
+      }
+      setData(await Promise.all(output))
+      setLoading(false)
+    }}>
+      <Text fontSize={14}>Show yearly data</Text>
+    </Button>
+  )
+
+  if (data.length) button = null
+
   return (
     <Box width={[1/2, 1/4]} my={3} px={3}>
       <StyledCountryCard p={3}>
@@ -51,9 +74,30 @@ const CountryBlock = ({countryCode, msmtCount}) => {
                 <Text mr={2} fontSize={20} fontWeight={600} color='blue9'><FormattedNumber value={msmtCount} /></Text>
                 <Text>Measurements</Text>
               </Flex>
+              <br />
+              {!!data.length && (
+                <Flex alignItems={['flex-start', 'center']} flexDirection={['row']} justifyContent={['space-between']}>
+                  {data
+                    // for years without records, the entry will be undefined
+                    .map(a => a ? a.measurement_count : 0)
+                    .map((count, index) => (
+                      <div key={index}>
+                        <Text fontWeight={600}>
+                          {new Date().getFullYear() - data.length + index + 1}
+                        </Text>
+                        <br />
+                        <Text fontSize={12}>
+                          {count}
+                        </Text>
+                      </div>
+                    ))
+                  }
+                </Flex>
+              )}
             </Flex>
           </CountryLink>
         </NLink>
+        {loading ? <Text>Loading...</Text> : button}
       </StyledCountryCard>
     </Box>
   )
