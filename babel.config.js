@@ -5,12 +5,6 @@ module.exports = function (api) {
   const plugins = [
     'inline-react-svg',
     ['styled-components', {'ssr': true, 'displayName': true, 'preprocess': false}],
-    ['react-intl', {
-      'messagesDir': './public/static/lang/.messages',
-      'enforceDescriptions': false,
-      'enforceDefaultMessage': false,
-      'extractFromFormatMessageCall': true
-    }]
   ]
 
   const presets = [

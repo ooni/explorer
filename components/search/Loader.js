@@ -11,8 +11,8 @@ export const LoaderRow = (props) => {
     height={40}
     width={450}
     speed={1}
-    primaryColor={theme.colors.gray3}
-    secondaryColor={theme.colors.gray5}
+    primarycolor={theme.colors.gray3}
+    secondarycolor={theme.colors.gray5}
     {...props}
   >
     <rect x="0" y="15" rx="5" ry="5" width="30" height="10" />
