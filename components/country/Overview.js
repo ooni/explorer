@@ -7,12 +7,6 @@ import { BoxWithTitle } from './boxes'
 import TestsByGroup from './OverviewCharts'
 import FormattedMarkdown from '../FormattedMarkdown'
 import { useCountry } from './CountryContext'
-import {
-  NettestGroupWebsites,
-  NettestGroupInstantMessaging,
-  NettestGroupMiddleBoxes,
-} from 'ooni-components/dist/icons'
-
 
 const NwInterferenceStatus = styled(Box)`
   color: ${props => props.color || props.theme.colors.gray5};

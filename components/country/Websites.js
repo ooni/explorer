@@ -10,24 +10,24 @@ import ConfirmedBlockedCategory from './ConfirmedBlockedCategory'
 const WebsitesSection = ({ countryCode }) => {
   return (
     <>
-      <SectionHeader>
-        <SectionHeader.Title name='websites'>
-          <FormattedMessage id='Country.Heading.Websites' />
-        </SectionHeader.Title>
-      </SectionHeader>
-      <SimpleBox>
-        <Text fontSize={16}>
-          <FormattedMarkdown id='Country.Websites.Description' />
-        </Text>
-      </SimpleBox>
-      <ConfirmedBlockedCategory testName='web_connectivity' title='Confirmed blocked categories' />
-      <Box my={4}>
-        <ChartCountry
-          testName='web_connectivity'
-          queryParams={{axis_y: 'domain'}}
-        />
-      </Box>
-    </>
+        <SectionHeader>
+          <SectionHeader.Title name='websites'>
+            <FormattedMessage id='Country.Heading.Websites' />
+          </SectionHeader.Title>
+        </SectionHeader>
+        <SimpleBox>
+          <Text fontSize={16}>
+            <FormattedMarkdown id='Country.Websites.Description' />
+          </Text>
+        </SimpleBox>
+        <ConfirmedBlockedCategory testName='web_connectivity' title='Confirmed blocked categories' />
+        <Box my={4}>
+          <ChartCountry
+            testName='web_connectivity'
+            queryParams={{axis_y: 'domain'}}
+          />
+        </Box>
+      </>
   )
 }
 

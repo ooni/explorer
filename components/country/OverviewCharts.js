@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Heading, Button, Flex, Box, Text, theme } from 'ooni-components'
+import { Flex, Box, theme } from 'ooni-components'
 import {
   VictoryChart,
   VictoryBar,
@@ -11,7 +11,6 @@ import {
   VictoryVoronoiContainer
 } from 'victory'
 import { FormattedMessage, injectIntl } from 'react-intl'
-import NLink from 'next/link'
 
 import Tooltip from './Tooltip'
 import VictoryTheme from '../VictoryTheme'

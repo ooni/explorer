@@ -7,19 +7,19 @@ import {
   Flex, Box
 } from 'ooni-components'
 import styled from 'styled-components'
+import { useIntl } from 'react-intl'
 import { StickyContainer, Sticky } from 'react-sticky'
 import { getLocalisedRegionName } from '../../utils/i18nCountries'
 
-import NavBar from '../../components/NavBar'
-import Flag from '../../components/Flag'
-import PageNavMenu from '../../components/country/PageNavMenu'
-import Overview from '../../components/country/Overview'
-import WebsitesSection from '../../components/country/Websites'
-import AppsSection from '../../components/country/Apps'
-// import NetworkPropertiesSection from '../../components/country/NetworkProperties'
-import { CountryContextProvider } from '../../components/country/CountryContext'
-import CountryHead from '../../components/country/CountryHead'
-import { useIntl } from 'react-intl'
+import NavBar from 'components/NavBar'
+import Flag from 'components/Flag'
+import Layout from 'components/Layout'
+import PageNavMenu from 'components/country/PageNavMenu'
+import Overview from 'components/country/Overview'
+import WebsitesSection from 'components/country/Websites'
+import AppsSection from 'components/country/Apps'
+import { CountryContextProvider } from 'components/country/CountryContext'
+import CountryHead from 'components/country/CountryHead'
 
 const getCountryReports = (countryCode, data) => {
   const reports = data.filter((article) => (
@@ -100,7 +100,7 @@ const Country = ({ countryCode, overviewStats, reports, ...coverageDataSSR }) =>
       })
     }
     fetcher(testGroupList)
-    
+
   }, [countryCode, setNewData])
 
   const { testCoverage, networkCoverage } = newData !== false ? newData : coverageDataSSR
