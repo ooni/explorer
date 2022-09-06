@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
-import { useIntl } from 'react-intl'
 import { useRouter } from 'next/router'
+import dayjs from 'services/dayjs'
 import { Heading, Box, Flex } from 'ooni-components'
 import useSWR from 'swr'
 import GridChart, { prepareDataForGridChart } from 'components/aggregation/mat/GridChart'
@@ -13,10 +13,9 @@ const swrOptions = {
   dedupingInterval: 10 * 60 * 1000,
 }
 
-const Chart = React.memo(function Chart({testName, testGroup = null, title, queryParams = {}}) {
-  const intl = useIntl()
+const ChartCountry = React.memo(function Chart({testName, testGroup = null, title, queryParams = {}}) {
   const router = useRouter()
-  const { query: {since, until, asn} } = router
+  const { query: { countryCode} } = router
 
   const name = testName || testGroup.name
 
@@ -27,20 +26,21 @@ const Chart = React.memo(function Chart({testName, testGroup = null, title, quer
 
   const query = useMemo(() => ({
     ...params,
-    probe_asn: asn,
-    since: since,
-    until: until,
+    probe_cc: countryCode,
+    since: dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD'),
+    until: dayjs.utc().add(1, 'day').format('YYYY-MM-DD'),
     ...testName && {test_name: testName}
-  }), [since, until, asn, params, testName])
+  }), [countryCode, params, testName])
 
   const apiQuery = useMemo(() => {
     const qs = new URLSearchParams(query).toString()
+    console.log(qs)
     return qs
   }, [query])
 
   const { data, error } = useSWR(
-    testGroup ? { query: apiQuery, 
-      testNames: testGroup.tests, 
+    testGroup ? { query: apiQuery,
+      testNames: testGroup.tests,
       groupKey: name
     } : apiQuery,
     testGroup ? MATMultipleFetcher : MATFetcher,
@@ -52,9 +52,9 @@ const Chart = React.memo(function Chart({testName, testGroup = null, title, quer
     }
     let chartData = testGroup ? data : data.data
     const graphQuery = testGroup ? {...query, axis_y: name} : query
-    const [reshapedData, rowKeys, rowLabels] = prepareDataForGridChart(chartData, graphQuery, intl.locale)
+    const [reshapedData, rowKeys, rowLabels] = prepareDataForGridChart(chartData, graphQuery)
     return [reshapedData, rowKeys, rowLabels]
-  }, [data, query, name, testGroup, intl])
+  }, [data, query, name, testGroup])
 
   const headerOptions = { probe_cc: false, subtitle: false }
 
@@ -64,10 +64,10 @@ const Chart = React.memo(function Chart({testName, testGroup = null, title, quer
         <Box><Heading h={3} mt={40} mb={20}>{title}</Heading></Box>
         <Box>
           {(!chartData && !error) ? (
-            <div>{intl.formatMessage({id: 'General.Loading'})}</div>
+            <div> Loading ...</div>
           ) : (
             chartData === null || chartData.length === 0 ? (
-              <Heading h={5}>{intl.formatMessage({id: 'General.NoData'})}</Heading>
+              <Heading h={5}>No Data</Heading>
             ) : (
               <GridChart
                 data={chartData}
@@ -82,7 +82,7 @@ const Chart = React.memo(function Chart({testName, testGroup = null, title, quer
         {error &&
           <DetailsBox collapsed={false} content={<>
             <details>
-              <summary><span>{intl.formatMessage({id: 'General.Error'})}: {error.message}</span></summary>
+              <summary><span>Error: {error.message}</span></summary>
               <Box as='pre'>
                 {JSON.stringify(error, null, 2)}
               </Box>
@@ -95,4 +95,4 @@ const Chart = React.memo(function Chart({testName, testGroup = null, title, quer
   )
 })
 
-export default Chart
+export default ChartCountry

@@ -10,7 +10,7 @@ import Layout from 'components/Layout'
 import NavBar from 'components/NavBar'
 import { MetaTags } from 'components/dashboard/MetaTags'
 import Form from 'components/network/Form'
-import Chart from 'components/network/Chart'
+import ChartNetwork from 'components/network/ChartNetwork'
 import Calendar from 'components/network/Calendar'
 import FormattedMarkdown from 'components/FormattedMarkdown'
 import { FormattedMessage } from 'react-intl'
@@ -35,15 +35,15 @@ const circumventionTestNames = ['psiphon', 'tor', 'torsf']
 const ChartsContainer = () => {
   const intl = useIntl()
   return (
-    <> 
-      <Chart
+    <>
+      <ChartNetwork
         testName='web_connectivity'
         title={intl.formatMessage({id: 'Tests.Groups.Webistes.Name'})}
         queryParams={{axis_y: 'domain'}} />
-      <Chart
+      <ChartNetwork
         testGroup={{name: 'messaging_apps', tests: messagingTestNames}}
         title={intl.formatMessage({id: 'Tests.Groups.Instant Messagging.Name'})} />
-      <Chart
+      <ChartNetwork
         testGroup={{name: 'circumvention_tools', tests: circumventionTestNames}}
         title={intl.formatMessage({id: 'Tests.Groups.Circumvention.Name'})} />
     </>
@@ -125,7 +125,7 @@ const NetworkDashboard = ({asn, calendarData = [], measurementsTotal, countriesD
         <Heading h={1} fontWeight='heading' my={20}>AS{displayASN}</Heading>
         {router.isReady &&
           <>
-            {!!calendarData.length ? 
+            {!!calendarData.length ?
               <>
                 <Summary measurementsTotal={measurementsTotal} countriesData={countriesData} firstMeasurement={calendarData[0].day} />
                 <Calendar data={calendarData} />
@@ -133,9 +133,9 @@ const NetworkDashboard = ({asn, calendarData = [], measurementsTotal, countriesD
                 <Form onChange={onChange} query={query} />
                 <ChartsContainer />
               </> :
-              <CallToActionBox 
+              <CallToActionBox
                 title={<FormattedMessage id='Network.NoData.Title' />}
-                text={<FormattedMessage id='Network.NoData.Text' />} 
+                text={<FormattedMessage id='Network.NoData.Text' />}
               />
             }
           </>
@@ -155,7 +155,7 @@ export const getServerSideProps = async (context) => {
     const measurementsTotal = await client
       .get(path, {params: {'probe_asn': asn}})
       .then((response)=> response?.data?.result.measurement_count)
-    
+
     const calendarData = await client.get(path, { params: {
       probe_asn: asn,
       since: dayjs.utc().subtract(10, 'year').format('YYYY-MM-DD'),
@@ -168,8 +168,8 @@ export const getServerSideProps = async (context) => {
       axis_x: 'probe_cc'
     }}).then((response) => (response.data.result.map(res => ({country: res.probe_cc, measurements: res.measurement_count}))))
 
-    return { 
-      props: { 
+    return {
+      props: {
         asn,
         calendarData,
         measurementsTotal,

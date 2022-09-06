@@ -4,7 +4,7 @@ import { Text } from 'ooni-components'
 
 import SectionHeader from './SectionHeader'
 import { SimpleBox } from './boxes'
-import Chart from './Chart'
+import ChartCountry from './ChartCountry'
 import FormattedMarkdown from '../FormattedMarkdown'
 
 const messagingTestNames = ['signal', 'telegram', 'whatsapp', 'facebook_messenger']
@@ -15,11 +15,11 @@ const ChartsContainer = () => {
 
   return (
     <>
-      <Chart
+      <ChartCountry
         testGroup={{name: 'messaging_apps', tests: messagingTestNames}}
         title={intl.formatMessage({id: 'Tests.Groups.Instant Messagging.Name'})}
       />
-      <Chart
+      <ChartCountry
         testGroup={{name: 'circumvention_tools', tests: circumventionTestNames}}
         title={intl.formatMessage({id: 'Tests.Groups.Circumvention.Name'})}
       />
