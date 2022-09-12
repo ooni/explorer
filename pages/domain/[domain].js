@@ -1,8 +1,9 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
-import { Container, Heading, Box } from 'ooni-components'
-import { useIntl } from 'react-intl'
+import { Container, Heading, Box, Flex } from 'ooni-components'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { countryList } from 'country-util'
+import axios from 'axios'
 
 import Layout from 'components/Layout'
 import NavBar from 'components/NavBar'
@@ -50,10 +51,11 @@ const Summary = ({ blockedCountries }) => {
   )
 }
 
-const DomainDashboard = ({ domain }) => {
+const DomainDashboard = ({ domain, categoryCode, canonicalDomain }) => {
   const router = useRouter()
   const query = router.query
   const [state, setState] = useState([])
+  const IconComponent = require(`ooni-components/dist/icons/CategoryCode${categoryCode}`).default
 
   const onChange = useCallback(({ since, until }) => {
     setState([])
@@ -83,7 +85,11 @@ const DomainDashboard = ({ domain }) => {
       <MetaTags />
       <NavBar />
       <Container>
-        <Heading h={1} fontWeight='heading' my={20}>{domain} </Heading>
+        <Flex mt={40} alignItems='center'>
+          <IconComponent height='35' width='35' />
+          <Heading h={4} my={0} ml={10}><FormattedMessage id={`CategoryCode.${categoryCode}.Name`} /></Heading>
+        </Flex>
+        <Heading h={1} fontWeight='heading' mt={0} mb={20}>{domain}</Heading>
         {router.isReady &&
           <>
             {!!blockedCountries.length && <Summary blockedCountries={blockedCountries} />}
@@ -100,8 +106,19 @@ export const getServerSideProps = async (context) => {
   const { domain } = context.query
 
   if (/^((xn--)?[a-z0-9\-]*\.)+((xn--)?[a-z0-9]*)$/.test(domain)) {
+    const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL})
+    const path = '/api/_/domain_metadata'
+
+    const { canonical_domain: canonicalDomain, category_code: categoryCode } = await client
+      .get(path, {params: {domain}})
+      .then((response)=> response.data)
+    
     return {
-      props: { domain }
+      props: { 
+        domain, 
+        canonicalDomain, 
+        categoryCode 
+      }
     }
   }
 
