@@ -4707,10 +4707,10 @@ onetime@^5.1.2:
   dependencies:
     mimic-fn "^2.1.0"
 
-ooni-components@^0.5.0-alpha.5:
-  version "0.5.0-alpha.5"
-  resolved "https://registry.yarnpkg.com/ooni-components/-/ooni-components-0.5.0-alpha.5.tgz#e42cd1f08e1cda2ea0310c53a6f824899f910a66"
-  integrity sha512-VBNew9RriKcTytTxUR78NGHqUF8GYbCUY3vqXtjFldc6WmFmsNt94VeLarj/WtiDhwtMDHUo8vgFoTNkRuIIPQ==
+ooni-components@^0.5.0-alpha.6:
+  version "0.5.0-alpha.6"
+  resolved "https://registry.yarnpkg.com/ooni-components/-/ooni-components-0.5.0-alpha.6.tgz#dfdeba61b255829b3558568b9f6abff99aeb3587"
+  integrity sha512-s6pRzTGZMmyR2ef4kpD5cnsJ5Exh5nbHMy/hSLSTb3xnMSoTMDywk88ZnwWK/vhCVoDattgqrVGM9VgVH5/P/w==
   dependencies:
     "@rebass/forms" "^4.0.6"
     react-icon-base "^2.1.2"
