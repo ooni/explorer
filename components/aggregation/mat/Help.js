@@ -27,7 +27,7 @@ const boxTitle = (
 
 const Help = () => {
   return (
-    <DetailsBox title={boxTitle} collapsed={true}>
+    <DetailsBox title={boxTitle} collapsed={false}>
       {/* <Heading h={2}> <FormattedMessage id='MAT.Help.Title' /> </Heading> */}
       <FormattedMarkdown id='MAT.Help.Content' />
       <Flex flexDirection='column'>
