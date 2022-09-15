@@ -1,6 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react'
 import { useRouter } from 'next/router'
-import { Container, Heading, Box, Flex } from 'ooni-components'
+import { Container, Heading, Box, Flex, Text } from 'ooni-components'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { countryList } from 'country-util'
 import axios from 'axios'
@@ -51,11 +51,26 @@ const Summary = ({ blockedCountries }) => {
   )
 }
 
+const Canonical = ({canonicalDomain}) => {
+  const intl = useIntl()
+  return (
+    <Text mb={20}>
+      {intl.formatMessage(
+        {id: 'Domain.Canonical'},
+        {canonicalDomain: (<NLink passHref href={`/domain/${canonicalDomain}`}>{canonicalDomain}</NLink>)
+        }
+      )}
+    </Text>
+  )
+}
+
 const DomainDashboard = ({ domain, categoryCode, canonicalDomain }) => {
   const router = useRouter()
   const query = router.query
   const [state, setState] = useState([])
   const IconComponent = require(`ooni-components/dist/icons/CategoryCode${categoryCode}`).default
+
+  const hasCanonical = domain !== canonicalDomain
 
   const onChange = useCallback(({ since, until }) => {
     setState([])
@@ -76,8 +91,9 @@ const DomainDashboard = ({ domain, categoryCode, canonicalDomain }) => {
   }, [router, query, domain])
 
   const blockedCountries = useMemo(() => {
-    if (state) return [...new Set(state.filter((s, index, self) => s.confirmed_count > 0).map((s) => s.probe_cc))]
-    return null
+    return state ?
+      [...new Set(state.filter((s, index, self) => s.confirmed_count > 0).map((s) => s.probe_cc))] :
+      []
   }, [state])
 
   return (
@@ -93,6 +109,7 @@ const DomainDashboard = ({ domain, categoryCode, canonicalDomain }) => {
         {router.isReady &&
           <>
             {!!blockedCountries.length && <Summary blockedCountries={blockedCountries} />}
+            {hasCanonical && <Canonical canonicalDomain={canonicalDomain} />}
             <Form onChange={onChange} query={query} />
             <ChartContainer domain={domain} setState={setState} />
           </>

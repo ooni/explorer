@@ -2,6 +2,7 @@ import PropTypes from 'prop-types'
 import { useIntl } from 'react-intl'
 import countryUtil from 'country-util'
 import { Box } from 'ooni-components'
+import NLink from 'next/link'
 
 import { testNames } from '../../test-info'
 import { getCategoryCodesMap } from '../../utils/categoryCodes'
@@ -40,7 +41,7 @@ export const getRowLabel = (key, yAxis) => {
     return categoryCodesMap.get(key)?.name ?? key
   case 'input':
   case 'domain':
-    return (<InputRowLabel input={key} />)
+    return (<NLink href={`/domain/${key}`}><a><InputRowLabel input={key} /></a></NLink>)
   case 'blocking_type':
     return blockingTypeLabels[key] ?? key
   case 'probe_asn':
