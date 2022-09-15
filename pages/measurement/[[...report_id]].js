@@ -40,7 +40,7 @@ export async function getServerSideProps({ query }) {
   // in which case, the extra segments are available inside query.report_id[1+]
   const report_id = query?.report_id?.[0]
   // If there is no report_id to use, fail early with MeasurementNotFound
-  if (typeof report_id !== 'string' || report_id.length < 1) {
+  if (typeof report_id !== 'string' || !report_id.match(/[a-zA-Z0-9_-]{40,100}/)) {
     initialProps.notFound = true
     return {
       props: initialProps
