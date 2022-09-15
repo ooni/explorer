@@ -78,7 +78,7 @@ const CustomToolTip = React.memo(({ data, onClose, title, link = true }) => {
     const searchQuery = generateSearchQuery(data, query)
     const linkObj = {
       pathname: '/search',
-      query: searchQuery
+      query: {...searchQuery, failure: true}
     }
 
 
