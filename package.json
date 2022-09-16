@@ -89,7 +89,6 @@
     "test": "yarn run test:e2e",
     "script:build-translations": "node ./scripts/build-translations.js",
     "script:extract-i18n-keys": "yarn build && node ./scripts/extract-react-intl-keys.js",
-    "script:populate-git-env:print": "echo 'SHA: '${GIT_COMMIT_SHA} && echo 'SHA (short): '${GIT_COMMIT_SHA_SHORT} && echo 'REF (current branch/tag): '${GIT_COMMIT_REF} && echo 'TAGS: '${GIT_COMMIT_TAGS}",
     "git:getReleasesAndTags": "git tag --points-at HEAD",
     "git:getCommitSHA": "git rev-parse HEAD",
     "git:getCommitSHA:short": "git rev-parse --short HEAD",
