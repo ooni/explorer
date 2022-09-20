@@ -4,7 +4,7 @@ import url from 'url'
 import dayjs from 'services/dayjs'
 import NLink from 'next/link'
 import styled from 'styled-components'
-import { useIntl } from 'react-intl'
+import { useIntl, defineMessages } from 'react-intl'
 import {
   Flex, Box,
   Link,
@@ -169,16 +169,20 @@ const messages = defineMessages({
     id: 'General.Anomaly',
     defaultMessage: ''
   },
+  'Search.Tor.Results.Error': {
+    id: 'General.Error',
+    defaultMessage: ''
+  },
   'Search.TorSnowflake.Results.Reachable': {
-    id: 'Search.TorSnowflake.Results.Reachable',
+    id: 'General.OK',
     defaultMessage: 'Reachable'
   },
   'Search.TorSnowflake.Results.Anomaly': {
-    id: 'Search.TorSnowflake.Results.Anomaly',
+    id: 'General.Anomaly',
     defaultMessage: 'Anomaly'
   },
   'Search.TorSnowflake.Results.Error': {
-    id: 'Search.TorSnowflake.Results.Anomaly',
+    id: 'General.Error',
     defaultMessage: 'Anomaly'
   },
   'Search.Psiphon.Results.Reachable': {
@@ -284,14 +288,14 @@ const getIndicators = ({ test_name, testDisplayName, scores = {}, confirmed, ano
       color = colorError
       tag = (
         <ResultTagHollow>
-          {intl.formatMessage({id:`${computedMessageIdPrefix}.Error`, defaultMessage: ''})}
+          {intl.formatMessage(messages[`${computedMessageIdPrefix}.Error`])}
         </ResultTagHollow>
       )
     } else if (confirmed === true) {
       color = colorConfirmed
       tag = (
         <ResultTagFilled>
-          {intl.formatMessage({id: `${computedMessageIdPrefix}.Blocked`, defaultMessage: ''})}
+          {intl.formatMessage(messages[`${computedMessageIdPrefix}.Blocked`])}
         </ResultTagFilled>
       )
     } else if (blockingType !== undefined) {
@@ -305,14 +309,14 @@ const getIndicators = ({ test_name, testDisplayName, scores = {}, confirmed, ano
       color = colorAnomaly
       tag = (
         <ResultTagHollow>
-          {intl.formatMessage({id:`${computedMessageIdPrefix}.Anomaly`, defaultMessage: ''})}
+          {intl.formatMessage(messages[`${computedMessageIdPrefix}.Anomaly`])}
         </ResultTagHollow>
       )
     } else {
       color = colorNormal
       tag = (
         <StyledResultTag>
-          {intl.formatMessage({id: `${computedMessageIdPrefix}.Reachable`, defaultMessage: ''})}
+          {intl.formatMessage(messages[`${computedMessageIdPrefix}.Reachable`])}
         </StyledResultTag>
       )
     }
