@@ -1,5 +1,6 @@
 import { Heading, Flex, Box, Text } from 'ooni-components'
 import { useIntl } from 'react-intl'
+import styled from 'styled-components'
 import OONILogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochrome.svg'
 
 import { useMATContext } from './MATContext'
@@ -7,9 +8,17 @@ import CountryNameLabel from './CountryNameLabel'
 import { colorMap } from './colorMap'
 import { getRowLabel } from './labels'
 
+const ChartHeaderContainer = styled(Flex)`
+  align-items: center;
+
+  @media(max-width: 768px) {
+    flex-direction: column;
+  }
+`
+
 const Legend = ({label, color}) => {
   return (
-    <Flex alignItems='center'>
+    <Flex alignItems='center' mr={2}>
       <Box pr={2}>
         <div style={{ width: '10px', height: '10px', backgroundColor: color }} />
       </Box>
@@ -55,34 +64,24 @@ export const ChartHeader = ({ options = {}}) => {
   const subTitle = <SubtitleStr query={query} />
 
   return (
-    <Flex alignItems={['center']}>
-      <Box width={2/16} sx={{ opacity: 0.8 }}>
+    <ChartHeaderContainer>
+      <Box sx={{ opacity: 0.8 }}>
         <OONILogo height='32px' />
       </Box>
-      <Box width={14/16}>
-        <Flex flexDirection={['column']}>
+      <Flex width={14/16} flexDirection={['column']}>
           {options.probe_cc !== false && <Heading h={3} textAlign='center'>
             <CountryNameLabel countryCode={query.probe_cc} />
           </Heading>}
           {options.subtitle !== false && <Heading h={5} fontWeight='normal' textAlign='center'>
             {subTitle}
           </Heading>}
-          {options.legend !== false && <Flex justifyContent='center' my={2}>
-            <Box pr={2}>
-              <Legend label='ok_count' color={colorMap['ok_count']} />
-            </Box>
-            <Box pr={2}>
-              <Legend label='confirmed_count' color={colorMap['confirmed_count']} />
-            </Box>
-            <Box pr={2}>
-              <Legend label='anomaly_count' color={colorMap['anomaly_count']} />
-            </Box>
-            <Box pr={2}>
-              <Legend label='failure_count' color={colorMap['failure_count']} />
-            </Box>
+          {options.legend !== false && <Flex justifyContent='center' my={2} flexWrap="wrap">
+            <Legend label='ok_count' color={colorMap['ok_count']} />
+            <Legend label='confirmed_count' color={colorMap['confirmed_count']} />
+            <Legend label='anomaly_count' color={colorMap['anomaly_count']} />
+            <Legend label='failure_count' color={colorMap['failure_count']} />
           </Flex>}
-        </Flex>
-      </Box>
-    </Flex>
+      </Flex>
+    </ChartHeaderContainer>
   )
 }
