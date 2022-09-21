@@ -5,7 +5,7 @@ import 'scripts/wdyr'
 import { useEffect, useMemo, useState } from 'react'
 import NProgress from 'nprogress'
 import { useRouter } from 'next/router'
-import 'fontsource-fira-sans/latin.css'
+import '@fontsource/fira-sans'
 
 import '../public/static/nprogress.css'
 import Layout from '../components/Layout'
