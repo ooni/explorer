@@ -427,6 +427,7 @@
   "Home.NetworkProperties.SummaryText": "Check the speed and performance of thousands of networks around the world. Explore data on video streaming performance.",
   "Home.MonthlyStats.Title": "Monthly coverage worldwide",
   "Home.MonthlyStats.SummaryText": "OONI Explorer hosts millions of network measurements collected from more than 200 countries since 2012. Every day, OONI Explorer is updated with new measurements!\n\nLast month, {measurementCount} OONI Probe measurements were collected from {networkCount} networks in {countryCount} countries. Explore the monthly usage of [OONI Probe](https://ooni.org/install/) through the stats below.",
+  "Home.Highlights.CTA": "We encourage you to <link-to-search>explore OONI measurements</link-to-search> to find more highlights!",
   "Home.Highlights.Title": "Highlights",
   "Home.Highlights.Description": "What can you learn from OONI Explorer? \n\nBelow we share some stories from [research reports](https://ooni.org/post/) based on OONI data.\n\nWe share these case studies to demonstrate how OONI's openly available data can be used and what types of stories can be told. \n\nWe encourage you to explore OONI data, discover more censorship cases, and to use OONI data as part of your research and/or advocacy.",
   "Home.Highlights.Political": "Censorship during political events",

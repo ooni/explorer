@@ -97,7 +97,6 @@ export async function getServerSideProps({ query }) {
 
 const Measurement = ({
   error,
-  country,
   confirmed,
   anomaly,
   failure,
@@ -216,7 +215,6 @@ const Measurement = ({
 Measurement.propTypes = {
   anomaly: PropTypes.bool,
   confirmed: PropTypes.bool,
-  country: PropTypes.string,
   error: PropTypes.string,
   failure: PropTypes.bool,
   input: PropTypes.any,

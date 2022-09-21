@@ -296,7 +296,17 @@ export default class LandingPage extends React.Component {
               highlights={highlightContent.changes}
             />
             <Box my={3}>
-              <Text fontSize={20}>We encourage you to <NLink href='/search' passHref><Link color='blue7'>explore OONI measurements</Link></NLink> to find more highlights!</Text>
+              <Text fontSize={20}>
+                <FormattedMessage 
+                  id="Home.Highlights.CTA"
+                  values={{'link-to-search': (string) => (
+                    <NLink href='/search' passHref>
+                      <Link color='blue7'>{string}</Link>
+                    </NLink>
+                    )
+                  }}
+                />
+              </Text>
             </Box>
           </Container>
         </Container>
