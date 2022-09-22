@@ -48,7 +48,7 @@
   "Measurement.Status.Hint.Websites.TCPBlock": "TCP/IP blocking",
   "Measurement.Status.Hint.Websites.Unavailable": "Website down",
   "Measurement.SummaryText.Websites.Accessible": "On {date}, {WebsiteURL} was accessible when tested on {network} in {country}.",
-  "Measurement.SummaryText.Websites.Anomaly": "On {date}, {WebsiteURL} presented signs of {BlockingReason} on {network} in {country}.\n\nThis might mean that {WebsiteURL} was blocked, but [false positives](https://ooni.org/support/faq/#why-do-false-positives-occur) can occur. \n\nPlease explore the network measurement data below.",
+  "Measurement.SummaryText.Websites.Anomaly": "On {date}, {WebsiteURL} presented signs of {reason} on {network} in {country}.\n\nThis might mean that {WebsiteURL} was blocked, but <link-to-docs>false positives</link-to-docs> can occur. \n\nPlease explore the network measurement data below.",
   "Measurement.SummaryText.Websites.Anomaly.BlockingReason.DNS": "DNS tampering",
   "Measurement.SummaryText.Websites.Anomaly.BlockingReason.TCP": "TCP/IP blocking",
   "Measurement.SummaryText.Websites.Anomaly.BlockingReason.HTTP-failure": "HTTP blocking (HTTP requests failed)",
