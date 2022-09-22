@@ -53,6 +53,7 @@ const LanguageSelect = styled.select`
   background: none;
   opacity: 0.6;
   border: none;
+  text-transform: capitalize;
 `
 
 const NavItemComponent = ({router, label, href}) => {
