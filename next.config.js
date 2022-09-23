@@ -3,6 +3,7 @@
 // https://nextjs.org/docs/api-reference/next.config.js/introduction
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 const { withSentryConfig } = require('@sentry/nextjs')
+const { execSync } = require('child_process')
 
 const SentryWebpackPluginOptions = {
   // https://github.com/getsentry/sentry-webpack-plugin#options
@@ -24,12 +25,21 @@ module.exports = withSentryConfig({
   },
 
   webpack: (config, options) => {
+    const gitCommitSHAShort = execSync(process.env.RUN_GIT_COMMIT_SHA_SHORT)
+    const gitCommitSHA = execSync(process.env.RUN_GIT_COMMIT_SHA)
+    const gitCommitRef = execSync(process.env.RUN_GIT_COMMIT_REF)
+    const gitCommitTags = execSync(process.env.RUN_GIT_COMMIT_TAGS)
+
     config.plugins.push(
       new options.webpack.DefinePlugin({
-        'process.env.GIT_COMMIT_SHA_SHORT': JSON.stringify(process.env.GIT_COMMIT_SHA_SHORT),
-        'process.env.GIT_COMMIT_SHA': JSON.stringify(process.env.GIT_COMMIT_SHA),
-        'process.env.GIT_COMMIT_REF': JSON.stringify(process.env.GIT_COMMIT_REF),
-        'process.env.GIT_COMMIT_TAGS': JSON.stringify(process.env.GIT_COMMIT_TAGS),
+          'process.env.GIT_COMMIT_SHA_SHORT': JSON.stringify(
+            gitCommitSHAShort.toString()
+          ),
+          'process.env.GIT_COMMIT_SHA': JSON.stringify(gitCommitSHA.toString()),
+          'process.env.GIT_COMMIT_REF': JSON.stringify(gitCommitRef.toString()),
+          'process.env.GIT_COMMIT_TAGS': JSON.stringify(
+            gitCommitTags.toString()
+          ),
         'process.env.WDYR': JSON.stringify(process.env.WDYR),
       })
     )
