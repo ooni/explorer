@@ -5,12 +5,10 @@ import { getDatesBetween } from './computations'
 
 const defaultCount = 20
 
-export function getXAxisTicks (data, count = defaultCount) {
+export function getXAxisTicks (query, count = defaultCount) {
 
-  if (data.length > 0) {
-    const since = data[0]['measurement_start_day']
-    const until = data[data.length - 1]['measurement_start_day']
-    const dateDomain = [...getDatesBetween(new Date(since), new Date(until))].map(d => new Date(d))
+  if (query.axis_x === 'measurement_start_day') {
+    const dateDomain = [...getDatesBetween(new Date(query.since), new Date(query.until))].map(d => new Date(d))
     const xScale = scaleUtc().domain([dateDomain[0], dateDomain[dateDomain.length-1]])
 
     const xAxisTickValues = dateDomain.length < 30 ? dateDomain : [

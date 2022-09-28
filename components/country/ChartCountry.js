@@ -1,6 +1,5 @@
 import React, { useMemo } from 'react'
 import { useRouter } from 'next/router'
-import dayjs from 'services/dayjs'
 import { Heading, Box, Flex } from 'ooni-components'
 import useSWR from 'swr'
 import GridChart, { prepareDataForGridChart } from 'components/aggregation/mat/GridChart'
@@ -15,7 +14,7 @@ const swrOptions = {
 
 const ChartCountry = React.memo(function Chart({testName, testGroup = null, title, queryParams = {}}) {
   const router = useRouter()
-  const { query: { countryCode} } = router
+  const { query: { since, until, countryCode } } = router
 
   const name = testName || testGroup.name
 
@@ -27,14 +26,13 @@ const ChartCountry = React.memo(function Chart({testName, testGroup = null, titl
   const query = useMemo(() => ({
     ...params,
     probe_cc: countryCode,
-    since: dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD'),
-    until: dayjs.utc().add(1, 'day').format('YYYY-MM-DD'),
+    since,
+    until,
     ...testName && {test_name: testName}
-  }), [countryCode, params, testName])
+  }), [countryCode, since, until, params, testName])
 
   const apiQuery = useMemo(() => {
     const qs = new URLSearchParams(query).toString()
-    console.log(qs)
     return qs
   }, [query])
 

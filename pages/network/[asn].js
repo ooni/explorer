@@ -1,10 +1,9 @@
 import React, { useCallback, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
-import { Container, Heading, Box, Flex, Text, Link } from 'ooni-components'
+import { Container, Heading, Box, Text, Link } from 'ooni-components'
 import { useIntl } from 'react-intl'
 import NLink from 'next/link'
-import styled from 'styled-components'
 import dayjs from 'services/dayjs'
 import Layout from 'components/Layout'
 import NavBar from 'components/NavBar'
@@ -16,10 +15,6 @@ import FormattedMarkdown from 'components/FormattedMarkdown'
 import { FormattedMessage } from 'react-intl'
 import CallToActionBox from 'components/CallToActionBox'
 import { getLocalisedRegionName } from '../../utils/i18nCountries'
-
-const Bold = styled.span`
-  font-weight: bold
-`
 
 const prepareDataForCalendar = (data) => {
   return data.map((r) => ({
@@ -154,7 +149,7 @@ export const getServerSideProps = async (context) => {
 
     const measurementsTotal = await client
       .get(path, {params: {'probe_asn': asn}})
-      .then((response)=> response?.data?.result.measurement_count)
+      .then((response) => response?.data?.result.measurement_count)
 
     const calendarData = await client.get(path, { params: {
       probe_asn: asn,

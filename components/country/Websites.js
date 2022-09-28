@@ -9,7 +9,7 @@ import ConfirmedBlockedCategory from './ConfirmedBlockedCategory'
 
 const WebsitesSection = ({ countryCode }) => {
   return (
-    <>
+    <React.Fragment>
         <SectionHeader>
           <SectionHeader.Title name='websites'>
             <FormattedMessage id='Country.Heading.Websites' />
@@ -27,7 +27,7 @@ const WebsitesSection = ({ countryCode }) => {
             queryParams={{axis_y: 'domain'}}
           />
         </Box>
-      </>
+      </React.Fragment>
   )
 }
 
