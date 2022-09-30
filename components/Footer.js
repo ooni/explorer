@@ -28,25 +28,30 @@ const StyledFooterItem = styled(Link)`
   color: #ffffff;
   cursor: pointer;
   opacity: 0.5;
-  display: ${props => (props.$horizontal === 'true') ? 'inline' : 'block'};
-  margin-left: ${props => (props.$horizontal === 'true') ? '1rem' : 0};
+  display: block;
+  margin-left: 0;
   &:hover {
     opacity: 1;
   }
 `
 
-const FooterLink = ({ label, href, horizontal = false}) => (
-  // Use non-boolean value for props sent to non-DOM styled components
-  // https://www.styled-components.com/docs/faqs#why-am-i-getting-html-attribute-warnings
-  <StyledFooterItem mb={2} $horizontal={horizontal.toString()} href={href}>
+const FooterGitLink = styled(Link)`
+  color: white;
+  text-decoration: underline;
+  &:hover {
+    filter: none;
+  }
+`
+
+const FooterLink = ({ label, href}) => (
+  <StyledFooterItem mb={2} href={href}>
     {label}
   </StyledFooterItem>
 )
 
 FooterLink.propTypes = {
-  label: PropTypes.node,
-  href: PropTypes.string.isRequired,
-  horizontal: PropTypes.bool
+  label: PropTypes.string,
+  href: PropTypes.string.isRequired
 }
 
 const FooterText = styled.div`
@@ -56,6 +61,7 @@ const FooterText = styled.div`
 const Footer = () => {
   const intl = useIntl()
   const currentYear = dayjs().get('year')
+
   return (
     <StyledFooter>
       <Container>
@@ -96,7 +102,9 @@ const Footer = () => {
             <small>
               <Box mb={1}>{intl.formatMessage({ id: 'Footer.Text.Copyright' }, { currentYear })}</Box>
               <FooterLink href='https://github.com/ooni/license' label={intl.formatMessage({ id: 'Footer.Text.CCommons'})} />
-              <FooterText>{intl.formatMessage({ id: 'Footer.Text.Version' }) }: {process.env.GIT_COMMIT_SHA_SHORT}</FooterText>
+              <FooterText>{intl.formatMessage({ id: 'Footer.Text.Version' }) }:{' '}
+                <FooterGitLink target="_blank" href={`https://github.com/ooni/explorer/tree/${process.env.GIT_COMMIT_SHA_SHORT}`}>{process.env.GIT_COMMIT_SHA_SHORT}</FooterGitLink>
+              </FooterText>
             </small>
           </FooterBox>
         </Flex>
