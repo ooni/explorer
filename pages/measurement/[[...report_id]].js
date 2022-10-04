@@ -7,17 +7,19 @@ import { Container, theme } from 'ooni-components'
 import { getLocalisedRegionName } from '../../utils/i18nCountries'
 import NLink from 'next/link'
 
-import Hero from '../../components/measurement/Hero'
-import CommonSummary from '../../components/measurement/CommonSummary'
-import DetailsHeader from '../../components/measurement/DetailsHeader'
-import SummaryText from '../../components/measurement/SummaryText'
-import CommonDetails from '../../components/measurement/CommonDetails'
-import MeasurementContainer from '../../components/measurement/MeasurementContainer'
-import MeasurementNotFound from '../../components/measurement/MeasurementNotFound'
-import HeadMetadata from '../../components/measurement/HeadMetadata'
+import Hero from 'components/measurement/Hero'
+import CommonSummary from 'components/measurement/CommonSummary'
+import DetailsHeader from 'components/measurement/DetailsHeader'
+import SummaryText from 'components/measurement/SummaryText'
+import CommonDetails from 'components/measurement/CommonDetails'
+import MeasurementContainer from 'components/measurement/MeasurementContainer'
+import MeasurementNotFound from 'components/measurement/MeasurementNotFound'
+import HeadMetadata from 'components/measurement/HeadMetadata'
+import FeedbackBox from 'components/measurement/FeedbackBox'
 import { LoginModal } from 'components/login/LoginForm'
 
-import NavBar from '../../components/NavBar'
+import Layout from 'components/Layout'
+import NavBar from 'components/NavBar'
 import ErrorPage from '../_error'
 import { useIntl } from 'react-intl'
 import useUser from 'hooks/useUser'
@@ -168,7 +170,7 @@ const Measurement = ({
               const color = failure === true ? pageColors['error'] : pageColors[status]
               const info = scores?.msg ?? statusInfo
               return (
-                <React.Fragment>
+                <>
                   {headMetadata &&
                     <HeadMetadata
                       content={headMetadata}
@@ -179,6 +181,7 @@ const Measurement = ({
                     />
                   }
                   <NavBar color={color} />
+                  <FeedbackBox user={user} report_id={report_id} setShowModal={setShowModal} />
                   <Hero
                     color={color}
                     status={status}
@@ -195,7 +198,6 @@ const Measurement = ({
                   />
 
                   <Container>
-                    { !user.loggedIn ? <h2>Please <a onClick={() => setShowModal(true)}>login</a> to give feedback about the measurement</h2> : <h2>Leave feedback here</h2> }
                     <DetailsHeader
                       testName={test_name}
                       runtime={raw_measurement?.test_runtime}
@@ -218,7 +220,7 @@ const Measurement = ({
                       reportId={report_id}
                     />
                   </Container>
-                </React.Fragment>
+                </>
               )
             }
           } />

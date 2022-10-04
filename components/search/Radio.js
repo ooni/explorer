@@ -24,7 +24,7 @@ export const RadioGroup = ({
   return (
     <Flex flexDirection={direction} {...props}>
       {React.Children.map(children, child => (
-        !(child.type.name === RadioButton.name)
+        !(child?.type.name === RadioButton.name)
           ? child
           : React.cloneElement(child, {
             name: name,

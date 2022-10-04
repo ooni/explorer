@@ -6,6 +6,7 @@
   "main": "index.js",
   "repository": "https://github.com/ooni/explorer",
   "dependencies": {
+    "@cassiozen/usestatemachine": "^1.0.1",
     "@datapunt/matomo-tracker-react": "^0.5.1",
     "@fontsource/fira-sans": "^4.5.9",
     "@nivo/bar": "^0.80.0",
