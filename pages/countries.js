@@ -86,6 +86,10 @@ const RegionHeaderAnchor = styled.div`
 const RegionBlock = ({regionCode, countries}) => {
   const intl = useIntl()
 
+  countries = countries
+    .map((c) => ({...c, localisedName: getLocalisedRegionName(c.alpha_2, intl.locale)}))
+    .sort((a, b) => (new Intl.Collator(intl.locale).compare(a.localisedName, b.localisedName)))
+
   const regionName = getLocalisedRegionName(regionCode, intl.locale)
   // Select countries in the region where we have measuremennts from
   const measuredCountriesInRegion = countryUtil.regions[regionCode].countries.filter((countryCode) => (
@@ -159,10 +163,6 @@ const NoCountriesFound = ({ searchTerm }) => (
 export const getServerSideProps = async () => {
   const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
     const result = await client.get('/api/_/countries')
-
-    // Sort countries by name (instead of by country codes)
-    result.data.countries.sort((a,b) => a.name < b.name ? -1 : 1)
-
     const responseUrl = result?.request?.res?.responseUrl
 
     return {
