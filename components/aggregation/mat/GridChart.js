@@ -60,7 +60,7 @@ export const prepareDataForGridChart = (data, query, locale) => {
 
   const reshapedDataWithoutHoles = fillDataHoles(reshapedData, query)
 
-  rows.sort((a,b) => sortRows(a, b, query.axis_y))
+  rows.sort((a,b) => sortRows(a, b, query.axis_y, locale))
 
   return [reshapedDataWithoutHoles, rows, rowLabels]
 }
