@@ -20,6 +20,7 @@ import {
 } from './Radio'
 import { TestNameOptions } from '../TestNameOptions'
 import { categoryCodes } from '../utils/categoryCodes'
+import { getLocalisedRegionName } from 'utils/i18nCountries'
 
 const StyledInputWithLabel = styled.div``
 const StyledLabel = styled(Label).attrs({
@@ -217,7 +218,8 @@ const FilterSidebar = ({
   //Insert an 'Any' option to test name filter
   // testNameOptions.unshift({name: intl.formatMessage({id: 'Search.Sidebar.TestName.AllTests'}), id: 'XX'})
 
-  const countryOptions = [...countries]
+  const countryOptions = [...countries.map((c) => ({...c, name: getLocalisedRegionName(c.alpha_2, intl.locale)}))]
+  countryOptions.sort((a,b) => (a.name < b.name) ? -1 : (a.name > b.name) ? 1 : 0)
   countryOptions.unshift({name: intl.formatMessage({id: 'Search.Sidebar.Country.AllCountries'}), alpha_2: 'XX'})
 
   return (

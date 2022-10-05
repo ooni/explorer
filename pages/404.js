@@ -11,14 +11,13 @@ import {
 } from 'ooni-components'
 import { FormattedMessage } from 'react-intl'
 
-import Layout from '../components/Layout'
 import NavBar from '../components/NavBar'
 import OONI404 from '../public/static/images/OONI_404.svg'
 
 export default function Custom404() {
   const router = useRouter()
   return (
-    <Layout>
+    <React.Fragment>
       <Head>
         <title> Page Not Found </title>
       </Head>
@@ -58,6 +57,6 @@ export default function Custom404() {
           </Box>
         </Flex>
       </Container>
-    </Layout>
+    </React.Fragment>
   )
 }

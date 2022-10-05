@@ -144,10 +144,10 @@ const SortHandle = ({ isSorted, isSortedDesc }) => {
   )
 }
 
-const prepareDataforTable = (data, query) => {
+const prepareDataforTable = (data, query, locale) => {
   const table = []
   
-  const [reshapedData, rows, rowLabels] = prepareDataForGridChart(data, query)
+  const [reshapedData, rows, rowLabels] = prepareDataForGridChart(data, query, locale)
 
   for (const [key, rowData] of reshapedData) {
 
@@ -201,7 +201,7 @@ const TableView = ({ data, query }) => {
     sortBy: [{ id: 'yAxisLabel', desc: false }]
   }),[])
 
-  const getRowId = React.useCallback(row => row[query.axis_y], [])
+  const getRowId = React.useCallback(row => row[query.axis_y], [query.axis_y])
 
   const columns = useMemo(() => [
     {
@@ -273,11 +273,11 @@ const TableView = ({ data, query }) => {
   // - indexes - 
   const [reshapedData, tableData, rowKeys, rowLabels] = useMemo(() => {
     try {
-      return prepareDataforTable(data, query)
+      return prepareDataforTable(data, query, intl.locale)
     } catch (e) {
       return [null, [], [], {}]
     }
-  }, [query, data])
+  }, [query, data, intl.locale])
 
   const {
     getTableProps,
@@ -339,16 +339,15 @@ const TableView = ({ data, query }) => {
   // }, [])
 
   const [dataForCharts, setDataForCharts] = useState(noRowsSelected)
-  
   const updateCharts = useCallback(() => {
-    const selectedRows = Object.keys(state.selectedRowIds).sort((a,b) => sortRows(a, b, query.axis_y))
+    const selectedRows = Object.keys(state.selectedRowIds).sort((a,b) => sortRows(a, b, query.axis_y, intl.locale))
 
     if (selectedRows.length > 0 && selectedRows.length !== preGlobalFilteredRows.length) {
       setDataForCharts(selectedRows)
     } else {
       setDataForCharts(noRowsSelected)
     }
-  }, [preGlobalFilteredRows.length, query.axis_y, state.selectedRowIds])
+  }, [preGlobalFilteredRows.length, query.axis_y, state.selectedRowIds, intl.locale])
 
   /**
    * Reset the table filter

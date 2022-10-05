@@ -3,7 +3,7 @@ import { Flex, Box, Heading } from 'ooni-components'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import axios from 'axios'
-import { territoryNames } from 'country-util'
+import { useIntl } from 'react-intl'
 
 import GridChart, { prepareDataForGridChart } from '../aggregation/mat/GridChart'
 import { MATContextProvider } from '../aggregation/mat/MATContext'
@@ -45,6 +45,7 @@ const fixedQuery = {
 }
 
 const Chart = React.memo(function Chart({ testName }) {
+  const intl = useIntl()
   const { query: {probe_cc, since, until} } = useRouter()
 
   // Construct a `query` object that matches the router.query
@@ -73,18 +74,18 @@ const Chart = React.memo(function Chart({ testName }) {
       return [null, 0]
     }
 
-    let chartData = data.data.sort((a, b) => (territoryNames[a.probe_cc] < territoryNames[b.probe_cc]) ? -1 : (territoryNames[a.probe_cc] > territoryNames[b.probe_cc]) ? 1 : 0)
+    let chartData = data.data.sort((a, b) => (new Intl.Collator(intl.locale).compare(a.probe_cc, b.probe_cc)))
 
     const selectedCountries = probe_cc?.length > 1 ? probe_cc.split(',') : []
     if (selectedCountries.length > 0) {
       chartData = chartData.filter(d => selectedCountries.includes(d.probe_cc))
     }
 
-    const [reshapedData, rowKeys, rowLabels] = prepareDataForGridChart(chartData, query)
+    const [reshapedData, rowKeys, rowLabels] = prepareDataForGridChart(chartData, query, intl.locale)
 
     return [reshapedData, rowKeys, rowLabels]
 
-  }, [data, probe_cc, query])
+  }, [data, probe_cc, query, intl])
 
 
   const headerOptions = { probe_cc: false, subtitle: false }
@@ -94,10 +95,10 @@ const Chart = React.memo(function Chart({ testName }) {
       <Box><Heading h={3}>{testNames[testName].name}</Heading></Box>
       <Box>
         {(!chartData && !error) ? (
-          <div> Loading ...</div>
+          <div>{intl.formatMessage({id: 'General.Loading'})}</div>
         ) : (
           chartData === null || chartData.length === 0 ? (
-            <Heading h={5}>No Data</Heading>
+            <Heading h={5}>{intl.formatMessage({id: 'General.NoData'})}</Heading>
           ) : (
             <GridChart
               data={chartData}
@@ -112,7 +113,7 @@ const Chart = React.memo(function Chart({ testName }) {
       {error &&
         <DetailsBox collapsed={false} content={<>
           <details>
-            <summary><span>Error: {error.message}</span></summary>
+            <summary><span>{intl.formatMessage({id: 'General.Error'})}: {error.message}</span></summary>
             <Box as='pre'>
               {JSON.stringify(error, null, 2)}
             </Box>

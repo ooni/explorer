@@ -32,10 +32,9 @@ const Legend = ({label, color}) => {
 export const SubtitleStr = ({ query }) => {
   const intl = useIntl()
   const params = new Set()
-
-  const testName = intl.formatMessage({id: getRowLabel(query.test_name, 'test_name')})
+  const messageId = getRowLabel(query.test_name, 'test_name') || 'none'
+  const testName = intl.formatMessage({id: messageId, defaultMessage: ''})
   params.add(testName)
-
 
   if (query.domain) {
     params.add(query.domain)

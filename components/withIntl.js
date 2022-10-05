@@ -1,41 +1,41 @@
 /* global require */
-import React, {Component} from 'react'
+import React, { useEffect, useState, useMemo, createContext } from 'react'
 import { IntlProvider } from 'react-intl'
+import { useRouter } from 'next/router'
 
-let messages = {
-  en: require('../public/static/lang/en.json')
-}
+export const LocaleProvider = ({ children }) => {
+  const { locale, defaultLocale } = useRouter()
 
-const getLocale = () => {
-  let navigatorLang = 'en-US'
-  if (typeof window !== 'undefined') {
-    navigatorLang = window.navigator.userLanguage || window.navigator.language
-  }
-  return navigatorLang.split('-')[0]
-}
+  const messages = useMemo(() => {
+    try {
+      const messages = require(`../public/static/lang/${locale}.json`)
+      const defaultMessages = require(`../public/static/lang/${defaultLocale}.json`)
 
-if (typeof window !== 'undefined' && window.OONITranslations) {
-  messages = window.OONITranslations
-}
-
-const withIntl = (Page) => {
-
-  return class PageWithIntl extends Component {
-    render () {
-      const now = Date.now()
-      let locale = getLocale()
-      // Use 'en' when locale is unsupported
-      if (Object.keys(messages).indexOf(locale) < 0) {
-        locale = 'en'
-      }
-      const messagesToLoad = Object.assign({}, messages[locale], messages['en'])
-      return (
-        <IntlProvider locale={locale} messages={messagesToLoad} initialNow={now}>
-          <Page {...this.props} />
-        </IntlProvider>
-      )
+      const mergedMessages = Object.assign({}, defaultMessages, messages)
+      return mergedMessages
+    } catch (e) {
+      console.error(`Failed to load messages for ${locale}: ${e.message}`)
+      const defaultMessages = require(`../public/static/lang/${defaultLocale}.json`)
+      return defaultMessages
     }
+  }, [locale, defaultLocale])
+  
+  const fixedLocale = (locale) => {
+    if (locale === 'pt_BR') return 'pt'
+    if (locale === 'pt_PT') return 'pt-PT'
+    if (locale === 'zh_CN') return 'zh-Hant'
+    if (locale === 'zh_HK') return 'zh-Hant-HK'
+    return locale
   }
-}
 
-export default withIntl
+  return (
+    <IntlProvider 
+      defaultLocale={defaultLocale}
+      locale={fixedLocale(locale)}
+      messages={messages}
+      key={locale}
+    >
+      {children}
+    </IntlProvider>
+  )
+}

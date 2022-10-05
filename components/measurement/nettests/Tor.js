@@ -196,7 +196,7 @@ const TorDetails = ({
       accessor: 'type'
     },
     {
-      Header: <FormattedMessage id='Measurement.Details.Tor.Table.Header.Accessible' />,
+      Header: <FormattedMessage id='General.Accessible' />,
       accessor: 'failure',
       collapse: true,
       Cell: ConnectionStatusCell
