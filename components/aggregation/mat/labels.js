@@ -4,6 +4,7 @@ import { Box } from 'ooni-components'
 import { testNames } from '../../test-info'
 import { getCategoryCodesMap } from '../../utils/categoryCodes'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 const InputRowLabel = ({ input }) => {
   const truncatedInput = input
@@ -31,12 +32,19 @@ const blockingTypeLabels = {
   'tcp_ip': 'TCP/IP Blocking'
 }
 
+const CategoryLabel = ({ code }) => {
+  const intl = useIntl()
+  return (
+    <FormattedMessage id={`CategoryCode.${code}.Name`} defaultMessage={code}/>
+  )
+}
+
 export const getRowLabel = (key, yAxis, locale = 'en') => {
   switch (yAxis) {
     case 'probe_cc':
       return getLocalisedRegionName(key, locale)
     case 'category_code':
-      return categoryCodesMap.get(key)?.name ?? key
+      return (<CategoryLabel code={key} />)
     case 'input':
     case 'domain':
       return (<InputRowLabel input={key} />)
