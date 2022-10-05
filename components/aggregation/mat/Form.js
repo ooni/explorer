@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef, useLayoutEffect } from 'react'
+import React, { useCallback, useEffect, useState, useRef, useMemo, useLayoutEffect } from 'react'
 import PropTypes from 'prop-types'
 import { useForm, Controller } from 'react-hook-form'
 import styled from 'styled-components'
@@ -123,11 +123,13 @@ export const Form = ({ onSubmit, testNames, query }) => {
     .sort((a,b) => (a.iso3166_name < b.iso3166_name) ? -1 : (a.iso3166_name > b.iso3166_name) ? 1 : 0)
 
   const testNameValue = watch('test_name')
-  const showWebConnectivityFilters = isValidFilterForTestname(testNameValue, testsWithValidDomainFilter)
+  const showWebConnectivityFilters = useMemo(() => (isValidFilterForTestname(testNameValue, testsWithValidDomainFilter)), [testNameValue])
   // reset domain and input when web_connectivity is deselected
-  useLayoutEffect(() => {
-    setValue('domain', '')
-    setValue('input', '')
+  useEffect(() => {
+    if (!showWebConnectivityFilters) {
+      setValue('domain', '')
+      setValue('input', '')
+    }
   }, [setValue, showWebConnectivityFilters])
 
   const [showDatePicker, setShowDatePicker] = useState(false)

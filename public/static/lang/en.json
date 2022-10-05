@@ -534,5 +534,7 @@
   "DateRange.Today": "Today",
   "DateRange.LastWeek": "Last Week",
   "DateRange.LastMonth": "Last Month",
-  "DateRange.LastYear": "Last Year"
+  "DateRange.LastYear": "Last Year",
+  "Domain.Summary": "In the timeframe from {since} to {until} the following countries blocked this website: {countries}.",
+  "Domain.Canonical": "More measurements for this domain can be found via canonical URL: {canonicalDomain}"
 }

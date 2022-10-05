@@ -10,7 +10,6 @@ import {
   Text,
   Link,
 } from 'ooni-components'
-import NLink from 'next/link'
 
 import { Tick, Cross } from 'ooni-components/dist/icons'
 import deepmerge from 'deepmerge'
