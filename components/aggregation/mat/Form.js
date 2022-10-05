@@ -120,7 +120,8 @@ export const Form = ({ onSubmit, testNames, query }) => {
   }, [reset, query])
 
   const sortedCountries = localisedCountries(intl.locale)
-    .sort((a,b) => (a.iso3166_name < b.iso3166_name) ? -1 : (a.iso3166_name > b.iso3166_name) ? 1 : 0)
+    .sort((a,b) => new Intl.Collator(intl.locale).compare(a.localisedCountryName, b.localisedCountryName))
+
   const testNameValue = watch('test_name')
   const showWebConnectivityFilters = isValidFilterForTestname(testNameValue, testsWithValidDomainFilter)
   // reset domain and input when web_connectivity is deselected
