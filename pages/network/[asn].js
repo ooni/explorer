@@ -6,7 +6,6 @@ import { useIntl } from 'react-intl'
 import NLink from 'next/link'
 import styled from 'styled-components'
 import dayjs from 'services/dayjs'
-import countryUtil from 'country-util'
 import Layout from 'components/Layout'
 import NavBar from 'components/NavBar'
 import { MetaTags } from 'components/dashboard/MetaTags'
@@ -16,6 +15,7 @@ import Calendar from 'components/network/Calendar'
 import FormattedMarkdown from 'components/FormattedMarkdown'
 import { FormattedMessage } from 'react-intl'
 import CallToActionBox from 'components/CallToActionBox'
+import { getLocalisedRegionName } from '../../utils/i18nCountries'
 
 const Bold = styled.span`
   font-weight: bold
@@ -58,7 +58,7 @@ const Summary = ({ measurementsTotal, firstMeasurement, countriesData }) => {
     return (
       <li key={c.country}>
         <NLink passHref href={`/country/${c.country}`}>
-          <Link mr={1}>{countryUtil.territoryNames[c.country]}</Link>
+          <Link mr={1}>{getLocalisedRegionName(c.country, intl.locale)}</Link>
         </NLink>
         <FormattedMessage id='Network.Summary.Country.Measurements' values={{measurementsTotal: c.measurements}} />
       </li>
@@ -109,7 +109,7 @@ const NetworkDashboard = ({asn, calendarData = [], measurementsTotal, countriesD
   }, [router, query, asn])
 
   return (
-    <Layout>
+    <>
       <MetaTags />
       <NavBar />
       <Container>
@@ -132,7 +132,7 @@ const NetworkDashboard = ({asn, calendarData = [], measurementsTotal, countriesD
           </>
         }
       </Container>
-    </Layout>
+    </>
   )
 }
 

@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Flex } from 'ooni-components'
 import styled from 'styled-components'
+import { useIntl } from 'react-intl'
 
 import GridChart, { prepareDataForGridChart } from './GridChart'
 import { NoCharts } from './NoCharts'
@@ -13,10 +14,10 @@ const ChartContainer = styled(Flex)`
 `
 
 export const StackedBarChart = ({ data, query }) => {
+  const intl = useIntl()
 
-  try {
-    
-    const [gridData, rows ] = prepareDataForGridChart(data.data.result, query)
+  try { 
+    const [gridData, rows ] = prepareDataForGridChart(data.data.result, query, intl.locale)
 
     return (
       <ChartContainer flexDirection={['column']}>

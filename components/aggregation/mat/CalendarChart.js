@@ -3,6 +3,7 @@ import React, { useEffect, useState } from 'react'
 import { ResponsiveCalendar } from '@nivo/calendar'
 import { Select } from 'ooni-components'
 import useSWR from 'swr'
+import { useIntl } from 'react-intl'
 
 
 const AGGREGATION_API = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation?`
@@ -17,6 +18,7 @@ const URL = `probe_cc=BR&since=${fromDate}&until=${toDate}&axis_x=measurement_st
 export const Calendar = () => {
   const { data } = useSWR(URL, fetcher)
   const [dataX, setDataX ] = useState([])
+  const intl = useIntl()
 
   useEffect(() => {
     if (data) {
@@ -29,7 +31,7 @@ export const Calendar = () => {
 
   if (!data) {
     return (
-      <div> Loading... </div>
+      <div>{intl.formatMessage({id: 'General.Loading'})}</div>
     )
   }
 

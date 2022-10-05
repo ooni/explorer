@@ -1,12 +1,12 @@
 /* eslint-disable no-console */
 const glob = require('glob')
-const { basename } = require('path')
+const { dirname, basename, resolve } = require('path')
 const { readFileSync, writeFileSync } = require('fs')
 
 const LANG_DIR = './public/static/lang/'
 const TRANSLATED_STRINGS_DIR = '../translations/explorer'
 
-const supportedLanguages = glob.sync(`${TRANSLATED_STRINGS_DIR}/*`).map((f) => basename(f, '.json'))
+const supportedLanguages = glob.sync(`${TRANSLATED_STRINGS_DIR}/**/*.json`).map((f) => basename(dirname(f, '.json')))
 
 // Copy latest files from `translations`
 supportedLanguages.forEach((lang) => {

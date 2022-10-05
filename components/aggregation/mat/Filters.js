@@ -170,7 +170,7 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
     sortBy: [{ id: 'yAxisLabel', desc: false }]
   }),[])
 
-  const getRowId = React.useCallback(row => row[query.axis_y], [])
+  const getRowId = React.useCallback(row => row[query.axis_y], [query.axis_y])
 
   const columns = useMemo(() => [
     {
@@ -287,14 +287,14 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
   )
   
   const updateCharts = useCallback(() => {
-    const selectedRows = Object.keys(state.selectedRowIds).sort((a,b) => sortRows(a, b, query.axis_y))
+    const selectedRows = Object.keys(state.selectedRowIds).sort((a,b) => sortRows(a, b, query.axis_y, intl.locale))
 
     if (selectedRows.length > 0 && selectedRows.length !== preGlobalFilteredRows.length) {
       setDataForCharts(selectedRows)
     } else {
       setDataForCharts(noRowsSelected)
     }
-  }, [preGlobalFilteredRows.length, query.axis_y, state.selectedRowIds, setDataForCharts])
+  }, [preGlobalFilteredRows.length, query.axis_y, state.selectedRowIds, setDataForCharts, intl.locale])
 
   /**
    * Reset the table filter
