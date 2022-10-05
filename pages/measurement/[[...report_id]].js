@@ -1,9 +1,9 @@
 /* global process */
-import React, { useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 import axios from 'axios'
-import { Container, theme } from 'ooni-components'
+import { Container, theme, Flex } from 'ooni-components'
 import { getLocalisedRegionName } from '../../utils/i18nCountries'
 import NLink from 'next/link'
 
@@ -23,6 +23,8 @@ import NavBar from 'components/NavBar'
 import ErrorPage from '../_error'
 import { useIntl } from 'react-intl'
 import useUser from 'hooks/useUser'
+import { DetailsBoxTable } from 'components/measurement/DetailsBox'
+import { FormattedMessage } from 'react-intl'
 
 const pageColors = {
   default: theme.colors.base,
@@ -35,7 +37,8 @@ const pageColors = {
 
 export async function getServerSideProps({ query }) {
   let initialProps = {
-    error: null
+    error: null,
+    userFeedback: null
   }
 
   // Get `report_id` using optional catch all dynamic route of Next.js
@@ -92,6 +95,14 @@ export async function getServerSideProps({ query }) {
       // Measurement not found
       initialProps.notFound = true
     }
+
+    await client
+      .get(`/api/v1/measurement_feedback/${report_id}`)
+      .then(({data}) => {
+        if (Object.keys(data?.summary).length) initialProps.userFeedback = data.summary
+      })
+      .catch(() => {})
+
   } catch (e) {
     initialProps.error = e.message
   }
@@ -99,6 +110,8 @@ export async function getServerSideProps({ query }) {
     props: initialProps
   }
 }
+
+const FeedbackLabel = ({reason}) => <FormattedMessage id={`Measurement.Feedback.${reason}`} />
 
 const Measurement = ({
   error,
@@ -114,6 +127,7 @@ const Measurement = ({
   raw_measurement,
   report_id,
   scores,
+  userFeedback,
   ...rest
 }) => {
   const intl = useIntl()
@@ -121,12 +135,22 @@ const Measurement = ({
 
   const { user, submitted, reqError, setSubmitted } = useUser()
   const [showModal, setShowModal] = useState(false)
+
+  const userFeedbackItems = userFeedback ? 
+    Object.entries(userFeedback).map(([key, value]) => ({label: <FeedbackLabel reason={key} />, value})) : 
+    null
+
   // Add the 'AS' prefix to probe_asn when API chooses to send just the number
   probe_asn = typeof probe_asn === 'number' ? `AS${probe_asn}` : probe_asn
   if (error) {
     return (
       <ErrorPage statusCode={501} error={error} />
     )
+  }
+
+  const hideModal = () => {
+    setShowModal(false)
+    setSubmitted(false)
   }
 
   return (
@@ -140,7 +164,7 @@ const Measurement = ({
         <>
           <LoginModal 
             isShowing={showModal}
-            hide={() => setShowModal(false)}
+            hide={() => hideModal()}
             reqError={reqError}
             submitted={submitted}
             onLogin={() => setSubmitted(true)} />
@@ -213,6 +237,14 @@ const Measurement = ({
                         date={measurement_start_time}
                         content={summaryText}
                       />
+                    }
+                    {userFeedbackItems && 
+                      <Flex my={2}>
+                        <DetailsBoxTable
+                          title={<FormattedMessage id='Measurement.CommonDetails.Label.UserFeedback' />}
+                          items={userFeedbackItems}
+                        />
+                      </Flex>
                     }
                     {details}
                     <CommonDetails

@@ -1,7 +1,6 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState, useCallback } from 'react'
 import useSWR from 'swr'
-import Axios from 'axios'
 
 import { fetcher, apiEndpoints, loginUser } from '/lib/api'
 
@@ -44,7 +43,7 @@ export default function useUser() {
 
   const loading = !data && !error
   // If API returned `401 Unauthorized`, assume the user is not logged in
-  const loggedOut = error && error.status === 401
+  const loggedOut = !data || (error && error.status === 401)
 
   return {
     loading,

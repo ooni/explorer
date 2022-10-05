@@ -1,13 +1,37 @@
-import React, { useEffect } from 'react'
-import axios from 'axios'
+import React, { useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { useIntl } from 'react-intl'
-import { Box, Button, Link } from 'ooni-components'
+import { FormattedMessage, useIntl } from 'react-intl'
+import { Box, Button, Link, Text, theme } from 'ooni-components'
 import { RadioGroup, RadioButton } from 'components/search/Radio'
 import useStateMachine from '@cassiozen/usestatemachine'
+import SpinLoader from 'components/vendor/SpinLoader'
+import { submitFeedback } from 'lib/api'
+
+const okValues = ['ok', 'ok.unreachable', 'ok.broken', 'ok.parked']
+const blockedValues = [
+  { top: 'blocked' },
+  { 
+    top: 'blocked.blockpage',
+    sub: [
+      'blocked.blockpage.http',
+      'blocked.blockpage.dns',
+      'blocked.blockpage.server_side',
+      'blocked.blockpage.server_side.captcha'
+    ]
+  },
+  { top: 'blocked.dns',
+    sub: ['blocked.dns.inconsistent', 'blocked.dns.nxdomain']
+  }
+]
+
+const QuestionText = ({i18nKey}) => (
+  <Text fontSize={16} mb={3}><FormattedMessage id={i18nKey} /></Text>
+)
 
 const FeedbackBox = ({user, report_id, setShowModal}) => {
   const intl = useIntl()
+  const [error, setError] = useState(null)
+
   const { handleSubmit, control, watch, setValue, getValues } = useForm()
 
   const [state, send] = useStateMachine({
@@ -19,15 +43,10 @@ const FeedbackBox = ({user, report_id, setShowModal}) => {
           IS_BLOCKING: 'isBlocking'
         },
       },
-      login: {},
       isBlocking: {
-        effect({ send }) {
-          if (!user.loggedIn) send('LOGIN')
-        },
         on: {
           NOT_BLOCKING: 'notBlocking',
           BLOCKING: 'blocking',
-          LOGIN: 'login'
         }
       },
       blocking: {
@@ -45,49 +64,56 @@ const FeedbackBox = ({user, report_id, setShowModal}) => {
       closed: {},
       submit: {
         effect({ send, setContext, event, context }) {
-          console.log('make submit request,', getValues())
-          const values = getValues()
-          const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL})
-          client
-            .post('/api/v1/measurement_feedback', {
-              measurement_uid: report_id,
-              status: values.nested ? values.nested : values.feedback
+          const { nested, feedback } = getValues()
+          const feedbackParams = {
+            measurement_uid: report_id,
+            status: nested || feedback
+          }
+          submitFeedback(feedbackParams)
+            .then(() => send('SUCCESS'))
+            .catch(({response}) => {
+              setError(response?.data?.error || 'unknown')
+              send('FAILURE')
             })
-            .then((data) => console.log('d', data))
-            .catch((error) => console.log('e,',error))
         },
+        on: {
+          SUCCESS: 'success',
+          FAILURE: 'failure'
+        }
+      },
+      success: {
         on: {
           CLOSE: 'closed'
         }
       },
+      failure: {
+        on: {
+          CLOSE: 'closed',
+          SUBMIT: 'submit'
+        },
+        effect() {
+          return () => setError(null)
+        },
+      }
     },
   })
 
-  const submit = (results) => {
-    console.log('SUBMIT', results)
-  }
-
   const firstLevel = watch('feedback')
-  // console.log('firstLevel', firstLevel)
+  const nestedLevel = watch('nested')
+ 
   useEffect(() => {
     setValue('nested', null)
-  }, [firstLevel])
+  }, [firstLevel, setValue])
 
-  useEffect(() => {
-    const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL})
-    client
-      .get(`/api/v1/measurement_feedback/${report_id}`)
-      .then((data) => console.log('d', data))
-      .catch((error) => console.log('e,',error))
-  }, [])
+  const sumitEnabled = useMemo(() => firstLevel || nestedLevel, [firstLevel, nestedLevel])
 
   return (
     <>
       {state.value !== 'closed' && 
         <Box
           p={3}
+          bg='gray3'
           sx={{
-            border: '1px solid black',
             width: '400px',
             position: 'absolute',
             right: '60px',
@@ -95,127 +121,119 @@ const FeedbackBox = ({user, report_id, setShowModal}) => {
             borderRadius: '10px'
           }}
         >
-          <form onSubmit={handleSubmit(submit)}>
-            {state.value === 'initial' && (
+          <form onSubmit={(e) => e.preventDefault()}>
+            {state.value === 'initial' && 
               <>
-                <p>Would you like to provide feedback on this measurement?</p>
-                <Button onClick={() => send('IS_BLOCKING')}>Yes</Button>
-                <Button onClick={() => send('CLOSE')}>No</Button>
+                {user.loggedIn ? 
+                  <>
+                    <QuestionText i18nKey='Measurement.Feedback.Q1' />
+                    <Button mr={2} onClick={() => send('IS_BLOCKING')}><FormattedMessage id='General.Yes' /></Button>
+                    <Button onClick={() => send('CLOSE')}><FormattedMessage id='General.No' /></Button>
+                  </>
+                  : 
+                  <Text fontSize={16}>
+                    <FormattedMessage
+                      id='Measurement.Feedback.Login'
+                      values={{
+                        'login': (string) => (<a onClick={() => setShowModal(true)}><Link>{string}</Link></a>)
+                      }}
+                    />
+                  </Text>
+                }
               </>
-            )}
-            {state.value === 'login' && 
-              <>Please <a onClick={() => setShowModal(true)}><Link>login</Link></a> to give feedback about the measurement</>
             }
             {state.value === 'isBlocking' && (
               <>
-                <p>Is this a case of blocking?</p>
-                <Button onClick={() => send('BLOCKING')}>Yes</Button>
-                <Button onClick={() => send('NOT_BLOCKING')}>No</Button>
+                <QuestionText i18nKey='Measurement.Feedback.Q2' />
+                <Button mr={2} onClick={() => send('BLOCKING')}><FormattedMessage id='General.Yes' /></Button>
+                <Button onClick={() => send('NOT_BLOCKING')}><FormattedMessage id='General.No' /></Button>
               </>
             )}
             {state.value === 'notBlocking' && (
               <>
-                <p>What is the status of this service?</p>
+                <QuestionText i18nKey='Measurement.Feedback.Q3' />
                 <Controller
                   control={control}
                   name='feedback'
                   render={({field}) => (
                     <RadioGroup {...field}>
-                      <RadioButton
-                        label={intl.formatMessage({id: 'Search.FilterButton.AllResults'}) }
-                        value='ok'
+                      {okValues.map(val => (
+                        <RadioButton
+                        label={intl.formatMessage({id: `Measurement.Feedback.${val}`})}
+                        value={val}
+                        key={val}
                       />
-                      <RadioButton
-                        label='unreachable'
-                        value='ok.unreachable'
-                      />
-                      <RadioButton
-                        label='broken'
-                        value='ok.broken'
-                      />
-                      <RadioButton
-                        label='parked'
-                        value='ok.parked'
-                      />
+                      ))}
                     </RadioGroup>
                   )}
                 />
-                <Button onClick={() => console.log('cancel')}>Cancel</Button>
-                <Button onClick={() => send('SUBMIT')}>Submit</Button>
+                <Button mr={2} disabled={!sumitEnabled} onClick={() => send('SUBMIT')}><FormattedMessage id='General.Submit' /></Button>
+                <Button hollow onClick={() => send('CANCEL')}><FormattedMessage id='General.Cancel' /></Button>
               </>
             )}
             {state.value === 'blocking' && (
               <>
-                <p>What kind of blocking is it?</p>
+                <QuestionText i18nKey='Measurement.Feedback.Q4' />
                 <Controller
                   control={control}
                   name='feedback'
                   render={({field}) => (
                     <RadioGroup {...field}>
-                      <RadioButton
-                        label='blocked'
-                        value='blocked'
-                      />
-                      <RadioButton
-                        label='blocked.blockpage'
-                        value='blocked.blockpage'
-                      />
-                      {firstLevel === 'blocked.blockpage' && <Controller
-                        control={control}
-                        name='nested'
-                        render={({field}) => (
-                          <RadioGroup {...field}>
-                            <RadioButton
-                              label='blocked.blockpage.http'
-                              value='blocked.blockpage.http'
-                            />
-                            <RadioButton
-                              label='blocked.blockpage.dns'
-                              value='blocked.blockpage.dns'
-                            />
-                            <RadioButton
-                              label='blocked.blockpage.server_side'
-                              value='blocked.blockpage.server_side'
-                            />
-                            <RadioButton
-                              label='blocked.blockpage.server_side.captcha'
-                              value='blocked.blockpage.server_side.captcha'
-                            />
-                          </RadioGroup>
-                        )}
-                      />}
-                      <RadioButton
-                        label='blocked.dns'
-                        value='blocked.dns'
-                      />
-                      {firstLevel === 'blocked.dns' && <Controller
-                        control={control}
-                        name='nested'
-                        render={({field}) => (
-                          <RadioGroup {...field}>
-                            <RadioButton
-                              label='blocked.dns.inconsistent'
-                              value='blocked.dns.inconsistent'
-                            />
-                            <RadioButton
-                              label='blocked.dns.nxdomain'
-                              value='blocked.dns.nxdomain'
-                            />
-                          </RadioGroup>
-                        )}
-                      />}
+                      {blockedValues.map(({top, sub}) => (
+                        <>
+                          <RadioButton
+                            label={intl.formatMessage({id: `Measurement.Feedback.${top}`})}
+                            value={top}
+                            key={top}
+                          />
+                          {sub && firstLevel === top && (
+                            <Controller
+                              control={control}
+                              name='nested'
+                              render={({field}) => (
+                                <RadioGroup {...field}>
+                                  {sub.map(subVal => (
+                                    <RadioButton
+                                      ml={3}
+                                      label={intl.formatMessage({id: `Measurement.Feedback.${subVal}`})}
+                                      value={subVal}
+                                      key={subVal}
+                                    />
+                                  ))}
+                                </RadioGroup>
+                              )}
+                            />)
+                          }
+                        </>
+                      ))}
                     </RadioGroup>
                   )}
                 />
-                <Button type='button' onClick={() => send('BLOCKING')}>Cancel</Button>
-                <Button type='button' onClick={() => send('SUBMIT')}>Submit</Button>
+                <Button type='button' mr={2} disabled={!sumitEnabled} onClick={() => send('SUBMIT')}>
+                  <FormattedMessage id='General.Submit' />
+                </Button>
+                <Button type='button' hollow onClick={() => send('CANCEL')}>
+                  <FormattedMessage id='General.Cancel' />
+                </Button>
               </>
             )}
             {state.value === 'submit' && 
-              <Button type='button' onClick={() => send('CLOSE')}>CLOSE</Button>
+              <SpinLoader background={theme.colors.gray3} />
+            }
+            {state.value === 'success' && 
+              <>
+                <Text fontSize={16} mb={3}><FormattedMessage id='Measurement.Feedback.Success' /></Text>
+                <Button type='button' onClick={() => send('CLOSE')}><FormattedMessage id='General.Close' /></Button>
+              </>
+            }
+            {state.value === 'failure' && 
+              <>
+                <Text fontSize={16} mb={3}><FormattedMessage id='Measurement.Feedback.Failure' /></Text>
+                <Text fontSize={16} mb={3}>{error && <p>Error: {error}</p>}</Text>
+                <Button type='button' onClick={() => send('SUBMIT')}><FormattedMessage id='General.Submit' /></Button>
+              </>
             }
           </form>
-          {/* {!user.loggedIn ? <h2>Please <a onClick={() => setShowModal(true)}>login</a> to give feedback about the measurement</h2> : <h2>Leaveee feedback here</h2>} */}
         </Box>
       }
     </>

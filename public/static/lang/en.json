@@ -22,6 +22,8 @@
   "Login.Success": "Successfully logged in. Redirecting back to the measurement...",
   "SocialButtons.CTA": "Share on <facebook-link>Facebook</facebook-link> or <twitter-link>Twitter</twitter-link>",
   "SocialButtons.Text": "Data from OONI Explorer",
+  "General.Yes": "Yes",
+  "General.No": "No",
   "Tests.WebConnectivity.Name": "Web Connectivity Test",
   "Tests.Telegram.Name": "Telegram Test",
   "Tests.Facebook.Name": "Facebook Messenger Test",

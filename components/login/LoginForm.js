@@ -6,6 +6,8 @@ import NLink from 'next/link'
 
 import { registerUser } from '/lib/api'
 import { useRouter } from 'next/router'
+import { FormattedMessage } from 'react-intl'
+import SpinLoader from 'components/vendor/SpinLoader'
 
 const StyledError = styled.small`
   color: ${props => props.theme.colors.red5};
@@ -39,24 +41,24 @@ export const LoginModal = ({ isShowing, hide, onLogin, submitted, reqError }) =>
         </Flex>
         {!submitted &&
           <>
-            <Text fontSize={1} mb={2} textAlign='center'>Add your email address and click the link sent to your email to log in. <br/>We do not store email addresses.</Text>
+            <Text fontSize={1} mb={2} textAlign='center'><FormattedMessage id="Login.EnterEmail" /></Text>
             <LoginForm onLogin={onLogin} redirectTo={redirectTo} />
           </>
         }
         {submitted &&
           <>
             <Heading h={3} width={[1, 2 / 3]} textAlign='center' mx='auto'>
-              Your login request has been submitted. Please check your email for a link to activate and log in to your account.
+              <FormattedMessage id="Login.Submitted" />
             </Heading>
             <Flex flexDirection='row' justifyContent='center' my={4}>
-              <Button mx={3} width={1 / 3} onClick={() => hide()}>OK</Button>
+              <Button mx={3} width={1 / 3} onClick={() => hide()}><FormattedMessage id="General.Close" /></Button>
             </Flex>
           </>
         }
         {reqError &&
           <Box width={[1, 1 / 3]} mx='auto' textAlign={'center'}>
             <Box mb={3} p={4} bg='red1'>{reqError}</Box>
-            <NLink href='/login'>Try logging in again</NLink>
+            <NLink href='/login'><FormattedMessage id="Login.Failure" /></NLink>
           </Box>
         }
       </Container>
@@ -95,7 +97,7 @@ export const LoginForm = ({ onLogin, redirectTo }) => {
     }
     setSubmitting(true)
     registerApi(email_address)
-  }, [onLogin, reset])
+  }, [onLogin, reset, redirectTo])
 
   useEffect(() => {
     // Remove previous errors when form becomes dirty again
@@ -126,10 +128,11 @@ export const LoginForm = ({ onLogin, redirectTo }) => {
         <Box my={2}>
           <StyledError>{loginError ?? <>&nbsp;</>}</StyledError>
         </Box>
-        <Box my={2}>
-          <Button type='submit'> Login </Button>
-        </Box>
-        {submitting ? <h1>LOADING</h1> : <Box my={50}></Box>}
+        {!submitting ? 
+          <Box my={2}>
+            <Button type='submit' mb={5} mt={3}><FormattedMessage id="General.Login" /></Button>
+          </Box> :
+          <SpinLoader />}
       </Flex>
     </form>
   )
