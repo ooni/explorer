@@ -109,7 +109,7 @@ const CustomToolTip = React.memo(({ data, onClose, title, link = true }) => {
       </Flex>
       {link &&
         <NLink passHref href={linkToMeasurements}>
-          <Link target='_blank' my={2} ml='auto' pr={3}>{intl.formatMessage({id: 'MAT.CustomTooltip.ViewMeasurements'})} &gt;</Link>
+          <Link target='_blank' my={2} ml='auto' pr={3}>view measurements &gt;</Link>
         </NLink>
       }
     </Flex>

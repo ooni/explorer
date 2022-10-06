@@ -46,6 +46,7 @@ HighlightSection.propTypes = {
   ]),
   highlights: PropTypes.arrayOf(PropTypes.shape({
     countryCode: PropTypes.string.isRequired,
+    countryName: PropTypes.string.isRequired,
     title: PropTypes.string,
     text: PropTypes.string,
     report: PropTypes.string,

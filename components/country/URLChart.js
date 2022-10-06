@@ -186,8 +186,8 @@ class URLChart extends React.Component {
               {/* TODO: Show percentages
                 <Flex flexDirection='column'>
                   <FormattedMessage id='Country.Websites.URLCharts.Legend.Label.Blocked' />
-                  <FormattedMessage id='General.Anomaly' />
-                  <FormattedMessage id='General.Accessible' />
+                  <FormattedMessage id='Country.Websites.URLCharts.Legend.Label.Anomaly' />
+                  <FormattedMessage id='Country.Websites.URLCharts.Legend.Label.Accessible' />
                 </Flex>
               */}
             </Box>

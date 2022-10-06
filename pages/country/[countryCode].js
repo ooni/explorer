@@ -6,12 +6,13 @@ import {
   Heading,
   Flex, Box
 } from 'ooni-components'
+import countryUtil from 'country-util'
 import styled from 'styled-components'
 import { StickyContainer, Sticky } from 'react-sticky'
-import { getLocalisedRegionName } from '../../utils/i18nCountries'
 
 import NavBar from '../../components/NavBar'
 import Flag from '../../components/Flag'
+import Layout from '../../components/Layout'
 import PageNavMenu from '../../components/country/PageNavMenu'
 import Overview from '../../components/country/Overview'
 import WebsitesSection from '../../components/country/Websites'
@@ -19,7 +20,6 @@ import AppsSection from '../../components/country/Apps'
 // import NetworkPropertiesSection from '../../components/country/NetworkProperties'
 import { CountryContextProvider } from '../../components/country/CountryContext'
 import CountryHead from '../../components/country/CountryHead'
-import { useIntl } from 'react-intl'
 
 const getCountryReports = (countryCode, data) => {
   const reports = data.filter((article) => (
@@ -73,15 +73,15 @@ export async function getServerSideProps ({ res, query }) {
       overviewStats,
       reports,
       countryCode,
+      countryName: countryUtil.territoryNames[countryCode]
     }
   }
 }
 
 
-const Country = ({ countryCode, overviewStats, reports, ...coverageDataSSR }) => {
-  const intl = useIntl()
+
+const Country = ({ countryCode, countryName, overviewStats, reports, ...coverageDataSSR }) => {
   const [newData, setNewData] = useState(false)
-  const countryName = getLocalisedRegionName(countryCode, intl.locale)
 
   const fetchTestCoverageData = useCallback((testGroupList) => {
     console.log(testGroupList)
@@ -106,7 +106,7 @@ const Country = ({ countryCode, overviewStats, reports, ...coverageDataSSR }) =>
   const { testCoverage, networkCoverage } = newData !== false ? newData : coverageDataSSR
 
   return (
-    <React.Fragment>
+    <Layout>
       <CountryHead countryName={countryName} measurementCount={overviewStats.measurement_count} measuredSince={overviewStats.first_bucket_date} networkCount={overviewStats.network_count} />
       <StickyContainer>
         <Sticky>
@@ -160,7 +160,7 @@ const Country = ({ countryCode, overviewStats, reports, ...coverageDataSSR }) =>
           </Flex>
         </Container>
       </StickyContainer>
-    </React.Fragment>
+    </Layout>
   )
 }
 

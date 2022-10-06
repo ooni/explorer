@@ -15,6 +15,7 @@ import { FormattedMessage } from 'react-intl'
 import dayjs from 'services/dayjs'
 
 import NavBar from '../components/NavBar'
+import Layout from '../components/Layout'
 
 import ResultsList from '../components/search/ResultsList'
 import FilterSidebar, { queryToFilterMap } from '../components/search/FilterSidebar'
@@ -371,7 +372,7 @@ class Search extends React.Component {
     } = this.state
 
     return (
-      <React.Fragment>
+      <Layout>
         <Head>
           <title>Search through millions of Internet censorship measurements | OONI Explorer</title>
         </Head>
@@ -415,7 +416,7 @@ class Search extends React.Component {
             </Box>
           </Flex>
         </Container>
-      </React.Fragment>
+      </Layout>
     )
   }
 }

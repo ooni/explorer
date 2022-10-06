@@ -6,7 +6,7 @@ import { theme } from 'ooni-components'
 
 import Header from './Header'
 import Footer from './Footer'
-import { LocaleProvider } from './withIntl'
+import withIntl from './withIntl'
 // import FeedbackButton from '../components/FeedbackFloat'
 
 theme.maxWidth = 1024
@@ -56,21 +56,19 @@ const Layout = ({ children, disableFooter = false }) => {
   }, [])
 
   return (
-    <LocaleProvider>
-      <MatomoProvider value={matomoInstance}>
-        <ThemeProvider theme={theme}>
-          <GlobalStyle />
-          <div className="site">
-            <Header />
-            <div className="content">
-              { children }
-            </div>
-            {!disableFooter && <Footer />}
+    <MatomoProvider value={matomoInstance}>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle />
+        <div className="site">
+          <Header />
+          <div className="content">
+            { children }
           </div>
-          {/* <FeedbackButton /> */}
-        </ThemeProvider>
-      </MatomoProvider>
-    </LocaleProvider>
+          {!disableFooter && <Footer />}
+        </div>
+        {/* <FeedbackButton /> */}
+      </ThemeProvider>
+    </MatomoProvider>
   )
 }
 
@@ -79,4 +77,4 @@ Layout.propTypes = {
   disableFooter: PropTypes.bool
 }
 
-export default Layout
+export default withIntl(Layout)

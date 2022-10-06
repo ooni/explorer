@@ -12,7 +12,7 @@ export const NoCharts = ({ message }) => {
       </Heading>
       {message &&
         <Box bg='gray1' p={2} m={2}>
-          <FormattedMessage id='MAT.Charts.NoData.Details' />
+          Details:
           <Box as='pre' my={2}>
             {message}
           </Box>

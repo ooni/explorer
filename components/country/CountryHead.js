@@ -10,7 +10,7 @@ const CountryHead = ({
   const intl = useIntl()
   return (
     <Head>
-      <title>{intl.formatMessage({ id: 'Country.Meta.Title',}, { countryName })}</title>
+      <title>Internet Censorship in {countryName} | OONI Explorer</title>
       <meta
         key="og:title"
         property="og:title"

@@ -18,6 +18,7 @@ import {
   Text
 } from 'ooni-components'
 
+import Layout from '../components/Layout'
 import NavBar from '../components/NavBar'
 import { toCompactNumberUnit } from '../utils'
 import HighlightSection from '../components/landing/HighlightsSection'
@@ -159,7 +160,7 @@ export default class LandingPage extends React.Component {
     asnCount = toCompactNumberUnit(asnCount)
 
     return (
-      <React.Fragment>
+      <Layout>
         <Head>
           <title>OONI Explorer</title>
         </Head>
@@ -296,21 +297,11 @@ export default class LandingPage extends React.Component {
               highlights={highlightContent.changes}
             />
             <Box my={3}>
-              <Text fontSize={20}>
-                <FormattedMessage 
-                  id="Home.Highlights.CTA"
-                  values={{'link-to-search': (string) => (
-                    <NLink href='/search' passHref>
-                      <Link color='blue7'>{string}</Link>
-                    </NLink>
-                    )
-                  }}
-                />
-              </Text>
+              <Text fontSize={20}>We encourage you to <NLink href='/search' passHref><Link color='blue7'>explore OONI measurements</Link></NLink> to find more highlights!</Text>
             </Box>
           </Container>
         </Container>
-      </React.Fragment>
+      </Layout>
     )
   }
 }

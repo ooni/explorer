@@ -158,7 +158,7 @@ export const categoryCodes = [
 
 export const getCategoryCodesMap = () => {
   const map = categoryCodes.reduce((acc, [code, name, description]) => 
-    acc.set(code, {code, name: `CategoryCode.${code}.Name`, description: `CategoryCode.${code}.Description`})
+    acc.set(code, {name, description})
   , new Map())
   return map
 }

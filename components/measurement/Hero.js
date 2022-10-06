@@ -17,15 +17,15 @@ const Hero = ({ status, color, icon, label, info }) => {
   if (status) {
     switch (status) {
     case 'anomaly':
-      computedLabel = <FormattedMessage id='General.Anomaly' />
+      computedLabel = <FormattedMessage id='Measurement.Hero.Status.Anomaly' />
       icon = <MdPriorityHigh />
       break
     case 'reachable':
-      computedLabel = <FormattedMessage id='General.OK' />
+      computedLabel = <FormattedMessage id='Measurement.Hero.Status.Reachable' />
       icon = <Tick />
       break
     case 'error':
-      computedLabel = <FormattedMessage id='General.Error' />
+      computedLabel = <FormattedMessage id='Measurement.Hero.Status.Error' />
       icon = <FaQuestion size={36}/>
       break
     case 'confirmed':

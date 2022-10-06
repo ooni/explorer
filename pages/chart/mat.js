@@ -11,7 +11,7 @@ import {
   Link
 } from 'ooni-components'
 import useSWR from 'swr'
-import { FormattedMessage, useIntl } from 'react-intl'
+import { FormattedMessage } from 'react-intl'
 
 import Layout from 'components/Layout'
 import NavBar from 'components/NavBar'
@@ -71,7 +71,7 @@ const fetcher = (query) => {
 }
 
 const MeasurementAggregationToolkit = ({ testNames }) => {
-  const intl = useIntl()
+
   const router = useRouter()
 
   const onSubmit = useCallback((data) => {
@@ -132,55 +132,59 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
 
   return (
     <MATContextProvider>
-      <Head>
-        <title>OONI Measurement Aggregation Toolkit</title>
-      </Head>
-      <NavBar />
-      <Container>
-        <Flex flexDirection='column'>
-          <Heading h={1} mt={3} mb={0}><FormattedMessage id='MAT.Title' /></Heading>
-          <Heading h={5} mt={0} mb={2} color='gray9'>
-            <FormattedMessage id='MAT.SubTitle' />
-          </Heading>
-          <Form onSubmit={onSubmit} testNames={testNames} query={router.query} />
-          {error &&
-            <NoCharts message={error?.info ?? error} />
-          }
-          <Box sx={{ minHeight: '500px' }}>
-            {showLoadingIndicator &&
-              <Box>
-                <h2>{intl.formatMessage({id: 'General.Loading'})}</h2>
+      <Layout>
+        <Head>
+          <title>OONI Measurement Aggregation Toolkit</title>
+        </Head>
+        <NavBar />
+        <Container>
+          <Flex flexDirection='column'>
+            <Heading h={1} mt={3} mb={0}><FormattedMessage id='MAT.Title' /></Heading>
+            <Heading h={5} mt={0} mb={2} color='gray9'>
+              <FormattedMessage id='MAT.SubTitle' />
+            </Heading>
+            <Form onSubmit={onSubmit} testNames={testNames} query={router.query} />
+            {error &&
+              <NoCharts message={error?.info ?? error} />
+            }
+            <Box sx={{ minHeight: '500px' }}>
+              {showLoadingIndicator &&
+                <Box>
+                  <h2>Loading ...</h2>
+                </Box>
+              }
+              {data && data.data.dimension_count == 0 &&
+                  <FunnelChart data={data.data.result} />
+              }
+              {data && data.data.dimension_count == 1 &&
+                  <StackedBarChart data={data} query={query} />
+              }
+              {data && data.data.dimension_count > 1 &&
+                  <TableView data={data.data.result} query={query} />
+              }
+            </Box>
+            {linkToAPIQuery &&
+              <Box mt={[3]} ml={['unset', 'auto']}>
+                <Flex>
+                  <Box>
+                    <Link as='a' href={linkToAPIQuery} target='_blank' title='opens in new tab'>
+                      JSON Data <FaExternalLinkAlt />
+                    </Link>
+                  </Box>
+                  <Box ml={2}>
+                    <Link href={`${linkToAPIQuery}&format=CSV`} target='_blank' title='opens in new tab'>
+                    CSV Data <FaExternalLinkAlt />
+                    </Link>
+                  </Box>
+                </Flex>
               </Box>
             }
-            {data && data.data.dimension_count == 0 &&
-                <FunnelChart data={data.data.result} />
-            }
-            {data && data.data.dimension_count == 1 &&
-                <StackedBarChart data={data} query={query} />
-            }
-            {data && data.data.dimension_count > 1 &&
-                <TableView data={data.data.result} query={query} />
-            }
-          </Box>
-          {linkToAPIQuery &&
-            <Box mt={[3]} ml={['unset', 'auto']}>
-              <Flex>
-                <Box>
-                  <Link as='a' href={linkToAPIQuery} target='_blank' title='opens in new tab'>{intl.formatMessage({id: 'MAT.JSONData'})}<FaExternalLinkAlt />
-                  </Link>
-                </Box>
-                <Box ml={2}>
-                  <Link href={`${linkToAPIQuery}&format=CSV`} target='_blank' title='opens in new tab'>{intl.formatMessage({id: 'MAT.CSVData'})}<FaExternalLinkAlt />
-                  </Link>
-                </Box>
-              </Flex>
+            <Box my={4}>
+              <Help />
             </Box>
-          }
-          <Box my={4}>
-            <Help />
-          </Box>
-        </Flex>
-      </Container>
+          </Flex>
+        </Container>
+      </Layout>
     </MATContextProvider>
   )
 }

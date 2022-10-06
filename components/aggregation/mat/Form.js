@@ -6,10 +6,10 @@ import {
   Flex, Box,
   Label, Input, Select, Button
 } from 'ooni-components'
+import { countryList } from 'country-util'
 import dayjs from 'services/dayjs'
 import { format } from 'date-fns'
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl'
-import { localisedCountries } from 'utils/i18nCountries'
 
 import { categoryCodes } from '../../utils/categoryCodes'
 import DateRangePicker from '../../DateRangePicker'
@@ -119,8 +119,8 @@ export const Form = ({ onSubmit, testNames, query }) => {
     }
   }, [reset, query])
 
-  const sortedCountries = localisedCountries(intl.locale)
-    .sort((a,b) => new Intl.Collator(intl.locale).compare(a.localisedCountryName, b.localisedCountryName))
+  const sortedCountries = countryList
+    .sort((a,b) => (a.iso3166_name < b.iso3166_name) ? -1 : (a.iso3166_name > b.iso3166_name) ? 1 : 0)
 
   const testNameValue = watch('test_name')
   const showWebConnectivityFilters = isValidFilterForTestname(testNameValue, testsWithValidDomainFilter)
@@ -180,9 +180,9 @@ export const Form = ({ onSubmit, testNames, query }) => {
           <Controller
             render={({field}) => (
               <Select {...field} width={1}>
-                <option value=''>{intl.formatMessage({id: 'MAT.Form.AllCountries'})}</option>
+                <option value=''>All Countries</option>
                 {sortedCountries.map((c, idx) =>(
-                  <option key={idx} value={c.iso3166_alpha2}>{c.localisedCountryName}</option>
+                  <option key={idx} value={c.iso3166_alpha2}>{c.iso3166_name}</option>
                 ))}
               </Select>
             )}
@@ -338,11 +338,11 @@ export const Form = ({ onSubmit, testNames, query }) => {
                 control={control}
                 render={({field}) => (
                   <Select {...field}>
-                    <option value="">{intl.formatMessage({id: 'MAT.Form.All'})}</option>
+                    <option value="">ALL</option>
                     {categoryCodes
                       .sort((a, b) => a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0)
                       .map(([code, label], idx) => (
-                        <option key={idx} value={code}>{intl.formatMessage({id: `CategoryCode.${code}.Name`})}</option>
+                        <option key={idx} value={code}>{label}</option>
                     ))}
                   </Select>
                 )}
