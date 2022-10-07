@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react'
 import { useIntl } from 'react-intl'
 import { useRouter } from 'next/router'
+import { FormattedMessage } from 'react-intl'
 import { Heading, Box, Flex } from 'ooni-components'
 import useSWR from 'swr'
 import GridChart, { prepareDataForGridChart } from 'components/aggregation/mat/GridChart'

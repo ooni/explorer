@@ -1,5 +1,6 @@
 import React, { useMemo } from 'react'
 import { useRouter } from 'next/router'
+import { FormattedMessage } from 'react-intl'
 import { Heading, Box, Flex } from 'ooni-components'
 import useSWR from 'swr'
 import GridChart, { prepareDataForGridChart } from 'components/aggregation/mat/GridChart'
@@ -65,7 +66,7 @@ const ChartCountry = React.memo(function Chart({testName, testGroup = null, titl
             <div> Loading ...</div>
           ) : (
             chartData === null || chartData.length === 0 ? (
-              <Heading h={5}>No Data</Heading>
+              <Heading h={5}><FormattedMessage id="Measurement.Details.Websites.Failures.Values.Unknown" /></Heading>
             ) : (
               <GridChart
                 data={chartData}
