@@ -5,7 +5,7 @@ import { Box, Button, Link, Text, theme } from 'ooni-components'
 import { RadioGroup, RadioButton } from 'components/search/Radio'
 import useStateMachine from '@cassiozen/usestatemachine'
 import SpinLoader from 'components/vendor/SpinLoader'
-import { submitFeedback } from 'lib/api'
+import { submitFeedback, getAPI } from 'lib/api'
 
 const okValues = ['ok', 'ok.unreachable', 'ok.broken', 'ok.parked']
 const blockedValues = [
@@ -28,7 +28,7 @@ const QuestionText = ({i18nKey}) => (
   <Text fontSize={16} mb={3}><FormattedMessage id={i18nKey} /></Text>
 )
 
-const FeedbackBox = ({user, report_id, setShowModal}) => {
+const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
   const intl = useIntl()
   const [error, setError] = useState(null)
 
@@ -126,16 +126,27 @@ const FeedbackBox = ({user, report_id, setShowModal}) => {
               <>
                 {user.loggedIn ? 
                   <>
-                    <QuestionText i18nKey='Measurement.Feedback.Q1' />
-                    <Button mr={2} onClick={() => send('IS_BLOCKING')}><FormattedMessage id='General.Yes' /></Button>
-                    <Button onClick={() => send('CLOSE')}><FormattedMessage id='General.No' /></Button>
+                    {previousFeedback ? 
+                      <>
+                        <Text fontSize={16} mb={3}><FormattedMessage id="Measurement.Feedback.ExistingFeedback" /></Text>
+                        <Text fontSize={16} mb={3}><FormattedMessage id={`Measurement.Feedback.${previousFeedback}`} /></Text>
+                        <Button mr={2} onClick={() => send('IS_BLOCKING')}>
+                          <FormattedMessage id="General.Edit" />
+                        </Button>
+                      </> :
+                      <>
+                        <QuestionText i18nKey='Measurement.Feedback.Q1' />
+                        <Button mr={2} onClick={() => send('IS_BLOCKING')}><FormattedMessage id='General.Yes' /></Button>
+                        <Button onClick={() => send('CLOSE')}><FormattedMessage id='General.No' /></Button>
+                      </>
+                    }
                   </>
                   : 
                   <Text fontSize={16}>
                     <FormattedMessage
                       id='Measurement.Feedback.Login'
                       values={{
-                        'login': (string) => (<a onClick={() => setShowModal(true)}><Link>{string}</Link></a>)
+                        'login': (string) => (<Link onClick={() => setShowModal(true)}>{string}</Link>)
                       }}
                     />
                   </Text>

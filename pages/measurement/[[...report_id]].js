@@ -1,5 +1,5 @@
 /* global process */
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 import axios from 'axios'
@@ -25,6 +25,7 @@ import { useIntl } from 'react-intl'
 import useUser from 'hooks/useUser'
 import { DetailsBoxTable } from 'components/measurement/DetailsBox'
 import { FormattedMessage } from 'react-intl'
+import useSWR from 'swr'
 
 const pageColors = {
   default: theme.colors.base,
@@ -95,14 +96,6 @@ export async function getServerSideProps({ query }) {
       // Measurement not found
       initialProps.notFound = true
     }
-
-    await client
-      .get(`/api/v1/measurement_feedback/${report_id}`)
-      .then(({data}) => {
-        if (Object.keys(data?.summary).length) initialProps.userFeedback = data.summary
-      })
-      .catch(() => {})
-
   } catch (e) {
     initialProps.error = e.message
   }
@@ -127,7 +120,6 @@ const Measurement = ({
   raw_measurement,
   report_id,
   scores,
-  userFeedback,
   ...rest
 }) => {
   const intl = useIntl()
@@ -135,10 +127,17 @@ const Measurement = ({
 
   const { user, submitted, reqError, setSubmitted } = useUser()
   const [showModal, setShowModal] = useState(false)
+  
+  const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL, withCredentials: true})
+  const fetcher = url => client.get(url).then(res => res.data)
 
-  const userFeedbackItems = userFeedback ? 
-    Object.entries(userFeedback).map(([key, value]) => ({label: <FeedbackLabel reason={key} />, value})) : 
-    null
+  const {data: userFeedback, error: userFeedbackError} = useSWR(`/api/_/measurement_feedback/${report_id}`, fetcher)
+
+  const userFeedbackItems = useMemo(() => {
+    return userFeedback ? 
+      Object.entries(userFeedback.summary).map(([key, value]) => ({label: <FeedbackLabel reason={key} />, value})) : 
+      null
+  }, [userFeedback])
 
   // Add the 'AS' prefix to probe_asn when API chooses to send just the number
   probe_asn = typeof probe_asn === 'number' ? `AS${probe_asn}` : probe_asn
@@ -205,7 +204,12 @@ const Measurement = ({
                     />
                   }
                   <NavBar color={color} />
-                  <FeedbackBox user={user} report_id={report_id} setShowModal={setShowModal} />
+                  <FeedbackBox 
+                    user={user}
+                    report_id={report_id}
+                    setShowModal={setShowModal}
+                    previousFeedback={userFeedback?.user_feedback}
+                  />
                   <Hero
                     color={color}
                     status={status}
