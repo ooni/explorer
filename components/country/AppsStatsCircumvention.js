@@ -32,7 +32,7 @@ class AppsStatsCircumvention extends React.Component {
 
   async fetchCircumventionStats() {
     const { countryCode } = this.props
-    const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
+    const client = axios.create({baseURL: process.env.NEXT_PUBLIC_OONI_API}) // eslint-disable-line
     const result = await client.get('/api/_/vanilla_tor_stats', {
       params: {
         probe_cc: countryCode

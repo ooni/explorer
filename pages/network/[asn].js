@@ -140,7 +140,7 @@ export const getServerSideProps = async (context) => {
   const { asn } = context.query
 
   if (/^AS[0-9]+$/.test(asn)) {
-    const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL})
+    const client = axios.create({baseURL: process.env.NEXT_PUBLIC_OONI_API})
     const path = '/api/v1/aggregation'
 
     const measurementsTotal = await client

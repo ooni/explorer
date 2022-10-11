@@ -117,7 +117,7 @@ class URLChart extends React.Component {
 
   async fetchURLChartData() {
     const { metadata, network, countryCode } = this.props
-    const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
+    const client = axios.create({baseURL: process.env.NEXT_PUBLIC_OONI_API}) // eslint-disable-line
     const result = await client.get('/api/_/website_stats', {
       params: {
         probe_cc: countryCode,

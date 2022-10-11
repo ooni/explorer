@@ -50,7 +50,7 @@ export async function getServerSideProps({ query }) {
   let response
   let client
   try {
-    client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
+    client = axios.create({baseURL: process.env.NEXT_PUBLIC_OONI_API}) // eslint-disable-line
     let params = {
       report_id: report_id,
       full: true

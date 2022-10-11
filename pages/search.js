@@ -55,7 +55,7 @@ const queryToParams = ({ query }) => {
 }
 
 const getMeasurements = (query) => {
-  let client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL})  // eslint-disable-line
+  let client = axios.create({baseURL: process.env.NEXT_PUBLIC_OONI_API})  // eslint-disable-line
   const params = queryToParams({ query })
   return client.get('/api/v1/measurements', {params})
 }
@@ -146,7 +146,7 @@ const NoResults = () => (
 class Search extends React.Component {
   static async getInitialProps ({ query }) {
     let msmtR, testNamesR, countriesR
-    let client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL})  // eslint-disable-line
+    let client = axios.create({baseURL: process.env.NEXT_PUBLIC_OONI_API})  // eslint-disable-line
 
     // By default, on '/search' show measurements published until today
     // including the measurements of today (so the date of tomorrow).
