@@ -16,7 +16,7 @@ const swrOptions = {
   dedupingInterval: 10 * 60 * 1000,
 }
 
-const baseURL = process.env.NEXT_PUBLIC_AGGREGATION_API
+const baseURL = process.env.NEXT_PUBLIC_OONI_API
 axiosResponseTime(axios)
 
 // TODO export from mat.js

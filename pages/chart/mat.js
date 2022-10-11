@@ -27,7 +27,7 @@ import Help from 'components/aggregation/mat/Help'
 import dayjs from 'services/dayjs'
 import { NoCharts } from 'components/aggregation/mat/NoCharts'
 
-const baseURL = process.env.NEXT_PUBLIC_MEASUREMENTS_URL
+const baseURL = process.env.NEXT_PUBLIC_OONI_API
 axiosResponseTime(axios)
 
 export const getServerSideProps = async () => {
@@ -52,7 +52,7 @@ const swrOptions = {
 
 const fetcher = (query) => {
   const qs = new URLSearchParams(query).toString()
-  const reqUrl = `${process.env.NEXT_PUBLIC_AGGREGATION_API || process.env.NEXT_PUBLIC_MEASUREMENTS_URL}/api/v1/aggregation?${qs}`
+  const reqUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation?${qs}`
   console.debug(`API Query: ${reqUrl}`)
   return axios.get(reqUrl).then(r => {
     return {
@@ -125,7 +125,7 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
 
   let linkToAPIQuery = null
   try {
-    linkToAPIQuery = `${process.env.NEXT_PUBLIC_AGGREGATION_API}/api/v1/aggregation?${new URLSearchParams(query).toString()}`
+    linkToAPIQuery = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation?${new URLSearchParams(query).toString()}`
   } catch (e) {
     console.error(`Failed to construct API query link: ${e.message}`)
   }

@@ -30,7 +30,7 @@ const getMaxima = (data) => {
   return maxima
 }
 
-const BASE_URL = `${process.env.NEXT_PUBLIC_MEASUREMENTS_URL}`
+const BASE_URL = `${process.env.NEXT_PUBLIC_OONI_API}`
 
 const dataFetcher = query => (
   axios.get( BASE_URL + query).then(r => r.data)

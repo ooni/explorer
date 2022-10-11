@@ -28,7 +28,7 @@ class AppsStatChart extends React.Component {
 
   async fetchAppNetworkStats() {
     const { countryCode, app, asn } = this.props
-    const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
+    const client = axios.create({baseURL: process.env.NEXT_PUBLIC_OONI_API}) // eslint-disable-line
     const result = await client.get('/api/_/im_stats', {
       params: {
         probe_cc: countryCode,
