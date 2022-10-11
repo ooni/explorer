@@ -52,7 +52,7 @@ const swrOptions = {
 
 const fetcher = (query) => {
   const qs = new URLSearchParams(query).toString()
-  const reqUrl = `${process.env.NEXT_PUBLIC_OONI_API || process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation?${qs}`
+  const reqUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation?${qs}`
   console.debug(`API Query: ${reqUrl}`)
   return axios.get(reqUrl).then(r => {
     return {

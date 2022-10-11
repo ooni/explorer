@@ -5,7 +5,7 @@ import { Select } from 'ooni-components'
 import useSWR from 'swr'
 
 
-const AGGREGATION_API = `${process.env.NEXT_PUBLIC_OONI_API || process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation?`
+const AGGREGATION_API = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation?`
 
 // TODO adapt to axios
 const fetcher = url => fetch(AGGREGATION_API + url).then(r => r.json())
