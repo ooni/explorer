@@ -14,6 +14,7 @@ const SentryWebpackPluginOptions = {
 }
 
 module.exports = withSentryConfig({
+  output: 'standalone',
   async redirects() {
     return [
       {

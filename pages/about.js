@@ -10,23 +10,20 @@ import {
 import Layout from '../components/Layout'
 import NavBar from '../components/NavBar'
 
-export default class About extends React.Component {
-  render () {
+const About = () => {
+  return (
+    <Layout>
+      <Head>
+        <title>About OONI Explorer</title>
+      </Head>
 
-    return (
-      <Layout>
-        <Head>
-          <title>About OONI Explorer</title>
-        </Head>
+      <NavBar />
 
-        <NavBar />
-
-        <Container>
-          <Heading h={2}>XXX Implement Me</Heading>
-          <Text>Do we even need an about page?</Text>
-        </Container>
-      </Layout>
-    )
-  }
-
+      <Container>
+        <Heading h={2}>XXX Implement Me</Heading>
+        <Text>Do we even need an about page?</Text>
+      </Container>
+    </Layout>
+  )
 }
+export default About

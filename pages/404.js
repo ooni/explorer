@@ -15,7 +15,7 @@ import Layout from '../components/Layout'
 import NavBar from '../components/NavBar'
 import OONI404 from '../public/static/images/OONI_404.svg'
 
-export default function Custom404() {
+const Custom404 = () => {
   const router = useRouter()
   return (
     <Layout>
@@ -61,3 +61,5 @@ export default function Custom404() {
     </Layout>
   )
 }
+
+export default Custom404
