@@ -40,7 +40,7 @@ export const getServerSideProps = async ({query}) => {
     query.failure = !(query.failure === 'false')
   }
 
-  const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL})
+  const client = axios.create({baseURL: process.env.NEXT_PUBLIC_OONI_API})
   const [testNamesR, countriesR] = await Promise.all([
     client.get('/api/_/test_names'),
     client.get('/api/_/countries')
@@ -67,9 +67,14 @@ export const getServerSideProps = async ({query}) => {
 
 
 const queryToParams = ({ query }) => {
-  // XXX do better validation
-  let params = {}
+  let params = {},
+    show = 50
   const supportedParams = ['probe_cc', 'domain', 'input','category_code', 'probe_asn', 'test_name', 'since', 'until', 'failure']
+  
+  if (query.show) {
+    show = parseInt(query.show)
+  }
+  params['limit'] = show
 
   // Allow only `failure=false`. `true` results in showing only failures
   if ('failure' in query && query['failure'] === false) {
@@ -217,7 +222,6 @@ const Search = ({testNames, testNamesKeyed, countries, query: queryProp }) => {
   const loadMore = () => {
     axios.get(nextURL)
       .then((res) => {
-        // XXX update the query
         const nextPageResults = res.data.results.filter(item => item.probe_asn !== 'AS0')
         setResults(results.concat(nextPageResults))
         setNextURL(res.data.metadata.next_url)
@@ -241,7 +245,6 @@ const Search = ({testNames, testNamesKeyed, countries, query: queryProp }) => {
       query
     }
     router.push(href, href, { shallow: true }).then(() => {
-      // XXX do error handling
       getMeasurements(query)
         .then((res) => {
           const results = res.data.results.filter(item => item.probe_asn !== 'AS0')
@@ -252,11 +255,8 @@ const Search = ({testNames, testNamesKeyed, countries, query: queryProp }) => {
         .catch((err) => {
           console.error(err)
           const error = serializeError(err)
-          
-          // this.setState({
-          //   error,
-          //   loading: false
-          // })
+          setError(error)
+          setLoading(false)
         })
       })
   }
@@ -337,7 +337,6 @@ const Search = ({testNames, testNamesKeyed, countries, query: queryProp }) => {
       </Container>
     </Layout>
   )
-  // }
 }
 
 Search.propTypes = {
