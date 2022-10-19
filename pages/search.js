@@ -205,11 +205,10 @@ const Search = ({testNames, testNamesKeyed, countries, query: queryProp }) => {
 
     setLoading(true)
     getMeasurements(query)
-      .then((res) => {
-        const results = res.data.results.filter(item => item.probe_asn !== 'AS0')
+      .then(({ data: { results, metadata: { next_url } } }) => {
         setLoading(false)
         setResults(results)
-        setNextURL(res.data.metadata.next_url)
+        setNextURL(next_url)
       })
       .catch((err) => {
         console.error(err)
@@ -221,10 +220,9 @@ const Search = ({testNames, testNamesKeyed, countries, query: queryProp }) => {
 
   const loadMore = () => {
     axios.get(nextURL)
-      .then((res) => {
-        const nextPageResults = res.data.results.filter(item => item.probe_asn !== 'AS0')
+      .then(({ data: { results:  nextPageResults, metadata: { next_url } } }) => {
         setResults(results.concat(nextPageResults))
-        setNextURL(res.data.metadata.next_url)
+        setNextURL(next_url)
       })
       .catch((err) => {
         console.error(err)
@@ -246,11 +244,10 @@ const Search = ({testNames, testNamesKeyed, countries, query: queryProp }) => {
     }
     router.push(href, href, { shallow: true }).then(() => {
       getMeasurements(query)
-        .then((res) => {
-          const results = res.data.results.filter(item => item.probe_asn !== 'AS0')
+        .then(({ data: { results, metadata: { next_url } } }) => {
           setLoading(false)
           setResults(results)
-          setNextURL(res.data.metadata.next_url)
+          setNextURL(next_url)
         })
         .catch((err) => {
           console.error(err)
