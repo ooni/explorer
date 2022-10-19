@@ -319,7 +319,7 @@ const WebConnectivityDetails = ({
   } = validateMeasurement(measurement ?? {})
 
   const intl = useIntl()
-  const date = dayjs(measurement_start_time).utc().format('MMMM DD, YYYY, hh:mm A [UTC]')
+  const date = dayjs(measurement_start_time).locale(intl.locale).utc().format('MMMM DD, YYYY, hh:mm A [UTC]')
 
   const p = url.parse(input)
   const hostname = p.host

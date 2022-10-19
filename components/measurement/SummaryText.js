@@ -5,6 +5,7 @@ import dayjs from 'services/dayjs'
 
 import { getTestMetadata } from '../utils'
 import FormattedMarkdown from '../FormattedMarkdown'
+import { useIntl } from 'react-intl'
 
 const SummaryText = ({
   testName,
@@ -13,8 +14,9 @@ const SummaryText = ({
   date,
   content,
 }) => {
+  const { locale } = useIntl()
   const metadata = getTestMetadata(testName)
-  const formattedDateTime = dayjs(date).utc().format('MMMM DD, YYYY, hh:mm A [UTC]')
+  const formattedDateTime = dayjs(date).locale(locale).utc().format('MMMM DD, YYYY, hh:mm A [UTC]')
 
   let textToRender = null
   if (typeof content === 'function') {

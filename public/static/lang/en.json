@@ -468,6 +468,7 @@
   "MAT.Form.Submit": "Show Chart",
   "MAT.Form.All": "All",
   "MAT.Form.AllCountries": "All Countries",
+  "MAT.Table.Header.ok_count": "OK Count",
   "MAT.Table.Header.anomaly_count": "Anomaly Count",
   "MAT.Table.Header.confirmed_count": "Confirmed Count",
   "MAT.Table.Header.failure_count": "Failure Count",

@@ -2,6 +2,12 @@ import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
+import('dayjs/locale/de')
+import('dayjs/locale/fa')
+import('dayjs/locale/fr')
+import('dayjs/locale/ru')
+import('dayjs/locale/tr')
+import('dayjs/locale/zh')
 
 dayjs
   .extend(utc)

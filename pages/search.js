@@ -15,6 +15,7 @@ import { FormattedMessage } from 'react-intl'
 import dayjs from 'services/dayjs'
 
 import NavBar from '../components/NavBar'
+import Layout from '../components/Layout'
 
 import ResultsList from '../components/search/ResultsList'
 import FilterSidebar, { queryToFilterMap } from '../components/search/FilterSidebar'
@@ -286,77 +287,53 @@ const Search = ({testNames, testNamesKeyed, countries, query: queryProp }) => {
     return query
   }
 
-  render () {
-    const {
-      testNames,
-      testNamesKeyed,
-      countries
-    } = this.props
+  return (
+    <Layout>
+      <Head>
+        <title>Search through millions of Internet censorship measurements | OONI Explorer</title>
+      </Head>
 
-    const {
-      loading,
-      error,
-      results,
-      onlyFilter,
-      domainFilter,
-      inputFilter,
-      categoryFilter,
-      testNameFilter,
-      countryFilter,
-      asnFilter,
-      sinceFilter,
-      untilFilter,
-      hideFailed
-    } = this.state
+      <NavBar />
 
-    return (
-      <Layout>
-        <Head>
-          <title>Search through millions of Internet censorship measurements | OONI Explorer</title>
-        </Head>
+      <Container>
+        <Flex pt={3} flexWrap='wrap'>
+          <Box width={[1, 1/4]} px={2}>
+            <FilterSidebar
+              domainFilter={query.domain}
+              inputFilter={query.input}
+              categoryFilter={query.category}
+              testNameFilter={query.test_name}
+              countryFilter={query.country}
+              asnFilter={query.asn}
+              sinceFilter={queryProp.since}
+              untilFilter={queryProp.until}
+              onlyFilter={query.only || 'all'}
+              hideFailed={query.failed}
+              onApplyFilter={onApplyFilter}
+              testNames={testNames}
+              countries={countries}
+            />
+          </Box>
+          <Box width={[1, 3/4]} px={2}>
+            {error && <ErrorBox error={error} />}
+            {loading && <Loader />}
 
-        <NavBar />
-
-        <Container>
-          <Flex pt={3} flexWrap='wrap'>
-            <Box width={[1, 1/4]} px={2}>
-              <FilterSidebar
-                domainFilter={query.domain}
-                inputFilter={query.input}
-                categoryFilter={query.category}
-                testNameFilter={query.test_name}
-                countryFilter={query.country}
-                asnFilter={query.asn}
-                sinceFilter={queryProp.since}
-                untilFilter={queryProp.until}
-                onlyFilter={query.only || 'all'}
-                hideFailed={query.failed}
-                onApplyFilter={onApplyFilter}
-                testNames={testNames}
-                countries={countries}
-              />
-            </Box>
-            <Box width={[1, 3/4]} px={2}>
-              {error && <ErrorBox error={error} />}
-              {loading && <Loader />}
-
-              {!error && !loading && results.length === 0 && <NoResults />}
-              {!error && !loading && results.length > 0 && <React.Fragment>
-                <ResultsList results={results} testNamesKeyed={testNamesKeyed} />
-                {this.state.nextURL &&
-                  <Flex alignItems='center' justifyContent='center'>
-                    <Button onClick={this.loadMore} data-test-id='load-more-button'>
-                      <FormattedMessage id='Search.Button.LoadMore' />
-                    </Button>
-                  </Flex>
-                }
-              </React.Fragment>}
-            </Box>
-          </Flex>
-        </Container>
-      </Layout>
-    )
-  }
+            {!error && !loading && results.length === 0 && <NoResults />}
+            {!error && !loading && results.length > 0 && <React.Fragment>
+              <ResultsList results={results} testNamesKeyed={testNamesKeyed} />
+              {nextURL &&
+                <Flex alignItems='center' justifyContent='center'>
+                  <Button onClick={loadMore} data-test-id='load-more-button'>
+                    <FormattedMessage id='Search.Button.LoadMore' />
+                  </Button>
+                </Flex>
+              }
+            </React.Fragment>}
+          </Box>
+        </Flex>
+      </Container>
+    </Layout>
+  )
 }
 
 Search.propTypes = {

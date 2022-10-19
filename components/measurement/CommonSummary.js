@@ -63,8 +63,8 @@ const CommonSummary = ({
       {country}
     </Box>
   </Flex>
-
-  const formattedDate = dayjs(startTime).utc().format('MMMM DD, YYYY, hh:mm A [UTC]')
+ 
+  const formattedDate = dayjs(startTime).locale(intl.locale).utc().format('MMMM DD, YYYY, hh:mm A [UTC]')
 
   return (
     <React.Fragment>
