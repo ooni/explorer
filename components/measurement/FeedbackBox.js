@@ -44,11 +44,16 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
         },
       },
       isBlocking: {
+        effect({ send, setContext, event, context }) {
+          if (!user.loggedIn) send('LOGIN')
+        },
         on: {
           NOT_BLOCKING: 'notBlocking',
           BLOCKING: 'blocking',
+          LOGIN: 'login'
         }
       },
+      login: {},
       blocking: {
         on: {
           CANCEL: 'initial',
@@ -88,7 +93,6 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
       },
       failure: {
         on: {
-          CLOSE: 'closed',
           SUBMIT: 'submit'
         },
         effect() {
@@ -124,34 +128,31 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
           <form onSubmit={(e) => e.preventDefault()}>
             {state.value === 'initial' && 
               <>
-                {user.loggedIn ? 
+                {previousFeedback ? 
                   <>
-                    {previousFeedback ? 
-                      <>
-                        <Text fontSize={16} mb={3}><FormattedMessage id="Measurement.Feedback.ExistingFeedback" /></Text>
-                        <Text fontSize={16} mb={3}><FormattedMessage id={`Measurement.Feedback.${previousFeedback}`} /></Text>
-                        <Button mr={2} onClick={() => send('IS_BLOCKING')}>
-                          <FormattedMessage id="General.Edit" />
-                        </Button>
-                      </> :
-                      <>
-                        <QuestionText i18nKey='Measurement.Feedback.Q1' />
-                        <Button mr={2} onClick={() => send('IS_BLOCKING')}><FormattedMessage id='General.Yes' /></Button>
-                        <Button onClick={() => send('CLOSE')}><FormattedMessage id='General.No' /></Button>
-                      </>
-                    }
+                    <Text fontSize={16} mb={3}><FormattedMessage id="Measurement.Feedback.ExistingFeedback" /></Text>
+                    <Text fontSize={16} mb={3}><FormattedMessage id={`Measurement.Feedback.${previousFeedback}`} /></Text>
+                    <Button mr={2} onClick={() => send('IS_BLOCKING')}>
+                      <FormattedMessage id="General.Edit" />
+                    </Button>
+                  </> :
+                  <>
+                    <QuestionText i18nKey='Measurement.Feedback.Q1' />
+                    <Button mr={2} onClick={() => send('IS_BLOCKING')}><FormattedMessage id='General.Yes' /></Button>
+                    <Button onClick={() => send('CLOSE')}><FormattedMessage id='General.No' /></Button>
                   </>
-                  : 
-                  <Text fontSize={16}>
-                    <FormattedMessage
-                      id='Measurement.Feedback.Login'
-                      values={{
-                        'login': (string) => (<Link onClick={() => setShowModal(true)}>{string}</Link>)
-                      }}
-                    />
-                  </Text>
                 }
               </>
+            }
+            {state.value === 'login' && 
+              <Text fontSize={16}>
+                <FormattedMessage
+                  id='Measurement.Feedback.Login'
+                  values={{
+                    'login': (string) => (<Link onClick={() => setShowModal(true)}>{string}</Link>)
+                  }}
+                />
+              </Text>
             }
             {state.value === 'isBlocking' && (
               <>
