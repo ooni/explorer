@@ -68,11 +68,8 @@ const TableView = ({ data, query }) => {
     <Flex flexDirection='column'>
       <Filters
         query={query}
-        // data={data}
         tableData={tableData}
         setDataForCharts={setDataForCharts}
-        // rowKeys={rowKeys}
-        // rowLabels={rowLabels}
        />
       <ResizableBox>
         <GridChart
