@@ -26,10 +26,10 @@ module.exports = withSentryConfig({
   },
 
   webpack: (config, options) => {
-    const gitCommitSHAShort = execSync(process.env.RUN_GIT_COMMIT_SHA_SHORT)
-    const gitCommitSHA = execSync(process.env.RUN_GIT_COMMIT_SHA)
-    const gitCommitRef = execSync(process.env.RUN_GIT_COMMIT_REF)
-    const gitCommitTags = execSync(process.env.RUN_GIT_COMMIT_TAGS)
+    const gitCommitSHAShort = process.env.RUN_GIT_COMMIT_SHA_SHORT ? execSync(process.env.RUN_GIT_COMMIT_SHA_SHORT) : ''
+    const gitCommitSHA = process.env.RUN_GIT_COMMIT_SHA ? execSync(process.env.RUN_GIT_COMMIT_SHA) : ''
+    const gitCommitRef = process.env.RUN_GIT_COMMIT_REF ? execSync(process.env.RUN_GIT_COMMIT_REF) : ''
+    const gitCommitTags = process.env.RUN_GIT_COMMIT_TAGS ? execSync(process.env.RUN_GIT_COMMIT_TAGS) : ''
 
     config.plugins.push(
       new options.webpack.DefinePlugin({
