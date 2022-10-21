@@ -5,3 +5,13 @@ npm-debug.log
 package-lock.json
 yarn-error.log
 ignore
+cypress
+.github
+.editorconfig
+.dockerignore
+CHANGELOG.md
+CODE_OF_CONDUCT.md
+cypress.config.js
+LICENSE.md
+Readme.md
+Todo.md
