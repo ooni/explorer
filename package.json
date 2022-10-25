@@ -66,6 +66,7 @@
     "lodash": "^4.17.21"
   },
   "devDependencies": {
+    "@svgr/webpack": "^6.5.0",
     "@welldone-software/why-did-you-render": "^7.0.1",
     "babel-plugin-formatjs": "^10.3.25",
     "cypress": "^10.6.0",

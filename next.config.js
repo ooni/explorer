@@ -3,6 +3,8 @@
 // https://nextjs.org/docs/api-reference/next.config.js/introduction
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 const { withSentryConfig } = require('@sentry/nextjs')
+const glob = require('glob')
+const { dirname, basename, resolve } = require('path')
 const { execSync } = require('child_process')
 
 const SentryWebpackPluginOptions = {
@@ -24,7 +26,12 @@ module.exports = withSentryConfig({
       },
     ]
   },
-
+  compiler: {
+    // see https://styled-components.com/docs/tooling#babel-plugin for more info on the options.
+    styledComponents: {
+      ssr: true,
+    },
+  },
   webpack: (config, options) => {
     const gitCommitSHAShort = process.env.RUN_GIT_COMMIT_SHA_SHORT ? execSync(process.env.RUN_GIT_COMMIT_SHA_SHORT) : ''
     const gitCommitSHA = process.env.RUN_GIT_COMMIT_SHA ? execSync(process.env.RUN_GIT_COMMIT_SHA) : ''
@@ -44,6 +51,34 @@ module.exports = withSentryConfig({
         'process.env.WDYR': JSON.stringify(process.env.WDYR),
       })
     )
+    
+    // SVG
+    config.module.rules.push({
+      test: /\.svg$/,
+      issuer: /\.js?$/,
+      include: [options.dir],
+      use: [
+        'next-swc-loader',
+        {
+          loader: '@svgr/webpack',
+          options: { babel: false }
+        }
+      ],
+    })
+
+    // whyDidYouRender
+    if (options.dev && !options.isServer) {
+      const originalEntry = config.entry
+      config.entry = async () => {
+        const wdrPath = resolve(__dirname, './scripts/wdyr.js')
+        const entries = await originalEntry()
+        if (entries['main.js'] && !entries['main.js'].includes(wdrPath)) {
+          entries['main.js'].unshift(wdrPath)
+        }
+        return entries
+      }
+    }
+
     return config
   },
   productionBrowserSourceMaps: true,
