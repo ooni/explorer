@@ -145,7 +145,7 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
             </Heading>
             <Form onSubmit={onSubmit} testNames={testNames} query={router.query} />
             {error &&
-              <NoCharts message={error?.info ?? error} />
+              <NoCharts message={error?.info ?? JSON.stringify(error)} />
             }
             <Box sx={{ minHeight: '500px' }}>
               {showLoadingIndicator &&
