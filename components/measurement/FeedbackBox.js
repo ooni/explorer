@@ -115,14 +115,14 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
     <>
       {state.value !== 'closed' && 
         <Box
-          p={3}
-          bg='gray3'
+          p={4}
+          bg='gray1'
           sx={{
             width: '400px',
             position: 'absolute',
             right: '60px',
-            background: 'silver',
-            borderRadius: '10px'
+            borderRadius: '6px',
+            boxShadow: '2px 5px 10px 0px rgba(0, 0, 0, 0.3)'
           }}
         >
           <form onSubmit={(e) => e.preventDefault()}>
