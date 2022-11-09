@@ -28,9 +28,9 @@ export default function useUser() {
   useEffect(() => {
     if (token && router.pathname === '/login') {
       loginUser(token)
-        .then(({ redirect_to }) => {
+        .then((data) => {
           setLoggedIn(true)
-          afterLogin(redirect_to)
+          if (data?.redirect_to) afterLogin(data.redirect_to)
         }).catch((e)=> {
           console.log(e)
           setReqError(e.message)
