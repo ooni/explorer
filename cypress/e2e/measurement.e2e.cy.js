@@ -8,21 +8,21 @@ describe('Measurement Page Tests', () => {
 
   describe('Web Connectivity tests', () => {
     it('renders a valid accessible og:description', () => {
-      cy.visit('/measurement/20200807T220702Z_AS9009_VDIirQFXzvVZXGTDXrRKAd7oQB3CpnKGISOZLs7kQFV6RJNR7n?input=https%3A%2F%2Fwww.theguardian.com%2F')
+      cy.visit('/measurement/20221110T100756Z_webconnectivity_US_13335_n1_KWJqHUAPqMdtf2Up?input=https%3A%2F%2Fwww.theguardian.com%2F')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests www.theguardian.com was accessible in United States on August 7, 2020, 10:44:09 PM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests www.theguardian.com was accessible in United States on November 10, 2022, 10:09:16 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
 
     it('renders a valid blocked og:description', () => {
-      cy.visit('/measurement/20200303T085244Z_AS42668_UThI3Fdoo0IZ6610604dd0CGkhd7oQV6QLWWzZDVLJ35oGxBO4?input=http%3A%2F%2Frutor.org%2F')
+      cy.visit('/measurement/20211215T052819Z_webconnectivity_RU_8369_n1_PkPgEYV2DrBAfPxu?input=http%3A%2F%2Frutor.org')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests rutor.org was blocked in Russia on March 3, 2020, 9:15:05 AM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests rutor.org was blocked in Russia on December 15, 2021, 5:44:55 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
 
     it('renders a valid anomaly og:description', () => {
-      cy.visit('/measurement/20200807T223513Z_AS27364_QJdsvFRG6B98MqqWR3QTey9WheksI7757sefWWMwAe0OHU8hWT?input=http%3A%2F%2Fwww.google.com%2Fsearch%3Fq%3Dlesbian')
+      cy.visit('/measurement/20221110T082316Z_webconnectivity_MY_4788_n1_Ue0y9OwyBLvoIfgm?input=http%3A%2F%2Fwww.google.com%2Fsearch%3Fq%3Dlesbian')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests www.google.com was accessible in United States on August 7, 2020, 10:36:29 PM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests www.google.com was accessible in Malaysia on November 10, 2022, 10:25:51 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
 
     // it('renders a valid website down og:description', () => {
@@ -68,15 +68,15 @@ describe('Measurement Page Tests', () => {
 
   describe('Telegram Tests', () => {
     it('renders a reachable og:description', () => {
-      cy.visit('/measurement/20200807T220134Z_AS9009_SOmXTa7NLwrzRniaVS0yxlJ3TbKTDJJxrfaIJkpURTn3GBHiA2')
+      cy.visit('/measurement/20221110T102855Z_telegram_US_7018_n1_HKJ2sF9m0lP7JMsW')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests Telegram was reachable in United States on August 7, 2020, 10:37:28 PM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests Telegram was reachable in United States on November 10, 2022, 10:28:56 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
 
     it('renders a unreachable og:description', () => {
-      cy.visit('/measurement/20200304T183801Z_AS42610_uehNyFJgkAJBCaq5thzAovFEODIQ1u5vlTTk3D6GDvbaYeoJY8')
+      cy.visit('measurement/20221109T225726Z_telegram_RU_8402_n1_qnYloXASGMUg2G9O')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests Telegram was NOT reachable in Russia on March 4, 2020, 6:57:54 PM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests Telegram was NOT reachable in Russia on November 9, 2022, 10:57:59 PM UTC, find more open data on internet censorship on OONI Explorer.')
     })
 
     it('renders an accessible measurement', () => {
@@ -86,7 +86,7 @@ describe('Measurement Page Tests', () => {
     })
 
     it('renders an anomaly measurement', () => {
-      cy.visit('/measurement/20200304T183801Z_AS42610_uehNyFJgkAJBCaq5thzAovFEODIQ1u5vlTTk3D6GDvbaYeoJY8')
+      cy.visit('measurement/20221109T225726Z_telegram_RU_8402_n1_qnYloXASGMUg2G9O')
       cy.heroHasColor(anomalyColor)
         .contains('Anomaly')
     })
@@ -94,15 +94,15 @@ describe('Measurement Page Tests', () => {
 
   describe('WhatsApp Tests', () => {
     it('renders a reachable og:description', () => {
-      cy.visit('/measurement/20200807T220116Z_AS9009_JaRyaMzjdCq5JA89mE1nl8VCZltDv4vAaNhUqi193SFCcwR8av')
+      cy.visit('/measurement/20221110T103853Z_whatsapp_US_7922_n1_JPLapx8JfJ0J4nf4')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests WhatsApp was reachable in United States on August 7, 2020, 10:37:10 PM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests WhatsApp was reachable in United States on November 10, 2022, 10:38:53 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
 
     it('renders an unreachable og:description', () => {
-      cy.visit('/measurement/20200407T024309Z_AS4713_xA9Wh81DQrIFqRe46zwKeyJw4DJQwjyTLBIi2zSQqWUBsfQMJS')
+      cy.visit('/measurement/20221105T223928Z_whatsapp_JP_55392_n1_aL6HH9GHYc1YbILm')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests WhatsApp was likely blocked in Japan on April 7, 2020, 2:43:10 AM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests WhatsApp was likely blocked in Japan on November 5, 2022, 10:39:29 PM UTC, find more open data on internet censorship on OONI Explorer.')
     })
 
     it('renders an accessible measurement', () => {
@@ -157,15 +157,15 @@ describe('Measurement Page Tests', () => {
     })
 
     it('renders a reachable og:description', () => {
-      cy.visit('/measurement/20200807T220152Z_AS9009_K9rqQAfaNssMkVbX1uhfdORk0w49f1sk14vCMs0ZuzUrBgg0Te')
+      cy.visit('/measurement/20221110T104252Z_facebookmessenger_US_20115_n1_o61hepYQFOp1mtT9')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests Facebook Messenger was reachable in United States on August 7, 2020, 10:37:46 PM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests Facebook Messenger was reachable in United States on November 10, 2022, 10:42:52 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
 
     it('renders a unreachable og:description', () => {
-      cy.visit('/measurement/20200304T191012Z_AS42610_fqDY31xiRoWEdKd4GWtV84UYpXG2RlpjBK7kd8rTLHIItqMnej')
+      cy.visit('/measurement/20221110T103257Z_facebookmessenger_RU_12389_n1_I1KmLISJCV1o4EoV')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests Facebook Messenger was NOT reachable in Russia on March 4, 2020, 6:37:43 PM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests Facebook Messenger was NOT reachable in Russia on November 10, 2022, 10:32:58 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
   })
 
@@ -181,14 +181,14 @@ describe('Measurement Page Tests', () => {
         .contains('Network tampering')
     })
     it('renders a valid og:description', () => {
-      cy.visit('/measurement/20200807T222222Z_AS37168_CdrDnfRHdhGBU3n5sjhbTJtR3B3IlOejPlsq3WBf1si6bhRlo0')
+      cy.visit('/measurement/20221110T105736Z_httpheaderfieldmanipulation_ES_57269_n1_8SnGox89HKlVQoDJ')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests HTTP header manipulation was not detected in South Africa on August 7, 2020, 10:22:22 PM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests HTTP header manipulation was not detected in Spain on November 10, 2022, 10:57:36 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
     it('renders an anomaly og:description', () => {
-      cy.visit('/measurement/20190530T141520Z_AS4788_DNqCUqL7CAfijExowyaymigb2sITdpS47gjrieDJCx8kDc1TfO')
+      cy.visit('/measurement/20221110T104927Z_httpheaderfieldmanipulation_IR_58224_n1_voFn4ODgxZHJCpoy')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests HTTP header manipulation was detected in Malaysia on May 30, 2019, 2:15:19 PM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests HTTP header manipulation was detected in Iran on November 10, 2022, 10:49:28 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
   })
 
@@ -204,14 +204,14 @@ describe('Measurement Page Tests', () => {
         .contains('Network tampering')
     })
     it('renders a valid og:description', () => {
-      cy.visit('/measurement/20200807T222629Z_AS31334_YNx9EqZSwRVEzVLN3TowlkW0a8pw1PYzJSI8yxHKDhVa7a2han')
+      cy.visit('/measurement/20221110T105936Z_httpinvalidrequestline_TR_47331_n1_fB1HONVuo6bJAcbz')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests Network traffic manipulation was not detected in Germany on August 7, 2020, 10:26:29 PM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests Network traffic manipulation was not detected in Turkey on November 10, 2022, 10:59:36 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
     it('render an anomaly og:description', () => {
-      cy.visit('/measurement/20170213T160709Z_AS8452_M5qSjOZgYwFrkQYVfdrYmYw2tLc3dzJB7mVbtjVoR1qCdbcEOA')
+      cy.visit('/measurement/20221110T105942Z_httpinvalidrequestline_US_13335_n1_cwbvshRglfEgMGAF')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests Network traffic manipulation was detected in Egypt on February 13, 2017, 4:07:00 PM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests Network traffic manipulation was detected in United States on November 10, 2022, 10:59:45 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
   })
 
@@ -229,9 +229,9 @@ describe('Measurement Page Tests', () => {
     })
 
     it('renders a valid og:description', () => {
-      cy.visit('/measurement/20200807T222629Z_AS31334_YNx9EqZSwRVEzVLN3TowlkW0a8pw1PYzJSI8yxHKDhVa7a2han')
+      cy.visit('/measurement/20221110T105028Z_ndt_DE_3209_n1_9eyIJwUdcD6u3WgC')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests Network traffic manipulation was not detected in Germany on August 7, 2020, 10:26:29 PM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests Speed test result (NDT Test) in Germany on November 10, 2022, 10:50:28 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
   })
 
@@ -247,9 +247,9 @@ describe('Measurement Page Tests', () => {
         .contains('Error')
     })
     it('renders a valid og:description', () => {
-      cy.visit('/measurement/20200807T222018Z_AS33363_FTKkox83LnAxEXkK8hJQuuqzBjZu2nyTl87aLXQ7MbCPvZIEgW')
+      cy.visit('/measurement/20221110T111104Z_dash_US_19969_n1_kyclVb6Fj9VuW3A9')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests 1440p (2k) quality video streaming at 25.43 Mbit/s speed in United States on August 7, 2020, 10:20:16 PM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests 2160p (4k) quality video streaming at 539.09 Mbit/s speed in United States on November 10, 2022, 11:11:04 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
   })
 
@@ -265,9 +265,9 @@ describe('Measurement Page Tests', () => {
         .contains('Psiphon is likely blocked')
     })
     it('renders a reachable og:description', () => {
-      cy.visit('/measurement/20200807T220939Z_AS9009_kBQ0oHp4qmji2gRJdiirDac5lYoSXxMDg5qe72r0NP4rW2q7ee')
+      cy.visit('/measurement/20221110T112242Z_psiphon_US_7018_n1_clM85Z0Pof3RqXdp')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests Psiphon was reachable in United States on August 7, 2020, 10:45:32 PM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests Psiphon was reachable in United States on November 10, 2022, 11:22:43 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
   })
 
@@ -283,9 +283,9 @@ describe('Measurement Page Tests', () => {
         .contains('Tor is likely blocked')
     })
     it('renders a valid og:description', () => {
-      cy.visit('/measurement/20200807T220959Z_AS9009_BKXGtNm91coGhmT6iRzvveeGGKvvebMpRONk1qv3DAMvxDPQwV')
+      cy.visit('/measurement/20221110T112301Z_tor_US_7018_n1_uszAjDiPyoWLMyuV')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests Tor censorship test result in United States on August 7, 2020, 10:45:52 PM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests Tor censorship test result in United States on November 10, 2022, 11:23:02 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
   })
 
