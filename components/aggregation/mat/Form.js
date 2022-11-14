@@ -61,11 +61,11 @@ const xAxisOptions = [
 ]
 
 const yAxisOptions = [
-  ['domain', ['web_connectivity']],
-  ['category_code', ['web_connectivity']],
-  ['probe_cc', []],
-  ['probe_asn', []],
-  ['', []]
+  ['domain', ['web_connectivity'], false],
+  ['category_code', ['web_connectivity'], false],
+  ['probe_cc', [], true],
+  ['probe_asn', [], false],
+  ['', [], false]
 ]
 
 const testsWithValidDomainFilter = [
@@ -124,6 +124,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
     .sort((a,b) => new Intl.Collator(intl.locale).compare(a.localisedCountryName, b.localisedCountryName))
 
   const testNameValue = watch('test_name')
+  const countryValue = watch('probe_cc')
   const showWebConnectivityFilters = isValidFilterForTestname(testNameValue, testsWithValidDomainFilter)
   // reset domain and input when web_connectivity is deselected
   useLayoutEffect(() => {
@@ -181,10 +182,13 @@ export const Form = ({ onSubmit, testNames, query }) => {
   const yAxisOptionsFiltered = useMemo(() => {
     console.log(`testNameValue changed to ${testNameValue}. Changing yAxis Options to:`)
     const newYAxisOptions = yAxisOptions
-      .filter(([option, validTestNames]) => validTestNames.length === 0 || validTestNames.includes(testNameValue))
+      .filter(([option, validTestNames, hideForSingleCountry]) => {
+        if (hideForSingleCountry && countryValue !== '') return false
+        return validTestNames.length === 0 || validTestNames.includes(testNameValue)
+      })
       .map(([option]) => option)
     return newYAxisOptions
-  }, [testNameValue])
+  }, [testNameValue, countryValue])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>

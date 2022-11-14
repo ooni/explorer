@@ -3,7 +3,7 @@
 // https://github.com/vercel/next.js/blob/canary/examples/with-loading/pages/_app.js
 import 'scripts/wdyr'
 import 'regenerator-runtime/runtime'
-import { useEffect, useId, useMemo, useState } from 'react'
+import { useEffect } from 'react'
 import 'regenerator-runtime/runtime'
 import NProgress from 'nprogress'
 import { useRouter } from 'next/router'
