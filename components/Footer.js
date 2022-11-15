@@ -65,7 +65,7 @@ const Footer = () => {
               <Box p={[1, 0]} mb={[0, 3]} width={[1/2, 1]}>
                 <ExplorerLogo height='32px' />
               </Box>
-              <Box p={[1, 0]} pr={[0, '50%']} width={[1/2, 1]}> <FooterText>{intl.formatMessage({ id: 'Footer.Text.Slogan' })}</FooterText> </Box>
+              <Box width={[1/2, 2/3]}> <FooterText>{intl.formatMessage({ id: 'Footer.Text.Slogan' })}</FooterText> </Box>
             </Flex>
           </FooterBox>
           <FooterBox width={[1/2, 1/5]}>

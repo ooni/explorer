@@ -112,10 +112,9 @@ FeatureBox.defaultProps = {
   lineHeight: 1.5,
 }
 
-const FeatureBoxTitle = styled(Text)`
+const FeatureBoxTitle = styled(Flex)`
 `
 FeatureBoxTitle.defaultProps = {
-  textAlign: ['center', 'left'],
   color: 'blue9',
   fontSize: 24,
   fontWeight: 600,

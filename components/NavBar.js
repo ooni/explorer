@@ -4,7 +4,6 @@ import NLink from 'next/link'
 import styled from 'styled-components'
 import { FormattedMessage, useIntl } from 'react-intl'
 
-import { useLocaleContext } from 'components/withIntl'
 import { getLocalisedLanguageName } from 'utils/i18nCountries'
 
 import ExplorerLogo from 'ooni-components/components/svgs/logos/Explorer-HorizontalMonochromeInverted.svg'
@@ -93,7 +92,7 @@ export const NavBar = ({color}) => {
       <Container>
         <Flex
           flexDirection={['column', 'row']}
-          justifyContent={['flex-start', 'space-around']}
+          justifyContent={['flex-start', 'space-between']}
           alignItems={['flex-start', 'center']}
         >
           <Box style={{zIndex: 1}}>
@@ -101,7 +100,7 @@ export const NavBar = ({color}) => {
               <Link><ExplorerLogo height='26px' /></Link>
             </NLink>
           </Box>
-          <Box ml={[0,'auto']} mt={[2, 0]}>
+          <Box mt={[2, 0]}>
             <Flex flexDirection={['column', 'row']} alignItems={'center'} >
               <NavItem label={<FormattedMessage id='Navbar.Search' />} href='/search' />
               <NavItem label={<FormattedMessage id='Navbar.Charts.MAT' />} href='/chart/mat' />

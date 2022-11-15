@@ -12,9 +12,11 @@ const HighlightSection = ({
   return (
     <section>
       <Box mt={4} mb={3}>
-        <Text fontSize={24} fontWeight='bold' color='blue9' textAlign={['center', 'left']}>
-          {title}
-        </Text>
+        <Flex>
+          <Text fontSize={24} fontWeight='bold' color='blue9'>
+            {title}
+          </Text>
+        </Flex>
       </Box>
       {/* Optional Description */}
       {description && <Box mt={4} mb={3}>

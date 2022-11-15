@@ -3,13 +3,14 @@
 // https://github.com/vercel/next.js/blob/canary/examples/with-loading/pages/_app.js
 import 'scripts/wdyr'
 import 'regenerator-runtime/runtime'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useId, useMemo, useState } from 'react'
 import NProgress from 'nprogress'
 import { useRouter } from 'next/router'
 import '@fontsource/fira-sans'
 
 import '../public/static/nprogress.css'
 import Layout from '../components/Layout'
+import { LocaleProvider } from 'components/withIntl'
 
 export default function App({ Component, pageProps, err }) {
   const router = useRouter()
@@ -36,8 +37,10 @@ export default function App({ Component, pageProps, err }) {
 
   // Workaround for https://github.com/vercel/next.js/issues/8592
   return (
-    <Layout>
-      <Component {...pageProps} err={err} />
-    </Layout>
+    <LocaleProvider>
+      <Layout>
+        <Component {...pageProps} err={err} />
+      </Layout>
+    </LocaleProvider>
   )
 }

@@ -6,7 +6,7 @@ import { theme } from 'ooni-components'
 
 import Header from './Header'
 import Footer from './Footer'
-import { LocaleProvider } from './withIntl'
+import { useIntl } from 'react-intl'
 // import FeedbackButton from '../components/FeedbackFloat'
 
 theme.maxWidth = 1024
@@ -17,6 +17,7 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
   body, html {
+    direction: ${props => props.direction};
     margin: 0;
     padding: 0;
     font-family: "Fira Sans";
@@ -50,27 +51,35 @@ const matomoInstance = createInstance({
   }
 })
 
+const getDirection = locale => {
+  switch (locale) {
+    case 'fa':
+      return 'rtl'
+    default:
+      return 'ltr'
+  }
+}
+
 const Layout = ({ children, disableFooter = false }) => {
+  const { locale } = useIntl()
   useEffect(() => {
     matomoInstance.trackPageView()
   }, [])
 
   return (
-    <LocaleProvider>
-      <MatomoProvider value={matomoInstance}>
-        <ThemeProvider theme={theme}>
-          <GlobalStyle />
-          <div className="site">
-            <Header />
-            <div className="content">
-              { children }
-            </div>
-            {!disableFooter && <Footer />}
+    <MatomoProvider value={matomoInstance}>
+      <ThemeProvider theme={theme}>
+        <GlobalStyle direction={getDirection(locale)} />
+        <div className="site">
+          <Header />
+          <div className="content">
+            { children }
           </div>
-          {/* <FeedbackButton /> */}
-        </ThemeProvider>
-      </MatomoProvider>
-    </LocaleProvider>
+          {!disableFooter && <Footer />}
+        </div>
+        {/* <FeedbackButton /> */}
+      </ThemeProvider>
+    </MatomoProvider>
   )
 }
 

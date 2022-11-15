@@ -43,6 +43,7 @@ module.exports = withSentryConfig({
     styledComponents: {
       ssr: true,
     },
+  },
   i18n: {
     locales: getSupportedLanguages(),
     defaultLocale: DEFAULT_LOCALE,
