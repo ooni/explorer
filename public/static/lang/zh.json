@@ -442,7 +442,7 @@
   "Home.Highlights.Explore": "浏览",
   "Home.Highlights.ReadReport": "阅读报告",
   "Countries.Heading.JumpToContinent": "跳转到大陆",
-  "Countries.Search.NoCountriesFound": "No countries found with \\\"{searchTerm}\\\"",
+  "Countries.Search.NoCountriesFound": "No countries found with {searchTerm}",
   "Countries.Search.Placeholder": "搜索国家",
   "Error.404.GoBack": "返回",
   "Error.404.Heading": "请求页面不存在",

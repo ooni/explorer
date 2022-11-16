@@ -442,7 +442,7 @@
   "Home.Highlights.Explore": "Исследовать",
   "Home.Highlights.ReadReport": "Прочитать отчет",
   "Countries.Heading.JumpToContinent": "Перейти к континенту",
-  "Countries.Search.NoCountriesFound": "No countries found with \\\"{searchTerm}\\\"",
+  "Countries.Search.NoCountriesFound": "No countries found with {searchTerm}",
   "Countries.Search.Placeholder": "Искать страны",
   "Error.404.GoBack": "Назад",
   "Error.404.Heading": "Запрашиваемая страница не существует",

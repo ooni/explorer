@@ -153,7 +153,7 @@ const NoCountriesFound = ({ searchTerm }) => (
         {/* TODO Add to copy */}
         <FormattedMessage
           id='Countries.Search.NoCountriesFound'
-          values={{ searchTerm }}
+          values={{ searchTerm: `"${searchTerm}"` }}
         />
       </Text>
     </Box>

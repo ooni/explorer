@@ -442,7 +442,7 @@
   "Home.Highlights.Explore": "Skoða",
   "Home.Highlights.ReadReport": "Lesa skýrslu",
   "Countries.Heading.JumpToContinent": "Hoppa í heimsálfu",
-  "Countries.Search.NoCountriesFound": "No countries found with \\\"{searchTerm}\\\"",
+  "Countries.Search.NoCountriesFound": "No countries found with {searchTerm}",
   "Countries.Search.Placeholder": "Leita að löndum",
   "Error.404.GoBack": "Fara til baka",
   "Error.404.Heading": "Umbeðin síða er ekki til",

@@ -442,7 +442,7 @@
   "Home.Highlights.Explore": "Explorar",
   "Home.Highlights.ReadReport": "Leer reporte",
   "Countries.Heading.JumpToContinent": "Saltar al continente",
-  "Countries.Search.NoCountriesFound": "No countries found with \\\"{searchTerm}\\\"",
+  "Countries.Search.NoCountriesFound": "No countries found with {searchTerm}",
   "Countries.Search.Placeholder": "Buscar por países",
   "Error.404.GoBack": "Ir hacia atrás",
   "Error.404.Heading": "La página solicitada no existe.",

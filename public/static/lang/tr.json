@@ -442,7 +442,7 @@
   "Home.Highlights.Explore": "Keşfet",
   "Home.Highlights.ReadReport": "Raporu oku",
   "Countries.Heading.JumpToContinent": "Kıtaya atla",
-  "Countries.Search.NoCountriesFound": "No countries found with \\\"{searchTerm}\\\"",
+  "Countries.Search.NoCountriesFound": "No countries found with {searchTerm}",
   "Countries.Search.Placeholder": "Ülke arama",
   "Error.404.GoBack": "Geri dön",
   "Error.404.Heading": "İstenilen sayfa bulunamadı",
