@@ -4,6 +4,7 @@
 import 'scripts/wdyr'
 import 'regenerator-runtime/runtime'
 import { useEffect, useId, useMemo, useState } from 'react'
+import 'regenerator-runtime/runtime'
 import NProgress from 'nprogress'
 import { useRouter } from 'next/router'
 import '@fontsource/fira-sans'

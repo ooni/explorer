@@ -85,7 +85,7 @@ const SearchFilter = ({
       onChange={e => {
         setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
       }}
-      placeholder={`Search ${count} records...`}
+      placeholder={intl.formatMessage({id: 'MAT.Table.FilterPlaceholder'}, {count})}
     />
   )
 }
@@ -104,6 +104,7 @@ function GlobalFilter({
   globalFilter,
   setGlobalFilter,
 }) {
+  const intl = useIntl()
   const count = preGlobalFilteredRows.length
   const [value, setValue] = React.useState(globalFilter)
   const onChange = useAsyncDebounce(value => {
@@ -118,14 +119,14 @@ function GlobalFilter({
 
   return (
     <StyledGlobalFilter>
-      Search:{' '}
+      {intl.formatMessage({id: 'MAT.Table.Search'})}{' '}
       <input
         value={value || ''}
         onChange={e => {
           setValue(e.target.value)
           onChange(e.target.value)
         }}
-        placeholder={`Search ${count} records...`}
+        placeholder={intl.formatMessage({id: 'MAT.Table.FilterPlaceholder'}, {count})}
       />
     </StyledGlobalFilter>
   )

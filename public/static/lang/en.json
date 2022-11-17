@@ -479,6 +479,8 @@
   "MAT.Table.Header.probe_asn": "ASN",
   "MAT.Table.Header.blocking_type": "Blocking Type",
   "MAT.Table.Header.domain": "Domain",
+  "MAT.Table.FilterPlaceholder": "Search {count} records\u2026",
+  "MAT.Table.Search": "Search:",
   "MAT.Charts.NoData.Title": "No Data Found",
   "MAT.Charts.NoData.Description": "We are not able to produce a chart based on the selected filters. Please change the filters and try again.",
   "MAT.Charts.NoData.Details": "Details:",
