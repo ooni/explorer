@@ -19,7 +19,7 @@ const ChartHeaderContainer = styled(Flex)`
 const Legend = ({label, color}) => {
   return (
     <Flex alignItems='center' mr={2}>
-      <Box pr={2}>
+      <Box px={2}>
         <div style={{ width: '10px', height: '10px', backgroundColor: color }} />
       </Box>
       <Box>

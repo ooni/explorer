@@ -7,6 +7,7 @@ import { theme } from 'ooni-components'
 import Header from './Header'
 import Footer from './Footer'
 import { useIntl } from 'react-intl'
+import { getDirection } from 'components/withIntl'
 // import FeedbackButton from '../components/FeedbackFloat'
 
 theme.maxWidth = 1024
@@ -50,15 +51,6 @@ const matomoInstance = createInstance({
     disableCookies: true
   }
 })
-
-const getDirection = locale => {
-  switch (locale) {
-    case 'fa':
-      return 'rtl'
-    default:
-      return 'ltr'
-  }
-}
 
 const Layout = ({ children, disableFooter = false }) => {
   const { locale } = useIntl()

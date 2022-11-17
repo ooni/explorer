@@ -3,6 +3,15 @@ import React, { useEffect, useState, useMemo, createContext } from 'react'
 import { IntlProvider } from 'react-intl'
 import { useRouter } from 'next/router'
 
+export const getDirection = locale => {
+  switch (locale) {
+    case 'fa':
+      return 'rtl'
+    default:
+      return 'ltr'
+  }
+}
+
 export const LocaleProvider = ({ children }) => {
   const { locale, defaultLocale } = useRouter()
 

@@ -332,11 +332,11 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
   })
 
   return (
-    <DetailsBox title={'Filters'} collapsed={false}>
+    <DetailsBox title={intl.formatMessage({id: 'MAT.Table.Filters'})} collapsed={false}>
       <Flex flexDirection='column'>
         <Flex mb={3} alignItems='center'>
-          <Button hollow onClick={updateCharts}>Apply</Button>
-          <Button inverted onClick={resetFilter} mx={3}>Reset</Button>
+          <Button hollow onClick={updateCharts}>{intl.formatMessage({id: 'General.Apply'})}</Button>
+          <Button inverted onClick={resetFilter} mx={3}>{intl.formatMessage({id: 'General.Reset'})}</Button>
         </Flex>
         <TableContainer>
           <Table {...getTableProps()}>

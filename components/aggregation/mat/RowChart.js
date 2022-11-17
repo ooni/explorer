@@ -10,6 +10,7 @@ import { colorMap } from './colorMap'
 import { useMATContext } from './MATContext'
 import { getXAxisTicks } from './timeScaleXAxis'
 import { defineMessages, useIntl } from 'react-intl'
+import styled from 'styled-components'
 
 const keys = [
   'anomaly_count',
@@ -17,6 +18,10 @@ const keys = [
   'failure_count',
   'ok_count',
 ]
+
+const StyledFlex = styled(Flex)`
+  direction: ltr;
+`
 
 const colorFunc = (d) => colorMap[d.id] || '#ccc'
 
@@ -143,7 +148,7 @@ const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last
   }, [intl, label, query])
 
   return (
-    <Flex alignItems='center' sx={{ position: 'relative' }}>
+    <StyledFlex alignItems='center' sx={{ position: 'relative' }}>
       {label && <Box width={2/16}>
         {label}
       </Box>}
@@ -163,7 +168,7 @@ const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last
           {...chartProps}
         />
       </Box>
-    </Flex>
+    </StyledFlex>
   )
 }
 
