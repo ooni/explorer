@@ -4,7 +4,7 @@ import { Text } from 'ooni-components'
 
 import SectionHeader from './SectionHeader'
 import { SimpleBox } from './boxes'
-import PeriodFilter from './PeriodFilter'
+// import PeriodFilter from './PeriodFilter'
 import AppsStatsGroup from './AppsStats'
 import AppsStatsCircumvention from './AppsStatsCircumvention'
 import FormattedMarkdown from '../FormattedMarkdown'

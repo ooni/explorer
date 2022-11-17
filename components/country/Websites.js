@@ -6,7 +6,7 @@ import { Flex, Box, Heading, Text, Input } from 'ooni-components'
 
 import SectionHeader from './SectionHeader'
 import { SimpleBox } from './boxes'
-import PeriodFilter from './PeriodFilter'
+// import PeriodFilter from './PeriodFilter'
 import TestsByCategoryInNetwork from './WebsitesCharts'
 import FormattedMarkdown from '../FormattedMarkdown'
 

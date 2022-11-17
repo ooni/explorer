@@ -4,13 +4,14 @@ import { useForm, Controller } from 'react-hook-form'
 import styled from 'styled-components'
 import {
   Flex, Box,
-  Label, Input, Select, Button
+  Label, Input, Button
 } from 'ooni-components'
 import dayjs from 'services/dayjs'
 import { format } from 'date-fns'
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl'
 import { localisedCountries } from 'utils/i18nCountries'
 
+import Select from 'components/form/Select'
 import { categoryCodes } from '../../utils/categoryCodes'
 import DateRangePicker from '../../DateRangePicker'
 import { ConfirmationModal } from './ConfirmationModal'

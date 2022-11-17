@@ -6,12 +6,12 @@ import {
   Box,
   Button,
   Input,
-  Select,
   Label,
 } from 'ooni-components'
 import dayjs from 'services/dayjs'
 import { useForm, Controller } from 'react-hook-form'
 
+import Select from 'components/form/Select'
 import DateRangePicker from '../DateRangePicker'
 import { format } from 'date-fns'
 import {
