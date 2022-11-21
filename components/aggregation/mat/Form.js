@@ -172,7 +172,6 @@ export const Form = ({ onSubmit, testNames, query }) => {
   }, [getValues, onConfirm])
 
   const xAxisOptionsFiltered = useMemo(() => {
-    console.log(`testNameValue changed to ${testNameValue}. Changing xAxis Options to:`)
     const newXAxisOptions = xAxisOptions
       .filter(([option, validTestNames]) => validTestNames.length === 0 || validTestNames.includes(testNameValue))
       .map(([option]) => option)
@@ -180,7 +179,6 @@ export const Form = ({ onSubmit, testNames, query }) => {
   }, [testNameValue])
 
   const yAxisOptionsFiltered = useMemo(() => {
-    console.log(`testNameValue changed to ${testNameValue}. Changing yAxis Options to:`)
     const newYAxisOptions = yAxisOptions
       .filter(([option, validTestNames, hideForSingleCountry]) => {
         if (hideForSingleCountry && countryValue !== '') return false
