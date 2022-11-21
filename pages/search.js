@@ -288,7 +288,7 @@ const Search = ({testNames, testNamesKeyed, countries, query: queryProp }) => {
   }
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>Search through millions of Internet censorship measurements | OONI Explorer</title>
       </Head>
@@ -332,7 +332,7 @@ const Search = ({testNames, testNamesKeyed, countries, query: queryProp }) => {
           </Box>
         </Flex>
       </Container>
-    </Layout>
+    </>
   )
 }
 
