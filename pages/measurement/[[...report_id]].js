@@ -3,7 +3,7 @@ import React, { useCallback, useEffect, useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 import axios from 'axios'
-import { Container, theme, Flex } from 'ooni-components'
+import { Container, theme, Flex, Text } from 'ooni-components'
 import { getLocalisedRegionName } from '../../utils/i18nCountries'
 import NLink from 'next/link'
 
@@ -165,12 +165,12 @@ const Measurement = ({
         <MeasurementNotFound />
       ): (
         <>
-          <LoginModal 
+          {/* <LoginModal 
             isShowing={showModal}
             hide={() => hideModal()}
             reqError={reqError}
             submitted={submitted}
-            onLogin={() => setSubmitted(true)} />
+            onLogin={() => setSubmitted(true)} /> */}
           <MeasurementContainer
             isConfirmed={confirmed}
             isAnomaly={anomaly}
@@ -208,12 +208,16 @@ const Measurement = ({
                     />
                   }
                   <NavBar color={color} />
-                  <FeedbackBox 
-                    user={user}
-                    report_id={report_id}
-                    setShowModal={setShowModal}
-                    previousFeedback={userFeedback?.user_feedback}
-                  />
+                  {showModal &&
+                    <FeedbackBox
+                      isShowing={showModal}
+                      hide={() => hideModal()}
+                      user={user}
+                      report_id={report_id}
+                      setShowModal={setShowModal}
+                      previousFeedback={userFeedback?.user_feedback}
+                    />
+                  }
                   <Hero
                     color={color}
                     status={status}
@@ -221,6 +225,7 @@ const Measurement = ({
                     label={statusLabel}
                     info={info}
                   />
+                  <Text onClick={() => setShowModal(true)}>Report an issue</Text>
                   <CommonSummary
                     measurement_start_time={measurement_start_time}
                     probe_asn={probe_asn}
