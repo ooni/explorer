@@ -54,7 +54,6 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
           if (!previousFeedback) send('FEEDBACK')
         },
         on: {
-          CLOSE: 'closed',
           IS_BLOCKING: 'isBlocking',
           LOGIN: 'login',
           FEEDBACK: 'feedback'
@@ -72,7 +71,6 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
           SUBMIT: 'submit'
         }
       },
-      closed: {},
       submit: {
         effect({ send, setContext, event, context }) {
           const { nested, feedback } = getValues()
@@ -92,11 +90,7 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
           FAILURE: 'failure'
         }
       },
-      success: {
-        on: {
-          CLOSE: 'closed'
-        }
-      },
+      success: {},
       failure: {
         on: {
           SUBMIT: 'submit'
@@ -123,7 +117,6 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
 
   return (
     <>
-      {state.value !== 'closed' && 
         <Box
           p={3}
           bg='gray1'
@@ -132,7 +125,8 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
             position: 'absolute',
             right: '60px',
             borderRadius: '6px',
-            boxShadow: '2px 5px 10px 0px rgba(0, 0, 0, 0.3)'
+          boxShadow: '2px 5px 10px 0px rgba(0, 0, 0, 0.3)',
+          zIndex: 100
           }}
         >
           <>
@@ -221,7 +215,7 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
                 <Button mr={2} disabled={!submitEnabled} onClick={() => send('SUBMIT')}>
                   <FormattedMessage id='General.Submit' />
                 </Button>
-                <Button hollow onClick={() => send('CANCEL')}>
+              <Button hollow onClick={() => setShowModal(false)}>
                   <FormattedMessage id='General.Cancel' />
                 </Button>
               </form>
@@ -245,7 +239,7 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
                 <Text fontSize={18} fontWeight='bold' mb={3}><FormattedMessage id='Measurement.Feedback.Success.Title' /></Text>
                 <Text fontSize={16} mb={4}><FormattedMessage id='Measurement.Feedback.Success.Description' /></Text>
                 <Flex justifyContent='center'>
-                <Button type='button' onClick={() => send('CLOSE')}><FormattedMessage id='General.Close' /></Button>
+                <Button type='button' onClick={() => setShowModal(false)}><FormattedMessage id='General.Close' /></Button>
                 </Flex>
               </>
             }
@@ -258,7 +252,6 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
             }
           </>
         </Box>
-      }
     </>
   )
 }
