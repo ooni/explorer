@@ -33,10 +33,10 @@ export const SubtitleStr = ({ query }) => {
   const intl = useIntl()
   const params = new Set()
 
-  const testName = intl.formatMessage({id: getRowLabel(query.test_name, 'test_name')})
-  params.add(testName)
-
-
+  if (query.test_name) {
+    const testName = intl.formatMessage({id: getRowLabel(query.test_name, 'test_name')})
+    params.add(testName)
+  }
   if (query.domain) {
     params.add(query.domain)
   }
