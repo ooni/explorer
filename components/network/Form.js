@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { Box, Flex, Input } from 'ooni-components'
 import { useIntl } from 'react-intl'
@@ -18,6 +18,7 @@ const defaultDefaultValues = {
 
 const Form = ({ onChange, query }) => {
   const intl = useIntl()
+  const isMounted = useRef(false)
 
   const query2formValues = (query) => {
     return {
@@ -48,11 +49,15 @@ const Form = ({ onChange, query }) => {
   }
   
   useEffect(() => {
-    const cleanedUpData = {
-      since,
-      until,
+    if (isMounted.current) {
+      const cleanedUpData = {
+        since,
+        until,
+      }
+      onChange(cleanedUpData)
+    } else {
+      isMounted.current = true
     }
-    onChange(cleanedUpData)
   }, [onChange, since, until])
 
   return (

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, useRef } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { Box, Flex, Input } from 'ooni-components'
 import { MultiSelect } from 'react-multi-select-component'
@@ -21,6 +21,7 @@ const defaultDefaultValues = {
 
 export const Form = ({ onChange, query, availableCountries }) => {
   const intl = useIntl()
+  const isMounted = useRef(false)
 
   const countryOptions = useMemo(() => availableCountries
     .map(cc => ({
@@ -35,7 +36,7 @@ export const Form = ({ onChange, query, availableCountries }) => {
     return {
       since: query?.since ?? defaultDefaultValues.since,
       until: query?.until ?? defaultDefaultValues.until,
-      probe_cc: countryOptions.filter(country => countriesInQuery.includes(country.value))
+      probe_cc: countryOptions.filter(country => countriesInQuery.includes(country.value)),
     }
   }
 
@@ -73,12 +74,16 @@ export const Form = ({ onChange, query, availableCountries }) => {
   const {since, until, probe_cc} = watch()
   
   useEffect(() => {
-    const cleanedUpData = {
-      since,
-      until,
-      probe_cc: probe_cc.length > 0 ? probe_cc.map(d => d.value).join(',') : undefined
+    if (isMounted.current) {
+      const cleanedUpData = {
+        since,
+        until,
+        probe_cc: probe_cc.length > 0 ? probe_cc.map(d => d.value).join(',') : undefined
+      }
+      onChange(cleanedUpData)
+    } else {
+      isMounted.current = true
     }
-    onChange(cleanedUpData)
   }, [onChange, since, until, probe_cc])
 
   return (

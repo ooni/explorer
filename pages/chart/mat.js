@@ -105,7 +105,7 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
           until: today.format('YYYY-MM-DD'),
         },
       }
-      router.push(href, href, { shallow: true })
+      router.replace(href, href, { shallow: true })
     }
   // Ignore the dependency on `router` because we want
   // this effect to run only once, on mount, if query is empty.

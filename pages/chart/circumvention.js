@@ -1,8 +1,9 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { Container, Heading, Box } from 'ooni-components'
 import { FormattedMessage } from 'react-intl'
 import axios from 'axios'
+import dayjs from 'dayjs'
 
 import NavBar from 'components/NavBar'
 import { MetaTags } from 'components/dashboard/MetaTags'
@@ -13,6 +14,24 @@ import FormattedMarkdown from 'components/FormattedMarkdown'
 const DashboardCircumvention = ({ availableCountries }) => {
   const router = useRouter()
   const query = router.query
+
+  useEffect(() => {
+    const { query } = router
+    if (Object.keys(query).length === 0) {
+      const tomorrow = dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
+      const monthAgo = dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD')
+      const probe_cc = ['CN', 'IR', 'RU'].join(',')
+      const href = {
+        pathname: router.pathname,
+        query: {
+          since: monthAgo,
+          until: tomorrow,
+          probe_cc
+        },
+      }
+      router.replace(href, href, { shallow: true })
+    }
+  }, [])
 
   // Sync page URL params with changes from form values
   const onChange = useCallback(({ since, until, probe_cc }) => {
@@ -36,7 +55,6 @@ const DashboardCircumvention = ({ availableCountries }) => {
     ) {
       router.push(href, href, { shallow: true })
     }
-
   }, [router, query])
 
   return (

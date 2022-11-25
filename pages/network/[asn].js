@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
 import { Container, Heading, Box, Flex, Text, Link } from 'ooni-components'
@@ -85,8 +85,24 @@ const Summary = ({ measurementsTotal, firstMeasurement, countriesData }) => {
 
 const NetworkDashboard = ({asn, calendarData = [], measurementsTotal, countriesData}) => {
   const router = useRouter()
-  const query = router.query
+  const { query } = router
   const displayASN = asn.replace('AS', '')
+
+  useEffect(() => {
+    if (Object.keys(query).length === 1) {
+      const today = dayjs.utc().add(1, 'day')
+      const monthAgo = dayjs.utc(today).subtract(1, 'month')
+      const href = {
+        pathname: router.pathname,
+        query: {
+          since: monthAgo.format('YYYY-MM-DD'),
+          until: today.format('YYYY-MM-DD'),
+          asn: query.asn
+        },
+      }
+      router.replace(href, href, { shallow: true })
+    }
+  }, [])
 
   // Sync page URL params with changes from form values
   const onChange = useCallback(({ since, until }) => {
