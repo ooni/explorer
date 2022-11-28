@@ -3,7 +3,7 @@ import { useTable, useFlexLayout, useRowSelect, useSortBy, useGlobalFilter, useA
 import { FormattedMessage, useIntl } from 'react-intl'
 import { defaultRangeExtractor, useVirtual } from 'react-virtual'
 import styled from 'styled-components'
-import { Flex, Box, Button, Text } from 'ooni-components'
+import { Flex, Box, Button, Text, Label } from 'ooni-components'
 
 import GridChart, { prepareDataForGridChart } from './GridChart'
 import { ResizableBox } from './Resizable'
@@ -149,6 +149,7 @@ const noRowsSelected = null
 const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
   const intl = useIntl()
   const resetTableRef = useRef(false)
+  const [showOnlyAnomalies, setShowOnlyAnomalies] = useState(false)
   const yAxis = query.axis_y
 
   const defaultColumn = React.useMemo(
@@ -288,13 +289,25 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
   
   const updateCharts = useCallback(() => {
     const selectedRows = Object.keys(state.selectedRowIds).sort((a,b) => sortRows(a, b, query.axis_y))
-
+  
     if (selectedRows.length > 0 && selectedRows.length !== preGlobalFilteredRows.length) {
-      setDataForCharts(selectedRows)
+      if (showOnlyAnomalies) {
+        const filtered = tableData.filter((row) => row.anomaly_count > 0).map((row) => row[query.axis_y])
+        const filteredSelectedRows = selectedRows.filter((row) => filtered.includes(row))
+        setDataForCharts(filteredSelectedRows)
+      } else {
+        setDataForCharts(selectedRows)
+      }
     } else {
+      showOnlyAnomalies ? 
+      setDataForCharts(tableData
+        .filter((row) => row.anomaly_count > 0)
+        .map((row) => row[query.axis_y])
+        .sort((a,b) => sortRows(a, b, query.axis_y))
+      ) : 
       setDataForCharts(noRowsSelected)
     }
-  }, [preGlobalFilteredRows.length, query.axis_y, state.selectedRowIds, setDataForCharts])
+  }, [preGlobalFilteredRows.length, query.axis_y, state.selectedRowIds, setDataForCharts, showOnlyAnomalies, tableData])
 
   /**
    * Reset the table filter
@@ -311,6 +324,7 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
       resetTableRef.current = true
       setGlobalFilter('')
     }
+    setShowOnlyAnomalies(false)
     setDataForCharts(noRowsSelected)
   }, [setGlobalFilter, state.globalFilter, toggleAllRowsSelected, setDataForCharts])
 
@@ -337,6 +351,10 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
           <Button hollow onClick={updateCharts}>Apply</Button>
           <Button inverted onClick={resetFilter} mx={3}>Reset</Button>
         </Flex>
+        <Label htmlFor='onlyAnomalies' alignItems='center' mb={2}>
+          <input type='checkbox' id='onlyAnomalies' onClick={() => setShowOnlyAnomalies(!showOnlyAnomalies)} checked={showOnlyAnomalies} />
+            <Box mx={1}>Only show anomalies</Box>
+          </Label>
         <TableContainer>
           <Table {...getTableProps()}>
             <TableHeader>
