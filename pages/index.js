@@ -7,7 +7,7 @@ import Router from 'next/router'
 import FormattedMarkdown from '../components/FormattedMarkdown'
 import styled from 'styled-components'
 import axios from 'axios'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 import {
   Link,
   Flex,
@@ -131,187 +131,178 @@ const StyledContainer = styled(Container)`
   background-position: center;
 `
 
-export default class LandingPage extends React.Component {
+export async function getServerSideProps({ query }) {
+  const client = axios.create({baseURL: process.env.NEXT_PUBLIC_OONI_API}) // eslint-disable-line
+  const result = await client.get('/api/_/global_overview')
 
-  static async getInitialProps () {
-    const client = axios.create({baseURL: process.env.NEXT_PUBLIC_OONI_API}) // eslint-disable-line
-    const result = await client.get('/api/_/global_overview')
-    return {
+  return {
+    props: {
       measurementCount: result.data.measurement_count,
       asnCount: result.data.network_count,
       countryCount: result.data.country_count
     }
   }
+}
 
-  constructor(props) {
-    super(props)
-  }
+const LandingPage = ({ measurementCount, asnCount, countryCount}) => {
+  const intl = useIntl()
+  measurementCount = toCompactNumberUnit(measurementCount)
+  asnCount = toCompactNumberUnit(asnCount)
 
-  render () {
-    let {
-      measurementCount,
-      asnCount,
-      countryCount
-    } = this.props
+  return (
+    <>
+      <Head>
+        <title>{intl.formatMessage({id: 'General.OoniExplorer'})}</title>
+      </Head>
+      <HeroUnit>
+        <NavBar color='transparent' />
+        <StyledContainer py={[0, 120]} my={[0, 90]}>
+          <Text textAlign='center'>
+            <Heading h={1}>
+              <Text fontSize={[32, 64]} color='#ffffff'><FormattedMessage id='Home.Banner.Title.UncoverEvidence' /></Text>
+            </Heading>
+            <Text fontSize={[18, 24]} color='blue1'><FormattedMessage id='Home.Banner.Subtitle.ExploreCensorshipEvents' /></Text>
+            <ExploreButton mt={48} px={5} hollow fontSize={24} onClick={() => (
+              Router.push('/chart/mat')
+            )}>
+              <FormattedMessage id='Home.Banner.Button.Explore' />
+            </ExploreButton>
+          </Text>
+        </StyledContainer>
+      </HeroUnit>
+      <Container>
+        <StatsContainer px={[0, 32]} py={16} mx={[0, '25%']} mt={[0, -120]} mb={48} flexWrap='wrap'>
+          <StatsItem
+            label={<FormattedMessage id='Home.Banner.Stats.Measurements' />}
+            unit={measurementCount.unit}
+            value={measurementCount.value}
+          />
+          <StatsItem
+            label={<FormattedMessage id='Home.Banner.Stats.Countries' />}
+            value={countryCount}
+          />
+          <StatsItem
+            label={<FormattedMessage id='Home.Banner.Stats.Networks' />}
+            unit={asnCount.unit}
+            value={asnCount.value}
+          />
+        </StatsContainer>
 
-    measurementCount = toCompactNumberUnit(measurementCount)
-    asnCount = toCompactNumberUnit(asnCount)
-
-    return (
-      <React.Fragment>
-        <Head>
-          <title>OONI Explorer</title>
-        </Head>
-        <HeroUnit>
-          <NavBar color='transparent' />
-          <StyledContainer py={[0, 120]} my={[0, 90]}>
-            <Text textAlign='center'>
-              <Heading h={1}>
-                <Text fontSize={[32, 64]} color='#ffffff'><FormattedMessage id='Home.Banner.Title.UncoverEvidence' /></Text>
-              </Heading>
-              <Text fontSize={[18, 24]} color='blue1'><FormattedMessage id='Home.Banner.Subtitle.ExploreCensorshipEvents' /></Text>
-              <ExploreButton mt={48} px={5} hollow fontSize={24} onClick={() => (
-                Router.push('/chart/mat')
-              )}>
-                <FormattedMessage id='Home.Banner.Button.Explore' />
-              </ExploreButton>
+        {/* Intro text about Explorer */}
+        <Flex justifyContent='center' my={4}>
+          <Box width={[1, 2/3]}>
+            <Text fontSize={20} lineHeight={1.5}>
+              <FormattedMarkdown id='Home.About.SummaryText' />
             </Text>
-          </StyledContainer>
-        </HeroUnit>
-        <Container>
-          <StatsContainer px={[0, 32]} py={16} mx={[0, '25%']} mt={[0, -120]} mb={48} flexWrap='wrap'>
-            <StatsItem
-              label={<FormattedMessage id='Home.Banner.Stats.Measurements' />}
-              unit={measurementCount.unit}
-              value={measurementCount.value}
-            />
-            <StatsItem
-              label={<FormattedMessage id='Home.Banner.Stats.Countries' />}
-              value={countryCount}
-            />
-            <StatsItem
-              label={<FormattedMessage id='Home.Banner.Stats.Networks' />}
-              unit={asnCount.unit}
-              value={asnCount.value}
-            />
-          </StatsContainer>
+          </Box>
+        </Flex>
 
-          {/* Intro text about Explorer */}
-          <Flex justifyContent='center' my={4}>
-            <Box width={[1, 2/3]}>
-              <Text fontSize={20} lineHeight={1.5}>
-                <FormattedMarkdown id='Home.About.SummaryText' />
+        {/* Websites & Apps */}
+        <FeatureRow>
+          <FeatureBox>
+            <ImgBox src='/static/images/websites-apps.png' alt='Websites and Apps' />
+          </FeatureBox>
+          <FeatureBox color='gray7'>
+            <FeatureBoxTitle>
+              <FormattedMessage id='Home.Websites&Apps.Title' />
+            </FeatureBoxTitle>
+            <FormattedMessage id='Home.Websites&Apps.SummaryText' />
+          </FeatureBox>
+        </FeatureRow>
+        {/* Search & Filter */}
+        {/* Arrange in {[img, para], [img, para], [img, para]} pattern on smaller screens */}
+        <FeatureRow flexDirection={['column-reverse', 'row']}>
+          <FeatureBox color='gray7'>
+            <FeatureBoxTitle>
+              <FormattedMessage id='Home.Search&Filter.Title' />
+            </FeatureBoxTitle>
+            <FormattedMessage id='Home.Search&Filter.SummaryText' />
+          </FeatureBox>
+          <FeatureBox>
+            <ImgBox src='/static/images/search.png' alt='Search and Filter' />
+          </FeatureBox>
+        </FeatureRow>
+        {/* Network Properties */}
+        <FeatureRow>
+          <FeatureBox>
+            <ImgBox src='/static/images/network-performance.png' alt='Network Properties' />
+          </FeatureBox>
+          <FeatureBox color='gray7'>
+            <FeatureBoxTitle>
+              <FormattedMessage id='Home.NetworkProperties.Title' />
+            </FeatureBoxTitle>
+            <FormattedMessage id='Home.NetworkProperties.SummaryText' />
+          </FeatureBox>
+        </FeatureRow>
+        {/* Measurement Statistics */}
+        <Container mb={5}>
+          <Flex justifyContent='center' my={3}>
+            <Heading h={2} color='blue7'>
+              <FormattedMessage id={'Home.MonthlyStats.Title'} />
+            </Heading>
+          </Flex>
+          <CoverageChart />
+        </Container>
+        {/* Highlights */}
+        <Container>
+          <Flex flexWrap='wrap' justifyContent='center' my={3}>
+            <Heading h={2} color='blue7'>
+              <a id='highlights'>
+                <FormattedMessage id={'Home.Highlights.Title'} />
+              </a>
+            </Heading>
+          </Flex>
+          <Flex flexWrap='wrap' justifyContent='center'>
+            <Box px={[0, 4]} my={3}>
+              <Text textAlign='center' fontSize={26}>
+                <FormattedMarkdown
+                  id='Home.Highlights.Description'
+                />
               </Text>
             </Box>
           </Flex>
 
-          {/* Websites & Apps */}
-          <FeatureRow>
-            <FeatureBox>
-              <ImgBox src='/static/images/websites-apps.png' alt='Websites and Apps' />
-            </FeatureBox>
-            <FeatureBox color='gray7'>
-              <FeatureBoxTitle>
-                <FormattedMessage id='Home.Websites&Apps.Title' />
-              </FeatureBoxTitle>
-              <FormattedMessage id='Home.Websites&Apps.SummaryText' />
-            </FeatureBox>
-          </FeatureRow>
-          {/* Search & Filter */}
-          {/* Arrange in {[img, para], [img, para], [img, para]} pattern on smaller screens */}
-          <FeatureRow flexDirection={['column-reverse', 'row']}>
-            <FeatureBox color='gray7'>
-              <FeatureBoxTitle>
-                <FormattedMessage id='Home.Search&Filter.Title' />
-              </FeatureBoxTitle>
-              <FormattedMessage id='Home.Search&Filter.SummaryText' />
-            </FeatureBox>
-            <FeatureBox>
-              <ImgBox src='/static/images/search.png' alt='Search and Filter' />
-            </FeatureBox>
-          </FeatureRow>
-          {/* Network Properties */}
-          <FeatureRow>
-            <FeatureBox>
-              <ImgBox src='/static/images/network-performance.png' alt='Network Properties' />
-            </FeatureBox>
-            <FeatureBox color='gray7'>
-              <FeatureBoxTitle>
-                <FormattedMessage id='Home.NetworkProperties.Title' />
-              </FeatureBoxTitle>
-              <FormattedMessage id='Home.NetworkProperties.SummaryText' />
-            </FeatureBox>
-          </FeatureRow>
-          {/* Measurement Statistics */}
-          <Container mb={5}>
-            <Flex justifyContent='center' my={3}>
-              <Heading h={2} color='blue7'>
-                <FormattedMessage id={'Home.MonthlyStats.Title'} />
-              </Heading>
-            </Flex>
-            <CoverageChart />
-          </Container>
-          {/* Highlights */}
-          <Container>
-            <Flex flexWrap='wrap' justifyContent='center' my={3}>
-              <Heading h={2} color='blue7'>
-                <a id='highlights'>
-                  <FormattedMessage id={'Home.Highlights.Title'} />
-                </a>
-              </Heading>
-            </Flex>
-            <Flex flexWrap='wrap' justifyContent='center'>
-              <Box px={[0, 4]} my={3}>
-                <Text textAlign='center' fontSize={26}>
-                  <FormattedMarkdown
-                    id='Home.Highlights.Description'
-                  />
-                </Text>
-              </Box>
-            </Flex>
-
-            {/* Political Events */}
-            <HighlightSection
-              title={<FormattedMessage id='Home.Highlights.Political' />}
-              description={<FormattedMessage id='Home.Highlights.Political.Description' />}
-              highlights={highlightContent.political}
-            />
-            {/* Media */}
-            <HighlightSection
-              title={<FormattedMessage id='Home.Highlights.Media' />}
-              description={<FormattedMessage id='Home.Highlights.Media.Description' />}
-              highlights={highlightContent.media}
-            />
-            {/* LGBTQI sites */}
-            <HighlightSection
-              title={<FormattedMessage id='Home.Highlights.LGBTQI' />}
-              description={<FormattedMessage id='Home.Highlights.LGBTQI.Description' />}
-              highlights={highlightContent.lgbtqi}
-            />
-            {/* Censorship changes */}
-            <HighlightSection
-              title={<FormattedMessage id='Home.Highlights.Changes' />}
-              description={<FormattedMessage id='Home.Highlights.Changes.Description' />}
-              highlights={highlightContent.changes}
-            />
-            <Box my={3}>
-              <Text fontSize={20}>
-                <FormattedMessage 
-                  id="Home.Highlights.CTA"
-                  values={{'link-to-search': (string) => (
-                    <NLink href='/search' passHref>
-                      <Link color='blue7'>{string}</Link>
-                    </NLink>
-                    )
-                  }}
-                />
-              </Text>
-            </Box>
-          </Container>
+          {/* Political Events */}
+          <HighlightSection
+            title={<FormattedMessage id='Home.Highlights.Political' />}
+            description={<FormattedMessage id='Home.Highlights.Political.Description' />}
+            highlights={highlightContent.political}
+          />
+          {/* Media */}
+          <HighlightSection
+            title={<FormattedMessage id='Home.Highlights.Media' />}
+            description={<FormattedMessage id='Home.Highlights.Media.Description' />}
+            highlights={highlightContent.media}
+          />
+          {/* LGBTQI sites */}
+          <HighlightSection
+            title={<FormattedMessage id='Home.Highlights.LGBTQI' />}
+            description={<FormattedMessage id='Home.Highlights.LGBTQI.Description' />}
+            highlights={highlightContent.lgbtqi}
+          />
+          {/* Censorship changes */}
+          <HighlightSection
+            title={<FormattedMessage id='Home.Highlights.Changes' />}
+            description={<FormattedMessage id='Home.Highlights.Changes.Description' />}
+            highlights={highlightContent.changes}
+          />
+          <Box my={3}>
+            <Text fontSize={20}>
+              <FormattedMessage 
+                id="Home.Highlights.CTA"
+                values={{'link-to-search': (string) => (
+                  <NLink href='/search' passHref>
+                    <Link color='blue7'>{string}</Link>
+                  </NLink>
+                  )
+                }}
+              />
+            </Text>
+          </Box>
         </Container>
-      </React.Fragment>
-    )
-  }
+      </Container>
+    </>
+  )
 }
 
 LandingPage.propTypes = {
@@ -319,3 +310,5 @@ LandingPage.propTypes = {
   asnCount: PropTypes.number,
   measurementCount: PropTypes.number
 }
+
+export default LandingPage

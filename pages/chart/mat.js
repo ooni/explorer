@@ -135,7 +135,7 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
   return (
     <MATContextProvider>
       <Head>
-        <title>OONI Measurement Aggregation Toolkit</title>
+        <title>{intl.formatMessage({id: 'MAT.Title'})}</title>
       </Head>
       <NavBar />
       <Container>

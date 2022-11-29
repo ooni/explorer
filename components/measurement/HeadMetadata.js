@@ -31,7 +31,13 @@ const HeadMetadata = ({
     )
   }
 
-  const metaDescription = `OONI data suggests ${description} on ${formattedDate}, find more open data on internet censorship on OONI Explorer.`
+  const metaDescription = intl.formatMessage({
+    id: 'Measurement.MetaDescription'},
+    {
+      description,
+      formattedDate
+    }
+  )
 
   return (
     <Head>

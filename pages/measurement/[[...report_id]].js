@@ -124,7 +124,7 @@ const Measurement = ({
   return (
     <React.Fragment>
       <Head>
-        <title>OONI Explorer</title>
+        <title>{intl.formatMessage({id: 'General.OoniExplorer'})}</title>
       </Head>
       {notFound ? (
         <MeasurementNotFound />

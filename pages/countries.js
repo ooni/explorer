@@ -194,9 +194,9 @@ const Countries = ({countries}) => {
   const regions = ['002', '019', '142', '150', '009', 'AQ']
 
   return (
-    <React.Fragment>
+    <>
       <Head>
-        <title>Internet Censorship around the world | OONI Explorer</title>
+        <title>{intl.formatMessage({id: 'Countries.PageTitle'})}</title>
       </Head>
 
       <StickyContainer>
@@ -241,7 +241,7 @@ const Countries = ({countries}) => {
           }
         </Container>
       </StickyContainer>
-    </React.Fragment>
+    </>
   )
 }
 

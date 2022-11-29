@@ -11,7 +11,7 @@ import {
   Heading,
   Text
 } from 'ooni-components'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
 
 import NavBar from '../components/NavBar'
@@ -187,6 +187,7 @@ const NoResults = () => (
 
 const Search = ({testNames, testNamesKeyed, countries, query: queryProp }) => {
   const router = useRouter()
+  const intl = useIntl()
   const { query, replace, isReady } = router
 
   const [nextURL, setNextURL] = useState(null)
@@ -290,7 +291,7 @@ const Search = ({testNames, testNamesKeyed, countries, query: queryProp }) => {
   return (
     <>
       <Head>
-        <title>Search through millions of Internet censorship measurements | OONI Explorer</title>
+        <title>{intl.formatMessage({id: 'Search.PageTitle'})}</title>
       </Head>
 
       <NavBar />
