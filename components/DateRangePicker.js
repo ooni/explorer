@@ -8,6 +8,16 @@ import styled from 'styled-components'
 import { Button } from 'ooni-components'
 import { getDirection } from 'components/withIntl'
 
+import de from 'date-fns/locale/de'
+import en from 'date-fns/locale/en-US'
+import es from 'date-fns/locale/es'
+import fa from 'date-fns/locale/fa-IR'
+import fr from 'date-fns/locale/fr'
+import is from 'date-fns/locale/is'
+import ru from 'date-fns/locale/ru'
+import tr from 'date-fns/locale/tr'
+import zh from 'date-fns/locale/zh-CN'
+
 const StyledDatetime = styled.div`
 z-index: 99999;
 position: absolute;
@@ -43,8 +53,32 @@ justify-content: right;
 gap: 6px;
 `
 
+const getDateFnsLocale = locale => {
+  switch (locale) {
+    case 'de':
+      return de
+    case 'es':
+      return es
+    case 'fa':
+      return fa
+    case 'fr':
+      return fr
+    case 'is':
+      return is
+    case 'ru':
+      return ru
+    case 'tr':
+      return tr
+    case 'zh':
+      return zh
+    default:
+      return en
+  }
+}
+
 const DateRangePicker = ({handleRangeSelect, initialRange, close, ...props}) => {
   const intl = useIntl()
+  // const locale = require(`date-fns/locale/${intl.locale}`)
 
   const ranges = ['Today', 'LastWeek', 'LastMonth', 'LastYear']
   const selectRange = (range) => {
@@ -101,6 +135,7 @@ const DateRangePicker = ({handleRangeSelect, initialRange, close, ...props}) => 
         <DayPicker 
           {...props}
           dir={getDirection(intl.locale)}
+          locale={getDateFnsLocale(intl.locale)}
           mode="range"
           toDate={tomorrow}
           selected={range}
