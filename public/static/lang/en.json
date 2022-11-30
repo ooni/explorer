@@ -9,6 +9,8 @@
   "General.NoData": "No data",
   "General.Apply": "Apply",
   "General.Reset": "Reset",
+  "SocialButtons.CTA": "Share on <facebook-link>Facebook</facebook-link> or <twitter-link>Twitter</twitter-link>",
+  "SocialButtons.Text": "Data from OONI Explorer",
   "Tests.WebConnectivity.Name": "Web Connectivity Test",
   "Tests.Telegram.Name": "Telegram Test",
   "Tests.Facebook.Name": "Facebook Messenger Test",

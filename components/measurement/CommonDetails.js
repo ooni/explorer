@@ -17,7 +17,7 @@ import { useRouter } from 'next/router'
 import { DetailsBoxTable, DetailsBox } from './DetailsBox'
 
 const LoadingRawData = (props) => {
-  return (<Box fontSize={1}>Loading</Box>)
+  return (<Box fontSize={1}><FormattedMessage id='General.Loading' /></Box>)
 }
 
 const ReactJson = dynamic(

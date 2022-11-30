@@ -61,7 +61,7 @@ const Form = ({ onChange, query }) => {
         <Box width={[1, 1/5]}>
           <Flex>
             <Box width={1/2} mr={3}>
-              <StyledLabel>Since</StyledLabel>
+              <StyledLabel>{intl.formatMessage({id: 'Search.Sidebar.From'})}</StyledLabel>
               <Controller
                 name='since'
                 control={control}
@@ -75,7 +75,7 @@ const Form = ({ onChange, query }) => {
               />
             </Box>
             <Box width={1/2} mr={3}>
-              <StyledLabel>Until</StyledLabel>
+              <StyledLabel>{intl.formatMessage({id: 'Search.Sidebar.Until'})}</StyledLabel>
               <Controller
                 name='until'
                 control={control}

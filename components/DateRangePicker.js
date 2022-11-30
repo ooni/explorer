@@ -6,6 +6,7 @@ import OutsideClickHandler from 'react-outside-click-handler'
 import { useIntl } from 'react-intl'
 import styled from 'styled-components'
 import { Button } from 'ooni-components'
+import { getDirection } from 'components/withIntl'
 
 const StyledDatetime = styled.div`
 z-index: 99999;
@@ -99,6 +100,7 @@ const DateRangePicker = ({handleRangeSelect, initialRange, close, ...props}) => 
         <StyledRangeButtons>{rangesList}</StyledRangeButtons>
         <DayPicker 
           {...props}
+          dir={getDirection(intl.locale)}
           mode="range"
           toDate={tomorrow}
           selected={range}
