@@ -178,7 +178,7 @@ const CommonDetails = ({
           }
           content={
             measurement && typeof measurement === 'object' ? (
-              <Flex bg='WHITE' p={3}>
+              <Flex bg='WHITE' p={3} style={{direction: 'ltr'}}>
                 <JsonViewer src={measurement} collapsed={collapsed} />
               </Flex>
             ) : (
