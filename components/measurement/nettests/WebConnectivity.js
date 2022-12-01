@@ -319,8 +319,8 @@ const WebConnectivityDetails = ({
   } = validateMeasurement(measurement ?? {})
 
   const intl = useIntl()
-  const date = dayjs(measurement_start_time).locale(intl.locale).utc().format('MMMM DD, YYYY, hh:mm A [UTC]')
-
+  const date = new Intl.DateTimeFormat(intl.locale, { dateStyle: 'long', timeStyle: 'long', timeZone: 'UTC' }).format(new Date(measurement_start_time))
+  
   const p = url.parse(input)
   const hostname = p.host
 

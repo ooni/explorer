@@ -52,7 +52,7 @@ const ChartsContainer = () => {
 
 const Summary = ({ measurementsTotal, firstMeasurement, countriesData }) => {
   const intl = useIntl()
-  const formattedDate = dayjs(firstMeasurement).locale(intl.locale).format('MMMM DD, YYYY')
+  const formattedDate = new Intl.DateTimeFormat(intl.locale, { dateStyle: 'long', timeZone: 'UTC' }).format(new Date(firstMeasurement))
   const sortedCountries = countriesData.sort((a, b) => b.measurements - a.measurements)
   const countriesList = sortedCountries.map(function(c){
     return (
