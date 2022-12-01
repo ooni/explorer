@@ -64,8 +64,8 @@ const CommonSummary = ({
     </Box>
   </Flex>
  
-  const formattedDate = dayjs(startTime).locale(intl.locale).utc().format('MMMM DD, YYYY, hh:mm A [UTC]')
-
+  const formattedDate = new Intl.DateTimeFormat(intl.locale, { dateStyle: 'long', timeStyle: 'long', timeZone: 'UTC' }).format(new Date(startTime))
+  
   return (
     <React.Fragment>
       <SummaryContainer py={4} color={color}>

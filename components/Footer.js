@@ -55,7 +55,7 @@ const FooterText = styled.div`
 
 const Footer = () => {
   const intl = useIntl()
-  const currentYear = dayjs().get('year')
+  const currentYear = new Intl.DateTimeFormat(intl.locale, { year: 'numeric' }).format(new Date())
   return (
     <StyledFooter>
       <Container>
