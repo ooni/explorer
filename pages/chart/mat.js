@@ -113,7 +113,9 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
   }, [])
 
   const shouldFetchData = router.pathname !== router.asPath
-  const query = router.query
+  // THIS IS TEMPORARY - in the next iteration users will be
+  // able to set time_grain themselves
+  const query = {...router.query, time_grain: 'day'}
 
   const { data, error, isValidating } = useSWR(
     () => shouldFetchData ? [query] : null,
