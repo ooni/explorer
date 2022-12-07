@@ -5,26 +5,26 @@ import dayjs from 'services/dayjs'
 const categoryCodesMap = getCategoryCodesMap()
 
 export function getDatesBetween(startDate, endDate, timeGrain) {
-  const dateSet = new Set()    
+  const dateSet = new Set()
   var currentDate = startDate
   while (currentDate < endDate) {
     if (timeGrain === 'hour') {
-      const startOfDay = new Date(currentDate.setUTCHours(0, 0, 0))
-      const nextDay = new Date(startOfDay.getTime() + 60 * 60 * 24 * 1000)
-      while (startOfDay < nextDay) {
+      let startOfDay = dayjs(currentDate).utc().startOf('day')
+      const nextDay = startOfDay.add(1, 'day')
+      while (startOfDay.toDate() < nextDay.toDate()) {
         dateSet.add(startOfDay.toISOString().split('.')[0] + 'Z')
-        startOfDay.setTime(startOfDay.getTime() + 60 * 60 * 1000)
+        startOfDay = startOfDay.utc().add(1, 'hours')
       }
-      currentDate.setDate(currentDate.getDate() + 1)
-    } if (timeGrain === 'month') {
+      currentDate = dayjs(currentDate).utc().add(1, 'day')
+    } else if (timeGrain === 'month') {
       const monthStart = dayjs(currentDate).utc().startOf('month')
       dateSet.add(monthStart.toISOString().slice(0, 10))
       currentDate = monthStart.add(1, 'month').toDate()
-    } if (timeGrain === 'week') {
+    } else if (timeGrain === 'week') {
       const weekStart = dayjs(currentDate).utc().startOf('week')
       dateSet.add(weekStart.toISOString().slice(0, 10))
       currentDate = weekStart.add(1, 'week').toDate()
-    } else {
+    } else if (timeGrain === 'day') {
       dateSet.add(currentDate.toISOString().slice(0, 10))
       currentDate.setDate(currentDate.getDate() + 1)
     }
