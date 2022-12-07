@@ -142,8 +142,9 @@ const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last
 
   const chartProps = useMemo(() => {
     const xAxisTicks = getXAxisTicks(query)
-    chartProps1D.axisBottom.tickValues = xAxisTicks
-    chartProps1D.axisBottom.legend = query.axis_x ? intl.formatMessage({id: `MAT.Form.Label.AxisOption.${query.axis_x}`, defaultMessage: ''}) : ''
+    // chartProps1D.axisBottom.tickValues = xAxisTicks
+    // chartProps1D.axisBottom.legend = query.axis_x ? intl.formatMessage({id: `MAT.Form.Label.AxisOption.${query.axis_x}`, defaultMessage: ''}) : ''
+    chartProps1D.axisBottom.legend = query.axis_x ? intl.formatMessage(messages[`x_axis.${query.axis_x}`]) : ''
       return label === undefined ? chartProps1D : chartProps2D
   }, [intl, label, query])
 

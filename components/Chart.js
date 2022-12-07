@@ -22,10 +22,12 @@ const Chart = React.memo(function Chart({testName, testGroup = null, title, quer
   }, [queryParams])
 
   const { data, error } = useSWR(
-    testGroup ? { query: apiQuery,
-      testNames: testGroup.tests,
-      groupKey: name
-    } : apiQuery,
+    testGroup ? 
+      { query: apiQuery, 
+        testNames: testGroup.tests, 
+        groupKey: name
+      } : 
+      apiQuery,
     testGroup ? MATMultipleFetcher : MATFetcher,
     swrOptions
   )

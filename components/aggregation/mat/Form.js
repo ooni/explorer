@@ -51,6 +51,22 @@ const messages = defineMessages({
     id: 'MAT.Form.Label.AxisOption.probe_asn',
     defaultMessage: ''
   },
+  'hour': {
+    id: 'MAT.Form.TimeGrainOption.hour',
+    defaultMessage: ''
+  },
+  'day': {
+    id: 'MAT.Form.TimeGrainOption.day',
+    defaultMessage: ''
+  },
+  'week': {
+    id: 'MAT.Form.TimeGrainOption.week',
+    defaultMessage: ''
+  },
+  'month': {
+    id: 'MAT.Form.TimeGrainOption.month',
+    defaultMessage: ''
+  }
 })
 
 
@@ -66,6 +82,13 @@ const yAxisOptions = [
   ['probe_cc', [], true],
   ['probe_asn', [], false],
   ['', [], false]
+]
+
+const timeGrainOptions = [
+  'hour',
+  'day',
+  'week',
+  'month',
 ]
 
 const testsWithValidDomainFilter = [
@@ -103,7 +126,8 @@ const defaultDefaultValues = {
   since: lastMonthToday,
   until: tomorrow,
   axis_x: 'measurement_start_day',
-  axis_y: ''
+  axis_y: '',
+  time_grain: 'day'
 }
 
 export const Form = ({ onSubmit, testNames, query }) => {
@@ -267,6 +291,22 @@ export const Form = ({ onSubmit, testNames, query }) => {
         </Box>
         <Box width={[1, 2/12]} mx={[0, 2]}>
           <StyledLabel>
+            <FormattedMessage id='MAT.Form.Label.TimeGrain' />
+          </StyledLabel>
+          <Controller
+            name='time_grain'
+            control={control}
+            render={({field}) => (
+              <Select {...field} width={1}>
+                {timeGrainOptions.map((option, idx) => (
+                  <option key={idx} value={option}>{option.length > 0 ? intl.formatMessage(messages[option]) : option}</option>
+                ))}
+              </Select>
+            )}
+          />
+        </Box>
+        <Box width={[1, 2/12]} mx={[0, 2]}>
+          <StyledLabel>
             <FormattedMessage id='MAT.Form.Label.XAxis' />
           </StyledLabel>
           <Controller
@@ -390,5 +430,6 @@ Form.propTypes = {
     input: PropTypes.string,
     probe_cc: PropTypes.string,
     category_code: PropTypes.string,
+    time_grain: PropTypes.string,
   })
 }

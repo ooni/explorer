@@ -1,14 +1,33 @@
 import { getCategoryCodesMap } from '../../utils/categoryCodes'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
+import dayjs from 'services/dayjs'
 
 const categoryCodesMap = getCategoryCodesMap()
 
-export function getDatesBetween(startDate, endDate) {
-  const dateSet = new Set()
+export function getDatesBetween(startDate, endDate, timeGrain) {
+  const dateSet = new Set()    
   var currentDate = startDate
   while (currentDate < endDate) {
-    dateSet.add(currentDate.toISOString().slice(0, 10))
-    currentDate.setDate(currentDate.getDate() + 1)
+    if (timeGrain === 'hour') {
+      const startOfDay = new Date(currentDate.setUTCHours(0, 0, 0))
+      const nextDay = new Date(startOfDay.getTime() + 60 * 60 * 24 * 1000)
+      while (startOfDay < nextDay) {
+        dateSet.add(startOfDay.toISOString().split('.')[0] + 'Z')
+        startOfDay.setTime(startOfDay.getTime() + 60 * 60 * 1000)
+      }
+      currentDate.setDate(currentDate.getDate() + 1)
+    } if (timeGrain === 'month') {
+      const monthStart = dayjs(currentDate).utc().startOf('month')
+      dateSet.add(monthStart.toISOString().slice(0, 10))
+      currentDate = monthStart.add(1, 'month').toDate()
+    } if (timeGrain === 'week') {
+      const weekStart = dayjs(currentDate).utc().startOf('week')
+      dateSet.add(weekStart.toISOString().slice(0, 10))
+      currentDate = weekStart.add(1, 'week').toDate()
+    } else {
+      dateSet.add(currentDate.toISOString().slice(0, 10))
+      currentDate.setDate(currentDate.getDate() + 1)
+    }
   }
   return dateSet
 }
@@ -20,7 +39,7 @@ export function fillRowHoles (data, query, locale) {
 
   switch(query.axis_x) {
     case 'measurement_start_day':
-      domain = getDatesBetween(new Date(query.since), new Date(query.until))
+      domain = getDatesBetween(new Date(query.since), new Date(query.until), query.time_grain)
       break
     case 'category_code':
       domain = [...getCategoryCodesMap().keys()]
