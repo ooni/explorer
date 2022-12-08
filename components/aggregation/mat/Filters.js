@@ -149,7 +149,7 @@ const noRowsSelected = null
 const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
   const intl = useIntl()
   const resetTableRef = useRef(false)
-  const [showOnlyAnomalies, setShowOnlyAnomalies] = useState(false)
+  const [onlyFilter, setOnlyFilter] = useState('all')
   const yAxis = query.axis_y
 
   const defaultColumn = React.useMemo(
@@ -289,25 +289,22 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
   
   const updateCharts = useCallback(() => {
     const selectedRows = Object.keys(state.selectedRowIds).sort((a,b) => sortRows(a, b, query.axis_y))
+
+    const filteredData = onlyFilter !== 'all' ?
+      tableData
+        .filter((row) => row[onlyFilter] > 0)
+        .map((row) => row[query.axis_y])
+        .sort((a,b) => sortRows(a, b, query.axis_y)) :
+      selectedRows
   
     if (selectedRows.length > 0 && selectedRows.length !== preGlobalFilteredRows.length) {
-      if (showOnlyAnomalies) {
-        const filtered = tableData.filter((row) => row.anomaly_count > 0).map((row) => row[query.axis_y])
-        const filteredSelectedRows = selectedRows.filter((row) => filtered.includes(row))
-        setDataForCharts(filteredSelectedRows)
-      } else {
-        setDataForCharts(selectedRows)
-      }
+      const filtered = filteredData
+      const filteredSelectedRows = selectedRows.filter((row) => filtered.includes(row))
+      setDataForCharts(filteredSelectedRows)
     } else {
-      showOnlyAnomalies ? 
-      setDataForCharts(tableData
-        .filter((row) => row.anomaly_count > 0)
-        .map((row) => row[query.axis_y])
-        .sort((a,b) => sortRows(a, b, query.axis_y))
-      ) : 
-      setDataForCharts(noRowsSelected)
+      setDataForCharts(filteredData)
     }
-  }, [preGlobalFilteredRows.length, query.axis_y, state.selectedRowIds, setDataForCharts, showOnlyAnomalies, tableData])
+  }, [preGlobalFilteredRows.length, query.axis_y, state.selectedRowIds, setDataForCharts, onlyFilter, tableData])
 
   /**
    * Reset the table filter
@@ -324,7 +321,7 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
       resetTableRef.current = true
       setGlobalFilter('')
     }
-    setShowOnlyAnomalies(false)
+    setOnlyFilter('all')
     setDataForCharts(noRowsSelected)
   }, [setGlobalFilter, state.globalFilter, toggleAllRowsSelected, setDataForCharts])
 
@@ -343,18 +340,23 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
     overscan: 10,
     estimateSize: React.useCallback(() => 35, []),
   })
-
+  const onRadioChange = (event) => setOnlyFilter(event.target.value)
   return (
     <DetailsBox title={'Filters'} collapsed={false}>
       <Flex flexDirection='column'>
-        <Flex mb={3} alignItems='center'>
-          <Button hollow onClick={updateCharts}>Apply</Button>
-          <Button inverted onClick={resetFilter} mx={3}>Reset</Button>
-        </Flex>
-        <Label htmlFor='onlyAnomalies' alignItems='center' mb={2}>
-          <input type='checkbox' id='onlyAnomalies' onClick={() => setShowOnlyAnomalies(!showOnlyAnomalies)} checked={showOnlyAnomalies} />
-            <Box mx={1}>Only show anomalies</Box>
+        <Box mb={3}>
+          <Label>
+            <Text fontWeight={600} fontSize={16}><FormattedMessage id='Search.Sidebar.Status' /></Text>
           </Label>
+          <div onChange={onRadioChange}>
+            <input type="radio" value="all" name="anomaly" checked={onlyFilter === 'all'} />
+            <FormattedMessage id='Search.FilterButton.AllResults' />
+            <input type="radio" value="anomaly_count" name="anomaly" checked={onlyFilter === 'anomaly_count'}/>
+            <FormattedMessage id='Search.FilterButton.Anomalies' />
+            <input type="radio" value="confirmed_count" name="anomaly" checked={onlyFilter === 'confirmed_count'} />
+            <FormattedMessage id='Search.FilterButton.Confirmed' />
+          </div>
+        </Box>
         <TableContainer>
           <Table {...getTableProps()}>
             <TableHeader>
@@ -439,6 +441,10 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
             </div>
           </Table>
         </TableContainer>
+        <Flex mt={3} alignItems='center'>
+          <Button hollow onClick={updateCharts}>Apply</Button>
+          <Button inverted onClick={resetFilter} mx={3}>Reset</Button>
+        </Flex>
       </Flex>
     </DetailsBox>
   )
