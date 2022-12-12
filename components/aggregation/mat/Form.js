@@ -84,13 +84,6 @@ const yAxisOptions = [
   ['', [], false]
 ]
 
-const timeGrainOptions = [
-  'hour',
-  'day',
-  'week',
-  'month',
-]
-
 const testsWithValidDomainFilter = [
   'web_connectivity',
   'http_requests',
@@ -209,6 +202,26 @@ export const Form = ({ onSubmit, testNames, query }) => {
     if (!yAxisOptionsFiltered.includes(getValues('axis_y'))) setValue('axis_y', '')
   }, [setValue, getValues, yAxisOptionsFiltered])
 
+  const since = watch('since')
+  const until = watch('until')
+  const timeGrainOptions = useMemo(() => {
+    if (!since || !until) return ['hour', 'day', 'week', 'month']
+    const diff = dayjs(until).diff(dayjs(since), 'day')
+    if (diff < 8) {
+      const availableValues = ['hour', 'day']
+      if (!availableValues.includes(getValues('time_grain'))) setValue('time_grain', 'hour')
+      return availableValues
+    } else if (diff >= 8 && diff < 31) {
+      const availableValues = ['day', 'week']
+      if (!availableValues.includes(getValues('time_grain'))) setValue('time_grain', 'day')
+      return availableValues
+    } else if (diff >= 31 ) {
+      const availableValues = ['day', 'week', 'month']
+      if (!availableValues.includes(getValues('time_grain'))) setValue('time_grain', 'day')
+      return availableValues
+    }
+  }, [setValue, getValues, since, until])
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <ConfirmationModal show={showConfirmation} onConfirm={onConfirm} onCancel={onCancel} />
@@ -299,7 +312,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             render={({field}) => (
               <Select {...field} width={1}>
                 {timeGrainOptions.map((option, idx) => (
-                  <option key={idx} value={option}>{option.length > 0 ? intl.formatMessage(messages[option]) : option}</option>
+                  <option key={idx} value={option}>{intl.formatMessage(messages[option])}</option>
                 ))}
               </Select>
             )}
