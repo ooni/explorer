@@ -84,7 +84,7 @@ const NetworkDashboard = ({asn, calendarData = [], measurementsTotal, countriesD
   const displayASN = asn.replace('AS', '')
 
   useEffect(() => {
-    if (Object.keys(query).length < 3) {
+    if (Object.keys(query).length  < 3) {
       const today = dayjs.utc().add(1, 'day')
       const monthAgo = dayjs.utc(today).subtract(1, 'month')
       const href = {
@@ -99,7 +99,7 @@ const NetworkDashboard = ({asn, calendarData = [], measurementsTotal, countriesD
   }, [])
 
   // Sync page URL params with changes from form values
-  const onChange = useCallback(({ since, until }) => {
+  const onSubmit = ({ since, until }) => {
     // since: "2022-01-02",
     // until: "2022-02-01",
     const params = {
@@ -110,7 +110,7 @@ const NetworkDashboard = ({asn, calendarData = [], measurementsTotal, countriesD
     if (query.since !== since || query.until !== until) {
       router.push({ query: params }, undefined, { shallow: true })
     }
-  }, [router, query, asn])
+  }
 
   return (
     <>
@@ -125,7 +125,7 @@ const NetworkDashboard = ({asn, calendarData = [], measurementsTotal, countriesD
                 <Summary measurementsTotal={measurementsTotal} countriesData={countriesData} firstMeasurement={calendarData[0].day} />
                 <Calendar data={calendarData} />
                 <Box as='hr' sx={{bg: 'gray5', border: 0, height: 1}} mt={20} mb={20} />
-                <Form onChange={onChange} query={query} />
+                <Form onSubmit={onSubmit} query={query} />
                 <ChartsContainer />
               </> :
               <CallToActionBox

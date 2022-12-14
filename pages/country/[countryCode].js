@@ -1,6 +1,7 @@
 /* global process */
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useState, useEffect } from 'react'
 import axios from 'axios'
+import { useRouter } from 'next/router'
 import {
   Container,
   Heading,
@@ -10,7 +11,9 @@ import styled from 'styled-components'
 import { useIntl } from 'react-intl'
 import { StickyContainer, Sticky } from 'react-sticky'
 import { getLocalisedRegionName } from '../../utils/i18nCountries'
+import dayjs from 'services/dayjs'
 
+import Form from 'components/network/Form'
 import NavBar from 'components/NavBar'
 import Flag from 'components/Flag'
 import Layout from 'components/Layout'
@@ -77,14 +80,30 @@ export async function getServerSideProps ({ res, query }) {
   }
 }
 
-
-const Country = ({ countryCode, overviewStats, reports, ...coverageDataSSR }) => {
+const Country = ({ countryCode, countryName, overviewStats, reports, ...coverageDataSSR }) => {
   const intl = useIntl()
-  const [newData, setNewData] = useState(false)
   const countryName = getLocalisedRegionName(countryCode, intl.locale)
+  const [newData, setNewData] = useState(false)
+  const router = useRouter()
+  const query = router.query
+
+  useEffect(() => {
+    if (Object.keys(query).length === 1) {
+      const today = dayjs.utc().add(1, 'day')
+      const monthAgo = dayjs.utc(today).subtract(1, 'month')
+      const href = {
+        pathname: router.pathname,
+        query: {
+          since: monthAgo.format('YYYY-MM-DD'),
+          until: today.format('YYYY-MM-DD'),
+          countryCode
+        },
+      }
+      router.replace(href, undefined, { shallow: true })
+    }
+  }, [])
 
   const fetchTestCoverageData = useCallback((testGroupList) => {
-    console.log(testGroupList)
     const fetcher = async (testGroupList) => {
       let client = axios.create({baseURL: process.env.NEXT_PUBLIC_OONI_API}) // eslint-disable-line
       const result = await client.get('/api/_/test_coverage', {
@@ -102,6 +121,26 @@ const Country = ({ countryCode, overviewStats, reports, ...coverageDataSSR }) =>
     fetcher(testGroupList)
 
   }, [countryCode, setNewData])
+
+  // Sync page URL params with changes from form values
+  const onSubmit = ({ since, until }) => {
+    const params = {
+      since,
+      until,
+    }
+
+    const href = {
+      pathname: router.pathname.replace('[countryCode]', countryCode),
+      query: params,
+    }
+
+    if (query.since !== since
+      || query.until !== until
+    ) {
+      router.push(href, href, { shallow: true })
+    }
+
+  }
 
   const { testCoverage, networkCoverage } = newData !== false ? newData : coverageDataSSR
 
@@ -153,6 +192,7 @@ const Country = ({ countryCode, overviewStats, reports, ...coverageDataSSR }) =>
                   fetchTestCoverageData={fetchTestCoverageData}
                   featuredArticles={reports}
                 />
+                <Form onSubmit={onSubmit} query={query} />
                 <WebsitesSection countryCode={countryCode} />
                 <AppsSection />
               </CountryContextProvider>

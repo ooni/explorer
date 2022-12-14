@@ -16,7 +16,7 @@ const defaultDefaultValues = {
   until: tomorrow,
 }
 
-const Form = ({ onChange, query }) => {
+const Form = ({ onSubmit, query }) => {
   const intl = useIntl()
 
   const query2formValues = (query) => {
@@ -49,11 +49,11 @@ const Form = ({ onChange, query }) => {
 
   const submit = (e) => {
     e.preventDefault()
-    onChange({since, until})
+    onSubmit({since, until})
   }
 
   return (
-    <form>
+    <form onSubmit={submit}>
       <Flex alignItems={['center']}>
         <Box width={[1, 1/5]}>
           <Flex>
@@ -99,6 +99,7 @@ const Form = ({ onChange, query }) => {
             />
           }
         </Box>
+        <Button style={{alignSelf: 'end'}} mb={2} type='submit'>Apply</Button>
       </Flex>
     </form>
   )
