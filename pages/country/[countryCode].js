@@ -80,7 +80,7 @@ export async function getServerSideProps ({ res, query }) {
   }
 }
 
-const Country = ({ countryCode, countryName, overviewStats, reports, ...coverageDataSSR }) => {
+const Country = ({ countryCode, overviewStats, reports, ...coverageDataSSR }) => {
   const intl = useIntl()
   const countryName = getLocalisedRegionName(countryCode, intl.locale)
   const [newData, setNewData] = useState(false)

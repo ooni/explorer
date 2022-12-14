@@ -99,7 +99,6 @@ const Form = ({ onSubmit, query }) => {
             />
           }
         </Box>
-        <Button style={{alignSelf: 'end'}} mb={2} type='submit'>Apply</Button>
       </Flex>
     </form>
   )

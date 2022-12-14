@@ -64,7 +64,7 @@ const ConfirmedBlockedCategory = React.memo(function Chart({testName, title, que
             <div> Loading ...</div>
           ) : (
             blockedCategoriesData === null || blockedCategoriesData.length === 0 ? (
-              <Heading h={5}><FormattedMessage id="Measurement.Details.Websites.Failures.Values.Unknown" /></Heading>
+              <Heading h={5}><FormattedMessage id="General.NoData" /></Heading>
             ) : (
               <Flex flexWrap='wrap'>
                 {blockedCategoriesData && blockedCategoriesData.map(category => (
@@ -113,7 +113,7 @@ const CategoryBadge = ({ categoryCode, categoryCodeMap, confirmedCount }) => {
           <CategoryIcon size={20} />
         </Box>
         <Box>
-        <Text>{categoryDesc.name}</Text>
+        <Text><FormattedMessage id={categoryDesc.name} /></Text>
         </Box>
       </Flex>
     </Badge>
