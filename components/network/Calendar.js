@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { ResponsiveCalendar } from '@nivo/calendar'
 import styled from 'styled-components'
-import { Flex, theme } from 'ooni-components'
+import { Flex, Box, theme } from 'ooni-components'
 import { getRange } from 'utils'
 
 const StyledCalendar = styled.div`
@@ -11,12 +11,19 @@ margin-top: 40px;
 `
 const colors = theme.colors
 const findColor = number => {
-  if (number === 0) return colors.gray4
-  if (number <= 10) return colors.orange3
-  if (number <= 100) return colors.green2
-  if (number <= 1000) return colors.green5
-  return colors.green8
+  if (number === 0) return colors.gray3
+  if (number <= 10) return colors.blue1
+  if (number <= 100) return colors.blue3
+  if (number <= 1000) return colors.blue5
+  return colors.blue7
 }
+
+const colorLegend = [
+  {color: colors.blue1, range: '1-10'},
+  {color: colors.blue3, range: '11-100'},
+  {color: colors.blue5, range: '101-1000'},
+  {color: colors.blue7, range: '>1000'},
+]
 
 const dateRange = (startDate, endDate) => {
   if (!startDate || !endDate) return
@@ -61,21 +68,40 @@ const Calendar = React.memo(function Calendar({asn, data}) {
           dayBorderColor="#ffffff"
         />
       </StyledCalendar>
-      <Flex justifyContent='right' mb={60}>
-        {yearsOptions.map(year => (
-          <span
-            key={year}
-            style={{
-              display: 'inline-block',
-              padding: '3px 9px',
-              cursor: 'pointer',
-              fontWeight: year === selectedYear ? '800' : '400'
-            }}
-            onClick={() => setSelectedYear(year)}
-          >
-            {year}
-          </span>
-        ))}
+      <Flex justifyContent='space-between'alignItems='center' mb={60}>
+        <Flex>
+          {colorLegend.map(item => (
+            <span
+              key={item.color}
+              style={{marginRight: '16px'}}
+            >
+              <span style={{
+                width: '11px',
+                height: '11px',
+                backgroundColor: item.color,
+                display: 'inline-block',
+                marginRight: '3px',
+              }}></span>
+              {item.range}
+            </span>
+          ))}
+        </Flex>
+        <Flex>
+          {yearsOptions.map(year => (
+            <span
+              key={year}
+              style={{
+                display: 'inline-block',
+                padding: '0 8px',
+                cursor: 'pointer',
+                fontWeight: year === selectedYear ? '800' : '400'
+              }}
+              onClick={() => setSelectedYear(year)}
+            >
+              {year}
+            </span>
+          ))}
+        </Flex>
       </Flex>
     </>
   )
