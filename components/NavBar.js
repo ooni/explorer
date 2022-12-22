@@ -113,15 +113,6 @@ export const NavBar = ({color}) => {
               <NavItem label={<FormattedMessage id='Navbar.Countries' />} href='/countries' />
               <NavItem label={<FormattedMessage id='Navbar.Networks' />} href='/networks' />
               <NavItem label={<FormattedMessage id='Navbar.Domains' />} href='/domains' />
-              {/* <Box ml={[0, 4]} my={[2, 0]}>
-                <LanguageSelect ml={[0, 4]} onChange={handleLocaleChange} value={locale}>
-                  {languages.map((c) => (
-                    <option key={c} value={c}>
-                      {getLocalisedLanguageName(c,c)}
-                    </option>
-                  ))}
-                </LanguageSelect>
-              </Box> */}
               {user?.logged_in && 
                 <Box  ml={[0, 4]} my={[2, 0]}>
                   <StyledNavItem>
@@ -132,6 +123,15 @@ export const NavBar = ({color}) => {
                   </StyledNavItem>
                 </Box>
               }
+              <Box ml={[0, 4]} my={[2, 0]}>
+                <LanguageSelect ml={[0, 4]} onChange={handleLocaleChange} value={locale}>
+                  {languages.map((c) => (
+                    <option key={c} value={c}>
+                      {getLocalisedLanguageName(c,c)}
+                    </option>
+                  ))}
+                </LanguageSelect>
+              </Box>
             </Flex>
           </Box>
         </Flex>
