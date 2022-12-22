@@ -10,19 +10,19 @@ describe('Measurement Page Tests', () => {
     it('renders a valid accessible og:description', () => {
       cy.visit('/measurement/20221110T100756Z_webconnectivity_US_13335_n1_KWJqHUAPqMdtf2Up?input=https%3A%2F%2Fwww.theguardian.com%2F')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests www.theguardian.com was accessible in United States on November 10, 2022, 10:09:16 AM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests www.theguardian.com was accessible in United States on November 10, 2022 at 10:09:16 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
 
     it('renders a valid blocked og:description', () => {
       cy.visit('/measurement/20211215T052819Z_webconnectivity_RU_8369_n1_PkPgEYV2DrBAfPxu?input=http%3A%2F%2Frutor.org')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests rutor.org was blocked in Russia on December 15, 2021, 5:44:55 AM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests rutor.org was blocked in Russia on December 15, 2021 at 5:44:55 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
 
     it('renders a valid anomaly og:description', () => {
       cy.visit('/measurement/20221110T082316Z_webconnectivity_MY_4788_n1_Ue0y9OwyBLvoIfgm?input=http%3A%2F%2Fwww.google.com%2Fsearch%3Fq%3Dlesbian')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests www.google.com was accessible in Malaysia on November 10, 2022, 10:25:51 AM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests www.google.com was accessible in Malaysia on November 10, 2022 at 10:25:51 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
 
     // it('renders a valid website down og:description', () => {
@@ -70,13 +70,13 @@ describe('Measurement Page Tests', () => {
     it('renders a reachable og:description', () => {
       cy.visit('/measurement/20221110T102855Z_telegram_US_7018_n1_HKJ2sF9m0lP7JMsW')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests Telegram was reachable in United States on November 10, 2022, 10:28:56 AM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests Telegram was reachable in United States on November 10, 2022 at 10:28:56 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
 
     it('renders a unreachable og:description', () => {
       cy.visit('measurement/20221109T225726Z_telegram_RU_8402_n1_qnYloXASGMUg2G9O')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests Telegram was NOT reachable in Russia on November 9, 2022, 10:57:59 PM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests Telegram was NOT reachable in Russia on November 9, 2022 at 10:57:59 PM UTC, find more open data on internet censorship on OONI Explorer.')
     })
 
     it('renders an accessible measurement', () => {
@@ -96,13 +96,13 @@ describe('Measurement Page Tests', () => {
     it('renders a reachable og:description', () => {
       cy.visit('/measurement/20221110T103853Z_whatsapp_US_7922_n1_JPLapx8JfJ0J4nf4')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests WhatsApp was reachable in United States on November 10, 2022, 10:38:53 AM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests WhatsApp was reachable in United States on November 10, 2022 at 10:38:53 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
 
     it('renders an unreachable og:description', () => {
       cy.visit('/measurement/20221105T223928Z_whatsapp_JP_55392_n1_aL6HH9GHYc1YbILm')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests WhatsApp was likely blocked in Japan on November 5, 2022, 10:39:29 PM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests WhatsApp was likely blocked in Japan on November 5, 2022 at 10:39:29 PM UTC, find more open data on internet censorship on OONI Explorer.')
     })
 
     it('renders an accessible measurement', () => {
@@ -131,7 +131,7 @@ describe('Measurement Page Tests', () => {
       cy.heroHasColor(normalColor)
         .contains('OK')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests Signal was reachable in Brazil on April 14, 2021, 11:32:39 PM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests Signal was reachable in Brazil on April 14, 2021 at 11:32:39 PM UTC, find more open data on internet censorship on OONI Explorer.')
     })
 
     it('renders an anomaly measurement', () => {
@@ -139,7 +139,7 @@ describe('Measurement Page Tests', () => {
       cy.heroHasColor(anomalyColor)
         .contains('Anomaly')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests Signal was NOT reachable in Iran on April 15, 2021, 8:42:27 AM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests Signal was NOT reachable in Iran on April 15, 2021 at 8:42:27 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
   })
 
@@ -159,13 +159,13 @@ describe('Measurement Page Tests', () => {
     it('renders a reachable og:description', () => {
       cy.visit('/measurement/20221110T104252Z_facebookmessenger_US_20115_n1_o61hepYQFOp1mtT9')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests Facebook Messenger was reachable in United States on November 10, 2022, 10:42:52 AM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests Facebook Messenger was reachable in United States on November 10, 2022 at 10:42:52 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
 
     it('renders a unreachable og:description', () => {
       cy.visit('/measurement/20221110T103257Z_facebookmessenger_RU_12389_n1_I1KmLISJCV1o4EoV')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests Facebook Messenger was NOT reachable in Russia on November 10, 2022, 10:32:58 AM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests Facebook Messenger was NOT reachable in Russia on November 10, 2022 at 10:32:58 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
   })
 
@@ -183,12 +183,12 @@ describe('Measurement Page Tests', () => {
     it('renders a valid og:description', () => {
       cy.visit('/measurement/20221110T105736Z_httpheaderfieldmanipulation_ES_57269_n1_8SnGox89HKlVQoDJ')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests HTTP header manipulation was not detected in Spain on November 10, 2022, 10:57:36 AM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests HTTP header manipulation was not detected in Spain on November 10, 2022 at 10:57:36 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
     it('renders an anomaly og:description', () => {
       cy.visit('/measurement/20221110T104927Z_httpheaderfieldmanipulation_IR_58224_n1_voFn4ODgxZHJCpoy')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests HTTP header manipulation was detected in Iran on November 10, 2022, 10:49:28 AM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests HTTP header manipulation was detected in Iran on November 10, 2022 at 10:49:28 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
   })
 
@@ -206,12 +206,12 @@ describe('Measurement Page Tests', () => {
     it('renders a valid og:description', () => {
       cy.visit('/measurement/20221110T105936Z_httpinvalidrequestline_TR_47331_n1_fB1HONVuo6bJAcbz')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests Network traffic manipulation was not detected in Turkey on November 10, 2022, 10:59:36 AM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests Network traffic manipulation was not detected in Turkey on November 10, 2022 at 10:59:36 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
     it('render an anomaly og:description', () => {
       cy.visit('/measurement/20221110T105942Z_httpinvalidrequestline_US_13335_n1_cwbvshRglfEgMGAF')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests Network traffic manipulation was detected in United States on November 10, 2022, 10:59:45 AM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests Network traffic manipulation was detected in United States on November 10, 2022 at 10:59:45 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
   })
 
@@ -231,7 +231,7 @@ describe('Measurement Page Tests', () => {
     it('renders a valid og:description', () => {
       cy.visit('/measurement/20221110T105028Z_ndt_DE_3209_n1_9eyIJwUdcD6u3WgC')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests Speed test result (NDT Test) in Germany on November 10, 2022, 10:50:28 AM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests Speed test result (NDT Test) in Germany on November 10, 2022 at 10:50:28 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
   })
 
@@ -249,7 +249,7 @@ describe('Measurement Page Tests', () => {
     it('renders a valid og:description', () => {
       cy.visit('/measurement/20221110T111104Z_dash_US_19969_n1_kyclVb6Fj9VuW3A9')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests 2160p (4k) quality video streaming at 539.09 Mbit/s speed in United States on November 10, 2022, 11:11:04 AM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests 2160p (4k) quality video streaming at 539.09 Mbit/s speed in United States on November 10, 2022 at 11:11:04 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
   })
 
@@ -267,7 +267,7 @@ describe('Measurement Page Tests', () => {
     it('renders a reachable og:description', () => {
       cy.visit('/measurement/20221110T112242Z_psiphon_US_7018_n1_clM85Z0Pof3RqXdp')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests Psiphon was reachable in United States on November 10, 2022, 11:22:43 AM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests Psiphon was reachable in United States on November 10, 2022 at 11:22:43 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
   })
 
@@ -285,7 +285,7 @@ describe('Measurement Page Tests', () => {
     it('renders a valid og:description', () => {
       cy.visit('/measurement/20221110T112301Z_tor_US_7018_n1_uszAjDiPyoWLMyuV')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests Tor censorship test result in United States on November 10, 2022, 11:23:02 AM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests Tor censorship test result in United States on November 10, 2022 at 11:23:02 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
   })
 

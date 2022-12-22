@@ -92,6 +92,6 @@
     "git:getReleasesAndTags": "git tag --points-at HEAD",
     "git:getCommitSHA": "git rev-parse HEAD",
     "git:getCommitSHA:short": "git rev-parse --short HEAD",
-    "git:getCommitRef": "git rev-parse --abbrev-ref HEAD"
+    "git:getCommitRef": "git symbolic-ref HEAD"
   }
 }
