@@ -19,7 +19,7 @@ const ChartHeaderContainer = styled(Flex)`
 const Legend = ({label, color}) => {
   return (
     <Flex alignItems='center' mr={2}>
-      <Box pr={2}>
+      <Box px={2}>
         <div style={{ width: '10px', height: '10px', backgroundColor: color }} />
       </Box>
       <Box>
@@ -34,7 +34,7 @@ export const SubtitleStr = ({ query }) => {
   const params = new Set()
 
   if (query.test_name) {
-    const testName = intl.formatMessage({id: getRowLabel(query.test_name, 'test_name')})
+    const testName = intl.formatMessage({id: getRowLabel(query.test_name, 'test_name'), defaultMessage: ''})
     params.add(testName)
   }
   if (query.domain) {
@@ -76,10 +76,10 @@ export const ChartHeader = ({ options = {}}) => {
             {subTitle}
           </Heading>}
           {options.legend !== false && <Flex justifyContent='center' my={2} flexWrap="wrap">
-            <Legend label='ok_count' color={colorMap['ok_count']} />
-            <Legend label='confirmed_count' color={colorMap['confirmed_count']} />
-            <Legend label='anomaly_count' color={colorMap['anomaly_count']} />
-            <Legend label='failure_count' color={colorMap['failure_count']} />
+            <Legend label={intl.formatMessage({id: 'MAT.Table.Header.ok_count'})} color={colorMap['ok_count']} />
+            <Legend label={intl.formatMessage({id: 'MAT.Table.Header.confirmed_count'})} color={colorMap['confirmed_count']} />
+            <Legend label={intl.formatMessage({id: 'MAT.Table.Header.anomaly_count'})} color={colorMap['anomaly_count']} />
+            <Legend label={intl.formatMessage({id: 'MAT.Table.Header.failure_count'})} color={colorMap['failure_count']} />
           </Flex>}
       </Flex>
     </ChartHeaderContainer>

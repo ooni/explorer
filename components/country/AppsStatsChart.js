@@ -55,7 +55,7 @@ class AppsStatChart extends React.Component {
     ), 0)
 
     return (
-      <React.Fragment>
+      <>
         <VictoryChart
           scale={{x: 'time'}}
           width={900}
@@ -103,7 +103,7 @@ class AppsStatChart extends React.Component {
             labelComponent={<Tooltip fontSize={14} />}
           />
         </VictoryChart>
-      </React.Fragment>
+      </>
     )
   }
 }

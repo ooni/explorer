@@ -78,7 +78,7 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
         formatted: false
       },
       details: (
-        <React.Fragment>
+        <>
           <Flex mb={4}>
             <Box width={1/4}>
               <AccessPointStatus
@@ -96,9 +96,9 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
           <DetailsBox
             title={<FormattedMessage id='Measurement.Details.FacebookMessenger.Endpoint.Status.Heading' />}
             content={
-              <React.Fragment>
+              <>
                 {Array.isArray(tcpConnections) && tcpConnections.length > 0 &&
-                <React.Fragment>
+                <>
                   {tcpConnections.map((connection, index) => (
                     <Flex key={index}>
                       <Box>
@@ -117,12 +117,12 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
                       </Box>
                     </Flex>
                   ))}
-                </React.Fragment>
+                </>
                 }
-              </React.Fragment>
+              </>
             }
           />
-        </React.Fragment>
+        </>
       )
     })
   )

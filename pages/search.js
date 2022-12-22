@@ -11,7 +11,7 @@ import {
   Heading,
   Text
 } from 'ooni-components'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
 
 import NavBar from '../components/NavBar'
@@ -187,6 +187,7 @@ const NoResults = () => (
 
 const Search = ({testNames, testNamesKeyed, countries, query: queryProp }) => {
   const router = useRouter()
+  const intl = useIntl()
   const { query, replace, isReady } = router
 
   const [nextURL, setNextURL] = useState(null)
@@ -288,9 +289,9 @@ const Search = ({testNames, testNamesKeyed, countries, query: queryProp }) => {
   }
 
   return (
-    <Layout>
+    <>
       <Head>
-        <title>Search through millions of Internet censorship measurements | OONI Explorer</title>
+        <title>{intl.formatMessage({id: 'Search.PageTitle'})}</title>
       </Head>
 
       <NavBar />
@@ -319,7 +320,7 @@ const Search = ({testNames, testNamesKeyed, countries, query: queryProp }) => {
             {loading && <Loader />}
 
             {!error && !loading && results.length === 0 && <NoResults />}
-            {!error && !loading && results.length > 0 && <React.Fragment>
+            {!error && !loading && results.length > 0 && <>
               <ResultsList results={results} testNamesKeyed={testNamesKeyed} />
               {nextURL &&
                 <Flex alignItems='center' justifyContent='center'>
@@ -328,11 +329,11 @@ const Search = ({testNames, testNamesKeyed, countries, query: queryProp }) => {
                   </Button>
                 </Flex>
               }
-            </React.Fragment>}
+            </>}
           </Box>
         </Flex>
       </Container>
-    </Layout>
+    </>
   )
 }
 

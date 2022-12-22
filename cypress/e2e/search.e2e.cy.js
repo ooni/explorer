@@ -68,7 +68,7 @@ describe('Search Page Tests', () => {
       expect(lastOfPreviousMonth).to.equal(selectedUntilDate)
     })
 
-    cy.get('[data-test-id="testname-filter"]').select('Telegram')
+    cy.get('[data-test-id="testname-filter"]').select('Telegram Test')
     cy.get('label').contains('Anomalies').click()
     cy.get('label').contains('All Results').click()
 
@@ -76,7 +76,7 @@ describe('Search Page Tests', () => {
 
   it('conditional filters are hidden and shown depending on selections', () => {
     cy.get('[data-test-id="domain-filter"]').should('not.exist')
-    cy.get('[data-test-id="testname-filter"]').select('Web Connectivity')
+    cy.get('[data-test-id="testname-filter"]').select('Web Connectivity Test')
     cy.get('[data-test-id="domain-filter"]').should('be.visible')
   })
 })

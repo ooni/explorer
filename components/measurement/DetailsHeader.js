@@ -35,7 +35,7 @@ const DetailsHeader = ({testName, runtime, notice, url}) => {
   const metadata = getTestMetadata(testName)
 
   return (
-    <React.Fragment>
+    <>
       <Flex pt={4} pb={2} alignItems={['flex-end', 'center']} flexDirection={['column', 'row']}>
         <Flex mb={[3, 0]} alignItems='center'>
           <Box>
@@ -69,7 +69,7 @@ const DetailsHeader = ({testName, runtime, notice, url}) => {
       <Flex pb={4} pt={2} alignItems={['flex-start', 'flex-end']}>
         <SocialButtons url={url}/>
       </Flex>
-    </React.Fragment>
+    </>
   )
 }
 

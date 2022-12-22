@@ -100,7 +100,7 @@ class TestsByCategoryInNetwork extends React.Component {
     )
 
     return (
-      <React.Fragment>
+      <>
         {/* <Heading h={4}><FormattedMessage id='Country.Websites.Heading.BlockedByCategory' /></Heading> */}
         {/* <FormattedMessage id='Country.Websites.BlockedByCategory.Description'
           defaultMessage='Websites that fall under the following categories are blocked in the {selectedASN} Network. To examine whether other types of websites are blocked as well, run OONI Probe!'
@@ -111,14 +111,14 @@ class TestsByCategoryInNetwork extends React.Component {
         {/* Category Selection */}
         <Flex justifyContent='space-between' alignItems='center' my={3}>
           {(network !== null && networks !== null) ?
-            <React.Fragment>
+            <>
               <Box>
                 <ASNSelector selectedNetwork={network} networks={networks} onNetworkChange={onNetworkChange} />
               </Box>
               <Box>
                 <strong>{testedUrlsCount}</strong> <FormattedMessage id='Country.Websites.TestedWebsitesCount' />
               </Box>
-            </React.Fragment>
+            </>
           :
           <Box my={2}></Box>
           }
@@ -157,7 +157,7 @@ class TestsByCategoryInNetwork extends React.Component {
           <Link color='blue7' href='#' onClick={(e) => {e.preventDefault(); this.nextPage()}}><FormattedMessage id='Country.Websites.URLCharts.Pagination.Next' />{' >'}</Link>
         </Flex>}
         {/* URL-wise barcharts End */}
-      </React.Fragment>
+      </>
     )
   }
 }

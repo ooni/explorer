@@ -39,7 +39,7 @@ const PageNavMenu = ({ countryCode }) => {
   const [isOpen, setOpen] = useState(true)
 
   return (
-    <React.Fragment>
+    <>
       {/* Show a trigger to open and close the nav menu, but hide it on desktops */}
       <HideInLargeScreens large xlarge>
         <ToggleIcon size={36} open={isOpen} onClick={() => setOpen(!isOpen)} />
@@ -63,7 +63,7 @@ const PageNavMenu = ({ countryCode }) => {
           <SocialButtons url={`country/${countryCode}`}/>
         </Flex>
       </Box>
-    </React.Fragment>
+    </>
   )
 }
 

@@ -6,7 +6,7 @@ import { Flex, Box, Heading, Text, Input } from 'ooni-components'
 
 import SectionHeader from './SectionHeader'
 import { SimpleBox } from './boxes'
-import PeriodFilter from './PeriodFilter'
+// import PeriodFilter from './PeriodFilter'
 import TestsByCategoryInNetwork from './WebsitesCharts'
 import FormattedMarkdown from '../FormattedMarkdown'
 
@@ -52,7 +52,7 @@ class WebsitesSection extends React.Component {
     const { onPeriodChange, countryCode } = this.props
     const { noData, selectedNetwork } = this.state
     return (
-      <React.Fragment>
+      <>
         <SectionHeader>
           <SectionHeader.Title name='websites'>
             <FormattedMessage id='Country.Heading.Websites' />
@@ -80,7 +80,7 @@ class WebsitesSection extends React.Component {
             networks={this.state.networks}
           />
         </Box>
-      </React.Fragment>
+      </>
     )
   }
 }

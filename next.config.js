@@ -15,6 +15,18 @@ const SentryWebpackPluginOptions = {
   silent: false,
 }
 
+const LANG_DIR = './public/static/lang/'
+const DEFAULT_LOCALE = 'en'
+
+function getSupportedLanguages() {
+  const supportedLanguages = new Set()
+  supportedLanguages.add(DEFAULT_LOCALE) // at least 1 supported language
+  glob.sync(`${LANG_DIR}/**/*.json`).forEach((f) =>
+    supportedLanguages.add(basename(f, '.json'))
+  )
+  return [...supportedLanguages]
+}
+
 module.exports = withSentryConfig({
   output: 'standalone',
   async redirects() {
@@ -32,6 +44,10 @@ module.exports = withSentryConfig({
       ssr: true,
     },
   },
+  i18n: {
+    locales: getSupportedLanguages(),
+    defaultLocale: DEFAULT_LOCALE,
+  },
   webpack: (config, options) => {
     const gitCommitSHAShort = process.env.RUN_GIT_COMMIT_SHA_SHORT ? execSync(process.env.RUN_GIT_COMMIT_SHA_SHORT) : ''
     const gitCommitSHA = process.env.RUN_GIT_COMMIT_SHA ? execSync(process.env.RUN_GIT_COMMIT_SHA) : ''
@@ -40,14 +56,16 @@ module.exports = withSentryConfig({
 
     config.plugins.push(
       new options.webpack.DefinePlugin({
-          'process.env.GIT_COMMIT_SHA_SHORT': JSON.stringify(
-            gitCommitSHAShort.toString()
-          ),
-          'process.env.GIT_COMMIT_SHA': JSON.stringify(gitCommitSHA.toString()),
-          'process.env.GIT_COMMIT_REF': JSON.stringify(gitCommitRef.toString()),
-          'process.env.GIT_COMMIT_TAGS': JSON.stringify(
-            gitCommitTags.toString()
-          ),
+        'process.env.GIT_COMMIT_SHA_SHORT': JSON.stringify(
+          gitCommitSHAShort.toString()
+        ),
+        'process.env.GIT_COMMIT_SHA': JSON.stringify(gitCommitSHA.toString()),
+        'process.env.GIT_COMMIT_REF': JSON.stringify(gitCommitRef.toString()),
+        'process.env.GIT_COMMIT_TAGS': JSON.stringify(
+          gitCommitTags.toString()
+        ),
+        'process.env.DEFAULT_LOCALE': DEFAULT_LOCALE,
+        'process.env.LOCALES': JSON.stringify(getSupportedLanguages()),
         'process.env.WDYR': JSON.stringify(process.env.WDYR),
       })
     )

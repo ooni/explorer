@@ -50,6 +50,7 @@ const StyledDetailsBox = styled(Box)`
 
 const StyledDetailsBoxHeader = styled(Flex)`
   cursor: pointer;
+  justify-content: space-between;
 `
 
 const StyledDetailsBoxContent = styled(Box)`
@@ -70,7 +71,7 @@ export const DetailsBox = ({ title, content, collapsed = false, children, ...res
           <Box>
             <Heading h={4}>{title}</Heading>
           </Box>
-          <Box ml='auto'>
+          <Box>
             <CollapseTrigger size={36} $open={isOpen} />
           </Box>
         </StyledDetailsBoxHeader>

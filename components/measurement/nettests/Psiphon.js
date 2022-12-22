@@ -53,7 +53,7 @@ const PsiphonDetails = ({
   }
 
   return (
-    <React.Fragment>
+    <>
       {render({
         status: status,
         statusInfo: hint,
@@ -63,7 +63,7 @@ const PsiphonDetails = ({
           formatted: false
         },
         details: (
-          <React.Fragment>
+          <>
             <Container>
               <Flex>
                 {
@@ -77,10 +77,10 @@ const PsiphonDetails = ({
                 }
               </Flex>
             </Container>
-          </React.Fragment>
+          </>
         )
       })}
-    </React.Fragment>
+    </>
   )
 }
 

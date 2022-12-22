@@ -10,10 +10,10 @@ import { DetailsBox } from '../../measurement/DetailsBox'
 import { sortRows } from './computations'
 import Filters from './Filters'
 
-const prepareDataforTable = (data, query) => {
+const prepareDataforTable = (data, query, locale) => {
   const table = []
   
-  const [reshapedData, rows, rowLabels] = prepareDataForGridChart(data, query)
+  const [reshapedData, rows, rowLabels] = prepareDataForGridChart(data, query, locale)
 
   for (const [key, rowData] of reshapedData) {
 
@@ -56,11 +56,11 @@ const TableView = ({ data, query }) => {
   // - indexes - 
   const [reshapedData, tableData, rowKeys, rowLabels] = useMemo(() => {
     try {
-      return prepareDataforTable(data, query)
+      return prepareDataforTable(data, query, intl.locale)
     } catch (e) {
       return [null, [], [], {}]
     }
-  }, [query, data])
+  }, [query, data, intl.locale])
 
   const [dataForCharts, setDataForCharts] = useState(noRowsSelected)
 

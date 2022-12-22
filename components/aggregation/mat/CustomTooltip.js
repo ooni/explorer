@@ -101,7 +101,7 @@ const CustomToolTip = React.memo(({ data, onClose, title, link = true }) => {
           <Box key={k} my={1} fontSize={16}>
             <Flex alignItems='center'>
               <Box mr={3}><Chip color={colorMap[k]} /></Box>
-              <Text mr={4}>{k}</Text>
+              <Text mr={4}>{intl.formatMessage({id: `MAT.Table.Header.${k}`})}</Text>
               <Text ml='auto'>{intl.formatNumber(Number(data[k] ?? 0))}</Text>
             </Flex>
           </Box>
@@ -109,7 +109,7 @@ const CustomToolTip = React.memo(({ data, onClose, title, link = true }) => {
       </Flex>
       {link &&
         <NLink passHref href={linkToMeasurements}>
-          <Link target='_blank' my={2} ml='auto' pr={3}>view measurements &gt;</Link>
+          <Link target='_blank' my={2} ml='auto' pr={3}>{intl.formatMessage({id: 'MAT.CustomTooltip.ViewMeasurements'})} &gt;</Link>
         </NLink>
       }
     </Flex>

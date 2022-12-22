@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from 'react'
-import { territoryNames } from 'country-util'
 import { useForm, Controller } from 'react-hook-form'
 import { Box, Flex, Input } from 'ooni-components'
 import { MultiSelect } from 'react-multi-select-component'
 import { useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
 import { format } from 'date-fns'
+import { getLocalisedRegionName } from '../../utils/i18nCountries'
 
 import { StyledLabel } from '../aggregation/mat/Form'
 import DateRangePicker from '../DateRangePicker'
@@ -23,12 +23,12 @@ export const Form = ({ onChange, query, availableCountries }) => {
   const intl = useIntl()
 
   const countryOptions = useMemo(() => availableCountries
-    .sort((a,b) => (territoryNames[a] < territoryNames[b]) ? -1 : (territoryNames[a] > territoryNames[b]) ? 1 : 0)
     .map(cc => ({
-      label: territoryNames[cc],
+      label: getLocalisedRegionName(cc, intl.locale),
       value: cc
     }))
-  , [availableCountries])
+    .sort((a, b) => (new Intl.Collator(intl.locale).compare(a.label, b.label)))
+  , [availableCountries, intl])
 
   const query2formValues = (query) => {
     const countriesInQuery = query.probe_cc?.split(',') ?? defaultDefaultValues.probe_cc

@@ -1,4 +1,5 @@
 import React, { useMemo } from 'react'
+import { useIntl } from 'react-intl'
 import { useRouter } from 'next/router'
 import { Heading, Box, Flex } from 'ooni-components'
 import useSWR from 'swr'
@@ -13,6 +14,7 @@ const swrOptions = {
 }
 
 const Chart = React.memo(function Chart({testName, testGroup = null, title, queryParams = {}}) {
+  const intl = useIntl()
   const router = useRouter()
   const { query: {since, until, asn} } = router
 
@@ -50,9 +52,9 @@ const Chart = React.memo(function Chart({testName, testGroup = null, title, quer
     }
     let chartData = testGroup ? data : data.data
     const graphQuery = testGroup ? {...query, axis_y: name} : query
-    const [reshapedData, rowKeys, rowLabels] = prepareDataForGridChart(chartData, graphQuery)
+    const [reshapedData, rowKeys, rowLabels] = prepareDataForGridChart(chartData, graphQuery, intl.locale)
     return [reshapedData, rowKeys, rowLabels]
-  }, [data, query, name, testGroup])
+  }, [data, query, name, testGroup, intl])
 
   const headerOptions = { probe_cc: false, subtitle: false }
 
@@ -62,10 +64,10 @@ const Chart = React.memo(function Chart({testName, testGroup = null, title, quer
         <Box><Heading h={3} mt={40} mb={20}>{title}</Heading></Box>
         <Box>
           {(!chartData && !error) ? (
-            <div> Loading ...</div>
+            <div>{intl.formatMessage({id: 'General.Loading'})}</div>
           ) : (
             chartData === null || chartData.length === 0 ? (
-              <Heading h={5}>No Data</Heading>
+              <Heading h={5}>{intl.formatMessage({id: 'General.NoData'})}</Heading>
             ) : (
               <GridChart
                 data={chartData}
@@ -80,7 +82,7 @@ const Chart = React.memo(function Chart({testName, testGroup = null, title, quer
         {error &&
           <DetailsBox collapsed={false} content={<>
             <details>
-              <summary><span>Error: {error.message}</span></summary>
+              <summary><span>{intl.formatMessage({id: 'General.Error'})}: {error.message}</span></summary>
               <Box as='pre'>
                 {JSON.stringify(error, null, 2)}
               </Box>

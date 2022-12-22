@@ -25,13 +25,14 @@ export const LoaderRow = (props) => {
 
 
 export const Loader = ({ rows = 10 }) => (
-  <React.Fragment>
-  {Array(rows)
-  .fill('')
-  .map((e, i) => (
-    <LoaderRow key={i} style={{ opacity: Number(2 / i).toFixed(1) }} />
-  ))}
-  </React.Fragment>
+  <>
+    {Array(rows)
+      .fill('')
+      .map((e, i) => (
+        <LoaderRow key={i} style={{ opacity: Number(2 / i).toFixed(1) }} />
+      ))
+    }
+  </>
 )
 
 Loader.propTypes = {

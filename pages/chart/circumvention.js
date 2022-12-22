@@ -4,7 +4,6 @@ import { Container, Heading, Box } from 'ooni-components'
 import { FormattedMessage } from 'react-intl'
 import axios from 'axios'
 
-import Layout from 'components/Layout'
 import NavBar from 'components/NavBar'
 import { MetaTags } from 'components/dashboard/MetaTags'
 import { Form } from 'components/dashboard/Form'
@@ -41,20 +40,20 @@ const DashboardCircumvention = ({ availableCountries }) => {
   }, [router, query])
 
   return (
-    <Layout>
+    <>
       <MetaTags />
       <NavBar />
       <Container>
         <Heading h={1}><FormattedMessage id='ReachabilityDash.Heading.CircumventionTools' /></Heading>
-        {router.isReady && <React.Fragment>
+        {router.isReady && <>
           <Box my={2} bg='gray0' p={3}>
             <FormattedMarkdown id='ReachabilityDash.CircumventionTools.Description' />
           </Box>
           <Form onChange={onChange} query={query} availableCountries={availableCountries} />
           <Charts />
-        </React.Fragment>}
+        </>}
       </Container>
-    </Layout>
+    </>
   )
 }
 

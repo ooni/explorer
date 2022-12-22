@@ -85,7 +85,7 @@ const SearchFilter = ({
       onChange={e => {
         setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
       }}
-      placeholder={`Search ${count} records...`}
+      placeholder={intl.formatMessage({id: 'MAT.Table.FilterPlaceholder'}, {count})}
     />
   )
 }
@@ -104,6 +104,7 @@ function GlobalFilter({
   globalFilter,
   setGlobalFilter,
 }) {
+  const intl = useIntl()
   const count = preGlobalFilteredRows.length
   const [value, setValue] = React.useState(globalFilter)
   const onChange = useAsyncDebounce(value => {
@@ -118,14 +119,14 @@ function GlobalFilter({
 
   return (
     <StyledGlobalFilter>
-      Search:{' '}
+      {intl.formatMessage({id: 'MAT.Table.Search'})}{' '}
       <input
         value={value || ''}
         onChange={e => {
           setValue(e.target.value)
           onChange(e.target.value)
         }}
-        placeholder={`Search ${count} records...`}
+        placeholder={intl.formatMessage({id: 'MAT.Table.FilterPlaceholder'}, {count})}
       />
     </StyledGlobalFilter>
   )
@@ -170,7 +171,7 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
     sortBy: [{ id: 'yAxisLabel', desc: false }]
   }),[])
 
-  const getRowId = React.useCallback(row => row[query.axis_y], [])
+  const getRowId = React.useCallback(row => row[query.axis_y], [query.axis_y])
 
   const columns = useMemo(() => [
     {
@@ -287,14 +288,14 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
   )
   
   const updateCharts = useCallback(() => {
-    const selectedRows = Object.keys(state.selectedRowIds).sort((a,b) => sortRows(a, b, query.axis_y))
+    const selectedRows = Object.keys(state.selectedRowIds).sort((a,b) => sortRows(a, b, query.axis_y, intl.locale))
 
     if (selectedRows.length > 0 && selectedRows.length !== preGlobalFilteredRows.length) {
       setDataForCharts(selectedRows)
     } else {
       setDataForCharts(noRowsSelected)
     }
-  }, [preGlobalFilteredRows.length, query.axis_y, state.selectedRowIds, setDataForCharts])
+  }, [preGlobalFilteredRows.length, query.axis_y, state.selectedRowIds, setDataForCharts, intl.locale])
 
   /**
    * Reset the table filter
@@ -331,11 +332,11 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
   })
 
   return (
-    <DetailsBox title={'Filters'} collapsed={false}>
+    <DetailsBox title={intl.formatMessage({id: 'MAT.Table.Filters'})} collapsed={false}>
       <Flex flexDirection='column'>
         <Flex mb={3} alignItems='center'>
-          <Button hollow onClick={updateCharts}>Apply</Button>
-          <Button inverted onClick={resetFilter} mx={3}>Reset</Button>
+          <Button hollow onClick={updateCharts}>{intl.formatMessage({id: 'General.Apply'})}</Button>
+          <Button inverted onClick={resetFilter} mx={3}>{intl.formatMessage({id: 'General.Reset'})}</Button>
         </Flex>
         <TableContainer>
           <Table {...getTableProps()}>

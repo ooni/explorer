@@ -4,7 +4,7 @@ import url from 'url'
 import dayjs from 'services/dayjs'
 import NLink from 'next/link'
 import styled from 'styled-components'
-import { useIntl } from 'react-intl'
+import { useIntl, defineMessages } from 'react-intl'
 import {
   Flex, Box,
   Link,
@@ -55,6 +55,161 @@ const imTests = [
   'whatsapp',
   'facebook_messenger'
 ]
+
+const messages = defineMessages({
+  'Search.WebConnectivity.Results.Reachable': {
+    id: 'General.Accessible',
+    defaultMessage: ''
+  },
+  'Search.WebConnectivity.Results.Anomaly': {
+    id: 'General.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.WebConnectivity.Results.Blocked': {
+    id: 'Search.WebConnectivity.Results.Blocked',
+    defaultMessage: ''
+  },
+  'Search.WebConnectivity.Results.Error': {
+    id: 'General.Error',
+    defaultMessage: ''
+  },
+  'Search.WhatsApp.Results.Reachable': {
+    id: 'General.Accessible',
+    defaultMessage: ''
+  },
+  'Search.WhatsApp.Results.Anomaly': {
+    id: 'General.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.WhatsApp.Results.Error': {
+    id: 'General.Error',
+    defaultMessage: ''
+  },
+  'Search.FacebookMessenger.Results.Reachable': {
+    id: 'General.Accessible',
+    defaultMessage: ''
+  },
+  'Search.FacebookMessenger.Results.Anomaly': {
+    id: 'General.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.FacebookMessenger.Results.Error': {
+    id: 'General.Error',
+    defaultMessage: ''
+  },
+  'Search.Telegram.Results.Reachable': {
+    id: 'General.Accessible',
+    defaultMessage: ''
+  },
+  'Search.Telegram.Results.Anomaly': {
+    id: 'General.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.Telegram.Results.Error': {
+    id: 'General.Error',
+    defaultMessage: ''
+  },
+  'Search.Signal.Results.Reachable': {
+    id: 'General.Accessible',
+    defaultMessage: ''
+  },
+  'Search.Signal.Results.Anomaly': {
+    id: 'General.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.Signal.Results.Error': {
+    id: 'General.Error',
+    defaultMessage: ''
+  },
+  'Search.HTTPInvalidRequestLine.Results.Anomaly': {
+    id: 'General.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.HTTPInvalidRequestLine.Results.Reachable': {
+    id: 'General.OK',
+    defaultMessage: ''
+  },
+  'Search.HTTPInvalidRequestLine.Results.Error': {
+    id: 'General.Error',
+    defaultMessage: ''
+  },
+  'Search.HTTPHeaderFieldManipulation.Results.Anomaly': {
+    id: 'General.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.HTTPHeaderFieldManipulation.Results.Reachable': {
+    id: 'General.OK',
+    defaultMessage: ''
+  },
+  'Search.HTTPHeaderFieldManipulation.Results.Error': {
+    id: 'General.Error',
+    defaultMessage: ''
+  },
+  'Search.HTTPRequests.Results.Reachable': {
+    id: 'Search.HTTPRequests.Results.Reachable',
+    defaultMessage: ''
+  },
+  'Search.HTTPRequests.Results.Error': {
+    id: 'Search.HTTPRequests.Results.Error',
+    defaultMessage: ''
+  },
+  'Search.HTTPRequests.Results.Blocked': {
+    id: 'Search.HTTPRequests.Results.Blocked',
+    defaultMessage: ''
+  },
+  'Search.HTTPRequests.Results.Anomaly': {
+    id: 'Search.HTTPRequests.Results.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.Tor.Results.Reachable': {
+    id: 'General.OK',
+    defaultMessage: ''
+  },
+  'Search.Tor.Results.Anomaly': {
+    id: 'General.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.Tor.Results.Error': {
+    id: 'General.Error',
+    defaultMessage: ''
+  },
+  'Search.TorSnowflake.Results.Reachable': {
+    id: 'General.OK',
+    defaultMessage: 'Reachable'
+  },
+  'Search.TorSnowflake.Results.Anomaly': {
+    id: 'General.Anomaly',
+    defaultMessage: 'Anomaly'
+  },
+  'Search.TorSnowflake.Results.Error': {
+    id: 'General.Error',
+    defaultMessage: 'Anomaly'
+  },
+  'Search.Psiphon.Results.Reachable': {
+    id: 'General.OK',
+    defaultMessage: ''
+  },
+  'Search.Psiphon.Results.Anomaly': {
+    id: 'General.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.Psiphon.Results.Error': {
+    id: 'General.Error',
+    defaultMessage: ''
+  },
+  'Search.RiseupVPN.Results.Reachable': {
+    id: 'General.Accessible',
+    defaultMessage: ''
+  },
+  'Search.RiseupVPN.Results.Anomaly': {
+    id: 'General.Anomaly',
+    defaultMessage: ''
+  },
+  'Search.RiseupVPN.Results.Error': {
+    id: 'General.Error',
+    defaultMessage: ''
+  },
+})
 
 const ASNBox = ({asn}) => {
   const justNumber = asn.split('AS')[1]
@@ -133,14 +288,14 @@ const getIndicators = ({ test_name, testDisplayName, scores = {}, confirmed, ano
       color = colorError
       tag = (
         <ResultTagHollow>
-          {intl.formatMessage({id:`${computedMessageIdPrefix}.Error`, defaultMessage: ''})}
+          {intl.formatMessage(messages[`${computedMessageIdPrefix}.Error`])}
         </ResultTagHollow>
       )
     } else if (confirmed === true) {
       color = colorConfirmed
       tag = (
         <ResultTagFilled>
-          {intl.formatMessage({id: `${computedMessageIdPrefix}.Blocked`, defaultMessage: ''})}
+          {intl.formatMessage(messages[`${computedMessageIdPrefix}.Blocked`])}
         </ResultTagFilled>
       )
     } else if (blockingType !== undefined) {
@@ -154,14 +309,14 @@ const getIndicators = ({ test_name, testDisplayName, scores = {}, confirmed, ano
       color = colorAnomaly
       tag = (
         <ResultTagHollow>
-          {intl.formatMessage({id:`${computedMessageIdPrefix}.Anomaly`, defaultMessage: ''})}
+          {intl.formatMessage(messages[`${computedMessageIdPrefix}.Anomaly`])}
         </ResultTagHollow>
       )
     } else {
       color = colorNormal
       tag = (
         <StyledResultTag>
-          {intl.formatMessage({id: `${computedMessageIdPrefix}.Reachable`, defaultMessage: ''})}
+          {intl.formatMessage(messages[`${computedMessageIdPrefix}.Reachable`])}
         </StyledResultTag>
       )
     }

@@ -1,9 +1,13 @@
 import { ResponsiveBar } from '@nivo/bar'
 import { Box, Flex } from 'ooni-components'
+import styled from 'styled-components'
 import { useMATContext } from './MATContext'
 
 import { getXAxisTicks } from './timeScaleXAxis'
 
+const StyledFlex = styled(Flex)`
+  direction: ltr;
+`
 
 export const XAxis = ({ data }) => {
   const [ query ] = useMATContext()
@@ -18,7 +22,7 @@ export const XAxis = ({ data }) => {
   }
 
   return (
-    <Flex>
+    <StyledFlex>
       <Box width={2/16}>
       </Box>
       <Box className='xAxis' sx={{ width: '100%', height: '62px' }}>
@@ -39,6 +43,6 @@ export const XAxis = ({ data }) => {
           animate={false}
         />
       </Box>
-    </Flex>
+    </StyledFlex>
   )
 }

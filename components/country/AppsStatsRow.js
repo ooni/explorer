@@ -126,7 +126,7 @@ class AppsStatRow extends React.Component {
     }
 
     return (
-      <React.Fragment>
+      <>
         <Flex flexWrap='wrap'>
           {content}
         </Flex>
@@ -137,7 +137,7 @@ class AppsStatRow extends React.Component {
             </Link>
           </Flex>
         }
-      </React.Fragment>
+      </>
     )
   }
 

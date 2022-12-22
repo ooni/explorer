@@ -56,7 +56,7 @@ const NameCell = ({ children }) => {
   const clipboard = useClipboard({ copiedTimeout: 1500 })
 
   return (
-    <React.Fragment>
+    <>
       <StyledNameCell
         title={`${children} (Click to copy)`}
         onClick={() => clipboard.copy(children)}
@@ -67,7 +67,7 @@ const NameCell = ({ children }) => {
         </ClipboardIcon>
       </StyledNameCell>
 
-    </React.Fragment>
+    </>
   )
 }
 
@@ -138,9 +138,9 @@ const ConnectionStatusCell = ({ cell: { value} }) => {
     statusIcon = value === null ? <Tick color={theme.colors.green7} /> : <Cross color={theme.colors.red7} />
   }
   return (
-    <React.Fragment>
+    <>
       {statusIcon} {value}
-    </React.Fragment>
+    </>
   )
 }
 
@@ -196,7 +196,7 @@ const TorDetails = ({
       accessor: 'type'
     },
     {
-      Header: <FormattedMessage id='Measurement.Details.Tor.Table.Header.Accessible' />,
+      Header: <FormattedMessage id='General.Accessible' />,
       accessor: 'failure',
       collapse: true,
       Cell: ConnectionStatusCell
@@ -222,7 +222,7 @@ const TorDetails = ({
   })
 
   return (
-    <React.Fragment>
+    <>
       {render({
         status: status,
         statusInfo: hint,
@@ -232,7 +232,7 @@ const TorDetails = ({
           formatted: false
         },
         details: (
-          <React.Fragment>
+          <>
             <Flex my={4}>
               <AccessPointStatus
                 width={1/2}
@@ -273,10 +273,10 @@ const TorDetails = ({
                 data={data}
               />
             </TableStyles>
-          </React.Fragment>
+          </>
         )
       })}
-    </React.Fragment>
+    </>
   )
 }
 

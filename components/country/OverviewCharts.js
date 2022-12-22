@@ -252,7 +252,7 @@ class TestsByGroup extends React.Component {
     }
 
     return (
-      <React.Fragment>
+      <>
         {notEnoughData && <CallToActionBox />}
         <Flex my={4} flexWrap='wrap' justifyContent='space-between'>
           {
@@ -272,7 +272,7 @@ class TestsByGroup extends React.Component {
             {notEnoughData ? renderEmptyChart() : renderCharts()}
           </Box>
         </Flex>
-      </React.Fragment>
+      </>
     )
   }
 }

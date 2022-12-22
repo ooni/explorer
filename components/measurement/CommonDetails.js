@@ -17,7 +17,7 @@ import { useRouter } from 'next/router'
 import { DetailsBoxTable, DetailsBox } from './DetailsBox'
 
 const LoadingRawData = (props) => {
-  return (<Box fontSize={1}>Loading</Box>)
+  return (<Box fontSize={1}><FormattedMessage id='General.Loading' /></Box>)
 }
 
 const ReactJson = dynamic(
@@ -126,7 +126,7 @@ const CommonDetails = ({
   }
 
   return (
-    <React.Fragment>
+    <>
       {showResolverItems && 
         <Flex my={4}>
           {/* Resolver data */}
@@ -178,7 +178,7 @@ const CommonDetails = ({
           }
           content={
             measurement && typeof measurement === 'object' ? (
-              <Flex bg='WHITE' p={3}>
+              <Flex bg='WHITE' p={3} style={{direction: 'ltr'}}>
                 <JsonViewer src={measurement} collapsed={collapsed} />
               </Flex>
             ) : (
@@ -187,7 +187,7 @@ const CommonDetails = ({
           }
         />
       </Flex>
-    </React.Fragment>
+    </>
   )
 }
 

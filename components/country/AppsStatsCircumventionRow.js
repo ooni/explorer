@@ -108,7 +108,7 @@ class AppsStatsCircumventionRow extends React.Component {
     }
 
     return (
-      <React.Fragment>
+      <>
         <Flex flexWrap='wrap'>
           {content}
         </Flex>
@@ -122,7 +122,7 @@ class AppsStatsCircumventionRow extends React.Component {
             </Link>
           </Flex>
         }
-      </React.Fragment>
+      </>
     )
   }
 
@@ -148,7 +148,7 @@ class AppsStatsCircumventionRow extends React.Component {
             {data.networks.length > 0 && `${data.networks.length} Networks Tested`}
           </Box>
           {totalNetworks > 0 &&
-            <React.Fragment>
+            <>
               <Box ml='auto'>
                 <FormattedMessage id='Country.Apps.Label.LastTested' />
                 {' '}
@@ -162,7 +162,7 @@ class AppsStatsCircumventionRow extends React.Component {
                   onClick={this.toggleMinimize}
                 />
               </Box>
-            </React.Fragment>
+            </>
           }
         </Flex>
         {!minimized && this.renderCharts()}

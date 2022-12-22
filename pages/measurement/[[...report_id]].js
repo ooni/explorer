@@ -2,9 +2,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
-import countryUtil from 'country-util'
 import axios from 'axios'
 import { Container, theme } from 'ooni-components'
+import { getLocalisedRegionName } from '../../utils/i18nCountries'
 
 import Hero from '../../components/measurement/Hero'
 import CommonSummary from '../../components/measurement/CommonSummary'
@@ -15,9 +15,9 @@ import MeasurementContainer from '../../components/measurement/MeasurementContai
 import MeasurementNotFound from '../../components/measurement/MeasurementNotFound'
 import HeadMetadata from '../../components/measurement/HeadMetadata'
 
-import Layout from '../../components/Layout'
 import NavBar from '../../components/NavBar'
 import ErrorPage from '../_error'
+import { useIntl } from 'react-intl'
 
 const pageColors = {
   default: theme.colors.base,
@@ -83,12 +83,6 @@ export async function getServerSideProps({ query }) {
       initialProps['raw_measurement'] ? 
         initialProps['raw_measurement'] = JSON.parse(initialProps['raw_measurement']) : 
         initialProps.notFound = true
-
-      const { probe_cc } = response.data
-      const countryObj = countryUtil.countryList.find(country => (
-        country.iso3166_alpha2 === probe_cc
-      ))
-      initialProps['country'] = countryObj?.name || 'Unknown'
     } else {
       // Measurement not found
       initialProps.notFound = true
@@ -103,7 +97,6 @@ export async function getServerSideProps({ query }) {
 
 const Measurement = ({
   error,
-  country,
   confirmed,
   anomaly,
   failure,
@@ -118,7 +111,8 @@ const Measurement = ({
   scores,
   ...rest
 }) => {
-
+  const intl = useIntl()
+  const country = getLocalisedRegionName(probe_cc, intl.locale)
   // Add the 'AS' prefix to probe_asn when API chooses to send just the number
   probe_asn = typeof probe_asn === 'number' ? `AS${probe_asn}` : probe_asn
   if (error) {
@@ -128,9 +122,9 @@ const Measurement = ({
   }
 
   return (
-    <Layout>
+    <>
       <Head>
-        <title>OONI Explorer</title>
+        <title>{intl.formatMessage({id: 'General.OoniExplorer'})}</title>
       </Head>
       {notFound ? (
         <MeasurementNotFound />
@@ -161,7 +155,7 @@ const Measurement = ({
             const color = failure === true ? pageColors['error'] : pageColors[status]
             const info = scores?.msg ?? statusInfo
             return (
-              <React.Fragment>
+              <>
                 {headMetadata &&
                   <HeadMetadata
                     content={headMetadata}
@@ -210,18 +204,17 @@ const Measurement = ({
                     reportId={report_id}
                   />
                 </Container>
-              </React.Fragment>
+              </>
             )
           }} />
       )}
-    </Layout>
+    </>
   )
 }
 
 Measurement.propTypes = {
   anomaly: PropTypes.bool,
   confirmed: PropTypes.bool,
-  country: PropTypes.string,
   error: PropTypes.string,
   failure: PropTypes.bool,
   input: PropTypes.any,

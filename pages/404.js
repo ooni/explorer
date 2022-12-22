@@ -9,18 +9,18 @@ import {
   Text,
   Heading
 } from 'ooni-components'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
-import Layout from '../components/Layout'
 import NavBar from '../components/NavBar'
 import OONI404 from '../public/static/images/OONI_404.svg'
 
 const Custom404 = () => {
   const router = useRouter()
+  const intl = useIntl()
   return (
-    <Layout>
+    <>
       <Head>
-        <title> Page Not Found </title>
+        <title>{intl.formatMessage({id: 'Error.404.PageNotFound'})}</title>
       </Head>
       <NavBar />
       <Container>
@@ -58,7 +58,7 @@ const Custom404 = () => {
           </Box>
         </Flex>
       </Container>
-    </Layout>
+    </>
   )
 }
 

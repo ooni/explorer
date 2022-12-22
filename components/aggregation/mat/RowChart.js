@@ -10,21 +10,7 @@ import { colorMap } from './colorMap'
 import { useMATContext } from './MATContext'
 import { getXAxisTicks } from './timeScaleXAxis'
 import { defineMessages, useIntl } from 'react-intl'
-
-const messages = defineMessages({
-  'x_axis.measurement_start_day': {
-    id: 'MAT.Form.Label.AxisOption.measurement_start_day',
-    defaultMessage: ''
-  },
-  'x_axis.category_code': {
-    id: 'MAT.Form.Label.AxisOption.category_code',
-    defaultMessage: ''
-  },
-  'x_axis.probe_cc': {
-    id: 'MAT.Form.Label.AxisOption.probe_cc',
-    defaultMessage: ''
-  }
-})
+import styled from 'styled-components'
 
 const keys = [
   'anomaly_count',
@@ -32,6 +18,10 @@ const keys = [
   'failure_count',
   'ok_count',
 ]
+
+const StyledFlex = styled(Flex)`
+  direction: ltr;
+`
 
 const colorFunc = (d) => colorMap[d.id] || '#ccc'
 
@@ -153,12 +143,12 @@ const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last
   const chartProps = useMemo(() => {
     const xAxisTicks = getXAxisTicks(query)
     chartProps1D.axisBottom.tickValues = xAxisTicks
-    chartProps1D.axisBottom.legend = query.axis_x ? intl.formatMessage(messages[`x_axis.${query.axis_x}`]) : ''
+    chartProps1D.axisBottom.legend = query.axis_x ? intl.formatMessage({id: `MAT.Form.Label.AxisOption.${query.axis_x}`, defaultMessage: ''}) : ''
       return label === undefined ? chartProps1D : chartProps2D
   }, [intl, label, query])
 
   return (
-    <Flex alignItems='center' sx={{ position: 'relative' }}>
+    <StyledFlex alignItems='center' sx={{ position: 'relative' }}>
       {label && <Box width={2/16}>
         {label}
       </Box>}
@@ -178,7 +168,7 @@ const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last
           {...chartProps}
         />
       </Box>
-    </Flex>
+    </StyledFlex>
   )
 }
 

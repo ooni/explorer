@@ -45,7 +45,7 @@ const VanillaTorDetails = ({ measurement, render }) => {
         formatted: false
       },
       details: (
-        <React.Fragment>
+        <>
           <Container>
             <Flex>
               <AccessPointStatus
@@ -63,7 +63,7 @@ const VanillaTorDetails = ({ measurement, render }) => {
               /> */}
             </Flex>
           </Container>
-        </React.Fragment>
+        </>
       )}
     )
   )

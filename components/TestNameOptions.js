@@ -9,6 +9,7 @@ export const TestNameOptions = ({ testNames, includeAllOption = true}) => {
       const option = {
         id: test.id,
         name: test.name,
+        intlKey: testNamesIntl[test.id]?.id,
         group
       }
       if (group in grouped) {
@@ -32,9 +33,9 @@ export const TestNameOptions = ({ testNames, includeAllOption = true}) => {
     includeAllOption && <option key='XX' value='XX'>{intl.formatMessage({id: 'Search.Sidebar.TestName.AllTests'})}</option>,
     [...sortedGroupedTestNameOptions].map(([group, tests]) => {
       const groupName = group in testGroups ? intl.formatMessage({id: testGroups[group].id}) : group
-      const testOptions = tests.map(({id, name}) => (
-        <option key={id} value={id}>{name}</option>
-      ))
+      const testOptions = tests.map(({id, name, intlKey}) => {
+        return <option key={id} value={id}>{intlKey ? intl.formatMessage({id: intlKey}) : name}</option>
+    })
       return [<optgroup key={group} label={groupName} />, ...testOptions]
     })
   ])

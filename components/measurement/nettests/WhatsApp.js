@@ -72,7 +72,7 @@ const WhatsAppDetails = ({ isAnomaly, scores, measurement, render }) => {
       formatted: false
     },
     details: (
-      <React.Fragment>
+      <>
         <Box mb={4} width={1/2}>
           <Flex>
             <Box width={1/3}>
@@ -99,11 +99,11 @@ const WhatsAppDetails = ({ isAnomaly, scores, measurement, render }) => {
           </Flex>
         </Box>
         {Array.isArray(tcp_connect) && tcp_connect.length > 0 &&
-          <React.Fragment>
+          <>
             <DetailsBox
               title={<FormattedMessage id='Measurement.Details.WhatsApp.Endpoint.Status.Heading' />}
               content={
-                <React.Fragment>
+                <>
                   {tcp_connect.map((connection, index) => (
                     <Flex key={index}>
                       <Box>
@@ -122,12 +122,12 @@ const WhatsAppDetails = ({ isAnomaly, scores, measurement, render }) => {
                       </Box>
                     </Flex>
                   ))}
-                </React.Fragment>
+                </>
               }
             />
-          </React.Fragment>
+          </>
         }
-      </React.Fragment>
+      </>
     )
   })
 }

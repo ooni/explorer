@@ -81,7 +81,7 @@ const CoverageChart = () => {
     const VictoryCursorVoronoiContainer = createContainer('cursor', 'voronoi')
 
     return (
-      <React.Fragment>
+      <>
         <Flex justifyContent='center'>
           <Text fontSize={18}>
             <FormattedMarkdown id={'Home.MonthlyStats.SummaryText'}
@@ -225,7 +225,7 @@ const CoverageChart = () => {
             }}
           />
         </VictoryChart>
-      </React.Fragment>
+      </>
     )
   } else {
     return (<ChartLoader />)
