@@ -293,13 +293,13 @@ describe('Measurement Page Tests', () => {
     it('URL with invalid report_id says measurement was not found', () => {
       const reportIdNotInDB = 'this-measurement-does-not-exist'
       cy.visit(`/measurement/${reportIdNotInDB}`)
-      cy.get('h4').contains('Measurement Not Found')
+      cy.get('h4').contains('Measurement not found')
         .siblings('div').contains(reportIdNotInDB)
     })
 
     it('Missing report_id in URL says the page cannot be found', () => {
       cy.visit('/measurement/', {failOnStatusCode: false}) // bypasss 4xx errors
-      cy.get('h4').contains('Measurement Not Found')
+      cy.get('h4').contains('Measurement not found')
     })
   })
 
