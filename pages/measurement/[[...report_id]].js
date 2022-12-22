@@ -122,7 +122,7 @@ const Measurement = ({
   }
 
   return (
-    <React.Fragment>
+    <>
       <Head>
         <title>{intl.formatMessage({id: 'General.OoniExplorer'})}</title>
       </Head>
@@ -155,7 +155,7 @@ const Measurement = ({
             const color = failure === true ? pageColors['error'] : pageColors[status]
             const info = scores?.msg ?? statusInfo
             return (
-              <React.Fragment>
+              <>
                 {headMetadata &&
                   <HeadMetadata
                     content={headMetadata}
@@ -204,11 +204,11 @@ const Measurement = ({
                     reportId={report_id}
                   />
                 </Container>
-              </React.Fragment>
+              </>
             )
           }} />
       )}
-    </React.Fragment>
+    </>
   )
 }
 

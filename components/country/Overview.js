@@ -112,7 +112,7 @@ const Overview = ({
   const intl = useIntl()
   const { countryCode } = useCountry()
   return (
-    <React.Fragment>
+    <>
       <SectionHeader>
         <SectionHeader.Title name='overview'>
           <FormattedMessage id='Country.Heading.Overview' />
@@ -178,7 +178,7 @@ const Overview = ({
         }
       </BoxWithTitle>
       {/* Highlight Box */}
-    </React.Fragment>
+    </>
   )
 }
 export default Overview

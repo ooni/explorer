@@ -106,7 +106,7 @@ const Country = ({ countryCode, overviewStats, reports, ...coverageDataSSR }) =>
   const { testCoverage, networkCoverage } = newData !== false ? newData : coverageDataSSR
 
   return (
-    <React.Fragment>
+    <>
       <CountryHead countryName={countryName} measurementCount={overviewStats.measurement_count} measuredSince={overviewStats.first_bucket_date} networkCount={overviewStats.network_count} />
       <StickyContainer>
         <Sticky>
@@ -160,7 +160,7 @@ const Country = ({ countryCode, overviewStats, reports, ...coverageDataSSR }) =>
           </Flex>
         </Container>
       </StickyContainer>
-    </React.Fragment>
+    </>
   )
 }
 

@@ -71,7 +71,7 @@ const TelegramDetails = ({ measurement, render }) => {
         formatted: false
       },
       details: (
-        <React.Fragment>
+        <>
           <Flex mb={4}>
             <Box width={1/4}>
               <AccessPointStatus
@@ -113,7 +113,7 @@ const TelegramDetails = ({ measurement, render }) => {
               ))}
             </DetailsBox>
           }
-        </React.Fragment>
+        </>
       )
     })
   )

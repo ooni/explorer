@@ -40,20 +40,20 @@ const DashboardCircumvention = ({ availableCountries }) => {
   }, [router, query])
 
   return (
-    <React.Fragment>
+    <>
       <MetaTags />
       <NavBar />
       <Container>
         <Heading h={1}><FormattedMessage id='ReachabilityDash.Heading.CircumventionTools' /></Heading>
-        {router.isReady && <React.Fragment>
+        {router.isReady && <>
           <Box my={2} bg='gray0' p={3}>
             <FormattedMarkdown id='ReachabilityDash.CircumventionTools.Description' />
           </Box>
           <Form onChange={onChange} query={query} availableCountries={availableCountries} />
           <Charts />
-        </React.Fragment>}
+        </>}
       </Container>
-    </React.Fragment>
+    </>
   )
 }
 

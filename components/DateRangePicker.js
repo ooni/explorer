@@ -78,9 +78,8 @@ const getDateFnsLocale = locale => {
 
 const DateRangePicker = ({handleRangeSelect, initialRange, close, ...props}) => {
   const intl = useIntl()
-  // const locale = require(`date-fns/locale/${intl.locale}`)
-
   const ranges = ['Today', 'LastWeek', 'LastMonth', 'LastYear']
+  
   const selectRange = (range) => {
     switch (range) {
       case 'Today':

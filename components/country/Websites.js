@@ -52,7 +52,7 @@ class WebsitesSection extends React.Component {
     const { onPeriodChange, countryCode } = this.props
     const { noData, selectedNetwork } = this.state
     return (
-      <React.Fragment>
+      <>
         <SectionHeader>
           <SectionHeader.Title name='websites'>
             <FormattedMessage id='Country.Heading.Websites' />
@@ -80,7 +80,7 @@ class WebsitesSection extends React.Component {
             networks={this.state.networks}
           />
         </Box>
-      </React.Fragment>
+      </>
     )
   }
 }

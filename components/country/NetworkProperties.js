@@ -104,7 +104,7 @@ class NetworkPropertiesSection extends React.Component {
       )
     }
     return (
-      <React.Fragment>
+      <>
         {content}
         {(visibleNetworks < totalNetworks) &&
           <Flex justifyContent='center'>
@@ -116,13 +116,13 @@ class NetworkPropertiesSection extends React.Component {
             </Link>
           </Flex>
         }
-      </React.Fragment>
+      </>
     )
   }
 
   render() {
     return (
-      <React.Fragment>
+      <>
         <SectionHeader>
           <SectionHeader.Title name='network-properties' >
             <FormattedMessage id='Country.Heading.NetworkProperties' />
@@ -154,7 +154,7 @@ class NetworkPropertiesSection extends React.Component {
         {this.renderStats()}
 
 
-      </React.Fragment>
+      </>
     )
   }
 }

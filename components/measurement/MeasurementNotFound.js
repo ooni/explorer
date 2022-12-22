@@ -12,7 +12,7 @@ const MeasurementNotFound = () => {
   const intl = useIntl()
   
   return (
-    <React.Fragment>
+    <>
       <NavBar />
       <Container>
         <Flex justifyContent='space-around' alignItems='center' my={5}>
@@ -25,7 +25,7 @@ const MeasurementNotFound = () => {
           </Box>
         </Flex>
       </Container>
-    </React.Fragment>
+    </>
   )
 }
 

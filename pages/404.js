@@ -18,7 +18,7 @@ const Custom404 = () => {
   const router = useRouter()
   const intl = useIntl()
   return (
-    <React.Fragment>
+    <>
       <Head>
         <title>{intl.formatMessage({id: 'Error.404.PageNotFound'})}</title>
       </Head>
@@ -58,7 +58,7 @@ const Custom404 = () => {
           </Box>
         </Flex>
       </Container>
-    </React.Fragment>
+    </>
   )
 }
 

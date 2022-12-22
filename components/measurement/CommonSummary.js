@@ -67,7 +67,7 @@ const CommonSummary = ({
   const formattedDate = new Intl.DateTimeFormat(intl.locale, { dateStyle: 'long', timeStyle: 'long', timeZone: 'UTC' }).format(new Date(startTime))
   
   return (
-    <React.Fragment>
+    <>
       <SummaryContainer py={4} color={color}>
         <Container>
           <Flex flexWrap='wrap' alignItems='flex-end' justifyContent='space-around'>
@@ -91,7 +91,7 @@ const CommonSummary = ({
           </Flex>
         </Container>
       </SummaryContainer>
-    </React.Fragment>
+    </>
   )
 }
 

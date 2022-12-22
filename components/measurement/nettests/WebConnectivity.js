@@ -471,14 +471,14 @@ const WebConnectivityDetails = ({
   }) : []
 
   return (
-    <React.Fragment>
+    <>
       {render({
         status: status,
         statusInfo: <StatusInfo title={input} message={reason} />,
         summaryText: summaryText,
         headMetadata: headMetadata,
         details: (
-          <React.Fragment>
+          <>
             {/* Failures */}
             <Flex>
               <DetailsBox
@@ -513,7 +513,7 @@ const WebConnectivityDetails = ({
                 title={<FormattedMessage id='Measurement.Details.Websites.DNSQueries.Heading' />}
                 content={
                   Array.isArray(queries) ? (
-                    <React.Fragment>
+                    <>
                       <Flex flexWrap='wrap' mb={2}>
                         <Box mr={1}>
                           <strong><FormattedMessage id='Measurement.Details.Websites.DNSQueries.Label.Resolver' />:</strong>
@@ -525,7 +525,7 @@ const WebConnectivityDetails = ({
                       <Box width={1}>
                         {queries.map((query, index) => <QueryContainer key={index} query={query} />)}
                       </Box>
-                    </React.Fragment>
+                    </>
                   ) : (
                     <FormattedMessage id='General.NoData' />
                   )
@@ -576,10 +576,10 @@ const WebConnectivityDetails = ({
                 }
               />
             </Flex>
-          </React.Fragment>
+          </>
         )
       })}
-    </React.Fragment>
+    </>
   )
 }
 

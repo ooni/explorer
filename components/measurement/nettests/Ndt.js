@@ -16,9 +16,9 @@ const ServerLocation = ({ serverAddress = '', isNdt7 }) => {
   const server = mlabServerDetails(serverAddress, isNdt7)
 
   return (
-    <React.Fragment>
+    <>
       {server ? `${server.city}, ${server.countryName}` : 'N/A'}
-    </React.Fragment>
+    </>
   )
 }
 

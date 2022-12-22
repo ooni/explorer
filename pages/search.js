@@ -320,7 +320,7 @@ const Search = ({testNames, testNamesKeyed, countries, query: queryProp }) => {
             {loading && <Loader />}
 
             {!error && !loading && results.length === 0 && <NoResults />}
-            {!error && !loading && results.length > 0 && <React.Fragment>
+            {!error && !loading && results.length > 0 && <>
               <ResultsList results={results} testNamesKeyed={testNamesKeyed} />
               {nextURL &&
                 <Flex alignItems='center' justifyContent='center'>
@@ -329,7 +329,7 @@ const Search = ({testNames, testNamesKeyed, countries, query: queryProp }) => {
                   </Button>
                 </Flex>
               }
-            </React.Fragment>}
+            </>}
           </Box>
         </Flex>
       </Container>

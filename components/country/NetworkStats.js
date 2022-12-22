@@ -45,7 +45,7 @@ const NetworkStats = ({
   avgPing,
   middleboxes
 }) => (
-  <React.Fragment>
+  <>
     <BorderedBox bg='gray1'>
       <Box mx={2}><strong>AS{asn}</strong></Box>
       <Box>{asnName}</Box>
@@ -85,7 +85,7 @@ const NetworkStats = ({
         value={<NettestGroupMiddleBoxes size={40} />}
       />
     </BorderedBox>
-  </React.Fragment>
+  </>
 )
 
 export default NetworkStats

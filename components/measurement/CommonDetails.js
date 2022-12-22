@@ -126,7 +126,7 @@ const CommonDetails = ({
   }
 
   return (
-    <React.Fragment>
+    <>
       {showResolverItems && 
         <Flex my={4}>
           {/* Resolver data */}
@@ -187,7 +187,7 @@ const CommonDetails = ({
           }
         />
       </Flex>
-    </React.Fragment>
+    </>
   )
 }
 

@@ -24,14 +24,14 @@ export const WebsiteChartLoader = (props) => {
 }
 
 export const WebsiteSectionLoader = ({ rows = 5 }) => (
-  <React.Fragment>
+  <>
     {Array(rows)
       .fill('')
       .map((e, i) => (
         <WebsiteChartLoader key={i} />
       ))
     }
-  </React.Fragment>
+  </>
 )
 
 WebsiteSectionLoader.propTypes = {

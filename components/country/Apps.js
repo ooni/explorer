@@ -10,7 +10,7 @@ import AppsStatsCircumvention from './AppsStatsCircumvention'
 import FormattedMarkdown from '../FormattedMarkdown'
 
 const AppsSection = () => (
-  <React.Fragment>
+  <>
     <SectionHeader>
       <SectionHeader.Title name='apps'>
         <FormattedMessage id='Country.Heading.Apps' />
@@ -33,7 +33,7 @@ const AppsSection = () => (
       title={<FormattedMessage id='Country.Overview.TestsByClass.Circumvention'/>}
       testGroup='circumvention'
     />}
-  </React.Fragment>
+  </>
 )
 
 export default AppsSection
