@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { Box, Button, Flex, Input } from 'ooni-components'
 import { useIntl } from 'react-intl'
@@ -18,7 +18,6 @@ const defaultDefaultValues = {
 
 const Form = ({ onChange, query }) => {
   const intl = useIntl()
-  const isMounted = useRef(false)
 
   const query2formValues = (query) => {
     return {

@@ -99,7 +99,7 @@ const NetworkDashboard = ({asn, calendarData = [], measurementsTotal, countriesD
           asn: query.asn
         },
       }
-      router.replace(href)
+      router.replace(href, undefined, { shallow: true })
     }
   }, [])
 

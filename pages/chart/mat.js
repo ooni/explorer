@@ -97,7 +97,6 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
       const today = dayjs.utc().add(1, 'day')
       const monthAgo = dayjs.utc(today).subtract(1, 'month')
       const href = {
-        pathname: router.pathname,
         query: {
           test_name: 'web_connectivity',
           axis_x: 'measurement_start_day',
@@ -105,7 +104,7 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
           until: today.format('YYYY-MM-DD'),
         },
       }
-      router.replace(href, href, { shallow: true })
+      router.replace(href, undefined, { shallow: true })
     }
   // Ignore the dependency on `router` because we want
   // this effect to run only once, on mount, if query is empty.

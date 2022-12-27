@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState, useRef } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { Box, Flex, Input, Button } from 'ooni-components'
 import { MultiSelect } from 'react-multi-select-component'
@@ -21,7 +21,6 @@ const defaultDefaultValues = {
 
 export const Form = ({ onChange, query, availableCountries }) => {
   const intl = useIntl()
-  const isMounted = useRef(false)
 
   const countryOptions = useMemo(() => availableCountries
     .map(cc => ({
