@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, useRef } from 'react'
 import { useForm, Controller } from 'react-hook-form'
-import { Box, Flex, Input } from 'ooni-components'
+import { Box, Flex, Input, Button } from 'ooni-components'
 import { MultiSelect } from 'react-multi-select-component'
 import { useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
@@ -72,19 +72,16 @@ export const Form = ({ onChange, query, availableCountries }) => {
   }
 
   const {since, until, probe_cc} = watch()
-  
-  useEffect(() => {
-    if (isMounted.current) {
-      const cleanedUpData = {
-        since,
-        until,
-        probe_cc: probe_cc.length > 0 ? probe_cc.map(d => d.value).join(',') : undefined
-      }
-      onChange(cleanedUpData)
-    } else {
-      isMounted.current = true
+
+  const submit = (e) => {
+    e.preventDefault()
+    const cleanedUpData = {
+      since,
+      until,
+      probe_cc: probe_cc.length > 0 ? probe_cc.map(d => d.value).join(',') : undefined
     }
-  }, [onChange, since, until, probe_cc])
+    onChange(cleanedUpData)
+  }
 
   return (
     <form>
@@ -135,6 +132,11 @@ export const Form = ({ onChange, query, availableCountries }) => {
                 )}
               />
             </Box>
+            <Flex mb={1} alignItems='end'>
+              <Box>
+                <Button onClick={submit}>{intl.formatMessage({id: 'General.Apply'})}</Button>
+              </Box>
+            </Flex>
           </Flex>
           { showDatePicker &&
             <DateRangePicker

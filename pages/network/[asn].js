@@ -89,18 +89,17 @@ const NetworkDashboard = ({asn, calendarData = [], measurementsTotal, countriesD
   const displayASN = asn.replace('AS', '')
 
   useEffect(() => {
-    if (Object.keys(query).length === 1) {
+    if (Object.keys(query).length < 3) {
       const today = dayjs.utc().add(1, 'day')
       const monthAgo = dayjs.utc(today).subtract(1, 'month')
       const href = {
-        pathname: router.pathname,
         query: {
           since: monthAgo.format('YYYY-MM-DD'),
           until: today.format('YYYY-MM-DD'),
           asn: query.asn
         },
       }
-      router.replace(href, href, { shallow: true })
+      router.replace(href)
     }
   }, [])
 
@@ -111,17 +110,11 @@ const NetworkDashboard = ({asn, calendarData = [], measurementsTotal, countriesD
     const params = {
       since,
       until,
+      asn
     }
-    const href = {
-      pathname: router.pathname.replace('[asn]', asn),
-      query: params,
+    if (query.since !== since || query.until !== until) {
+      router.push({ query: params }, undefined, { shallow: true })
     }
-    if (query.since !== since
-      || query.until !== until
-    ) {
-      router.push(href, href, { shallow: true })
-    }
-
   }, [router, query, asn])
 
   return (

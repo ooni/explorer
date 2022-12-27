@@ -22,14 +22,13 @@ const DashboardCircumvention = ({ availableCountries }) => {
       const monthAgo = dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD')
       const probe_cc = ['CN', 'IR', 'RU'].join(',')
       const href = {
-        pathname: router.pathname,
         query: {
           since: monthAgo,
           until: tomorrow,
           probe_cc
         },
       }
-      router.replace(href, href, { shallow: true })
+      router.replace(href, undefined, { shallow: true })
     }
   }, [])
 
@@ -45,15 +44,11 @@ const DashboardCircumvention = ({ availableCountries }) => {
     if (probe_cc) {
       params['probe_cc'] = probe_cc
     }
-    const href = {
-      pathname: router.pathname,
-      query: params,
-    }
     if (query.since !== since
       || query.until !== until
       || query.probe_cc !== probe_cc
     ) {
-      router.push(href, href, { shallow: true })
+      router.push({ query: params }, undefined, { shallow: true })
     }
   }, [router, query])
 

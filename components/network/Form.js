@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react'
 import { useForm, Controller } from 'react-hook-form'
-import { Box, Flex, Input } from 'ooni-components'
+import { Box, Button, Flex, Input } from 'ooni-components'
 import { useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
 import { format } from 'date-fns'
@@ -47,18 +47,11 @@ const Form = ({ onChange, query }) => {
     }
     setShowDatePicker(false)
   }
-  
-  useEffect(() => {
-    if (isMounted.current) {
-      const cleanedUpData = {
-        since,
-        until,
-      }
-      onChange(cleanedUpData)
-    } else {
-      isMounted.current = true
-    }
-  }, [onChange, since, until])
+
+  const submit = (e) => {
+    e.preventDefault()
+    onChange({since, until})
+  }
 
   return (
     <form>
@@ -93,6 +86,11 @@ const Form = ({ onChange, query }) => {
                 )}
               />
             </Box>
+            <Flex mb={1} alignItems='end'>
+              <Box>
+                <Button onClick={submit}>{intl.formatMessage({id: 'General.Apply'})}</Button>
+              </Box>
+            </Flex>
           </Flex>
           { showDatePicker &&
             <DateRangePicker
