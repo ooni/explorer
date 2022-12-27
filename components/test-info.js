@@ -131,12 +131,6 @@ export const testNames = {
   },
 
   /* Censorship circumvention */
-  'vanilla_tor': {
-    group: 'legacy',
-    name: <FormattedMessage id='Tests.TorVanilla.Name' />,
-    id: 'Tests.TorVanilla.Name',
-    info: 'https://ooni.org/nettest/vanilla-tor/'
-  },
   'bridge_reachability': {
     group: 'legacy',
     name: <FormattedMessage id='Tests.BridgeReachability.Name' />,
@@ -189,6 +183,12 @@ export const testNames = {
   },
 
   /* Experimental tests */
+  'vanilla_tor': {
+    group: 'experimental',
+    name: <FormattedMessage id='Tests.TorVanilla.Name' />,
+    id: 'Tests.TorVanilla.Name',
+    info: 'https://ooni.org/nettest/vanilla-tor/'
+  },
   'dnscheck': {
     group: 'experimental',
     name: <FormattedMessage id='Tests.DNSCheck.Name' />,
