@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
-import { Box, Flex, Input } from 'ooni-components'
+import { Box, Flex, Input, Button } from 'ooni-components'
 import { MultiSelect } from 'react-multi-select-component'
 import { useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
@@ -35,7 +35,7 @@ export const Form = ({ onChange, query, availableCountries }) => {
     return {
       since: query?.since ?? defaultDefaultValues.since,
       until: query?.until ?? defaultDefaultValues.until,
-      probe_cc: countryOptions.filter(country => countriesInQuery.includes(country.value))
+      probe_cc: countryOptions.filter(country => countriesInQuery.includes(country.value)),
     }
   }
 
@@ -71,21 +71,22 @@ export const Form = ({ onChange, query, availableCountries }) => {
   }
 
   const {since, until, probe_cc} = watch()
-  
-  useEffect(() => {
+
+  const submit = (e) => {
+    e.preventDefault()
     const cleanedUpData = {
       since,
       until,
       probe_cc: probe_cc.length > 0 ? probe_cc.map(d => d.value).join(',') : undefined
     }
     onChange(cleanedUpData)
-  }, [onChange, since, until, probe_cc])
+  }
 
   return (
     <form>
       <Flex alignItems={['center']} flexDirection={['column', 'row']}>
         <Box width={[1, 1/4]} mr={3} sx={{ zIndex: 2 }}>
-          <StyledLabel>Country</StyledLabel>
+          <StyledLabel>{intl.formatMessage({id: 'Search.Sidebar.Country'})}</StyledLabel>
           {<Controller
             render={({field}) => (
               <MultiSelect
@@ -103,7 +104,7 @@ export const Form = ({ onChange, query, availableCountries }) => {
         <Box width={[1, 1/5]}>
           <Flex>
             <Box width={1/2} mr={3}>
-              <StyledLabel>Since</StyledLabel>
+              <StyledLabel>{intl.formatMessage({id: 'Search.Sidebar.From'})}</StyledLabel>
               <Controller
                 name='since'
                 control={control}
@@ -117,7 +118,7 @@ export const Form = ({ onChange, query, availableCountries }) => {
               />
             </Box>
             <Box width={1/2} mr={3}>
-              <StyledLabel>Until</StyledLabel>
+              <StyledLabel>{intl.formatMessage({id: 'Search.Sidebar.Until'})}</StyledLabel>
               <Controller
                 name='until'
                 control={control}
@@ -130,6 +131,11 @@ export const Form = ({ onChange, query, availableCountries }) => {
                 )}
               />
             </Box>
+            <Flex mb={1} alignItems='end'>
+              <Box>
+                <Button onClick={submit}>{intl.formatMessage({id: 'General.Apply'})}</Button>
+              </Box>
+            </Flex>
           </Flex>
           { showDatePicker &&
             <DateRangePicker
