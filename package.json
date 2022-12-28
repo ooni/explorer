@@ -72,9 +72,12 @@
     "cypress": "^10.6.0",
     "eslint": "^8.22.0",
     "eslint-config-next": "^12.2.5",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-plugin-cypress": "^2.12.1",
+    "eslint-plugin-prettier": "^4.2.1",
     "glob": "^8.0.3",
     "mustache": "^4.2.0",
+    "prettier": "^2.8.1",
     "start-server-and-test": "^1.14.0"
   },
   "scripts": {
@@ -89,6 +92,8 @@
     "test": "yarn run test:e2e",
     "script:build-translations": "node ./scripts/build-translations.js",
     "script:extract-i18n-keys": "yarn build && node ./scripts/extract-react-intl-keys.js",
+    "format": "prettier --check --ignore-path .gitignore .",
+    "format:fix": "prettier --write --ignore-path .gitignore .",
     "git:getReleasesAndTags": "git tag --points-at HEAD",
     "git:getCommitSHA": "git rev-parse HEAD",
     "git:getCommitSHA:short": "git rev-parse --short HEAD",
