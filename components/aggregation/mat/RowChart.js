@@ -62,7 +62,7 @@ const chartProps1D = (query, intl) => ({
     legendPosition: 'middle',
     legendOffset: 70,
     tickValues: getXAxisTicks(query),
-    legend: query.axis_x ? intl.formatMessage(messages[`x_axis.${query.axis_x}`]) : '',
+    legend: query.axis_x ? intl.formatMessage({id: `MAT.Form.Label.AxisOption.${query.axis_x}`, defaultMessage: '' }) : '',
     format: (values) => formatXAxisValues(values, query, intl),
   },
   axisLeft: {
