@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useRef, useLayoutEffect, useMemo } from 'react'
+import React, { useCallback, useEffect, useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { useForm, Controller } from 'react-hook-form'
 import styled from 'styled-components'
@@ -55,9 +55,9 @@ const messages = defineMessages({
 
 
 const xAxisOptions = [
-  ['measurement_start_day', []],
-  ['category_code', ['web_connectivity']],
-  ['probe_cc', []],
+  ['measurement_start_day', [], false],
+  ['category_code', ['web_connectivity'], false],
+  ['probe_cc', [], true],
 ]
 
 const yAxisOptions = [
@@ -74,6 +74,15 @@ const testsWithValidDomainFilter = [
   'dns_consistency',
   'tcp_connect'
 ]
+
+const filterAxisOptions = (options, countryValue, testNameValue) => {
+  return options
+    .filter(([option, validTestNames, hideForSingleCountry]) => {
+      if (hideForSingleCountry && countryValue !== '') return false
+      return validTestNames.length === 0 || validTestNames.includes(testNameValue)
+    })
+    .map(([option]) => option)
+}
 
 function isValidFilterForTestname(testName = 'XX', arrayWithMapping) {
   // whether the dependent filter is valid to show along with `testName`
@@ -98,7 +107,6 @@ const defaultDefaultValues = {
 }
 
 export const Form = ({ onSubmit, testNames, query }) => {
-  const isInitialMount = useRef(true)
   const intl = useIntl()
   const [showConfirmation, setShowConfirmation] = useState(false)
 
@@ -108,28 +116,18 @@ export const Form = ({ onSubmit, testNames, query }) => {
     shouldUnregister: true,
   })
 
-  // If `query` changes after the page mounts, reset the form to use default
-  // values based on new `query`
-  useEffect(() => {
-    // Skip running this on mount to avoid unnecessary re-renders
-    // Based on: https://reactjs.org/docs/hooks-faq.html#can-i-run-an-effect-only-on-updates
-    if (isInitialMount.current) {
-      isInitialMount.current = false
-    } else {
-      reset(Object.assign({}, defaultDefaultValues, query))
-    }
-  }, [reset, query])
-
   const sortedCountries = localisedCountries(intl.locale)
     .sort((a,b) => new Intl.Collator(intl.locale).compare(a.localisedCountryName, b.localisedCountryName))
 
   const testNameValue = watch('test_name')
   const countryValue = watch('probe_cc')
-  const showWebConnectivityFilters = isValidFilterForTestname(testNameValue, testsWithValidDomainFilter)
+  const showWebConnectivityFilters = useMemo(() => (isValidFilterForTestname(testNameValue, testsWithValidDomainFilter)), [testNameValue])
   // reset domain and input when web_connectivity is deselected
-  useLayoutEffect(() => {
-    setValue('domain', '')
-    setValue('input', '')
+  useEffect(() => {
+    if (!showWebConnectivityFilters) {
+      setValue('domain', '')
+      setValue('input', '')
+    }
   }, [setValue, showWebConnectivityFilters])
 
   const [showDatePicker, setShowDatePicker] = useState(false)
@@ -172,21 +170,20 @@ export const Form = ({ onSubmit, testNames, query }) => {
   }, [getValues, onConfirm])
 
   const xAxisOptionsFiltered = useMemo(() => {
-    const newXAxisOptions = xAxisOptions
-      .filter(([option, validTestNames]) => validTestNames.length === 0 || validTestNames.includes(testNameValue))
-      .map(([option]) => option)
-    return newXAxisOptions
-  }, [testNameValue])
+    return filterAxisOptions(xAxisOptions, countryValue, testNameValue)
+  }, [testNameValue, countryValue])
+
+  useEffect(() => {
+    if (!xAxisOptionsFiltered.includes(getValues('axis_x'))) setValue('axis_x', 'measurement_start_day')
+  }, [setValue, getValues, xAxisOptionsFiltered])
 
   const yAxisOptionsFiltered = useMemo(() => {
-    const newYAxisOptions = yAxisOptions
-      .filter(([option, validTestNames, hideForSingleCountry]) => {
-        if (hideForSingleCountry && countryValue !== '') return false
-        return validTestNames.length === 0 || validTestNames.includes(testNameValue)
-      })
-      .map(([option]) => option)
-    return newYAxisOptions
+    return filterAxisOptions(yAxisOptions, countryValue, testNameValue)
   }, [testNameValue, countryValue])
+
+  useEffect(() => {
+    if (!yAxisOptionsFiltered.includes(getValues('axis_y'))) setValue('axis_y', '')
+  }, [setValue, getValues, yAxisOptionsFiltered])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
