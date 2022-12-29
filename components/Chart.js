@@ -13,29 +13,13 @@ const swrOptions = {
   dedupingInterval: 10 * 60 * 1000,
 }
 
-const ChartCountry = React.memo(function Chart({testName, testGroup = null, title, queryParams = {}}) {
-  const router = useRouter()
-  const { query: { since, until, countryCode } } = router
-
+const Chart = React.memo(function Chart({testName, testGroup = null, title, queryParams = {}}) {
   const name = testName || testGroup.name
 
-  const params = useMemo(() => ({
-    ...queryParams,
-    axis_x: 'measurement_start_day'
-  }), [queryParams])
-
-  const query = useMemo(() => ({
-    ...params,
-    probe_cc: countryCode,
-    since,
-    until,
-    ...testName && {test_name: testName}
-  }), [countryCode, since, until, params, testName])
-
   const apiQuery = useMemo(() => {
-    const qs = new URLSearchParams(query).toString()
+    const qs = new URLSearchParams(queryParams).toString()
     return qs
-  }, [query])
+  }, [queryParams])
 
   const { data, error } = useSWR(
     testGroup ? { query: apiQuery,
@@ -50,23 +34,23 @@ const ChartCountry = React.memo(function Chart({testName, testGroup = null, titl
       return [null, 0]
     }
     let chartData = testGroup ? data : data.data
-    const graphQuery = testGroup ? {...query, axis_y: name} : query
+    const graphQuery = testGroup ? {...queryParams, axis_y: name} : queryParams
     const [reshapedData, rowKeys, rowLabels] = prepareDataForGridChart(chartData, graphQuery)
     return [reshapedData, rowKeys, rowLabels]
-  }, [data, query, name, testGroup])
+  }, [data, queryParams, name, testGroup])
 
   const headerOptions = { probe_cc: false, subtitle: false }
 
   return (
-    <MATContextProvider key={name} test_name={name} {...params}>
+    <MATContextProvider key={name} test_name={name} {...queryParams}>
       <Flex flexDirection='column' mb={60}>
         <Box><Heading h={3} mt={40} mb={20}>{title}</Heading></Box>
         <Box>
           {(!chartData && !error) ? (
-            <div> Loading ...</div>
+            <FormattedMessage id="General.Loading" />
           ) : (
             chartData === null || chartData.length === 0 ? (
-              <Heading h={5}><FormattedMessage id="Measurement.Details.Websites.Failures.Values.Unknown" /></Heading>
+              <Heading h={5}><FormattedMessage id="General.NoData" /></Heading>
             ) : (
               <GridChart
                 data={chartData}
@@ -94,4 +78,4 @@ const ChartCountry = React.memo(function Chart({testName, testGroup = null, titl
   )
 })
 
-export default ChartCountry
+export default Chart

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
 import { Container, Heading, Box, Text, Link } from 'ooni-components'
@@ -9,7 +9,7 @@ import Layout from 'components/Layout'
 import NavBar from 'components/NavBar'
 import { MetaTags } from 'components/dashboard/MetaTags'
 import Form from 'components/network/Form'
-import ChartNetwork from 'components/network/ChartNetwork'
+import Chart from 'components/Chart'
 import Calendar from 'components/network/Calendar'
 import FormattedMarkdown from 'components/FormattedMarkdown'
 import { FormattedMessage } from 'react-intl'
@@ -29,18 +29,46 @@ const circumventionTestNames = ['psiphon', 'tor', 'torsf']
 
 const ChartsContainer = () => {
   const intl = useIntl()
+  const router = useRouter()
+  const { query: { since, until, asn } } = router
+
+  const queryWebsites = useMemo(() => ({
+    axis_y: 'domain',
+    axis_x: 'measurement_start_day',
+    asn,
+    since,
+    until,
+    test_name: 'web_connectivity',
+  }), [asn, since, until])
+
+  const queryMessagingApps = useMemo(() => ({
+    axis_x: 'measurement_start_day',
+    asn,
+    since,
+    until,
+  }), [asn, since, until])
+
+  const queryCircumventionTools = useMemo(() => ({
+    axis_x: 'measurement_start_day',
+    asn,
+    since,
+    until,
+  }), [asn, since, until])
+
   return (
     <>
-      <ChartNetwork
+      <Chart
         testName='web_connectivity'
         title={intl.formatMessage({id: 'Tests.Groups.Webistes.Name'})}
-        queryParams={{axis_y: 'domain'}} />
-      <ChartNetwork
+        queryParams={queryWebsites} />
+      <Chart
         testGroup={{name: 'messaging_apps', tests: messagingTestNames}}
-        title={intl.formatMessage({id: 'Tests.Groups.Instant Messagging.Name'})} />
-      <ChartNetwork
+        title={intl.formatMessage({id: 'Tests.Groups.Instant Messagging.Name'})}
+        queryParams={queryMessagingApps} />
+      <Chart
         testGroup={{name: 'circumvention_tools', tests: circumventionTestNames}}
-        title={intl.formatMessage({id: 'Tests.Groups.Circumvention.Name'})} />
+        title={intl.formatMessage({id: 'Tests.Groups.Circumvention.Name'})} 
+        queryParams={queryCircumventionTools} />
     </>
   )
 }
