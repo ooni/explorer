@@ -175,7 +175,9 @@ DnsAnswerCell.propTypes = {
   children: PropTypes.any
 }
 
-const DNSAnswerRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = 'Type', data = 'DATA', header = false}) => (
+const DNSAnswerRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = 'Type',
+                        data = 'DATA', asn = 'ASN', as_org_name = 'ISP',
+                        header = false}) => (
   <Text fontWeight={header ? 'bold' : undefined}>
     <Flex flexWrap='wrap' mb={2}>
       <DnsAnswerCell>{name}</DnsAnswerCell>
@@ -183,6 +185,8 @@ const DNSAnswerRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = '
       <DnsAnswerCell>{ttl}</DnsAnswerCell>
       <DnsAnswerCell>{type}</DnsAnswerCell>
       <DnsAnswerCell>{data}</DnsAnswerCell>
+      <DnsAnswerCell>{asn}</DnsAnswerCell>
+      <DnsAnswerCell>{as_org_name}</DnsAnswerCell>
     </Flex>
   </Text>
 )
@@ -193,6 +197,8 @@ DNSAnswerRow.propTypes = {
   ttl: PropTypes.number,
   type: PropTypes.string,
   data: PropTypes.string,
+  asn: PropTypes.number,
+  as_org_name: PropTypes.string,
   header: PropTypes.bool
 }
 
@@ -244,6 +250,8 @@ const QueryContainer = ({query}) => {
                     ? dnsAnswer.hostname
                     : null // for any other answer_type, DATA column will be empty
               }
+              asn={dnsAnswer.asn || null}
+              as_org_name={dnsAnswer.as_org_name || null}
             />
           ))}
         </Box>
