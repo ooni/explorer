@@ -175,7 +175,7 @@ DnsAnswerCell.propTypes = {
   children: PropTypes.any
 }
 
-const DNSAnswerRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = 'Type', data = 'DATA', header = false}) => (
+const DnsAnswerRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = 'Type', data = 'DATA', header = false}) => (
   <Text fontWeight={header ? 'bold' : undefined}>
     <Flex flexWrap='wrap' mb={2}>
       <DnsAnswerCell>{name}</DnsAnswerCell>
@@ -187,7 +187,7 @@ const DNSAnswerRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = '
   </Text>
 )
 
-DNSAnswerRow.propTypes = {
+DnsAnswerRow.propTypes = {
   name: PropTypes.string,
   netClass: PropTypes.string,
   ttl: PropTypes.number,
@@ -228,9 +228,9 @@ const QueryContainer = ({query}) => {
       {failure && <Box width={1}><FailureString failure={failure} /></Box>}
       {!failure &&
         <Box width={1}>
-          <DNSAnswerRow header />
+          <DnsAnswerRow header />
           {Array.isArray(answers) && answers.map((dnsAnswer, index) => (
-            <DNSAnswerRow
+            <DnsAnswerRow
               key={index}
               name='@'
               netClass='IN'
