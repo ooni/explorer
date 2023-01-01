@@ -167,8 +167,12 @@ FailureString.propTypes = {
   failure: PropTypes.string
 }
 
+const DnsNarrowAnswerCell = (props) => (
+  <Box width={1/12}>{props.children}</Box>
+)
+
 const DnsAnswerCell = (props) => (
-  <Box width={1/8}>{props.children}</Box>
+  <Box width={1/4}>{props.children}</Box>
 )
 
 DnsAnswerCell.propTypes = {
@@ -179,9 +183,9 @@ const DnsAnswerRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = '
   <Text fontWeight={header ? 'bold' : undefined}>
     <Flex flexWrap='wrap' mb={2}>
       <DnsAnswerCell>{name}</DnsAnswerCell>
-      <DnsAnswerCell>{netClass}</DnsAnswerCell>
-      <DnsAnswerCell>{ttl}</DnsAnswerCell>
-      <DnsAnswerCell>{type}</DnsAnswerCell>
+      <DnsNarrowAnswerCell>{netClass}</DnsNarrowAnswerCell>
+      <DnsNarrowAnswerCell>{ttl}</DnsNarrowAnswerCell>
+      <DnsNarrowAnswerCell>{type}</DnsNarrowAnswerCell>
       <DnsAnswerCell>{data}</DnsAnswerCell>
       <DnsAnswerCell>{anc}</DnsAnswerCell>
     </Flex>
