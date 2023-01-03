@@ -179,6 +179,16 @@ DnsAnswerCell.propTypes = {
   children: PropTypes.any
 }
 
+const DnsAnswerIpInfo = (dnsAnswer) => {
+    return dnsAnswer.asn
+        ? dnsAnswer.as_org_name
+        ? `AS${dnsAnswer.asn} (${dnsAnswer.as_org_name})`
+        : `AS${dnsAnswer.asn}`
+    : dnsAnswer.as_org_name
+        ? `Unknown AS (${dnsAnswer.as_org_name})`
+        : null
+}
+
 const DnsAnswerRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = 'Type', data = 'DATA', answer_ip_info = 'Answer IP Info', header = false}) => (
   <Text fontWeight={header ? 'bold' : undefined}>
     <Flex flexWrap='wrap' mb={2}>
@@ -250,12 +260,7 @@ const QueryContainer = ({query}) => {
                     ? dnsAnswer.hostname
                     : null // for any other answer_type, DATA column will be empty
               }
-              answer_ip_info={dnsAnswer.asn
-                              ? dnsAnswer.as_org_name
-                              ? `AS${dnsAnswer.asn} (${dnsAnswer.as_org_name})`
-                              : `AS${dnsAnswer.asn}`
-                              : dnsAnswer.as_org_name
-                              ? `Unknown AS (${dnsAnswer.as_org_name})` : null}
+              answer_ip_info={DnsAnswerIpInfo(dnsAnswer)}
             />
           ))}
         </Box>
