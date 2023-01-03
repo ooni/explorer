@@ -179,7 +179,7 @@ DnsAnswerCell.propTypes = {
   children: PropTypes.any
 }
 
-const DnsAnswerIpInfo = (dnsAnswer) => {
+const dnsAnswerIpInfo = (dnsAnswer) => {
     return dnsAnswer.asn
         ? dnsAnswer.as_org_name
         ? `AS${dnsAnswer.asn} (${dnsAnswer.as_org_name})`
@@ -260,7 +260,7 @@ const QueryContainer = ({query}) => {
                     ? dnsAnswer.hostname
                     : null // for any other answer_type, DATA column will be empty
               }
-              answer_ip_info={DnsAnswerIpInfo(dnsAnswer)}
+              answer_ip_info={dnsAnswerIpInfo(dnsAnswer)}
             />
           ))}
         </Box>
