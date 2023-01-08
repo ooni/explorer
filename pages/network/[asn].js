@@ -1,25 +1,20 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useMemo } from 'react'
 import { useRouter } from 'next/router'
 import axios from 'axios'
-import { Container, Heading, Box, Flex, Text, Link } from 'ooni-components'
+import { Container, Heading, Box, Text, Link } from 'ooni-components'
 import { useIntl } from 'react-intl'
 import NLink from 'next/link'
-import styled from 'styled-components'
 import dayjs from 'services/dayjs'
 import Layout from 'components/Layout'
 import NavBar from 'components/NavBar'
 import { MetaTags } from 'components/dashboard/MetaTags'
 import Form from 'components/network/Form'
-import Chart from 'components/network/Chart'
+import Chart from 'components/Chart'
 import Calendar from 'components/network/Calendar'
 import FormattedMarkdown from 'components/FormattedMarkdown'
 import { FormattedMessage } from 'react-intl'
 import CallToActionBox from 'components/CallToActionBox'
 import { getLocalisedRegionName } from '../../utils/i18nCountries'
-
-const Bold = styled.span`
-  font-weight: bold
-`
 
 const prepareDataForCalendar = (data) => {
   return data.map((r) => ({
@@ -34,18 +29,46 @@ const circumventionTestNames = ['psiphon', 'tor', 'torsf']
 
 const ChartsContainer = () => {
   const intl = useIntl()
+  const router = useRouter()
+  const { query: { since, until, asn } } = router
+
+  const queryWebsites = useMemo(() => ({
+    axis_y: 'domain',
+    axis_x: 'measurement_start_day',
+    asn,
+    since,
+    until,
+    test_name: 'web_connectivity',
+  }), [asn, since, until])
+
+  const queryMessagingApps = useMemo(() => ({
+    axis_x: 'measurement_start_day',
+    asn,
+    since,
+    until,
+  }), [asn, since, until])
+
+  const queryCircumventionTools = useMemo(() => ({
+    axis_x: 'measurement_start_day',
+    asn,
+    since,
+    until,
+  }), [asn, since, until])
+
   return (
-    <> 
+    <>
       <Chart
         testName='web_connectivity'
         title={intl.formatMessage({id: 'Tests.Groups.Webistes.Name'})}
-        queryParams={{axis_y: 'domain'}} />
+        queryParams={queryWebsites} />
       <Chart
         testGroup={{name: 'messaging_apps', tests: messagingTestNames}}
-        title={intl.formatMessage({id: 'Tests.Groups.Instant Messagging.Name'})} />
+        title={intl.formatMessage({id: 'Tests.Groups.Instant Messagging.Name'})}
+        queryParams={queryMessagingApps} />
       <Chart
         testGroup={{name: 'circumvention_tools', tests: circumventionTestNames}}
-        title={intl.formatMessage({id: 'Tests.Groups.Circumvention.Name'})} />
+        title={intl.formatMessage({id: 'Tests.Groups.Circumvention.Name'})} 
+        queryParams={queryCircumventionTools} />
     </>
   )
 }
@@ -89,7 +112,7 @@ const NetworkDashboard = ({asn, calendarData = [], measurementsTotal, countriesD
   const displayASN = asn.replace('AS', '')
 
   useEffect(() => {
-    if (Object.keys(query).length < 3) {
+    if (Object.keys(query).length  < 3) {
       const today = dayjs.utc().add(1, 'day')
       const monthAgo = dayjs.utc(today).subtract(1, 'month')
       const href = {
@@ -104,7 +127,7 @@ const NetworkDashboard = ({asn, calendarData = [], measurementsTotal, countriesD
   }, [])
 
   // Sync page URL params with changes from form values
-  const onChange = useCallback(({ since, until }) => {
+  const onSubmit = ({ since, until }) => {
     // since: "2022-01-02",
     // until: "2022-02-01",
     const params = {
@@ -115,7 +138,7 @@ const NetworkDashboard = ({asn, calendarData = [], measurementsTotal, countriesD
     if (query.since !== since || query.until !== until) {
       router.push({ query: params }, undefined, { shallow: true })
     }
-  }, [router, query, asn])
+  }
 
   return (
     <>
@@ -125,17 +148,17 @@ const NetworkDashboard = ({asn, calendarData = [], measurementsTotal, countriesD
         <Heading h={1} fontWeight='heading' my={20}>AS{displayASN}</Heading>
         {router.isReady &&
           <>
-            {!!calendarData.length ? 
+            {!!calendarData.length ?
               <>
                 <Summary measurementsTotal={measurementsTotal} countriesData={countriesData} firstMeasurement={calendarData[0].day} />
                 <Calendar data={calendarData} />
                 <Box as='hr' sx={{bg: 'gray5', border: 0, height: 1}} mt={20} mb={20} />
-                <Form onChange={onChange} query={query} />
+                <Form onSubmit={onSubmit} query={query} />
                 <ChartsContainer />
               </> :
-              <CallToActionBox 
+              <CallToActionBox
                 title={<FormattedMessage id='Network.NoData.Title' />}
-                text={<FormattedMessage id='Network.NoData.Text' />} 
+                text={<FormattedMessage id='Network.NoData.Text' />}
               />
             }
           </>
@@ -154,8 +177,8 @@ export const getServerSideProps = async (context) => {
 
     const measurementsTotal = await client
       .get(path, {params: {'probe_asn': asn}})
-      .then((response)=> response?.data?.result.measurement_count)
-    
+      .then((response) => response?.data?.result.measurement_count)
+
     const calendarData = await client.get(path, { params: {
       probe_asn: asn,
       since: dayjs.utc().subtract(10, 'year').format('YYYY-MM-DD'),
@@ -168,8 +191,8 @@ export const getServerSideProps = async (context) => {
       axis_x: 'probe_cc'
     }}).then((response) => (response.data.result.map(res => ({country: res.probe_cc, measurements: res.measurement_count}))))
 
-    return { 
-      props: { 
+    return {
+      props: {
         asn,
         calendarData,
         measurementsTotal,

@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react'
-import { useIntl } from 'react-intl'
 import { useRouter } from 'next/router'
+import { FormattedMessage } from 'react-intl'
 import { Heading, Box, Flex } from 'ooni-components'
 import useSWR from 'swr'
 import GridChart, { prepareDataForGridChart } from 'components/aggregation/mat/GridChart'
@@ -14,33 +14,16 @@ const swrOptions = {
 }
 
 const Chart = React.memo(function Chart({testName, testGroup = null, title, queryParams = {}}) {
-  const intl = useIntl()
-  const router = useRouter()
-  const { query: {since, until, asn} } = router
-
   const name = testName || testGroup.name
 
-  const params = useMemo(() => ({
-    ...queryParams,
-    axis_x: 'measurement_start_day'
-  }), [queryParams])
-
-  const query = useMemo(() => ({
-    ...params,
-    probe_asn: asn,
-    since: since,
-    until: until,
-    ...testName && {test_name: testName}
-  }), [since, until, asn, params, testName])
-
   const apiQuery = useMemo(() => {
-    const qs = new URLSearchParams(query).toString()
+    const qs = new URLSearchParams(queryParams).toString()
     return qs
-  }, [query])
+  }, [queryParams])
 
   const { data, error } = useSWR(
-    testGroup ? { query: apiQuery, 
-      testNames: testGroup.tests, 
+    testGroup ? { query: apiQuery,
+      testNames: testGroup.tests,
       groupKey: name
     } : apiQuery,
     testGroup ? MATMultipleFetcher : MATFetcher,
@@ -51,23 +34,23 @@ const Chart = React.memo(function Chart({testName, testGroup = null, title, quer
       return [null, 0]
     }
     let chartData = testGroup ? data : data.data
-    const graphQuery = testGroup ? {...query, axis_y: name} : query
-    const [reshapedData, rowKeys, rowLabels] = prepareDataForGridChart(chartData, graphQuery, intl.locale)
+    const graphQuery = testGroup ? {...queryParams, axis_y: name} : queryParams
+    const [reshapedData, rowKeys, rowLabels] = prepareDataForGridChart(chartData, graphQuery)
     return [reshapedData, rowKeys, rowLabels]
-  }, [data, query, name, testGroup, intl])
+  }, [data, queryParams, name, testGroup])
 
   const headerOptions = { probe_cc: false, subtitle: false }
 
   return (
-    <MATContextProvider key={name} test_name={name} {...params}>
+    <MATContextProvider key={name} test_name={name} {...queryParams}>
       <Flex flexDirection='column' mb={60}>
         <Box><Heading h={3} mt={40} mb={20}>{title}</Heading></Box>
         <Box>
           {(!chartData && !error) ? (
-            <div>{intl.formatMessage({id: 'General.Loading'})}</div>
+            <FormattedMessage id="General.Loading" />
           ) : (
             chartData === null || chartData.length === 0 ? (
-              <Heading h={5}>{intl.formatMessage({id: 'General.NoData'})}</Heading>
+              <Heading h={5}><FormattedMessage id="General.NoData" /></Heading>
             ) : (
               <GridChart
                 data={chartData}
@@ -82,7 +65,7 @@ const Chart = React.memo(function Chart({testName, testGroup = null, title, quer
         {error &&
           <DetailsBox collapsed={false} content={<>
             <details>
-              <summary><span>{intl.formatMessage({id: 'General.Error'})}: {error.message}</span></summary>
+              <summary><span>Error: {error.message}</span></summary>
               <Box as='pre'>
                 {JSON.stringify(error, null, 2)}
               </Box>
