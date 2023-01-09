@@ -165,12 +165,6 @@ const Measurement = ({
         <MeasurementNotFound />
       ): (
         <>
-          {/* <LoginModal 
-            isShowing={showModal}
-            hide={() => hideModal()}
-            reqError={reqError}
-            submitted={submitted}
-            onLogin={() => setSubmitted(true)} /> */}
           <MeasurementContainer
             isConfirmed={confirmed}
             isAnomaly={anomaly}
@@ -218,20 +212,15 @@ const Measurement = ({
                       previousFeedback={userFeedback?.user_feedback}
                     />
                   }
-                  <Hero
-                    color={color}
-                    status={status}
-                    icon={statusIcon}
-                    label={statusLabel}
-                    info={info}
-                  />
-                  <Text onClick={() => setShowModal(true)}>Report an issue</Text>
                   <CommonSummary
                     measurement_start_time={measurement_start_time}
                     probe_asn={probe_asn}
                     probe_cc={probe_cc}
+                    networkName={raw_measurement?.probe_network_name}
                     color={color}
                     country={country}
+                    hero={<Hero status={status} icon={statusIcon} label={statusLabel} info={info} />}
+                    onVerifyClick={() => setShowModal(true)}
                   />
 
                   <Container>
