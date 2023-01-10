@@ -76,7 +76,7 @@ const Layout = ({ children, disableFooter = false }) => {
 }
 
 Layout.propTypes = {
-  children: PropTypes.array.isRequired,
+  children: PropTypes.object.isRequired,
   disableFooter: PropTypes.bool
 }
 

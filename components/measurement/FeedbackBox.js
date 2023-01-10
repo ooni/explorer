@@ -18,6 +18,10 @@ font-size: 16px;
 cursor: pointer;
 `
 
+const StyledError = styled.small`
+  color: ${props => props.theme.colors.red5};
+`
+
 const okValues = ['ok', 'ok.unreachable', 'ok.broken', 'ok.parked']
 const blockedValues = [
   { top: 'ok' },
@@ -43,7 +47,7 @@ const blockedValues = [
 ]
 
 const QuestionText = ({i18nKey}) => (
-  <Text fontSize={16} mb={3}><FormattedMessage id={i18nKey} /></Text>
+  <Text mb={3}><FormattedMessage id={i18nKey} /></Text>
 )
 
 const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
@@ -64,10 +68,9 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
           if (!previousFeedback) send('FEEDBACK')
         },
         on: {
-          IS_BLOCKING: 'isBlocking',
           LOGIN: 'login',
           FEEDBACK: 'feedback'
-      },
+        },
       },
       login: {
         on: {
@@ -79,7 +82,10 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
         on: {
           CANCEL: 'initial',
           SUBMIT: 'submit'
-        }
+        },
+        effect() {
+          return () => setError(null)
+        },
       },
       submit: {
         effect({ send, setContext, event, context }) {
@@ -92,23 +98,14 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
             .then(() => send('SUCCESS'))
             .catch(({response}) => {
               setError(response?.data?.error || 'unknown')
-              send('FAILURE')
-            })
+            }).finally(() => send('FEEDBACK'))
         },
         on: {
           SUCCESS: 'success',
-          FAILURE: 'failure'
+          FEEDBACK: 'feedback'
         }
       },
       success: {},
-      failure: {
-        on: {
-          SUBMIT: 'submit'
-        },
-        effect() {
-          return () => setError(null)
-        },
-      }
     },
   })
 
@@ -129,14 +126,15 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
     <>
         <Box
           p={3}
-          bg='gray1'
+          bg='gray0'
           sx={{
-            width: '293px',
+            width: '320px',
             position: 'absolute',
             right: '60px',
             borderRadius: '6px',
-          boxShadow: '2px 5px 10px 0px rgba(0, 0, 0, 0.3)',
-          zIndex: 100
+            boxShadow: '2px 5px 10px 0px rgba(0, 0, 0, 0.3)',
+            zIndex: 100,
+            fontSize: 16
           }}
         >
           <StyledCloseIcon onClick={() => setShowModal(false)} />
@@ -146,8 +144,8 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
                 <Text fontSize={18} fontWeight='bold' mb={3}>
                   <FormattedMessage id="Measurement.Feedback.ExistingFeedback" />
                 </Text>
-                <Text fontSize={16} mb={4}>
-                  <FormattedMessage id={`Measurement.Feedback.${previousFeedback}`} />
+                <Text mb={4}>
+                  <FormattedMessage id={`Measurement.Feedback.${previousFeedback}`} defaultMessage="" />
                 </Text>
                 <Flex justifyContent='center'>
                   <Button hollow onClick={() => send('FEEDBACK')}>
@@ -159,80 +157,11 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
             {state.value === 'login' && 
               <>
                 <Text fontSize={18} fontWeight='bold' mb={3}>
-                  <FormattedMessage id='Measurement.Feedback.Login.Title'/>
+                <FormattedMessage id='Measurement.Feedback.Login.Title'/>
               </Text>
                 <Text><FormattedMessage id='Measurement.Feedback.Login.Description'/></Text>
                 <LoginForm onLogin={() => {console.log('send');send('LOGIN_SUCCESS')}} redirectTo={redirectTo} />
               </>
-            }
-            {state.value === 'feedback' &&
-              <form onSubmit={(e) => e.preventDefault()}>
-                <Text fontSize={18} fontWeight='bold' mb={3}>Verify the measurement</Text>
-                <Controller
-                  control={control}
-                  name='feedback'
-                  render={({field}) => (
-                    <RadioGroup {...field}>
-                      {blockedValues.map(({top, sub}) => (
-                        <>
-                        <RadioButton
-                            label={intl.formatMessage({id: `Measurement.Feedback.${top}`})}
-                            value={top}
-                            key={top}
-                      />
-                          {sub && firstLevel === top && (
-                <Controller
-                  control={control}
-                              name='nested'
-                  render={({field}) => (
-                    <RadioGroup {...field}>
-                                  {sub.map(({top, sub}) => (
-                        <>
-                          <RadioButton
-                                        ml='23px'
-                            label={intl.formatMessage({id: `Measurement.Feedback.${top}`})}
-                            value={top}
-                            key={top}
-                          />
-                                      {sub && nestedLevel === top && (
-                            <Controller
-                              control={control}
-                                          name='last'
-                              render={({field}) => (
-                                <RadioGroup {...field}>
-                                  {sub.map(subVal => (
-                                    <RadioButton
-                                                  ml='45px'
-                                      label={intl.formatMessage({id: `Measurement.Feedback.${subVal}`})}
-                                      value={subVal}
-                                      key={subVal}
-                                    />
-                                              ))}
-                                            </RadioGroup>
-                                          )}
-                                        />)
-                                      }
-                                    </>
-                                  ))}
-                                </RadioGroup>
-                              )}
-                            />)
-                          }
-                        </>
-                      ))}
-                    </RadioGroup>
-                  )}
-                />
-                <Button mr={2} disabled={!submitEnabled} onClick={() => send('SUBMIT')}>
-                  <FormattedMessage id='General.Submit' />
-                </Button>
-              <Button hollow onClick={() => setShowModal(false)}>
-                  <FormattedMessage id='General.Cancel' />
-                </Button>
-              </form>
-            }
-            {state.value === 'submit' && 
-              <SpinLoader background={theme.colors.gray3} />
             }
             {state.value === 'loginSuccess' && 
               <>
@@ -245,20 +174,87 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
                 </Button>
               </>
             }
+            {state.value === 'feedback' &&
+              <form onSubmit={(e) => e.preventDefault()}>
+                <Text fontSize={18} fontWeight='bold' mb={3}>Verify the measurement</Text>
+                <Controller
+                  control={control}
+                  name='feedback'
+                  render={({field}) => (
+                    <RadioGroup {...field}>
+                      {blockedValues.map(({top, sub}) => (
+                        <>
+                          <RadioButton
+                            label={intl.formatMessage({id: `Measurement.Feedback.${top}`})}
+                            value={top}
+                            key={top}
+                          />
+                          {sub && firstLevel === top && (
+                            <Controller
+                              control={control}
+                              name='nested'
+                              render={({field}) => (
+                                <RadioGroup {...field}>
+                                  {sub.map(({top, sub}) => (
+                                    <>
+                                      <RadioButton
+                                        ml='23px'
+                                        label={intl.formatMessage({id: `Measurement.Feedback.${top}`})}
+                                        value={top}
+                                        key={top}
+                                      />
+                                      {sub && nestedLevel === top && (
+                                        <Controller
+                                          control={control}
+                                          name='last'
+                                          render={({field}) => (
+                                            <RadioGroup {...field}>
+                                              {sub.map(subVal => (
+                                                <RadioButton
+                                                  ml='45px'
+                                                  label={intl.formatMessage({id: `Measurement.Feedback.${subVal}`})}
+                                                  value={subVal}
+                                                  key={subVal}
+                                                />)
+                                              )}
+                                              </RadioGroup>
+                                            )}
+                                      />)}
+                                    </>
+                                  ))}
+                                </RadioGroup>
+                              )}
+                          />)}
+                        </>
+                      ))}
+                    </RadioGroup>
+                  )}
+                />
+                <Text mb={3}>We use this feedback to improve our results’ accuracy.</Text>
+                {error && 
+                  <StyledError>
+                    <FormattedMessage id='Measurement.Feedback.Failure' />
+                    <Text mb={3}>Error: {error}</Text>
+                  </StyledError>
+                }
+                <Button mr={2} disabled={!submitEnabled} onClick={() => send('SUBMIT')}>
+                  <FormattedMessage id='General.Submit' />
+                </Button>
+                <Button hollow onClick={() => setShowModal(false)}>
+                  <FormattedMessage id='General.Cancel' />
+                </Button>
+              </form>
+            }
+            {state.value === 'submit' && 
+              <SpinLoader background={theme.colors.gray0} />
+            }
             {state.value === 'success' && 
               <>
                 <Text fontSize={18} fontWeight='bold' mb={3}><FormattedMessage id='Measurement.Feedback.Success.Title' /></Text>
-                <Text fontSize={16} mb={4}><FormattedMessage id='Measurement.Feedback.Success.Description' /></Text>
+                <Text mb={4}><FormattedMessage id='Measurement.Feedback.Success.Description' /></Text>
                 <Flex justifyContent='center'>
                 <Button type='button' onClick={() => setShowModal(false)}><FormattedMessage id='General.Close' /></Button>
                 </Flex>
-              </>
-            }
-            {state.value === 'failure' && 
-              <>
-                <Text fontSize={16} mb={3}><FormattedMessage id='Measurement.Feedback.Failure' /></Text>
-                <Text fontSize={16} mb={3}>{error && <p>Error: {error}</p>}</Text>
-                <Button type='button' onClick={() => send('SUBMIT')}><FormattedMessage id='General.Submit' /></Button>
               </>
             }
           </>

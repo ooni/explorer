@@ -106,8 +106,8 @@ export async function getServerSideProps({ query }) {
 
 const FeedbackLabel = ({reason}) => <FormattedMessage id={`Measurement.Feedback.${reason}`} />
 
-const token = () => {
-  return typeof localStorage !== 'undefined' ? localStorage.getItem('bearer') : ''
+const getBearerToken = () => {
+  return typeof localStorage !== 'undefined' ? JSON.parse(localStorage.getItem('bearer'))?.token : ''
 }
 
 const Measurement = ({
@@ -133,7 +133,7 @@ const Measurement = ({
   const [showModal, setShowModal] = useState(false)
   
   const client = axios.create({baseURL: process.env.NEXT_PUBLIC_OONI_API})
-  const fetcher = url => client.get(url, { headers: { Authorization: `Bearer ${token()}` } }).then(res => res.data)
+  const fetcher = url => client.get(url, { headers: { Authorization: `Bearer ${getBearerToken()}` } }).then(res => res.data)
 
   const {data: userFeedback, error: userFeedbackError} = useSWR(`/api/_/measurement_feedback/${report_id}`, fetcher)
 

@@ -58,7 +58,7 @@ const CommonSummary = ({
                 <Box fontSize={18} textAlign='center'><BiShareAlt /></Box>
                 <Box fontSize={0} fontWeigh={600} textAlign='center'>{'Share'.toUpperCase()}</Box>
               </Box>
-              <Box onClick={onVerifyClick}>
+              <Box sx={{cursor: 'pointer'}} onClick={onVerifyClick}>
                 <Box fontSize={18} textAlign='center'><AiOutlineWarning /></Box>
                 <Box fontSize={0} fontWeigh={600} textAlign='center'>{'Verify'.toUpperCase()}</Box>
               </Box>

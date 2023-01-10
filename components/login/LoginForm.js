@@ -120,6 +120,12 @@ export const LoginForm = ({ onLogin, redirectTo }) => {
                 {...field}
               />
             )}
+            rules={{
+              pattern: {
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, 
+              },
+              required: true,
+            }}
             name='email_address'
             control={control}
           />
@@ -132,7 +138,7 @@ export const LoginForm = ({ onLogin, redirectTo }) => {
         }
         {!submitting ? 
           <Box mt={2}>
-            <Button type='submit'><FormattedMessage id="General.Login" /></Button>
+            <Button disabled={!isValid} type='submit'><FormattedMessage id="General.Login" /></Button>
           </Box> :
           <SpinLoader />}
       </Flex>
