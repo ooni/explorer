@@ -2,14 +2,21 @@ import { useRouter } from 'next/router'
 import { useEffect, useState, useCallback } from 'react'
 import useSWR from 'swr'
 
-import { fetcher, apiEndpoints, loginUser } from '/lib/api'
+import { fetcher, apiEndpoints, loginUser, refreshToken, customErrorRetry } from '/lib/api'
+
+const TWELVE_HOURS = 1000 * 60 * 60 * 12
+const TEN_MINUTES = 1000 * 60 * 10
 
 export default function useUser() {
   const [submitted, setSubmitted] = useState(false)
   const [loggedIn, setLoggedIn] = useState(false)
   const [reqError, setReqError] = useState(null)
+  const [tokenRefreshErrored, setTokenRefreshErrored] = useState(false)
 
-  const { data, error, mutate } = useSWR(apiEndpoints.ACCOUNT_METADATA, fetcher)
+  const { data, error, mutate } = useSWR(apiEndpoints.ACCOUNT_METADATA, fetcher, {
+    dedupingInterval: 1000,
+    onErrorRetry: customErrorRetry
+  })
   const router = useRouter()
   const { token } = router.query
 
@@ -41,9 +48,29 @@ export default function useUser() {
     }
   }, [afterLogin, token, router.pathname])
 
+  useEffect(() => {
+    const interval = setInterval(() => {
+      const tokenCreatedAt = JSON.parse(localStorage.getItem('bearer'))?.created_at
+      if (tokenCreatedAt) {
+        const tokenExpiry = tokenCreatedAt + TWELVE_HOURS
+        const now = Date.now()
+        if (now > tokenExpiry) {
+          refreshToken().catch((e) => {
+            if (e?.response?.status === 401) {
+              localStorage.removeItem('bearer')
+              setTokenRefreshErrored(true)
+            }
+          })
+        }
+      }
+    }, TEN_MINUTES)
+
+    return () => clearInterval(interval)
+  }, [])
+
   const loading = !data && !error
   // If API returned `401 Unauthorized`, assume the user is not logged in
-  const loggedOut = !data || (error && error.status === 401)
+  const loggedOut = (!data || (error && error.status === 401)) || tokenRefreshErrored
 
   return {
     loading,

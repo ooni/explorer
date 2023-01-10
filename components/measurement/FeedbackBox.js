@@ -2,11 +2,21 @@ import React, { useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { Box, Button, Flex, Link, Text, theme } from 'ooni-components'
+import { GrClose } from 'react-icons/gr'
 import { RadioGroup, RadioButton } from 'components/search/Radio'
 import useStateMachine from '@cassiozen/usestatemachine'
 import SpinLoader from 'components/vendor/SpinLoader'
 import { submitFeedback, getAPI } from 'lib/api'
 import LoginForm from 'components/login/LoginForm'
+import styled from 'styled-components'
+
+const StyledCloseIcon = styled(GrClose)`
+position: absolute;
+top: 16px;
+right: 16px;
+font-size: 16px;
+cursor: pointer;
+`
 
 const okValues = ['ok', 'ok.unreachable', 'ok.broken', 'ok.parked']
 const blockedValues = [
@@ -129,6 +139,7 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
           zIndex: 100
           }}
         >
+          <StyledCloseIcon onClick={() => setShowModal(false)} />
           <>
             {state.value === 'initial' && 
               <>

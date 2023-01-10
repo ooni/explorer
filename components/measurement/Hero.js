@@ -49,7 +49,7 @@ const Hero = ({ status, icon, label, info }) => {
       <Container>
         <Text fontWeight={400} fontSize={24} as='div'>
           <Flex my={2} justifyContent='center' alignItems='center'>
-            <Box>{icon}</Box> <Box>{label}</Box>
+            {icon} <Box>{label}</Box>
           </Flex>
         </Text>
         {info &&

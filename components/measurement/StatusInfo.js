@@ -7,11 +7,11 @@ import {
 
 const StatusInfo = ({ title, message}) => (
   <Flex flexDirection='column'>
-    <Box mb={3}>
+    <Box mb={12}>
       <Text textAlign='center' fontSize={28}> {title} </Text>
     </Box>
     <Box>
-      <Text textAlign='center' fontSize={20} fontWeight='bold' style={{whiteSpace:'pre'}}> {message} </Text>
+      <Text textAlign='center' fontSize={18} fontWeight='bold' style={{whiteSpace:'pre'}}> {message} </Text>
     </Box>
   </Flex>
 )
