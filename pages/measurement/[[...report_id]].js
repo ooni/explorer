@@ -239,18 +239,11 @@ const Measurement = ({
                         content={summaryText}
                       />
                     }
-                    {!!userFeedbackItems.length && 
-                      <Flex my={2}>
-                        <DetailsBoxTable
-                          title={<FormattedMessage id='Measurement.CommonDetails.Label.UserFeedback' />}
-                          items={userFeedbackItems}
-                        />
-                      </Flex>
-                    }
                     {details}
                     <CommonDetails
                       measurement={raw_measurement}
                       reportId={report_id}
+                      userFeedbackItems={userFeedbackItems}
                     />
                   </Container>
                 </>

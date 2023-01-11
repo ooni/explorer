@@ -47,7 +47,8 @@ JsonViewer.propTypes = {
 
 const CommonDetails = ({
   measurement,
-  reportId
+  reportId,
+  userFeedbackItems =[]
 }) => {
   const {
     software_name,
@@ -143,6 +144,15 @@ const CommonDetails = ({
           bg={theme.colors.gray2}
         />
       </Flex>
+      {/* User Feedback */}
+      {!!userFeedbackItems.length && 
+        <Flex my={4}>
+          <DetailsBoxTable
+            title={<FormattedMessage id='Measurement.CommonDetails.Label.UserFeedback' />}
+            items={userFeedbackItems}
+          />
+        </Flex>
+      }
       {/* Raw Measurement */}
       <Flex>
         <DetailsBox
