@@ -11,7 +11,7 @@ import {
 } from 'ooni-components'
 import { useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
-import { AiOutlineWarning } from 'react-icons/ai'
+import { MdOutlineFactCheck } from 'react-icons/md'
 import { BiShareAlt } from 'react-icons/bi'
 
 import Flag from '../Flag'
@@ -56,7 +56,7 @@ const CommonSummary = ({
                 <Box fontSize={0} fontWeigh={600} textAlign='center'>{'Share'.toUpperCase()}</Box>
               </Box>
               <Box sx={{cursor: 'pointer'}} onClick={onVerifyClick}>
-                <Box fontSize={18} textAlign='center'><AiOutlineWarning /></Box>
+                <Box fontSize={18} textAlign='center'><MdOutlineFactCheck /></Box>
                 <Box fontSize={0} fontWeigh={600} textAlign='center'>{'Verify'.toUpperCase()}</Box>
               </Box>
               </Flex>
