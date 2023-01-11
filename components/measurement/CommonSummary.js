@@ -39,9 +39,6 @@ const CommonSummary = ({
   const startTime = measurement_start_time
   const network = probe_asn
   const countryCode = probe_cc
-
-  
- 
   const formattedDate = new Intl.DateTimeFormat(intl.locale, { dateStyle: 'long', timeStyle: 'long', timeZone: 'UTC' }).format(new Date(startTime))
   
   return (
@@ -66,7 +63,6 @@ const CommonSummary = ({
             </Box>
           </Flex>
           {hero}
-
           <Flex flexWrap='wrap' alignItems='flex-end' justifyContent='space-between'>
             <Box>
               <Text fontSize={1}>
@@ -74,14 +70,18 @@ const CommonSummary = ({
               </Text>
             </Box>
             <Box>
-              <Flex>
-                <Box mr={2}>
-                  <Flag countryCode={countryCode} size={30} border />
-                </Box>
-                <Box fontSize={3} >
-                  {country}
-                </Box>
-              </Flex>
+              <NLink href={`/country/${countryCode}`} passHref><Link color='white'>
+                <Flex>
+                
+                  <Box mr={2}>
+                    <Flag countryCode={countryCode} size={30} border />
+                  </Box>
+                  <Box fontSize={3}>
+                    {country}
+                  </Box>
+                
+                </Flex>
+              </Link></NLink>
             </Box>
           </Flex>
         </Container>

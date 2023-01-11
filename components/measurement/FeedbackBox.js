@@ -166,17 +166,21 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
             {state.value === 'loginSuccess' && 
               <>
                 <Text fontSize={18} fontWeight='bold' mb={3}>
-                  Login link sent
+                  <FormattedMessage id="Measurement.Feedback.Login.Confirmation.Title" />
                 </Text>
-                <Text>Please check your email for a link to login to your account.</Text>
+                <Text>
+                  <FormattedMessage id="Measurement.Feedback.Login.Confirmation.Text" />
+                </Text>
                 <Button mt={4} onClick={() => setShowModal(false)}>
-                  OK
+                  <FormattedMessage id="General.OK" />
                 </Button>
               </>
             }
             {state.value === 'feedback' &&
               <form onSubmit={(e) => e.preventDefault()}>
-                <Text fontSize={18} fontWeight='bold' mb={3}>Verify the measurement</Text>
+                <Text fontSize={18} fontWeight='bold' mb={3}>
+                  <FormattedMessage id="Measurement.Feedback.Title" />
+                </Text>
                 <Controller
                   control={control}
                   name='feedback'
@@ -230,7 +234,9 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
                     </RadioGroup>
                   )}
                 />
-                <Text mb={3}>We use this feedback to improve our results’ accuracy.</Text>
+                <Text mb={3}>
+                  <FormattedMessage id="Measurement.Feedback.Description" />
+                </Text>
                 {error && 
                   <StyledError>
                     <FormattedMessage id='Measurement.Feedback.Failure' />

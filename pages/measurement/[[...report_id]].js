@@ -140,7 +140,7 @@ const Measurement = ({
   const userFeedbackItems = useMemo(() => {
     return userFeedback ? 
       Object.entries(userFeedback.summary).map(([key, value]) => ({label: <FeedbackLabel reason={key} />, value})) : 
-      null
+      []
   }, [userFeedback])
 
   // Add the 'AS' prefix to probe_asn when API chooses to send just the number
@@ -222,7 +222,6 @@ const Measurement = ({
                     hero={<Hero status={status} icon={statusIcon} label={statusLabel} info={info} />}
                     onVerifyClick={() => setShowModal(true)}
                   />
-
                   <Container>
                     <DetailsHeader
                       testName={test_name}
@@ -240,7 +239,7 @@ const Measurement = ({
                         content={summaryText}
                       />
                     }
-                    {userFeedbackItems && 
+                    {!!userFeedbackItems.length && 
                       <Flex my={2}>
                         <DetailsBoxTable
                           title={<FormattedMessage id='Measurement.CommonDetails.Label.UserFeedback' />}

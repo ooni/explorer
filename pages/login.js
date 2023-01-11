@@ -10,9 +10,10 @@ import LoginForm from 'components/login/LoginForm'
 import { mutate } from 'swr'
 import SpinLoader from 'components/vendor/SpinLoader'
 import useUser from 'hooks/useUser'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 const Login = () => {
+  const intl = useIntl()
   const router = useRouter()
   const { token } = router.query
 
@@ -28,9 +29,9 @@ const Login = () => {
   // }, [user, loading, router])
 
   return (
-    <Layout title='Login'>
+    <Layout>
       <Head>
-        <title>Login</title>
+        <title>{intl.formatMessage({id: 'General.Login'})}</title>
       </Head>
       <NavBar />
 
@@ -68,9 +69,9 @@ const Login = () => {
         {/* After loggin in */}
         {loggedIn && !reqError &&
           <>
-            <Heading h={2} my={2} mx='auto'>
+            <Text fontSize={3} my={2} mx='auto'>
               <FormattedMessage id="Login.Success" />
-            </Heading>
+            </Text>
           </>
         }
 
