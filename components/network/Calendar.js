@@ -9,20 +9,22 @@ height: 180px;
 margin-bottom: 10px;
 margin-top: 40px;
 `
-const colors = theme.colors
+const { colors } = theme
+const chartColors = [colors.blue2, colors.blue4, colors.blue5, colors.blue7]
+
 const findColor = number => {
-  if (number === 0) return colors.gray3
-  if (number <= 10) return colors.blue1
-  if (number <= 100) return colors.blue3
-  if (number <= 1000) return colors.blue5
-  return colors.blue7
+  if (number === 0) return colors.gray1
+  if (number <= 50) return chartColors[0]
+  if (number <= 500) return chartColors[1]
+  if (number <= 5000) return chartColors[2]
+  return chartColors[3]
 }
 
 const colorLegend = [
-  {color: colors.blue1, range: '1-10'},
-  {color: colors.blue3, range: '11-100'},
-  {color: colors.blue5, range: '101-1000'},
-  {color: colors.blue7, range: '>1000'},
+  {color: chartColors[0], range: '1-50'},
+  {color: chartColors[1], range: '51-100'},
+  {color: chartColors[2], range: '501-5000'},
+  {color: chartColors[3], range: '>5000'},
 ]
 
 const dateRange = (startDate, endDate) => {
