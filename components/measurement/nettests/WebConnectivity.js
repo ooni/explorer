@@ -180,13 +180,10 @@ DnsAnswerCell.propTypes = {
 }
 
 const dnsAnswerIpInfo = (dnsAnswer) => {
-    return dnsAnswer.asn
-        ? dnsAnswer.as_org_name
-        ? `AS${dnsAnswer.asn} (${dnsAnswer.as_org_name})`
-        : `AS${dnsAnswer.asn}`
-    : dnsAnswer.as_org_name
-        ? `Unknown AS (${dnsAnswer.as_org_name})`
-        : null
+    const asn = dnsAnswer.asn ? `AS${dnsAnswer.asn}` : 'Unknown AS'
+    const asOrgName = dnsAnswer.as_org_name ? `(${dnsAnswer.as_org_name})` : ''
+
+    return `${asn} ${asOrgName}`.trim()
 }
 
 const DnsAnswerRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = 'Type', data = 'DATA', answer_ip_info = 'Answer IP Info', header = false}) => (
