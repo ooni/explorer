@@ -7,7 +7,7 @@ export default function handler(req, res) {
   const location = req.query?.country
 
   const diff = dayjs(dateEnd).diff(dayjs(dateStart), 'day')
-  const aggInterval = diff <= 31 ? '1h' : '1d'
+  const aggInterval = diff <= 30 ? '1h' : '1d'
 
   axios({
     method:'get',

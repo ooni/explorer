@@ -153,7 +153,6 @@ const Country = ({ countryCode, overviewStats, reports, ...coverageDataSSR }) =>
       axios({
         method: 'get',
         url: `/api/cloudflare?from=${from.toISOString().split('.')[0]+'Z'}&to=${to.toISOString().split('.')[0]+'Z'}&country=${countryCode}`,
-        baseURL: 'http://localhost:3100',
       }).then(({data}) => {
         const ruData = data.result.all.timestamps.map((st, i) => {
           return {
@@ -272,7 +271,8 @@ const Country = ({ countryCode, overviewStats, reports, ...coverageDataSSR }) =>
                   axisBottom={{
                     format: '%Y-%m-%d',
                   }}
-                  
+                  // enableSlices='x'
+                  useMesh={true}
 
 
 
@@ -322,7 +322,7 @@ const Country = ({ countryCode, overviewStats, reports, ...coverageDataSSR }) =>
                   // pointBorderWidth={2}
                   // pointBorderColor={{ from: 'serieColor' }}
                   // pointLabelYOffset={-12}
-                  useMesh={true}
+              
                   legends={[
                     {
                       anchor: 'bottom-left',
