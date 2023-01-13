@@ -131,8 +131,8 @@ const Measurement = ({
 
   const { user, submitted, reqError, setSubmitted } = useUser()
   const [showModal, setShowModal] = useState(false)
-  
-  const client = axios.create({baseURL: process.env.NEXT_PUBLIC_OONI_API})
+
+  const client = axios.create({baseURL: process.env.NEXT_PUBLIC_TEMP})
   const fetcher = url => client.get(url, { headers: { Authorization: `Bearer ${getBearerToken()}` } }).then(res => res.data)
 
   const {data: userFeedback, error: userFeedbackError} = useSWR(`/api/_/measurement_feedback/${report_id}`, fetcher)
