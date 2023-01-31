@@ -19,8 +19,8 @@ const StyledModal = styled(Modal).attrs({
 })``
 
 const StyledInputContainer = styled(Box).attrs({
-  // width: [1, 1 / 3],
-  my: 3,
+  width: '100%',
+  mt: 3,
 })`
   position: relative;
   & ${StyledError} {
@@ -110,7 +110,6 @@ export const LoginForm = ({ onLogin, redirectTo }) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <Flex
         flexDirection={['column']}
-        alignItems={'center'}
       >
         <StyledInputContainer>
            <Controller
@@ -132,12 +131,12 @@ export const LoginForm = ({ onLogin, redirectTo }) => {
           <StyledError>{errors?.email_address?.message}</StyledError>
         </StyledInputContainer>
         {loginError && 
-          <Box my={1}>
+          <Box mt={1}>
             <StyledError>{loginError}</StyledError>
           </Box>
         }
         {!submitting ? 
-          <Box mt={2}>
+          <Box mt={3} alignSelf='center'>
             <Button disabled={!isValid} type='submit'><FormattedMessage id="General.Login" /></Button>
           </Box> :
           <SpinLoader />}
