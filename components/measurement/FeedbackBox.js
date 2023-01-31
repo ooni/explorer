@@ -64,7 +64,7 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
     states: {
       initial: {
         effect({ send, setContext, event, context }) {
-          if (!user.loggedIn) send('LOGIN')
+          if (!user?.logged_in) send('LOGIN')
           if (!previousFeedback) send('FEEDBACK')
         },
         on: {

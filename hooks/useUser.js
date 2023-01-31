@@ -1,50 +1,48 @@
 import { useRouter } from 'next/router'
-import { useEffect, useState, useCallback } from 'react'
+import { useEffect, useState, useCallback, useContext, createContext, useMemo } from 'react'
 import useSWR from 'swr'
 
-import { fetcher, apiEndpoints, loginUser, refreshToken, customErrorRetry } from '/lib/api'
+import { fetcher, apiEndpoints, loginUser, refreshToken, customErrorRetry, getAPI } from '/lib/api'
 
 const TWELVE_HOURS = 1000 * 60 * 60 * 12
 const TEN_MINUTES = 1000 * 60 * 10
 
-export default function useUser() {
-  const [submitted, setSubmitted] = useState(false)
-  const [loggedIn, setLoggedIn] = useState(false)
-  const [reqError, setReqError] = useState(null)
-  const [tokenRefreshErrored, setTokenRefreshErrored] = useState(false)
+const UserContext = createContext({})
 
-  const { data, error, mutate } = useSWR(apiEndpoints.ACCOUNT_METADATA, fetcher, {
-    dedupingInterval: 1000,
-    onErrorRetry: customErrorRetry
-  })
+export const UserProvider = ({children}) => {
   const router = useRouter()
   const { token } = router.query
+  const [user, setUser] = useState()
+  const [error, setError] = useState()
+  const [loading, setLoading] = useState(false)
+  const [loadingInitial, setLoadingInitial] = useState(true)
+
+  const getUser = () => {
+    return getAPI(apiEndpoints.ACCOUNT_METADATA)
+      .then((user) => setUser(user))
+      .catch(() => setUser(undefined))
+      .finally(() => setLoadingInitial(false))
+  }
 
   const afterLogin = useCallback((redirectTo) => {
-    mutate(apiEndpoints.ACCOUNT_METADATA, true)
-    if (redirectTo) {
-      const { pathname, searchParams } = new URL(redirectTo)
-      setTimeout(() => {
-        router.push({ pathname, query: Object.fromEntries([...searchParams]) })
-      }, 3000)
-    }
-  }, [router, mutate])
+    const { pathname, searchParams } = new URL(redirectTo)
+    setTimeout(() => {
+      router.push({ pathname, query: Object.fromEntries([...searchParams]) })
+    }, 3000)
+  }, [router])
 
-  // If there is a `token` URL param, call the login API
-  // This fetches and sets the authentication cookie
   useEffect(() => {
     if (token && router.pathname === '/login') {
       loginUser(token)
         .then((data) => {
-          setLoggedIn(true)
+          getUser()
           if (data?.redirect_to) afterLogin(data.redirect_to)
         }).catch((e)=> {
           console.log(e)
-          setReqError(e.message)
+          setError(e.message)
         })
     } else {
-      // Reset any error messages from using invalid tokens
-      setReqError(null)
+      setError(null)
     }
   }, [afterLogin, token, router.pathname])
 
@@ -58,7 +56,7 @@ export default function useUser() {
           refreshToken().catch((e) => {
             if (e?.response?.status === 401) {
               localStorage.removeItem('bearer')
-              setTokenRefreshErrored(true)
+              getUser()
             }
           })
         }
@@ -68,20 +66,59 @@ export default function useUser() {
     return () => clearInterval(interval)
   }, [])
 
-  const loading = !data && !error
-  // If API returned `401 Unauthorized`, assume the user is not logged in
-  const loggedOut = (!data || (error && error.status === 401)) || tokenRefreshErrored
+  useEffect(() => {
+    getUser()
+  }, [])
 
-  return {
-    loading,
-    loggedOut,
-    user: {
-      loggedIn: !loggedOut
-    },
-    mutate,
-    submitted,
-    setSubmitted,
-    loggedIn,
-    reqError
+  function login(email, password) {
+    setLoading(true)
+    loginUser(token)
+      .then((data) => {
+        setUser(data)
+        if (data?.redirect_to) afterLogin(data.redirect_to)
+      }).catch((e)=> {
+        console.log(e)
+        setError(error)
+      }).finally(() => setLoading(false))
   }
+
+  function signUp(email, name, password) {
+    // setLoading(true)
+    // signUp({ email, name, password })
+    //   .then((user) => {
+    //     setUser(user)
+    //     history.push('/')
+    //   })
+    //   .catch((error) => setError(error))
+    //   .finally(() => setLoading(false))
+  }
+
+  function logout() {
+    localStorage.removeItem('bearer')
+    getUser()
+  }
+
+  const memoedValue = useMemo(
+    () => ({
+      user,
+      loading,
+      error,
+      login,
+      signUp,
+      logout,
+    }),
+    [user, loading, error]
+  )
+
+  return (
+    <UserContext.Provider value={memoedValue}>
+      {children}
+    </UserContext.Provider>
+  )
 }
+
+const useUser = () => {
+  return useContext(UserContext)
+}
+
+export default useUser

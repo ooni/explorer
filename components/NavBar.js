@@ -3,11 +3,8 @@ import { useRouter, withRouter } from 'next/router'
 import NLink from 'next/link'
 import styled from 'styled-components'
 import { FormattedMessage, useIntl } from 'react-intl'
-
 import { getLocalisedLanguageName } from 'utils/i18nCountries'
-
 import ExplorerLogo from 'ooni-components/components/svgs/logos/Explorer-HorizontalMonochromeInverted.svg'
-
 import {
   Link,
   Flex,
@@ -15,6 +12,7 @@ import {
   Container,
   Select,
 } from 'ooni-components'
+import useUser from 'hooks/useUser'
 
 const StyledNavItem = styled.a`
   text-decoration: none;
@@ -83,9 +81,15 @@ export const NavBar = ({color}) => {
   const { locale } = useIntl()
   const router = useRouter()
   const { pathname, asPath, query } = router
+  const { user, logout } = useUser()
 
   const handleLocaleChange = (event) => {
     router.push({ pathname, query }, asPath, { locale: event.target.value })
+  }
+
+  const logoutUser = (e) => {
+    e.preventDefault()
+    logout()
   }
 
   return (
@@ -116,6 +120,17 @@ export const NavBar = ({color}) => {
                   ))}
                 </LanguageSelect>
               </Box> */}
+              {user?.logged_in && 
+                <Box  ml={[0, 4]} my={[2, 0]}>
+                  <StyledNavItem>
+                    <NavItemLabel onClick={logoutUser}>
+                      <FormattedMessage id='General.Logout' />
+                    </NavItemLabel>
+                    <Underline />
+                  </StyledNavItem>
+                </Box>
+              }
+              {/* <NavItem label="LogOut" href="#" onClick={logout} /> */}
             </Flex>
           </Box>
         </Flex>

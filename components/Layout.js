@@ -8,6 +8,7 @@ import Header from './Header'
 import Footer from './Footer'
 import { useIntl } from 'react-intl'
 import { getDirection } from 'components/withIntl'
+import { UserProvider } from 'hooks/useUser'
 // import FeedbackButton from '../components/FeedbackFloat'
 
 theme.maxWidth = 1024
@@ -61,15 +62,17 @@ const Layout = ({ children, disableFooter = false }) => {
   return (
     <MatomoProvider value={matomoInstance}>
       <ThemeProvider theme={theme}>
-        <GlobalStyle direction={getDirection(locale)} />
-        <div className="site">
-          <Header />
-          <div className="content">
-            { children }
+        <UserProvider>
+          <GlobalStyle direction={getDirection(locale)} />
+          <div className="site">
+            <Header />
+            <div className="content">
+              { children }
+            </div>
+            {!disableFooter && <Footer />}
           </div>
-          {!disableFooter && <Footer />}
-        </div>
-        {/* <FeedbackButton /> */}
+          {/* <FeedbackButton /> */}
+        </UserProvider>
       </ThemeProvider>
     </MatomoProvider>
   )

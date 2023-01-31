@@ -18,7 +18,6 @@ import HeadMetadata from 'components/measurement/HeadMetadata'
 import FeedbackBox from 'components/measurement/FeedbackBox'
 import { LoginModal } from 'components/login/LoginForm'
 
-import Layout from 'components/Layout'
 import NavBar from 'components/NavBar'
 import ErrorPage from '../_error'
 import { useIntl } from 'react-intl'

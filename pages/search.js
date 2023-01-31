@@ -15,7 +15,6 @@ import { FormattedMessage, useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
 
 import NavBar from '../components/NavBar'
-import Layout from '../components/Layout'
 
 import ResultsList from '../components/search/ResultsList'
 import FilterSidebar, { queryToFilterMap } from '../components/search/FilterSidebar'

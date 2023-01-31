@@ -5,7 +5,6 @@ import NLink from 'next/link'
 import Head from 'next/head'
 
 import NavBar from 'components/NavBar'
-import Layout from 'components/Layout'
 import LoginForm from 'components/login/LoginForm'
 import { mutate } from 'swr'
 import SpinLoader from 'components/vendor/SpinLoader'
@@ -17,9 +16,12 @@ const Login = () => {
   const router = useRouter()
   const { token } = router.query
 
+  const [submitted, setSubmitted] = useState(false)
+
   const redirectTo = typeof window !== 'undefined' && window.location.origin
 
-  const { user, loading, submitted, setSubmitted, loggedIn, reqError } = useUser()
+  const { user, loading, error } = useUser()
+
 
   // // If user is already logged in, redirect to home page
   // useEffect(() => {
@@ -29,7 +31,7 @@ const Login = () => {
   // }, [user, loading, router])
 
   return (
-    <Layout>
+    <>
       <Head>
         <title>{intl.formatMessage({id: 'General.Login'})}</title>
       </Head>
@@ -57,7 +59,7 @@ const Login = () => {
         }
 
         {/* While logging In */}
-        {token && !loggedIn && !reqError &&
+        {token && !user && !error &&
           <>
             <SpinLoader />
             <Heading h={2} my={2} mx='auto'>
@@ -67,7 +69,7 @@ const Login = () => {
         }
 
         {/* After loggin in */}
-        {loggedIn && !reqError &&
+        {user && !error &&
           <>
             <Text fontSize={3} my={2} mx='auto'>
               <FormattedMessage id="Login.Success" />
@@ -76,14 +78,14 @@ const Login = () => {
         }
 
         {/* Errors */}
-        {reqError &&
+        {error &&
           <Box width={[1, 1 / 3]} mx='auto' textAlign={'center'}>
-            <Box mb={3} p={4} bg='red1'>{reqError}</Box>
+            <Box mb={3} p={4} bg='red1'>{error}</Box>
             <NLink href='/login'><FormattedMessage id="Login.Failure" /></NLink>
           </Box>
         }
       </Flex>
-    </Layout>
+    </>
   )
 }
 
