@@ -50,7 +50,7 @@ const QuestionText = ({i18nKey}) => (
   <Text mb={3}><FormattedMessage id={i18nKey} /></Text>
 )
 
-const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
+const FeedbackBox = ({user, report_id, setShowModal, previousFeedback, mutateUserFeedback}) => {
   const intl = useIntl()
   const [error, setError] = useState(null)
 
@@ -95,7 +95,10 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback}) => {
             status: nested || feedback
           }
           submitFeedback(feedbackParams)
-            .then(() => send('SUCCESS'))
+            .then(() => {
+              mutateUserFeedback()
+              send('SUCCESS')
+            })
             .catch(({response}) => {
               setError(response?.data?.error || 'unknown')
             }).finally(() => send('FEEDBACK'))

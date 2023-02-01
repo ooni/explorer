@@ -134,7 +134,7 @@ const Measurement = ({
   const client = axios.create({baseURL: process.env.NEXT_PUBLIC_TEMP})
   const fetcher = url => client.get(url, { headers: { Authorization: `Bearer ${getBearerToken()}` } }).then(res => res.data)
 
-  const {data: userFeedback, error: userFeedbackError} = useSWR(`/api/_/measurement_feedback/${report_id}`, fetcher)
+  const {data: userFeedback, error: userFeedbackError, mutate: mutateUserFeedback} = useSWR(`/api/_/measurement_feedback/${report_id}`, fetcher)
 
   const userFeedbackItems = useMemo(() => {
     return userFeedback ? 
@@ -209,6 +209,7 @@ const Measurement = ({
                       report_id={report_id}
                       setShowModal={setShowModal}
                       previousFeedback={userFeedback?.user_feedback}
+                      mutateUserFeedback={mutateUserFeedback}
                     />
                   }
                   <CommonSummary
