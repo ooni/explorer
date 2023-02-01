@@ -167,32 +167,45 @@ FailureString.propTypes = {
   failure: PropTypes.string
 }
 
+const DnsNarrowAnswerCell = (props) => (
+  <Box width={1/12}>{props.children}</Box>
+)
+
 const DnsAnswerCell = (props) => (
-  <Box width={1/8}>{props.children}</Box>
+  <Box width={1/4}>{props.children}</Box>
 )
 
 DnsAnswerCell.propTypes = {
   children: PropTypes.any
 }
 
-const FiveColRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = 'Type', data = 'DATA', header = false}) => (
+const dnsAnswerIpInfo = (dnsAnswer) => {
+    const asn = dnsAnswer.asn ? `AS${dnsAnswer.asn}` : 'Unknown AS'
+    const asOrgName = dnsAnswer.as_org_name ? `(${dnsAnswer.as_org_name})` : ''
+
+    return `${asn} ${asOrgName}`.trim()
+}
+
+const DnsAnswerRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = 'Type', data = 'DATA', answer_ip_info = 'Answer IP Info', header = false}) => (
   <Text fontWeight={header ? 'bold' : undefined}>
     <Flex flexWrap='wrap' mb={2}>
       <DnsAnswerCell>{name}</DnsAnswerCell>
-      <DnsAnswerCell>{netClass}</DnsAnswerCell>
-      <DnsAnswerCell>{ttl}</DnsAnswerCell>
-      <DnsAnswerCell>{type}</DnsAnswerCell>
+      <DnsNarrowAnswerCell>{netClass}</DnsNarrowAnswerCell>
+      <DnsNarrowAnswerCell>{ttl}</DnsNarrowAnswerCell>
+      <DnsNarrowAnswerCell>{type}</DnsNarrowAnswerCell>
       <DnsAnswerCell>{data}</DnsAnswerCell>
+      <DnsAnswerCell>{answer_ip_info}</DnsAnswerCell>
     </Flex>
   </Text>
 )
 
-FiveColRow.propTypes = {
+DnsAnswerRow.propTypes = {
   name: PropTypes.string,
   netClass: PropTypes.string,
   ttl: PropTypes.number,
   type: PropTypes.string,
   data: PropTypes.string,
+  answer_ip_info: PropTypes.string,
   header: PropTypes.bool
 }
 
@@ -228,9 +241,9 @@ const QueryContainer = ({query}) => {
       {failure && <Box width={1}><FailureString failure={failure} /></Box>}
       {!failure &&
         <Box width={1}>
-          <FiveColRow header />
+          <DnsAnswerRow header />
           {Array.isArray(answers) && answers.map((dnsAnswer, index) => (
-            <FiveColRow
+            <DnsAnswerRow
               key={index}
               name='@'
               netClass='IN'
@@ -244,6 +257,7 @@ const QueryContainer = ({query}) => {
                     ? dnsAnswer.hostname
                     : null // for any other answer_type, DATA column will be empty
               }
+              answer_ip_info={dnsAnswerIpInfo(dnsAnswer)}
             />
           ))}
         </Box>
