@@ -63,23 +63,22 @@ const CommonSummary = ({
             </Box>
           </Flex>
           {hero}
-          <Flex flexWrap='wrap' alignItems='flex-end' justifyContent='space-between'>
+          <Flex flexWrap='wrap' alignItems='flex-end' justifyContent='space-between' sx={{textDecoration:'underline'}}>
             <Box>
               <Text fontSize={1}>
-                <NLink href={`/network/${network}`} passHref><Link color='white'>{`${network} ${networkName}`.trim()}</Link></NLink>
+                <Box mb={2}><NLink href={`/network/${network}`} passHref><Link color='white'>{network}</Link></NLink></Box>
+                <Box><NLink href={`/network/${network}`} passHref><Link color='white'>{networkName}</Link></NLink></Box>
               </Text>
             </Box>
             <Box>
               <NLink href={`/country/${countryCode}`} passHref><Link color='white'>
-                <Flex>
-                
+                <Flex alignItems='center'>
                   <Box mr={2}>
-                    <Flag countryCode={countryCode} size={30} border />
+                    <Flag countryCode={countryCode} size={46} border />
                   </Box>
-                  <Box fontSize={3}>
+                  <Box fontSize={20}>
                     {country}
                   </Box>
-                
                 </Flex>
               </Link></NLink>
             </Box>
