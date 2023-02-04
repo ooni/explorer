@@ -70,7 +70,7 @@ const queryToParams = ({ query }) => {
   let params = {},
     show = 50
   const supportedParams = ['probe_cc', 'domain', 'input','category_code', 'probe_asn', 'test_name', 'since', 'until', 'failure']
-  
+
   if (query.show) {
     show = parseInt(query.show)
   }
@@ -101,22 +101,6 @@ const getMeasurements = (query) => {
   const params = queryToParams({ query })
   return client.get('/api/v1/measurements', {params})
 }
-
-// Handle circular structures when stringifying error responses
-// From: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Errors/Cyclic_object_value#Examples
-const getCircularReplacer = () => {
-  const seen = new WeakSet()
-  return (key, value) => {
-    if (typeof value === 'object' && value !== null) {
-      if (seen.has(value)) {
-        return
-      }
-      seen.add(value)
-    }
-    return value
-  }
-}
-
 
 const serializeError = (err) => {
   const { name, message, stack, config = {} } = err.toJSON()
@@ -302,14 +286,14 @@ const Search = ({testNames, testNamesKeyed, countries, query: queryProp }) => {
             <FilterSidebar
               domainFilter={query.domain}
               inputFilter={query.input}
-              categoryFilter={query.category}
+              categoryFilter={query.category_code}
               testNameFilter={query.test_name}
-              countryFilter={query.country}
+              countryFilter={query.probe_cc}
               asnFilter={query.asn}
               sinceFilter={queryProp.since}
               untilFilter={queryProp.until}
               onlyFilter={query.only || 'all'}
-              hideFailed={query.failed}
+              hideFailed={query.failure}
               onApplyFilter={onApplyFilter}
               testNames={testNames}
               countries={countries}
