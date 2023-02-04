@@ -289,11 +289,11 @@ const Search = ({testNames, testNamesKeyed, countries, query: queryProp }) => {
               categoryFilter={query.category_code}
               testNameFilter={query.test_name}
               countryFilter={query.probe_cc}
-              asnFilter={query.asn}
+              asnFilter={query.probe_asn}
               sinceFilter={queryProp.since}
               untilFilter={queryProp.until}
               onlyFilter={query.only || 'all'}
-              hideFailed={query.failure}
+              hideFailed={!query.failure}
               onApplyFilter={onApplyFilter}
               testNames={testNames}
               countries={countries}
