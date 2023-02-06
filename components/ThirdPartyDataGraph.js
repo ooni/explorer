@@ -1,22 +1,27 @@
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { ResponsiveLine } from '@nivo/line'
-import { Box } from 'ooni-components'
+import { Box, theme } from 'ooni-components'
 import dayjs from 'services/dayjs'
+import { useIntl } from 'react-intl'
 
+const iodaLineColors = [theme.colors.blue5, theme.colors.red5, theme.colors.green5, theme.colors.fuchsia5]
 
-const ThirdPartyDataGraph = ({since, until, country, asn}) => {
-  console.log('TEST')
+const ThirdPartyDataGraph = ({since, until, country, asn, ...props}) => {
+  console.log('TEST', props)
+  const intl = useIntl()
   const location = country || asn
   const [graphData, setGraphData] = useState([])
 
   const cloudflareData = useEffect(() => {
+    setGraphData([])
+
     const to = dayjs.utc(until)
     const from = dayjs.utc(since)
 
     axios({
       method: 'get',
-      url: `/api/cloudflare?from=${from.toISOString().split('.')[0]+'Z'}&to=${to.toISOString().split('.')[0]+'Z'}&location=${asn ? `AS${asn}` : country}`,
+      url: `/api/cloudflare?from=${from.toISOString().split('.')[0]+'Z'}&to=${to.toISOString().split('.')[0]+'Z'}&${asn ? `asn=${asn}` : `country=${country}`}`,
     }).then(({data}) => {
       const ruData = data.result.all.timestamps.map((st, i) => {
         return {
@@ -27,7 +32,7 @@ const ThirdPartyDataGraph = ({since, until, country, asn}) => {
       setGraphData((oldVal) => {
         return [...oldVal, {
           'id': 'Cloudflare',
-          // 'color': 'hsl(0, 100%, 50%)',
+          'color': theme.colors.yellow5,
           'data': ruData,
         }]
       })
@@ -39,15 +44,15 @@ const ThirdPartyDataGraph = ({since, until, country, asn}) => {
           `https://api.ioda.inetintel.cc.gatech.edu/v2/signals/raw/country/${location}?from=${Math.round(from.valueOf()/1000)}&until=${Math.round(to.valueOf()/1000)}&sourceParams=WEB_SEARCH` : 
           `https://api.ioda.inetintel.cc.gatech.edu/v2/signals/raw/asn/${location}?from=${Math.round(from.valueOf()/1000)}&until=${Math.round(to.valueOf()/1000)}&sourceParams=WEB_SEARCH`,
     }).then(({data}) => {
-      const graphData2 = data.data[0].map((item) => {
+      const graphData2 = data.data[0].map((item, i) => {
         const max = Math.max(...item.values)
         const values = item.values.map((val, i) => {
           const time = dayjs(item.from * 1000).add(item.step * i, 'second').utc().toISOString().split('.')[0]+'Z'
           return {x: time, y: val ? val / max : null}
         })
         return {
-          'id': item.datasource,
-          // 'color': 'hsl(100, 70%, 50%)',
+          'id': intl.formatMessage({id: `ThirdPartyGraph.Label.${item.datasource}`}),
+          'color': iodaLineColors[i],
           'data': values
         }
       })
@@ -66,7 +71,7 @@ const ThirdPartyDataGraph = ({since, until, country, asn}) => {
           data={graphData}
           margin={{ top: 50, right: 20, bottom: 70, left: 30 }}
           enablePoints={false}
-          lineWidth={1}
+          lineWidth={2}
           xScale={{
             type: 'time',
             format: '%Y-%m-%dT%H:%M:%SZ',
@@ -85,6 +90,7 @@ const ThirdPartyDataGraph = ({since, until, country, asn}) => {
           }}
           // enableSlices='x'
           useMesh={true}
+          colors={d => d.color}
 
 
 
@@ -137,14 +143,14 @@ const ThirdPartyDataGraph = ({since, until, country, asn}) => {
       
           legends={[
             {
-              anchor: 'bottom-left',
+              anchor: 'bottom',
               direction: 'row',
               // justify: false,
               // translateX: 100,
               translateY: 70,
               itemsSpacing: 0,
               itemDirection: 'left-to-right',
-              itemWidth: 90,
+              itemWidth: 140,
               itemHeight: 20,
               // itemOpacity: 0.75,
               symbolSize: 12,
