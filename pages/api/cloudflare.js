@@ -54,14 +54,15 @@ const cloudflareHandler = (req, res) => {
       'X-Auth-Email': process.env.CLOUDFLARE_EMAIL
     },
    }).then(({data, headers}) => {
+    const result = data.result.all
     if (req.cache) {
       req.cache.set(cacheKey, {
         headers,
-        data
+        data: result
       })
     }
 
-    return res.status(200).json(data)
+    return res.status(200).json(result)
   }).catch((err) =>{
     return res.status(400).json(err)
   })

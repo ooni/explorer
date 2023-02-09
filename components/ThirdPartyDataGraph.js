@@ -23,10 +23,10 @@ const ThirdPartyDataGraph = ({since, until, country, asn, ...props}) => {
       method: 'get',
       url: `/api/cloudflare?from=${from.toISOString().split('.')[0]+'Z'}&to=${to.toISOString().split('.')[0]+'Z'}&${asn ? `asn=${asn}` : `country=${country}`}`,
     }).then(({data}) => {
-      const ruData = data.result.all.timestamps.map((st, i) => {
+      const ruData = data.timestamps.map((st, i) => {
         return {
           'x': st,
-          'y': Number(data.result.all.values[i])
+          'y': Number(data.values[i])
         }
       })
       setGraphData((oldVal) => {
