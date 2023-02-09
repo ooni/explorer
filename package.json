@@ -25,6 +25,7 @@
     "deepmerge": "^4.2.2",
     "flag-icon-css": "^4.1.7",
     "lodash.debounce": "^4.0.8",
+    "lru-cache": "^7.14.1",
     "markdown-to-jsx": "^7.1.7",
     "next": "^12.3.1",
     "nprogress": "^0.2.0",
