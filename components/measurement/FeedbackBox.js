@@ -26,6 +26,8 @@ const okValues = ['ok', 'ok.unreachable', 'ok.broken', 'ok.parked']
 const blockedValues = [
   { top: 'ok' },
   { top: 'ok.broken' },
+  { top: 'ok.parked' },
+  { top: 'ok.unreachable' },
   { top: 'blocked',
     sub: [
   { 
