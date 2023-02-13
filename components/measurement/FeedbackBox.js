@@ -22,29 +22,32 @@ const StyledError = styled.small`
   color: ${props => props.theme.colors.red5};
 `
 
-const okValues = ['ok', 'ok.unreachable', 'ok.broken', 'ok.parked']
 const blockedValues = [
   { top: 'ok' },
-  { top: 'ok.broken' },
-  { top: 'ok.parked' },
-  { top: 'ok.unreachable' },
-  { top: 'blocked',
+  { top: 'broken',
     sub: [
-  { 
-    top: 'blocked.blockpage',
-    sub: [
-      'blocked.blockpage.http',
-      'blocked.blockpage.dns',
-      'blocked.blockpage.server_side',
-      'blocked.blockpage.server_side.captcha'
+      { top: 'broken.parked' },
+      { top: 'broken.down' },
+      { top: 'broken.other' }
     ]
   },
-  { top: 'blocked.dns',
-    sub: ['blocked.dns.inconsistent', 'blocked.dns.nxdomain']
+  { top: 'blocked',
+    sub: [
+      { 
+        top: 'blocked.blockpage',
+        sub: [
+          'blocked.blockpage.http',
+          'blocked.blockpage.dns',
+          'blocked.blockpage.server_side',
+          'blocked.blockpage.server_side.captcha'
+        ]
+      },
+      { top: 'blocked.dns',
+        sub: ['blocked.dns.inconsistent', 'blocked.dns.nxdomain']
       },
       { top: 'blocked.tcp' },
       { top: 'blocked.tls' }
-]
+    ]
   },
 ]
 
@@ -101,8 +104,8 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback, mutateUse
               mutateUserFeedback()
               send('SUCCESS')
             })
-            .catch(({response}) => {
-              setError(response?.data?.error || 'unknown')
+            .catch((response) => {
+              setError(response?.message || 'unknown')
             }).finally(() => send('FEEDBACK'))
         },
         on: {
