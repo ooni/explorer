@@ -64,7 +64,7 @@ const Chart = React.memo(function Chart({ testName }) {
   }, [query])
 
   const { data, error } = useSWR(
-    apiQuery,
+    () => since && until ? apiQuery : null,
     fetcher,
     swrOptions
   )

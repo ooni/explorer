@@ -47,13 +47,12 @@ const Form = ({ onSubmit, query }) => {
     setShowDatePicker(false)
   }
 
-  const submit = (e) => {
-    e.preventDefault()
+  useEffect(() => {
     onSubmit({since, until})
-  }
+  }, [onSubmit, since, until])
 
   return (
-    <form onSubmit={submit}>
+    <form>
       <Flex alignItems={['center']}>
         <Box width={[1, 1/5]}>
           <Flex>
@@ -85,11 +84,6 @@ const Form = ({ onSubmit, query }) => {
                 )}
               />
             </Box>
-            <Flex mb={1} alignItems='end'>
-              <Box>
-                <Button onClick={submit}>{intl.formatMessage({id: 'General.Apply'})}</Button>
-              </Box>
-            </Flex>
           </Flex>
           { showDatePicker &&
             <DateRangePicker
