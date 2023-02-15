@@ -28,7 +28,18 @@ const colorFunc = (d) => colorMap[d.id] || '#ccc'
 const barLayers = ['grid', 'axes', 'bars']
 export const chartMargins = { top: 4, right: 50, bottom: 4, left: 0 }
 
-const chartProps1D = {
+const formatXAxisValues = (value, query, intl) => {
+  if (query.axis_x === 'measurement_start_day' && Date.parse(value)) {
+    if (query.time_grain === 'hour') {
+      const dateTime = new Date(value)
+      return new Intl.DateTimeFormat(intl.locale, { dateStyle: 'short', timeStyle: 'short', timeZone: 'UTC', hourCycle: 'h23' }).format(dateTime)
+    }
+  } else {
+    return value
+  }
+}
+
+const chartProps1D = (query, intl) => ({
   colors: colorFunc,
   indexScale: {
     type: 'band',
@@ -49,7 +60,10 @@ const chartProps1D = {
     tickPadding: 5,
     tickRotation: 45,
     legendPosition: 'middle',
-    legendOffset: 60
+    legendOffset: 70,
+    tickValues: getXAxisTicks(query),
+    legend: query.axis_x ? intl.formatMessage({id: `MAT.Form.Label.AxisOption.${query.axis_x}`, defaultMessage: '' }) : '',
+    format: (values) => formatXAxisValues(values, query, intl),
   },
   axisLeft: {
     tickSize: 5,
@@ -64,9 +78,9 @@ const chartProps1D = {
   animate: true,
   motionStiffness: 90,
   motionDamping: 15,
-}
+})
 
-const chartProps2D = {
+const chartProps2D = (query) => ({
   // NOTE: These dimensions are linked to accuracy of the custom axes rendered in
   // <GridChart />
   margin: chartMargins,
@@ -98,7 +112,7 @@ const chartProps2D = {
   animate: false,
   isInteractive: true,
   layers: barLayers,
-}
+})
 
 const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last */}) => {
   const intl = useIntl()
@@ -128,9 +142,6 @@ const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last
   // react-spring from working on the actual data during
   // first render. This forces an update after 1ms with
   // real data, which appears quick enough with animation disabled
-  // const [chartData, setChartData] = useState([])
-  // useEffect(() => {
-  //   let animation = setTimeout(() => setChartData(data), 1)
   const [chartData, setChartData] = useState([])
   useEffect(() => {
     let animation = setTimeout(() => setChartData(data), 1)
@@ -140,11 +151,9 @@ const RowChart = ({ data, indexBy, label, height, rowIndex /* width, first, last
     }
   }, [data])
 
+
   const chartProps = useMemo(() => {
-    const xAxisTicks = getXAxisTicks(query)
-    chartProps1D.axisBottom.tickValues = xAxisTicks
-    chartProps1D.axisBottom.legend = query.axis_x ? intl.formatMessage({id: `MAT.Form.Label.AxisOption.${query.axis_x}`, defaultMessage: ''}) : ''
-      return label === undefined ? chartProps1D : chartProps2D
+    return label === undefined ? chartProps1D(query, intl) : chartProps2D(query)
   }, [intl, label, query])
 
   return (

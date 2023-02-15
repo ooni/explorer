@@ -51,6 +51,22 @@ const messages = defineMessages({
     id: 'MAT.Form.Label.AxisOption.probe_asn',
     defaultMessage: ''
   },
+  'hour': {
+    id: 'MAT.Form.TimeGrainOption.hour',
+    defaultMessage: ''
+  },
+  'day': {
+    id: 'MAT.Form.TimeGrainOption.day',
+    defaultMessage: ''
+  },
+  'week': {
+    id: 'MAT.Form.TimeGrainOption.week',
+    defaultMessage: ''
+  },
+  'month': {
+    id: 'MAT.Form.TimeGrainOption.month',
+    defaultMessage: ''
+  }
 })
 
 
@@ -103,7 +119,8 @@ const defaultDefaultValues = {
   since: lastMonthToday,
   until: tomorrow,
   axis_x: 'measurement_start_day',
-  axis_y: ''
+  axis_y: '',
+  time_grain: 'day'
 }
 
 export const Form = ({ onSubmit, testNames, query }) => {
@@ -185,6 +202,26 @@ export const Form = ({ onSubmit, testNames, query }) => {
     if (!yAxisOptionsFiltered.includes(getValues('axis_y'))) setValue('axis_y', '')
   }, [setValue, getValues, yAxisOptionsFiltered])
 
+  const since = watch('since')
+  const until = watch('until')
+  const timeGrainOptions = useMemo(() => {
+    if (!since || !until) return ['hour', 'day', 'week', 'month']
+    const diff = dayjs(until).diff(dayjs(since), 'day')
+    if (diff < 8) {
+      const availableValues = ['hour', 'day']
+      if (!availableValues.includes(getValues('time_grain'))) setValue('time_grain', 'hour')
+      return availableValues
+    } else if (diff >= 8 && diff < 31) {
+      const availableValues = ['day', 'week']
+      if (!availableValues.includes(getValues('time_grain'))) setValue('time_grain', 'day')
+      return availableValues
+    } else if (diff >= 31 ) {
+      const availableValues = ['day', 'week', 'month']
+      if (!availableValues.includes(getValues('time_grain'))) setValue('time_grain', 'day')
+      return availableValues
+    }
+  }, [setValue, getValues, since, until])
+
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <ConfirmationModal show={showConfirmation} onConfirm={onConfirm} onCancel={onCancel} />
@@ -264,6 +301,22 @@ export const Form = ({ onSubmit, testNames, query }) => {
               close={() => setShowDatePicker(false)}
             />
           }
+        </Box>
+        <Box width={[1, 2/12]} mx={[0, 2]}>
+          <StyledLabel>
+            <FormattedMessage id='MAT.Form.Label.TimeGrain' />
+          </StyledLabel>
+          <Controller
+            name='time_grain'
+            control={control}
+            render={({field}) => (
+              <Select {...field} width={1}>
+                {timeGrainOptions.map((option, idx) => (
+                  <option key={idx} value={option}>{intl.formatMessage(messages[option])}</option>
+                ))}
+              </Select>
+            )}
+          />
         </Box>
         <Box width={[1, 2/12]} mx={[0, 2]}>
           <StyledLabel>
@@ -390,5 +443,6 @@ Form.propTypes = {
     input: PropTypes.string,
     probe_cc: PropTypes.string,
     category_code: PropTypes.string,
+    time_grain: PropTypes.string,
   })
 }

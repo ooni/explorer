@@ -102,6 +102,7 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
           axis_x: 'measurement_start_day',
           since: monthAgo.format('YYYY-MM-DD'),
           until: today.format('YYYY-MM-DD'),
+          time_grain: 'day',
         },
       }
       router.replace(href, undefined, { shallow: true })
@@ -112,9 +113,7 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
   }, [])
 
   const shouldFetchData = router.pathname !== router.asPath
-  // THIS IS TEMPORARY - in the next iteration users will be
-  // able to set time_grain themselves
-  const query = {...router.query, time_grain: 'day'}
+  const query = {...router.query}
 
   const { data, error, isValidating } = useSWR(
     () => shouldFetchData ? [query] : null,
