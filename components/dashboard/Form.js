@@ -30,14 +30,14 @@ export const Form = ({ onChange, query, availableCountries }) => {
     .sort((a, b) => (new Intl.Collator(intl.locale).compare(a.label, b.label)))
   , [availableCountries, intl])
 
-  const query2formValues = (query) => {
+  const query2formValues = useMemo(() => {
     const countriesInQuery = query.probe_cc?.split(',') ?? defaultDefaultValues.probe_cc
     return {
       since: query?.since ?? defaultDefaultValues.since,
       until: query?.until ?? defaultDefaultValues.until,
       probe_cc: countryOptions.filter(country => countriesInQuery.includes(country.value)),
     }
-  }
+  }, [countryOptions, query])
 
   const multiSelectStrings = useMemo(() => ({
     'allItemsAreSelected': intl.formatMessage({ id: 'ReachabilityDash.Form.Label.CountrySelect.AllSelected' }),
@@ -51,9 +51,22 @@ export const Form = ({ onChange, query, availableCountries }) => {
     // 'create': 'Create',
   }), [intl])
 
-  const { control, getValues, watch, setValue } = useForm({
-    defaultValues: query2formValues(query)
+  const { control, getValues, watch, setValue, reset } = useForm({
+    defaultValues: query2formValues
   })
+
+  useEffect(()=> {
+    reset(query2formValues)
+  }, [query2formValues, reset])
+
+  const cleanedUpData = (values) => {
+    const { since, until, probe_cc } = values
+    return {
+      since,
+      until,
+      probe_cc: probe_cc.length > 0 ? probe_cc.map(d => d.value).join(',') : undefined
+    }
+  }
 
   const [showDatePicker, setShowDatePicker] = useState(false)
   const handleRangeSelect = (range) => {
@@ -68,19 +81,15 @@ export const Form = ({ onChange, query, availableCountries }) => {
       setValue('until', '')
     }
     setShowDatePicker(false)
+    onChange(cleanedUpData(getValues()))
   }
 
-  const {since, until, probe_cc} = watch()
-
-  const submit = (e) => {
-    e.preventDefault()
-    const cleanedUpData = {
-      since,
-      until,
-      probe_cc: probe_cc.length > 0 ? probe_cc.map(d => d.value).join(',') : undefined
-    }
-    onChange(cleanedUpData)
-  }
+  useEffect(() => {
+    const subscription = watch((value, { name, type }) => {
+      if (name === 'probe_cc' && type === 'change') onChange(cleanedUpData(getValues()))
+    })
+    return () => subscription.unsubscribe()
+  }, [watch, getValues])
 
   return (
     <form>
@@ -113,6 +122,9 @@ export const Form = ({ onChange, query, availableCountries }) => {
                     {...field}
                     onFocus={() => setShowDatePicker(true)}
                     onKeyDown={() => setShowDatePicker(false)}
+                    name={field.name}
+                    value={field.value}
+                    onChange={field.onChange}
                   />
                 )}
               />
@@ -127,15 +139,13 @@ export const Form = ({ onChange, query, availableCountries }) => {
                     {...field}
                     onFocus={() => setShowDatePicker(true)}
                     onKeyDown={() => setShowDatePicker(false)}
+                    name={field.name}
+                    value={field.value}
+                    onChange={field.onChange}
                   />
                 )}
               />
             </Box>
-            <Flex mb={1} alignItems='end'>
-              <Box>
-                <Button onClick={submit}>{intl.formatMessage({id: 'General.Apply'})}</Button>
-              </Box>
-            </Flex>
           </Flex>
           { showDatePicker &&
             <DateRangePicker
