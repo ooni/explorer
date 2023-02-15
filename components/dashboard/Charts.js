@@ -55,7 +55,8 @@ const Chart = React.memo(function Chart({ testName }) {
     ...fixedQuery,
     test_name: testName,
     since: since,
-    until: until
+    until: until,
+    time_grain: 'day'
   }), [since, testName, until])
 
   const apiQuery = useMemo(() => {
