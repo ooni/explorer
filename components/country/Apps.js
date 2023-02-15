@@ -21,6 +21,7 @@ const ChartsContainer = () => {
     probe_cc: countryCode,
     since,
     until,
+    time_grain: 'day',
   }), [countryCode, since, until])
 
   const queryCircumventionTools = useMemo(() => ({
@@ -28,6 +29,7 @@ const ChartsContainer = () => {
     probe_cc: countryCode,
     since,
     until,
+    time_grain: 'day',
   }), [countryCode, since, until])
 
   return (

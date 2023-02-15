@@ -19,6 +19,7 @@ const WebsitesSection = ({ countryCode }) => {
     since,
     until,
     test_name: 'web_connectivity',
+    time_grain: 'day',
   }), [countryCode, since, until])
 
   return (

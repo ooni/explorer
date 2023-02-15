@@ -39,6 +39,7 @@ const ChartsContainer = () => {
     since,
     until,
     test_name: 'web_connectivity',
+    time_grain: 'day',
   }), [asn, since, until])
 
   const queryMessagingApps = useMemo(() => ({
@@ -46,6 +47,7 @@ const ChartsContainer = () => {
     asn,
     since,
     until,
+    time_grain: 'day',
   }), [asn, since, until])
 
   const queryCircumventionTools = useMemo(() => ({
@@ -53,6 +55,7 @@ const ChartsContainer = () => {
     asn,
     since,
     until,
+    time_grain: 'day',
   }), [asn, since, until])
 
   return (

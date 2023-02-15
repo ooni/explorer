@@ -20,7 +20,7 @@ describe('MAT Tests', () => {
 
   describe('MAT Basics', () => {
     before(() => {
-      cy.visit('http://localhost:3100/chart/mat?test_name=web_connectivity&since=2022-03-01&until=2022-04-01&axis_x=measurement_start_day')
+      cy.visit('http://localhost:3100/chart/mat?test_name=web_connectivity&since=2022-03-01&until=2022-04-01&axis_x=measurement_start_day&time_grain=day')
     })
 
     it('it loads', () => {
