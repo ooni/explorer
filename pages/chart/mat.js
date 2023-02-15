@@ -93,23 +93,22 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
   // In that case, trigger a shallow navigation that shows a chart
   useEffect(() => {
     const { query } = router
-    if (Object.keys(query).length === 0) {
-      const today = dayjs.utc().add(1, 'day')
-      const monthAgo = dayjs.utc(today).subtract(1, 'month')
-      const href = {
-        query: {
-          test_name: 'web_connectivity',
-          axis_x: 'measurement_start_day',
-          since: monthAgo.format('YYYY-MM-DD'),
-          until: today.format('YYYY-MM-DD'),
-          time_grain: 'day',
-        },
-      }
-      router.replace(href, undefined, { shallow: true })
+    const today = dayjs.utc().add(1, 'day')
+    const monthAgo = dayjs.utc(today).subtract(1, 'month')
+    const href = {
+      query: {
+        test_name: 'web_connectivity',
+        axis_x: 'measurement_start_day',
+        since: monthAgo.format('YYYY-MM-DD'),
+        until: today.format('YYYY-MM-DD'),
+        time_grain: 'day',
+        ...query
+      },
     }
-  // Ignore the dependency on `router` because we want
-  // this effect to run only once, on mount, if query is empty.
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    router.replace(href, undefined, { shallow: true })
+    // Ignore the dependency on `router` because we want
+    // this effect to run only once, on mount, if query is empty.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const shouldFetchData = router.pathname !== router.asPath
