@@ -1,5 +1,5 @@
 import { getCategoryCodesMap } from '../../utils/categoryCodes'
-import { getLocalisedRegionName } from 'utils/i18nCountries'
+import { getLocalisedRegionName, localisedCountries } from 'utils/i18nCountries'
 import dayjs from 'services/dayjs'
 
 const categoryCodesMap = getCategoryCodesMap()
