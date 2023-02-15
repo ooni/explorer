@@ -195,8 +195,6 @@ const Country = ({ countryCode, overviewStats, reports, ...coverageDataSSR }) =>
                 <WebsitesSection countryCode={countryCode} />
                 <AppsSection />
               </CountryContextProvider>
-            </Box>
-            
               {query.since && query.until && 
                 <ThirdPartyDataGraph
                   country={countryCode}
@@ -204,6 +202,7 @@ const Country = ({ countryCode, overviewStats, reports, ...coverageDataSSR }) =>
                   until={query.until}
                 />
               }
+            </Box>
           </Flex>
         </Container>
       </StickyContainer>
