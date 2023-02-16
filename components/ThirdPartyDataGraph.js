@@ -1,6 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useMemo, createContext, useCallback, createElement, useContext, MutableRefObject, MouseEvent, memo } from 'react'
 import axios from 'axios'
 import { ResponsiveLine } from '@nivo/line'
+import { useTooltip } from '@nivo/tooltip'
 import { Box, Flex, Text, theme } from 'ooni-components'
 import dayjs from 'services/dayjs'
 import { useIntl } from 'react-intl'
@@ -9,6 +10,100 @@ import { SimpleBox } from './country/boxes'
 import FormattedMarkdown from './FormattedMarkdown'
 
 const iodaLineColors = [theme.colors.blue5, theme.colors.red5, theme.colors.green5, theme.colors.fuchsia5]
+
+const SlicesItem = ({ slice, axis, debug, tooltip, isCurrent, setCurrent }) => {
+  const { showTooltipFromEvent, hideTooltip } = useTooltip()
+
+  const handleMouseEnter = useCallback(
+    event => {
+      showTooltipFromEvent(createElement(tooltip, { slice, axis }), event, 'right')
+      setCurrent(slice)
+    },
+    [showTooltipFromEvent, tooltip, slice]
+  )
+
+  const handleMouseMove = useCallback(
+    event => {
+      showTooltipFromEvent(createElement(tooltip, { slice, axis }), event, 'right')
+    },
+    [showTooltipFromEvent, tooltip, slice]
+  )
+
+  const handleMouseLeave = useCallback(() => {
+      hideTooltip()
+      setCurrent(null)
+  }, [hideTooltip])
+
+  return (
+    <rect
+      x={slice.x0}
+      y={slice.y0}
+      width={slice.width}
+      height={slice.height}
+      stroke="red"
+      strokeWidth={debug ? 1 : 0}
+      strokeOpacity={0.75}
+      fill="red"
+      fillOpacity={isCurrent && debug ? 0.35 : 0}
+      onMouseEnter={handleMouseEnter}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+    />
+  )
+}
+
+const Slices = (props) => {
+  const { width, axis, debug, height, tooltip, sliceTooltip, currentSlice, setCurrentSlice, points, enableSlices, debugSlices } = props
+
+  const map = new Map()
+
+  points.forEach(point => {
+    if (point.data.x === null || point.data.y === null) return
+    if (new Date(point.data.x).getMinutes() !== 30 && new Date(point.data.x).getMinutes() !== 0) return
+    if (!map.has(point.x)) map.set(point.x, [point])
+    else map.get(point.x).push(point)
+  })
+
+  const slices = Array.from(map.entries())
+    .sort((a, b) => a[0] - b[0])
+    .map(([x, slicePoints], i, slices) => {
+      const prevSlice = slices[i - 1]
+      const nextSlice = slices[i + 1]
+
+      let x0
+      if (!prevSlice) x0 = x
+      else x0 = x - (x - prevSlice[0]) / 2
+
+      let sliceWidth
+      if (!nextSlice) sliceWidth = width - x0
+      else sliceWidth = x - x0 + (nextSlice[0] - x) / 2
+
+      return {
+        id: x,
+        x0,
+        x,
+        y0: 0,
+        y: 0,
+        width: sliceWidth,
+        height,
+        points: slicePoints.reverse(),
+      }
+    })
+
+  return slices.map(slice => (
+    <SlicesItem
+      key={slice.id}
+      slice={slice}
+      axis={enableSlices}
+      debug={debugSlices}
+      height={height}
+      tooltip={sliceTooltip}
+      sliceTooltip={sliceTooltip}
+      setCurrent={setCurrentSlice}
+      isCurrent={currentSlice !== null && currentSlice?.id === slice?.id}
+    />
+  ))
+}
 
 const ThirdPartyDataGraph = ({since, until, country, asn, ...props}) => {
   console.log('TEST', props)
@@ -102,9 +197,48 @@ const ThirdPartyDataGraph = ({since, until, country, asn, ...props}) => {
             axisBottom={{
               format: '%Y-%m-%d',
             }}
-            // enableSlices='x'
-            useMesh={true}
+            enableSlices='x'
+            // debugSlices={true}
+            // useMesh={true}
             colors={d => d.color}
+
+            layers={[
+              'grid',
+              'markers',
+              'axes',
+              'areas',
+              'crosshair',
+              'points',
+              Slices,
+              // 'slices',
+              'lines',
+              'mesh',
+              'legends',
+            ]}
+
+            sliceTooltip={(props) => {
+              return (
+                <div
+                  style={{
+                    background: 'white',
+                    padding: '9px 12px',
+                    border: '1px solid #ccc',
+                  }}
+                >
+                  {props?.slice?.points?.length && props.slice.points.map((point) => (
+                    <div
+                      key={point.id}
+                      style={{
+                        color: point.serieColor,
+                        padding: '3px 0',
+                      }}
+                    >
+                      <strong>{point.serieId}</strong> [{point.data.yFormatted}]
+                    </div>
+                  ))}
+                </div>
+              )
+            }}
 
 
 
@@ -186,4 +320,4 @@ const ThirdPartyDataGraph = ({since, until, country, asn, ...props}) => {
   )
 }
 
-export default ThirdPartyDataGraph
+export default memo(ThirdPartyDataGraph)
