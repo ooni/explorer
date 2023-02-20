@@ -4,7 +4,7 @@ import { Box } from 'ooni-components'
 import { testNames } from '../../test-info'
 import { getCategoryCodesMap } from '../../utils/categoryCodes'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
-import { FormattedMessage, useIntl } from 'react-intl'
+import { FormattedMessage } from 'react-intl'
 
 const InputRowLabel = ({ input }) => {
   const truncatedInput = input
@@ -33,7 +33,6 @@ const blockingTypeLabels = {
 }
 
 const CategoryLabel = ({ code }) => {
-  const intl = useIntl()
   return (
     <FormattedMessage id={`CategoryCode.${code}.Name`} defaultMessage={code}/>
   )

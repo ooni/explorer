@@ -44,7 +44,7 @@ export const SubtitleStr = ({ query }) => {
     params.add(query.input)
   }
   if (query.category_code) {
-    params.add(getRowLabel(query.category_code, 'category_code'))
+    params.add(intl.formatMessage({id: `CategoryCode.${query.category_code}.Name`, defaultMessage: query.category_code}))
   }
   if (query.probe_asn) {
     params.add(query.probe_asn)
