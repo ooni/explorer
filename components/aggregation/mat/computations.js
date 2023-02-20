@@ -24,7 +24,7 @@ export function getDatesBetween(startDate, endDate, timeGrain) {
       const weekStart = dayjs(currentDate).utc().startOf('week')
       dateSet.add(weekStart.toISOString().slice(0, 10))
       currentDate = weekStart.add(1, 'week').toDate()
-    } else if (timeGrain === 'day') {
+    } else {
       dateSet.add(currentDate.toISOString().slice(0, 10))
       currentDate.setDate(currentDate.getDate() + 1)
     }
