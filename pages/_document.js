@@ -1,27 +1,26 @@
-import React from 'react'
-import Document, { Html, Head, Main, NextScript } from 'next/document'
+// updated based on documentation: https://github.com/vercel/next.js/blob/canary/examples/with-styled-components/pages/_document.tsx
+import Document, { DocumentContext, Html, Head, Main, NextScript } from 'next/document'
 import { ServerStyleSheet } from 'styled-components'
 
 export default class MyDocument extends Document {
   static async getInitialProps (ctx) {
     const sheet = new ServerStyleSheet()
-    const page = ctx.renderPage(App => props => sheet.collectStyles(<App {...props} />))
-    const styleTags = sheet.getStyleElement()
-    const initialProps = await Document.getInitialProps(ctx)
-    return { ...page, styleTags, ...initialProps }
-  }
+    const originalRenderPage = ctx.renderPage
 
-  render () {
-    return (
-      <Html>
-        <Head>
-          {this.props.styleTags}
-        </Head>
-        <body>
-          <Main />
-          <NextScript />
-        </body>
-      </Html>
-    )
+    try {
+      ctx.renderPage = () =>
+        originalRenderPage({
+          enhanceApp: (App) => (props) =>
+            sheet.collectStyles(<App {...props} />),
+        })
+
+      const initialProps = await Document.getInitialProps(ctx)
+      return {
+        ...initialProps,
+        styles: [initialProps.styles, sheet.getStyleElement()],
+      }
+    } finally {
+      sheet.seal()
+    }
   }
 }
