@@ -6,7 +6,6 @@
   "main": "index.js",
   "repository": "https://github.com/ooni/explorer",
   "dependencies": {
-    "@babel/core": "7.18.10",
     "@datapunt/matomo-tracker-react": "^0.5.1",
     "@fontsource/fira-sans": "^4.5.9",
     "@nivo/bar": "^0.80.0",
@@ -17,8 +16,6 @@
     "@rebass/forms": "^4.0.6",
     "@sentry/nextjs": "^7.11.1",
     "axios": "^0.27.2",
-    "babel-plugin-inline-react-svg": "2.0.1",
-    "babel-plugin-styled-components": "^1.10.7",
     "buffer-from": "^1.1.2",
     "country-util": "^0.2.0",
     "date-fns": "^2.29.1",
@@ -68,7 +65,6 @@
   "devDependencies": {
     "@svgr/webpack": "^6.5.0",
     "@welldone-software/why-did-you-render": "^7.0.1",
-    "babel-plugin-formatjs": "^10.3.25",
     "cypress": "^10.6.0",
     "eslint": "^8.22.0",
     "eslint-config-next": "^12.2.5",
