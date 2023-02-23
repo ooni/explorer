@@ -66,8 +66,12 @@ const CommonSummary = ({
           <Flex flexWrap='wrap' alignItems='flex-end' justifyContent='space-between' sx={{textDecoration:'underline'}}>
             <Box>
               <Text fontSize={1}>
-                <Box mb={2}><NLink href={`/network/${network}`} passHref><Link color='white'>{network}</Link></NLink></Box>
-                <Box><NLink href={`/network/${network}`} passHref><Link color='white'>{networkName}</Link></NLink></Box>
+                <NLink href={`/network/${network}`} passHref>
+                  <Link color='white'>
+                    <Box mb={2}>{network}</Box>
+                    <Box>{networkName}</Box>
+                  </Link>
+                </NLink>
               </Text>
             </Box>
             <Box>

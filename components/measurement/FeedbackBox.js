@@ -24,11 +24,10 @@ const StyledError = styled.small`
 
 const blockedValues = [
   { top: 'ok' },
-  { top: 'broken',
+  { top: 'down',
     sub: [
-      { top: 'broken.parked' },
-      { top: 'broken.down' },
-      { top: 'broken.other' }
+      { top: 'down.unreachable' },
+      { top: 'down.misconfigured' },
     ]
   },
   { top: 'blocked',
