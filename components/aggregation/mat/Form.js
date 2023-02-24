@@ -311,7 +311,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             control={control}
             render={({field}) => (
               <Select {...field} width={1}>
-                {timeGrainOptions.map((option, idx) => (
+                {timeGrainOptions?.map((option, idx) => (
                   <option key={idx} value={option}>{intl.formatMessage(messages[option])}</option>
                 ))}
               </Select>
