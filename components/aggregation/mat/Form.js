@@ -205,7 +205,8 @@ export const Form = ({ onSubmit, testNames, query }) => {
   const since = watch('since')
   const until = watch('until')
   const timeGrainOptions = useMemo(() => {
-    if (!since || !until) return ['hour', 'day', 'week', 'month']
+    const dateRegex = /^\d{4}-\d{2}-\d{2}$/
+    if (!until.match(dateRegex) || !since.match(dateRegex)) return ['hour', 'day', 'week', 'month']
     const diff = dayjs(until).diff(dayjs(since), 'day')
     if (diff < 8) {
       const availableValues = ['hour', 'day']
