@@ -25,15 +25,13 @@ var supportedCountryCodes = [
   'yt', 'za', 'zm', 'zw']
 
 const FlagImg = styled.img`
-  width: ${props => props.size}px;
-  height: ${props => props.size}px;
-  clip-path: circle(50% at 50% 50%);
+  width: 100%;
+  height: 100%;
 `
 
 const FlagContainer = styled.div`
   border-radius: 50%;
-  /* padding-left: 3px; */
-  /* padding-top: 3px; */
+  overflow: hidden;
   width: ${props => props.size + 6}px;
   height: ${props => props.size + 6}px;
   border: ${props => props.border ? '3px solid white' : 'none'};
@@ -48,7 +46,7 @@ export const Flag = ({countryCode, size, border}) => {
   const src = `/static/flags/1x1/${countryCode}.svg`
   return (
     <FlagContainer className='country-flag' size={size} border={border}>
-      <FlagImg src={src} size={size} loading='lazy' />
+      <FlagImg src={src} loading='lazy' />
     </FlagContainer>
   )
 }
