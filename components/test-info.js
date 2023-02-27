@@ -152,12 +152,13 @@ export const testNames = {
   'torsf': {
     group: 'circumvention',
     name: <FormattedMessage id='Tests.TorSnowflake.Name' />,
-    id: 'Tests.Tor.Name',
+    id: 'Tests.TorSnowflake.Name',
     info: 'https://ooni.org/nettest/torsf/'
   },
   'riseupvpn': {
     group: 'circumvention',
     name: <FormattedMessage id='Tests.RiseupVPN.Name' />,
+    id: 'Tests.RiseupVPN.Name',
     info: 'https://ooni.org/nettest/'
   },
 
@@ -192,7 +193,7 @@ export const testNames = {
   'dnscheck': {
     group: 'experimental',
     name: <FormattedMessage id='Tests.DNSCheck.Name' />,
-    id: 'Tests.HTTPRequests.Name',
+    id: 'Tests.DNSCheck.Name',
     info: 'https://ooni.org/nettest/http-requests/'
   },
   'stunreachability': {
