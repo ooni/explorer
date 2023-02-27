@@ -51,13 +51,13 @@ const CommonSummary = ({
             </Box>
             <Box>
               <Flex sx={{gap: 14}}>
-              <Box>
+              {/* <Box>
                 <Box fontSize={18} textAlign='center'><BiShareAlt /></Box>
                 <Box fontSize={0} fontWeigh={600} textAlign='center'>{'Share'.toUpperCase()}</Box>
-              </Box>
+              </Box> */}
               <Box sx={{cursor: 'pointer'}} onClick={onVerifyClick}>
                 <Box fontSize={18} textAlign='center'><MdOutlineFactCheck /></Box>
-                <Box fontSize={0} fontWeigh={600} textAlign='center'>{'Verify'.toUpperCase()}</Box>
+                <Box fontSize={0} fontWeigh={600} textAlign='center'>{intl.formatMessage({id: 'Measurement.CommonSummary.Verify'}).toUpperCase()}</Box>
               </Box>
               </Flex>
             </Box>
