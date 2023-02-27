@@ -78,21 +78,22 @@ const getDateFnsLocale = locale => {
 
 const DateRangePicker = ({handleRangeSelect, initialRange, close, ...props}) => {
   const intl = useIntl()
+  const tomorrow = addDays(new Date(), 1)
   const ranges = ['Today', 'LastWeek', 'LastMonth', 'LastYear']
   
   const selectRange = (range) => {
     switch (range) {
       case 'Today':
-        handleRangeSelect({from: new Date(), to: new Date()})
+        handleRangeSelect({from: new Date(), to: tomorrow})
         break
       case 'LastWeek':
-        handleRangeSelect({from: sub(new Date(), {weeks: 1}) , to: new Date()})
+        handleRangeSelect({from: sub(new Date(), {weeks: 1}) , to: tomorrow})
         break
       case 'LastMonth':
-        handleRangeSelect({from: sub(new Date(), {months: 1}) , to: new Date()})
+        handleRangeSelect({from: sub(new Date(), {months: 1}) , to: tomorrow})
         break
       case 'LastYear':
-        handleRangeSelect({from: sub(new Date(), {years: 1}) , to: new Date()})
+        handleRangeSelect({from: sub(new Date(), {years: 1}) , to: tomorrow})
         break
     }
   }
@@ -124,8 +125,6 @@ const DateRangePicker = ({handleRangeSelect, initialRange, close, ...props}) => 
   const onSelect = (range) => {
     setRange(range)
   }
-
-  const tomorrow = addDays(new Date(), 1)
 
   return (
     <StyledDatetime>
