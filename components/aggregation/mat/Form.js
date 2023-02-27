@@ -17,8 +17,8 @@ import DateRangePicker from '../../DateRangePicker'
 import { ConfirmationModal } from './ConfirmationModal'
 import { TestNameOptions } from '../../TestNameOptions'
 
-const THRESHOLD_IN_MONTHS = 12
-const MAX_RANGE_DAYS = 31
+const DAY_GRAIN_THRESHOLD_IN_MONTHS = 12
+const WEEK_GRAIN_THRESHOLD_IN_MONTHS = 36
 
 export const StyledLabel = styled(Label).attrs({
   my: 2,
@@ -175,10 +175,15 @@ export const Form = ({ onSubmit, testNames, query }) => {
   const maybeWarnBeforeSubmit = useCallback((e) => {
     e.preventDefault()
 
-    const [since, until] = getValues(['since', 'until'])
-    const isDurationMoreThanThresold = (dayjs(until).diff(dayjs(since), 'month')) > THRESHOLD_IN_MONTHS
+    const [since, until, timeGrain] = getValues(['since', 'until', 'time_grain'])
+    const shouldShowConfirmationModal = () => {
+      if (timeGrain === 'month') return false
+      const diff = (dayjs(until).diff(dayjs(since), 'month'))
+      if (timeGrain === 'week') return diff > WEEK_GRAIN_THRESHOLD_IN_MONTHS
+      return diff > DAY_GRAIN_THRESHOLD_IN_MONTHS
+    }
 
-    if (isDurationMoreThanThresold) {
+    if (shouldShowConfirmationModal()) {
       setShowConfirmation(true)
     } else {
       // Otherwise just continue with submission without interruption
@@ -296,7 +301,6 @@ export const Form = ({ onSubmit, testNames, query }) => {
           </Flex>
           { showDatePicker &&
             <DateRangePicker
-              max={MAX_RANGE_DAYS}
               handleRangeSelect={handleRangeSelect}
               initialRange={{from: getValues('since'), to: getValues('until')}}
               close={() => setShowDatePicker(false)}
