@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import { useEffect, useState, useCallback, useContext, createContext, useMemo } from 'react'
 import useSWR from 'swr'
 
-import { fetcher, apiEndpoints, loginUser, refreshToken, customErrorRetry, getAPI } from '/lib/api'
+import { apiEndpoints, loginUser, refreshToken, getAPI } from '/lib/api'
 
 const TWELVE_HOURS = 1000 * 60 * 60 * 12
 const TEN_MINUTES = 1000 * 60 * 10
@@ -46,6 +46,8 @@ export const UserProvider = ({children}) => {
     }
   }, [afterLogin, token, router.pathname])
 
+  // periodically check if the token need to be refreshed and request a
+  // new one if needed
   useEffect(() => {
     const interval = setInterval(() => {
       const tokenCreatedAt = JSON.parse(localStorage.getItem('bearer'))?.created_at

@@ -13,11 +13,6 @@ const StyledError = styled.small`
   color: ${props => props.theme.colors.red5};
 `
 
-const StyledModal = styled(Modal).attrs({
-  maxWidth: 800,
-  width: '100%'
-})``
-
 const StyledInputContainer = styled(Box).attrs({
   width: '100%',
   mt: 3,

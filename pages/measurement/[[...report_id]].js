@@ -4,8 +4,10 @@ import PropTypes from 'prop-types'
 import Head from 'next/head'
 import axios from 'axios'
 import { Container, theme, Flex, Text } from 'ooni-components'
-import { getLocalisedRegionName } from '../../utils/i18nCountries'
+import { getLocalisedRegionName } from '/utils/i18nCountries'
 import NLink from 'next/link'
+import { FormattedMessage } from 'react-intl'
+import useSWR from 'swr'
 
 import Hero from 'components/measurement/Hero'
 import CommonSummary from 'components/measurement/CommonSummary'
@@ -22,8 +24,7 @@ import ErrorPage from '../_error'
 import { useIntl } from 'react-intl'
 import useUser from 'hooks/useUser'
 import { DetailsBoxTable } from 'components/measurement/DetailsBox'
-import { FormattedMessage } from 'react-intl'
-import useSWR from 'swr'
+import { fetcher } from '/lib/api'
 
 const pageColors = {
   default: theme.colors.base,
@@ -102,12 +103,6 @@ export async function getServerSideProps({ query }) {
   }
 }
 
-const FeedbackLabel = ({reason}) => <FormattedMessage id={`Measurement.Feedback.${reason}`} />
-
-const getBearerToken = () => {
-  return typeof localStorage !== 'undefined' ? JSON.parse(localStorage.getItem('bearer'))?.token : ''
-}
-
 const Measurement = ({
   error,
   confirmed,
@@ -127,17 +122,16 @@ const Measurement = ({
   const intl = useIntl()
   const country = getLocalisedRegionName(probe_cc, intl.locale)
 
-  const { user, submitted, reqError, setSubmitted } = useUser()
+  const { user, setSubmitted } = useUser()
   const [showModal, setShowModal] = useState(false)
-
-  const client = axios.create({baseURL: process.env.NEXT_PUBLIC_TEMP})
-  const fetcher = url => client.get(url, { headers: { Authorization: `Bearer ${getBearerToken()}` } }).then(res => res.data)
 
   const {data: userFeedback, error: userFeedbackError, mutate: mutateUserFeedback} = useSWR(`/api/_/measurement_feedback/${report_id}`, fetcher)
 
   const userFeedbackItems = useMemo(() => {
     return userFeedback ? 
-      Object.entries(userFeedback.summary).map(([key, value]) => ({label: <FeedbackLabel reason={key} />, value})) : 
+      Object.entries(userFeedback.summary).map(([key, value]) => (
+        {label: intl.formatMessage({id: `Measurement.Feedback.${key}`}), value}
+      )) : 
       []
   }, [userFeedback])
 
