@@ -130,7 +130,6 @@ export const NavBar = ({color}) => {
                   </StyledNavItem>
                 </Box>
               }
-              {/* <NavItem label="LogOut" href="#" onClick={logout} /> */}
             </Flex>
           </Box>
         </Flex>

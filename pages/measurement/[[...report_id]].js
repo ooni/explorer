@@ -1,5 +1,5 @@
 /* global process */
-import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 import axios from 'axios'
@@ -16,7 +16,6 @@ import MeasurementContainer from 'components/measurement/MeasurementContainer'
 import MeasurementNotFound from 'components/measurement/MeasurementNotFound'
 import HeadMetadata from 'components/measurement/HeadMetadata'
 import FeedbackBox from 'components/measurement/FeedbackBox'
-import { LoginModal } from 'components/login/LoginForm'
 
 import NavBar from 'components/NavBar'
 import ErrorPage from '../_error'
@@ -203,8 +202,6 @@ const Measurement = ({
                   <NavBar color={color} />
                   {showModal &&
                     <FeedbackBox
-                      isShowing={showModal}
-                      hide={() => hideModal()}
                       user={user}
                       report_id={report_id}
                       setShowModal={setShowModal}

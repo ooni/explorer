@@ -9,7 +9,6 @@ import Footer from './Footer'
 import { useIntl } from 'react-intl'
 import { getDirection } from 'components/withIntl'
 import { UserProvider } from 'hooks/useUser'
-// import FeedbackButton from '../components/FeedbackFloat'
 
 theme.maxWidth = 1024
 
@@ -71,7 +70,6 @@ const Layout = ({ children, disableFooter = false }) => {
             </div>
             {!disableFooter && <Footer />}
           </div>
-          {/* <FeedbackButton /> */}
         </UserProvider>
       </ThemeProvider>
     </MatomoProvider>

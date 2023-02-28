@@ -82,17 +82,6 @@ export const UserProvider = ({children}) => {
       }).finally(() => setLoading(false))
   }
 
-  function signUp(email, name, password) {
-    // setLoading(true)
-    // signUp({ email, name, password })
-    //   .then((user) => {
-    //     setUser(user)
-    //     history.push('/')
-    //   })
-    //   .catch((error) => setError(error))
-    //   .finally(() => setLoading(false))
-  }
-
   function logout() {
     localStorage.removeItem('bearer')
     getUser()
@@ -104,7 +93,6 @@ export const UserProvider = ({children}) => {
       loading,
       error,
       login,
-      signUp,
       logout,
     }),
     [user, loading, error]

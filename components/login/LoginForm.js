@@ -28,44 +28,7 @@ const StyledInputContainer = styled(Box).attrs({
     top: -10px;
     right: 0px;
   }
-`
-
-export const LoginModal = ({ isShowing, hide, onLogin, submitted, reqError }) => {
-  const redirectTo = typeof window !== 'undefined' && window.location.href
-
-  return (
-    <StyledModal show={isShowing} onHideClick={hide}>
-      <Container p={[0, 3]}>
-        <Flex flexDirection='row' justifyContent='end' mb={4}>
-          <a onClick={() => hide()}>X</a>
-        </Flex>
-        {!submitted &&
-          <>
-            <Text fontSize={1} mb={2} textAlign='center'><FormattedMessage id="Login.EnterEmail" /></Text>
-            <LoginForm onLogin={onLogin} redirectTo={redirectTo} />
-          </>
-        }
-        {submitted &&
-          <>
-            <Heading h={3} width={[1, 2 / 3]} textAlign='center' mx='auto'>
-              <FormattedMessage id="Login.Submitted" />
-            </Heading>
-            <Flex flexDirection='row' justifyContent='center' my={4}>
-              <Button mx={3} width={1 / 3} onClick={() => hide()}><FormattedMessage id="General.Close" /></Button>
-            </Flex>
-          </>
-        }
-        {reqError &&
-          <Box width={[1, 1 / 3]} mx='auto' textAlign={'center'}>
-            <Box mb={3} p={4} bg='red1'>{reqError}</Box>
-            <NLink href='/login'><FormattedMessage id="Login.Failure" /></NLink>
-          </Box>
-        }
-      </Container>
-    </StyledModal>
-  )
-}
-  
+`  
 
 export const LoginForm = ({ onLogin, redirectTo }) => {
   const router = useRouter()
@@ -135,11 +98,12 @@ export const LoginForm = ({ onLogin, redirectTo }) => {
             <StyledError>{loginError}</StyledError>
           </Box>
         }
-        {!submitting ? 
-          <Box mt={3} alignSelf='center'>
-            <Button disabled={!isValid} type='submit'><FormattedMessage id="General.Login" /></Button>
-          </Box> :
-          <SpinLoader />}
+        <Box mt={3} alignSelf='center'>
+          {!submitting ? 
+            <Button disabled={!isValid} type='submit'><FormattedMessage id="General.Login" /></Button> :
+            <SpinLoader size={3} margin='1px' />
+          }
+        </Box>
       </Flex>
     </form>
   )

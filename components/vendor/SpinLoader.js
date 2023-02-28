@@ -25,7 +25,7 @@ const Spin = styled.div`
   border-radius: 50%;
   font-size: ${props => `${props.size}px`};
   height: 11em;
-  margin: 50px auto;
+  margin: ${props => props.margin};
   position: relative;
   text-indent: -9999em;
   transform: translateZ(0);
@@ -66,13 +66,15 @@ SpinLoader.propTypes = {
   color: PropTypes.string,
   duration: PropTypes.number,
   size: PropTypes.number,
+  margin: PropTypes.string,
 }
 
 SpinLoader.defaultProps = {
   background: '#fff',
   color: theme.colors.blue5,
   duration: 1.4,
-  size: 5
+  size: 5,
+  margin: '50px auto',
 }
 
 export default SpinLoader
