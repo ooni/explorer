@@ -165,7 +165,7 @@ const ThirdPartyDataGraph = ({since, until, country, asn, ...props}) => {
     <>
       <SectionHeader>
         <SectionHeader.Title name='shutdowns'>
-          {intl.formatMessage({id: 'Country.Heading.Shutdowns'})}
+          {intl.formatMessage({id: 'Country.Shutdowns'})}
         </SectionHeader.Title>
       </SectionHeader>
       <SimpleBox>
@@ -217,27 +217,34 @@ const ThirdPartyDataGraph = ({since, until, country, asn, ...props}) => {
             ]}
 
             sliceTooltip={(props) => {
-              return (
-                <div
-                  style={{
-                    background: 'white',
-                    padding: '9px 12px',
-                    border: '1px solid #ccc',
-                  }}
-                >
-                  {props?.slice?.points?.length && props.slice.points.map((point) => (
-                    <div
-                      key={point.id}
-                      style={{
-                        color: point.serieColor,
-                        padding: '3px 0',
-                      }}
-                    >
-                      <strong>{point.serieId}</strong> [{point.data.yFormatted}]
-                    </div>
-                  ))}
-                </div>
-              )
+              if (props?.slice?.points?.length) {
+                const points = props.slice.points
+                return (
+                  <div
+                    style={{
+                      background: 'white',
+                      padding: '9px 12px',
+                      border: '1px solid #ccc',
+                    }}
+                  >
+                    <Text fontWeight='bold' mb={2}>{new Intl.DateTimeFormat(intl.locale, { dateStyle: 'long', timeStyle: 'long', timeZone: 'UTC' }).format(new Date(points[0].data.x))}</Text>
+                    {points.map((point) => (
+                      <Flex key={point.id} alignItems='center'>
+                        <Box
+                          key={point.id}
+                          style={{
+                            backgroundColor: point.serieColor,
+                            padding: '3px 0',
+                            width: '10px',
+                            height: '10px',
+                          }}
+                        />
+                        <Box ml={2}><strong>{point.serieId}</strong> [{Number(point.data.yFormatted).toFixed(4)}]</Box>
+                      </Flex>
+                    ))}
+                  </div>
+                )
+              }
             }}
 
 
