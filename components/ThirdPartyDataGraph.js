@@ -106,7 +106,6 @@ const Slices = (props) => {
 }
 
 const ThirdPartyDataGraph = ({since, until, country, asn, ...props}) => {
-  console.log('TEST', props)
   const intl = useIntl()
   const location = country || asn
   const [graphData, setGraphData] = useState([])
@@ -114,7 +113,8 @@ const ThirdPartyDataGraph = ({since, until, country, asn, ...props}) => {
   const cloudflareData = useEffect(() => {
     setGraphData([])
 
-    const to = dayjs.utc(until)
+    // make sure the date is not in the future to avoid receiving error from CloudFlare
+    const to = dayjs(until).isBefore(dayjs(), 'day') ? dayjs.utc(until) : dayjs().subtract(30, 'minute').utc()
     const from = dayjs.utc(since)
 
     axios({
@@ -159,8 +159,8 @@ const ThirdPartyDataGraph = ({since, until, country, asn, ...props}) => {
         return [...oldVal, ...graphData2]
       })
     })
-  }, [])
-  console.log('graphData', graphData)
+  }, [since, until])
+
   return (
     <>
       <SectionHeader>
