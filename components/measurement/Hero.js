@@ -45,7 +45,7 @@ const Hero = ({ status, icon, label, info }) => {
   }
 
   return (
-    <HeroContainer py={2} data-test-id='hero'>
+    <HeroContainer py={2}>
       <Container>
         <Text fontWeight={400} fontSize={24} as='div'>
           <Flex my={2} justifyContent='center' alignItems='center'>

@@ -65,12 +65,17 @@
   },
   "devDependencies": {
     "@svgr/webpack": "^6.5.0",
+    "@testing-library/cypress": "^9.0.0",
     "@welldone-software/why-did-you-render": "^7.0.1",
-    "cypress": "^10.6.0",
+    "cypress": "^12.6.0",
+    "cypress-recurse": "^1.27.0",
     "eslint": "^8.22.0",
     "eslint-config-next": "^12.2.5",
     "eslint-plugin-cypress": "^2.12.1",
     "glob": "^8.0.3",
+    "imap-simple": "^5.1.0",
+    "jsdom": "^21.1.0",
+    "mailparser": "^3.6.3",
     "mustache": "^4.2.0",
     "start-server-and-test": "^1.14.0"
   },

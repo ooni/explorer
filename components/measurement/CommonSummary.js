@@ -43,7 +43,7 @@ const CommonSummary = ({
   
   return (
     <>
-      <SummaryContainer py={4} color={color}>
+      <SummaryContainer py={4} color={color} data-test-id='common-summary'>
         <Container>
           <Flex justifyContent='space-between'>
             <Box fontSize={1}>

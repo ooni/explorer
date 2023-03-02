@@ -1,3 +1,5 @@
+const { recurse } = require('cypress-recurse')
+
 describe('Measurement Page Tests', () => {
 
   const normalColor = 'rgb(47, 158, 68)'
@@ -302,5 +304,51 @@ describe('Measurement Page Tests', () => {
       cy.get('h4').contains('Measurement not found')
     })
   })
+
+  // describe('User Feedback', () => {
+  //   beforeEach(() => {
+  //     cy.intercept('GET', 'https://ams-pg-test.ooni.org/api/v1/user_login*').as('userLogin')
+  //   })
+
+  //   it('URL with invalid report_id says measurement was not found', () => {
+  //     const reportIdNotInDB = 'this-measurement-does-not-exist'
+  //     cy.visit('/measurement/20200303T085244Z_AS42668_UThI3Fdoo0IZ6610604dd0CGkhd7oQV6QLWWzZDVLJ35oGxBO4?input=http%3A%2F%2Frutor.org%2F')
+  //     cy.findByText('VERIFY').click()
+
+  //     // cy.findByRole('textbox').click().type('kaylee.greenholt48@ethereal.email')
+  //     // cy.findByText('Login').click()
+
+  //     recurse(
+  //       () => cy.task('getLastEmail'), // Cypress commands to retry
+  //       Cypress._.isObject, // keep retrying until the task returns an object
+  //       {
+  //         timeout: 60000, // retry up to 1 minute
+  //         delay: 5000, // wait 5 seconds between attempts
+  //       },
+  //     ).then(({ loginLink }) => {
+  //         cy.visit(loginLink)
+  //       })
+
+  //     cy.url().should('contain', '/login')
+  //     cy.wait('@userLogin')
+
+
+  //     cy.visit('/measurement/20200303T085244Z_AS42668_UThI3Fdoo0IZ6610604dd0CGkhd7oQV6QLWWzZDVLJ35oGxBO4?input=http%3A%2F%2Frutor.org%2F')
+  //     cy.findByText('VERIFY').click()
+
+  //     cy.get('body').then(($body) => {
+  //       if ($body.text().includes('Your previous feedback')) {
+  //         cy.findByText('Edit').click()
+  //       }
+  //     })
+
+  //     cy.get('form').findByText('It\'s blocked').click()
+  //     cy.get('form').findByText('Block page').click()
+  //     cy.get('form').findByText('CAPTCHA').click()
+  //     cy.get('form').findByText('Submit').click()
+      
+  //     cy.findByText('Thank you!')
+  //   })
+  // })
 
 })
