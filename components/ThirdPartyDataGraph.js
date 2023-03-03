@@ -59,7 +59,7 @@ const Slices = (props) => {
 
   points.forEach(point => {
     if (point.data.x === null || point.data.y === null) return
-    if (new Date(point.data.x).getMinutes() !== 30 && new Date(point.data.x).getMinutes() !== 0) return
+    if (new Date(point.data.x).getMinutes() !== 0) return
     if (!map.has(point.x)) map.set(point.x, [point])
     else map.get(point.x).push(point)
   })
@@ -180,7 +180,7 @@ const ThirdPartyDataGraph = ({since, until, country, asn, ...props}) => {
             data={graphData}
             margin={{ top: 50, right: 20, bottom: 70, left: 30 }}
             enablePoints={false}
-            lineWidth={2}
+            lineWidth={1}
             xScale={{
               type: 'time',
               format: '%Y-%m-%dT%H:%M:%SZ',
@@ -204,16 +204,15 @@ const ThirdPartyDataGraph = ({since, until, country, asn, ...props}) => {
 
             layers={[
               'grid',
-              'markers',
+              // 'markers',
               'axes',
-              'areas',
-              'crosshair',
-              'points',
-              Slices,
-              // 'slices',
+              // 'areas',
+              // 'points',
               'lines',
-              'mesh',
+              // 'mesh',
               'legends',
+              'crosshair',
+              Slices,
             ]}
 
             sliceTooltip={(props) => {
