@@ -55,8 +55,8 @@ const PageNavMenu = ({ countryCode }) => {
           <PageNavItem link='#apps'>
             <FormattedMessage id='Country.Heading.Apps' />
           </PageNavItem>
-          <PageNavItem link='#shutdowns'>
-            <FormattedMessage id='Country.Heading.Shutdowns' />
+          <PageNavItem link='#outages'>
+            <FormattedMessage id='Country.Heading.Outages' />
           </PageNavItem>
         </Flex>}
         <Flex justifyContent={['flex-start', 'flex-end']} px={[0, 3]} py={1}>

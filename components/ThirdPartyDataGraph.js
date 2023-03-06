@@ -164,13 +164,13 @@ const ThirdPartyDataGraph = ({since, until, country, asn, ...props}) => {
   return (
     <>
       <SectionHeader>
-        <SectionHeader.Title name='shutdowns'>
-          {intl.formatMessage({id: 'Country.Shutdowns'})}
+        <SectionHeader.Title name='outages'>
+          {intl.formatMessage({id: 'Country.Outages'})}
         </SectionHeader.Title>
       </SectionHeader>
       <SimpleBox>
         <Text fontSize={16}>
-          <FormattedMarkdown id='Country.Shutdowns.Description' />
+          <FormattedMarkdown id='Country.Outages.Description' />
         </Text>
       </SimpleBox>
 
