@@ -1,5 +1,4 @@
-/* global process */
-import React, { useCallback, useState, useEffect } from 'react'
+import { useCallback, useState, useEffect, useMemo } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import {
@@ -85,18 +84,26 @@ const Country = ({ countryCode, overviewStats, reports, ...coverageDataSSR }) =>
   const countryName = getLocalisedRegionName(countryCode, intl.locale)
   const [newData, setNewData] = useState(false)
   const router = useRouter()
-  const query = router.query
+  const { query } = router
+
+  const { since, until } = useMemo(() => {
+    const today = dayjs.utc().add(1, 'day')
+    const monthAgo = dayjs.utc(today).subtract(1, 'month')
+
+    return { 
+      since: query.since ?? monthAgo.format('YYYY-MM-DD'),
+      until: query.until ?? today.format('YYYY-MM-DD')
+    }
+  }, [query])
 
   useEffect(() => {
-    if (Object.keys(query).length === 1) {
-      const today = dayjs.utc().add(1, 'day')
-      const monthAgo = dayjs.utc(today).subtract(1, 'month')
+    if (Object.keys(query).length  < 3) {
       const href = {
         pathname: router.pathname,
         query: {
-          since: monthAgo.format('YYYY-MM-DD'),
-          until: today.format('YYYY-MM-DD'),
-          countryCode
+          since,
+          until,
+          countryCode,
         },
       }
       router.replace(href, undefined, { shallow: true })
@@ -191,15 +198,15 @@ const Country = ({ countryCode, overviewStats, reports, ...coverageDataSSR }) =>
                   fetchTestCoverageData={fetchTestCoverageData}
                   featuredArticles={reports}
                 />
-                <Form onSubmit={onSubmit} query={query} />
+                <Form onSubmit={onSubmit} since={since} until={until} />
                 <WebsitesSection countryCode={countryCode} />
                 <AppsSection />
               </CountryContextProvider>
-              {query.since && query.until && 
+              {since && until && 
                 <ThirdPartyDataGraph
                   country={countryCode}
-                  since={query.since}
-                  until={query.until}
+                  since={since}
+                  until={until}
                 />
               }
             </Box>
