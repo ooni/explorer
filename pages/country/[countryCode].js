@@ -141,9 +141,7 @@ const Country = ({ countryCode, overviewStats, reports, ...coverageDataSSR }) =>
       query: params,
     }
 
-    if (query.since !== since
-      || query.until !== until
-    ) {
+    if (query.since !== since || query.until !== until) {
       router.push(href, href, { shallow: true })
     }
   }

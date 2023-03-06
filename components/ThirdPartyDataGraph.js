@@ -170,7 +170,13 @@ const ThirdPartyDataGraph = ({since, until, country, asn, ...props}) => {
       </SectionHeader>
       <SimpleBox>
         <Text fontSize={16}>
-          <FormattedMarkdown id='Country.Outages.Description' />
+          <FormattedMarkdown 
+            id='Country.Outages.Description'
+            values={{
+              'ioda-link': (string) => (`[${string}](https://ioda.inetintel.cc.gatech.edu/country/${country})`),
+              'cloudflare-link': (string) => (`[${string}](https://radar.cloudflare.com/${country})`)
+            }}
+          />
         </Text>
       </SimpleBox>
 
