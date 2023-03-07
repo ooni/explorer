@@ -1,4 +1,4 @@
-import { useState, useEffect, useMemo, createContext, useCallback, useContext, MutableRefObject, MouseEvent, memo } from 'react'
+import { useState, useEffect, memo } from 'react'
 import axios from 'axios'
 import { ResponsiveLine } from '@nivo/line'
 import { Box, Flex, Text, theme } from 'ooni-components'
@@ -67,7 +67,7 @@ const ThirdPartyDataChart = ({since, until, country, asn, ...props}) => {
             id='Country.Outages.Description'
             values={{
               'ioda-link': (string) => (`[${string}](https://ioda.inetintel.cc.gatech.edu/${country ? 'country' : 'asn'}/${location})`),
-              'cloudflare-link': (string) => (`[${string}](https://radar.cloudflare.com/${asn && 'as'}${location})`)
+              'cloudflare-link': (string) => (`[${string}](https://radar.cloudflare.com/${asn ? 'as' : ''}${location})`)
             }}
           />
         </Text>
