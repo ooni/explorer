@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react'
+import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { Box, Button, Flex, Link, Text, theme } from 'ooni-components'
@@ -50,13 +50,23 @@ const blockedValues = [
   },
 ]
 
+const radioLevels = ['firstLevelRadio', 'secondLevelRadio', 'thirdLevelRadio']
+
 const FeedbackBox = ({user, report_id, setShowModal, previousFeedback, mutateUserFeedback}) => {
   const intl = useIntl()
   const [error, setError] = useState(null)
 
   const redirectTo = typeof window !== 'undefined' && window.location.href
   
-  const { handleSubmit, control, watch, setValue, getValues } = useForm()
+  const defaultValues = useMemo(() => {
+    if (!previousFeedback) return {}
+    const feedbackLevels = previousFeedback.split('.')
+    return feedbackLevels.reduce((acc, current, i) => {
+      return {...acc, ...{[radioLevels[i]]: feedbackLevels.slice(0, i+1).join('.')}}
+    }, {})
+  }, [previousFeedback])
+  
+  const { handleSubmit, control, watch, setValue, getValues } = useForm({defaultValues})
 
   const [state, send] = useStateMachine({
     initial: 'initial',
@@ -111,15 +121,20 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback, mutateUse
     },
   })
 
-  const firstLevelRadio = watch('firstLevelRadio')
-  const secondLevelRadio = watch('secondLevelRadio')
+
+  const initialLoadFirst = useRef(false)
+  const initialLoadSecond = useRef(false)
+  const firstLevelRadio = watch(radioLevels[0])
+  const secondLevelRadio = watch(radioLevels[1])
  
   useEffect(() => {
-    setValue('secondLevelRadio', null)
-  }, [firstLevelRadio, setValue])
+    if (initialLoadFirst.current) return setValue(radioLevels[1], null)
+    initialLoadFirst.current = true
+  }, [firstLevelRadio])
   useEffect(() => {
-    setValue('thirdLevelRadio', null)
-  }, [secondLevelRadio, setValue])
+    if (initialLoadSecond.current) return setValue(radioLevels[2], null)
+    initialLoadSecond.current = true
+  }, [secondLevelRadio])
 
   const submitEnabled = useMemo(() => !!firstLevelRadio, [firstLevelRadio])
 
@@ -184,7 +199,7 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback, mutateUse
               </Text>
               <Controller
                 control={control}
-                name='firstLevelRadio'
+                name={radioLevels[0]}
                 render={({field}) => (
                   <RadioGroup {...field}>
                     {blockedValues.map(({top, sub}) => (
@@ -197,7 +212,7 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback, mutateUse
                         {sub && firstLevelRadio === top && (
                           <Controller
                             control={control}
-                            name='secondLevelRadio'
+                            name={radioLevels[1]}
                             render={({field}) => (
                               <RadioGroup {...field}>
                                 {sub.map(({top, sub}) => (
@@ -211,7 +226,7 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback, mutateUse
                                     {sub && secondLevelRadio === top && (
                                       <Controller
                                         control={control}
-                                        name='thirdLevelRadio'
+                                        name={radioLevels[2]}
                                         render={({field}) => (
                                           <RadioGroup {...field}>
                                             {sub.map(subVal => (
