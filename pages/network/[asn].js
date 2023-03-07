@@ -13,7 +13,7 @@ import Calendar from 'components/network/Calendar'
 import FormattedMarkdown from 'components/FormattedMarkdown'
 import { FormattedMessage } from 'react-intl'
 import CallToActionBox from 'components/CallToActionBox'
-import ThirdPartyDataGraph from 'components/ThirdPartyDataGraph'
+import ThirdPartyDataChart from 'components/ThirdPartyDataChart'
 import { getLocalisedRegionName } from '../../utils/i18nCountries'
 
 const prepareDataForCalendar = (data) => {
@@ -168,7 +168,7 @@ const NetworkDashboard = ({asn, calendarData = [], measurementsTotal, countriesD
                 <Form onSubmit={onSubmit} since={since} until={until} />
                 <ChartsContainer />
                 {since && until && 
-                  <ThirdPartyDataGraph 
+                  <ThirdPartyDataChart 
                     since={since}
                     until={until}
                     asn={displayASN}

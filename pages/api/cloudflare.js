@@ -54,15 +54,23 @@ const cloudflareHandler = (req, res) => {
       'X-Auth-Email': process.env.CLOUDFLARE_EMAIL
     },
    }).then(({data, headers}) => {
-    const result = data.result.all
+    const timestamps = data.result.all.timestamps
+    const values = data.result.all.values
+    const chartData = timestamps.map((st, i) => {
+      return {
+        'x': st,
+        'y': Number(values[i])
+      }
+    })
+
     if (req.cache) {
       req.cache.set(cacheKey, {
         headers,
-        data: result
+        data: chartData
       })
     }
 
-    return res.status(200).json(result)
+    return res.status(200).json(chartData)
   }).catch((err) =>{
     return res.status(400).json(err)
   })

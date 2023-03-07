@@ -21,7 +21,7 @@ import WebsitesSection from 'components/country/Websites'
 import AppsSection from 'components/country/Apps'
 import { CountryContextProvider } from 'components/country/CountryContext'
 import CountryHead from 'components/country/CountryHead'
-import ThirdPartyDataGraph from 'components/ThirdPartyDataGraph'
+import ThirdPartyDataChart from 'components/ThirdPartyDataChart'
 
 const getCountryReports = (countryCode, data) => {
   const reports = data.filter((article) => (
@@ -201,7 +201,7 @@ const Country = ({ countryCode, overviewStats, reports, ...coverageDataSSR }) =>
                 <AppsSection />
               </CountryContextProvider>
               {since && until && 
-                <ThirdPartyDataGraph
+                <ThirdPartyDataChart
                   country={countryCode}
                   since={since}
                   until={until}
