@@ -29,16 +29,16 @@ describe('Search Page Tests', () => {
   })
 
   it('fetches more results when "Load More" button is clicked', () => {
-    cy.intercept('/api/v1/*').as('searchAPI')
+    cy.intercept('/api/v1/measurements*').as('searchAPI')
     cy.get('[data-test-id="load-more-button"]').click()
     cy.wait('@searchAPI')
     cy.get('[data-test-id="results-list"]', { timeout: 10000 }).children('a').should('have.length', 100)
   })
 
   it('results loaded by "Load More" button are valid', () => {
-    cy.intercept('/api/v1/*').as('searchAPI')
+    cy.intercept('/api/v1/measurements*').as('searchAPI')
     cy.get('[data-test-id="results-list"] > a:nth-child(51)').click()
-    cy.location('pathname', { timeout: 10000 }).should('include', '/measurement/')
+    cy.location('pathname', { timeout: 20000 }).should('include', '/measurement/')
     cy.go('back')
     cy.wait('@searchAPI')
   })
@@ -51,7 +51,7 @@ describe('Search Page Tests', () => {
     // click in the since date filter and select range from first to last day of the previous month
     cy.get('#since-filter').click()
     cy.get('.rdp-nav_button_previous').click()
-    cy.get('.rdp-cell > .rdp-day').first().click().click()
+    cy.get('.rdp-cell > .rdp-day').first().click()
     cy.get('.rdp-cell > .rdp-day').last().click()
 
     cy.get('#apply-range').click()

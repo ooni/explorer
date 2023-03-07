@@ -306,17 +306,24 @@ describe('Measurement Page Tests', () => {
   })
 
   // describe('User Feedback', () => {
-  //   beforeEach(() => {
+  //   let userEmail
+
+  //   before(() => {
   //     cy.intercept('GET', 'https://ams-pg-test.ooni.org/api/v1/user_login*').as('userLogin')
+  //     // get and check the test email only once before the tests
+  //     cy.task('getUserEmail').then((email) => {
+  //       expect(email).to.be.a('string')
+  //       userEmail = email
+  //     })
   //   })
 
-  //   it('URL with invalid report_id says measurement was not found', () => {
-  //     const reportIdNotInDB = 'this-measurement-does-not-exist'
-  //     cy.visit('/measurement/20200303T085244Z_AS42668_UThI3Fdoo0IZ6610604dd0CGkhd7oQV6QLWWzZDVLJ35oGxBO4?input=http%3A%2F%2Frutor.org%2F')
+  //   it('can login and submit feedback', () => {
+  //     cy.visit('/measurement/20230307T142506Z_webconnectivity_US_20115_n1_PXV9h44BLL9pXFhs?input=https%3A%2F%2Fwww.instagram.com%2F')
   //     cy.findByText('VERIFY').click()
 
-  //     // cy.findByRole('textbox').click().type('kaylee.greenholt48@ethereal.email')
-  //     // cy.findByText('Login').click()
+  //     cy.findByRole('textbox').click().type(userEmail)
+  //     cy.findByText('Login').click()
+  //     cy.findByText('Login link sent')
 
   //     recurse(
   //       () => cy.task('getLastEmail'), // Cypress commands to retry
@@ -332,8 +339,7 @@ describe('Measurement Page Tests', () => {
   //     cy.url().should('contain', '/login')
   //     cy.wait('@userLogin')
 
-
-  //     cy.visit('/measurement/20200303T085244Z_AS42668_UThI3Fdoo0IZ6610604dd0CGkhd7oQV6QLWWzZDVLJ35oGxBO4?input=http%3A%2F%2Frutor.org%2F')
+  //     cy.visit('/measurement/20230307T142506Z_webconnectivity_US_20115_n1_PXV9h44BLL9pXFhs?input=https%3A%2F%2Fwww.instagram.com%2F')
   //     cy.findByText('VERIFY').click()
 
   //     cy.get('body').then(($body) => {
@@ -350,5 +356,4 @@ describe('Measurement Page Tests', () => {
   //     cy.findByText('Thank you!')
   //   })
   // })
-
 })

@@ -77,7 +77,8 @@
     "jsdom": "^21.1.0",
     "mailparser": "^3.6.3",
     "mustache": "^4.2.0",
-    "start-server-and-test": "^1.14.0"
+    "nodemailer": "^6.9.1",
+    "start-server-and-test": "^2.0.0"
   },
   "scripts": {
     "dev": "next dev -p 3100",
@@ -86,7 +87,9 @@
     "build": "next build",
     "export": "next export",
     "lint": "next lint",
-    "test:e2e": "yarn build && start-server-and-test start http://localhost:3100 cypress:run",
+    "start:testServer": "NODE_ENV=test yarn start",
+    "build:test": "NODE_ENV=test yarn build",
+    "test:e2e": "yarn build:test && start-server-and-test start:testServer http://localhost:3100 cypress:run",
     "cypress:run": "cypress run",
     "test": "yarn run test:e2e",
     "script:build-translations": "node ./scripts/build-translations.js",

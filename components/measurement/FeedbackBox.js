@@ -161,7 +161,7 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback, mutateUse
               <FormattedMessage id='Measurement.Feedback.Login.Title'/>
             </Text>
               <Text><FormattedMessage id='Measurement.Feedback.Login.Description'/></Text>
-              <LoginForm onLogin={() => {console.log('send');send('LOGIN_SUCCESS')}} redirectTo={redirectTo} />
+              <LoginForm onLogin={() => {send('LOGIN_SUCCESS')}} redirectTo={redirectTo} />
             </>
           }
           {state.value === 'loginSuccess' && 
