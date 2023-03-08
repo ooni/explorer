@@ -1,7 +1,7 @@
 import { useState, useEffect, memo } from 'react'
 import axios from 'axios'
 import { ResponsiveLine } from '@nivo/line'
-import { Box, Flex, Text, theme } from 'ooni-components'
+import { Box, Flex, Text, Heading, theme } from 'ooni-components'
 import dayjs from 'services/dayjs'
 import { useIntl } from 'react-intl'
 import SectionHeader from './country/SectionHeader'
@@ -16,6 +16,16 @@ const iodaLineColors = {
   'ping-slash24': theme.colors.fuchsia5
 }
 
+
+const SectionText = ({location, asn, country}) => (
+  <FormattedMarkdown 
+    id='Country.Outages.Description'
+    values={{
+      'ioda-link': (string) => (`[${string}](https://ioda.inetintel.cc.gatech.edu/${country ? 'country' : 'asn'}/${location})`),
+      'cloudflare-link': (string) => (`[${string}](https://radar.cloudflare.com/${asn ? 'as' : ''}${location})`)
+    }}
+  />
+)
 const ThirdPartyDataChart = ({since, until, country, asn, ...props}) => {
   const intl = useIntl()
   const location = country || asn
@@ -54,22 +64,26 @@ const ThirdPartyDataChart = ({since, until, country, asn, ...props}) => {
 
   return (
     <>
-      <SectionHeader>
-        <SectionHeader.Title name='outages'>
-          {intl.formatMessage({id: 'Country.Outages'})}
-        </SectionHeader.Title>
-      </SectionHeader>
-      <SimpleBox>
-        <Text fontSize={16}>
-          <FormattedMarkdown 
-            id='Country.Outages.Description'
-            values={{
-              'ioda-link': (string) => (`[${string}](https://ioda.inetintel.cc.gatech.edu/${country ? 'country' : 'asn'}/${location})`),
-              'cloudflare-link': (string) => (`[${string}](https://radar.cloudflare.com/${asn ? 'as' : ''}${location})`)
-            }}
-          />
-        </Text>
-      </SimpleBox>
+      {/* keep distinct styles for country and network pages */}
+      {country ? (
+        <>
+          <SectionHeader>
+            <SectionHeader.Title name='outages'>
+              {intl.formatMessage({id: 'Country.Outages'})}
+            </SectionHeader.Title>
+          </SectionHeader>
+          <SimpleBox>
+            <Text fontSize={16}>
+              <SectionText location={location} asn={asn} country={country} />
+            </Text>
+          </SimpleBox>
+        </>
+      ) : (
+        <>
+          <Heading h={3}>{intl.formatMessage({id: 'Country.Outages'})}</Heading>
+          <SectionText location={location} asn={asn} country={country} />
+        </>
+      )}
 
       <Box style={{width: '100%',height: '500px'}}>
         {!!graphData.length && 
