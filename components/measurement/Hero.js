@@ -8,11 +8,10 @@ import styled from 'styled-components'
 import { FormattedMessage } from 'react-intl'
 
 const HeroContainer = styled(Box)`
-  background-color: ${props => props.color};
   color: white;
 `
 
-const Hero = ({ status, color, icon, label, info }) => {
+const Hero = ({ status, icon, label, info }) => {
   let computedLabel = ''
   if (status) {
     switch (status) {
@@ -46,15 +45,15 @@ const Hero = ({ status, color, icon, label, info }) => {
   }
 
   return (
-    <HeroContainer py={4} color={color} data-test-id='hero'>
+    <HeroContainer py={2}>
       <Container>
-        <Text fontWeight={600} fontSize={4} as='div'>
+        <Text fontWeight={400} fontSize={24} as='div'>
           <Flex my={2} justifyContent='center' alignItems='center'>
-            <Box>{icon}</Box> <Box>{label}</Box>
+            {icon} <Box>{label}</Box>
           </Flex>
         </Text>
         {info &&
-          <Text fontSize={28} textAlign='center' as='div'>
+          <Text fontSize={3} fontWeight={300} textAlign='center' as='div'>
             {info}
           </Text>
         }
@@ -65,7 +64,6 @@ const Hero = ({ status, color, icon, label, info }) => {
 
 Hero.propTypes = {
   status: PropTypes.string,
-  color: PropTypes.string,
   icon: PropTypes.node,
   label: PropTypes.string,
   info: PropTypes.node

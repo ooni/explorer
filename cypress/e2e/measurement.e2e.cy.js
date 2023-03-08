@@ -1,3 +1,5 @@
+const { recurse } = require('cypress-recurse')
+
 describe('Measurement Page Tests', () => {
 
   const normalColor = 'rgb(47, 158, 68)'
@@ -303,4 +305,56 @@ describe('Measurement Page Tests', () => {
     })
   })
 
+  describe('User Feedback', () => {
+    let userEmail
+
+    before(() => {
+      cy.clearLocalStorage()
+      cy.intercept('GET', 'https://ams-pg-test.ooni.org/api/v1/user_login*').as('userLogin')
+      // get and check the test email only once before the tests
+      cy.task('getUserEmail').then((email) => {
+        expect(email).to.be.a('string')
+        userEmail = email
+      })
+    })
+
+    it('can login and submit feedback', () => {
+      cy.visit('/measurement/20230307T142506Z_webconnectivity_US_20115_n1_PXV9h44BLL9pXFhs?input=https%3A%2F%2Fwww.instagram.com%2F')
+      cy.findByText('VERIFY').click()
+
+      cy.findByRole('textbox').click().type(userEmail)
+      cy.findByText('Login').click()
+      cy.findByText('Login link sent')
+
+      recurse(
+        () => cy.task('getLastEmail'), // Cypress commands to retry
+        Cypress._.isObject, // keep retrying until the task returns an object
+        {
+          timeout: 60000, // retry up to 1 minute
+          delay: 5000, // wait 5 seconds between attempts
+        },
+      ).then(({ loginLink }) => {
+          cy.visit(loginLink)
+        })
+
+      cy.url().should('contain', '/login')
+      cy.wait('@userLogin')
+
+      cy.visit('/measurement/20230307T142506Z_webconnectivity_US_20115_n1_PXV9h44BLL9pXFhs?input=https%3A%2F%2Fwww.instagram.com%2F')
+      cy.findByText('VERIFY').click()
+
+      cy.get('body').then(($body) => {
+        if ($body.text().includes('Your previous feedback')) {
+          cy.findByText('Edit').click()
+        }
+      })
+
+      cy.get('form').findByText('It\'s blocked').click()
+      cy.get('form').findByText('Block page').click()
+      cy.get('form').findByText('CAPTCHA').click()
+      cy.get('form').findByText('Submit').click()
+      
+      cy.findByText('Thank you!')
+    })
+  })
 })

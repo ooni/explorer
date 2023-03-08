@@ -12,6 +12,6 @@ describe('Home Page Tests', () => {
   it('explore button works', () => {
     // Check if explore button
     cy.get('button').contains('Explore').click()
-    cy.url().should('include', '/chart/mat')
+    cy.location('pathname', { timeout: 20000 }).should('include', '/chart/mat')
   })
 })

@@ -11,6 +11,8 @@ import {
 } from 'ooni-components'
 import { useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
+import { MdOutlineFactCheck } from 'react-icons/md'
+import { BiShareAlt } from 'react-icons/bi'
 
 import Flag from '../Flag'
 
@@ -23,71 +25,67 @@ const StyledSummaryItemLabel = styled(Text)`
   font-weight: 600;
 `
 
-const SummaryItemBox = ({
-  label,
-  content,
-  link = null
-}) => (
-  <Box width={[1, 1/3]} px={4} py={2}>
-    <Text fontSize={24} fontWeight={300}>
-      {link ? <NLink href={link} passHref><Link color='white'>{content}</Link></NLink> : content}
-    </Text>
-    <StyledSummaryItemLabel fontSize={16} >
-      {label}
-    </StyledSummaryItemLabel>
-  </Box>
-)
-
-SummaryItemBox.propTypes = {
-  label: PropTypes.string,
-  content: PropTypes.node
-}
-
 const CommonSummary = ({
   color,
   measurement_start_time,
   probe_asn,
   probe_cc,
-  country
+  networkName,
+  country,
+  hero,
+  onVerifyClick
 }) => {
   const intl = useIntl()
   const startTime = measurement_start_time
   const network = probe_asn
   const countryCode = probe_cc
-
-  const countryBlock = <Flex flexWrap='wrap'>
-    <Box mr={2} pb={1} width={1}>
-      <Flag countryCode={countryCode} size={60} border />
-    </Box>
-    <Box>
-      {country}
-    </Box>
-  </Flex>
- 
   const formattedDate = new Intl.DateTimeFormat(intl.locale, { dateStyle: 'long', timeStyle: 'long', timeZone: 'UTC' }).format(new Date(startTime))
   
   return (
     <>
-      <SummaryContainer py={4} color={color}>
+      <SummaryContainer py={4} color={color} data-test-id='common-summary'>
         <Container>
-          <Flex flexWrap='wrap' alignItems='flex-end' justifyContent='space-around'>
-            {/*<SummaryItemBox
-              label='Network Name'
-              content='AT&T Lorem Ipsum Name A.T.T Internationale'
-            />*/}
-            <SummaryItemBox
-              label={intl.formatMessage({ id: 'Measurement.CommonSummary.Label.Country' })}
-              content={countryBlock}
-            />
-            <SummaryItemBox
-              label={intl.formatMessage({ id: 'Measurement.CommonSummary.Label.ASN' })}
-              content={network}
-              link={`/network/${network}`}
-            />
-            <SummaryItemBox
-              label={intl.formatMessage({ id: 'Measurement.CommonSummary.Label.DateTime' })}
-              content={formattedDate}
-            />
+          <Flex justifyContent='space-between'>
+            <Box fontSize={1}>
+              {formattedDate}
+            </Box>
+            <Box>
+              <Flex sx={{gap: 14}}>
+              {/* <Box>
+                <Box fontSize={18} textAlign='center'><BiShareAlt /></Box>
+                <Box fontSize={0} fontWeigh={600} textAlign='center'>{'Share'.toUpperCase()}</Box>
+              </Box> */}
+              <Box sx={{cursor: 'pointer'}} onClick={onVerifyClick}>
+                <Box fontSize={18} textAlign='center'><MdOutlineFactCheck /></Box>
+                <Box fontSize={0} fontWeigh={600} textAlign='center'>{intl.formatMessage({id: 'Measurement.CommonSummary.Verify'}).toUpperCase()}</Box>
+              </Box>
+              </Flex>
+            </Box>
+          </Flex>
+          {hero}
+          <Flex flexWrap='wrap' alignItems='flex-end' justifyContent='space-between' sx={{textDecoration:'underline'}}>
+            <Box>
+              <Text fontSize={1}>
+                <NLink href={`/network/${network}`} passHref>
+                  <Link color='white'>
+                    <Box mb={2}>{network}</Box>
+                    <Box>{networkName}</Box>
+                  </Link>
+                </NLink>
+              </Text>
+            </Box>
+            <Box>
+              <NLink href={`/country/${countryCode}`} passHref><Link color='white'>
+                <Flex alignItems='center'>
+                  <Box mr={2}>
+                    <Flag countryCode={countryCode} size={46} border />
+                  </Box>
+                  <Box fontSize={20}>
+                    {country}
+                  </Box>
+                </Flex>
+              </Link></NLink>
+            </Box>
           </Flex>
         </Container>
       </SummaryContainer>
@@ -99,6 +97,7 @@ CommonSummary.propTypes = {
   measurement_start_time: PropTypes.string.isRequired,
   probe_asn: PropTypes.string.isRequired,
   probe_cc: PropTypes.string.isRequired,
+  networkName: PropTypes.string,
   country: PropTypes.string.isRequired,
   color: PropTypes.string.isRequired
 }

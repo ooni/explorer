@@ -6,6 +6,7 @@
   "main": "index.js",
   "repository": "https://github.com/ooni/explorer",
   "dependencies": {
+    "@cassiozen/usestatemachine": "^1.0.1",
     "@datapunt/matomo-tracker-react": "^0.5.1",
     "@fontsource/fira-sans": "^4.5.9",
     "@nivo/bar": "^0.80.0",
@@ -64,14 +65,20 @@
   },
   "devDependencies": {
     "@svgr/webpack": "^6.5.0",
+    "@testing-library/cypress": "^9.0.0",
     "@welldone-software/why-did-you-render": "^7.0.1",
-    "cypress": "^10.6.0",
+    "cypress": "^12.6.0",
+    "cypress-recurse": "^1.27.0",
     "eslint": "^8.22.0",
     "eslint-config-next": "^12.2.5",
     "eslint-plugin-cypress": "^2.12.1",
     "glob": "^8.0.3",
+    "imap-simple": "^5.1.0",
+    "jsdom": "^21.1.0",
+    "mailparser": "^3.6.3",
     "mustache": "^4.2.0",
-    "start-server-and-test": "^1.14.0"
+    "nodemailer": "^6.9.1",
+    "start-server-and-test": "^2.0.0"
   },
   "scripts": {
     "dev": "next dev -p 3100",
@@ -80,7 +87,9 @@
     "build": "next build",
     "export": "next export",
     "lint": "next lint",
-    "test:e2e": "yarn build && start-server-and-test start http://localhost:3100 cypress:run",
+    "start:testServer": "NODE_ENV=test yarn start",
+    "build:test": "NODE_ENV=test yarn build",
+    "test:e2e": "yarn build:test && start-server-and-test start:testServer http://localhost:3100 cypress:run",
     "cypress:run": "cypress run",
     "test": "yarn run test:e2e",
     "script:build-translations": "node ./scripts/build-translations.js",

@@ -29,16 +29,16 @@ describe('Search Page Tests', () => {
   })
 
   it('fetches more results when "Load More" button is clicked', () => {
-    cy.intercept('/api/v1/*').as('searchAPI')
+    cy.intercept('/api/v1/measurements*').as('searchAPI')
     cy.get('[data-test-id="load-more-button"]').click()
     cy.wait('@searchAPI')
     cy.get('[data-test-id="results-list"]', { timeout: 10000 }).children('a').should('have.length', 100)
   })
 
   it('results loaded by "Load More" button are valid', () => {
-    cy.intercept('/api/v1/*').as('searchAPI')
+    cy.intercept('/api/v1/measurements*').as('searchAPI')
     cy.get('[data-test-id="results-list"] > a:nth-child(51)').click()
-    cy.url().should('include', '/measurement/')
+    cy.location('pathname', { timeout: 20000 }).should('include', '/measurement/')
     cy.go('back')
     cy.wait('@searchAPI')
   })

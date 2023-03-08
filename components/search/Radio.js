@@ -21,17 +21,21 @@ export const RadioGroup = ({
   ...props
 }) => {
 
+  const iterateOverChildren = (children) => {
+    return React.Children.map(children, (child) => {
+      if (!React.isValidElement(child)) return
+
+      return React.cloneElement(child, {
+        ...child.props,
+        checked: child.props.value === value,
+        onChange: (e) => { onChange(e.target.value) },
+        children: iterateOverChildren(child.props.children)})
+    })
+  }
+
   return (
     <Flex flexDirection={direction} {...props}>
-      {React.Children.map(children, child => (
-        !(child.type.name === RadioButton.name)
-          ? child
-          : React.cloneElement(child, {
-            name: name,
-            checked: child.props.value === value,
-            onChange: (e) => { onChange(e.target.value) },
-          })
-      ))}
+      {iterateOverChildren(children)}
     </Flex>
   )
 }

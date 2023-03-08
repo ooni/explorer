@@ -1,23 +1,30 @@
 /* global process */
-import React from 'react'
+import React, { useMemo, useState } from 'react'
 import PropTypes from 'prop-types'
 import Head from 'next/head'
 import axios from 'axios'
-import { Container, theme } from 'ooni-components'
-import { getLocalisedRegionName } from '../../utils/i18nCountries'
+import { Container, theme, Flex, Text } from 'ooni-components'
+import { getLocalisedRegionName } from '/utils/i18nCountries'
+import NLink from 'next/link'
+import { FormattedMessage } from 'react-intl'
+import useSWR from 'swr'
 
-import Hero from '../../components/measurement/Hero'
-import CommonSummary from '../../components/measurement/CommonSummary'
-import DetailsHeader from '../../components/measurement/DetailsHeader'
-import SummaryText from '../../components/measurement/SummaryText'
-import CommonDetails from '../../components/measurement/CommonDetails'
-import MeasurementContainer from '../../components/measurement/MeasurementContainer'
-import MeasurementNotFound from '../../components/measurement/MeasurementNotFound'
-import HeadMetadata from '../../components/measurement/HeadMetadata'
+import Hero from 'components/measurement/Hero'
+import CommonSummary from 'components/measurement/CommonSummary'
+import DetailsHeader from 'components/measurement/DetailsHeader'
+import SummaryText from 'components/measurement/SummaryText'
+import CommonDetails from 'components/measurement/CommonDetails'
+import MeasurementContainer from 'components/measurement/MeasurementContainer'
+import MeasurementNotFound from 'components/measurement/MeasurementNotFound'
+import HeadMetadata from 'components/measurement/HeadMetadata'
+import FeedbackBox from 'components/measurement/FeedbackBox'
 
-import NavBar from '../../components/NavBar'
+import NavBar from 'components/NavBar'
 import ErrorPage from '../_error'
 import { useIntl } from 'react-intl'
+import useUser from 'hooks/useUser'
+import { DetailsBoxTable } from 'components/measurement/DetailsBox'
+import { fetcher } from '/lib/api'
 
 const pageColors = {
   default: theme.colors.base,
@@ -30,7 +37,8 @@ const pageColors = {
 
 export async function getServerSideProps({ query }) {
   let initialProps = {
-    error: null
+    error: null,
+    userFeedback: null
   }
 
   // Get `report_id` using optional catch all dynamic route of Next.js
@@ -113,12 +121,31 @@ const Measurement = ({
 }) => {
   const intl = useIntl()
   const country = getLocalisedRegionName(probe_cc, intl.locale)
+
+  const { user, setSubmitted } = useUser()
+  const [showModal, setShowModal] = useState(false)
+
+  const {data: userFeedback, error: userFeedbackError, mutate: mutateUserFeedback} = useSWR(`/api/_/measurement_feedback/${report_id}`, fetcher)
+
+  const userFeedbackItems = useMemo(() => {
+    return userFeedback ? 
+      Object.entries(userFeedback.summary).map(([key, value]) => (
+        {label: intl.formatMessage({id: `Measurement.Feedback.${key}`}), value}
+      )) : 
+      []
+  }, [userFeedback])
+
   // Add the 'AS' prefix to probe_asn when API chooses to send just the number
   probe_asn = typeof probe_asn === 'number' ? `AS${probe_asn}` : probe_asn
   if (error) {
     return (
       <ErrorPage statusCode={501} error={error} />
     )
+  }
+
+  const hideModal = () => {
+    setShowModal(false)
+    setSubmitted(false)
   }
 
   return (
@@ -129,84 +156,92 @@ const Measurement = ({
       {notFound ? (
         <MeasurementNotFound />
       ): (
-        <MeasurementContainer
-          isConfirmed={confirmed}
-          isAnomaly={anomaly}
-          isFailure={failure}
-          testName={test_name}
-          country={country}
-          measurement={raw_measurement}
-          input={input}
-          measurement_start_time={measurement_start_time}
-          probe_asn={probe_asn}
-          scores={scores}
-          {...rest}
+        <>
+          <MeasurementContainer
+            isConfirmed={confirmed}
+            isAnomaly={anomaly}
+            isFailure={failure}
+            testName={test_name}
+            country={country}
+            measurement={raw_measurement}
+            input={input}
+            measurement_start_time={measurement_start_time}
+            probe_asn={probe_asn}
+            scores={scores}
+            {...rest}
 
-          render={({
-            status = 'default',
-            statusIcon,
-            statusLabel,
-            statusInfo,
-            legacy = false,
-            summaryText,
-            headMetadata,
-            details
-          }) => {
-            const color = failure === true ? pageColors['error'] : pageColors[status]
-            const info = scores?.msg ?? statusInfo
-            return (
-              <>
-                {headMetadata &&
-                  <HeadMetadata
-                    content={headMetadata}
-                    testName={test_name}
-                    testUrl={input}
-                    country={country}
-                    date={measurement_start_time}
-                  />
-                }
-                <NavBar color={color} />
-                <Hero
-                  color={color}
-                  status={status}
-                  icon={statusIcon}
-                  label={statusLabel}
-                  info={info}
-                />
-                <CommonSummary
-                  measurement_start_time={measurement_start_time}
-                  probe_asn={probe_asn}
-                  probe_cc={probe_cc}
-                  color={color}
-                  country={country}
-                />
-
-                <Container>
-                  <DetailsHeader
-                    testName={test_name}
-                    runtime={raw_measurement?.test_runtime}
-                    notice={legacy}
-                    url={`measurement/${report_id}`}
-                  />
-                  {summaryText &&
-                    <SummaryText
+            render={({
+              status = 'default',
+              statusIcon,
+              statusLabel,
+              statusInfo,
+              legacy = false,
+              summaryText,
+              headMetadata,
+              details
+            }) => {
+              const color = failure === true ? pageColors['error'] : pageColors[status]
+              const info = scores?.msg ?? statusInfo
+              return (
+                <>
+                  {headMetadata &&
+                    <HeadMetadata
+                      content={headMetadata}
                       testName={test_name}
                       testUrl={input}
-                      network={probe_asn}
                       country={country}
                       date={measurement_start_time}
-                      content={summaryText}
                     />
                   }
-                  {details}
-                  <CommonDetails
-                    measurement={raw_measurement}
-                    reportId={report_id}
+                  <NavBar color={color} />
+                  {showModal &&
+                    <FeedbackBox
+                      user={user}
+                      report_id={report_id}
+                      setShowModal={setShowModal}
+                      previousFeedback={userFeedback?.user_feedback}
+                      mutateUserFeedback={mutateUserFeedback}
+                    />
+                  }
+                  <CommonSummary
+                    measurement_start_time={measurement_start_time}
+                    probe_asn={probe_asn}
+                    probe_cc={probe_cc}
+                    networkName={raw_measurement?.probe_network_name}
+                    color={color}
+                    country={country}
+                    hero={<Hero status={status} icon={statusIcon} label={statusLabel} info={info} />}
+                    onVerifyClick={() => setShowModal(true)}
                   />
-                </Container>
-              </>
-            )
-          }} />
+                  <Container>
+                    <DetailsHeader
+                      testName={test_name}
+                      runtime={raw_measurement?.test_runtime}
+                      notice={legacy}
+                      url={`measurement/${report_id}`}
+                    />
+                    {summaryText &&
+                      <SummaryText
+                        testName={test_name}
+                        testUrl={input}
+                        network={probe_asn}
+                        country={country}
+                        date={measurement_start_time}
+                        content={summaryText}
+                      />
+                    }
+                    {details}
+                    <CommonDetails
+                      measurement={raw_measurement}
+                      reportId={report_id}
+                      userFeedbackItems={userFeedbackItems}
+                    />
+                  </Container>
+                </>
+              )
+            }
+          } />
+        </>
       )}
     </>
   )

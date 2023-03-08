@@ -11,18 +11,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Cypress run
-        uses: cypress-io/github-action@v4.1.0
+        uses: cypress-io/github-action@v5
         with:
           build: npm run build
           start: npm start
           wait-on: 'http://localhost:3100'
-          browser: chrome
+        env:
+          NODE_ENV: 'test'
 
       - name: Upload screenshots on failure
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         if: always()
         with:
           name: cypress-screenshots

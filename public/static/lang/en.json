@@ -60,6 +60,7 @@
   "Measurement.CommonSummary.Label.ASN": "Network",
   "Measurement.CommonSummary.Label.Country": "Country",
   "Measurement.CommonSummary.Label.DateTime": "Date & Time",
+  "Measurement.CommonSummary.Verify": "Verify",
   "Measurement.DetailsHeader.Runtime": "Runtime",
   "Measurement.Status.Hint.Websites.Censorship": "",
   "Measurement.Status.Hint.Websites.DNS": "DNS tampering",

@@ -8,6 +8,7 @@ import 'regenerator-runtime/runtime'
 import NProgress from 'nprogress'
 import { useRouter } from 'next/router'
 import '@fontsource/fira-sans'
+import '@fontsource/fira-sans/300.css'
 
 import '../public/static/nprogress.css'
 import Layout from '../components/Layout'

@@ -13,7 +13,6 @@ import {
 import useSWR from 'swr'
 import { FormattedMessage, useIntl } from 'react-intl'
 
-import Layout from 'components/Layout'
 import NavBar from 'components/NavBar'
 import { MATContextProvider } from 'components/aggregation/mat/MATContext'
 import { StackedBarChart } from 'components/aggregation/mat/StackedBarChart'
