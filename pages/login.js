@@ -24,10 +24,10 @@ const Login = () => {
 
   // If user is already logged in, redirect to home page
   useEffect(() => {
-    if (!loading && user) {
+    if (!loading && user && !token) {
       router.replace('/')
     }
-  }, [user, loading, router])
+  }, [user, loading, router, token])
 
   return (
     <>
@@ -71,7 +71,7 @@ const Login = () => {
           }
 
           {/* After loggin in */}
-          {user && !error &&
+          {user && !error && token &&
             <>
               <Text fontSize={3} my={2} mx='auto'>
                 <FormattedMessage id="Login.Success" />
