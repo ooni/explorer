@@ -45,10 +45,12 @@ const cloudflareHandler = (req, res) => {
   const diff = dayjs(dateEnd).diff(dayjs(dateStart), 'day')
   const aggInterval = diff <= 30 ? '1h' : '1d'
   const targetParam = asn ? `asn=${asn}` : `location=${country}`
+  const formattedFrom = dateStart.split('.')[0]+'Z'
+  const formattedTo = dateEnd.split('.')[0]+'Z'
 
   return axios({
     method:'get',
-    url:`https://api.cloudflare.com/client/v4/radar/netflows/timeseries?name=all&product=all&dateStart=${dateStart}&dateEnd=${dateEnd}&${targetParam}&aggInterval=${aggInterval}&normalization=MIN0_MAX`,
+    url:`https://api.cloudflare.com/client/v4/radar/netflows/timeseries?name=all&product=all&dateStart=${formattedFrom}&dateEnd=${formattedTo}&${targetParam}&aggInterval=${aggInterval}&normalization=MIN0_MAX`,
     headers: {
       'X-Auth-Key': process.env.CLOUDFLARE_TOKEN,
       'X-Auth-Email': process.env.CLOUDFLARE_EMAIL

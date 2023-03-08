@@ -9,7 +9,12 @@ import { SimpleBox } from './country/boxes'
 import FormattedMarkdown from './FormattedMarkdown'
 import Slices from 'components/chart/Slices'
 
-const iodaLineColors = [theme.colors.blue5, theme.colors.red5, theme.colors.green5, theme.colors.fuchsia5]
+const iodaLineColors = {
+  gtr: theme.colors.blue5,
+  'merit-nt': theme.colors.red5,
+  bgp: theme.colors.green5,
+  'ping-slash24': theme.colors.fuchsia5
+}
 
 const ThirdPartyDataChart = ({since, until, country, asn, ...props}) => {
   const intl = useIntl()
@@ -20,37 +25,28 @@ const ThirdPartyDataChart = ({since, until, country, asn, ...props}) => {
     setGraphData([])
 
     // make sure the date is not in the future to avoid receiving error from CloudFlare
-    const to = dayjs(until).isBefore(dayjs(), 'day') ? dayjs.utc(until) : dayjs().subtract(30, 'minute').utc()
-    const from = dayjs.utc(since)
+    const to = dayjs(until).isBefore(dayjs(), 'day') ? 
+      dayjs.utc(until).toISOString() : 
+      dayjs().subtract(30, 'minute').utc().toISOString()
+    const from = dayjs.utc(since).toISOString()
 
-    axios({
-      method: 'get',
-      url: `/api/cloudflare?from=${from.toISOString().split('.')[0]+'Z'}&to=${to.toISOString().split('.')[0]+'Z'}&${asn ? `asn=${asn}` : `country=${country}`}`,
-    }).then(({data}) => {
-      setGraphData((oldVal) => {
-        return [...oldVal, {
-          'id': intl.formatMessage({id:'ThirdPartyChart.Label.cloudflare'}),
-          'color': theme.colors.yellow5,
-          'data': data,
-        }]
-      })
-    }).catch(() => {})
-
-    axios({
-        method: 'get',
-        url: `/api/ioda?from=${Math.round(from.valueOf()/1000)}&to=${Math.round(to.valueOf()/1000)}&${asn ? `asn=${asn}` : `country=${country}`}`,
-    }).then(({ data }) => {
-      const newgraphData = data.map((item, i) => {
+    Promise.all([
+      axios.get(`/api/cloudflare?from=${from}&to=${to}&${asn ? `asn=${asn}` : `country=${country}`}`),
+      axios.get(`/api/ioda?from=${from}&to=${to}&${asn ? `asn=${asn}` : `country=${country}`}`)
+    ]).then(([{data : cloudflareData}, {data: iodaData}]) => {
+      const cloudflareChartData = {
+        'id': intl.formatMessage({id:'ThirdPartyChart.Label.cloudflare'}),
+        'color': theme.colors.yellow5,
+        'data': cloudflareData,
+      }
+      const iodaChartData = iodaData.map((item) => {
         return {
           'id': intl.formatMessage({id: `ThirdPartyChart.Label.${item.datasource}`}),
-          'color': iodaLineColors[i],
+          'color': iodaLineColors[item.datasource],
           'data': item.values
         }
       })
-
-      setGraphData((oldVal) => {
-        return [...oldVal, ...newgraphData]
-      })
+      setGraphData([...iodaChartData, cloudflareChartData])
     })
   }, [since, until])
 

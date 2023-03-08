@@ -11,21 +11,22 @@ const iodaHandler = (req, res) => {
   if (country && asn) {
     return res.status(400).json('Country and asn can only be requested individually.')
   }
-  // if (!dayjs(dateStart).isValid() || dayjs(dateStart).isAfter(dayjs()) || dayjs(dateStart).isAfter(dayjs(dateEnd))) {
-  //   return res.status(400).json('Invalid Start Date')
-  // }
-  // if (!dayjs(dateEnd).isValid() || dayjs(dateEnd).isAfter(dayjs())) {
-  //   return res.status(400).json('Invalid End Date')
-  // }
+  if (!dayjs(dateStart).isValid() || dayjs(dateStart).isAfter(dayjs()) || dayjs(dateStart).isAfter(dayjs(dateEnd))) {
+    return res.status(400).json('Invalid Start Date')
+  }
+  if (!dayjs(dateEnd).isValid() || dayjs(dateEnd).isAfter(dayjs())) {
+    return res.status(400).json('Invalid End Date')
+  }
 
   const diff = dayjs(dateEnd).diff(dayjs(dateStart), 'day')
   const aggInterval = diff <= 30 ? '1h' : '1d'
   const location = country || asn
-
+  const formattedFrom = Math.round(dayjs(dateStart).utc().valueOf()/1000)
+  const formattedTo = Math.round(dayjs(dateEnd).utc().valueOf()/1000)
 
   axios({
     method: 'get',
-    url: `https://api.ioda.inetintel.cc.gatech.edu/v2/signals/raw/${country ? 'country' : 'asn'}/${location}?from=${dateStart}&until=${dateEnd}&sourceParams=WEB_SEARCH`,
+    url: `https://api.ioda.inetintel.cc.gatech.edu/v2/signals/raw/${country ? 'country' : 'asn'}/${location}?from=${formattedFrom}&until=${formattedTo}&sourceParams=WEB_SEARCH`,
     httpsAgent: new https.Agent({
       rejectUnauthorized: false
     })
