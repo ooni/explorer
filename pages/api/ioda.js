@@ -24,11 +24,13 @@ const iodaHandler = (req, res) => {
   const formattedFrom = Math.round(dayjs(dateStart).utc().valueOf()/1000)
   const formattedTo = Math.round(dayjs(dateEnd).utc().valueOf()/1000)
 
-  axios({
+  return axios({
     method: 'get',
     url: `https://api.ioda.inetintel.cc.gatech.edu/v2/signals/raw/${country ? 'country' : 'asn'}/${location}?from=${formattedFrom}&until=${formattedTo}&sourceParams=WEB_SEARCH`,
-    httpsAgent: new https.Agent({
-      rejectUnauthorized: false
+    ...(process.env.NODE_ENV === 'development' && {
+      httpsAgent: new https.Agent({
+        rejectUnauthorized: false
+      })
     })
   }).then(({data}) => {
     const result = data.data[0].map((item, i) => {
