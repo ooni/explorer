@@ -91,13 +91,13 @@ const Country = ({ countryCode, overviewStats, reports, ...coverageDataSSR }) =>
     const monthAgo = dayjs.utc(today).subtract(1, 'month')
 
     return { 
-      since: query.since ?? monthAgo.format('YYYY-MM-DD'),
-      until: query.until ?? today.format('YYYY-MM-DD')
+      since: dayjs(query.since, 'YYYY-MM-DD', true).isValid() ? query.since : monthAgo.format('YYYY-MM-DD'),
+      until: dayjs(query.until, 'YYYY-MM-DD', true).isValid() ? query.until : today.format('YYYY-MM-DD')
     }
   }, [query])
 
   useEffect(() => {
-    if (Object.keys(query).length  < 3) {
+    if (query.since !== since || query.until !== until) {
       const href = {
         pathname: router.pathname,
         query: {
@@ -200,13 +200,11 @@ const Country = ({ countryCode, overviewStats, reports, ...coverageDataSSR }) =>
                 <WebsitesSection countryCode={countryCode} />
                 <AppsSection />
               </CountryContextProvider>
-              {since && until && 
-                <ThirdPartyDataChart
-                  country={countryCode}
-                  since={since}
-                  until={until}
-                />
-              }
+              <ThirdPartyDataChart
+                country={countryCode}
+                since={since}
+                until={until}
+              />
             </Box>
           </Flex>
         </Container>

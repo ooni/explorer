@@ -22,6 +22,8 @@ const ThirdPartyDataChart = ({since, until, country, asn, ...props}) => {
   const [graphData, setGraphData] = useState([])
 
   const cloudflareData = useEffect(() => {
+    if (!since && !until) return 
+    
     setGraphData([])
 
     // make sure the date is not in the future to avoid receiving error from CloudFlare
