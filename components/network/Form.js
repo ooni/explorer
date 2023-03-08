@@ -34,7 +34,12 @@ const Form = ({ onSubmit, since, until }) => {
   }
 
   useEffect(() => {
-    if (initialLoad.current) {
+    // trigger submit only when the dates are valid
+    if (
+      initialLoad.current && 
+      dayjs(updatedSince, 'YYYY-MM-DD', true).isValid() &&
+      dayjs(updatedUntil, 'YYYY-MM-DD', true).isValid()
+    ) {
       onSubmit({since: updatedSince, until: updatedUntil})
     } else {
       initialLoad.current = true
