@@ -30,11 +30,13 @@ const ThirdPartyDataChart = ({since, until, country, asn, ...props}) => {
   const intl = useIntl()
   const location = country || asn
   const [graphData, setGraphData] = useState([])
+  const [error, setError] = useState(null)
 
   const cloudflareData = useEffect(() => {
     if (!since && !until) return 
     
     setGraphData([])
+    setError(null)
 
     // make sure the date is not in the future to avoid receiving error from CloudFlare
     const to = dayjs(until).isBefore(dayjs(), 'day') ? 
@@ -59,6 +61,8 @@ const ThirdPartyDataChart = ({since, until, country, asn, ...props}) => {
         }
       })
       setGraphData([...iodaChartData, cloudflareChartData])
+    }).catch((err) => {
+      setError(err.message)
     })
   }, [since, until])
 
@@ -86,7 +90,7 @@ const ThirdPartyDataChart = ({since, until, country, asn, ...props}) => {
       )}
 
       <Box style={{width: '100%',height: '500px'}}>
-        {!!graphData.length && 
+        {!!graphData.length && !error &&
           <ResponsiveLine
             data={graphData}
             margin={{ top: 50, right: 20, bottom: 70, left: 30 }}
@@ -161,6 +165,9 @@ const ThirdPartyDataChart = ({since, until, country, asn, ...props}) => {
               }
             ]}
           />
+        }
+        {error && 
+          <Text fontSize={1} mt={3}>Unable to retrieve the data</Text>
         }
       </Box>
     </>
