@@ -27,11 +27,14 @@ const iodaHandler = (req, res) => {
   return axios({
     method: 'get',
     url: `https://api.ioda.inetintel.cc.gatech.edu/v2/signals/raw/${country ? 'country' : 'asn'}/${location}?from=${formattedFrom}&until=${formattedTo}&sourceParams=WEB_SEARCH`,
-    ...(process.env.NODE_ENV === 'development' && {
-      httpsAgent: new https.Agent({
-        rejectUnauthorized: false
-      })
+    httpsAgent: new https.Agent({
+      rejectUnauthorized: false
     })
+    // ...(process.env.NODE_ENV === 'development' && {
+    //   httpsAgent: new https.Agent({
+    //     rejectUnauthorized: false
+    //   })
+    // })
   }).then(({data}) => {
     const result = data.data[0].map((item, i) => {
       const max = Math.max(...item.values)
