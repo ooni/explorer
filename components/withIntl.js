@@ -30,10 +30,10 @@ export const LocaleProvider = ({ children }) => {
   }, [locale, defaultLocale])
   
   const fixedLocale = (locale) => {
-    if (locale === 'pt_BR') return 'pt'
-    if (locale === 'pt_PT') return 'pt-PT'
-    if (locale === 'zh_CN') return 'zh-Hant'
-    if (locale === 'zh_HK') return 'zh-Hant-HK'
+    // if (locale === 'pt_BR') return 'pt'
+    // if (locale === 'pt_PT') return 'pt-PT'
+    // if (locale === 'zh_CN') return 'zh-cn'
+    // if (locale === 'zh_HK') return 'zh-Hant-HK'
     return locale
   }
 
