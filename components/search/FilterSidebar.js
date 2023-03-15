@@ -114,7 +114,7 @@ const tomorrowUTC = dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
 
 const asnRegEx = /^(AS)?([1-9][0-9]*)$/
 const domainRegEx = /(^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,}(:[0-9]{1,5})?$)|(^(([0-9]{1,3})\.){3}([0-9]{1,3}))/
-const inputRegEx = /(^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,}\.[a-zA-Z0-9()]{2,}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$)|(^(([0-9]{1,3})\.){3}([0-9]{1,3}))/
+const inputRegEx = /(^https?:\/\/(?:www\.)?[-a-z0-9@:%._\+~#=]{1,}\.[a-z0-9()]{2,}\b(?:[-a-z0-9()@:%_\+.~#?&\/=]*)$)|(^(([0-9]{1,3})\.){3}([0-9]{1,3}))/
 
 export const queryToFilterMap = {
   domain: [ 'domainFilter', ''],
@@ -298,7 +298,7 @@ const FilterSidebar = ({
             </Box>
           </Flex>
           {
-            showDatePicker && 
+            showDatePicker &&
             <DateRangePicker
               handleRangeSelect={handleRangeSelect}
               initialRange={{from: getValues('sinceFilter'), to: getValues('untilFilter')}}
@@ -374,10 +374,9 @@ const FilterSidebar = ({
                 />
               )}
               rules={{
-                pattern: {
-                  value: inputRegEx,
-                  message: intl.formatMessage({id: 'Search.Sidebar.Input.Error'})
-                }
+                validate: (value = '') =>
+                  (String(value).length === 0 || inputRegEx.test(value))
+                  || intl.formatMessage({id: 'Search.Sidebar.Input.Error'})
               }}
             />
           </>
