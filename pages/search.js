@@ -292,7 +292,9 @@ const Search = ({countries, query: queryProp }) => {
 
             {!error && !loading && results.length === 0 && <NoResults />}
             {!error && !loading && results.length > 0 && <>
-              <ResultsList results={results} />
+              <Box my={4}>
+                <ResultsList results={results} />
+              </Box>
               {nextURL &&
                 <Flex alignItems='center' justifyContent='center'>
                   <Button onClick={loadMore} data-test-id='load-more-button'>
