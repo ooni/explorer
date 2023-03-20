@@ -19,8 +19,8 @@ import { FormattedMessage } from 'react-intl'
 export const testGroups = {
   'websites': {
     'color': theme.colors.indigo5,
-    'id': 'Tests.Groups.Webistes.Name',
-    'name': <FormattedMessage id='Tests.Groups.Webistes.Name' />,
+    'id': 'Tests.Groups.Websites.Name',
+    'name': <FormattedMessage id='Tests.Groups.Websites.Name' />,
     'icon': <NettestGroupWebsites />
   },
   'im': {
@@ -182,6 +182,24 @@ export const testNames = {
     id: 'Tests.HTTPRequests.Name',
     info: 'https://ooni.org/nettest/http-requests/'
   },
+  'http_host': {
+    group: 'legacy',
+    name: <FormattedMessage id='Tests.HTTPHost.Name' />,
+    id: 'Tests.HTTPHost.Name',
+    info: 'https://ooni.org/nettest/http-host/'
+  },
+  'meek_fronted_requests_test': {
+    group: 'legacy',
+    name: <FormattedMessage id='Tests.MeekFrontendRequests.Name' />,
+    id: 'Tests.MeekFrontendRequests.Name',
+    info: 'https://ooni.org/nettest/meek-fronted-requests/'
+  },
+  'multi_protocol_traceroute': {
+    group: 'legacy',
+    name: <FormattedMessage id='Tests.MultiProtocolTraceroute.Name' />,
+    id: 'Tests.MultiProtocolTraceroute.Name',
+    info: 'https://ooni.org/nettest/'
+  },
 
   /* Experimental tests */
   'vanilla_tor': {
@@ -207,5 +225,11 @@ export const testNames = {
     name: <FormattedMessage id='Tests.URLGetter.Name' />,
     id: 'Tests.URLGetter.Name',
     info: 'https://ooni.org/nettest/http-requests/'
+  },
+  'browser_web': {
+    group: 'experimental',
+    name: <FormattedMessage id='Tests.ProbeWeb.Name' />,
+    id: 'Tests.ProbeWeb.Name',
+    info: 'https://github.com/ooni/spec/blob/master/nettests/ts-036-browser_web.md'
   }
 }

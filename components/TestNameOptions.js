@@ -1,15 +1,15 @@
 import { useIntl } from 'react-intl'
-import { testGroups, testNames as testNamesIntl } from '../components/test-info'
+import { testGroups, testNames } from '../components/test-info'
 
-export const TestNameOptions = ({ testNames, includeAllOption = true}) => {
+export const TestNameOptions = ({ includeAllOption = true}) => {
   const intl = useIntl()
-  const groupedTestNameOptions = testNames
-    .reduce((grouped, test) => {
-      const group = test.id in testNamesIntl ? testNamesIntl[test.id].group : 'legacy'
+  const groupedTestNameOptions = Object.entries(testNames)
+    .reduce((grouped, [testKey, testValue]) => {
+      const group = testValue.group
       const option = {
-        id: test.id,
-        name: test.name,
-        intlKey: testNamesIntl[test.id]?.id,
+        id: testKey,
+        name: testValue.name,
+        intlKey: testValue.id,
         group
       }
       if (group in grouped) {
