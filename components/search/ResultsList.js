@@ -210,6 +210,18 @@ const messages = defineMessages({
     id: 'General.Error',
     defaultMessage: ''
   },
+  'Search.riseupvpn.Results.Reachable': {
+    id: 'General.Accessible',
+    defaultMessage: ''
+  },
+  'Search.riseupvpn.Results.Anomaly': {
+    id: 'General.Anomaly',
+    defaultMessage: 'Anomaly'
+  },
+  'Search.riseupvpn.Results.Error': {
+    id: 'General.Error',
+    defaultMessage: 'Anomaly'
+  },
 })
 
 const ASNBox = ({asn}) => {
