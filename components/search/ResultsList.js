@@ -204,11 +204,11 @@ const messages = defineMessages({
   },
   'Search.riseupvpn.Results.Anomaly': {
     id: 'General.Anomaly',
-    defaultMessage: 'Anomaly'
+    defaultMessage: ''
   },
   'Search.riseupvpn.Results.Error': {
     id: 'General.Error',
-    defaultMessage: 'Anomaly'
+    defaultMessage: ''
   },
 })
 
