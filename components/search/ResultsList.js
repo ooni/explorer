@@ -198,18 +198,6 @@ const messages = defineMessages({
     id: 'General.Error',
     defaultMessage: ''
   },
-  'Search.psiphon.Results.Reachable': {
-    id: 'General.Accessible',
-    defaultMessage: ''
-  },
-  'Search.psiphon.Results.Anomaly': {
-    id: 'General.Anomaly',
-    defaultMessage: ''
-  },
-  'Search.psiphon.Results.Error': {
-    id: 'General.Error',
-    defaultMessage: ''
-  },
   'Search.riseupvpn.Results.Reachable': {
     id: 'General.Accessible',
     defaultMessage: ''
