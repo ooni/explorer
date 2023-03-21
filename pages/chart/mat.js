@@ -29,21 +29,6 @@ import { NoCharts } from 'components/aggregation/mat/NoCharts'
 const baseURL = process.env.NEXT_PUBLIC_OONI_API
 axiosResponseTime(axios)
 
-export const getServerSideProps = async () => {
-  const testNamesR = await axios.get(`${baseURL}/api/_/test_names`)
-  if (Array.isArray(testNamesR.data.test_names)){
-    return {
-      props: {
-        testNames: testNamesR.data.test_names
-      }
-    }
-  } else {
-    return {
-      props: { testNames: [] }
-    }
-  }
-}
-
 const swrOptions = {
   revalidateOnFocus: false,
   dedupingInterval: 10 * 60 * 1000,
@@ -69,7 +54,7 @@ const fetcher = (query) => {
   })
 }
 
-const MeasurementAggregationToolkit = ({ testNames }) => {
+const MeasurementAggregationToolkit = () => {
   const intl = useIntl()
   const router = useRouter()
 
@@ -140,7 +125,7 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
           <Heading h={5} mt={0} mb={2} color='gray9'>
             <FormattedMessage id='MAT.SubTitle' />
           </Heading>
-          <Form onSubmit={onSubmit} testNames={testNames} query={router.query} />
+          <Form onSubmit={onSubmit} query={router.query} />
           {error &&
             <NoCharts message={error?.info ?? JSON.stringify(error)} />
           }
@@ -180,15 +165,6 @@ const MeasurementAggregationToolkit = ({ testNames }) => {
         </Flex>
       </Container>
     </MATContextProvider>
-  )
-}
-
-MeasurementAggregationToolkit.propTypes = {
-  testNames: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.string,
-      name: PropTypes.string
-    })
   )
 }
 

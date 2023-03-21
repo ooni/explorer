@@ -40,24 +40,13 @@ export const getServerSideProps = async ({query}) => {
   }
 
   const client = axios.create({baseURL: process.env.NEXT_PUBLIC_OONI_API})
-  const [testNamesR, countriesR] = await Promise.all([
-    client.get('/api/_/test_names'),
-    client.get('/api/_/countries')
-  ])
-
-  const testNames = testNamesR.data.test_names
-  testNames.sort(sortByKey('name'))
-
-  const testNamesKeyed = {}
-  testNames.forEach(v => testNamesKeyed[v.id] = v.name)
+  const countriesR = await client.get('/api/_/countries')
 
   const countries = countriesR.data.countries
   countries.sort(sortByKey('name'))
 
   return {
     props: {
-      testNamesKeyed,
-      testNames,
       countries,
       query,
     }
@@ -168,7 +157,7 @@ const NoResults = () => (
   </Flex>
 )
 
-const Search = ({testNames, testNamesKeyed, countries, query: queryProp }) => {
+const Search = ({countries, query: queryProp }) => {
   const router = useRouter()
   const intl = useIntl()
   const { query, replace, isReady } = router
@@ -294,7 +283,6 @@ const Search = ({testNames, testNamesKeyed, countries, query: queryProp }) => {
               onlyFilter={query.only || 'all'}
               hideFailed={!query.failure}
               onApplyFilter={onApplyFilter}
-              testNames={testNames}
               countries={countries}
             />
           </Box>
@@ -304,7 +292,9 @@ const Search = ({testNames, testNamesKeyed, countries, query: queryProp }) => {
 
             {!error && !loading && results.length === 0 && <NoResults />}
             {!error && !loading && results.length > 0 && <>
-              <ResultsList results={results} testNamesKeyed={testNamesKeyed} />
+              <Box my={4}>
+                <ResultsList results={results} />
+              </Box>
               {nextURL &&
                 <Flex alignItems='center' justifyContent='center'>
                   <Button onClick={loadMore} data-test-id='load-more-button'>
@@ -321,8 +311,6 @@ const Search = ({testNames, testNamesKeyed, countries, query: queryProp }) => {
 }
 
 Search.propTypes = {
-  testNamesKeyed: PropTypes.object,
-  testNames: PropTypes.array,
   countries: PropTypes.array,
   query: PropTypes.object,
 }
