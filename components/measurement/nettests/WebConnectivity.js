@@ -7,7 +7,8 @@ import {
   Heading,
   Flex,
   Box,
-  Text
+  Text,
+  Link,
 } from 'ooni-components'
 
 import { Tick, Cross } from 'ooni-components/dist/icons'
@@ -488,7 +489,14 @@ const WebConnectivityDetails = ({
     <>
       {render({
         status: status,
-        statusInfo: <StatusInfo title={input} message={reason} />,
+        statusInfo: <StatusInfo 
+          title={
+            <NLink passHref href={`/domain/${hostname}`}>
+              <Link sx={{textDecoration: 'underline'}} color='white'>{input}</Link>
+            </NLink>
+          }
+          message={reason} 
+        />,
         summaryText: summaryText,
         headMetadata: headMetadata,
         details: (
