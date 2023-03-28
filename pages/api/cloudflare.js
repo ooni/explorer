@@ -52,8 +52,7 @@ const cloudflareHandler = (req, res) => {
     method:'get',
     url:`https://api.cloudflare.com/client/v4/radar/netflows/timeseries?name=all&product=all&dateStart=${formattedFrom}&dateEnd=${formattedTo}&${targetParam}&aggInterval=${aggInterval}&normalization=MIN0_MAX`,
     headers: {
-      'X-Auth-Key': process.env.CLOUDFLARE_TOKEN,
-      'X-Auth-Email': process.env.CLOUDFLARE_EMAIL
+      Authorization: `Bearer ${process.env.CLOUDFLARE_TOKEN}`
     },
    }).then(({data, headers}) => {
     const timestamps = data.result.all.timestamps
@@ -74,7 +73,8 @@ const cloudflareHandler = (req, res) => {
 
     return res.status(200).json(chartData)
   }).catch((err) =>{
-    return res.status(400).json(err)
+    const responseError = err?.response?.data?.errors[0]?.message || err.message
+    return res.status(400).json(responseError)
   })
 }
 
