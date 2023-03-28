@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useMemo } from 'react'
+import { useCallback, useEffect, useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { useForm, Controller } from 'react-hook-form'
 import styled from 'styled-components'
@@ -123,7 +123,7 @@ const defaultDefaultValues = {
   time_grain: 'day'
 }
 
-export const Form = ({ onSubmit, testNames, query }) => {
+export const Form = ({ onSubmit, query }) => {
   const intl = useIntl()
   const [showConfirmation, setShowConfirmation] = useState(false)
 
@@ -366,7 +366,7 @@ export const Form = ({ onSubmit, testNames, query }) => {
             control={control}
             render={({field}) => (
               <Select {...field} width={1}>
-                <TestNameOptions testNames={testNames} includeAllOption={false} />
+                <TestNameOptions includeAllOption={false} />
               </Select>
             )}
           />
@@ -437,7 +437,6 @@ export const Form = ({ onSubmit, testNames, query }) => {
 
 Form.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  testNames: PropTypes.array,
   query: PropTypes.shape({
     axis_x: PropTypes.string,
     axis_y: PropTypes.string,

@@ -3,18 +3,11 @@ import { useIntl } from 'react-intl'
 import styled from 'styled-components'
 import OONILogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochrome.svg'
 
+import { testNames, testGroups } from '/components/test-info'
 import { useMATContext } from './MATContext'
 import CountryNameLabel from './CountryNameLabel'
 import { colorMap } from './colorMap'
 import { getRowLabel } from './labels'
-
-const ChartHeaderContainer = styled(Flex)`
-  align-items: center;
-
-  @media(max-width: 768px) {
-    flex-direction: column;
-  }
-`
 
 const Legend = ({label, color}) => {
   return (
@@ -29,13 +22,34 @@ const Legend = ({label, color}) => {
   )
 }
 
+const getTestNameGroupName = (testNameArray) => {
+  // TODO
+  // show single test name
+  if (testNameArray.length === 1) return [testNames[testNameArray[0]]?.id || testNameArray[0]]
+
+  const testGroup = new Set()
+  testNameArray.forEach((t) => {
+    testNames[t]?.group && testGroup.add(testNames[t]?.group)
+  })
+  // if all test names belong to a single group, show group name
+  if (testGroup.size === 1) {
+    const testGroupName = testGroups[[...testGroup][0]].id
+    return [testGroupName]
+  }
+  // list of multiple test names from different groups
+  return testNameArray.map((t) => (testNames[t].id))
+}
+
 export const SubtitleStr = ({ query }) => {
   const intl = useIntl()
   const params = new Set()
 
   if (query.test_name) {
-    const testName = intl.formatMessage({id: getRowLabel(query.test_name, 'test_name'), defaultMessage: ''})
-    params.add(testName)
+    const testNameQuery = Array.isArray(query.test_name) ? query.test_name : [query.test_name]
+    const testNames = getTestNameGroupName(testNameQuery)
+    testNames.forEach((testName) => {
+      params.add(intl.formatMessage({id: testName, defaultMessage: ''}))
+    })
   }
   if (query.domain) {
     params.add(query.domain)
@@ -62,26 +76,29 @@ export const ChartHeader = ({ options = {}}) => {
   const [query] = useMATContext()
 
   const subTitle = <SubtitleStr query={query} />
-
   return (
-    <ChartHeaderContainer>
-      <Box sx={{ opacity: 0.8 }}>
-        <OONILogo height='32px' />
+    <>
+      <Box>
+        {options.subtitle !== false && <Heading as='span' h={4}>
+          {subTitle}
+        </Heading>}
+        {options.probe_cc !== false && query.probe_cc && <Heading as='span' h={5}>
+          <CountryNameLabel countryCode={query.probe_cc} />
+        </Heading>}
       </Box>
-      <Flex width={14/16} flexDirection={['column']}>
-          {options.probe_cc !== false && <Heading h={3} textAlign='center'>
-            <CountryNameLabel countryCode={query.probe_cc} />
-          </Heading>}
-          {options.subtitle !== false && <Heading h={5} fontWeight='normal' textAlign='center'>
-            {subTitle}
-          </Heading>}
+      <Box>
+        <Flex mb={2} justifyContent='space-between'>
           {options.legend !== false && <Flex justifyContent='center' my={2} flexWrap="wrap">
             <Legend label={intl.formatMessage({id: 'MAT.Table.Header.ok_count'})} color={colorMap['ok_count']} />
             <Legend label={intl.formatMessage({id: 'MAT.Table.Header.confirmed_count'})} color={colorMap['confirmed_count']} />
             <Legend label={intl.formatMessage({id: 'MAT.Table.Header.anomaly_count'})} color={colorMap['anomaly_count']} />
             <Legend label={intl.formatMessage({id: 'MAT.Table.Header.failure_count'})} color={colorMap['failure_count']} />
           </Flex>}
-      </Flex>
-    </ChartHeaderContainer>
+          <Box sx={{ opacity: 0.5 }}>
+            <OONILogo height='32px' />
+          </Box>
+        </Flex>
+      </Box>
+    </>
   )
 }

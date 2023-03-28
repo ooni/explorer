@@ -15,10 +15,8 @@ const prepareDataforTable = (data, query, locale) => {
   
   const [reshapedData, rows, rowLabels] = prepareDataForGridChart(data, query, locale)
 
+  const countKeys = ['anomaly_count', 'confirmed_count', 'failure_count', 'measurement_count']
   for (const [key, rowData] of reshapedData) {
-
-    const countKeys = ['anomaly_count', 'confirmed_count', 'failure_count', 'measurement_count']
-    
     const row = {
       [query.axis_y]: key,
       rowLabel: rowLabels[key],
