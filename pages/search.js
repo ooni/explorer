@@ -14,12 +14,12 @@ import {
 import { FormattedMessage, useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
 
-import NavBar from '../components/NavBar'
+import NavBar from '/components/NavBar'
 
-import ResultsList from '../components/search/ResultsList'
-import FilterSidebar, { queryToFilterMap } from '../components/search/FilterSidebar'
-import { Loader } from '../components/search/Loader'
-import FormattedMarkdown from '../components/FormattedMarkdown'
+import ResultsList from '/components/search/ResultsList'
+import FilterSidebar, { queryToFilterMap } from '/components/search/FilterSidebar'
+import { Loader } from '/components/search/Loader'
+import FormattedMarkdown from '/components/FormattedMarkdown'
 
 import { sortByKey } from '../utils'
 
@@ -157,7 +157,7 @@ const NoResults = () => (
   </Flex>
 )
 
-const Search = ({countries, query: queryProp }) => {
+const Search = ({ countries, query: queryProp }) => {
   const router = useRouter()
   const intl = useIntl()
   const { query, replace, isReady } = router

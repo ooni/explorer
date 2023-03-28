@@ -7,6 +7,7 @@ import { BoxWithTitle } from './boxes'
 import TestsByGroup from './OverviewCharts'
 import FormattedMarkdown from '../FormattedMarkdown'
 import { useCountry } from './CountryContext'
+import BlockText from 'components/BlockText'
 
 const NwInterferenceStatus = styled(Box)`
   color: ${props => props.color || props.theme.colors.gray5};
@@ -75,17 +76,17 @@ const FeaturedArticle = ({link, title}) => (
   </Box>
 )
 
-const SummaryText = styled(Box)`
-  border: 1px solid ${props => props.theme.colors.gray4};
-  border-left: 12px solid ${props => props.theme.colors.blue5};
-  font-size: 22px;
-  font-style: italic;
-  line-height: 1.5;
-`
+// const SummaryText = styled(Box)`
+//   border: 1px solid ${props => props.theme.colors.gray4};
+//   border-left: 12px solid ${props => props.theme.colors.blue5};
+//   font-size: 22px;
+//   font-style: italic;
+//   line-height: 1.5;
+// `
 
-SummaryText.defaultProps = {
-  p: 3,
-}
+// SummaryText.defaultProps = {
+//   p: 3,
+// }
 
 const LOW_DATA_THRESHOLD = 10
 
@@ -113,7 +114,7 @@ const Overview = ({
         </SectionHeader.Title>
       </SectionHeader>
       {/* <SummaryText> */}
-      <SummaryText my={3}>
+      <BlockText my={3}>
         <FormattedMarkdown
           id='Country.Overview.SummaryTextTemplate'
           values={{
@@ -123,7 +124,7 @@ const Overview = ({
             networkCovered: intl.formatNumber(networkCount)
           }}
         />
-      </SummaryText>
+      </BlockText>
       {/* </SummaryText> */}
 
       {/*

@@ -1,24 +1,20 @@
-import React, { useMemo, useState } from 'react'
-import Head from 'next/head'
-import NLink from 'next/link'
 import axios from 'axios'
-import { useIntl } from 'react-intl'
-import styled from 'styled-components'
-import { FormattedMessage, FormattedNumber } from 'react-intl'
 import debounce from 'lodash.debounce'
+import Head from 'next/head'
 import {
-  Flex, Box,
-  Container,
-  Link, Input,
-  Heading, Text
+  Box,
+  Container, Flex, Heading, Input, Link, Text
 } from 'ooni-components'
-import { StickyContainer, Sticky } from 'react-sticky'
+import React, { useMemo, useState } from 'react'
+import { FormattedMessage, useIntl } from 'react-intl'
+import styled from 'styled-components'
 
-import Flag from '../components/Flag'
-import NavBar from '../components/NavBar'
+import NavBar from 'components/NavBar'
 
 import countryUtil from 'country-util'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
+import CountryList from 'components/CountryBox'
+import { StyledStickyNavBar } from 'components/SharedStyledComponents'
 
 const CountryLink = styled(Link)`
   color: ${props => props.theme.colors.black};
@@ -36,30 +32,6 @@ const Divider = styled.div`
   border: 1px solid ${props => props.theme.colors.gray3};
   margin-bottom: 12px;
 `
-
-const CountryBlock = ({countryCode, msmtCount}) => {
-  const intl = useIntl()
-  const href = `/country/${countryCode}`
-  return (
-    <Box width={[1/2, 1/4]} my={3} px={3}>
-      <StyledCountryCard p={3}>
-        <NLink href={href}>
-          <CountryLink href={href}>
-            <Flex flexDirection='column'>
-              <Flag center border countryCode={countryCode} size={48} />
-              <Text py={2} fontSize={[20, 24]} style={{height: '100px'}}>{getLocalisedRegionName(countryCode, intl.locale)}</Text>
-              <Divider />
-              <Flex alignItems={['flex-start', 'center']} flexDirection={['column', 'row']}>
-                <Text mr={2} fontSize={20} fontWeight={600} color='blue9'><FormattedNumber value={msmtCount} /></Text>
-                <Text>{intl.formatMessage({id: 'Home.Banner.Stats.Measurements'})}</Text>
-              </Flex>
-            </Flex>
-          </CountryLink>
-        </NLink>
-      </StyledCountryCard>
-    </Box>
-  )
-}
 
 // To compenstate for the sticky navigation bar
 // :target selector applies only the element with id that matches
@@ -105,27 +77,19 @@ const RegionBlock = ({regionCode, countries}) => {
     <Box my={3}>
       <RegionHeaderAnchor id={regionName} />
       <Heading h={1} center py={2}>{regionName}</Heading>
-      <Flex flexWrap='wrap' py={2}>
-        {countries
-          .filter((c => ( measuredCountriesInRegion.indexOf(c.alpha_2) > -1 )))
-          .map((country, index) => (
-            <CountryBlock key={index} countryCode={country.alpha_2} msmtCount={country.count} />
-          ))
-        }
-      </Flex>
+      <CountryList 
+        countries={countries.filter((c => ( measuredCountriesInRegion.indexOf(c.alpha_2) > -1 ))).map((c) => ({country: c.alpha_2, measurements: c.count}))}
+        itemsPerRow={4}
+      />
     </Box>
   )
 }
-
-// Raise the Sticky Header to avoid the flags getting rendered over it
-const RaisedHeader = styled.div`
-  z-index: 100;
-`
 
 const RegionMenu = styled.div`
   background-color: white;
   border-bottom: 1px solid ${props => props.theme.colors.gray3};
 `
+
 const StyledRegionLink = styled.a`
   display: block;
   color: ${(props) => props.theme.colors.blue5};
@@ -144,7 +108,6 @@ const RegionLink = ({ href, label }) => (
     </StyledRegionLink>
   </Box>
 )
-
 
 const NoCountriesFound = ({ searchTerm }) => (
   <Flex justifyContent='center'>
@@ -198,49 +161,44 @@ const Countries = ({countries}) => {
       <Head>
         <title>{intl.formatMessage({id: 'Countries.PageTitle'})}</title>
       </Head>
+      <StyledStickyNavBar>
+        <NavBar />
+        <RegionMenu>
+      
+          <Container>
+            <Flex
+              flexDirection={['column', 'row']}
+              justifyContent={['flex-start', 'flex-end']}
+              alignItems={['flex-start', 'center']}
+            >
+              <Box my={2}>
+                <Input
+                  onChange={(e) => debouncedSearchHandler(e.target.value)}
+                  placeholder={intl.formatMessage({id: 'Countries.Search.Placeholder'})}
+                  error={filteredCountries.length === 0}
+                />
+              </Box>
+              <RegionLink href={`#${getLocalisedRegionName('002', intl.locale)}`} label={getLocalisedRegionName('002', intl.locale)} />
+              <RegionLink href={`#${getLocalisedRegionName('019', intl.locale)}`} label={getLocalisedRegionName('019', intl.locale)} />
+              <RegionLink href={`#${getLocalisedRegionName('142', intl.locale)}`} label={getLocalisedRegionName('142', intl.locale)} />
+              <RegionLink href={`#${getLocalisedRegionName('150', intl.locale)}`} label={getLocalisedRegionName('150', intl.locale)} />
+              <RegionLink href={`#${getLocalisedRegionName('009', intl.locale)}`} label={getLocalisedRegionName('009', intl.locale)} />
+              <RegionLink href={`#${getLocalisedRegionName('AQ', intl.locale)}`} label={getLocalisedRegionName('AQ', intl.locale)} />
+            </Flex>
+          </Container>
+        </RegionMenu>
+      </StyledStickyNavBar>
 
-      <StickyContainer>
-        <Sticky>
-          {({ style }) => (
-            <RaisedHeader style={style}>
-              <NavBar />
-              <RegionMenu>
-                <Container>
-                  <Flex
-                    flexDirection={['column', 'row']}
-                    justifyContent={['flex-start', 'flex-end']}
-                    alignItems={['flex-start', 'center']}
-                  >
-                    <Box my={2}>
-                      <Input
-                        onChange={(e) => debouncedSearchHandler(e.target.value)}
-                        placeholder={intl.formatMessage({id: 'Countries.Search.Placeholder'})}
-                        error={filteredCountries.length === 0}
-                      />
-                    </Box>
-                    <RegionLink href={`#${getLocalisedRegionName('002', intl.locale)}`} label={getLocalisedRegionName('002', intl.locale)} />
-                    <RegionLink href={`#${getLocalisedRegionName('019', intl.locale)}`} label={getLocalisedRegionName('019', intl.locale)} />
-                    <RegionLink href={`#${getLocalisedRegionName('142', intl.locale)}`} label={getLocalisedRegionName('142', intl.locale)} />
-                    <RegionLink href={`#${getLocalisedRegionName('150', intl.locale)}`} label={getLocalisedRegionName('150', intl.locale)} />
-                    <RegionLink href={`#${getLocalisedRegionName('009', intl.locale)}`} label={getLocalisedRegionName('009', intl.locale)} />
-                    <RegionLink href={`#${getLocalisedRegionName('AQ', intl.locale)}`} label={getLocalisedRegionName('AQ', intl.locale)} />
-                  </Flex>
-                </Container>
-              </RegionMenu>
-            </RaisedHeader>
-          )}
-        </Sticky>
-        <Container>
-          {
-            // Show a message when there are no countries to show, when search is empty
-            (filteredCountries.length === 0)
-              ? <NoCountriesFound searchTerm={searchInput} />
-              : regions.map((regionCode, index) => (
-                <RegionBlock key={index} regionCode={regionCode} countries={filteredCountries} />
-              ))
-          }
-        </Container>
-      </StickyContainer>
+      <Container>
+        {
+          // Show a message when there are no countries to show, when search is empty
+          (filteredCountries.length === 0)
+            ? <NoCountriesFound searchTerm={searchInput} />
+            : regions.map((regionCode, index) => (
+              <RegionBlock key={index} regionCode={regionCode} countries={filteredCountries} />
+            ))
+        }
+      </Container>
     </>
   )
 }
