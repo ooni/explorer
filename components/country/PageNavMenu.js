@@ -55,6 +55,9 @@ const PageNavMenu = ({ countryCode }) => {
           <PageNavItem link='#apps'>
             <FormattedMessage id='Country.Heading.Apps' />
           </PageNavItem>
+          <PageNavItem link='#outages'>
+            <FormattedMessage id='Country.Heading.Outages' />
+          </PageNavItem>
         </Flex>}
         <Flex justifyContent={['flex-start', 'flex-end']} px={[0, 3]} py={1}>
           <SocialButtons url={`country/${countryCode}`}/>

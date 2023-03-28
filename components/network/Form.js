@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState, useMemo } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { Box, Button, Flex, Input } from 'ooni-components'
 import { useIntl } from 'react-intl'
@@ -8,29 +8,15 @@ import { format } from 'date-fns'
 import { StyledLabel } from '../aggregation/mat/Form'
 import DateRangePicker from '../DateRangePicker'
 
-const tomorrow = dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
-const lastMonthToday = dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD')
-
-const defaultDefaultValues = {
-  since: lastMonthToday,
-  until: tomorrow,
-}
-
-const Form = ({ onSubmit, query }) => {
+const Form = ({ onSubmit, since, until }) => {
   const intl = useIntl()
+  const initialLoad = useRef(false)
 
-  const query2formValues = (query) => {
-    return {
-      since: query?.since ?? defaultDefaultValues.since,
-      until: query?.until ?? defaultDefaultValues.until,
-    }
-  }
-
-  const { control, getValues, watch, setValue } = useForm({
-    defaultValues: query2formValues(query)
+  const { control, getValues, watch, setValue, reset } = useForm({
+    defaultValues: { since, until }
   })
 
-  const {since, until} = watch()
+  const { since: updatedSince, until: updatedUntil } = watch()
 
   const [showDatePicker, setShowDatePicker] = useState(false)
   const handleRangeSelect = (range) => {
@@ -48,8 +34,17 @@ const Form = ({ onSubmit, query }) => {
   }
 
   useEffect(() => {
-    onSubmit({since, until})
-  }, [onSubmit, since, until])
+    // trigger submit only when the dates are valid
+    if (
+      initialLoad.current && 
+      dayjs(updatedSince, 'YYYY-MM-DD', true).isValid() &&
+      dayjs(updatedUntil, 'YYYY-MM-DD', true).isValid()
+    ) {
+      onSubmit({since: updatedSince, until: updatedUntil})
+    } else {
+      initialLoad.current = true
+    }
+  }, [updatedSince, updatedUntil])
 
   return (
     <form>

@@ -1,5 +1,4 @@
-/* global process */
-import React, { useCallback, useState, useEffect } from 'react'
+import { useCallback, useState, useEffect, useMemo } from 'react'
 import axios from 'axios'
 import { useRouter } from 'next/router'
 import {
@@ -22,6 +21,7 @@ import WebsitesSection from 'components/country/Websites'
 import AppsSection from 'components/country/Apps'
 import { CountryContextProvider } from 'components/country/CountryContext'
 import CountryHead from 'components/country/CountryHead'
+import ThirdPartyDataChart from 'components/ThirdPartyDataChart'
 
 const getCountryReports = (countryCode, data) => {
   const reports = data.filter((article) => (
@@ -84,18 +84,26 @@ const Country = ({ countryCode, overviewStats, reports, ...coverageDataSSR }) =>
   const countryName = getLocalisedRegionName(countryCode, intl.locale)
   const [newData, setNewData] = useState(false)
   const router = useRouter()
-  const query = router.query
+  const { query } = router
+
+  const { since, until } = useMemo(() => {
+    const today = dayjs.utc().add(1, 'day')
+    const monthAgo = dayjs.utc(today).subtract(1, 'month')
+
+    return { 
+      since: dayjs(query.since, 'YYYY-MM-DD', true).isValid() ? query.since : monthAgo.format('YYYY-MM-DD'),
+      until: dayjs(query.until, 'YYYY-MM-DD', true).isValid() ? query.until : today.format('YYYY-MM-DD')
+    }
+  }, [query])
 
   useEffect(() => {
-    if (Object.keys(query).length === 1) {
-      const today = dayjs.utc().add(1, 'day')
-      const monthAgo = dayjs.utc(today).subtract(1, 'month')
+    if (query.since !== since || query.until !== until) {
       const href = {
         pathname: router.pathname,
         query: {
-          since: monthAgo.format('YYYY-MM-DD'),
-          until: today.format('YYYY-MM-DD'),
-          countryCode
+          since,
+          until,
+          countryCode,
         },
       }
       router.replace(href, undefined, { shallow: true })
@@ -133,12 +141,9 @@ const Country = ({ countryCode, overviewStats, reports, ...coverageDataSSR }) =>
       query: params,
     }
 
-    if (query.since !== since
-      || query.until !== until
-    ) {
+    if (query.since !== since || query.until !== until) {
       router.push(href, href, { shallow: true })
     }
-
   }
 
   const { testCoverage, networkCoverage } = newData !== false ? newData : coverageDataSSR
@@ -191,10 +196,15 @@ const Country = ({ countryCode, overviewStats, reports, ...coverageDataSSR }) =>
                   fetchTestCoverageData={fetchTestCoverageData}
                   featuredArticles={reports}
                 />
-                <Form onSubmit={onSubmit} query={query} />
+                <Form onSubmit={onSubmit} since={since} until={until} />
                 <WebsitesSection countryCode={countryCode} />
                 <AppsSection />
               </CountryContextProvider>
+              <ThirdPartyDataChart
+                country={countryCode}
+                since={since}
+                until={until}
+              />
             </Box>
           </Flex>
         </Container>

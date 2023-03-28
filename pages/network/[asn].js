@@ -13,6 +13,7 @@ import Calendar from 'components/network/Calendar'
 import FormattedMarkdown from 'components/FormattedMarkdown'
 import { FormattedMessage } from 'react-intl'
 import CallToActionBox from 'components/CallToActionBox'
+import ThirdPartyDataChart from 'components/ThirdPartyDataChart'
 import { getLocalisedRegionName } from '../../utils/i18nCountries'
 
 const prepareDataForCalendar = (data) => {
@@ -113,15 +114,24 @@ const NetworkDashboard = ({asn, calendarData = [], measurementsTotal, countriesD
   const { query } = router
   const displayASN = asn.replace('AS', '')
 
+  const { since, until } = useMemo(() => {
+    const today = dayjs.utc().add(1, 'day')
+    const monthAgo = dayjs.utc(today).subtract(1, 'month')
+
+    return { 
+      since: query.since ?? monthAgo.format('YYYY-MM-DD'),
+      until: query.until ?? today.format('YYYY-MM-DD')
+    }
+  }, [query])
+
   useEffect(() => {
-    if (Object.keys(query).length  < 3) {
-      const today = dayjs.utc().add(1, 'day')
-      const monthAgo = dayjs.utc(today).subtract(1, 'month')
+    if (Object.keys(query).length < 3) {
       const href = {
+        pathname: router.pathname,
         query: {
-          since: monthAgo.format('YYYY-MM-DD'),
-          until: today.format('YYYY-MM-DD'),
-          asn: query.asn
+          since,
+          until,
+          asn: query.asn,
         },
       }
       router.replace(href, undefined, { shallow: true })
@@ -155,8 +165,15 @@ const NetworkDashboard = ({asn, calendarData = [], measurementsTotal, countriesD
                 <Summary measurementsTotal={measurementsTotal} countriesData={countriesData} firstMeasurement={calendarData[0].day} />
                 <Calendar data={calendarData} />
                 <Box as='hr' sx={{bg: 'gray5', border: 0, height: 1}} mt={20} mb={20} />
-                <Form onSubmit={onSubmit} query={query} />
+                <Form onSubmit={onSubmit} since={since} until={until} />
                 <ChartsContainer />
+                {since && until && 
+                  <ThirdPartyDataChart 
+                    since={since}
+                    until={until}
+                    asn={displayASN}
+                  />
+                }
               </> :
               <CallToActionBox
                 title={<FormattedMessage id='Network.NoData.Title' />}
