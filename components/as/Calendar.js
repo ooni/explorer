@@ -6,8 +6,6 @@ import { getRange } from 'utils'
 
 const StyledCalendar = styled.div`
 height: 180px;
-margin-bottom: 10px;
-margin-top: 40px;
 `
 const { colors } = theme
 const chartColors = [colors.blue2, colors.blue4, colors.blue5, colors.blue7]
@@ -46,7 +44,7 @@ const backfillData = data => {
   return range.map((r) => (data.find((d) => d.day === r) || { value: 0, day: r}))
 }
 
-const Calendar = React.memo(function Calendar({asn, data}) {
+const Calendar = React.memo(function Calendar({data}) {
   const currentYear = new Date().getFullYear()
   const firstMeasurementYear = Number(data[0].day.split('-')[0])
   const yearsOptions = getRange(firstMeasurementYear, currentYear)
@@ -64,13 +62,13 @@ const Calendar = React.memo(function Calendar({asn, data}) {
           to={`${selectedYear}-12-31`}
           emptyColor={colors.gray1}
           colorScale={(value) => findColor(value)}
-          margin={{ top: 20, right: 20, bottom: 0, left: 20 }}
+          margin={{ top: 20, right: 0, bottom: 0, left: 20 }}
           monthBorderColor="#ffffff"
           dayBorderWidth={2}
           dayBorderColor="#ffffff"
         />
       </StyledCalendar>
-      <Flex justifyContent='space-between'alignItems='center' mb={60}>
+      <Flex justifyContent='space-between'alignItems='center' mb={60} mt={2}>
         <Flex>
           {colorLegend.map(item => (
             <span

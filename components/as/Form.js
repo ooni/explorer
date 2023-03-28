@@ -51,7 +51,7 @@ const Form = ({ onSubmit, since, until }) => {
       <Flex alignItems={['center']}>
         <Box width={[1, 1/5]}>
           <Flex>
-            <Box width={1/2} mr={3}>
+            <Box width={2/3} mr={3}>
               <StyledLabel>{intl.formatMessage({id: 'Search.Sidebar.From'})}</StyledLabel>
               <Controller
                 name='since'
@@ -65,7 +65,7 @@ const Form = ({ onSubmit, since, until }) => {
                 )}
               />
             </Box>
-            <Box width={1/2} mr={3}>
+            <Box width={2/3} mr={3}>
               <StyledLabel>{intl.formatMessage({id: 'Search.Sidebar.Until'})}</StyledLabel>
               <Controller
                 name='until'
