@@ -63,28 +63,25 @@ const CommonSummary = ({
             </Box>
           </Flex>
           {hero}
-          <Flex flexWrap='wrap' alignItems='flex-end' justifyContent='space-between' sx={{textDecoration:'underline'}}>
-            <Box>
-              <Text fontSize={1}>
-                <NLink href={`/network/${network}`} passHref>
-                  <Link color='white'>
-                    <Box mb={2}>{network}</Box>
-                    <Box>{networkName}</Box>
-                  </Link>
-                </NLink>
-              </Text>
-            </Box>
-            <Box>
+          <Flex mt={2} sx={{textDecoration:'underline'}}>
+            <Box width={[1, 1, 1/2]}>
               <NLink href={`/country/${countryCode}`} passHref><Link color='white'>
                 <Flex alignItems='center'>
                   <Box mr={2}>
-                    <Flag countryCode={countryCode} size={46} border />
+                    <Flag countryCode={countryCode} size={33} />
                   </Box>
-                  <Box fontSize={20}>
+                  <Box fontSize={2}>
                     {country}
                   </Box>
                 </Flex>
               </Link></NLink>
+              <Text fontSize={1}>
+                <NLink href={`/network/${network}`} passHref>
+                  <Link color='white'>
+                    <Text mb={2} mt={2}>{network} {networkName}</Text>
+                  </Link>
+                </NLink>
+              </Text>
             </Box>
           </Flex>
         </Container>

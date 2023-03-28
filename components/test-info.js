@@ -18,19 +18,19 @@ import { FormattedMessage } from 'react-intl'
 
 export const testGroups = {
   'websites': {
-    'color': theme.colors.indigo5,
+    'color': theme.colors.indigo7,
     'id': 'Tests.Groups.Websites.Name',
     'name': <FormattedMessage id='Tests.Groups.Websites.Name' />,
     'icon': <NettestGroupWebsites />
   },
   'im': {
-    'color': theme.colors.cyan6,
+    'color': theme.colors.cyan7,
     'id': 'Tests.Groups.Instant Messagging.Name',
     'name': <FormattedMessage id='Tests.Groups.Instant Messagging.Name' />,
     'icon': <NettestGroupInstantMessaging />
   },
   'middlebox': {
-    'color': theme.colors.violet8,
+    'color': theme.colors.violet9,
     'id': 'Tests.Groups.Middlebox.Name',
     'name': <FormattedMessage id='Tests.Groups.Middlebox.Name' />,
     'icon': <NettestGroupMiddleBoxes />

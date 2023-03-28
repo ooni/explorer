@@ -23,6 +23,8 @@ RUN yarn build
 # Production image, copy all the files and run next
 FROM node:16.3-alpine3.12 AS runner
 WORKDIR /app
+ARG CLOUDFLARE_TOKEN=''
+ENV CLOUDFLARE_TOKEN $CLOUDFLARE_TOKEN
 ENV NODE_ENV production
 ENV NEXT_TELEMETRY_DISABLED 1
 RUN addgroup --system --gid 1001 nodejs

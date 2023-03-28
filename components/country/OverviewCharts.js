@@ -98,7 +98,7 @@ class TestsByGroup extends React.Component {
 
     // Use react-intl's imperative API to render localized test names in chart tooltips
     const testGroupNames = {
-      'websites': intl.formatMessage({id: 'Tests.Groups.Webistes.Name'}),
+      'websites': intl.formatMessage({id: 'Tests.Groups.Websites.Name'}),
       'im': intl.formatMessage({id: 'Tests.Groups.Instant Messagging.Name'}),
       'middlebox': intl.formatMessage({id: 'Tests.Groups.Middlebox.Name'}),
       'performance': intl.formatMessage({id: 'Tests.Groups.Performance.Name'}),

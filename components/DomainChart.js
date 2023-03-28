@@ -1,53 +1,24 @@
+// TODO: refactor to use the same chart for circumvention tools and domains (no request on probe_cc change)
 import GridChart, { prepareDataForGridChart } from 'components/aggregation/mat/GridChart'
 import { MATContextProvider } from 'components/aggregation/mat/MATContext'
+import { MATLink } from 'components/Chart'
 import { DetailsBox } from 'components/measurement/DetailsBox'
-import NLink from 'next/link'
-import { Box, Flex, Heading, Link } from 'ooni-components'
+import { useRouter } from 'next/router'
+import { Box, Flex, Heading } from 'ooni-components'
 import React, { useEffect, useMemo } from 'react'
-import { MdBarChart, MdOutlineFileDownload } from 'react-icons/md'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { MATFetcher } from 'services/fetchers'
 import useSWR from 'swr'
-import { StyledHollowButton } from './SharedStyledComponents'
 
 const swrOptions = {
   revalidateOnFocus: false,
   dedupingInterval: 10 * 60 * 1000,
 }
 
-export const MATLink = ({ query }) => {
-  const intl = useIntl()
-  const queryToSearchParams = new URLSearchParams(query)
-  const apiUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation?${queryToSearchParams}`
-
-  const showMATButton = !Array.isArray(query.test_name)
-
-  return (
-    <Flex mt={3} justifyContent='space-between' alignItems='center'>
-      <Box>
-        {showMATButton &&
-          <NLink href={`/chart/mat?${queryToSearchParams}`}passHref>
-            <a>
-              <StyledHollowButton>
-                {intl.formatMessage({id: 'MAT.Charts.SeeOnMAT'})} <MdBarChart size={20} style={{verticalAlign: 'bottom'}} />
-              </StyledHollowButton>
-            </a>
-          </NLink>
-        }
-      </Box>
-      <Box>
-        <NLink passHref href={apiUrl}>
-          <Link mr={3}>{intl.formatMessage({id: 'MAT.Charts.DownloadJSONData'})} <MdOutlineFileDownload style={{verticalAlign: 'bottom'}} size={20} /></Link>
-        </NLink>
-        <NLink passHref href={`${apiUrl}&format=CSV`}>
-          <Link>{intl.formatMessage({id: 'MAT.Charts.DownloadCSVData'})} <MdOutlineFileDownload style={{verticalAlign: 'bottom'}} size={20} /></Link>
-        </NLink>
-      </Box>
-    </Flex>
-  )
-}
-
 const Chart = React.memo(function Chart({testGroup = null, queryParams = {}, setState}) {
+  const {query: { probe_cc }} = useRouter()
+  const {locale} = useIntl()
+
   const apiQuery = useMemo(() => {
     const qs = new URLSearchParams(queryParams).toString()
     return qs
@@ -63,17 +34,23 @@ const Chart = React.memo(function Chart({testGroup = null, queryParams = {}, set
     if (!data) {
       return [null, 0]
     }
-    let chartData = data.data
-    const graphQuery = queryParams
-    const [reshapedData, rowKeys, rowLabels] = prepareDataForGridChart(chartData, graphQuery)
+
+    let chartData = data.data.sort((a, b) => (new Intl.Collator(locale).compare(a.probe_cc, b.probe_cc)))
+
+    if (probe_cc) chartData = chartData.filter(d => probe_cc === d.probe_cc)
+
+    const [reshapedData, rowKeys, rowLabels] = prepareDataForGridChart(chartData, queryParams, locale)
+
     return [reshapedData, rowKeys, rowLabels]
-  }, [data, queryParams])
+
+  }, [data, queryParams, probe_cc, locale])
 
   useEffect(()=> {
     if (setState && data?.data) setState(data.data)
   }, [data, setState])
 
   const headerOptions = { probe_cc: false, subtitle: false }
+  const linkParams = {...queryParams, ... probe_cc && {probe_cc}}
 
   return (
     // <MATContextProvider key={name} test_name={name} {...queryParams}>
@@ -90,7 +67,7 @@ const Chart = React.memo(function Chart({testGroup = null, queryParams = {}, set
                 rowLabels={rowLabels}
                 isGrouped={false}
               />
-              {!!chartData?.size && <MATLink query={queryParams} />}
+              {!!chartData?.size && <MATLink query={linkParams} />}
             </>
           )}
         </Box>

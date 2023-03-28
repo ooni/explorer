@@ -98,17 +98,13 @@ const Chart = React.memo(function Chart({ testName }) {
         {(!chartData && !error) ? (
           <div>{intl.formatMessage({id: 'General.Loading'})}</div>
         ) : (
-          chartData === null || chartData.length === 0 ? (
-            <Heading h={5}>{intl.formatMessage({id: 'General.NoData'})}</Heading>
-          ) : (
-            <GridChart
-              data={chartData}
-              rowKeys={rowKeys}
-              rowLabels={rowLabels}
-              isGrouped={false}
-              header={headerOptions}
-            />
-          )
+          <GridChart
+            data={chartData}
+            rowKeys={rowKeys}
+            rowLabels={rowLabels}
+            isGrouped={false}
+            header={headerOptions}
+          />
         )}
       </Box>
       {error &&

@@ -114,7 +114,7 @@ const GridChart = ({ data, rowKeys, rowLabels, isGrouped = true, height = 'auto'
     gridHeight = Math.min( XAXIS_HEIGHT + (rowCount * ROW_HEIGHT), GRID_MAX_HEIGHT)
   }
 
-  if (data.size < 1) {
+  if (!data || data.size < 1) {
     return (
       <NoCharts />
     )

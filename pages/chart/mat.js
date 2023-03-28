@@ -57,6 +57,7 @@ const fetcher = (query) => {
 const MeasurementAggregationToolkit = () => {
   const intl = useIntl()
   const router = useRouter()
+  const { query } = router
 
   const onSubmit = useCallback((data) => {
     let params = {}
@@ -76,36 +77,36 @@ const MeasurementAggregationToolkit = () => {
   // Upon mount, check if the page was accessed without query params
   // In that case, trigger a shallow navigation that shows a chart
   useEffect(() => {
-    const { query } = router
-    const today = dayjs.utc().add(1, 'day')
-    const monthAgo = dayjs.utc(today).subtract(1, 'month')
-    const href = {
-      query: {
-        test_name: 'web_connectivity',
-        axis_x: 'measurement_start_day',
-        since: monthAgo.format('YYYY-MM-DD'),
-        until: today.format('YYYY-MM-DD'),
-        time_grain: 'day',
-        ...query
-      },
+    if (router.isReady) {
+      const today = dayjs.utc().add(1, 'day')
+      const monthAgo = dayjs.utc(today).subtract(1, 'month')
+      const href = {
+        query: {
+          test_name: 'web_connectivity',
+          axis_x: 'measurement_start_day',
+          since: monthAgo.format('YYYY-MM-DD'),
+          until: today.format('YYYY-MM-DD'),
+          time_grain: 'day',
+          ...query
+        },
+      }
+      router.replace(href, undefined, { shallow: true })
     }
-    router.replace(href, undefined, { shallow: true })
     // Ignore the dependency on `router` because we want
     // this effect to run only once, on mount, if query is empty.
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [router.isReady])
 
   const shouldFetchData = router.pathname !== router.asPath
-  const query = {...router.query}
 
   const { data, error, isValidating } = useSWR(
     () => shouldFetchData ? [query] : null,
     fetcher,
     swrOptions
   )
-
+    
   const showLoadingIndicator = useMemo(() => isValidating, [isValidating])
-
+  
   let linkToAPIQuery = null
   try {
     linkToAPIQuery = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation?${new URLSearchParams(query).toString()}`
@@ -125,39 +126,44 @@ const MeasurementAggregationToolkit = () => {
           <Heading h={5} mt={0} mb={2} color='gray9'>
             <FormattedMessage id='MAT.SubTitle' />
           </Heading>
-          <Form onSubmit={onSubmit} query={router.query} />
-          {error &&
-            <NoCharts message={error?.info ?? JSON.stringify(error)} />
-          }
-          <Box sx={{ minHeight: '500px' }}>
-            {showLoadingIndicator &&
-              <Box>
-                <h2>{intl.formatMessage({id: 'General.Loading'})}</h2>
-              </Box>
-            }
-            {data && data.data.dimension_count == 0 &&
-                <FunnelChart data={data.data.result} />
-            }
-            {data && data.data.dimension_count == 1 &&
-                <StackedBarChart data={data} query={query} />
-            }
-            {data && data.data.dimension_count > 1 &&
-                <TableView data={data.data.result} query={query} />
-            }
-          </Box>
-          {linkToAPIQuery &&
-            <Box mt={[3]} ml={['unset', 'auto']}>
-              <Flex>
-                <Box>
-                  <Link as='a' href={linkToAPIQuery} target='_blank' title='opens in new tab'>{intl.formatMessage({id: 'MAT.JSONData'})}<FaExternalLinkAlt />
-                  </Link>
+          {router.isReady && (
+            <>
+              <Form onSubmit={onSubmit} query={router.query} />
+                {error &&
+                  <NoCharts message={error?.info ?? JSON.stringify(error)} />
+                }
+                <Box sx={{ minHeight: '500px' }}>
+                  {showLoadingIndicator &&
+                    <Box>
+                      <h2>{intl.formatMessage({id: 'General.Loading'})}</h2>
+                    </Box>
+                  }
+                  {data && data.data.dimension_count == 0 &&
+                      <FunnelChart data={data.data.result} />
+                  }
+                  {data && data.data.dimension_count == 1 &&
+                      <StackedBarChart data={data} query={query} />
+                  }
+                  {data && data.data.dimension_count > 1 &&
+                      <TableView data={data.data.result} query={query} />
+                  }
                 </Box>
-                <Box ml={2}>
-                  <Link href={`${linkToAPIQuery}&format=CSV`} target='_blank' title='opens in new tab'>{intl.formatMessage({id: 'MAT.CSVData'})}<FaExternalLinkAlt />
-                  </Link>
-                </Box>
-              </Flex>
-            </Box>
+                {linkToAPIQuery &&
+                  <Box mt={[3]} ml={['unset', 'auto']}>
+                    <Flex>
+                      <Box>
+                        <Link as='a' href={linkToAPIQuery} target='_blank' title='opens in new tab'>{intl.formatMessage({id: 'MAT.JSONData'})}<FaExternalLinkAlt />
+                        </Link>
+                      </Box>
+                      <Box ml={2}>
+                        <Link href={`${linkToAPIQuery}&format=CSV`} target='_blank' title='opens in new tab'>{intl.formatMessage({id: 'MAT.CSVData'})}<FaExternalLinkAlt />
+                        </Link>
+                      </Box>
+                    </Flex>
+                  </Box>
+                }
+              </>
+            )
           }
           <Box my={4}>
             <Help />

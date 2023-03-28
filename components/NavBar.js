@@ -111,6 +111,8 @@ export const NavBar = ({color}) => {
               <NavItem label={<FormattedMessage id='Navbar.Charts.MAT' />} href='/chart/mat' />
               <NavItem label={<FormattedMessage id='Navbar.Charts.Circumvention' />} href='/chart/circumvention' />
               <NavItem label={<FormattedMessage id='Navbar.Countries' />} href='/countries' />
+              <NavItem label={<FormattedMessage id='Navbar.Networks' />} href='/networks' />
+              <NavItem label={<FormattedMessage id='Navbar.Domains' />} href='/domains' />
               {/* <Box ml={[0, 4]} my={[2, 0]}>
                 <LanguageSelect ml={[0, 4]} onChange={handleLocaleChange} value={locale}>
                   {languages.map((c) => (

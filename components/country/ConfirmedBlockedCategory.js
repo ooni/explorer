@@ -1,47 +1,38 @@
-import React, { useMemo } from 'react'
-import { useRouter } from 'next/router'
-import { FormattedMessage } from 'react-intl'
-import { Heading, Box, Flex, Text, theme } from 'ooni-components'
-import useSWR from 'swr'
+import { CategoryBadge } from 'components/Badge'
 import { DetailsBox } from 'components/measurement/DetailsBox'
-import { MATFetcher } from 'services/fetchers'
-import * as icons from 'ooni-components/dist/icons'
-import Badge from 'components/Badge'
 import { getCategoryCodesMap } from 'components/utils/categoryCodes'
+import { useRouter } from 'next/router'
+import { Box, Flex, Heading } from 'ooni-components'
+import { memo, useMemo } from 'react'
+import { FormattedMessage } from 'react-intl'
+import { MATFetcher } from 'services/fetchers'
+import useSWR from 'swr'
 
 const swrOptions = {
   revalidateOnFocus: false,
   dedupingInterval: 10 * 60 * 1000,
 }
 
-const ConfirmedBlockedCategory = React.memo(function Chart({testName, title, queryParams = {}}) {
+const ConfirmedBlockedCategory = ({title}) => {
   const router = useRouter()
-  const { query: { countryCode } } = router
+  const { query: { countryCode, since, until } } = router
 
   const categoryCodeMap = getCategoryCodesMap()
 
-  const params = useMemo(() => ({
-    ...queryParams,
-    axis_x: 'category_code'
-  }), [queryParams])
-
   const query = useMemo(() => ({
-    ...params,
     probe_cc: countryCode,
-    ...testName && {test_name: testName}
-  }), [countryCode, params, testName])
-
-  const apiQuery = useMemo(() => {
-    const qs = new URLSearchParams(query).toString()
-    return qs
-  }, [query])
+    since,
+    until,
+    test_name: 'web_connectivity',
+    axis_x: 'category_code'
+  }), [countryCode, since, until])
 
   const prepareDataForBadge = (categoriesData) => {
     return categoriesData.filter(category => category.confirmed_count > 0)
   }
 
   const { data, error } = useSWR(
-    apiQuery,
+    since && until ? new URLSearchParams(query).toString() : null,
     MATFetcher,
     swrOptions
   )
@@ -66,13 +57,11 @@ const ConfirmedBlockedCategory = React.memo(function Chart({testName, title, que
             blockedCategoriesData === null || blockedCategoriesData.length === 0 ? (
               <Heading h={5}><FormattedMessage id="General.NoData" /></Heading>
             ) : (
-              <Flex flexWrap='wrap'>
+              <Flex flexWrap='wrap' sx={{gap: 2}}>
                 {blockedCategoriesData && blockedCategoriesData.map(category => (
                   <CategoryBadge
                     key={category.category_code}
                     categoryCode={category.category_code}
-                    categoryCodeMap={categoryCodeMap}
-                    confirmedCount={category.confirmed_count}
                   />
                 ))}
               </Flex>
@@ -92,32 +81,6 @@ const ConfirmedBlockedCategory = React.memo(function Chart({testName, title, que
 
       </Flex>
   )
-})
-
-const CategoryBadge = ({ categoryCode, categoryCodeMap, confirmedCount }) => {
-  const categoryDesc = categoryCodeMap.get(categoryCode)
-  const CategoryIcon = icons[`CategoryCode${categoryCode}`]
-
-  if (categoryDesc === undefined && confirmedCount === 0) {
-    return null
-  }
-
-  if (CategoryIcon === undefined) {
-    return null
-  }
-
-  return (
-    <Badge bg={theme.colors.gray6} color='white' style={{ marginRight: '10px', marginBottom: '15px' }}>
-      <Flex alignItems='center'>
-        <Box mr={3}>
-          <CategoryIcon size={20} />
-        </Box>
-        <Box>
-        <Text><FormattedMessage id={categoryDesc.name} /></Text>
-        </Box>
-      </Flex>
-    </Badge>
-  )
 }
 
-export default ConfirmedBlockedCategory
+export default memo(ConfirmedBlockedCategory)
