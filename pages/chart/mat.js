@@ -126,44 +126,39 @@ const MeasurementAggregationToolkit = () => {
           <Heading h={5} mt={0} mb={2} color='gray9'>
             <FormattedMessage id='MAT.SubTitle' />
           </Heading>
-          {router.isReady && (
-            <>
-              <Form onSubmit={onSubmit} query={router.query} />
-                {error &&
-                  <NoCharts message={error?.info ?? JSON.stringify(error)} />
-                }
-                <Box sx={{ minHeight: '500px' }}>
-                  {showLoadingIndicator &&
-                    <Box>
-                      <h2>{intl.formatMessage({id: 'General.Loading'})}</h2>
-                    </Box>
-                  }
-                  {data && data.data.dimension_count == 0 &&
-                      <FunnelChart data={data.data.result} />
-                  }
-                  {data && data.data.dimension_count == 1 &&
-                      <StackedBarChart data={data} query={query} />
-                  }
-                  {data && data.data.dimension_count > 1 &&
-                      <TableView data={data.data.result} query={query} />
-                  }
+          <Form onSubmit={onSubmit} query={router.query} />
+          {error &&
+            <NoCharts message={error?.info ?? JSON.stringify(error)} />
+          }
+          <Box sx={{ minHeight: '500px' }}>
+            {showLoadingIndicator &&
+              <Box>
+                <h2>{intl.formatMessage({id: 'General.Loading'})}</h2>
+              </Box>
+            }
+            {data && data.data.dimension_count == 0 &&
+                <FunnelChart data={data.data.result} />
+            }
+            {data && data.data.dimension_count == 1 &&
+                <StackedBarChart data={data} query={query} />
+            }
+            {data && data.data.dimension_count > 1 &&
+                <TableView data={data.data.result} query={query} />
+            }
+          </Box>
+          {linkToAPIQuery &&
+            <Box mt={[3]} ml={['unset', 'auto']}>
+              <Flex>
+                <Box>
+                  <Link as='a' href={linkToAPIQuery} target='_blank' title='opens in new tab'>{intl.formatMessage({id: 'MAT.JSONData'})}<FaExternalLinkAlt />
+                  </Link>
                 </Box>
-                {linkToAPIQuery &&
-                  <Box mt={[3]} ml={['unset', 'auto']}>
-                    <Flex>
-                      <Box>
-                        <Link as='a' href={linkToAPIQuery} target='_blank' title='opens in new tab'>{intl.formatMessage({id: 'MAT.JSONData'})}<FaExternalLinkAlt />
-                        </Link>
-                      </Box>
-                      <Box ml={2}>
-                        <Link href={`${linkToAPIQuery}&format=CSV`} target='_blank' title='opens in new tab'>{intl.formatMessage({id: 'MAT.CSVData'})}<FaExternalLinkAlt />
-                        </Link>
-                      </Box>
-                    </Flex>
-                  </Box>
-                }
-              </>
-            )
+                <Box ml={2}>
+                  <Link href={`${linkToAPIQuery}&format=CSV`} target='_blank' title='opens in new tab'>{intl.formatMessage({id: 'MAT.CSVData'})}<FaExternalLinkAlt />
+                  </Link>
+                </Box>
+              </Flex>
+            </Box>
           }
           <Box my={4}>
             <Help />
