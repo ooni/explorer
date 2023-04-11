@@ -1,45 +1,10 @@
-/* global process */
-import React, { useMemo, useState } from 'react'
-import PropTypes from 'prop-types'
-import Head from 'next/head'
 import axios from 'axios'
-import { Container, theme, Flex, Text } from 'ooni-components'
-import { getLocalisedRegionName } from '/utils/i18nCountries'
-import NLink from 'next/link'
-import { FormattedMessage } from 'react-intl'
-import useSWR from 'swr'
 
-import Hero from 'components/measurement/Hero'
-import CommonSummary from 'components/measurement/CommonSummary'
-import DetailsHeader from 'components/measurement/DetailsHeader'
-import SummaryText from 'components/measurement/SummaryText'
-import CommonDetails from 'components/measurement/CommonDetails'
-import MeasurementContainer from 'components/measurement/MeasurementContainer'
+import ErrorPage from 'pages/_error'
 import MeasurementNotFound from 'components/measurement/MeasurementNotFound'
-import HeadMetadata from 'components/measurement/HeadMetadata'
-import FeedbackBox from 'components/measurement/FeedbackBox'
-
-import NavBar from 'components/NavBar'
-import ErrorPage from '../_error'
-import { useIntl } from 'react-intl'
-import useUser from 'hooks/useUser'
-import { DetailsBoxTable } from 'components/measurement/DetailsBox'
-import { fetcher } from '/lib/api'
-
-const pageColors = {
-  default: theme.colors.base,
-  anomaly: theme.colors.yellow9,
-  reachable: theme.colors.green8,
-  error: theme.colors.gray6,
-  down: theme.colors.gray6,
-  confirmed: theme.colors.red7
-}
 
 export async function getServerSideProps({ query }) {
-  let initialProps = {
-    error: null,
-    userFeedback: null
-  }
+  let error = null
 
   // Get `report_id` using optional catch all dynamic route of Next.js
   // Doc: https://nextjs.org/docs/routing/dynamic-routes#optional-catch-all-routes 
@@ -49,217 +14,50 @@ export async function getServerSideProps({ query }) {
   const report_id = query?.report_id?.[0]
   // If there is no report_id to use, fail early with MeasurementNotFound
   if (typeof report_id !== 'string' || !report_id.match(/[a-zA-Z0-9_-]{40,100}/)) {
-    initialProps.notFound = true
     return {
-      props: initialProps
+      props: {}
     }
+  }
+
+  const client = axios.create({baseURL: process.env.NEXT_PUBLIC_OONI_API}) // eslint-disable-line
+  const params = {
+    report_id,
+    full: true
+  }
+  if (query.input) {
+    params['input'] = query.input
   }
 
   let response
-  let client
   try {
-    client = axios.create({baseURL: process.env.NEXT_PUBLIC_OONI_API}) // eslint-disable-line
-    let params = {
-      report_id: report_id,
-      full: true
-    }
-    if (query.input) {
-      params['input'] = query.input
-    }
-
-    try {
-      response = await client.get('/api/v1/measurement_meta', {
-        params
-      })
-    } catch (e) {
-      throw new Error(`Failed to fetch measurement data. Server message: ${e.response.status}, ${e.response.statusText}`)
-    }
-
-    // If response `data` is an empty object, the measurement was
-    // probably not found
-    if (Object.prototype.hasOwnProperty.call(response, 'data') && Object.keys(response.data).length !== 0) {
-      initialProps = {...initialProps, ...response.data}
-
-      if (typeof initialProps['scores'] === 'string') {
-        try {
-          initialProps['scores'] = JSON.parse(initialProps['scores'])
-        } catch (e) {
-          throw new Error(`Failed to parse JSON in scores: ${e.toString()}`)
-        }
-      }
-
-      initialProps['raw_measurement'] ? 
-        initialProps['raw_measurement'] = JSON.parse(initialProps['raw_measurement']) : 
-        initialProps.notFound = true
-    } else {
-      // Measurement not found
-      initialProps.notFound = true
-    }
+    response = await client.get('/api/v1/measurement_meta', { params })
   } catch (e) {
-    initialProps.error = e.message
+    error = `Failed to fetch measurement data. Server message: ${e.response.status}, ${e.response.statusText}`
   }
-  return {
-    props: initialProps
+
+  if (response?.data?.measurement_uid) {
+    return {
+      redirect: {
+        destination: `/m/${response.data.measurement_uid}`,
+        permanent: true,
+      },
+    }
+  }
+
+  return { 
+    props: {
+      ...(error && error)
+    }
   }
 }
 
-const Measurement = ({
-  error,
-  confirmed,
-  anomaly,
-  failure,
-  test_name,
-  measurement_start_time,
-  probe_cc,
-  probe_asn,
-  notFound = false,
-  input,
-  raw_measurement,
-  report_id,
-  scores,
-  ...rest
-}) => {
-  const intl = useIntl()
-  const country = getLocalisedRegionName(probe_cc, intl.locale)
-
-  const { user, setSubmitted } = useUser()
-  const [showModal, setShowModal] = useState(false)
-
-  const {data: userFeedback, error: userFeedbackError, mutate: mutateUserFeedback} = useSWR(`/api/_/measurement_feedback/${report_id}`, fetcher)
-
-  const userFeedbackItems = useMemo(() => {
-    return userFeedback ? 
-      Object.entries(userFeedback.summary).map(([key, value]) => (
-        {label: intl.formatMessage({id: `Measurement.Feedback.${key}`}), value}
-      )) : 
-      []
-  }, [userFeedback])
-
-  // Add the 'AS' prefix to probe_asn when API chooses to send just the number
-  probe_asn = typeof probe_asn === 'number' ? `AS${probe_asn}` : probe_asn
-  if (error) {
-    return (
-      <ErrorPage statusCode={501} error={error} />
-    )
-  }
-
-  const hideModal = () => {
-    setShowModal(false)
-    setSubmitted(false)
-  }
-
-  return (
-    <>
-      <Head>
-        <title>{intl.formatMessage({id: 'General.OoniExplorer'})}</title>
-      </Head>
-      {notFound ? (
-        <MeasurementNotFound />
-      ): (
-        <>
-          <MeasurementContainer
-            isConfirmed={confirmed}
-            isAnomaly={anomaly}
-            isFailure={failure}
-            testName={test_name}
-            country={country}
-            measurement={raw_measurement}
-            input={input}
-            measurement_start_time={measurement_start_time}
-            probe_asn={probe_asn}
-            scores={scores}
-            {...rest}
-
-            render={({
-              status = 'default',
-              statusIcon,
-              statusLabel,
-              statusInfo,
-              legacy = false,
-              summaryText,
-              headMetadata,
-              details
-            }) => {
-              const color = failure === true ? pageColors['error'] : pageColors[status]
-              const info = scores?.msg ?? statusInfo
-              return (
-                <>
-                  {headMetadata &&
-                    <HeadMetadata
-                      content={headMetadata}
-                      testName={test_name}
-                      testUrl={input}
-                      country={country}
-                      date={measurement_start_time}
-                    />
-                  }
-                  <NavBar color={color} />
-                  {showModal &&
-                    <FeedbackBox
-                      user={user}
-                      report_id={report_id}
-                      setShowModal={setShowModal}
-                      previousFeedback={userFeedback?.user_feedback}
-                      mutateUserFeedback={mutateUserFeedback}
-                    />
-                  }
-                  <CommonSummary
-                    measurement_start_time={measurement_start_time}
-                    probe_asn={probe_asn}
-                    probe_cc={probe_cc}
-                    networkName={raw_measurement?.probe_network_name}
-                    color={color}
-                    country={country}
-                    hero={<Hero status={status} icon={statusIcon} label={statusLabel} info={info} />}
-                    onVerifyClick={() => setShowModal(true)}
-                  />
-                  <Container>
-                    <DetailsHeader
-                      testName={test_name}
-                      runtime={raw_measurement?.test_runtime}
-                      notice={legacy}
-                      url={`measurement/${report_id}`}
-                    />
-                    {summaryText &&
-                      <SummaryText
-                        testName={test_name}
-                        testUrl={input}
-                        network={probe_asn}
-                        country={country}
-                        date={measurement_start_time}
-                        content={summaryText}
-                      />
-                    }
-                    {details}
-                    <CommonDetails
-                      measurement={raw_measurement}
-                      reportId={report_id}
-                      userFeedbackItems={userFeedbackItems}
-                    />
-                  </Container>
-                </>
-              )
-            }
-          } />
-        </>
-      )}
-    </>
-  )
-}
-
-Measurement.propTypes = {
-  anomaly: PropTypes.bool,
-  confirmed: PropTypes.bool,
-  error: PropTypes.string,
-  failure: PropTypes.bool,
-  input: PropTypes.any,
-  notFound: PropTypes.bool,
-  probe_asn: PropTypes.any,
-  probe_cc: PropTypes.string,
-  raw_measurement: PropTypes.object,
-  report_id: PropTypes.string,
-  test_name: PropTypes.string,
-  measurement_start_time: PropTypes.string
-}
+const Measurement = ({ error }) => (
+  <>
+    {error ? 
+      <ErrorPage statusCode={501} error={error} /> : 
+      <MeasurementNotFound />
+    } 
+  </>
+)
 
 export default Measurement

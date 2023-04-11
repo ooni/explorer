@@ -231,11 +231,9 @@ const StyledViewDetailsLink = styled(Link)`
   }
 `
 
-const ViewDetailsLink = ({reportId, input, children}) => {
-  let href = `/measurement/${reportId}`
-  if (input) {
-    href += `?input=${encodeURIComponent(input)}`
-  }
+const ViewDetailsLink = ({measurementUid, children}) => {
+  let href = `/m/${measurementUid}`
+
   return (
     <NLink href={href}>
       <StyledViewDetailsLink href={href}>{children}</StyledViewDetailsLink>
@@ -244,8 +242,7 @@ const ViewDetailsLink = ({reportId, input, children}) => {
 }
 
 ViewDetailsLink.propTypes = {
-  reportId: PropTypes.string,
-  input: PropTypes.string,
+  measurementUid: PropTypes.string,
   children: PropTypes.element.isRequired
 }
 
@@ -327,7 +324,7 @@ const getIndicators = ({ test_name, scores = {}, confirmed, anomaly, failure, in
 const ResultItem = ({
   test_name,
   input,
-  report_id,
+  measurement_uid,
   probe_cc,
   probe_asn,
   measurement_start_time,
@@ -365,7 +362,7 @@ const ResultItem = ({
   const testName = testNames[test_name]?.name || test_name
 
   return (
-    <ViewDetailsLink reportId={report_id} input={input}>
+    <ViewDetailsLink measurementUid={measurement_uid}>
       <ResultRow flexWrap='wrap' alignItems='stretch'>
         <Box width={1/32}>
           <ColoredIndicator color={indicatorColor} />
@@ -415,7 +412,7 @@ const ResultItem = ({
 ResultItem.propTypes = {
   test_name: PropTypes.string,
   input: PropTypes.string,
-  report_id: PropTypes.string,
+  measurement_uid: PropTypes.string,
   probe_cc: PropTypes.string,
   probe_asn: PropTypes.string,
   measurement_start_time: PropTypes.string,
