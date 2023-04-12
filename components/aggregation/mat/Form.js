@@ -16,6 +16,7 @@ import { categoryCodes } from '../../utils/categoryCodes'
 import DateRangePicker from '../../DateRangePicker'
 import { ConfirmationModal } from './ConfirmationModal'
 import { TestNameOptions } from '../../TestNameOptions'
+import { useRouter } from 'next/router'
 
 const DAY_GRAIN_THRESHOLD_IN_MONTHS = 12
 const WEEK_GRAIN_THRESHOLD_IN_MONTHS = 36
@@ -91,7 +92,7 @@ const testsWithValidDomainFilter = [
   'tcp_connect'
 ]
 
-const filterAxisOptions = (options, countryValue, testNameValue) => {
+const filterAxisOptions = (options, countryValue = '', testNameValue = 'web_connectivity') => {
   return options
     .filter(([option, validTestNames, hideForSingleCountry]) => {
       if (hideForSingleCountry && countryValue !== '') return false
@@ -125,19 +126,40 @@ const defaultDefaultValues = {
 
 export const Form = ({ onSubmit, query }) => {
   const intl = useIntl()
+  const router = useRouter()
   const [showConfirmation, setShowConfirmation] = useState(false)
 
-  const defaultValues = Object.assign({}, defaultDefaultValues, query)
+  const defaultValues = useMemo(() => (Object.assign({}, defaultDefaultValues, query)), [query])
+
   const { handleSubmit, control, getValues, watch, reset, setValue } = useForm({
     defaultValues,
     shouldUnregister: true,
   })
 
+  useEffect(() => {
+    if (router.isReady) {
+      reset(defaultValues)
+    }
+  }, [defaultValues, reset, router.isReady])
+
+  const [since, setSince] = useState(defaultValues['since'])
+  const [until, setUntil] = useState(defaultValues['until'])
+  const [countryValue, setCountryValue] = useState(defaultValues['probe_cc'])
+  const [testNameValue, setTestNameValue] = useState(defaultValues['test_name'])
+  
+  useEffect(() => {
+    const subscription = watch((value, { name, type }) => {
+      if (name === 'since') setSince(value['since'])
+      if (name === 'until') setUntil(value['until'])
+      if (name === 'probe_cc') setCountryValue(value['probe_cc'])
+      if (name === 'test_name') setTestNameValue(value['test_name'])
+    })
+    return () => subscription.unsubscribe()
+  }, [watch])
+
   const sortedCountries = localisedCountries(intl.locale)
     .sort((a,b) => new Intl.Collator(intl.locale).compare(a.localisedCountryName, b.localisedCountryName))
 
-  const testNameValue = watch('test_name')
-  const countryValue = watch('probe_cc')
   const showWebConnectivityFilters = useMemo(() => (isValidFilterForTestname(testNameValue, testsWithValidDomainFilter)), [testNameValue])
   // reset domain and input when web_connectivity is deselected
   useEffect(() => {
@@ -207,11 +229,9 @@ export const Form = ({ onSubmit, query }) => {
     if (!yAxisOptionsFiltered.includes(getValues('axis_y'))) setValue('axis_y', '')
   }, [setValue, getValues, yAxisOptionsFiltered])
 
-  const since = watch('since')
-  const until = watch('until')
   const timeGrainOptions = useMemo(() => {
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/
-    if (!until.match(dateRegex) || !since.match(dateRegex)) return ['hour', 'day', 'week', 'month']
+    if (!until?.match(dateRegex) || !since?.match(dateRegex)) return ['hour', 'day', 'week', 'month']
     const diff = dayjs(until).diff(dayjs(since), 'day')
     if (diff < 8) {
       const availableValues = ['hour', 'day']
