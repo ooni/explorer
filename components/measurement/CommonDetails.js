@@ -90,6 +90,10 @@ const CommonDetails = ({
   const items = [
     {
       label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.MsmtID' }),
+      value: measurementUid ?? unavailable
+    },
+    {
+      label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.ReportID' }),
       value: reportId ?? unavailable
     },
     {

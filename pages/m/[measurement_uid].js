@@ -39,7 +39,7 @@ export async function getServerSideProps({ query }) {
 
   const measurement_uid = query?.measurement_uid
   // If there is no measurement_uid to use, fail early with MeasurementNotFound
-  if (typeof measurement_uid !== 'string' || !measurement_uid.match(/[a-zA-Z0-9._-]{40,100}/)) {
+  if (typeof measurement_uid !== 'string' || measurement_uid.length < 10) {
     initialProps.notFound = true
     return {
       props: initialProps

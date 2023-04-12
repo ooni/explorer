@@ -39,7 +39,7 @@ export async function getServerSideProps({ query }) {
     return {
       redirect: {
         destination: `/m/${response.data.measurement_uid}`,
-        permanent: true,
+        statusCode: 301,
       },
     }
   }
