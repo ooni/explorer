@@ -12,7 +12,7 @@ describe('Search Page Tests', () => {
       .each(($el) => {
         cy.wrap($el)
           .should('have.attr', 'href')
-          .and('match', /measurement/)
+          .and('match', /m/)
       })
   })
 
@@ -38,7 +38,7 @@ describe('Search Page Tests', () => {
   it('results loaded by "Load More" button are valid', () => {
     cy.intercept('/api/v1/measurements*').as('searchAPI')
     cy.get('[data-test-id="results-list"] > a:nth-child(51)').click()
-    cy.location('pathname', { timeout: 20000 }).should('include', '/measurement/')
+    cy.location('pathname', { timeout: 20000 }).should('include', '/m/')
     cy.go('back')
     cy.wait('@searchAPI')
   })
