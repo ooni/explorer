@@ -52,7 +52,7 @@ const blockedValues = [
 
 const radioLevels = ['firstLevelRadio', 'secondLevelRadio', 'thirdLevelRadio']
 
-const FeedbackBox = ({user, report_id, setShowModal, previousFeedback, mutateUserFeedback}) => {
+const FeedbackBox = ({user, measurement_uid, setShowModal, previousFeedback, mutateUserFeedback}) => {
   const intl = useIntl()
   const [error, setError] = useState(null)
 
@@ -100,7 +100,7 @@ const FeedbackBox = ({user, report_id, setShowModal, previousFeedback, mutateUse
         effect({ send, setContext, event, context }) {
           const { firstLevelRadio, secondLevelRadio, thirdLevelRadio } = getValues()
           const feedbackParams = {
-            measurement_uid: report_id,
+            measurement_uid,
             status: thirdLevelRadio || secondLevelRadio || firstLevelRadio
           }
           submitFeedback(feedbackParams)

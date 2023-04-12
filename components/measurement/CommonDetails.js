@@ -48,6 +48,7 @@ JsonViewer.propTypes = {
 const CommonDetails = ({
   measurement,
   reportId,
+  measurementUid,
   userFeedbackItems =[]
 }) => {
   const {
@@ -85,10 +86,14 @@ const CommonDetails = ({
   let software = software_name ?? unavailable
   software += software_version ? ` (${software_version})` : ''
 
-  const downloadFilename = `ooni-measurement-${reportId}.json`
+  const downloadFilename = `ooni-measurement-${measurementUid}.json`
   const items = [
     {
       label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.MsmtID' }),
+      value: measurementUid ?? unavailable
+    },
+    {
+      label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.ReportID' }),
       value: reportId ?? unavailable
     },
     {
@@ -203,7 +208,8 @@ const CommonDetails = ({
 
 CommonDetails.propTypes = {
   measurement: PropTypes.object,
-  reportId: PropTypes.string
+  reportId: PropTypes.string,
+  measurementUid: PropTypes.string
 }
 
 export default CommonDetails
