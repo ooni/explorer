@@ -17,7 +17,7 @@ describe('Seearch Page Tests', () => {
       .each(($el) => {
         cy.wrap($el)
           .should('have.attr', 'href')
-          .and('match', /measurement/)
+          .and('match', /m/)
           .then((href) => {
             cy.request(href)
           })
@@ -25,7 +25,7 @@ describe('Seearch Page Tests', () => {
   })
 
   it.skip('legacy measurement page shows enough information', () => {
-    cy.visit('/measurement/20150330T231214Z_bLcnlMHNRrNezvvmUePFtkbJNDglhMvTNoivcUMZqpUjXhkHlR?input=https%3A%2F%2Fcryptbin.com')
+    cy.visit('/m/01201503307dd8855f39f3d8f78be05f0c67770d')
     cy.contains('Country').siblings().contains('Canada')
     cy.contains('Network').siblings().contains('AS812')
     cy.contains('Date & Time').siblings().contains('March 30, 2015, 11:12 PM UTC')
