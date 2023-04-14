@@ -163,7 +163,7 @@ const Search = ({ countries, query: queryProp }) => {
   const { query, replace, isReady } = router
 
   const [nextURL, setNextURL] = useState(null)
-  const [loading, setLoading] = useState(false)
+  const [loading, setLoading] = useState(true)
   const [results, setResults] = useState([])
   const [filters, setFilters] = useState({})
   const [error, setError] = useState(null)
@@ -176,7 +176,6 @@ const Search = ({ countries, query: queryProp }) => {
     }
     replace(href, href, { shallow: true })
 
-    setLoading(true)
     getMeasurements(query)
       .then(({ data: { results, metadata: { next_url } } }) => {
         setLoading(false)
@@ -288,8 +287,7 @@ const Search = ({ countries, query: queryProp }) => {
           </Box>
           <Box width={[1, 3/4]} px={2}>
             {error && <ErrorBox error={error} />}
-            {loading && <Loader />}
-
+            {loading && <Box my={4}><Loader /></Box>}
             {!error && !loading && results.length === 0 && <NoResults />}
             {!error && !loading && results.length > 0 && <>
               <Box my={4}>
