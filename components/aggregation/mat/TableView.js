@@ -1,14 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useTable, useFlexLayout, useRowSelect, useSortBy, useGlobalFilter, useAsyncDebounce } from 'react-table'
-import { FormattedMessage, useIntl } from 'react-intl'
-import styled from 'styled-components'
-import { Flex, Box, Button, Text } from 'ooni-components'
+import { Flex } from 'ooni-components'
+import React, { useMemo, useRef, useState } from 'react'
+import { useIntl } from 'react-intl'
 
+import Filters from './Filters'
 import GridChart, { prepareDataForGridChart } from './GridChart'
 import { ResizableBox } from './Resizable'
-import { DetailsBox } from '../../measurement/DetailsBox'
-import { sortRows } from './computations'
-import Filters from './Filters'
 
 const prepareDataforTable = (data, query, locale) => {
   const table = []

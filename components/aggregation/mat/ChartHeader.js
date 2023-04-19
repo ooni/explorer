@@ -1,13 +1,11 @@
-import { Heading, Flex, Box, Text } from 'ooni-components'
-import { useIntl } from 'react-intl'
-import styled from 'styled-components'
+import { Box, Flex, Heading, Text } from 'ooni-components'
 import OONILogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochrome.svg'
+import { useIntl } from 'react-intl'
 
-import { testNames, testGroups } from '/components/test-info'
-import { useMATContext } from './MATContext'
-import CountryNameLabel from './CountryNameLabel'
 import { colorMap } from './colorMap'
-import { getRowLabel } from './labels'
+import CountryNameLabel from './CountryNameLabel'
+import { useMATContext } from './MATContext'
+import { testGroups, testNames } from '/components/test-info'
 
 const Legend = ({label, color}) => {
   return (

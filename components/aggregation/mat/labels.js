@@ -5,7 +5,7 @@ import NLink from 'next/link'
 import { testNames } from '../../test-info'
 import { getCategoryCodesMap } from '../../utils/categoryCodes'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 
 const InputRowLabel = ({ input }) => {
   const truncatedInput = input
@@ -33,28 +33,25 @@ const blockingTypeLabels = {
   'tcp_ip': 'TCP/IP Blocking'
 }
 
-const CategoryLabel = ({ code }) => (
-  <FormattedMessage id={`CategoryCode.${code}.Name`} defaultMessage={code}/>
-)
-
-const TestNameLabel = ({ id }) => (<FormattedMessage id={id} defaultMessage={id}/>)
-
 export const getRowLabel = (key, yAxis, locale = 'en') => {
+  const messages = require(`/public/static/lang/${locale}.json`)
+
   switch (yAxis) {
     case 'probe_cc':
       return getLocalisedRegionName(key, locale)
     case 'category_code':
-      return (<CategoryLabel code={key} />)
+      return messages[`CategoryCode.${key}.Name`]
     case 'input':
     case 'domain':
-      // return (<NLink href={`/domain/${key}`}><a><InputRowLabel input={key} /></a></NLink>)
       return (<InputRowLabel input={key} />)
     case 'blocking_type':
       return blockingTypeLabels[key] ?? key
     case 'probe_asn':
       return `AS${key}`
     case 'test_name':
-      return Object.keys(testNames).includes(key) ? <TestNameLabel id={testNames[key].id} /> : key
+      return Object.keys(testNames).includes(key) ? 
+        messages[testNames[key].id] : 
+        key
     default:
       return key
   }
