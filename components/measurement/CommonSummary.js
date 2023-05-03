@@ -76,7 +76,7 @@ const CommonSummary = ({
                 </Flex>
               </Link></NLink>
               <Text fontSize={1}>
-                <NLink href={`/network/${network}`} passHref>
+                <NLink href={`/as/${network}`} passHref>
                   <Link color='white'>
                     <Text mb={2} mt={2}>{network} {networkName}</Text>
                   </Link>

@@ -83,7 +83,7 @@ const Login = () => {
           {error &&
             <Box width={[1, 1 / 3]} mx='auto' textAlign={'center'}>
               <Box mb={3} p={4} bg='red1'>{error}</Box>
-              <NLink href='/login'><FormattedMessage id="Login.Failure" /></NLink>
+              <NLink href='/login' passHref><a><FormattedMessage id="Login.Failure" /></a></NLink>
             </Box>
           }
         </Flex>
