@@ -73,6 +73,7 @@
     "cypress-recurse": "^1.27.0",
     "eslint": "^8.22.0",
     "eslint-config-next": "^12.2.5",
+    "eslint-config-prettier": "^8.8.0",
     "eslint-plugin-cypress": "^2.12.1",
     "glob": "^8.0.3",
     "imap-simple": "^5.1.0",
@@ -80,6 +81,7 @@
     "mailparser": "^3.6.3",
     "mustache": "^4.2.0",
     "nodemailer": "^6.9.1",
+    "prettier": "^2.8.8",
     "start-server-and-test": "^2.0.0"
   },
   "scripts": {
