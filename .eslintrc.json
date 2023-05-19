@@ -1,13 +1,6 @@
 {
   "plugins": ["cypress"],
-  "extends": [
-    "next/core-web-vitals",
-    "plugin:cypress/recommended"
-  ],
-  "rules": {
-    "linebreak-style": ["error", "unix"],
-    "quotes": ["error", "single"],
-    "semi": ["error", "never"]
-  },
+  "extends": ["next/core-web-vitals", "plugin:cypress/recommended", "prettier"],
+  "rules": {},
   "ignorePatterns": ["components/vendor", "static"]
 }
