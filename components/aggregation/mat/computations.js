@@ -87,8 +87,8 @@ export function fillDataHoles (data, query) {
 
 export const sortRows = (a, b, type, locale = 'en') => {
   switch(type) {
-    case 'probe_cc':
-      return new Intl.Collator(locale).compare(getLocalisedRegionName(a, locale), getLocalisedRegionName(b, locale))
+    // case 'probe_cc':
+    //   return new Intl.Collator(locale).compare(getLocalisedRegionName(a, locale), getLocalisedRegionName(b, locale))
     default:
       return new Intl.Collator(locale).compare(a, b)
   }

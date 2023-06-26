@@ -43,7 +43,7 @@ const GRID_MAX_HEIGHT = 600
 export const prepareDataForGridChart = (data, query, locale) => {
   const rows = []
   const rowLabels = {}
-  let reshapedData = {}
+  const reshapedData = {}
 
   data.forEach((item) => {
     // Convert non-string keys (e.g `probe_asn`) to string
@@ -60,9 +60,9 @@ export const prepareDataForGridChart = (data, query, locale) => {
 
   const reshapedDataWithoutHoles = fillDataHoles(reshapedData, query)
 
-  rows.sort((a,b) => sortRows(a, b, query.axis_y, locale))
+  const sortedRowKeys = rows.sort((a, b) => (sortRows(rowLabels[a], rowLabels[b], query.axis_y, locale)))
 
-  return [reshapedDataWithoutHoles, rows, rowLabels]
+  return [reshapedDataWithoutHoles, sortedRowKeys, rowLabels]
 }
 
 /**

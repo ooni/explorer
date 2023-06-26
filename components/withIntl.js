@@ -28,19 +28,11 @@ export const LocaleProvider = ({ children }) => {
       return defaultMessages
     }
   }, [locale, defaultLocale])
-  
-  const fixedLocale = (locale) => {
-    if (locale === 'pt_BR') return 'pt'
-    if (locale === 'pt_PT') return 'pt-PT'
-    if (locale === 'zh_CN') return 'zh-Hant'
-    if (locale === 'zh_HK') return 'zh-Hant-HK'
-    return locale
-  }
 
   return (
     <IntlProvider 
       defaultLocale={defaultLocale}
-      locale={fixedLocale(locale)}
+      locale={locale}
       messages={messages}
       key={locale}
     >

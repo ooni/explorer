@@ -1,15 +1,19 @@
 import { countryList } from 'country-util'
 import '@formatjs/intl-displaynames/polyfill'
 
+const getLocale = (locale) => {
+  return locale === 'zh-cn' ? 'zh-Hant' : locale
+}
 // eventually we can remove this, but currently Chrome doesn't have the translations for UN M.49 area codes implemented so we need to polyfill
 process.env.LOCALES.forEach((locale) => {
-  // if (locale === 'zh_CN') locale = 'zh-Hant'
-  // if (locale === 'zh_HK') locale = 'zh-Hant-HK'
+  locale = getLocale(locale)
 
   require(`@formatjs/intl-displaynames/locale-data/${locale}`)
 })
 
 export const getLocalisedRegionName = (regionCode, locale) => {
+  locale = getLocale(locale)
+
   try {
     return new Intl.DisplayNames([locale], { type: 'region' }).of(String(regionCode))
   } catch (e) {
@@ -18,6 +22,8 @@ export const getLocalisedRegionName = (regionCode, locale) => {
 }
 
 export const getLocalisedLanguageName = (regionCode, locale) => {
+  locale = getLocale(locale)
+
   try {
     return new Intl.DisplayNames([locale], { type: 'language' }).of(String(regionCode))
   } catch (e) {

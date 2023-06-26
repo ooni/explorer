@@ -11,13 +11,15 @@ const supportedLanguages = glob.sync(`${TRANSLATED_STRINGS_DIR}/**/*.json`).map(
 // Copy latest files from `translations`
 supportedLanguages.forEach((lang) => {
   console.log('> Getting latest translations for:', lang)
-  writeFileSync(`${LANG_DIR}/${lang}.json`, readFileSync(`${TRANSLATED_STRINGS_DIR}/${lang}/strings.json`))
+  const formattedLang = lang.toLowerCase().replace('_', '-')
+  writeFileSync(`${LANG_DIR}/${formattedLang}.json`, readFileSync(`${TRANSLATED_STRINGS_DIR}/${lang}/strings.json`))
 })
 
 // Build the locale files to be sent to the browser
 const translationsMap = supportedLanguages
   .reduce((t, lang) => {
-    t[lang] = JSON.parse(readFileSync(`${LANG_DIR}/${lang}.json`))
+    const formattedLang = lang.toLowerCase().replace('_', '-')
+    t[formattedLang] = JSON.parse(readFileSync(`${LANG_DIR}/${formattedLang}.json`))
     return t
   }, {})
 
