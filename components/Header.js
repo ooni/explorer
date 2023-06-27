@@ -4,7 +4,10 @@ import { useRouter } from 'next/router'
 import { useIntl } from 'react-intl'
 
 const Header = () => {
-  const canonical = 'https://explorer.ooni.org' + useRouter().asPath.split('?')[0]
+  const { asPath, locale, defaultLocale } = useRouter()
+
+  const lang = locale === defaultLocale ? '' : `/${locale}`
+  const canonical = 'https://explorer.ooni.org' + lang + asPath.split('?')[0]
 
   const intl = useIntl()
   const description = intl.formatMessage({ id: 'Home.Meta.Description' })
