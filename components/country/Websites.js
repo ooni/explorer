@@ -34,7 +34,7 @@ const WebsitesSection = ({ countryCode }) => {
           <FormattedMarkdown id='Country.Websites.Description' />
         </Text>
       </SimpleBox>
-      <ConfirmedBlockedCategory title='Confirmed blocked categories' />
+      <ConfirmedBlockedCategory />
       <Box my={4}>
         <ChartCountry
           testName='web_connectivity'

@@ -7,7 +7,7 @@ const CountryNameLabel = ({ countryCode, ...props }) => {
   const country = localisedCountries(intl.locale).find(o => o.iso3166_alpha2 === countryCode)
   const name = country ? country.localisedCountryName : countryCode
   return (
-    <Box {...props}>in {name}</Box>
+    <Box {...props}>{name}</Box>
   )
 }
 

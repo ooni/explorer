@@ -4,7 +4,7 @@ import { getCategoryCodesMap } from 'components/utils/categoryCodes'
 import { useRouter } from 'next/router'
 import { Box, Flex, Heading } from 'ooni-components'
 import { memo, useMemo } from 'react'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { MATFetcher } from 'services/fetchers'
 import useSWR from 'swr'
 
@@ -13,9 +13,10 @@ const swrOptions = {
   dedupingInterval: 10 * 60 * 1000,
 }
 
-const ConfirmedBlockedCategory = ({title}) => {
+const ConfirmedBlockedCategory = () => {
   const router = useRouter()
   const { query: { countryCode, since, until } } = router
+  const intl = useIntl()
 
   const categoryCodeMap = getCategoryCodesMap()
 
@@ -49,7 +50,7 @@ const ConfirmedBlockedCategory = ({title}) => {
 
   return (
       <Flex flexDirection='column' mb={60}>
-        <Box><Heading h={3} mt={40} mb={20}>{title}</Heading></Box>
+        <Box><Heading h={3} mt={40} mb={20}>{intl.formatMessage({id: 'Country.Websites.ConfirmedBlockedCategories'})}</Heading></Box>
         <Box>
           {(!blockedCategoriesData && !error) ? (
             <div> Loading ...</div>
