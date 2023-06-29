@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Container, Flex, Box, Text } from 'ooni-components'
-import { Tick, Cross } from 'ooni-components/dist/icons'
+import { Tick, Cross } from 'ooni-components/icons'
 import { MdWarning, MdPriorityHigh} from 'react-icons/md'
 import { FaQuestion } from 'react-icons/fa'
 import styled from 'styled-components'

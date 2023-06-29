@@ -21,12 +21,6 @@ import { useRouter } from 'next/router'
 const DAY_GRAIN_THRESHOLD_IN_MONTHS = 12
 const WEEK_GRAIN_THRESHOLD_IN_MONTHS = 36
 
-export const StyledLabel = styled(Label).attrs({
-  my: 2,
-  color: 'blue5',
-})`
-`
-
 const messages = defineMessages({
   'measurement_start_day': {
     id: 'MAT.Form.Label.AxisOption.measurement_start_day',
@@ -253,12 +247,9 @@ export const Form = ({ onSubmit, query }) => {
       <ConfirmationModal show={showConfirmation} onConfirm={onConfirm} onCancel={onCancel} />
       <Flex my={2} alignItems='center' flexDirection={['column', 'row']}>
         <Box width={[1, 3/12]} mx={[0, 2]}>
-          <StyledLabel>
-            <FormattedMessage id='Search.Sidebar.Country' />
-          </StyledLabel>
           <Controller
             render={({field}) => (
-              <Select {...field} width={1}>
+              <Select {...field} label={intl.formatMessage({id: 'Search.Sidebar.Country'})} width={1}>
                 <option value=''>{intl.formatMessage({id: 'MAT.Form.AllCountries'})}</option>
                 {sortedCountries.map((c, idx) =>(
                   <option key={idx} value={c.iso3166_alpha2}>{c.localisedCountryName}</option>
@@ -270,15 +261,13 @@ export const Form = ({ onSubmit, query }) => {
           />
         </Box>
         <Box width={[1, 1/12]} mx={[0, 2]}>
-          <StyledLabel>
-            <FormattedMessage id='Search.Sidebar.ASN' />
-          </StyledLabel>
           <Controller
             name='probe_asn'
             control={control}
             render={({field}) => (
               <Input
                 placeholder='AS1234'
+                label={intl.formatMessage({id: 'Search.Sidebar.ASN'})}
                 {...field}
               />
             )}
@@ -287,15 +276,13 @@ export const Form = ({ onSubmit, query }) => {
         <Box width={[1, 2/12]} mx={[0, 2]}>
           <Flex>
             <Box width={1} mx={[0, 2]}>
-              <StyledLabel>
-                <FormattedMessage id='Search.Sidebar.From' />
-              </StyledLabel>
               <Controller
                 name='since'
                 control={control}
                 render={({field}) => (
                   <Input
                     {...field}
+                    label={intl.formatMessage({id: 'Search.Sidebar.From'})}
                     onFocus={() => setShowDatePicker(true)}
                     onKeyDown={() => setShowDatePicker(false)}
                   />
@@ -303,15 +290,13 @@ export const Form = ({ onSubmit, query }) => {
               />
             </Box>
             <Box width={1} mx={[0, 2]}>
-              <StyledLabel>
-                <FormattedMessage id='Search.Sidebar.Until' />
-              </StyledLabel>
               <Controller
                 name='until'
                 control={control}
                 render={({field}) => (
                   <Input
                     {...field}
+                    label={intl.formatMessage({id: 'Search.Sidebar.Until'})}
                     onFocus={() => setShowDatePicker(true)}
                     onKeyDown={() => setShowDatePicker(false)}
                   />
@@ -328,14 +313,11 @@ export const Form = ({ onSubmit, query }) => {
           }
         </Box>
         <Box width={[1, 2/12]} mx={[0, 2]}>
-          <StyledLabel>
-            <FormattedMessage id='MAT.Form.Label.TimeGrain' />
-          </StyledLabel>
           <Controller
             name='time_grain'
             control={control}
             render={({field}) => (
-              <Select {...field} width={1}>
+              <Select {...field} label={intl.formatMessage({id: 'MAT.Form.Label.TimeGrain'})} width={1}>
                 {timeGrainOptions.map((option, idx) => (
                   <option key={idx} value={option}>{intl.formatMessage(messages[option])}</option>
                 ))}
@@ -344,14 +326,11 @@ export const Form = ({ onSubmit, query }) => {
           />
         </Box>
         <Box width={[1, 2/12]} mx={[0, 2]}>
-          <StyledLabel>
-            <FormattedMessage id='MAT.Form.Label.XAxis' />
-          </StyledLabel>
           <Controller
             name='axis_x'
             control={control}
             render={({field}) => (
-              <Select {...field} width={1}>
+              <Select {...field} label={intl.formatMessage({id: 'MAT.Form.Label.XAxis'})} width={1}>
                 {xAxisOptionsFiltered.map((option, idx) => (
                   <option key={idx} value={option}>{option.length > 0 ? intl.formatMessage(messages[option]) : option}</option>
                 ))}
@@ -360,14 +339,11 @@ export const Form = ({ onSubmit, query }) => {
           />
         </Box>
         <Box width={[1, 2/12]} mx={[0, 2]}>
-          <StyledLabel>
-            <FormattedMessage id='MAT.Form.Label.YAxis' />
-          </StyledLabel>
           <Controller
             name='axis_y'
             control={control}
             render={({field}) => (
-              <Select {...field} width={1}>
+              <Select {...field} label={intl.formatMessage({id: 'MAT.Form.Label.YAxis'})} width={1}>
                 {yAxisOptionsFiltered.map((option, idx) => (
                   <option key={idx} value={option}>{option.length > 0 ? intl.formatMessage(messages[option]) : option}</option>
                 ))}
@@ -378,14 +354,11 @@ export const Form = ({ onSubmit, query }) => {
       </Flex>
       <Flex my={2} flexDirection={['column', 'row']}>
         <Box width={[1, 1/5]} mx={[0, 2]}>
-          <StyledLabel>
-            <FormattedMessage id='Search.Sidebar.TestName' />
-          </StyledLabel>
           <Controller
             name='test_name'
             control={control}
             render={({field}) => (
-              <Select {...field} width={1}>
+              <Select {...field} label={intl.formatMessage({id: 'Search.Sidebar.TestName'})} width={1}>
                 <TestNameOptions includeAllOption={false} />
               </Select>
             )}
@@ -394,14 +367,12 @@ export const Form = ({ onSubmit, query }) => {
         {showWebConnectivityFilters &&
           <>
             <Box width={[1, 1/5]} mx={[0, 2]}>
-              <StyledLabel>
-                <FormattedMessage id='Search.Sidebar.Domain' />
-              </StyledLabel>
               <Controller
                 name='domain'
                 control={control}
                 render={({field}) => (
                   <Input
+                    label={intl.formatMessage({id: 'Search.Sidebar.Domain'})}
                     placeholder='twitter.com'
                     {...field}
                   />
@@ -409,14 +380,12 @@ export const Form = ({ onSubmit, query }) => {
               />
             </Box>
             <Box width={[1, 1/5]} mx={[0, 2]}>
-              <StyledLabel>
-                <FormattedMessage id='Search.Sidebar.Input' />
-              </StyledLabel>
               <Controller
                 name='input'
                 control={control}
                 render={({field}) => (
                   <Input
+                    label={intl.formatMessage({id: 'Search.Sidebar.Input'})}
                     placeholder='https://fbcdn.net/robots.txt'
                     {...field}
                   />
@@ -424,14 +393,11 @@ export const Form = ({ onSubmit, query }) => {
               />
             </Box>
             <Box width={[1, 1/5]} mx={[0, 2]}>
-              <StyledLabel>
-                <FormattedMessage id='Search.Sidebar.Categories' />
-              </StyledLabel>
               <Controller
                 name='category_code'
                 control={control}
                 render={({field}) => (
-                  <Select {...field}>
+                  <Select label={intl.formatMessage({id: 'Search.Sidebar.Categories'})} {...field}>
                     <option value="">{intl.formatMessage({id: 'MAT.Form.All'})}</option>
                     {categoryCodes
                       .sort((a, b) => a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0)

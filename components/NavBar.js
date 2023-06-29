@@ -4,7 +4,7 @@ import NLink from 'next/link'
 import styled from 'styled-components'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { getLocalisedLanguageName } from 'utils/i18nCountries'
-import ExplorerLogo from 'ooni-components/components/svgs/logos/Explorer-HorizontalMonochromeInverted.svg'
+import ExplorerLogo from 'ooni-components/svgs/logos/Explorer-HorizontalMonochromeInverted.svg'
 import {
   Link,
   Flex,
@@ -102,7 +102,9 @@ export const NavBar = ({color}) => {
         >
           <Box style={{zIndex: 1}}>
             <NLink href='/' passHref>
-              <Link><ExplorerLogo height='26px' /></Link>
+              <Link>
+                <ExplorerLogo height='26px' />
+              </Link>
             </NLink>
           </Box>
           <Box mt={[2, 0]}>

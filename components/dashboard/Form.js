@@ -7,7 +7,6 @@ import dayjs from 'services/dayjs'
 import { format } from 'date-fns'
 import { getLocalisedRegionName } from '../../utils/i18nCountries'
 
-import { StyledLabel } from '../aggregation/mat/Form'
 import DateRangePicker from '../DateRangePicker'
 
 const tomorrow = dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
@@ -95,7 +94,7 @@ export const Form = ({ onChange, query, availableCountries }) => {
     <form>
       <Flex alignItems={['center']} flexDirection={['column', 'row']}>
         <Box width={[1, 1/4]} mr={3} sx={{ zIndex: 2 }}>
-          <StyledLabel>{intl.formatMessage({id: 'Search.Sidebar.Country'})}</StyledLabel>
+          {intl.formatMessage({id: 'Search.Sidebar.Country'})}
           {<Controller
             render={({field}) => (
               <MultiSelect
@@ -113,13 +112,13 @@ export const Form = ({ onChange, query, availableCountries }) => {
         <Box width={[1, 1/5]}>
           <Flex>
             <Box width={1/2} mr={3}>
-              <StyledLabel>{intl.formatMessage({id: 'Search.Sidebar.From'})}</StyledLabel>
               <Controller
                 name='since'
                 control={control}
                 render={({field}) => (
                   <Input
                     {...field}
+                    label={intl.formatMessage({id: 'Search.Sidebar.From'})}
                     onFocus={() => setShowDatePicker(true)}
                     onKeyDown={() => setShowDatePicker(false)}
                     name={field.name}
@@ -130,12 +129,12 @@ export const Form = ({ onChange, query, availableCountries }) => {
               />
             </Box>
             <Box width={1/2} mr={3}>
-              <StyledLabel>{intl.formatMessage({id: 'Search.Sidebar.Until'})}</StyledLabel>
               <Controller
                 name='until'
                 control={control}
                 render={({field}) => (
                   <Input
+                    label={intl.formatMessage({id: 'Search.Sidebar.Until'})}
                     {...field}
                     onFocus={() => setShowDatePicker(true)}
                     onKeyDown={() => setShowDatePicker(false)}

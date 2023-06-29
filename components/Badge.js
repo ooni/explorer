@@ -38,7 +38,7 @@ const TestGroupBadge = ({ testName, ...props }) => {
 export const CategoryBadge = ({ categoryCode }) => {
   let IconComponent
   try {
-    IconComponent = require(`ooni-components/dist/icons/CategoryCode${categoryCode}`).default
+    IconComponent = require(`ooni-components/icons/CategoryCode${categoryCode}`).default
   } catch {
     IconComponent = null
   }

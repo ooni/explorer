@@ -1,5 +1,5 @@
 import { Box, Flex, Heading, Text } from 'ooni-components'
-import OONILogo from 'ooni-components/components/svgs/logos/OONI-HorizontalMonochrome.svg'
+import OONILogo from 'ooni-components/svgs/logos/OONI-HorizontalMonochrome.svg'
 import { useIntl } from 'react-intl'
 
 import { colorMap } from './colorMap'

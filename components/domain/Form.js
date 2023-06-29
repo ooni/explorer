@@ -8,7 +8,6 @@ import { MultiSelect } from 'react-multi-select-component'
 import styled from 'styled-components'
 
 import { getLocalisedRegionName } from 'utils/i18nCountries'
-import { StyledLabel } from '../aggregation/mat/Form'
 import DateRangePicker from '../DateRangePicker'
 import { useRouter } from 'next/router'
 
@@ -20,19 +19,6 @@ const defaultDefaultValues = {
   until: tomorrow,
   probe_cc: ''
 }
-
-const StyledSelectWithLabel = styled.div``
-
-const SelectWithLabel = (props) => (
-  <StyledSelectWithLabel>
-    <StyledLabel>
-      {props.label}
-    </StyledLabel>
-    <Select {...props} style={{width: '100%'}}>
-      {props.children}
-    </Select>
-  </StyledSelectWithLabel>
-)
 
 const countryOptions = []
 
@@ -104,13 +90,13 @@ const Form = ({ onSubmit, availableCountries = [] }) => {
         <Box width={[1, 1/5]}>
           <Flex>
             <Box width={2/3} mr={3}>
-              <StyledLabel>{intl.formatMessage({id: 'Search.Sidebar.From'})}</StyledLabel>
               <Controller
                 name='since'
                 control={control}
                 render={({field}) => (
                   <Input
                     {...field}
+                    label={intl.formatMessage({id: 'Search.Sidebar.From'})}
                     onFocus={() => setShowDatePicker(true)}
                     onKeyDown={() => setShowDatePicker(false)}
                   />
@@ -118,13 +104,13 @@ const Form = ({ onSubmit, availableCountries = [] }) => {
               />
             </Box>
             <Box width={2/3} mr={3}>
-              <StyledLabel>{intl.formatMessage({id: 'Search.Sidebar.Until'})}</StyledLabel>
               <Controller
                 name='until'
                 control={control}
                 render={({field}) => (
                   <Input
                     {...field}
+                    label={intl.formatMessage({id: 'Search.Sidebar.Until'})}
                     onFocus={() => setShowDatePicker(true)}
                     onKeyDown={() => setShowDatePicker(false)}
                   />
@@ -141,12 +127,11 @@ const Form = ({ onSubmit, availableCountries = [] }) => {
           }
         </Box>
         <Box width={[1, 1/4]} mr={3} sx={{ zIndex: 2 }}>
-          {/* <StyledLabel>{intl.formatMessage({id: 'Search.Sidebar.Country'})}</StyledLabel> */}
           <Controller
           control={control}
           name='probe_cc'
           render={({field}) => (
-            <SelectWithLabel
+            <Select
               {...field}
               pt={2}
               label={intl.formatMessage({id: 'Search.Sidebar.Country'})}
@@ -158,7 +143,7 @@ const Form = ({ onSubmit, availableCountries = [] }) => {
                   <option key={value} value={value}>{name}</option>
                 )
               })}
-            </SelectWithLabel>
+            </Select>
           )}
         />
         </Box>

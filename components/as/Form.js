@@ -5,7 +5,6 @@ import { useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
 import { format } from 'date-fns'
 
-import { StyledLabel } from '../aggregation/mat/Form'
 import DateRangePicker from '../DateRangePicker'
 
 const Form = ({ onSubmit, since, until }) => {
@@ -52,13 +51,13 @@ const Form = ({ onSubmit, since, until }) => {
         <Box width={[1, 1/5]}>
           <Flex>
             <Box width={2/3} mr={3}>
-              <StyledLabel>{intl.formatMessage({id: 'Search.Sidebar.From'})}</StyledLabel>
               <Controller
                 name='since'
                 control={control}
                 render={({field}) => (
                   <Input
                     {...field}
+                    label={intl.formatMessage({id: 'Search.Sidebar.From'})}
                     onFocus={() => setShowDatePicker(true)}
                     onKeyDown={() => setShowDatePicker(false)}
                   />
@@ -66,13 +65,13 @@ const Form = ({ onSubmit, since, until }) => {
               />
             </Box>
             <Box width={2/3} mr={3}>
-              <StyledLabel>{intl.formatMessage({id: 'Search.Sidebar.Until'})}</StyledLabel>
               <Controller
                 name='until'
                 control={control}
                 render={({field}) => (
                   <Input
                     {...field}
+                    label={intl.formatMessage({id: 'Search.Sidebar.Until'})}
                     onFocus={() => setShowDatePicker(true)}
                     onKeyDown={() => setShowDatePicker(false)}
                   />
