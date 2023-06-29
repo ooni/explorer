@@ -98,25 +98,29 @@ export const NavBar = ({ color }) => {
           alignItems={['flex-start', 'center']}
         >
           <Box style={{ zIndex: 1 }}>
-            <NLink href='/' passHref>
+            <NLink href="/" passHref>
               <Link>
-                <ExplorerLogo height='26px' />
+                <ExplorerLogo height="26px" />
               </Link>
             </NLink>
           </Box>
           <Box mt={[2, 0]}>
             <Flex flexDirection={['column', 'row']} alignItems={'center'}>
-              <NavItem label={<FormattedMessage id='Navbar.Search' />} href='/search' />
-              <NavItem label={<FormattedMessage id='Navbar.Charts.MAT' />} href='/chart/mat' />
-              <NavItem label={<FormattedMessage id='Navbar.Charts.Circumvention' />} href='/chart/circumvention' />
-              <NavItem label={<FormattedMessage id='Navbar.Countries' />} href='/countries' />
-              <NavItem label={<FormattedMessage id='Navbar.Networks' />} href='/networks' />
-              <NavItem label={<FormattedMessage id='Navbar.Domains' />} href='/domains' />
+              <NavItem label={<FormattedMessage id="Navbar.Search" />} href="/search" />
+              <NavItem label={<FormattedMessage id="Navbar.Charts.MAT" />} href="/chart/mat" />
+              <NavItem
+                label={<FormattedMessage id="Navbar.Charts.Circumvention" />}
+                href="/chart/circumvention"
+              />
+              <NavItem label={<FormattedMessage id="Navbar.Countries" />} href="/countries" />
+              <NavItem label={<FormattedMessage id="Navbar.Networks" />} href="/networks" />
+              <NavItem label={<FormattedMessage id="Navbar.Domains" />} href="/domains" />
+              <NavItem label={<FormattedMessage id="Navbar.Reports" />} href="/reports" />
               {user?.logged_in && (
                 <Box ml={[0, 4]} my={[2, 0]}>
                   <StyledNavItem>
                     <NavItemLabel onClick={logoutUser}>
-                      <FormattedMessage id='General.Logout' />
+                      <FormattedMessage id="General.Logout" />
                     </NavItemLabel>
                     <Underline />
                   </StyledNavItem>

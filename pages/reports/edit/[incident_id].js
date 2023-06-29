@@ -1,0 +1,51 @@
+import Head from 'next/head'
+import NavBar from '/components/NavBar'
+import { Container, Heading } from 'ooni-components'
+
+import { updateIncidentReport, fetcher, apiEndpoints } from '/lib/api'
+import { useIntl } from 'react-intl'
+import IncidentForm from '/components/reports/form'
+import { useRouter } from 'next/router'
+import useSWR from 'swr'
+import { useMemo } from 'react'
+
+const EditReport = () => {
+  const intl = useIntl()
+
+  const { query } = useRouter()
+
+  const { data, error } = useSWR(
+    query.incident_id
+      ? apiEndpoints.SHOW_INCIDENT.replace(':incident_id', query.incident_id)
+      : null,
+    fetcher
+  )
+
+  const defaultValues = useMemo(() => {
+    if (data) {
+      const { update_time, ...rest } = data.incident
+      return rest
+    } else {
+      return null
+    }
+  }, [data])
+
+  const onSubmit = (report) => {
+    updateIncidentReport(report)
+  }
+
+  return (
+    <>
+      <Head>
+        <title></title>
+      </Head>
+      <NavBar />
+      <Container>
+        <Heading h={1}>Edit Report</Heading>
+        {defaultValues && <IncidentForm onSubmit={onSubmit} defaultValues={defaultValues} />}
+      </Container>
+    </>
+  )
+}
+
+export default EditReport
