@@ -4,10 +4,11 @@ import NavBar from '../../components/NavBar'
 import { Button, Container, Heading, Box, Link, Text, Flex } from 'ooni-components'
 import useSWR from 'swr'
 import { apiEndpoints, fetcher } from '/lib/api'
+import useUser from 'hooks/useUser'
 
 const ReportIndex = () => {
+  const { user } = useUser()
   const { data, error } = useSWR(apiEndpoints.SEARCH_INCIDENTS, fetcher)
-  console.log('DATA', data)
 
   return (
     <>
@@ -25,18 +26,22 @@ const ReportIndex = () => {
               </Link>
             </NLink>
             <Text>{incident.published ? 'published' : 'not published'}</Text>
-            <NLink href={`/reports/edit/${incident.id}`}>
-              <Button type="button" hollow>
-                Edit
-              </Button>
-            </NLink>
+            {user?.role === 'admin' && (
+              <NLink href={`/reports/edit/${incident.id}`}>
+                <Button type="button" hollow>
+                  Edit
+                </Button>
+              </NLink>
+            )}
           </Flex>
         ))}
-        <NLink href="/reports/create">
-          <Button type="button" hollow>
-            + Add Report
-          </Button>
-        </NLink>
+        {!!user && (
+          <NLink href="/reports/create">
+            <Button type="button" hollow>
+              + Add Report
+            </Button>
+          </NLink>
+        )}
       </Container>
     </>
   )

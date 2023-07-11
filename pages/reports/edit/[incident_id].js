@@ -7,15 +7,22 @@ import { useIntl } from 'react-intl'
 import Form from 'components/reports/Form'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
-import { useMemo } from 'react'
+import { useEffect, useMemo } from 'react'
+import useUser from 'hooks/useUser'
 
 const EditReport = () => {
   const intl = useIntl()
+  const router = useRouter()
+  const { loading, user } = useUser()
 
-  const { query } = useRouter()
+  useEffect(() => {
+    if (!user && !loading) router.push('/reports')
+  }, [user, loading])
+
+  const { query } = router
 
   const { data, error } = useSWR(
-    query.incident_id
+    query.incident_id && user
       ? apiEndpoints.SHOW_INCIDENT.replace(':incident_id', query.incident_id)
       : null,
     fetcher

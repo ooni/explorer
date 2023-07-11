@@ -4,6 +4,9 @@ import { Container, Heading } from 'ooni-components'
 import { createIncidentReport } from '/lib/api'
 import { useIntl } from 'react-intl'
 import Form from '/components/reports/Form'
+import useUser from 'hooks/useUser'
+import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 const defaultValues = {
   reported_by: null,
@@ -22,6 +25,12 @@ const defaultValues = {
 
 const CreateReport = () => {
   const intl = useIntl()
+  const router = useRouter()
+  const { loading, user } = useUser()
+
+  useEffect(() => {
+    if (!user && !loading) router.push('/reports')
+  }, [user, loading])
 
   const onSubmit = (report) => {
     createIncidentReport(report)
