@@ -9,6 +9,7 @@ import dayjs from 'services/dayjs'
 import { axiosResponseTime } from 'components/axios-plugins'
 import axios from 'axios'
 import { MATContextProvider } from 'components/aggregation/mat/MATContext'
+import { useIntl } from 'react-intl'
 
 const baseURL = process.env.NEXT_PUBLIC_OONI_API
 axiosResponseTime(axios)
@@ -41,9 +42,11 @@ const fetcher = (query) => {
     })
 }
 
-const MAT = ({ link }) => {
+const MATChart = ({ link, routerQuery }) => {
+  const intl = useIntl()
   const today = dayjs.utc().add(1, 'day')
   const monthAgo = dayjs.utc(today).subtract(1, 'month')
+  console.log('routerQuery', routerQuery)
 
   let searchParams
 
@@ -55,46 +58,41 @@ const MAT = ({ link }) => {
   }
 
   //TODO: make sure searchParams are only the ones that are allowed
+  const query = searchParams
+    ? {
+        test_name: 'web_connectivity',
+        axis_x: 'measurement_start_day',
+        since: monthAgo.format('YYYY-MM-DD'),
+        until: today.format('YYYY-MM-DD'),
+        time_grain: 'day',
+        ...searchParams,
+      }
+    : routerQuery
 
-  const query = {
-    test_name: 'web_connectivity',
-    axis_x: 'measurement_start_day',
-    since: monthAgo.format('YYYY-MM-DD'),
-    until: today.format('YYYY-MM-DD'),
-    time_grain: 'day',
-    ...searchParams,
-  }
-  console.log('searchParams', searchParams)
-  const { data, error, isValidating } = useSWR(searchParams ? query : null, fetcher, swrOptions)
+  const { data, error, isValidating } = useSWR(query ? query : null, fetcher, swrOptions)
 
   const showLoadingIndicator = useMemo(() => isValidating, [isValidating])
+
   console.log('data', data)
   return (
     <Box my={3}>
-      {data ? (
-        <MATContextProvider queryParams={searchParams}>
-          {error && <NoCharts message={error?.info ?? JSON.stringify(error)} />}
-          <Box sx={{ minHeight: '500px' }}>
-            {showLoadingIndicator && (
-              <Box>
-                {/* <h2>{intl.formatMessage({id: 'General.Loading'})}</h2> */}
-                <h2>LOADING</h2>
-              </Box>
-            )}
-            {data && data.data.dimension_count == 0 && <FunnelChart data={data.data.result} />}
-            {data && data.data.dimension_count == 1 && (
-              <StackedBarChart data={data} query={query} />
-            )}
-            {data && data.data.dimension_count > 1 && (
-              <TableView data={data.data.result} query={query} />
-            )}
-          </Box>
-        </MATContextProvider>
-      ) : (
-        <>Chart not available</>
-      )}
+      <MATContextProvider queryParams={searchParams}>
+        {error && <NoCharts message={error?.info ?? JSON.stringify(error)} />}
+        <Box sx={{ minHeight: '500px' }}>
+          {showLoadingIndicator && (
+            <Box>
+              <h2>{intl.formatMessage({ id: 'General.Loading' })}</h2>
+            </Box>
+          )}
+          {data && data.data.dimension_count == 0 && <FunnelChart data={data.data.result} />}
+          {data && data.data.dimension_count == 1 && <StackedBarChart data={data} query={query} />}
+          {data && data.data.dimension_count > 1 && (
+            <TableView data={data.data.result} query={query} />
+          )}
+        </Box>
+      </MATContextProvider>
     </Box>
   )
 }
 
-export default MAT
+export default MATChart

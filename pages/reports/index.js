@@ -8,6 +8,7 @@ import { apiEndpoints, fetcher } from '/lib/api'
 const ReportIndex = () => {
   const { data, error } = useSWR(apiEndpoints.SEARCH_INCIDENTS, fetcher)
   console.log('DATA', data)
+
   return (
     <>
       <Head>
@@ -15,22 +16,26 @@ const ReportIndex = () => {
       </Head>
       <NavBar />
       <Container>
-        <Heading h={1}>INDEX</Heading>
+        <Heading h={1}>Incident Reports</Heading>
         {data?.incidents.map((incident) => (
-          <Flex my={2} key={incident.id} justifyContent="space-between" alignItems="end">
+          <Flex my={2} key={incident.id} justifyContent="space-between" alignItems="center">
             <NLink href={`/reports/${incident.id}`} passHref>
               <Link>
-                <Heading h={3}>{incident.title}</Heading>
+                <Heading h={4}>{incident.title}</Heading>
               </Link>
             </NLink>
             <Text>{incident.published ? 'published' : 'not published'}</Text>
             <NLink href={`/reports/edit/${incident.id}`}>
-              <Button type="button">Edit</Button>
+              <Button type="button" hollow>
+                Edit
+              </Button>
             </NLink>
           </Flex>
         ))}
         <NLink href="/reports/create">
-          <Button type="button">+ Add Report</Button>
+          <Button type="button" hollow>
+            + Add Report
+          </Button>
         </NLink>
       </Container>
     </>

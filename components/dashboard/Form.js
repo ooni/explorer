@@ -15,46 +15,60 @@ const lastMonthToday = dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD')
 const defaultDefaultValues = {
   since: lastMonthToday,
   until: tomorrow,
-  probe_cc: ['CN', 'IR', 'RU']
+  probe_cc: ['CN', 'IR', 'RU'],
 }
 
 export const Form = ({ onChange, query, availableCountries }) => {
   const intl = useIntl()
 
-  const countryOptions = useMemo(() => availableCountries
-    .map(cc => ({
-      label: getLocalisedRegionName(cc, intl.locale),
-      value: cc
-    }))
-    .sort((a, b) => (new Intl.Collator(intl.locale).compare(a.label, b.label)))
-  , [availableCountries, intl])
+  const countryOptions = useMemo(
+    () =>
+      availableCountries
+        .map((cc) => ({
+          label: getLocalisedRegionName(cc, intl.locale),
+          value: cc,
+        }))
+        .sort((a, b) => new Intl.Collator(intl.locale).compare(a.label, b.label)),
+    [availableCountries, intl]
+  )
 
   const query2formValues = useMemo(() => {
     const countriesInQuery = query.probe_cc?.split(',') ?? defaultDefaultValues.probe_cc
     return {
       since: query?.since ?? defaultDefaultValues.since,
       until: query?.until ?? defaultDefaultValues.until,
-      probe_cc: countryOptions.filter(country => countriesInQuery.includes(country.value)),
+      probe_cc: countryOptions.filter((country) => countriesInQuery.includes(country.value)),
     }
   }, [countryOptions, query])
-
-  const multiSelectStrings = useMemo(() => ({
-    'allItemsAreSelected': intl.formatMessage({ id: 'ReachabilityDash.Form.Label.CountrySelect.AllSelected' }),
-    // 'clearSearch': 'Clear Search',
-    // 'clearSelected': 'Clear Selected',
-    // 'noOptions': 'No options',
-    'search': intl.formatMessage({ id: 'ReachabilityDash.Form.Label.CountrySelect.SearchPlaceholder' }),
-    'selectAll': intl.formatMessage({ id: 'ReachabilityDash.Form.Label.CountrySelect.SelectAll' }),
-    'selectAllFiltered': intl.formatMessage({ id: 'ReachabilityDash.Form.Label.CountrySelect.SelectAllFiltered' }),
-    'selectSomeItems': intl.formatMessage({ id: 'ReachabilityDash.Form.Label.CountrySelect.InputPlaceholder' }),
-    // 'create': 'Create',
-  }), [intl])
+  console.log('query2formValues', query2formValues)
+  const multiSelectStrings = useMemo(
+    () => ({
+      allItemsAreSelected: intl.formatMessage({
+        id: 'ReachabilityDash.Form.Label.CountrySelect.AllSelected',
+      }),
+      // 'clearSearch': 'Clear Search',
+      // 'clearSelected': 'Clear Selected',
+      // 'noOptions': 'No options',
+      search: intl.formatMessage({
+        id: 'ReachabilityDash.Form.Label.CountrySelect.SearchPlaceholder',
+      }),
+      selectAll: intl.formatMessage({ id: 'ReachabilityDash.Form.Label.CountrySelect.SelectAll' }),
+      selectAllFiltered: intl.formatMessage({
+        id: 'ReachabilityDash.Form.Label.CountrySelect.SelectAllFiltered',
+      }),
+      selectSomeItems: intl.formatMessage({
+        id: 'ReachabilityDash.Form.Label.CountrySelect.InputPlaceholder',
+      }),
+      // 'create': 'Create',
+    }),
+    [intl]
+  )
 
   const { control, getValues, watch, setValue, reset } = useForm({
-    defaultValues: query2formValues
+    defaultValues: query2formValues,
   })
 
-  useEffect(()=> {
+  useEffect(() => {
     reset(query2formValues)
   }, [query2formValues, reset])
 
@@ -63,7 +77,7 @@ export const Form = ({ onChange, query, availableCountries }) => {
     return {
       since,
       until,
-      probe_cc: probe_cc.length > 0 ? probe_cc.map(d => d.value).join(',') : undefined
+      probe_cc: probe_cc.length > 0 ? probe_cc.map((d) => d.value).join(',') : undefined,
     }
   }
 
@@ -93,32 +107,34 @@ export const Form = ({ onChange, query, availableCountries }) => {
   return (
     <form>
       <Flex alignItems={['center']} flexDirection={['column', 'row']}>
-        <Box width={[1, 1/4]} mr={3} sx={{ zIndex: 2 }}>
-          {intl.formatMessage({id: 'Search.Sidebar.Country'})}
-          {<Controller
-            render={({field}) => (
-              <MultiSelect
-                options={countryOptions}
-                overrideStrings={multiSelectStrings}
-                name={field.name}
-                value={field.value}
-                onChange={field.onChange}
-              />
-            )}
-            name='probe_cc'
-            control={control}
-          />}
+        <Box width={[1, 1 / 4]} mr={3} sx={{ zIndex: 2 }}>
+          {intl.formatMessage({ id: 'Search.Sidebar.Country' })}
+          {
+            <Controller
+              render={({ field }) => (
+                <MultiSelect
+                  options={countryOptions}
+                  overrideStrings={multiSelectStrings}
+                  name={field.name}
+                  value={field.value}
+                  onChange={field.onChange}
+                />
+              )}
+              name="probe_cc"
+              control={control}
+            />
+          }
         </Box>
-        <Box width={[1, 1/5]}>
+        <Box width={[1, 1 / 5]}>
           <Flex>
-            <Box width={1/2} mr={3}>
+            <Box width={1 / 2} mr={3}>
               <Controller
-                name='since'
+                name="since"
                 control={control}
-                render={({field}) => (
+                render={({ field }) => (
                   <Input
                     {...field}
-                    label={intl.formatMessage({id: 'Search.Sidebar.From'})}
+                    label={intl.formatMessage({ id: 'Search.Sidebar.From' })}
                     onFocus={() => setShowDatePicker(true)}
                     onKeyDown={() => setShowDatePicker(false)}
                     name={field.name}
@@ -128,13 +144,13 @@ export const Form = ({ onChange, query, availableCountries }) => {
                 )}
               />
             </Box>
-            <Box width={1/2} mr={3}>
+            <Box width={1 / 2} mr={3}>
               <Controller
-                name='until'
+                name="until"
                 control={control}
-                render={({field}) => (
+                render={({ field }) => (
                   <Input
-                    label={intl.formatMessage({id: 'Search.Sidebar.Until'})}
+                    label={intl.formatMessage({ id: 'Search.Sidebar.Until' })}
                     {...field}
                     onFocus={() => setShowDatePicker(true)}
                     onKeyDown={() => setShowDatePicker(false)}
@@ -146,16 +162,15 @@ export const Form = ({ onChange, query, availableCountries }) => {
               />
             </Box>
           </Flex>
-          { showDatePicker &&
+          {showDatePicker && (
             <DateRangePicker
               handleRangeSelect={handleRangeSelect}
-              initialRange={{from: getValues('since'), to: getValues('until')}}
+              initialRange={{ from: getValues('since'), to: getValues('until') }}
               close={() => setShowDatePicker(false)}
             />
-          }
+          )}
         </Box>
       </Flex>
     </form>
   )
 }
-
