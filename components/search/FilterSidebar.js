@@ -1,11 +1,10 @@
 import React, { useEffect, useMemo, useState } from 'react'
 import styled from 'styled-components'
 import { useIntl } from 'react-intl'
-import { Flex, Box, Button, Input, Label, RadioGroup, RadioButton, Checkbox } from 'ooni-components'
+import { Flex, Box, Button, Input, Label, RadioGroup, RadioButton, Checkbox, Select } from 'ooni-components'
 import dayjs from 'services/dayjs'
 import { useForm, Controller } from 'react-hook-form'
 
-import Select from 'components/form/Select'
 import DateRangePicker from '../DateRangePicker'
 import { format } from 'date-fns'
 import { TestNameOptions } from '../TestNameOptions'
