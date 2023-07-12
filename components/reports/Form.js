@@ -1,11 +1,9 @@
-import { Input, Textarea, Button, Flex, Box, Checkbox, Modal } from 'ooni-components'
+import { Input, Textarea, Button, Flex, Box, Checkbox, Modal, TagsInput, MultiSelect} from 'ooni-components'
 import { useForm, Controller } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 import { useCallback, useState } from 'react'
 import DateRangePicker from '../DateRangePicker'
 import { format } from 'date-fns'
-import { TagsInput } from 'react-tag-input-component'
-import MultiSelect from 'react-select'
 import { localisedCountries } from 'utils/i18nCountries'
 import ReportDisplay from './ReportDisplay'
 
@@ -124,22 +122,22 @@ const Form = ({ defaultValues, onSubmit }) => {
         <Controller
           control={control}
           name="tags"
-          render={({ field }) => <TagsInput {...field} placeHolder="Tags" />}
+          render={({ field }) => <TagsInput {...field} mb={3} label="Tags" placeHolder="Enter to add the tag" />}
         />
         <Controller
           control={control}
           name="CCs"
-          render={({ field }) => <MultiSelect {...field} options={sortedCountries} isMulti />}
+          render={({ field }) => <MultiSelect {...field} mb={3} options={sortedCountries} label="Countries" />}
         />
         <Controller
           control={control}
           name="ASNs"
-          render={({ field }) => <TagsInput {...field} placeHolder="ASNs" />}
+          render={({ field }) => <TagsInput {...field} mb={3} label="ASNs" />}
         />
         <Controller
           control={control}
           name="Domains"
-          render={({ field }) => <TagsInput {...field} placeHolder="Domains" />}
+          render={({ field }) => <TagsInput {...field} mb={3} label="Domains" />}
         />
         <Controller
           control={control}
