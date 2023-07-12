@@ -28,7 +28,7 @@
     "markdown-to-jsx": "^7.1.9",
     "next": "^12.3.1",
     "nprogress": "^0.2.0",
-    "ooni-components": "1.0.0-alpha.1",
+    "ooni-components": "1.0.0-alpha.2",
     "pretty-ms": "^8.0.0",
     "prop-types": "15.8.1",
     "react": "17.0.2",
