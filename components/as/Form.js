@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, useMemo } from 'react'
 import { useForm, Controller } from 'react-hook-form'
-import { Box, Button, Flex, Input } from 'ooni-components'
+import { Box, Flex, Input } from 'ooni-components'
 import { useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
 import { format } from 'date-fns'
@@ -12,7 +12,7 @@ const Form = ({ onSubmit, since, until }) => {
   const initialLoad = useRef(false)
 
   const { control, getValues, watch, setValue, reset } = useForm({
-    defaultValues: { since, until }
+    defaultValues: { since, until },
   })
 
   const { since: updatedSince, until: updatedUntil } = watch()
@@ -35,11 +35,11 @@ const Form = ({ onSubmit, since, until }) => {
   useEffect(() => {
     // trigger submit only when the dates are valid
     if (
-      initialLoad.current && 
+      initialLoad.current &&
       dayjs(updatedSince, 'YYYY-MM-DD', true).isValid() &&
       dayjs(updatedUntil, 'YYYY-MM-DD', true).isValid()
     ) {
-      onSubmit({since: updatedSince, until: updatedUntil})
+      onSubmit({ since: updatedSince, until: updatedUntil })
     } else {
       initialLoad.current = true
     }
@@ -48,30 +48,30 @@ const Form = ({ onSubmit, since, until }) => {
   return (
     <form>
       <Flex alignItems={['center']}>
-        <Box width={[1, 1/5]}>
+        <Box width={[1, 1 / 5]}>
           <Flex>
-            <Box width={2/3} mr={3}>
+            <Box width={2 / 3} mr={3}>
               <Controller
                 name='since'
                 control={control}
-                render={({field}) => (
+                render={({ field }) => (
                   <Input
                     {...field}
-                    label={intl.formatMessage({id: 'Search.Sidebar.From'})}
+                    label={intl.formatMessage({ id: 'Search.Sidebar.From' })}
                     onFocus={() => setShowDatePicker(true)}
                     onKeyDown={() => setShowDatePicker(false)}
                   />
                 )}
               />
             </Box>
-            <Box width={2/3} mr={3}>
+            <Box width={2 / 3} mr={3}>
               <Controller
                 name='until'
                 control={control}
-                render={({field}) => (
+                render={({ field }) => (
                   <Input
                     {...field}
-                    label={intl.formatMessage({id: 'Search.Sidebar.Until'})}
+                    label={intl.formatMessage({ id: 'Search.Sidebar.Until' })}
                     onFocus={() => setShowDatePicker(true)}
                     onKeyDown={() => setShowDatePicker(false)}
                   />
@@ -79,13 +79,16 @@ const Form = ({ onSubmit, since, until }) => {
               />
             </Box>
           </Flex>
-          { showDatePicker &&
+          {showDatePicker && (
             <DateRangePicker
               handleRangeSelect={handleRangeSelect}
-              initialRange={{from: getValues('since'), to: getValues('until')}}
+              initialRange={{
+                from: getValues('since'),
+                to: getValues('until'),
+              }}
               close={() => setShowDatePicker(false)}
             />
-          }
+          )}
         </Box>
       </Flex>
     </form>

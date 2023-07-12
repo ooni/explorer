@@ -1,11 +1,7 @@
 import { useCallback, useEffect, useState, useMemo } from 'react'
 import PropTypes from 'prop-types'
 import { useForm, Controller } from 'react-hook-form'
-import styled from 'styled-components'
-import {
-  Flex, Box,
-  Label, Input, Button
-} from 'ooni-components'
+import { Flex, Box, Input, Button } from 'ooni-components'
 import dayjs from 'services/dayjs'
 import { format } from 'date-fns'
 import { defineMessages, useIntl, FormattedMessage } from 'react-intl'
@@ -22,48 +18,47 @@ const DAY_GRAIN_THRESHOLD_IN_MONTHS = 12
 const WEEK_GRAIN_THRESHOLD_IN_MONTHS = 36
 
 const messages = defineMessages({
-  'measurement_start_day': {
+  measurement_start_day: {
     id: 'MAT.Form.Label.AxisOption.measurement_start_day',
-    defaultMessage: ''
+    defaultMessage: '',
   },
-  'domain': {
+  domain: {
     id: 'MAT.Form.Label.AxisOption.domain',
-    defaultMessage: ''
+    defaultMessage: '',
   },
-  'input': {
+  input: {
     id: 'MAT.Form.Label.AxisOption.input',
-    defaultMessage: ''
+    defaultMessage: '',
   },
-  'category_code': {
+  category_code: {
     id: 'MAT.Form.Label.AxisOption.category_code',
-    defaultMessage: ''
+    defaultMessage: '',
   },
-  'probe_cc': {
+  probe_cc: {
     id: 'MAT.Form.Label.AxisOption.probe_cc',
-    defaultMessage: 'D'
+    defaultMessage: 'D',
   },
-  'probe_asn': {
+  probe_asn: {
     id: 'MAT.Form.Label.AxisOption.probe_asn',
-    defaultMessage: ''
+    defaultMessage: '',
   },
-  'hour': {
+  hour: {
     id: 'MAT.Form.TimeGrainOption.hour',
-    defaultMessage: ''
+    defaultMessage: '',
   },
-  'day': {
+  day: {
     id: 'MAT.Form.TimeGrainOption.day',
-    defaultMessage: ''
+    defaultMessage: '',
   },
-  'week': {
+  week: {
     id: 'MAT.Form.TimeGrainOption.week',
-    defaultMessage: ''
+    defaultMessage: '',
   },
-  'month': {
+  month: {
     id: 'MAT.Form.TimeGrainOption.month',
-    defaultMessage: ''
-  }
+    defaultMessage: '',
+  },
 })
-
 
 const xAxisOptions = [
   ['measurement_start_day', [], false],
@@ -76,15 +71,10 @@ const yAxisOptions = [
   ['category_code', ['web_connectivity'], false],
   ['probe_cc', [], true],
   ['probe_asn', [], false],
-  ['', [], false]
+  ['', [], false],
 ]
 
-const testsWithValidDomainFilter = [
-  'web_connectivity',
-  'http_requests',
-  'dns_consistency',
-  'tcp_connect'
-]
+const testsWithValidDomainFilter = ['web_connectivity', 'http_requests', 'dns_consistency', 'tcp_connect']
 
 const filterAxisOptions = (options, countryValue = '', testNameValue = 'web_connectivity') => {
   return options
@@ -100,7 +90,6 @@ function isValidFilterForTestname(testName = 'XX', arrayWithMapping) {
   return arrayWithMapping.includes(testName)
 }
 
-
 const tomorrow = dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
 const lastMonthToday = dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD')
 
@@ -115,7 +104,7 @@ const defaultDefaultValues = {
   until: tomorrow,
   axis_x: 'measurement_start_day',
   axis_y: '',
-  time_grain: 'day'
+  time_grain: 'day',
 }
 
 export const Form = ({ onSubmit, query }) => {
@@ -123,7 +112,7 @@ export const Form = ({ onSubmit, query }) => {
   const router = useRouter()
   const [showConfirmation, setShowConfirmation] = useState(false)
 
-  const defaultValues = useMemo(() => (Object.assign({}, defaultDefaultValues, query)), [query])
+  const defaultValues = useMemo(() => Object.assign({}, defaultDefaultValues, query), [query])
 
   const { handleSubmit, control, getValues, watch, reset, setValue } = useForm({
     defaultValues,
@@ -140,7 +129,7 @@ export const Form = ({ onSubmit, query }) => {
   const [until, setUntil] = useState(defaultValues['until'])
   const [countryValue, setCountryValue] = useState(defaultValues['probe_cc'])
   const [testNameValue, setTestNameValue] = useState(defaultValues['test_name'])
-  
+
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
       if (name === 'since') setSince(value['since'])
@@ -151,10 +140,14 @@ export const Form = ({ onSubmit, query }) => {
     return () => subscription.unsubscribe()
   }, [watch])
 
-  const sortedCountries = localisedCountries(intl.locale)
-    .sort((a,b) => new Intl.Collator(intl.locale).compare(a.localisedCountryName, b.localisedCountryName))
+  const sortedCountries = localisedCountries(intl.locale).sort((a, b) =>
+    new Intl.Collator(intl.locale).compare(a.localisedCountryName, b.localisedCountryName)
+  )
 
-  const showWebConnectivityFilters = useMemo(() => (isValidFilterForTestname(testNameValue, testsWithValidDomainFilter)), [testNameValue])
+  const showWebConnectivityFilters = useMemo(
+    () => isValidFilterForTestname(testNameValue, testsWithValidDomainFilter),
+    [testNameValue]
+  )
   // reset domain and input when web_connectivity is deselected
   useEffect(() => {
     if (!showWebConnectivityFilters) {
@@ -178,34 +171,40 @@ export const Form = ({ onSubmit, query }) => {
     setShowDatePicker(false)
   }
 
-  const onConfirm = useCallback((e) => {
-    setShowConfirmation(false)
-    handleSubmit(onSubmit)(e)
-  }, [handleSubmit, onSubmit])
+  const onConfirm = useCallback(
+    (e) => {
+      setShowConfirmation(false)
+      handleSubmit(onSubmit)(e)
+    },
+    [handleSubmit, onSubmit]
+  )
 
   const onCancel = useCallback((e) => {
     setShowConfirmation(false)
     e.preventDefault()
   }, [])
 
-  const maybeWarnBeforeSubmit = useCallback((e) => {
-    e.preventDefault()
+  const maybeWarnBeforeSubmit = useCallback(
+    (e) => {
+      e.preventDefault()
 
-    const [since, until, timeGrain] = getValues(['since', 'until', 'time_grain'])
-    const shouldShowConfirmationModal = () => {
-      if (timeGrain === 'month') return false
-      const diff = (dayjs(until).diff(dayjs(since), 'month'))
-      if (timeGrain === 'week') return diff > WEEK_GRAIN_THRESHOLD_IN_MONTHS
-      return diff > DAY_GRAIN_THRESHOLD_IN_MONTHS
-    }
+      const [since, until, timeGrain] = getValues(['since', 'until', 'time_grain'])
+      const shouldShowConfirmationModal = () => {
+        if (timeGrain === 'month') return false
+        const diff = dayjs(until).diff(dayjs(since), 'month')
+        if (timeGrain === 'week') return diff > WEEK_GRAIN_THRESHOLD_IN_MONTHS
+        return diff > DAY_GRAIN_THRESHOLD_IN_MONTHS
+      }
 
-    if (shouldShowConfirmationModal()) {
-      setShowConfirmation(true)
-    } else {
-      // Otherwise just continue with submission without interruption
-      onConfirm(e)
-    }
-  }, [getValues, onConfirm])
+      if (shouldShowConfirmationModal()) {
+        setShowConfirmation(true)
+      } else {
+        // Otherwise just continue with submission without interruption
+        onConfirm(e)
+      }
+    },
+    [getValues, onConfirm]
+  )
 
   const xAxisOptionsFiltered = useMemo(() => {
     return filterAxisOptions(xAxisOptions, countryValue, testNameValue)
@@ -235,7 +234,7 @@ export const Form = ({ onSubmit, query }) => {
       const availableValues = ['day', 'week']
       if (!availableValues.includes(getValues('time_grain'))) setValue('time_grain', 'day')
       return availableValues
-    } else if (diff >= 31 ) {
+    } else if (diff >= 31) {
       const availableValues = ['day', 'week', 'month']
       if (!availableValues.includes(getValues('time_grain'))) setValue('time_grain', 'day')
       return availableValues
@@ -245,14 +244,16 @@ export const Form = ({ onSubmit, query }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <ConfirmationModal show={showConfirmation} onConfirm={onConfirm} onCancel={onCancel} />
-      <Flex my={2} alignItems='center' flexDirection={['column', 'row']}>
-        <Box width={[1, 3/12]} mx={[0, 2]}>
+      <Flex my={2} alignItems='center' flexDirection={['column', 'row']} sx={{ gap: 3 }}>
+        <Box width={[1, 3 / 12]}>
           <Controller
-            render={({field}) => (
-              <Select {...field} label={intl.formatMessage({id: 'Search.Sidebar.Country'})} width={1}>
-                <option value=''>{intl.formatMessage({id: 'MAT.Form.AllCountries'})}</option>
-                {sortedCountries.map((c, idx) =>(
-                  <option key={idx} value={c.iso3166_alpha2}>{c.localisedCountryName}</option>
+            render={({ field }) => (
+              <Select {...field} label={intl.formatMessage({ id: 'Search.Sidebar.Country' })} width={1}>
+                <option value=''>{intl.formatMessage({ id: 'MAT.Form.AllCountries' })}</option>
+                {sortedCountries.map((c, idx) => (
+                  <option key={idx} value={c.iso3166_alpha2}>
+                    {c.localisedCountryName}
+                  </option>
                 ))}
               </Select>
             )}
@@ -260,43 +261,39 @@ export const Form = ({ onSubmit, query }) => {
             control={control}
           />
         </Box>
-        <Box width={[1, 1/12]} mx={[0, 2]}>
+        <Box width={[1, 1 / 12]}>
           <Controller
             name='probe_asn'
             control={control}
-            render={({field}) => (
-              <Input
-                placeholder='AS1234'
-                label={intl.formatMessage({id: 'Search.Sidebar.ASN'})}
-                {...field}
-              />
+            render={({ field }) => (
+              <Input placeholder='AS1234' label={intl.formatMessage({ id: 'Search.Sidebar.ASN' })} {...field} />
             )}
           />
         </Box>
-        <Box width={[1, 2/12]} mx={[0, 2]}>
-          <Flex>
-            <Box width={1} mx={[0, 2]}>
+        <Box width={[1, 3 / 12]}>
+          <Flex sx={{ gap: 3 }}>
+            <Box width={1}>
               <Controller
                 name='since'
                 control={control}
-                render={({field}) => (
+                render={({ field }) => (
                   <Input
                     {...field}
-                    label={intl.formatMessage({id: 'Search.Sidebar.From'})}
+                    label={intl.formatMessage({ id: 'Search.Sidebar.From' })}
                     onFocus={() => setShowDatePicker(true)}
                     onKeyDown={() => setShowDatePicker(false)}
                   />
                 )}
               />
             </Box>
-            <Box width={1} mx={[0, 2]}>
+            <Box width={1}>
               <Controller
                 name='until'
                 control={control}
-                render={({field}) => (
+                render={({ field }) => (
                   <Input
                     {...field}
-                    label={intl.formatMessage({id: 'Search.Sidebar.Until'})}
+                    label={intl.formatMessage({ id: 'Search.Sidebar.Until' })}
                     onFocus={() => setShowDatePicker(true)}
                     onKeyDown={() => setShowDatePicker(false)}
                   />
@@ -304,119 +301,136 @@ export const Form = ({ onSubmit, query }) => {
               />
             </Box>
           </Flex>
-          { showDatePicker &&
+          {showDatePicker && (
             <DateRangePicker
               handleRangeSelect={handleRangeSelect}
-              initialRange={{from: getValues('since'), to: getValues('until')}}
+              initialRange={{
+                from: getValues('since'),
+                to: getValues('until'),
+              }}
               close={() => setShowDatePicker(false)}
             />
-          }
+          )}
         </Box>
-        <Box width={[1, 2/12]} mx={[0, 2]}>
+        <Box width={[1, 2 / 12]}>
           <Controller
             name='time_grain'
             control={control}
-            render={({field}) => (
-              <Select {...field} label={intl.formatMessage({id: 'MAT.Form.Label.TimeGrain'})} width={1}>
+            render={({ field }) => (
+              <Select {...field} label={intl.formatMessage({ id: 'MAT.Form.Label.TimeGrain' })} width={1}>
                 {timeGrainOptions.map((option, idx) => (
-                  <option key={idx} value={option}>{intl.formatMessage(messages[option])}</option>
+                  <option key={idx} value={option}>
+                    {intl.formatMessage(messages[option])}
+                  </option>
                 ))}
               </Select>
             )}
           />
         </Box>
-        <Box width={[1, 2/12]} mx={[0, 2]}>
+        <Box width={[1, 2 / 12]}>
           <Controller
             name='axis_x'
             control={control}
-            render={({field}) => (
-              <Select {...field} label={intl.formatMessage({id: 'MAT.Form.Label.XAxis'})} width={1}>
+            render={({ field }) => (
+              <Select {...field} label={intl.formatMessage({ id: 'MAT.Form.Label.XAxis' })} width={1}>
                 {xAxisOptionsFiltered.map((option, idx) => (
-                  <option key={idx} value={option}>{option.length > 0 ? intl.formatMessage(messages[option]) : option}</option>
+                  <option key={idx} value={option}>
+                    {option.length > 0 ? intl.formatMessage(messages[option]) : option}
+                  </option>
                 ))}
               </Select>
             )}
           />
         </Box>
-        <Box width={[1, 2/12]} mx={[0, 2]}>
+        <Box width={[1, 2 / 12]}>
           <Controller
             name='axis_y'
             control={control}
-            render={({field}) => (
-              <Select {...field} label={intl.formatMessage({id: 'MAT.Form.Label.YAxis'})} width={1}>
+            render={({ field }) => (
+              <Select {...field} label={intl.formatMessage({ id: 'MAT.Form.Label.YAxis' })} width={1}>
                 {yAxisOptionsFiltered.map((option, idx) => (
-                  <option key={idx} value={option}>{option.length > 0 ? intl.formatMessage(messages[option]) : option}</option>
+                  <option key={idx} value={option}>
+                    {option.length > 0 ? intl.formatMessage(messages[option]) : option}
+                  </option>
                 ))}
               </Select>
             )}
           />
         </Box>
       </Flex>
-      <Flex my={2} flexDirection={['column', 'row']}>
-        <Box width={[1, 1/5]} mx={[0, 2]}>
+      <Flex my={2} flexDirection={['column', 'row']} sx={{ gap: 3 }}>
+        <Box width={[1, 1 / 5]}>
           <Controller
             name='test_name'
             control={control}
-            render={({field}) => (
-              <Select {...field} label={intl.formatMessage({id: 'Search.Sidebar.TestName'})} width={1}>
+            render={({ field }) => (
+              <Select {...field} label={intl.formatMessage({ id: 'Search.Sidebar.TestName' })} width={1}>
                 <TestNameOptions includeAllOption={false} />
               </Select>
             )}
           />
         </Box>
-        {showWebConnectivityFilters &&
+        {showWebConnectivityFilters && (
           <>
-            <Box width={[1, 1/5]} mx={[0, 2]}>
+            <Box width={[1, 1 / 5]}>
               <Controller
                 name='domain'
                 control={control}
-                render={({field}) => (
+                render={({ field }) => (
                   <Input
-                    label={intl.formatMessage({id: 'Search.Sidebar.Domain'})}
+                    label={intl.formatMessage({ id: 'Search.Sidebar.Domain' })}
                     placeholder='twitter.com'
                     {...field}
                   />
                 )}
               />
             </Box>
-            <Box width={[1, 1/5]} mx={[0, 2]}>
+            <Box width={[1, 1 / 5]}>
               <Controller
                 name='input'
                 control={control}
-                render={({field}) => (
+                render={({ field }) => (
                   <Input
-                    label={intl.formatMessage({id: 'Search.Sidebar.Input'})}
+                    label={intl.formatMessage({ id: 'Search.Sidebar.Input' })}
                     placeholder='https://fbcdn.net/robots.txt'
                     {...field}
                   />
                 )}
               />
             </Box>
-            <Box width={[1, 1/5]} mx={[0, 2]}>
+            <Box width={[1, 1 / 5]}>
               <Controller
                 name='category_code'
                 control={control}
-                render={({field}) => (
-                  <Select label={intl.formatMessage({id: 'Search.Sidebar.Categories'})} {...field}>
-                    <option value="">{intl.formatMessage({id: 'MAT.Form.All'})}</option>
+                render={({ field }) => (
+                  <Select
+                    label={intl.formatMessage({
+                      id: 'Search.Sidebar.Categories',
+                    })}
+                    {...field}
+                  >
+                    <option value=''>{intl.formatMessage({ id: 'MAT.Form.All' })}</option>
                     {categoryCodes
-                      .sort((a, b) => a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0)
+                      .sort((a, b) => (a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0))
                       .map(([code, label], idx) => (
-                        <option key={idx} value={code}>{intl.formatMessage({id: `CategoryCode.${code}.Name`})}</option>
-                    ))}
+                        <option key={idx} value={code}>
+                          {intl.formatMessage({
+                            id: `CategoryCode.${code}.Name`,
+                          })}
+                        </option>
+                      ))}
                   </Select>
                 )}
               />
             </Box>
           </>
-        }
+        )}
       </Flex>
       <Flex my={4}>
         <Button data-test-id='mat-form-submit' width={[1, 'unset']} onClick={maybeWarnBeforeSubmit}>
           <FormattedMessage id='MAT.Form.Submit' />
         </Button>
       </Flex>
-
     </form>
   )
 }
@@ -434,5 +448,5 @@ Form.propTypes = {
     probe_cc: PropTypes.string,
     category_code: PropTypes.string,
     time_grain: PropTypes.string,
-  })
+  }),
 }

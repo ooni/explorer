@@ -20,17 +20,23 @@ import { getLocalisedRegionName } from 'utils/i18nCountries'
 import BlockText from '../../components/BlockText'
 import { sortByKey } from '../../utils'
 
-
 const CountryList = ({ countries, itemsPerRow = 6, gridGap = 3 }) => {
   const intl = useIntl()
-  const gridTemplateColumns = ['1fr 1fr', '1fr 1fr', '1fr 1fr 1fr 1fr', [...Array(itemsPerRow)].map((i) => ('1fr')).join(' ')]
+  const gridTemplateColumns = [
+    '1fr 1fr',
+    '1fr 1fr',
+    '1fr 1fr 1fr 1fr',
+    [...Array(itemsPerRow)].map((i) => '1fr').join(' '),
+  ]
 
   return (
-    <Box sx={{
-      display: 'grid',
-      gridGap,
-      gridTemplateColumns 
-    }}>
+    <Box
+      sx={{
+        display: 'grid',
+        gridGap,
+        gridTemplateColumns,
+      }}
+    >
       {countries.map(([key, value]) => {
         return (
           <GridBox
@@ -38,15 +44,18 @@ const CountryList = ({ countries, itemsPerRow = 6, gridGap = 3 }) => {
             href={`/country/${key}`}
             title={
               <Flex mb={2} alignItems='center'>
-                <Box alignSelf='start'><Flag countryCode={key} size={22} border /></Box>
-                <Text fontSize={1} fontWeight='bold' ml={2} lineHeight='24px'>{getLocalisedRegionName(key, intl.locale)}</Text>
+                <Box alignSelf='start'>
+                  <Flag countryCode={key} size={22} border />
+                </Box>
+                <Text fontSize={1} fontWeight='bold' ml={2} lineHeight='24px'>
+                  {getLocalisedRegionName(key, intl.locale)}
+                </Text>
               </Flex>
             }
             multiCount={value}
           />
-          )}
         )
-      }
+      })}
     </Box>
   )
 }
@@ -58,44 +67,53 @@ const swrOptions = {
 
 const ChartContainer = ({ domain, ...props }) => {
   const intl = useIntl()
-  const { query: {since, until, probe_cc} } = useRouter()
+  const {
+    query: { since, until, probe_cc },
+  } = useRouter()
 
-  const queryParams = useMemo(() => ({
-    axis_x: 'measurement_start_day',
-    axis_y: 'probe_cc',
-    test_name: 'web_connectivity',
-    domain,
-    since,
-    until,
-    time_grain: 'day',
-  }), [domain, since, until])
+  const queryParams = useMemo(
+    () => ({
+      axis_x: 'measurement_start_day',
+      axis_y: 'probe_cc',
+      test_name: 'web_connectivity',
+      domain,
+      since,
+      until,
+      time_grain: 'day',
+    }),
+    [domain, since, until]
+  )
 
   return (
     <>
       <TestGroupBadge mb={3} testName='web_connectivity' />
-      <Chart
-        queryParams={queryParams}
-        {...props}
-      />
+      <Chart queryParams={queryParams} {...props} />
     </>
   )
 }
 
 const BlockingCountries = ({ blockedCountries }) => {
   const intl = useIntl()
-  const { query: {since, until, domain} } = useRouter()
+  const {
+    query: { since, until, domain },
+  } = useRouter()
 
   return (
     <>
-      <Heading h={4} mt={4}>{intl.formatMessage({id: 'Domain.CountriesBlocking.Title'}, {domain})}</Heading>
-      <Heading h={5} mb={3}>{intl.formatMessage({id: 'Domain.CountriesBlocking.FromTo'}, {since, until})}</Heading>
-      {!!blockedCountries?.length ? 
+      <Heading h={4} mt={4}>
+        {intl.formatMessage({ id: 'Domain.CountriesBlocking.Title' }, { domain })}
+      </Heading>
+      <Heading h={5} mb={3}>
+        {intl.formatMessage({ id: 'Domain.CountriesBlocking.FromTo' }, { since, until })}
+      </Heading>
+      {!!blockedCountries?.length ? (
         <>
-          <BlockText mb={3}>{intl.formatMessage({id: 'Domain.CountriesBlocking.Subtitle'})}</BlockText>
+          <BlockText mb={3}>{intl.formatMessage({ id: 'Domain.CountriesBlocking.Subtitle' })}</BlockText>
           <CountryList countries={blockedCountries} />
-        </> : 
-        <Text>{intl.formatMessage({id: 'Domain.CountriesBlocking.NoCountries'}, {domain})}</Text>
-      }
+        </>
+      ) : (
+        <Text>{intl.formatMessage({ id: 'Domain.CountriesBlocking.NoCountries' }, { domain })}</Text>
+      )}
     </>
   )
 }
@@ -105,8 +123,13 @@ const Canonical = ({ canonicalDomain }) => {
   return (
     <BlockText mb={4}>
       {intl.formatMessage(
-        {id: 'Domain.Canonical'},
-        {canonicalDomain: (<NLink passHref href={`/domain/${canonicalDomain}`}>{canonicalDomain}</NLink>)
+        { id: 'Domain.Canonical' },
+        {
+          canonicalDomain: (
+            <NLink passHref href={`/domain/${canonicalDomain}`}>
+              {canonicalDomain}
+            </NLink>
+          ),
         }
       )}
     </BlockText>
@@ -123,32 +146,33 @@ const DomainDashboard = ({ domain, categoryCode, canonicalDomain, countries }) =
 
   const blockedCountries = useMemo(() => {
     if (testedCountries) {
-      const countriesMap = testedCountries
-        .reduce((accum, current) => {
-          if (accum.get(current.probe_cc)) {
-            const countryData = accum.get(current.probe_cc)
+      const countriesMap = testedCountries.reduce((accum, current) => {
+        if (accum.get(current.probe_cc)) {
+          const countryData = accum.get(current.probe_cc)
 
-            accum.set(current.probe_cc, {
-              confirmed_count: countryData.confirmed_count + current.confirmed_count,
-              anomaly_count: countryData.anomaly_count + current.anomaly_count,
-              ok_count: countryData.ok_count + current.ok_count,
-            })
-          } else {
-            accum.set(current.probe_cc, {
-              confirmed_count: current.confirmed_count,
-              anomaly_count: current.anomaly_count,
-              ok_count: current.ok_count
-            })
-          }
-          return accum
-        }, new Map())
-      return [...countriesMap].filter(([key, value]) => value.confirmed_count > 0).sort((a, b) => (b[1].confirmed_count - a[1].confirmed_count))
+          accum.set(current.probe_cc, {
+            confirmed_count: countryData.confirmed_count + current.confirmed_count,
+            anomaly_count: countryData.anomaly_count + current.anomaly_count,
+            ok_count: countryData.ok_count + current.ok_count,
+          })
+        } else {
+          accum.set(current.probe_cc, {
+            confirmed_count: current.confirmed_count,
+            anomaly_count: current.anomaly_count,
+            ok_count: current.ok_count,
+          })
+        }
+        return accum
+      }, new Map())
+      return [...countriesMap]
+        .filter(([key, value]) => value.confirmed_count > 0)
+        .sort((a, b) => b[1].confirmed_count - a[1].confirmed_count)
     }
     return null
   }, [testedCountries])
 
   const { data: recentMeasurements, error: recentMeasurementsError } = useSWR(
-    ['/api/v1/measurements', { limit: 5, failure: false, domain} ], 
+    ['/api/v1/measurements', { limit: 5, failure: false, domain }],
     simpleFetcher,
     swrOptions
   )
@@ -172,11 +196,15 @@ const DomainDashboard = ({ domain, categoryCode, canonicalDomain, countries }) =
   return (
     <>
       <Head>
-        <title>{intl.formatMessage({id: 'General.OoniExplorer'})} | {domain}</title>
+        <title>
+          {intl.formatMessage({ id: 'General.OoniExplorer' })} | {domain}
+        </title>
       </Head>
       <NavBar />
       <Container mt={5}>
-        <Heading h={1} mb={0}>{domain}</Heading>
+        <Heading h={1} mb={0}>
+          {domain}
+        </Heading>
         <Box mb={4}>
           <CategoryBadge categoryCode={categoryCode} />
         </Box>
@@ -184,7 +212,7 @@ const DomainDashboard = ({ domain, categoryCode, canonicalDomain, countries }) =
         <Box>
           {/* we want sticky header only while scrolling over the charts */}
           <StyledSticky>
-            <Box mb={3}>
+            <Box pb={3} pt={2}>
               <Form onSubmit={onSubmit} availableCountries={countries.map((c) => c.alpha_2)} />
             </Box>
           </StyledSticky>
@@ -203,32 +231,32 @@ export const getServerSideProps = async (context) => {
   const { domain } = context.query
 
   if (/^((xn--)?[a-z0-9\-]*\.)+((xn--)?[a-z0-9]*)$/.test(domain)) {
-    const client = axios.create({baseURL: process.env.NEXT_PUBLIC_OONI_API})
+    const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
     const path = '/api/_/domain_metadata'
 
     const { canonical_domain: canonicalDomain, category_code: categoryCode } = await client
-      .get(path, {params: {domain}})
-      .then((response)=> response.data)
+      .get(path, { params: { domain } })
+      .then((response) => response.data)
 
     const countriesR = await client.get('/api/_/countries')
     const countries = countriesR.data.countries
     countries.sort(sortByKey('name'))
-    
+
     return {
-      props: { 
-        domain, 
-        canonicalDomain, 
+      props: {
+        domain,
+        canonicalDomain,
         categoryCode,
-        countries
-      }
+        countries,
+      },
     }
   }
 
   return {
     redirect: {
       permanent: false,
-      destination: '/404'
-    }
+      destination: '/404',
+    },
   }
 }
 
