@@ -37,6 +37,9 @@ const EditReport = () => {
     }
   }, [data])
 
+  const onSubmit = (report) => {
+    return updateIncidentReport(report).then((data) => router.push(`/reports/${data.id}`))
+  }
 
   return (
     <>
@@ -46,7 +49,7 @@ const EditReport = () => {
       <NavBar />
       <Container>
         <Heading h={1}>Edit Report</Heading>
-        {defaultValues && <Form onSubmit={updateIncidentReport} defaultValues={defaultValues} />}
+        {defaultValues && <Form onSubmit={onSubmit} defaultValues={defaultValues} />}
       </Container>
     </>
   )

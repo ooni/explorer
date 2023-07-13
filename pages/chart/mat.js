@@ -84,7 +84,7 @@ const MeasurementAggregationToolkit = () => {
             <FormattedMessage id="MAT.SubTitle" />
           </Heading>
           <Form onSubmit={onSubmit} query={router.query} />
-          <MATChart routerQuery={query} />
+          <MATChart query={query} />
           {linkToAPIQuery && (
             <Box mt={[3]} ml={['unset', 'auto']}>
               <Flex>

@@ -1,7 +1,7 @@
 import { Heading, Flex, Box } from 'ooni-components'
 import { Badge } from 'components/Badge'
 import Markdown from 'markdown-to-jsx'
-import MATChart from 'components/MATChart'
+import { MATChartReportWrapper } from 'components/MATChart'
 
 const FormattedMarkdown = ({ children }) => {
   return (
@@ -9,7 +9,7 @@ const FormattedMarkdown = ({ children }) => {
       options={{
         overrides: {
           MAT: {
-            component: MATChart,
+            component: MATChartReportWrapper,
           },
         },
       }}

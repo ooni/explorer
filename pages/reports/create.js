@@ -33,7 +33,7 @@ const CreateReport = () => {
   }, [user, loading])
 
   const onSubmit = (report) => {
-    createIncidentReport(report)
+    return createIncidentReport(report).then((data) => router.push(`/reports/${data.id}`))
   }
 
   return (

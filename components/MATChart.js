@@ -42,13 +42,10 @@ const fetcher = (query) => {
     })
 }
 
-const MATChart = ({ link, routerQuery }) => {
-  const intl = useIntl()
+export const MATChartReportWrapper = ({link}) => {
+  let searchParams
   const today = dayjs.utc().add(1, 'day')
   const monthAgo = dayjs.utc(today).subtract(1, 'month')
-  console.log('routerQuery', routerQuery)
-
-  let searchParams
 
   try {
     if (link) searchParams = Object.fromEntries(new URL(link).searchParams)
@@ -58,25 +55,27 @@ const MATChart = ({ link, routerQuery }) => {
   }
 
   //TODO: make sure searchParams are only the ones that are allowed
-  const query = searchParams
-    ? {
-        test_name: 'web_connectivity',
-        axis_x: 'measurement_start_day',
-        since: monthAgo.format('YYYY-MM-DD'),
-        until: today.format('YYYY-MM-DD'),
-        time_grain: 'day',
-        ...searchParams,
-      }
-    : routerQuery
+  const query = {
+    test_name: 'web_connectivity',
+    axis_x: 'measurement_start_day',
+    since: monthAgo.format('YYYY-MM-DD'),
+    until: today.format('YYYY-MM-DD'),
+    time_grain: 'day',
+    ...searchParams,
+  }
 
+  return searchParams ? <MATChart query={query} /> : <bold>WRONG LINK FORMAT</bold>
+}
+
+const MATChart = ({ query }) => {
+  const intl = useIntl()
   const { data, error, isValidating } = useSWR(query ? query : null, fetcher, swrOptions)
 
   const showLoadingIndicator = useMemo(() => isValidating, [isValidating])
 
-  console.log('data', data)
   return (
     <Box my={3}>
-      <MATContextProvider queryParams={searchParams}>
+      <MATContextProvider queryParams={query}>
         {error && <NoCharts message={error?.info ?? JSON.stringify(error)} />}
         <Box sx={{ minHeight: '500px' }}>
           {showLoadingIndicator && (
