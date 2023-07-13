@@ -9,11 +9,24 @@ import ReportDisplay from './ReportDisplay'
 
 const Form = ({ defaultValues, onSubmit }) => {
   const intl = useIntl()
+
+  if (defaultValues.CCs.length) defaultValues = {
+    ...defaultValues, 
+    CCs: defaultValues.CCs.map((cc) => {
+      const ccObj = localisedCountries(intl.locale).find((co) => (co.iso3166_alpha2 === cc))
+      return {
+        label: ccObj.localisedCountryName, 
+        value: ccObj.iso3166_alpha2}
+      }
+    )
+  }
+
   const { handleSubmit, control, watch, setValue, getValues, formState } = useForm({
     defaultValues,
   })
   const { errors } = formState
   const [showPreview, setShowPreview] = useState(false)
+  const [submitError, setSubmitError] = useState(null)
 
   const sortedCountries = localisedCountries(intl.locale)
     .sort((a, b) =>
@@ -48,6 +61,14 @@ const Form = ({ defaultValues, onSubmit }) => {
     setShowDatePicker(false)
   }
 
+  const submit = (report) => {
+    return onSubmit({
+      ...report,
+      CCs: report.CCs.length ? report.CCs.map((cc) => cc.value) : [],
+      ASNs: report.ASNs.length ? report.ASNs.filter((as) => !isNaN(as)).map((as) => Number(as)) : []
+    })
+  }
+
   return (
     <>
       <Modal
@@ -58,7 +79,7 @@ const Form = ({ defaultValues, onSubmit }) => {
       >
         <ReportDisplay report={getPreviewValues()} />
       </Modal>
-      <form onSubmit={handleSubmit(onSubmit)}>
+      <form onSubmit={(e) => handleSubmit(submit)(e).catch((e) => setSubmitError(e.message))}>
         <Box mb={3}>
           <Controller
             control={control}
@@ -122,7 +143,7 @@ const Form = ({ defaultValues, onSubmit }) => {
         <Controller
           control={control}
           name="tags"
-          render={({ field }) => <TagsInput {...field} mb={3} label="Tags" placeHolder="Enter to add the tag" />}
+          render={({ field }) => <TagsInput {...field} mb={3} label="Tags" placeHolder="Press Enter to add tags" />}
         />
         <Controller
           control={control}
@@ -132,12 +153,12 @@ const Form = ({ defaultValues, onSubmit }) => {
         <Controller
           control={control}
           name="ASNs"
-          render={({ field }) => <TagsInput {...field} mb={3} label="ASNs" />}
+          render={({ field }) => <TagsInput {...field} mb={3} label="ASNs" placeHolder="Press Enter to add ASNs" />}
         />
         <Controller
           control={control}
           name="Domains"
-          render={({ field }) => <TagsInput {...field} mb={3} label="Domains" />}
+          render={({ field }) => <TagsInput {...field} mb={3} label="Domains" placeHolder="Press Enter to add domains" />}
         />
         <Controller
           control={control}
@@ -156,6 +177,7 @@ const Form = ({ defaultValues, onSubmit }) => {
           Show Preview
         </Button>
         <Button type="submit">Submit</Button>
+        {submitError && <>{submitError}</>}
       </form>
     </>
   )

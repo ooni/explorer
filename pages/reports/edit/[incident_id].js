@@ -37,9 +37,6 @@ const EditReport = () => {
     }
   }, [data])
 
-  const onSubmit = (report) => {
-    updateIncidentReport(report)
-  }
 
   return (
     <>
@@ -49,7 +46,7 @@ const EditReport = () => {
       <NavBar />
       <Container>
         <Heading h={1}>Edit Report</Heading>
-        {defaultValues && <Form onSubmit={onSubmit} defaultValues={defaultValues} />}
+        {defaultValues && <Form onSubmit={updateIncidentReport} defaultValues={defaultValues} />}
       </Container>
     </>
   )
