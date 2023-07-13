@@ -153,7 +153,10 @@ const Form = ({ defaultValues, onSubmit }) => {
         <Controller
           control={control}
           name="ASNs"
-          render={({ field }) => <TagsInput {...field} mb={3} label="ASNs" placeHolder="Press Enter to add ASNs" />}
+          rules={{validate: (val) => (
+            val.every((v) => !isNaN(v)) || 'Must be a number'
+          )}}
+          render={({ field }) => <TagsInput {...field} mb={3} label="ASNs" placeHolder="Press Enter to add ASNs" error={errors?.ASNs?.message} />}
         />
         <Controller
           control={control}
@@ -177,7 +180,7 @@ const Form = ({ defaultValues, onSubmit }) => {
           Show Preview
         </Button>
         <Button type="submit">Submit</Button>
-        {submitError && <>{submitError}</>}
+        <p>{submitError && <>{submitError}</>}</p>
       </form>
     </>
   )
