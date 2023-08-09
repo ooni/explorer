@@ -10,15 +10,6 @@ import { getLocalisedRegionName } from '../../utils/i18nCountries'
 import { StyledLabel } from '../aggregation/mat/Form'
 import DateRangePicker from '../DateRangePicker'
 
-const tomorrow = dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
-const lastMonthToday = dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD')
-
-const defaultDefaultValues = {
-  since: lastMonthToday,
-  until: tomorrow,
-  probe_cc: ['CN', 'IR', 'RU']
-}
-
 export const Form = ({ onChange, query, availableCountries }) => {
   const intl = useIntl()
 
@@ -31,10 +22,10 @@ export const Form = ({ onChange, query, availableCountries }) => {
   , [availableCountries, intl])
 
   const query2formValues = useMemo(() => {
-    const countriesInQuery = query.probe_cc?.split(',') ?? defaultDefaultValues.probe_cc
+    const countriesInQuery = query.probe_cc?.split(',') ?? ''
     return {
-      since: query?.since ?? defaultDefaultValues.since,
-      until: query?.until ?? defaultDefaultValues.until,
+      since: query?.since,
+      until: query?.until,
       probe_cc: countryOptions.filter(country => countriesInQuery.includes(country.value)),
     }
   }, [countryOptions, query])
