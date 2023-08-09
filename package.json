@@ -15,7 +15,7 @@
     "@nivo/funnel": "^0.80.0",
     "@nivo/heatmap": "^0.80.0",
     "@nivo/line": "^0.80.0",
-    "@sentry/nextjs": "^7.11.1",
+    "@sentry/nextjs": "^7.61.1",
     "axios": "^0.27.2",
     "buffer-from": "^1.1.2",
     "country-util": "^0.2.0",

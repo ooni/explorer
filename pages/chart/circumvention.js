@@ -17,19 +17,18 @@ const DashboardCircumvention = ({ availableCountries }) => {
 
   useEffect(() => {
     const { query } = router
-    if (Object.keys(query).length === 0) {
-      const tomorrow = dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
-      const monthAgo = dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD')
-      const probe_cc = ['CN', 'IR', 'RU'].join(',')
-      const href = {
-        query: {
-          since: monthAgo,
-          until: tomorrow,
-          probe_cc
-        },
-      }
-      router.replace(href, undefined, { shallow: true })
+    const tomorrow = dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
+    const monthAgo = dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD')
+    const probe_cc = ['CN', 'IR', 'RU'].join(',')
+    const href = {
+      query: {
+        since: monthAgo,
+        until: tomorrow,
+        probe_cc,
+        ...query
+      },
     }
+    router.replace(href, undefined, { shallow: true })
   }, [])
 
   // Sync page URL params with changes from form values
@@ -58,13 +57,15 @@ const DashboardCircumvention = ({ availableCountries }) => {
       <NavBar />
       <Container>
         <Heading h={1}><FormattedMessage id='ReachabilityDash.Heading.CircumventionTools' /></Heading>
-        {router.isReady && <>
           <Box my={2} bg='gray0' p={3}>
             <FormattedMarkdown id='ReachabilityDash.CircumventionTools.Description' />
           </Box>
-          <Form onChange={onChange} query={query} availableCountries={availableCountries} />
-          <Charts />
-        </>}
+          {Object.keys(query).length > 0 &&
+            <>
+              <Form onChange={onChange} query={query} availableCountries={availableCountries} />
+              <Charts />
+            </>
+          }
       </Container>
     </>
   )
