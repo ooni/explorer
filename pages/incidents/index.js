@@ -20,14 +20,14 @@ const ReportIndex = () => {
         <Heading h={1}>Incident Reports</Heading>
         {data?.incidents.map((incident) => (
           <Flex my={2} key={incident.id} justifyContent="space-between" alignItems="center">
-            <NLink href={`/reports/${incident.id}`} passHref>
+            <NLink href={`/incidents/${incident.id}`} passHref>
               <Link>
                 <Heading h={4}>{incident.title}</Heading>
               </Link>
             </NLink>
             <Text>{incident.published ? 'published' : 'not published'}</Text>
             {user?.role === 'admin' && (
-              <NLink href={`/reports/edit/${incident.id}`}>
+              <NLink href={`/incidents/edit/${incident.id}`}>
                 <Button type="button" hollow>
                   Edit
                 </Button>
@@ -36,7 +36,7 @@ const ReportIndex = () => {
           </Flex>
         ))}
         {!!user && (
-          <NLink href="/reports/create">
+          <NLink href="/incidents/create">
             <Button type="button" hollow>
               + Add Report
             </Button>

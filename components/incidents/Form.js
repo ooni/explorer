@@ -2,10 +2,11 @@ import { Input, Textarea, Button, Flex, Box, Checkbox, Modal, TagsInput, MultiSe
 import { useForm, Controller } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 import { useCallback, useState } from 'react'
-import DateRangePicker from '../DateRangePicker'
-import { format } from 'date-fns'
+// import DateRangePicker from '../DateRangePicker'
+// import { format } from 'date-fns'
 import { localisedCountries } from 'utils/i18nCountries'
 import ReportDisplay from './ReportDisplay'
+import { testNames } from '/components/test-info'
 
 const Form = ({ defaultValues, onSubmit }) => {
   const intl = useIntl()
@@ -21,12 +22,17 @@ const Form = ({ defaultValues, onSubmit }) => {
     )
   }
 
-  const { handleSubmit, control, watch, setValue, getValues, formState } = useForm({
+  const { handleSubmit, control, setValue, getValues, formState } = useForm({
     defaultValues,
   })
   const { errors } = formState
   const [showPreview, setShowPreview] = useState(false)
   const [submitError, setSubmitError] = useState(null)
+
+  const testNamesOptions = Object.entries(testNames).map(([k, v]) => ({
+    value: k,
+    label: intl.formatMessage({id: v.id}),
+  }))
 
   const sortedCountries = localisedCountries(intl.locale)
     .sort((a, b) =>
@@ -45,25 +51,29 @@ const Form = ({ defaultValues, onSubmit }) => {
     }
   }, [getValues])
 
-  const [showDatePicker, setShowDatePicker] = useState(false)
+  // const [showDatePicker, setShowDatePicker] = useState(false)
 
-  const handleRangeSelect = (range) => {
-    if (range?.from) {
-      setValue('start_time', format(range.from, 'y-MM-dd'))
-    } else {
-      setValue('start_time', null)
-    }
-    if (range?.to) {
-      setValue('end_time', format(range.to, 'y-MM-dd'))
-    } else {
-      setValue('end_time', null)
-    }
-    setShowDatePicker(false)
-  }
+  // const handleRangeSelect = (range) => {
+  //   if (range?.from) {
+  //     setValue('start_time', format(range.from, 'y-MM-dd'))
+  //   } else {
+  //     setValue('start_time', null)
+  //   }
+  //   if (range?.to) {
+  //     setValue('end_time', format(range.to, 'y-MM-dd'))
+  //   } else {
+  //     setValue('end_time', null)
+  //   }
+  //   setShowDatePicker(false)
+  // }
 
   const submit = (report) => {
+    console.log(report)
     return onSubmit({
       ...report,
+      start_time: `${report.start_time}:00Z`,
+      ...(report.end_time ? { end_time: `${report.end_time}:00Z` } : {end_time: null}),
+      test_names: report.test_names.length ? report.test_names.map((test_name) => test_name.value) : [],
       CCs: report.CCs.length ? report.CCs.map((cc) => cc.value) : [],
       ASNs: report.ASNs.length ? report.ASNs.filter((as) => !isNaN(as)).map((as) => Number(as)) : []
     })
@@ -91,14 +101,14 @@ const Form = ({ defaultValues, onSubmit }) => {
           control={control}
           name="title"
           render={({ field }) => (
-            <Input mb={3} {...field} label="Title" error={errors?.title?.message} />
+            <Input mb={3} {...field} label="Title*" error={errors?.title?.message} />
           )}
         />
         <Controller
           control={control}
           name="reported_by"
           render={({ field }) => (
-            <Input mb={3} {...field} label="Author" error={errors?.reported_by?.message} />
+            <Input mb={3} {...field} label="Author*" error={errors?.reported_by?.message} />
           )}
         />
         <Flex flexDirection={['column', 'row']} mb={3}>
@@ -109,9 +119,11 @@ const Form = ({ defaultValues, onSubmit }) => {
               render={({ field }) => (
                 <Input
                   {...field}
-                  onFocus={() => setShowDatePicker(true)}
-                  onKeyDown={() => setShowDatePicker(false)}
-                  label="Start Time"
+                  required
+                  type="datetime-local"
+                  // onFocus={() => setShowDatePicker(true)}
+                  // onKeyDown={() => setShowDatePicker(false)}
+                  label="Start Time*"
                   id="start_time"
                 />
               )}
@@ -124,8 +136,9 @@ const Form = ({ defaultValues, onSubmit }) => {
               render={({ field }) => (
                 <Input
                   {...field}
-                  onFocus={() => setShowDatePicker(true)}
-                  onKeyDown={() => setShowDatePicker(false)}
+                  type="datetime-local"
+                  // onFocus={() => setShowDatePicker(true)}
+                  // onKeyDown={() => setShowDatePicker(false)}
                   label="End Time"
                   id="end_time"
                 />
@@ -133,17 +146,22 @@ const Form = ({ defaultValues, onSubmit }) => {
             />
           </Box>
         </Flex>
-        {showDatePicker && (
+        {/* {showDatePicker && (
           <DateRangePicker
             handleRangeSelect={handleRangeSelect}
             initialRange={{ from: getValues('start_time'), to: getValues('end_time') }}
             close={() => setShowDatePicker(false)}
           />
-        )}
+        )} */}
         <Controller
           control={control}
           name="tags"
           render={({ field }) => <TagsInput {...field} mb={3} label="Tags" placeHolder="Press Enter to add tags" />}
+        />
+        <Controller
+          control={control}
+          name="test_names"
+          render={({ field }) => <MultiSelect {...field} mb={3} options={testNamesOptions} label="Test Names" />}
         />
         <Controller
           control={control}

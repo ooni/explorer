@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 
 import SpinLoader from 'components/vendor/SpinLoader'
 import NotFound from 'components/NotFound'
-import ReportDisplay from '../../components/reports/ReportDisplay'
+import ReportDisplay from '../../components/incidents/ReportDisplay'
 
 const ReportView = () => {
   const { query } = useRouter()

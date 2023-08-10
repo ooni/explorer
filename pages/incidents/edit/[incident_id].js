@@ -4,7 +4,7 @@ import { Container, Heading } from 'ooni-components'
 
 import { updateIncidentReport, fetcher, apiEndpoints } from '/lib/api'
 import { useIntl } from 'react-intl'
-import Form from 'components/reports/Form'
+import Form from 'components/incidents/Form'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import { useEffect, useMemo } from 'react'
@@ -16,7 +16,7 @@ const EditReport = () => {
   const { loading, user } = useUser()
 
   useEffect(() => {
-    if (!user && !loading) router.push('/reports')
+    if (!user && !loading) router.push('/incidents')
   }, [user, loading])
 
   const { query } = router
@@ -30,7 +30,8 @@ const EditReport = () => {
 
   const defaultValues = useMemo(() => {
     if (data) {
-      const { update_time, ...rest } = data.incident
+      const { update_time, mine, ...rest } = data.incident
+      rest.start_time = rest.start_time.slice(0, -4)
       return rest
     } else {
       return null
@@ -38,7 +39,7 @@ const EditReport = () => {
   }, [data])
 
   const onSubmit = (report) => {
-    return updateIncidentReport(report).then((data) => router.push(`/reports/${data.id}`))
+    return updateIncidentReport(report).then((data) => router.push(`/incidents/${data.id}`))
   }
 
   return (

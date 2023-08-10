@@ -3,18 +3,18 @@ import NavBar from '/components/NavBar'
 import { Container, Heading } from 'ooni-components'
 import { createIncidentReport } from '/lib/api'
 import { useIntl } from 'react-intl'
-import Form from '/components/reports/Form'
+import Form from '/components/incidents/Form'
 import useUser from 'hooks/useUser'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
 const defaultValues = {
-  reported_by: null,
-  title: null,
-  text: null,
+  reported_by: '',
+  title: '',
+  text: '',
   published: false,
-  start_time: null,
-  end_time: null,
+  start_time: '',
+  end_time: '',
   tags: [],
   CCs: [],
   ASNs: [],
@@ -29,11 +29,11 @@ const CreateReport = () => {
   const { loading, user } = useUser()
 
   useEffect(() => {
-    if (!user && !loading) router.push('/reports')
+    if (!user && !loading) router.push('/incidents')
   }, [user, loading])
 
   const onSubmit = (report) => {
-    return createIncidentReport(report).then((data) => router.push(`/reports/${data.id}`))
+    return createIncidentReport(report).then((data) => router.push(`/incidents/${data.id}`))
   }
 
   return (
@@ -43,7 +43,7 @@ const CreateReport = () => {
       </Head>
       <NavBar />
       <Container>
-        <Heading h={1}>Create Report</Heading>
+        <Heading h={1}>Create Incident Report</Heading>
         <Form onSubmit={onSubmit} defaultValues={defaultValues} />
       </Container>
     </>
