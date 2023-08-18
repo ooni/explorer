@@ -65,7 +65,6 @@ const Chart = React.memo(function Chart({testGroup = null, queryParams = {}, set
                 data={chartData}
                 rowKeys={rowKeys}
                 rowLabels={rowLabels}
-                isGrouped={false}
               />
               {!!chartData?.size && <MATLink query={linkParams} />}
             </>

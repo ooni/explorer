@@ -10,8 +10,9 @@ import { axiosResponseTime } from 'components/axios-plugins'
 import axios from 'axios'
 import { MATContextProvider } from 'components/aggregation/mat/MATContext'
 import { useIntl } from 'react-intl'
+import { ResizableBox } from './aggregation/mat/Resizable'
+import FormattedMarkdown from './FormattedMarkdown'
 
-const baseURL = process.env.NEXT_PUBLIC_OONI_API
 axiosResponseTime(axios)
 
 const swrOptions = {
@@ -42,7 +43,7 @@ const fetcher = (query) => {
     })
 }
 
-export const MATChartReportWrapper = ({link}) => {
+export const MATChartReportWrapper = ({link, caption}) => {
   let searchParams
   const today = dayjs.utc().add(1, 'day')
   const monthAgo = dayjs.utc(today).subtract(1, 'month')
@@ -64,7 +65,11 @@ export const MATChartReportWrapper = ({link}) => {
     ...searchParams,
   }
 
-  return searchParams ? <MATChart query={query} /> : <bold>WRONG LINK FORMAT</bold>
+  return searchParams ? 
+    <>
+      <MATChart query={query} />
+      {caption && <FormattedMarkdown>{caption}</FormattedMarkdown>}
+    </> : <bold>WRONG LINK FORMAT</bold>
 }
 
 const MATChart = ({ query }) => {
@@ -72,21 +77,27 @@ const MATChart = ({ query }) => {
   const { data, error, isValidating } = useSWR(query ? query : null, fetcher, swrOptions)
 
   const showLoadingIndicator = useMemo(() => isValidating, [isValidating])
-
   return (
-    <Box my={3}>
+    <Box>  
       <MATContextProvider queryParams={query}>
         {error && <NoCharts message={error?.info ?? JSON.stringify(error)} />}
-        <Box sx={{ minHeight: '500px' }}>
-          {showLoadingIndicator && (
+        <Box>
+          {showLoadingIndicator ? (
             <Box>
               <h2>{intl.formatMessage({ id: 'General.Loading' })}</h2>
             </Box>
-          )}
-          {data && data.data.dimension_count == 0 && <FunnelChart data={data.data.result} />}
-          {data && data.data.dimension_count == 1 && <StackedBarChart data={data} query={query} />}
-          {data && data.data.dimension_count > 1 && (
-            <TableView data={data.data.result} query={query} />
+          ) : (
+            <>
+              {data?.data?.result?.length > 0 ? 
+                <Box sx={{ minHeight: '500px' }}>
+                  {data && data.data.dimension_count == 0 && <FunnelChart data={data.data.result} />}
+                  {data && data.data.dimension_count == 1 && <StackedBarChart data={data.data.result} query={query} />}
+                  {data && data.data.dimension_count > 1 && (
+                    <TableView data={data.data.result} query={query} />
+                  )}
+                </Box> : <ResizableBox><NoCharts /></ResizableBox>
+              }
+            </>
           )}
         </Box>
       </MATContextProvider>

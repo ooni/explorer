@@ -78,9 +78,6 @@ export const prepareDataForGridChart = (data, query, locale) => {
  * 
  * selectedRows - a subset of `rowKeys` representing which rows to render in the grid
  * 
- * isGrouped - Whether the data is already grouped by y-axis value
- * If `false`, `reshapeChartData()` will group the data as required
- *
  * height - uses a specific height provided by the container (e.g ResizableBox)
  * If not speicied, it calculates a height based on the number of rows, capped
  * at GRID_MAX_HEIGHT, which allows <VirtualRows> to render a subset of the data
@@ -89,7 +86,7 @@ export const prepareDataForGridChart = (data, query, locale) => {
  * header - an element showing some summary information on top of the charts
 }
 */
-const GridChart = ({ data, rowKeys, rowLabels, isGrouped = true, height = 'auto', header, selectedRows = null, noLabels = false }) => {
+const GridChart = ({ data, rowKeys, rowLabels, height = 'auto', header, selectedRows = null, noLabels = false }) => {
 
   // Fetch query state from context instead of router
   // because some params not present in the URL are injected in the context
@@ -178,7 +175,6 @@ GridChart.propTypes = {
   rowKeys: PropTypes.arrayOf(PropTypes.string),
   rowLabels: PropTypes.objectOf(PropTypes.string),
   selectedRows: PropTypes.arrayOf(PropTypes.string),
-  isGrouped: PropTypes.bool,
   height: PropTypes.oneOfType([
     PropTypes.string,
     PropTypes.number

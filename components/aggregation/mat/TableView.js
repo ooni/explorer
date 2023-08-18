@@ -71,7 +71,6 @@ const TableView = ({ data, query }) => {
           selectedRows={dataForCharts}
           rowKeys={rowKeys}
           rowLabels={rowLabels}
-          isGrouped={true}
         />
       </ResizableBox>
     </Flex>

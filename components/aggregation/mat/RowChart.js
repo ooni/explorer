@@ -46,10 +46,10 @@ const chartProps1D = (query, intl) => ({
     round: false
   },
   margin: {
-    top: 50,
-    right: 30,
+    top: 30,
+    right: 20,
     bottom: 100,
-    left: 80
+    left: 70
   },
   padding: 0.3,
   borderColor: { from: 'color', modifiers: [ [ 'darker', 1.6 ] ] },
