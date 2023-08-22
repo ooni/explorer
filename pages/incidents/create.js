@@ -43,7 +43,7 @@ const CreateReport = () => {
       </Head>
       <NavBar />
       <Container>
-        <Heading h={1}>Create Incident Report</Heading>
+        <Heading h={1}>Create Incident</Heading>
         <Form onSubmit={onSubmit} defaultValues={defaultValues} />
       </Container>
     </>

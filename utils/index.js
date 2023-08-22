@@ -50,3 +50,7 @@ export const getRange = (start, end) => {
   if ((start === end) || (start > end)) return [start]
   return [...Array(end - start + 1).keys()].map(idx => idx + start)
 }
+
+export const formatLongDate = (date, locale) => {
+  return new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(new Date(date))
+}

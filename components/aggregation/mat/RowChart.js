@@ -48,7 +48,7 @@ const chartProps1D = (query, intl) => ({
   margin: {
     top: 30,
     right: 20,
-    bottom: 100,
+    bottom: 80,
     left: 70
   },
   padding: 0.3,

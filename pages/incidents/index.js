@@ -5,10 +5,18 @@ import { Button, Container, Heading, Box, Link, Text, Flex } from 'ooni-componen
 import useSWR from 'swr'
 import { apiEndpoints, fetcher } from '/lib/api'
 import useUser from 'hooks/useUser'
+import ReportBox from '../../components/ReportBox'
+import { styled } from 'styled-components'
 
+const StyledGrid = styled(Box)`
+display: grid;
+grid-template-columns: 1fr 1fr;
+grid-auto-rows: 1fr;
+gap: 24px;
+`
 const ReportIndex = () => {
   const { user } = useUser()
-  const { data, error } = useSWR(apiEndpoints.SEARCH_INCIDENTS, fetcher)
+  const { data, error } = useSWR(`${apiEndpoints.SEARCH_INCIDENTS}?published=true`, fetcher)
 
   return (
     <>
@@ -17,31 +25,19 @@ const ReportIndex = () => {
       </Head>
       <NavBar />
       <Container>
-        <Heading h={1}>Incident Reports</Heading>
-        {data?.incidents.map((incident) => (
-          <Flex my={2} key={incident.id} justifyContent="space-between" alignItems="center">
-            <NLink href={`/incidents/${incident.id}`} passHref>
-              <Link>
-                <Heading h={4}>{incident.title}</Heading>
-              </Link>
-            </NLink>
-            <Text>{incident.published ? 'published' : 'not published'}</Text>
-            {user?.role === 'admin' && (
-              <NLink href={`/incidents/edit/${incident.id}`}>
-                <Button type="button" hollow>
-                  Edit
-                </Button>
-              </NLink>
-            )}
-          </Flex>
-        ))}
-        {!!user && (
-          <NLink href="/incidents/create">
-            <Button type="button" hollow>
-              + Add Report
-            </Button>
-          </NLink>
-        )}
+        <Heading h={1}>Incidents</Heading>
+        <StyledGrid>
+          {data?.incidents.map((incident) => (
+            <ReportBox 
+              key={incident.id}
+              id={incident.id}
+              country={incident.CCs[0]}
+              title={incident.title}
+              startDate={incident.start_time}
+              endDate={incident.end_time}
+            />
+          ))}
+        </StyledGrid>
       </Container>
     </>
   )

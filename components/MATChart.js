@@ -11,7 +11,7 @@ import axios from 'axios'
 import { MATContextProvider } from 'components/aggregation/mat/MATContext'
 import { useIntl } from 'react-intl'
 import { ResizableBox } from './aggregation/mat/Resizable'
-import FormattedMarkdown from './FormattedMarkdown'
+import { FormattedMarkdownBase } from './FormattedMarkdown'
 
 axiosResponseTime(axios)
 
@@ -66,10 +66,10 @@ export const MATChartReportWrapper = ({link, caption}) => {
   }
 
   return searchParams ? 
-    <>
+    <Box my={4}>
       <MATChart query={query} />
-      {caption && <FormattedMarkdown>{caption}</FormattedMarkdown>}
-    </> : <bold>WRONG LINK FORMAT</bold>
+      {caption && <FormattedMarkdownBase>{caption}</FormattedMarkdownBase>}
+    </Box> : <bold>WRONG LINK FORMAT</bold>
 }
 
 const MATChart = ({ query }) => {

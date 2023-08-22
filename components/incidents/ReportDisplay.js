@@ -3,8 +3,9 @@ import { Badge } from 'components/Badge'
 import Flag from 'components/Flag'
 import Markdown from 'markdown-to-jsx'
 import { MATChartReportWrapper } from 'components/MATChart'
-import { getLocalisedRegionName } from '../../utils/i18nCountries'
+import { getLocalisedRegionName } from 'utils/i18nCountries'
 import { useIntl } from 'react-intl'
+import { formatLongDate } from 'utils'
 
 const FormattedMarkdown = ({ children }) => {
   return (
@@ -20,10 +21,6 @@ const FormattedMarkdown = ({ children }) => {
       {children}
     </Markdown>
   )
-}
-
-const formatDate = (date, locale) => {
- return new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(new Date(date))
 }
 
 const ReportDisplay = ({ report }) => {
@@ -43,10 +40,9 @@ const ReportDisplay = ({ report }) => {
           </Heading>
         </Flex>
       )}
-      <p>{formatDate(report?.start_time, intl.locale)} - {report?.end_time ? formatDate(report?.end_time, intl.locale) : 'ongoing'}</p>
-      <p>created by {report?.reported_by}</p>
+      <Text color="gray6" mb={3}>{report?.start_time && formatLongDate(report?.start_time, intl.locale)} - {report?.end_time ? formatLongDate(report?.end_time, intl.locale) : 'ongoing'}</Text>
       {!!report?.tags?.length && (
-        <Flex>
+        <Flex mb={3}>
           {report.tags.map((tag) => (
             <Box key={tag} mr={2}>
               <Badge>{tag}</Badge>
@@ -54,8 +50,9 @@ const ReportDisplay = ({ report }) => {
           ))}
         </Flex>
       )}
-      {!!report?.domains?.length && <p>Domains: {report.domains.join(', ')}</p>}
-      <Box mt={3}>{report?.text && <FormattedMarkdown>{report.text}</FormattedMarkdown>}</Box>
+      <Text color="gray6" mb={4}>created by {report?.reported_by}</Text>
+      {/* {!!report?.domains?.length && <p>Domains: {report.domains.join(', ')}</p>} */}
+      <Box lineHeight="1.5">{report?.text && <FormattedMarkdown>{report.text}</FormattedMarkdown>}</Box>
     </>
   )
 }

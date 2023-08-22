@@ -6,8 +6,7 @@ import { useIntl } from 'react-intl'
 import Markdown from 'markdown-to-jsx'
 import { Link, theme } from 'ooni-components'
 
-const FormattedMarkdown = ({ id, defaultMessage, values }) => {
-  const intl = useIntl()
+export const FormattedMarkdownBase = ({ children }) => {
   return (
     <Markdown
       options={{
@@ -21,8 +20,18 @@ const FormattedMarkdown = ({ id, defaultMessage, values }) => {
         }
       }}
     >
-      {intl.formatMessage({id, defaultMessage}, values )}
+      {children}
     </Markdown>
+  )
+}
+
+const FormattedMarkdown = ({ id, defaultMessage, values }) => {
+  const intl = useIntl()
+
+  return (
+    <FormattedMarkdownBase>
+      {intl.formatMessage({id, defaultMessage}, values )}
+    </FormattedMarkdownBase>
   )
 }
 

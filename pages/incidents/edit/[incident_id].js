@@ -32,6 +32,7 @@ const EditReport = () => {
     if (data) {
       const { update_time, mine, ...rest } = data.incident
       rest.start_time = rest.start_time.slice(0, -4)
+      rest.end_time = rest?.end_time ? rest.end_time.slice(0, -4) : null
       return rest
     } else {
       return null
