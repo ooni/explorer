@@ -17,7 +17,7 @@ const IncidentsDashboard = () => {
       </Head>
       <NavBar />
       <Container>
-        <Heading h={1}>Incidents</Heading>
+        <Heading h={1}>Incidents Dashboard</Heading>
         {data?.incidents.map((incident) => (
           <Flex my={2} key={incident.id} justifyContent="space-between" alignItems="center">
             <NLink href={`/incidents/${incident.id}`} passHref>
@@ -38,7 +38,7 @@ const IncidentsDashboard = () => {
         {!!user && (
           <NLink href="/incidents/create">
             <Button type="button" hollow>
-              + Add Report
+              + Add Incident
             </Button>
           </NLink>
         )}

@@ -17,9 +17,15 @@ const Form = ({ defaultValues, onSubmit }) => {
       const ccObj = localisedCountries(intl.locale).find((co) => (co.iso3166_alpha2 === cc))
       return {
         label: ccObj.localisedCountryName, 
-        value: ccObj.iso3166_alpha2}
+        value: ccObj.iso3166_alpha2
       }
-    )
+    }),
+    test_names: defaultValues.test_names.map((tn) => {
+      return {
+        label: intl.formatMessage({id: testNames[tn].id}), 
+        value: tn
+      }
+    })
   }
 
   const { handleSubmit, control, setValue, getValues, formState } = useForm({
@@ -178,7 +184,7 @@ const Form = ({ defaultValues, onSubmit }) => {
         />
         <Controller
           control={control}
-          name="Domains"
+          name="domains"
           render={({ field }) => <TagsInput {...field} mb={3} label="Domains" placeHolder="Press Enter to add domains" />}
         />
         <Controller
