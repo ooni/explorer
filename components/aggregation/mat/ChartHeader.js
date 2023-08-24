@@ -85,7 +85,7 @@ export const ChartHeader = ({ options = {}}) => {
         </Heading>}
       </Box>
       <Box>
-        <Flex mb={2} justifyContent='space-between'>
+        <Flex mb={2} justifyContent='space-between' fontSize={14}>
           {options.legend !== false && <Flex justifyContent='center' my={2} flexWrap="wrap">
             <Legend label={intl.formatMessage({id: 'MAT.Table.Header.ok_count'})} color={colorMap['ok_count']} />
             <Legend label={intl.formatMessage({id: 'MAT.Table.Header.confirmed_count'})} color={colorMap['confirmed_count']} />

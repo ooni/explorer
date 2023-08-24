@@ -17,13 +17,13 @@ const ReportBox = ({country, startDate, endDate, title, id, ...props}) => {
       {country && (
         <Flex alignItems="center">
           <Flag countryCode={country} size={32} />
-          <Heading h={4} ml={2}>
+          <Heading h={28} ml={2}>
             {getLocalisedRegionName(country, intl.locale)}
           </Heading>
         </Flex>
       )}
       <Text color="gray6">{startDate && formatLongDate(startDate, intl.locale)} - {endDate ? formatLongDate(endDate, intl.locale) : 'ongoing'}</Text>
-      <p>{title}</p>
+      <Heading h={4}>{title}</Heading>
       {/* <p>{summary}</p> */}
       <Box textAlign="center" mt={2}>
         <NLink href={`/incidents/${id}`}>

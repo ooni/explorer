@@ -28,7 +28,7 @@ const ReportDisplay = ({ report }) => {
 
   return (
     <>
-      <Heading h={1} mt={4} mb={3} sx={{borderBottom: '1px solid', borderColor: 'gray3'}}>{report?.title}</Heading>
+      <Heading h={1} mt={4} mb={4} pb={3} sx={{borderBottom: '1px solid', borderColor: 'gray3'}}>{report?.title}</Heading>
       {/* <p>Published: {report.published}</p> */}
       {/* {!!report?.CCs?.length && <p>Countries: {report.CCs.join(', ')}</p>} */}
       {/* {!!report?.ASNs?.length && <p>ASNs: {report.ASNs.join(', ')}</p>} */}
@@ -52,7 +52,7 @@ const ReportDisplay = ({ report }) => {
       )}
       <Text color="gray6" mb={4}>created by {report?.reported_by}</Text>
       {/* {!!report?.domains?.length && <p>Domains: {report.domains.join(', ')}</p>} */}
-      <Box lineHeight="1.5">{report?.text && <FormattedMarkdown>{report.text}</FormattedMarkdown>}</Box>
+      <Box fontSize={18} lineHeight="1.5">{report?.text && <FormattedMarkdown>{report.text}</FormattedMarkdown>}</Box>
     </>
   )
 }

@@ -1,4 +1,4 @@
-import { Box, Container } from 'ooni-components'
+import { Box, Text } from 'ooni-components'
 import { StackedBarChart } from 'components/aggregation/mat/StackedBarChart'
 import { FunnelChart } from 'components/aggregation/mat/FunnelChart'
 import { NoCharts } from 'components/aggregation/mat/NoCharts'
@@ -68,7 +68,11 @@ export const MATChartReportWrapper = ({link, caption}) => {
   return searchParams ? 
     <Box my={4}>
       <MATChart query={query} />
-      {caption && <FormattedMarkdownBase>{caption}</FormattedMarkdownBase>}
+      {caption && (
+        <Text fontSize={1} mt={2}>
+          <FormattedMarkdownBase>{caption}</FormattedMarkdownBase>
+        </Text>
+      )}
     </Box> : <bold>WRONG LINK FORMAT</bold>
 }
 
