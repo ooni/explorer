@@ -26,7 +26,7 @@ gap: 24px;
 const ReportIndex = () => {
   const intl = useIntl()
 
-  const { data, error } = useSWR(`${apiEndpoints.SEARCH_INCIDENTS}?published=true`, fetcher)
+  const { data, error } = useSWR(apiEndpoints.SEARCH_INCIDENTS, fetcher)
 
   const {
     searchValue,
@@ -37,12 +37,14 @@ const ReportIndex = () => {
 
   const displayData = useMemo(() => {
     if (data) {
-      return data.incidents.map((incident) => ({
-        ...incident,
-        start_time: new Date(incident.start_time),
-        ...(incident.end_time && {end_time: new Date(incident.end_time)}),
-        sort_end_time: incident.end_time ? new Date(incident.end_time) : new Date()
-      }))
+      return data.incidents
+        .filter((incident) => incident.published)
+        .map((incident) => ({
+          ...incident,
+          start_time: new Date(incident.start_time),
+          ...(incident.end_time && {end_time: new Date(incident.end_time)}),
+          sort_end_time: incident.end_time ? new Date(incident.end_time) : new Date()
+        }))
     } else {
       return []
     }
