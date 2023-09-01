@@ -12,17 +12,24 @@ import * as yup from 'yup'
 const schema = yup
   .object({
     title: yup.string().required(),
+    reported_by: yup.string().required(),
     short_description: yup.string().required(),
     ASNs: yup.array().test({
       name: 'ASNsError',
       message: 'Only numbers allowed',
       test: (val) => val.every((v) => !isNaN(v.value)),
     }),
+    start_time: yup.string().required(),
     end_time: yup.string().test({
       name: 'EndTimeError',
       message: 'Must be after start time',
-      test: (val, testContext) => (new Date(testContext.parent.start_time).getTime() < new Date(val).getTime()),
+      test: (val, testContext) => {
+        if (val)
+          return new Date(testContext.parent.start_time).getTime() < new Date(val).getTime()
+        return true
+      },
     }),
+    text: yup.string().required(),
   })
 
 const Form = ({ defaultValues, onSubmit }) => {
@@ -137,10 +144,10 @@ const Form = ({ defaultValues, onSubmit }) => {
               render={({ field }) => (
                 <Input
                   {...field}
-                  required
                   type="datetime-local"
                   label="Start Time*"
                   id="start_time"
+                  error={errors?.start_time?.message}
                 />
               )}
             />
@@ -205,7 +212,7 @@ const Form = ({ defaultValues, onSubmit }) => {
               label="Text*"
               mb={3}
               minHeight={500}
-              error={errors?.title?.message}
+              error={errors?.text?.message}
             />
           )}
         />
