@@ -106,7 +106,7 @@ const Form = ({ defaultValues, onSubmit }) => {
         <ReportDisplay report={getPreviewValues()} />
       </Modal>
       <form onSubmit={(e) => handleSubmit(submit)(e).catch((e) => setSubmitError(e.message))}>
-        {user.role === 'admin' &&
+        {user?.role === 'admin' &&
           <Box mb={3}>
             <Controller
               control={control}
