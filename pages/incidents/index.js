@@ -117,6 +117,7 @@ const ReportIndex = () => {
               country={incident.CCs[0]}
               title={incident.title}
               startDate={incident.start_time}
+              shortDescription={incident.short_description}
               endDate={incident.end_time}
             />
           ))}

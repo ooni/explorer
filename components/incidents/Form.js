@@ -1,15 +1,33 @@
-import { Input, Textarea, Button, Flex, Box, Checkbox, Modal, TagsInput, MultiSelect} from 'ooni-components'
+import { Input, Textarea, Button, Flex, Box, Checkbox, Modal, TagInput, MultiSelect} from 'ooni-components'
 import { useForm, Controller } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 import { useCallback, useState } from 'react'
-// import DateRangePicker from '../DateRangePicker'
-// import { format } from 'date-fns'
+import { yupResolver } from '@hookform/resolvers/yup'
 import { localisedCountries } from 'utils/i18nCountries'
 import ReportDisplay from './ReportDisplay'
 import { testNames } from '/components/test-info'
+import useUser from '../../hooks/useUser'
+import * as yup from 'yup'
+
+const schema = yup
+  .object({
+    title: yup.string().required(),
+    short_description: yup.string().required(),
+    ASNs: yup.array().test({
+      name: 'ASNsError',
+      message: 'Only numbers allowed',
+      test: (val) => val.every((v) => !isNaN(v.value)),
+    }),
+    end_time: yup.string().test({
+      name: 'EndTimeError',
+      message: 'Must be after start time',
+      test: (val, testContext) => (new Date(testContext.parent.start_time).getTime() < new Date(val).getTime()),
+    }),
+  })
 
 const Form = ({ defaultValues, onSubmit }) => {
   const intl = useIntl()
+  const { user } = useUser()
 
   if (defaultValues.CCs.length) defaultValues = {
     ...defaultValues, 
@@ -20,16 +38,19 @@ const Form = ({ defaultValues, onSubmit }) => {
         value: ccObj.iso3166_alpha2
       }
     }),
-    test_names: defaultValues.test_names.map((tn) => {
-      return {
+    test_names: defaultValues.test_names.map((tn) => ({
         label: intl.formatMessage({id: testNames[tn].id}), 
         value: tn
       }
-    })
+    )),
+    tags: defaultValues.tags.map((t) => ({label: t, value: t})),
+    ASNs: defaultValues.ASNs.map((as) => ({label: as, value: as})),
+    domains: defaultValues.domains.map((d) => ({label: d, value: d}))
   }
 
-  const { handleSubmit, control, setValue, getValues, formState } = useForm({
+  const { handleSubmit, control, getValues, formState } = useForm({
     defaultValues,
+    resolver: yupResolver(schema),
   })
   const { errors } = formState
   const [showPreview, setShowPreview] = useState(false)
@@ -54,24 +75,11 @@ const Form = ({ defaultValues, onSubmit }) => {
     return {
       ...values,
       CCs: values.CCs.length ? values.CCs.map((cc) => cc.value) : [],
+      tags: values.tags.length ? values.tags.map((t) => t.value) : [],
+      ASNs: values.ASNs.length ? values.ASNs.map((as) => as.value) : [],
+      domains: values.domains.length ? values.domains.map((d) => d.value) : [],
     }
   }, [getValues])
-
-  // const [showDatePicker, setShowDatePicker] = useState(false)
-
-  // const handleRangeSelect = (range) => {
-  //   if (range?.from) {
-  //     setValue('start_time', format(range.from, 'y-MM-dd'))
-  //   } else {
-  //     setValue('start_time', null)
-  //   }
-  //   if (range?.to) {
-  //     setValue('end_time', format(range.to, 'y-MM-dd'))
-  //   } else {
-  //     setValue('end_time', null)
-  //   }
-  //   setShowDatePicker(false)
-  // }
 
   const submit = (report) => {
     console.log(report)
@@ -81,7 +89,9 @@ const Form = ({ defaultValues, onSubmit }) => {
       ...(report.end_time ? { end_time: `${report.end_time}:00Z` } : {end_time: null}),
       test_names: report.test_names.length ? report.test_names.map((test_name) => test_name.value) : [],
       CCs: report.CCs.length ? report.CCs.map((cc) => cc.value) : [],
-      ASNs: report.ASNs.length ? report.ASNs.filter((as) => !isNaN(as)).map((as) => Number(as)) : []
+      tags: report.tags.length ? report.tags.map((t) => t.value) : [],
+      ASNs: report.ASNs.length ? report.ASNs.map((as) => as.value) : [],
+      domains: report.domains.length ? report.domains.map((d) => d.value) : [],
     })
   }
 
@@ -96,13 +106,15 @@ const Form = ({ defaultValues, onSubmit }) => {
         <ReportDisplay report={getPreviewValues()} />
       </Modal>
       <form onSubmit={(e) => handleSubmit(submit)(e).catch((e) => setSubmitError(e.message))}>
-        <Box mb={3}>
-          <Controller
-            control={control}
-            name="published"
-            render={({ field }) => <Checkbox {...field} label="Published" checked={field.value} />}
-          />
-        </Box>
+        {user.role === 'admin' &&
+          <Box mb={3}>
+            <Controller
+              control={control}
+              name="published"
+              render={({ field }) => <Checkbox {...field} label="Published" checked={field.value} />}
+            />
+          </Box>
+        }
         <Controller
           control={control}
           name="title"
@@ -127,8 +139,6 @@ const Form = ({ defaultValues, onSubmit }) => {
                   {...field}
                   required
                   type="datetime-local"
-                  // onFocus={() => setShowDatePicker(true)}
-                  // onKeyDown={() => setShowDatePicker(false)}
                   label="Start Time*"
                   id="start_time"
                 />
@@ -143,8 +153,7 @@ const Form = ({ defaultValues, onSubmit }) => {
                 <Input
                   {...field}
                   type="datetime-local"
-                  // onFocus={() => setShowDatePicker(true)}
-                  // onKeyDown={() => setShowDatePicker(false)}
+                  error={errors?.end_time?.message}
                   label="End Time"
                   id="end_time"
                 />
@@ -152,17 +161,12 @@ const Form = ({ defaultValues, onSubmit }) => {
             />
           </Box>
         </Flex>
-        {/* {showDatePicker && (
-          <DateRangePicker
-            handleRangeSelect={handleRangeSelect}
-            initialRange={{ from: getValues('start_time'), to: getValues('end_time') }}
-            close={() => setShowDatePicker(false)}
-          />
-        )} */}
         <Controller
           control={control}
           name="tags"
-          render={({ field }) => <TagsInput {...field} mb={3} label="Tags" placeHolder="Press Enter to add tags" />}
+          render={({ field }) => 
+          <TagInput {...field} mb={3} label="Tags" placeholder="Press Enter to add tags" />
+        }
         />
         <Controller
           control={control}
@@ -177,15 +181,20 @@ const Form = ({ defaultValues, onSubmit }) => {
         <Controller
           control={control}
           name="ASNs"
-          rules={{validate: (val) => (
-            val.every((v) => !isNaN(v)) || 'Must be a number'
-          )}}
-          render={({ field }) => <TagsInput {...field} mb={3} label="ASNs" placeHolder="Press Enter to add ASNs" error={errors?.ASNs?.message} />}
+          error={errors?.ASNs?.message}
+          render={({ field }) => <TagInput {...field} mb={3} label="ASNs" placeholder="Press Enter to add ASNs" error={errors?.ASNs?.message} />}
         />
         <Controller
           control={control}
           name="domains"
-          render={({ field }) => <TagsInput {...field} mb={3} label="Domains" placeHolder="Press Enter to add domains" />}
+          render={({ field }) => <TagInput {...field} mb={3} label="Domains" placeHolder="Press Enter to add domains" />}
+        />
+        <Controller
+          control={control}
+          name="short_description"
+          render={({ field }) => (
+            <Input mb={3} {...field} error={errors?.short_description?.message} label="Short Description*" />
+          )}
         />
         <Controller
           control={control}
@@ -193,7 +202,7 @@ const Form = ({ defaultValues, onSubmit }) => {
           render={({ field }) => (
             <Textarea
               {...field}
-              label="Text"
+              label="Text*"
               mb={3}
               minHeight={500}
               error={errors?.title?.message}

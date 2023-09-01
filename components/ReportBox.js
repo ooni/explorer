@@ -5,7 +5,7 @@ import { formatLongDate } from 'utils'
 import { useIntl } from 'react-intl'
 import NLink from 'next/link'
 
-const ReportBox = ({country, startDate, endDate, title, id, ...props}) => {
+const ReportBox = ({country, startDate, endDate, title, id, shortDescription, ...props}) => {
   const intl = useIntl()
 
   return (
@@ -24,7 +24,7 @@ const ReportBox = ({country, startDate, endDate, title, id, ...props}) => {
       )}
       <Text color="gray6">{startDate && formatLongDate(startDate, intl.locale)} - {endDate ? formatLongDate(endDate, intl.locale) : 'ongoing'}</Text>
       <Heading h={4}>{title}</Heading>
-      {/* <p>{summary}</p> */}
+      <p>{shortDescription}</p>
       <Box textAlign="center" mt={2}>
         <NLink href={`/incidents/${id}`}>
           <Button btnSize="small" hollow>Read More</Button>

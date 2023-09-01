@@ -12,6 +12,7 @@ const defaultValues = {
   reported_by: '',
   title: '',
   text: '',
+  short_description: '',
   published: false,
   start_time: '',
   end_time: '',
