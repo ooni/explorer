@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState, useCallback, useContext, createContext, useMemo } from 'react'
-import useSWR from 'swr'
 
 import { apiEndpoints, loginUser, refreshToken, getAPI } from '/lib/api'
 

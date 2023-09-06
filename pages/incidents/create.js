@@ -19,6 +19,7 @@ const defaultValues = {
   tags: [],
   CCs: [],
   ASNs: [],
+  test_names: [],
   links: [],
   domains: [],
   event_type: 'incident',

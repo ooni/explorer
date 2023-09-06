@@ -65,7 +65,7 @@ export const MATChartReportWrapper = ({link, caption}) => {
     ...searchParams,
   }
 
-  return searchParams ? 
+  return !!searchParams && 
     <Box my={4}>
       <MATChart query={query} />
       {caption && (
@@ -73,7 +73,7 @@ export const MATChartReportWrapper = ({link, caption}) => {
           <FormattedMarkdownBase>{caption}</FormattedMarkdownBase>
         </Text>
       )}
-    </Box> : <bold>WRONG LINK FORMAT</bold>
+    </Box>
 }
 
 const MATChart = ({ query }) => {

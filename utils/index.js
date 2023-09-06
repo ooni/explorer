@@ -51,6 +51,10 @@ export const getRange = (start, end) => {
   return [...Array(end - start + 1).keys()].map(idx => idx + start)
 }
 
-export const formatLongDate = (date, locale) => {
-  return new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(new Date(date))
-}
+export const formatLongDate = (date, locale) => (
+  new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(new Date(date))
+)
+
+export const formatMediumDateTime = (date, locale) => (
+  new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'medium', timeZone: 'UTC' }).format(new Date(date))
+)

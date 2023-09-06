@@ -29,7 +29,16 @@ const schema = yup
         return true
       },
     }),
-    text: yup.string().required(),
+    text: yup.string().required().test({
+      name: 'TextError',
+      message: 'Contains invalid MAT url',
+      test: (val) => {
+        const regexp = /<(?:MAT.*link)=(?:"|')(?<link>[^"']*)(?:"|').*\/>/g
+        const MATurlRegexp = /https:\/\/explorer\.ooni\.org\/chart\/mat\S*/
+        const matches = [...val.matchAll(regexp)]
+        return matches.every((match) => match[1].match(MATurlRegexp))
+      },
+    }),
   })
 
 const Form = ({ defaultValues, onSubmit }) => {
@@ -216,7 +225,7 @@ const Form = ({ defaultValues, onSubmit }) => {
             />
           )}
         />
-        <Button type="button" onClick={() => setShowPreview(true)}>
+        <Button hollow mr={3} type="button" onClick={() => setShowPreview(true)}>
           Show Preview
         </Button>
         <Button type="submit">Submit</Button>

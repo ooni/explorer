@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import NavBar from 'components/NavBar'
-import { Container, Heading, Box, Flex, Input, Select } from 'ooni-components'
+import { Container, Heading, Box, Flex, Input, Select, Button } from 'ooni-components'
 import { StyledStickyNavBar, StyledStickySubMenu } from 'components/SharedStyledComponents'
 import useFilterWithSort from 'hooks/useFilterWithSort'
 import useSWR from 'swr'
@@ -9,6 +9,8 @@ import ReportBox from '../../components/ReportBox'
 import { styled } from 'styled-components'
 import { useIntl } from 'react-intl'
 import { useMemo } from 'react'
+import useUser from 'hooks/useUser'
+import NLink from 'next/link'
 
 const sortOptions = [
   { key: 'start_asc', intlKey: 'Sort.StartAsc' },
@@ -25,6 +27,7 @@ gap: 24px;
 `
 const ReportIndex = () => {
   const intl = useIntl()
+  const { user } = useUser()
 
   const { data, error } = useSWR(apiEndpoints.SEARCH_INCIDENTS, fetcher)
 
@@ -83,8 +86,11 @@ const ReportIndex = () => {
         <NavBar />
       </StyledStickyNavBar>
       <Container>
+        {user?.role === 'admin' && (
+          <Flex justifyContent="end" mt={3}><NLink href="/incidents/dashboard"><Button hollow>Dashboard</Button></NLink></Flex>
+        )}
         <StyledStickySubMenu>
-          <Flex mt={5} mb={2} justifyContent='space-between' alignItems='baseline'>
+          <Flex mt={user?.role === 'admin' ? 0 : 5} mb={2} justifyContent='space-between' alignItems='baseline'>
             <Heading h={1} mt={1} mb={0}>
               {intl.formatMessage({id: 'Incidents.Title'})}
             </Heading>

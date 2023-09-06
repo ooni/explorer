@@ -11,9 +11,11 @@ import useSWR from 'swr'
 import { apiEndpoints, fetcher } from 'lib/api'
 import useUser from 'hooks/useUser'
 import NavBar from 'components/NavBar'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { styled } from 'styled-components'
-import { formatLongDate } from '../../utils'
+import { formatMediumDateTime } from '../../utils'
+import { useRouter } from 'next/router'
+import { useIntl } from 'react-intl'
 
 const StyledTable = styled.table`
 border-collapse: collapse;
@@ -31,11 +33,18 @@ const StyledRow = styled.tr`
 
 const IncidentsDashboard = () => {
   const { user } = useUser()
+  const router = useRouter()
+
   const { data, error } = useSWR(apiEndpoints.SEARCH_INCIDENTS, fetcher)
 
   const tableData = useMemo(() => (data?.incidents ? data.incidents : []), [data])
-  
+
   const [sorting, setSorting] = useState([])
+
+  // redirect non-admin users
+  useEffect(() => {
+    if (user?.role !== 'admin') router.replace('/incidents')
+  }, [user, router])
 
   const columns = useMemo(
     () => [
@@ -50,6 +59,12 @@ const IncidentsDashboard = () => {
         )
       },
       {
+        header: 'Last Update',
+        accessorKey: 'update_time',
+        footer: props => props.column.id,
+        cell: (info) => (formatMediumDateTime(info.getValue()))
+      },
+      {
         header: 'Reported by',
         accessorKey: 'reported_by',
         footer: props => props.column.id,
@@ -58,13 +73,13 @@ const IncidentsDashboard = () => {
         header: 'Start Time',
         accessorKey: 'start_time',
         footer: props => props.column.id,
-        cell: (info) => (formatLongDate(info.getValue()))
+        cell: (info) => (formatMediumDateTime(info.getValue()))
       },
       {
         header: 'End Time',
         accessorKey: 'end_time',
         footer: props => props.column.id,
-        cell: (info) => (info.getValue() && formatLongDate(info.getValue()))
+        cell: (info) => (info.getValue() && formatMediumDateTime(info.getValue()))
       },
       {
         header: 'Published',
@@ -105,68 +120,72 @@ const IncidentsDashboard = () => {
         <title></title>
       </Head>
       <NavBar />
-      <Container>
-        <Heading h={1} mt={4}>Incidents Dashboard</Heading>
-        <StyledTable>
-          <thead>
-            {table.getHeaderGroups().map(headerGroup => (
-              <tr key={headerGroup.id}>
-                {headerGroup.headers.map(header => {
+      {user?.role === 'admin' ? (
+        <Container>
+          <Heading h={1} mt={4}>Incidents Dashboard</Heading>
+          <StyledTable>
+            <thead>
+              {table.getHeaderGroups().map(headerGroup => (
+                <tr key={headerGroup.id}>
+                  {headerGroup.headers.map(header => {
+                    return (
+                      <th key={header.id} colSpan={header.colSpan}>
+                        {header.isPlaceholder ? null : (
+                          <div
+                            {...{
+                              className: header.column.getCanSort()
+                                ? 'cursor-pointer select-none'
+                                : '',
+                              onClick: header.column.getToggleSortingHandler(),
+                            }}
+                          >
+                            {flexRender(
+                              header.column.columnDef.header,
+                              header.getContext()
+                            )}
+                            {{
+                              asc: ' 🔼',
+                              desc: ' 🔽',
+                            }[header.column.getIsSorted()] ?? null}
+                          </div>
+                        )}
+                      </th>
+                    )
+                  })}
+                </tr>
+              ))}
+            </thead>
+            <tbody>
+              {table
+                .getRowModel()
+                .rows.slice(0, 10)
+                .map(row => {
                   return (
-                    <th key={header.id} colSpan={header.colSpan}>
-                      {header.isPlaceholder ? null : (
-                        <div
-                          {...{
-                            className: header.column.getCanSort()
-                              ? 'cursor-pointer select-none'
-                              : '',
-                            onClick: header.column.getToggleSortingHandler(),
-                          }}
-                        >
-                          {flexRender(
-                            header.column.columnDef.header,
-                            header.getContext()
-                          )}
-                          {{
-                            asc: ' 🔼',
-                            desc: ' 🔽',
-                          }[header.column.getIsSorted()] ?? null}
-                        </div>
-                      )}
-                    </th>
+                    <StyledRow key={row.id}>
+                      {row.getVisibleCells().map(cell => {
+                        return (
+                          <td key={cell.id}>
+                            {flexRender(
+                              cell.column.columnDef.cell,
+                              cell.getContext()
+                            )}
+                          </td>
+                        )
+                      })}
+                    </StyledRow>
                   )
                 })}
-              </tr>
-            ))}
-          </thead>
-          <tbody>
-            {table
-              .getRowModel()
-              .rows.slice(0, 10)
-              .map(row => {
-                return (
-                  <StyledRow key={row.id}>
-                    {row.getVisibleCells().map(cell => {
-                      return (
-                        <td key={cell.id}>
-                          {flexRender(
-                            cell.column.columnDef.cell,
-                            cell.getContext()
-                          )}
-                        </td>
-                      )
-                    })}
-                  </StyledRow>
-                )
-              })}
-          </tbody>
-        </StyledTable>
-        <NLink href="/incidents/create">
-          <Button type="button" hollow mt={4}>
-            + Add Incident
-          </Button>
-        </NLink>
-      </Container>
+            </tbody>
+          </StyledTable>
+          <NLink href="/incidents/create">
+            <Button type="button" hollow mt={4}>
+              + Add Incident
+            </Button>
+          </NLink>
+        </Container>
+      ) : (
+        <Container>LOADING</Container>
+      )}
     </>
   )
 }
