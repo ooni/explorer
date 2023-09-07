@@ -226,9 +226,9 @@ const Form = ({ defaultValues, onSubmit }) => {
           )}
         />
         <Button hollow mr={3} type="button" onClick={() => setShowPreview(true)}>
-          Show Preview
+          {intl.formatMessage({id: 'Incidents.Edit.ShowPreview'})}
         </Button>
-        <Button type="submit">Submit</Button>
+        <Button type="submit">{intl.formatMessage({id: 'General.Submit'})}</Button>
         <p>{submitError && <>{submitError}</>}</p>
       </form>
     </>

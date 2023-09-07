@@ -630,5 +630,12 @@
   "Networks.SearchError": "No networks found",
   "Incidents.Title": "Incidents",
   "Incidents.SearchPlaceholder": "Search for incidents",
-  "Incidents.SearchError": "No incidents found"
+  "Incidents.SearchError": "No incidents found",
+  "Incidents.Edit.Title": "Edit Incident Report",
+  "Incidents.Edit.ShowPreview": "Show Preview",
+  "Incidents.Edit.Delete": "Delete",
+  "Incidents.Create.Title": "Create Incident",
+  "Incidents.Dashboard.Title": "Incidents Dashboard",
+  "Incidents.Dashboard.Edit": "Edit",
+  "Incidents.Dashboard.Add": "Add Incident"
 }

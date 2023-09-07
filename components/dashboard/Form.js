@@ -31,7 +31,7 @@ export const Form = ({ onChange, query, availableCountries }) => {
       probe_cc: countryOptions.filter(country => countriesInQuery.includes(country.value)),
     }
   }, [countryOptions, query])
-  console.log('query2formValues', query2formValues)
+
   const multiSelectStrings = useMemo(
     () => ({
       allItemsAreSelected: intl.formatMessage({

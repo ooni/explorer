@@ -65,7 +65,7 @@ const EditReport = () => {
       </Head>
       <NavBar />
       <Container>
-        <Heading h={1}>Edit Report</Heading>
+        <Heading h={1}>{intl.formatMessage({id: 'Incident.Edit.Title'})}</Heading>
         {defaultValues && (
           <>
             <Form onSubmit={onSubmit} defaultValues={defaultValues} />
@@ -78,7 +78,7 @@ const EditReport = () => {
               loading={isMutating}
               disabled={isMutating}
               spinner={<ButtonSpinner />}
-            >Delete</Button>
+            >{intl.formatMessage({id: 'Incidents.Edit.Delete'})}</Button>
           </>
         )}
       </Container>

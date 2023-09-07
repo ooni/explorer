@@ -11,6 +11,7 @@ import useSWR from 'swr'
 import { apiEndpoints, fetcher } from 'lib/api'
 import useUser from 'hooks/useUser'
 import NavBar from 'components/NavBar'
+import SpinLoader from 'components/vendor/SpinLoader'
 import { useEffect, useMemo, useState } from 'react'
 import { styled } from 'styled-components'
 import { formatMediumDateTime } from '../../utils'
@@ -32,6 +33,7 @@ const StyledRow = styled.tr`
 `
 
 const IncidentsDashboard = () => {
+  const intl = useIntl()
   const { user } = useUser()
   const router = useRouter()
 
@@ -93,7 +95,7 @@ const IncidentsDashboard = () => {
         cell: (id) => (
           <NLink href={`/incidents/edit/${id.getValue()}`}>
             <Button type="button" btnSize="small" hollow>
-              <>Edit</>
+              <>{intl.formatMessage({id: 'Incidents.Dashboard.Edit'})}</>
             </Button>
           </NLink>
         )
@@ -122,7 +124,7 @@ const IncidentsDashboard = () => {
       <NavBar />
       {user?.role === 'admin' ? (
         <Container>
-          <Heading h={1} mt={4}>Incidents Dashboard</Heading>
+          <Heading h={1} mt={4}>{intl.formatMessage({id: 'Incidents.Dashboard.Title'})}</Heading>
           <StyledTable>
             <thead>
               {table.getHeaderGroups().map(headerGroup => (
@@ -178,13 +180,11 @@ const IncidentsDashboard = () => {
             </tbody>
           </StyledTable>
           <NLink href="/incidents/create">
-            <Button type="button" hollow mt={4}>
-              + Add Incident
-            </Button>
+            <Button type="button" hollow mt={4}>{intl.formatMessage({id: 'Incidents.Dashboard.Add'})}</Button>
           </NLink>
         </Container>
       ) : (
-        <Container>LOADING</Container>
+        <Container pt={6}><SpinLoader /></Container>
       )}
     </>
   )
