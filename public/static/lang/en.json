@@ -628,7 +628,7 @@
   "Networks.Title": "Networks",
   "Networks.SearchPlaceholder": "Search by ASN",
   "Networks.SearchError": "No networks found",
-  "Incidents.Title": "Incidents",
+  "Incidents.Title": "Censorship Incident Reports",
   "Incidents.SearchPlaceholder": "Search for incidents",
   "Incidents.SearchError": "No incidents found",
   "Incidents.Edit.Title": "Edit Incident Report",
