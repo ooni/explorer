@@ -1,5 +1,5 @@
 /// <reference types="cypress" />
-const makeEmailAccount = require('./email-account')
+// const makeEmailAccount = require('./email-account')
 // ***********************************************************
 // This example plugins/index.js can be used to load plugins
 //
@@ -19,15 +19,15 @@ const makeEmailAccount = require('./email-account')
 module.exports = async (on, config) => {
   // `on` is used to hook into various events Cypress emits
   // `config` is the resolved Cypress config
-  const emailAccount = await makeEmailAccount()
+  // const emailAccount = await makeEmailAccount()
 
-  on('task', {
-    getUserEmail() {
-      return emailAccount.email
-    },
+  // on('task', {
+  //   getUserEmail() {
+  //     return emailAccount.email
+  //   },
 
-    getLastEmail() {
-      return emailAccount.getLastEmail()
-    },
-  })
+  //   getLastEmail() {
+  //     return emailAccount.getLastEmail()
+  //   },
+  // })
 }

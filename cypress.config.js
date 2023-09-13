@@ -12,4 +12,7 @@ module.exports = defineConfig({
     baseUrl: 'http://localhost:3100',
     testIsolation: false,
   },
+  env: {
+    apiUrl: 'https://ams-pg-test.ooni.org',
+  }
 })

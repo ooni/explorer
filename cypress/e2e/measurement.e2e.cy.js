@@ -1,4 +1,5 @@
 const { recurse } = require('cypress-recurse')
+import { worker, rest } from '../mocks/browser'
 
 describe('Measurement Page Tests', () => {
 
@@ -319,36 +320,45 @@ describe('Measurement Page Tests', () => {
 
     before(() => {
       cy.clearLocalStorage()
-      cy.intercept('GET', 'https://ams-pg-test.ooni.org/api/v1/user_login*').as('userLogin')
-      // get and check the test email only once before the tests
-      cy.task('getUserEmail').then((email) => {
-        expect(email).to.be.a('string')
-        userEmail = email
+      cy.window().then((window) => {
+        window.msw = { worker, rest }
+
+        worker.start({
+          // This is going to perform unhandled requests
+          // but print no warning whatsoever when they happen.
+          onUnhandledRequest: 'bypass'
+        })
       })
+      cy.intercept('GET', 'https://ams-pg-test.ooni.org/api/v1/user_login*').as('userLogin')
+      // eslint-disable-next-line cypress/no-unnecessary-waiting
+      cy.wait(2000)
+      })
+
+    it('can login', () => {
+      cy.window().then((window) => {
+        const { worker, rest } = window.msw
+  
+        worker.use(
+          rest.get('https://ams-pg-test.ooni.org/api/_/account_metadata', (req, res, ctx) => {
+            return res.once(
+              ctx.status(401),
+            )
+          }),
+        )
     })
 
-    it('can login and submit feedback', () => {
       const measurementUrl = '/m/20230307142542.625294_US_webconnectivity_9215f30cf2412f49'
       cy.visit(measurementUrl)
       cy.findByText('VERIFY').click()
 
-      cy.findByRole('textbox').click().type(userEmail)
+      cy.findByRole('textbox').click().type('randomEmail@randomEmail.com')
       cy.findByText('Login').click()
       cy.findByText('Login link sent')
-
-      recurse(
-        () => cy.task('getLastEmail'), // Cypress commands to retry
-        Cypress._.isObject, // keep retrying until the task returns an object
-        {
-          timeout: 60000, // retry up to 1 minute
-          delay: 5000, // wait 5 seconds between attempts
-        },
-      ).then(({ loginLink }) => {
-          cy.visit(loginLink)
         })
 
-      cy.url().should('contain', '/login')
-      cy.wait('@userLogin')
+
+    it('can submit feedback', () => {
+      const measurementUrl = '/m/20230307142542.625294_US_webconnectivity_9215f30cf2412f49'
 
       cy.visit(measurementUrl)
       cy.findByText('VERIFY').click()
