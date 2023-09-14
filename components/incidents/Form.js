@@ -20,7 +20,7 @@ const schema = yup
       test: (val) => val.every((v) => !isNaN(v.value)),
     }),
     start_time: yup.string().required(),
-    end_time: yup.string().test({
+    end_time: yup.string().nullable().test({
       name: 'EndTimeError',
       message: 'Must be after start time',
       test: (val, testContext) => {
@@ -55,7 +55,7 @@ const Form = ({ defaultValues, onSubmit }) => {
       }
     }),
     test_names: defaultValues.test_names.map((tn) => ({
-        label: intl.formatMessage({id: testNames[tn].id}), 
+        label: testNames[tn] ? intl.formatMessage({id: testNames[tn].id}) : tn, 
         value: tn
       }
     )),
@@ -181,13 +181,13 @@ const Form = ({ defaultValues, onSubmit }) => {
           control={control}
           name="tags"
           render={({ field }) => 
-          <TagInput {...field} mb={3} label="Tags" placeholder="Press Enter to add tags" />
+          <TagInput {...field} mb={3} label="Tags" components={{ DropdownIndicator: null }} menuIsOpen={false} placeholder="Press Enter to add tags" />
         }
         />
         <Controller
           control={control}
           name="test_names"
-          render={({ field }) => <MultiSelect {...field} mb={3} options={testNamesOptions} label="Test Names" />}
+          render={({ field }) => <TagInput {...field} mb={3} options={testNamesOptions} label="Test Names" />}
         />
         <Controller
           control={control}

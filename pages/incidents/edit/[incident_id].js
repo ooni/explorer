@@ -65,7 +65,7 @@ const EditReport = () => {
       </Head>
       <NavBar />
       <Container>
-        <Heading h={1}>{intl.formatMessage({id: 'Incident.Edit.Title'})}</Heading>
+        <Heading h={1}>{intl.formatMessage({id: 'Incidents.Edit.Title'})}</Heading>
         {defaultValues && (
           <>
             <Form onSubmit={onSubmit} defaultValues={defaultValues} />
