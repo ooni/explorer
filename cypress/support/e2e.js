@@ -16,7 +16,6 @@
 // Import commands.js using ES2015 syntax:
 import './commands'
 import './msw'
-// import { worker, rest } from '../mocks/browser'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
