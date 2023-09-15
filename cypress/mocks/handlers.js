@@ -40,3 +40,9 @@ export const handlers = [
     )
   }),
 ]
+
+export const failedAccountMetadata = rest.get('https://ams-pg-test.ooni.org/api/_/account_metadata', (req, res, ctx) => {
+    return res(
+      ctx.status(401),
+    )
+  })

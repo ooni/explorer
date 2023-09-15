@@ -1,5 +1,4 @@
-const { recurse } = require('cypress-recurse')
-import { worker, rest } from '../mocks/browser'
+import { failedAccountMetadata } from '/cypress/mocks/handlers'
 
 describe('Measurement Page Tests', () => {
 
@@ -316,36 +315,12 @@ describe('Measurement Page Tests', () => {
   })
 
   describe('User Feedback', () => {
-    let userEmail
-
     before(() => {
       cy.clearLocalStorage()
-      cy.window().then((window) => {
-        window.msw = { worker, rest }
-
-        worker.start({
-          // This is going to perform unhandled requests
-          // but print no warning whatsoever when they happen.
-          onUnhandledRequest: 'bypass'
-        })
-      })
-      cy.intercept('GET', 'https://ams-pg-test.ooni.org/api/v1/user_login*').as('userLogin')
-      // eslint-disable-next-line cypress/no-unnecessary-waiting
-      cy.wait(2000)
-      })
+    })
 
     it('can login', () => {
-      cy.window().then((window) => {
-        const { worker, rest } = window.msw
-  
-        worker.use(
-          rest.get('https://ams-pg-test.ooni.org/api/_/account_metadata', (req, res, ctx) => {
-            return res.once(
-              ctx.status(401),
-            )
-          }),
-        )
-    })
+      cy.interceptRequest(failedAccountMetadata)
 
       const measurementUrl = '/m/20230307142542.625294_US_webconnectivity_9215f30cf2412f49'
       cy.visit(measurementUrl)
@@ -354,7 +329,7 @@ describe('Measurement Page Tests', () => {
       cy.findByRole('textbox').click().type('randomEmail@randomEmail.com')
       cy.findByText('Login').click()
       cy.findByText('Login link sent')
-        })
+    })
 
 
     it('can submit feedback', () => {
