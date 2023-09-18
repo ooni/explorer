@@ -10,16 +10,7 @@ import { MdTimelapse } from 'react-icons/md'
 
 import AccessPointStatus from '../AccessPointStatus'
 
-const VanillaTorDetails = ({ measurement, render }) => {
-  const testKeys = measurement.test_keys
-  const isOK = testKeys.success === true
-  const isAnomaly = testKeys.success === false
-  const torVersion = testKeys.tor_version
-  const torLog = testKeys.tor_log
-  const torProgress = testKeys.tor_progress
-  const isFailure = testKeys.error !== null
-  const failure = testKeys.failure
-
+const VanillaTorDetails = ({ measurement, render, isAnomaly, isFailure }) => {
   const messages = defineMessages({
     reachable: {
       id: 'Measurement.Metadata.VanillaTor.Reachable',
@@ -71,6 +62,9 @@ const VanillaTorDetails = ({ measurement, render }) => {
 
 VanillaTorDetails.propTypes = {
   measurement: PropTypes.object.isRequired,
-  render: PropTypes.func}
+  isAnomaly: PropTypes.bool.isRequired,
+  isFailure: PropTypes.bool.isRequired,
+  render: PropTypes.func
+}
 
 export default VanillaTorDetails

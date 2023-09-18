@@ -2,7 +2,6 @@ const { defineConfig } = require('cypress')
 
 module.exports = defineConfig({
   video: false,
-  chromeWebSecurity: false,
   e2e: {
     // We've imported your old cypress plugins here.
     // You may want to clean this up later by importing these.
@@ -12,4 +11,7 @@ module.exports = defineConfig({
     baseUrl: 'http://localhost:3100',
     testIsolation: false,
   },
+  env: {
+    apiUrl: 'https://ams-pg-test.ooni.org',
+  }
 })
