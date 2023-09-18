@@ -1,16 +1,17 @@
 import Head from 'next/head'
 import NavBar from 'components/NavBar'
-import { Container, Heading, Box, Flex, Input, Select, Button } from 'ooni-components'
+import { Container, Heading, Box, Flex, Input, Select, Button, Text } from 'ooni-components'
 import { StyledStickyNavBar, StyledStickySubMenu } from 'components/SharedStyledComponents'
 import useFilterWithSort from 'hooks/useFilterWithSort'
 import useSWR from 'swr'
 import { apiEndpoints, fetcher } from '/lib/api'
-import ReportBox from '../../components/ReportBox'
+import HighlightBox from 'components/landing/HighlightBox'
 import { styled } from 'styled-components'
 import { useIntl } from 'react-intl'
 import { useMemo } from 'react'
 import useUser from 'hooks/useUser'
 import NLink from 'next/link'
+import { formatLongDate } from 'utils'
 
 const sortOptions = [
   { key: 'start_asc', intlKey: 'Sort.StartAsc' },
@@ -21,10 +22,10 @@ const sortOptions = [
 
 const StyledGrid = styled(Box)`
 display: grid;
-grid-template-columns: 1fr 1fr;
-grid-auto-rows: 1fr;
+grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
 gap: 24px;
 `
+
 const ReportIndex = () => {
   const intl = useIntl()
   const { user } = useUser()
@@ -117,14 +118,23 @@ const ReportIndex = () => {
         </StyledStickySubMenu>
         <StyledGrid mt={4}>
           {sortedAndFilteredData.map((incident) => (
-            <ReportBox 
+            <HighlightBox 
               key={incident.id}
-              id={incident.id}
-              country={incident.CCs[0]}
+              countryCode={incident.CCs[0]}
               title={incident.title}
-              startDate={incident.start_time}
-              shortDescription={incident.short_description}
-              endDate={incident.end_time}
+              text={incident.short_description}
+              dates={
+                <Text color="gray6">
+                  {incident.start_time && formatLongDate(incident.start_time, intl.locale)} - {incident.end_time ? formatLongDate(incident.end_time, intl.locale) : 'ongoing'}
+                </Text>
+              }
+              footer={
+                <Box textAlign="center" mt={2}>
+                  <NLink href={`/incidents/${incident.id}`}>
+                    <Button btnSize="small" hollow>Read More</Button>
+                  </NLink>
+                </Box>
+              }
             />
           ))}
         </StyledGrid>
