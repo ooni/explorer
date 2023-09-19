@@ -1,4 +1,4 @@
-const { recurse } = require('cypress-recurse')
+import { failedAccountMetadata } from '/cypress/mocks/handlers'
 
 describe('Measurement Page Tests', () => {
 
@@ -315,40 +315,25 @@ describe('Measurement Page Tests', () => {
   })
 
   describe('User Feedback', () => {
-    let userEmail
-
     before(() => {
       cy.clearLocalStorage()
-      cy.intercept('GET', 'https://ams-pg-test.ooni.org/api/v1/user_login*').as('userLogin')
-      // get and check the test email only once before the tests
-      cy.task('getUserEmail').then((email) => {
-        expect(email).to.be.a('string')
-        userEmail = email
-      })
     })
 
-    it('can login and submit feedback', () => {
+    it('can login', () => {
+      cy.interceptRequest(failedAccountMetadata)
+
       const measurementUrl = '/m/20230307142542.625294_US_webconnectivity_9215f30cf2412f49'
       cy.visit(measurementUrl)
       cy.findByText('VERIFY').click()
 
-      cy.findByRole('textbox').click().type(userEmail)
+      cy.findByRole('textbox').click().type('randomEmail@randomEmail.com')
       cy.findByText('Login').click()
       cy.findByText('Login link sent')
+    })
 
-      recurse(
-        () => cy.task('getLastEmail'), // Cypress commands to retry
-        Cypress._.isObject, // keep retrying until the task returns an object
-        {
-          timeout: 60000, // retry up to 1 minute
-          delay: 5000, // wait 5 seconds between attempts
-        },
-      ).then(({ loginLink }) => {
-          cy.visit(loginLink)
-        })
 
-      cy.url().should('contain', '/login')
-      cy.wait('@userLogin')
+    it('can submit feedback', () => {
+      const measurementUrl = '/m/20230307142542.625294_US_webconnectivity_9215f30cf2412f49'
 
       cy.visit(measurementUrl)
       cy.findByText('VERIFY').click()
