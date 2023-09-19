@@ -5809,10 +5809,10 @@ onetime@^5.1.0, onetime@^5.1.2:
   dependencies:
     mimic-fn "^2.1.0"
 
-ooni-components@1.0.0-alpha.14:
-  version "1.0.0-alpha.14"
-  resolved "https://registry.yarnpkg.com/ooni-components/-/ooni-components-1.0.0-alpha.14.tgz#d6d26944b56bf6e0be81102d7cd27a44dbc57a25"
-  integrity sha512-n90KEtXTKT11mA4+F3rnbwZcuZgrUJdrV38CRXgJhD6QTEU9/ADkNDO0ae0sFiR0XZkhbaBBU4hjao/TZgZIFw==
+ooni-components@1.0.0-alpha.16:
+  version "1.0.0-alpha.16"
+  resolved "https://registry.yarnpkg.com/ooni-components/-/ooni-components-1.0.0-alpha.16.tgz#d2190c5e126fd43901e887ad640692caf26a99f6"
+  integrity sha512-5CHY85VylxCyMBt39hvlh69m2dS+YrgGSwoA5h9fDWcOxETja/BZ81OJqT2xt1A79ao4YQaW2VmqlQNpWiODDw==
   dependencies:
     "@styled-system/css" "^5.1.5"
     "@styled-system/should-forward-prop" "^5.1.5"
