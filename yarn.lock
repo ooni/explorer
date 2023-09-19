@@ -5421,14 +5421,14 @@ onetime@^5.1.0, onetime@^5.1.2:
   dependencies:
     mimic-fn "^2.1.0"
 
-ooni-components@1.0.0-alpha.2:
-  version "1.0.0-alpha.2"
-  resolved "https://registry.yarnpkg.com/ooni-components/-/ooni-components-1.0.0-alpha.2.tgz#a30915f7b94662220e41ed9b6bc4de72aad07e0c"
-  integrity sha512-bAC+znWTeuhvETlBPgulsoSdXMEeU4dymxsmIV14MNT5JHvUnmhu7o9IDmuQjhPlTtfbibPFYAZb+oY1KR/SCA==
+ooni-components@1.0.0-alpha.13:
+  version "1.0.0-alpha.13"
+  resolved "https://registry.yarnpkg.com/ooni-components/-/ooni-components-1.0.0-alpha.13.tgz#2699412989707432d534cf1ae45788f624474686"
+  integrity sha512-g2jzDfj8YdZn7OFY10E9kac9ycid8DZEWQ3tPHWDHhreRbsO2/6zUa4kEz9HBHFuix5xggR7jHepvZo+fVYJEQ==
   dependencies:
     "@styled-system/css" "^5.1.5"
     "@styled-system/should-forward-prop" "^5.1.5"
-    react-select "^5.7.3"
+    react-select "^5.7.4"
     react-tag-input-component "^2.0.2"
     styled-system "^5.1.5"
 
@@ -5837,10 +5837,10 @@ react-resize-detector@^7.1.2:
   dependencies:
     lodash "^4.17.21"
 
-react-select@^5.7.3:
-  version "5.7.3"
-  resolved "https://registry.yarnpkg.com/react-select/-/react-select-5.7.3.tgz#fa0dc9a23cad6ff3871ad3829f6083a4b54961a2"
-  integrity sha512-z8i3NCuFFWL3w27xq92rBkVI2onT0jzIIPe480HlBjXJ3b5o6Q+Clp4ydyeKrj9DZZ3lrjawwLC5NGl0FSvUDg==
+react-select@^5.7.4:
+  version "5.7.4"
+  resolved "https://registry.yarnpkg.com/react-select/-/react-select-5.7.4.tgz#d8cad96e7bc9d6c8e2709bdda8f4363c5dd7ea7d"
+  integrity sha512-NhuE56X+p9QDFh4BgeygHFIvJJszO1i1KSkg/JPcIJrbovyRtI+GuOEa4XzFCEpZRAEoEI8u/cAHK+jG/PgUzQ==
   dependencies:
     "@babel/runtime" "^7.12.0"
     "@emotion/cache" "^11.4.0"
