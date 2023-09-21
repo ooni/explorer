@@ -1,18 +1,18 @@
 
-import { setupWorker, rest} from 'msw'
-import { handlers } from '/cypress/mocks/handlers'
+// import { setupWorker} from 'msw'
+// import { handlers } from '/cypress/mocks/handlers'
 
-let worker
+// let worker
 
-before(() => {
-  worker = setupWorker(...handlers)
-  cy.wrap(worker.start({ onUnhandledRequest: 'bypass' }), { log: false })
-})
-Cypress.on('test:before:run', () => {
-  if (!worker) return
-  worker.resetHandlers()
-})
+// before(() => {
+//   worker = setupWorker(...handlers)
+//   cy.wrap(worker.start({ onUnhandledRequest: 'bypass' }))
+// })
+// Cypress.on('test:before:run', () => {
+//   if (!worker) return
+//   worker.resetHandlers()
+// })
 
-Cypress.Commands.add('interceptRequest', (...params) => {
-  worker.use(...params)
-})
+// Cypress.Commands.add('interceptRequest', (...params) => {
+//   worker.use(...params)
+// })
