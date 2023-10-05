@@ -12,6 +12,7 @@ import * as yup from 'yup'
 const schema = yup
   .object({
     title: yup.string().required(),
+    email_address: yup.string().required(),
     reported_by: yup.string().required(),
     short_description: yup.string().required(),
     ASNs: yup.array().test({
@@ -143,6 +144,13 @@ const Form = ({ defaultValues, onSubmit }) => {
           name="reported_by"
           render={({ field }) => (
             <Input mb={3} {...field} label="Author*" error={errors?.reported_by?.message} />
+          )}
+        />
+        <Controller
+          control={control}
+          name="email_address"
+          render={({ field }) => (
+            <Input mb={3} bg="gray2" {...field} label="Email Address*" error={errors?.title?.message} disabled />
           )}
         />
         <Flex flexDirection={['column', 'row']} mb={3}>

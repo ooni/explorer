@@ -7,10 +7,12 @@ import Form from '/components/incidents/Form'
 import useUser from 'hooks/useUser'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
+import { getUserEmail } from 'lib/api'
 
 const defaultValues = {
   reported_by: '',
   title: '',
+  email_address: getUserEmail(),
   text: '',
   short_description: '',
   published: false,
