@@ -72,6 +72,11 @@ const IncidentsDashboard = () => {
         footer: props => props.column.id,
       },
       {
+        header: 'Email Address',
+        accessorKey: 'email_address',
+        footer: props => props.column.id,
+      },
+      {
         header: 'Start Time',
         accessorKey: 'start_time',
         footer: props => props.column.id,

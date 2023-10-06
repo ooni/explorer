@@ -46,7 +46,7 @@ const Form = ({ defaultValues, onSubmit }) => {
   const intl = useIntl()
   const { user } = useUser()
 
-  if (defaultValues.CCs.length) defaultValues = {
+  defaultValues = {
     ...defaultValues, 
     CCs: defaultValues.CCs.map((cc) => {
       const ccObj = localisedCountries(intl.locale).find((co) => (co.iso3166_alpha2 === cc))
