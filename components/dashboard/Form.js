@@ -1,9 +1,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useForm, Controller } from 'react-hook-form'
-import { Box, Flex, Input, Button } from 'ooni-components'
-import { MultiSelect } from 'react-multi-select-component'
+import { Box, Flex, Input, MultiSelect } from 'ooni-components'
 import { useIntl } from 'react-intl'
-import dayjs from 'services/dayjs'
 import { format } from 'date-fns'
 import { getLocalisedRegionName } from '../../utils/i18nCountries'
 
@@ -85,10 +83,10 @@ export const Form = ({ onChange, query, availableCountries }) => {
     <form>
       <Flex alignItems={['center']} flexDirection={['column', 'row']}>
         <Box width={[1, 1/4]} mr={3} sx={{ zIndex: 2 }}>
-          {intl.formatMessage({id: 'Search.Sidebar.Country'})}
-          {<Controller
+          <Controller
             render={({field}) => (
               <MultiSelect
+                label={intl.formatMessage({id: 'Search.Sidebar.Country'})}
                 options={countryOptions}
                 overrideStrings={multiSelectStrings}
                 name={field.name}
@@ -98,7 +96,7 @@ export const Form = ({ onChange, query, availableCountries }) => {
             )}
             name='probe_cc'
             control={control}
-          />}
+          />
         </Box>
         <Box width={[1, 1/5]}>
           <Flex>
