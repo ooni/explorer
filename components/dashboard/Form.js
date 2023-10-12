@@ -89,9 +89,7 @@ export const Form = ({ onChange, query, availableCountries }) => {
                 label={intl.formatMessage({id: 'Search.Sidebar.Country'})}
                 options={countryOptions}
                 overrideStrings={multiSelectStrings}
-                name={field.name}
-                value={field.value}
-                onChange={field.onChange}
+                {...field}
               />
             )}
             name='probe_cc'

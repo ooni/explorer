@@ -15,6 +15,7 @@
     "@nivo/funnel": "^0.80.0",
     "@nivo/heatmap": "^0.80.0",
     "@nivo/line": "^0.80.0",
+    "@nivo/tooltip": "0.80.0",
     "@sentry/nextjs": "^7.61.1",
     "axios": "^0.27.2",
     "buffer-from": "^1.1.2",
@@ -22,7 +23,7 @@
     "date-fns": "^2.29.1",
     "dayjs": "^1.11.5",
     "deepmerge": "^4.2.2",
-    "flag-icon-css": "^4.1.7",
+    "flag-icons": "^6.11.1",
     "lodash.debounce": "^4.0.8",
     "lru-cache": "^7.14.1",
     "markdown-to-jsx": "^7.1.9",
@@ -52,7 +53,6 @@
     "victory": "^32.0.2"
   },
   "resolutions": {
-    "hoist-non-react-statics": "3.0.1",
     "js-yaml": "^3.13.1",
     "https-proxy-agent": "^2.2.3",
     "minimist": "^1.2.6",
