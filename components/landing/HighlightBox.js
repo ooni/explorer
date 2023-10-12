@@ -11,6 +11,9 @@ import Flag from '../Flag'
 
 const StyledFlex = styled(Flex)`
   min-height: 350px;
+  a:hover {
+    color: ${props => props.theme.colors.white};
+  }
 `
 
 const FlexGrowBox = styled(Box)`
