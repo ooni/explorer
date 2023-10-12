@@ -86,8 +86,8 @@ const HighlightBox = ({
 
 
 HighlightBox.propTypes = {
-  countryCode: PropTypes.string.isRequired,
-  countryName: PropTypes.string.isRequired,
+  countryCode: PropTypes.string,
+  countryName: PropTypes.string,
   title: PropTypes.string,
   text: PropTypes.string.isRequired,
   report: PropTypes.string,

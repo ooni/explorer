@@ -19,7 +19,7 @@ const StyledNavItem = styled.a`
 const NavItemLabel = styled.span`
   color: ${(props) => props.theme.colors.white};
   cursor: pointer;
-  opacity: ${(props) => (props.active ? '1' : '0.6 ')};
+  opacity: ${(props) => (props.$active ? '1' : '0.6 ')};
 
   ${StyledNavItem}:hover & {
     opacity: 1;
@@ -34,7 +34,7 @@ const Underline = styled.span`
   left: 0;
   bottom: -6px;
 
-  width: ${(props) => (props.active ? '100%' : '0px')};
+  width: ${(props) => (props.$active ? '100%' : '0px')};
   ${StyledNavItem}:hover & {
     width: calc(100%);
   }
@@ -55,8 +55,8 @@ const NavItemComponent = ({ router, label, href }) => {
     <Box ml={[0, 4]} my={[2, 0]}>
       <NLink href={href} passHref>
         <StyledNavItem>
-          <NavItemLabel active={active}>{label}</NavItemLabel>
-          <Underline active={active} />
+          <NavItemLabel $active={active}>{label}</NavItemLabel>
+          <Underline $active={active} />
         </StyledNavItem>
       </NLink>
     </Box>

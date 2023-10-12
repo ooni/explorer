@@ -36,7 +36,7 @@ const FlagContainer = styled.div`
   /* padding-top: 3px; */
   width: ${props => props.size + 2}px;
   height: ${props => props.size + 2}px;
-  border: ${props => props.border ? '1px solid white' : 'none'};
+  border: ${props => props.$border ? '1px solid white' : 'none'};
 `
 
 export const Flag = ({countryCode, size, border}) => {
@@ -47,7 +47,7 @@ export const Flag = ({countryCode, size, border}) => {
   }
   const src = `/static/flags/1x1/${countryCode}.svg`
   return (
-    <FlagContainer className='country-flag' size={size} border={border}>
+    <FlagContainer className='country-flag' size={size} $border={border}>
       <FlagImg src={src} size={size} loading='lazy' />
     </FlagContainer>
   )
