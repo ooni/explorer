@@ -42,9 +42,6 @@ margin: 1em 1em 0;
 display: flex;
 gap: 6px;
 flex-wrap: wrap;
-button {
-  padding: 4px 6px;
-}
 `
 
 const StyledFooter = styled.div`
@@ -101,7 +98,9 @@ const DateRangePicker = ({handleRangeSelect, initialRange, close, ...props}) => 
   const rangesList = ranges.map((range) => 
     <Button
       hollow
+      size="small"
       key={range}
+      px={2}
       onClick={(e) => {
         e.preventDefault()
         selectRange(range)
