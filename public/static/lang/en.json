@@ -31,7 +31,7 @@
   "Login.Submitted": "Your login request has been submitted. Please check your email for a link to activate and log in to your account.",
   "Login.LoggingIn": "Logging in...",
   "Login.Failure": "Try logging in again",
-  "Login.Success": "Successfully logged in. Redirecting back to the measurement...",
+  "Login.Success": "Successfully logged in. Redirecting...",
   "SocialButtons.CTA": "Share on <facebook-link>Facebook</facebook-link> or <twitter-link>Twitter</twitter-link>",
   "SocialButtons.Text": "Data from OONI Explorer",
   "Tests.WebConnectivity.Name": "Web Connectivity Test",

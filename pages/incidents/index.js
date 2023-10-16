@@ -131,7 +131,7 @@ const ReportIndex = () => {
               footer={
                 <Box textAlign="center" mt={2}>
                   <NLink href={`/incidents/${incident.id}`}>
-                    <Button btnSize="small" hollow>Read More</Button>
+                    <Button size="small" hollow>Read More</Button>
                   </NLink>
                 </Box>
               }

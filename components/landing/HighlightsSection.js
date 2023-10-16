@@ -46,7 +46,7 @@ const HighlightSection = ({
                   {item.explore && 
                     <Box>
                       <NLink href={item.explore}>
-                        <Button type='button' hollow btnSize='small'>
+                        <Button type='button' hollow size='small'>
                           {intl.formatMessage({id: 'Home.Highlights.Explore'})}
                         </Button>
                       </NLink>
@@ -55,7 +55,7 @@ const HighlightSection = ({
                   {item.report && 
                     <Box>
                       <a href={item.report}>
-                        <Button type='button' hollow btnSize='small'>{intl.formatMessage({id: 'Home.Highlights.ReadReport'})}</Button>
+                        <Button type='button' hollow size='small'>{intl.formatMessage({id: 'Home.Highlights.ReadReport'})}</Button>
                       </a>
                     </Box>
                   }

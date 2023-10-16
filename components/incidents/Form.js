@@ -1,4 +1,4 @@
-import { Input, Textarea, Button, Flex, Box, Checkbox, Modal, TagInput, MultiSelect} from 'ooni-components'
+import { Input, Textarea, Button, Flex, Box, Checkbox, Modal, MultiSelectCreatable, MultiSelect} from 'ooni-components'
 import { useForm, Controller } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 import { useCallback, useState } from 'react'
@@ -189,13 +189,13 @@ const Form = ({ defaultValues, onSubmit }) => {
           control={control}
           name="tags"
           render={({ field }) => 
-          <TagInput {...field} mb={3} label="Tags" components={{ DropdownIndicator: null }} menuIsOpen={false} placeholder="Press Enter to add tags" />
+          <MultiSelectCreatable {...field} mb={3} label="Tags" components={{ DropdownIndicator: null }} menuIsOpen={false} placeholder="Press Enter to add tags" />
         }
         />
         <Controller
           control={control}
           name="test_names"
-          render={({ field }) => <TagInput {...field} mb={3} options={testNamesOptions} label="Test Names" />}
+          render={({ field }) => <MultiSelectCreatable {...field} mb={3} options={testNamesOptions} label="Test Names" />}
         />
         <Controller
           control={control}
@@ -206,12 +206,12 @@ const Form = ({ defaultValues, onSubmit }) => {
           control={control}
           name="ASNs"
           error={errors?.ASNs?.message}
-          render={({ field }) => <TagInput {...field} mb={3} label="ASNs" placeholder="Press Enter to add ASNs" error={errors?.ASNs?.message} />}
+          render={({ field }) => <MultiSelectCreatable {...field} mb={3} label="ASNs" placeholder="Press Enter to add ASNs" error={errors?.ASNs?.message} />}
         />
         <Controller
           control={control}
           name="domains"
-          render={({ field }) => <TagInput {...field} mb={3} label="Domains" placeHolder="Press Enter to add domains" />}
+          render={({ field }) => <MultiSelectCreatable {...field} mb={3} label="Domains" placeHolder="Press Enter to add domains" />}
         />
         <Controller
           control={control}

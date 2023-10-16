@@ -45,7 +45,7 @@ const IncidentsDashboard = () => {
 
   // redirect non-admin users
   useEffect(() => {
-    if (user?.role !== 'admin') router.replace('/incidents')
+    if (user && user?.role !== 'admin') router.replace('/incidents')
   }, [user, router])
 
   const columns = useMemo(
@@ -99,7 +99,7 @@ const IncidentsDashboard = () => {
         accessorKey: 'id',
         cell: (id) => (
           <NLink href={`/incidents/edit/${id.getValue()}`}>
-            <Button type="button" btnSize="small" hollow>
+            <Button type="button" size="small" hollow>
               <>{intl.formatMessage({id: 'Incidents.Dashboard.Edit'})}</>
             </Button>
           </NLink>
