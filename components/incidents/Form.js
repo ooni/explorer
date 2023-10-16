@@ -206,7 +206,7 @@ const Form = ({ defaultValues, onSubmit }) => {
           control={control}
           name="ASNs"
           error={errors?.ASNs?.message}
-          render={({ field }) => <MultiSelectCreatable {...field} mb={3} label="ASNs" placeholder="Press Enter to add ASNs" error={errors?.ASNs?.message} />}
+          render={({ field }) => <MultiSelectCreatable {...field}  menuIsOpen={false} components={{DropdownIndicator: null}} mb={3} label="ASNs" placeholder="Press Enter to add ASNs" error={errors?.ASNs?.message} />}
         />
         <Controller
           control={control}
