@@ -4,6 +4,7 @@ import { cloneElement } from 'react'
 import { FormattedMessage } from 'react-intl'
 import styled from 'styled-components'
 import { getTestMetadata } from './utils'
+import * as icons from 'ooni-components/icons'
 
 // XXX replace what is inside of search/results-list.StyledResultTag
 const Badge = styled(Box)`
@@ -38,7 +39,7 @@ const TestGroupBadge = ({ testName, ...props }) => {
 export const CategoryBadge = ({ categoryCode }) => {
   let IconComponent
   try {
-    IconComponent = require(`ooni-components/icons/CategoryCode${categoryCode}`).default
+    IconComponent = icons[`CategoryCode${categoryCode}`]
   } catch {
     IconComponent = null
   }
@@ -49,11 +50,7 @@ export const CategoryBadge = ({ categoryCode }) => {
         <Box>
           <FormattedMessage id={`CategoryCode.${categoryCode}.Name`} />
         </Box>
-        {IconComponent && 
-          <Box>
-            <IconComponent height={15} width={15} />
-          </Box>
-        }
+        {IconComponent && <IconComponent size={15} />}
       </Flex>
     </Badge>
   )
