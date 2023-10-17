@@ -12,7 +12,7 @@ import {
   NettestGroupPerformance,
   NettestGroupCircumvention,
   NettestGroupExperimental
-} from 'ooni-components/dist/icons'
+} from 'ooni-components/icons'
 import { FormattedMessage } from 'react-intl'
 
 

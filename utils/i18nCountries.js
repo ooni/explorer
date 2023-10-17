@@ -15,11 +15,8 @@ process.env.LOCALES.forEach((locale) => {
 
 export const getLocalisedRegionName = (regionCode, locale) => {
   locale = getLocale(locale)
-
   try {
-    return new Intl.DisplayNames([locale], { type: 'region' }).of(
-      String(regionCode)
-    )
+    return new Intl.DisplayNames([locale], { type: 'region' }).of(String(regionCode))
   } catch (e) {
     return regionCode
   }

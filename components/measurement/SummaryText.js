@@ -26,8 +26,8 @@ const SummaryText = ({
       <FormattedMarkdown id={content}
         values={{
           testName: `[${metadata.name}](${metadata.info})`,
-          network: network,
-          country: country,
+          network,
+          country,
           date: formattedDateTime
         }}
       />
