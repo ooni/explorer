@@ -115,7 +115,7 @@ export const NavBar = ({ color }) => {
               <NavItem label={<FormattedMessage id="Navbar.Countries" />} href="/countries" />
               <NavItem label={<FormattedMessage id="Navbar.Networks" />} href="/networks" />
               <NavItem label={<FormattedMessage id="Navbar.Domains" />} href="/domains" />
-              <NavItem label={<FormattedMessage id="Navbar.Incidents" />} href="/incidents" />
+              {/* <NavItem label={<FormattedMessage id="Navbar.Incidents" />} href="/incidents" /> */}
               {user?.logged_in ? (
                 <Box ml={[0, 4]} my={[2, 0]}>
                   <StyledNavItem>
@@ -126,7 +126,8 @@ export const NavBar = ({ color }) => {
                   </StyledNavItem>
                 </Box>
               ) : (
-                <NavItem label={<FormattedMessage id="General.Login" />} href="/login" />
+                <></>
+                // <NavItem label={<FormattedMessage id="General.Login" />} href="/login" />
               )}
               <Box ml={[0, 4]} my={[2, 0]}>
                 <LanguageSelect ml={[0, 4]} onChange={handleLocaleChange} value={locale}>
