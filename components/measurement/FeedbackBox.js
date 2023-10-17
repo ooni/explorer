@@ -1,11 +1,11 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { FormattedMessage, useIntl } from 'react-intl'
-import { Box, Button, Flex, Link, Text, theme, RadioGroup, RadioButton } from 'ooni-components'
+import { Box, Button, Flex, Text, theme, RadioButton, RadioGroup } from 'ooni-components'
 import { GrClose } from 'react-icons/gr'
 import useStateMachine from '@cassiozen/usestatemachine'
 import SpinLoader from 'components/vendor/SpinLoader'
-import { submitFeedback, getAPI } from 'lib/api'
+import { submitFeedback } from 'lib/api'
 import LoginForm from 'components/login/LoginForm'
 import styled from 'styled-components'
 
@@ -204,6 +204,7 @@ const FeedbackBox = ({user, measurement_uid, setShowModal, previousFeedback, mut
                     {blockedValues.map(({top, sub}) => (
                       <>
                         <RadioButton
+                          mb={2}
                           label={intl.formatMessage({id: `Measurement.Feedback.${top}`})}
                           value={top}
                           key={top}
@@ -217,6 +218,7 @@ const FeedbackBox = ({user, measurement_uid, setShowModal, previousFeedback, mut
                                 {sub.map(({top, sub}) => (
                                   <>
                                     <RadioButton
+                                      mb={2}
                                       ml='23px'
                                       label={intl.formatMessage({id: `Measurement.Feedback.${top}`})}
                                       value={top}
@@ -230,6 +232,7 @@ const FeedbackBox = ({user, measurement_uid, setShowModal, previousFeedback, mut
                                           <RadioGroup {...field}>
                                             {sub.map(subVal => (
                                               <RadioButton
+                                                mb={2}
                                                 ml='45px'
                                                 label={intl.formatMessage({id: `Measurement.Feedback.${subVal}`})}
                                                 value={subVal}

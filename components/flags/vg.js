@@ -1,6 +1,6 @@
 import React from 'react'
 
-import SvgFlagVG from 'flag-icon-css/flags/1x1/vg.svg'
+import SvgFlagVG from 'flag-icons/flags/1x1/vg.svg'
 
 export const FlagVG = () => (
   <SvgFlagVG viewBox='0 0 512 512' />

@@ -10,6 +10,9 @@ import Flag from '../Flag'
 
 const StyledFlex = styled(Flex)`
   min-height: 350px;
+  a:hover {
+    color: ${props => props.theme.colors.white};
+  }
 `
 
 const FlexGrowBox = styled(Box)`
@@ -76,8 +79,8 @@ const HighlightBox = ({
 
 
 HighlightBox.propTypes = {
-  countryCode: PropTypes.string.isRequired,
-  countryName: PropTypes.string.isRequired,
+  countryCode: PropTypes.string,
+  countryName: PropTypes.string,
   title: PropTypes.string,
   text: PropTypes.string.isRequired,
   footer: PropTypes.element,
