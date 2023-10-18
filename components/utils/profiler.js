@@ -2,7 +2,7 @@ import { Profiler as NativeProfiler } from 'react'
 
 export const Profiler = ({ id, children }) => {
   const _id = `${id || children.type.type.displayName}.${children.key}`
-  // console.log(children)
+  
   return (
     <NativeProfiler id={_id} onRender={profilerLog}>
       {children}

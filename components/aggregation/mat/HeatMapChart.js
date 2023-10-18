@@ -132,7 +132,7 @@ const HeatMapCell = React.memo(CustomHeatMapCell)
 const HEIGHT_MULTIPLIER = 30
 
 export const HeatmapChart = ({ data, query }) => {
-  // console.log(getHeatMapData(sData, yAxis))
+  
   const yAxis = query.axis_y
   const [keys, shapedData, indexBy] = getHeatMapData(data, yAxis)
   return (
