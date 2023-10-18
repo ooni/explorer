@@ -12,38 +12,45 @@ export const defaultMATContext = {
   probe_cc: '',
   probe_asn: '',
   input: '',
-  category_code: ''
+  domain: '',
+  category_code: '',
+  tooltipIndex: [-1, ''],
 }
 
-export const MATContextProvider = ({ children, ...initialContext }) => {
-  const [state, setState] = useState({...defaultMATContext, ...initialContext})
+export const MATContextProvider = ({ children, queryParams, ...initialContext }) => {
+  const [state, setState] = useState({
+    ...defaultMATContext,
+    ...initialContext,
+  })
 
   const { query } = useRouter()
 
-  const stateReducer = useCallback((updates) => {
-    setState(state =>
-      Object.assign({},
-        state,
-        defaultMATContext,
-        initialContext,
-        updates
+  const MATquery = queryParams || query
+
+  const stateReducer = useCallback(
+    (updates, partial = false) => {
+      setState((state) =>
+        partial
+          ? Object.assign({}, state, updates)
+          : Object.assign({}, state, defaultMATContext, initialContext, updates)
       )
-    )
-  }, [initialContext])
+    },
+    [initialContext]
+  )
 
   useEffect(() => {
-    stateReducer(query)
-  }, [query])
+    stateReducer(MATquery)
+  }, [MATquery])
 
   return (
-    <MATStateContext.Provider value={{...state, updateMATContext: stateReducer}}>
+    <MATStateContext.Provider value={{ ...state, updateMATContext: stateReducer }}>
       {children}
     </MATStateContext.Provider>
   )
 }
 
-export function useMATContext () {
-  const {updateMATContext, ...state} = useContext(MATStateContext)
+export function useMATContext() {
+  const { updateMATContext, ...state } = useContext(MATStateContext)
   if (typeof state === 'undefined') {
     throw new Error('useMATContext should be used within a MATContextProvider')
   }

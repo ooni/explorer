@@ -4,10 +4,14 @@ import { useRouter } from 'next/router'
 import { useIntl } from 'react-intl'
 
 const Header = () => {
-  const canonical = 'https://explorer.ooni.org' + useRouter().pathname
+  const { asPath, locale, defaultLocale } = useRouter()
+
+  const lang = locale === defaultLocale ? '' : `/${locale}`
+  const canonical = 'https://explorer.ooni.org' + lang + asPath.split('?')[0]
 
   const intl = useIntl()
   const description = intl.formatMessage({ id: 'Home.Meta.Description' })
+  const title = intl.formatMessage({ id: 'Home.Meta.Title' })
 
   return (
     <Head>
@@ -29,7 +33,7 @@ const Header = () => {
       <meta name="twitter:site" content="@openobservatory" />
       <meta name="twitter:creator" content="@openobservatory" />
 
-      <meta key="og:title" name='og:title' property='og:title' content='OONI Explorer - Open Data on Internet Censorship Worldwide' />
+      <meta key="og:title" name='og:title' property='og:title' content={title} />
       <meta key="og:description" property="og:description" content={description} />
       <meta property='og:type' content='website' />
     </Head>

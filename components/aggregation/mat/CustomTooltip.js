@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react'
 import { Chip } from '@nivo/tooltip'
 import { useTheme } from '@nivo/core'
-import { Box, Flex, Text, Link } from 'ooni-components'
+import { Box, Flex, Text, Link, theme } from 'ooni-components'
 import NLink from 'next/link'
 
 import { colorMap } from './colorMap'
@@ -9,6 +9,25 @@ import { MdClear } from 'react-icons/md'
 import { useIntl } from 'react-intl'
 import { useMATContext } from './MATContext'
 
+export const themeForInvisibleTooltip = {
+  tooltip: {
+    container: {
+      boxShadow: '',
+      background: ''
+    }
+  }
+}
+
+export const InvisibleTooltip = () => <></>
+
+export const barThemeForTooltip = {
+  tooltip: {
+    container: {
+      pointerEvents: 'initial',
+      boxShadow: `1px 1px 4px 1px ${theme.colors.gray6}`
+    }
+  }
+}
 
 const urlToDomain = (url) => new URL(url).hostname
 
@@ -27,16 +46,13 @@ export const generateSearchQuery = (data, query) => {
     untilFilter = untilPlus1.toISOString().split('T')[0]
   }
 
-  const queryObj = ['probe_cc', 'test_name', 'category_code', 'probe_asn', 'input'].reduce((q, k) => {
+  const queryObj = ['probe_cc', 'test_name', 'category_code', 'probe_asn', 'input', 'domain'].reduce((q, k) => {
     if (k in data)
       q[k] = data[k]
     else if (query[k])
       q[k] = query[k]
     return q
   }, {})
-  if (data.input || query.input) {
-    queryObj.domain = urlToDomain(data.input ?? query.input)
-  }
 
   // Filter for anomalies if blocking_type is set
   const isBlockingType = Object.values(query).includes('blocking_type') && 'blocking_type' in data
@@ -52,32 +68,32 @@ export const generateSearchQuery = (data, query) => {
   }
 }
 
-const CustomToolTip = React.memo(({ data, onClose, indexValue, link = true }) => {
+const CustomToolTip = React.memo(({ data, onClose, title, link = true }) => {
   const theme = useTheme()
   const intl = useIntl()
   const [query] = useMATContext()
   const dataKeysToShow = ['anomaly_count', 'confirmed_count', 'failure_count', 'ok_count']
 
-  const [linkToMeasurements, title] = useMemo(() => {
+  const [linkToMeasurements, derivedTitle] = useMemo(() => {
     const searchQuery = generateSearchQuery(data, query)
     const linkObj = {
       pathname: '/search',
-      query: searchQuery
+      query: {...searchQuery, failure: true}
     }
 
 
-    const title = `${indexValue} ${'axis_y' in query ? ` - ${data[query.axis_y]}` : ''}`
+    const derivedTitle = title ?? `${data[query?.axis_x]} ${query?.axis_y !== '' ? ` - ${data[query.axis_y]}` : ''}`
 
     return [
       linkObj,
-      title,
+      derivedTitle,
     ]
-  }, [data, query, indexValue])
+  }, [data, query, title])
 
   return (
     <Flex flexDirection='column' style={{...theme.tooltip.container}}>
       <Flex my={1} fontSize={16}>
-        <Text fontWeight='bolder' mr='auto'>{title}</Text>
+        <Text fontWeight='bolder' mr='auto'>{derivedTitle}</Text>
         <MdClear title='Close' strokeWidth={2} onClick={onClose} />
       </Flex>
       <Flex flexDirection='column' pr={3} my={1}>
@@ -85,13 +101,17 @@ const CustomToolTip = React.memo(({ data, onClose, indexValue, link = true }) =>
           <Box key={k} my={1} fontSize={16}>
             <Flex alignItems='center'>
               <Box mr={3}><Chip color={colorMap[k]} /></Box>
-              <Text mr={4}>{k}</Text>
+              <Text mr={4}>{intl.formatMessage({id: `MAT.Table.Header.${k}`})}</Text>
               <Text ml='auto'>{intl.formatNumber(Number(data[k] ?? 0))}</Text>
             </Flex>
           </Box>
         ))}
       </Flex>
-      {link && <NLink passHref href={linkToMeasurements}><Link my={2} ml='auto' pr={3}>view measurements &gt;</Link></NLink>}
+      {link &&
+        <NLink passHref href={linkToMeasurements}>
+          <Link target='_blank' my={2} ml='auto' pr={3}>{intl.formatMessage({id: 'MAT.CustomTooltip.ViewMeasurements'})} &gt;</Link>
+        </NLink>
+      }
     </Flex>
   )
 })

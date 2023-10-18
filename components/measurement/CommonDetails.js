@@ -17,7 +17,7 @@ import { useRouter } from 'next/router'
 import { DetailsBoxTable, DetailsBox } from './DetailsBox'
 
 const LoadingRawData = (props) => {
-  return (<Box fontSize={1}>Loading</Box>)
+  return (<Box fontSize={1}><FormattedMessage id='General.Loading' /></Box>)
 }
 
 const ReactJson = dynamic(
@@ -47,17 +47,22 @@ JsonViewer.propTypes = {
 
 const CommonDetails = ({
   measurement,
-  reportId
+  reportId,
+  measurementUid,
+  userFeedbackItems =[]
 }) => {
   const {
     software_name,
     software_version,
     annotations,
+    resolver_asn,
+    resolver_ip,
+    resolver_network_name,
   } = measurement ?? {}
 
   const { query } = useRouter()
   const queryString = new URLSearchParams(query)
-  const rawMsmtDownloadURL = `${process.env.NEXT_PUBLIC_MEASUREMENTS_URL}/api/v1/raw_measurement?${queryString}`
+  const rawMsmtDownloadURL = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/raw_measurement?${queryString}`
   const [collapsed, setCollapsed] = useState(1)
 
   const intl = useIntl()
@@ -81,10 +86,14 @@ const CommonDetails = ({
   let software = software_name ?? unavailable
   software += software_version ? ` (${software_version})` : ''
 
-  const downloadFilename = `ooni-measurement-${reportId}.json`
+  const downloadFilename = `ooni-measurement-${measurementUid}.json`
   const items = [
     {
       label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.MsmtID' }),
+      value: measurementUid ?? unavailable
+    },
+    {
+      label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.ReportID' }),
       value: reportId ?? unavailable
     },
     {
@@ -97,8 +106,24 @@ const CommonDetails = ({
     },
     {
       label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.Engine' }),
-      value: engine ?? intl.formatMessage({ id: 'Measurement.CommonDetails.Value.Unavailable' })
+      value: engine
     }
+  ]
+
+  const showResolverItems = resolver_asn || resolver_ip || resolver_network_name
+  const resolverItems = [
+    {
+      label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.ResolverASN' }),
+      value: resolver_asn ?? unavailable
+    },
+    {
+      label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.ResolverIP' }),
+      value: resolver_ip ?? unavailable
+    },
+    {
+      label: intl.formatMessage({ id: 'Measurement.CommonDetails.Label.ResolverNetworkName' }),
+      value: resolver_network_name ?? unavailable
+    },
   ]
 
   const expandAllBtn = (e) => {
@@ -107,7 +132,16 @@ const CommonDetails = ({
   }
 
   return (
-    <React.Fragment>
+    <>
+      {showResolverItems && 
+        <Flex my={4}>
+          {/* Resolver data */}
+          <DetailsBoxTable
+            title={<FormattedMessage id='Measurement.CommonDetails.Label.Resolver' />}
+            items={resolverItems}
+          />
+        </Flex>
+      }
       <Flex my={4}>
         {/* Metadata: platform, probe, MK version etc. */}
         <DetailsBoxTable
@@ -115,6 +149,15 @@ const CommonDetails = ({
           bg={theme.colors.gray2}
         />
       </Flex>
+      {/* User Feedback */}
+      {!!userFeedbackItems.length && 
+        <Flex my={4}>
+          <DetailsBoxTable
+            title={<FormattedMessage id='Measurement.CommonDetails.Label.UserFeedback' />}
+            items={userFeedbackItems}
+          />
+        </Flex>
+      }
       {/* Raw Measurement */}
       <Flex>
         <DetailsBox
@@ -150,7 +193,7 @@ const CommonDetails = ({
           }
           content={
             measurement && typeof measurement === 'object' ? (
-              <Flex bg='WHITE' p={3}>
+              <Flex bg='WHITE' p={3} style={{direction: 'ltr'}}>
                 <JsonViewer src={measurement} collapsed={collapsed} />
               </Flex>
             ) : (
@@ -159,13 +202,14 @@ const CommonDetails = ({
           }
         />
       </Flex>
-    </React.Fragment>
+    </>
   )
 }
 
 CommonDetails.propTypes = {
   measurement: PropTypes.object,
-  reportId: PropTypes.string
+  reportId: PropTypes.string,
+  measurementUid: PropTypes.string
 }
 
 export default CommonDetails

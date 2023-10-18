@@ -4,46 +4,20 @@ import prettyMs from 'pretty-ms'
 import { Flex, Box, Link, Text } from 'ooni-components'
 import { FormattedMessage } from 'react-intl'
 import { MdOpenInNew } from 'react-icons/md'
-
 import { getTestMetadata } from '../utils'
-import Badge from '../Badge'
+
+import TestGroupBadge from '../Badge'
 import SocialButtons from '../SocialButtons'
-
-const TestGroupBadge = ({icon, name, color}) => (
-  <Badge bg={color} color='white'>
-    <Flex alignItems='center'>
-      <Box>
-        {React.cloneElement(icon, {size: 32})}
-      </Box>
-      <Box>
-        {name}
-      </Box>
-    </Flex>
-  </Badge>
-)
-
-TestGroupBadge.propTypes = {
-  icon: PropTypes.element,
-  name: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element
-  ]),
-  color: PropTypes.string
-}
 
 const DetailsHeader = ({testName, runtime, notice, url}) => {
   const metadata = getTestMetadata(testName)
 
   return (
-    <React.Fragment>
+    <>
       <Flex pt={4} pb={2} alignItems={['flex-end', 'center']} flexDirection={['column', 'row']}>
         <Flex mb={[3, 0]} alignItems='center'>
           <Box>
-            <TestGroupBadge
-              icon={metadata.icon}
-              name={<Text fontSize={20} as='span'>{metadata.groupName}</Text>}
-              color={metadata.color}
-            />
+            <TestGroupBadge testName={testName} />
           </Box>
           <Box ml={2}>
             <Link color='blue7' href={metadata.info}>
@@ -69,7 +43,7 @@ const DetailsHeader = ({testName, runtime, notice, url}) => {
       <Flex pb={4} pt={2} alignItems={['flex-start', 'flex-end']}>
         <SocialButtons url={url}/>
       </Flex>
-    </React.Fragment>
+    </>
   )
 }
 

@@ -1,36 +1,70 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Flex, Box, Text } from 'ooni-components'
-
+import { Flex, Box, Text, Button } from 'ooni-components'
+import NLink from 'next/link'
 import HighlightBox from './HighlightBox'
+import { styled } from 'styled-components'
+import { useIntl } from 'react-intl'
+
+const StyledGrid = styled(Box)`
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+gap: 24px;
+`
 
 const HighlightSection = ({
   title,
   highlights,
   description
 }) => {
+  const intl = useIntl()
+
   return (
     <section>
       <Box mt={4} mb={3}>
-        <Text fontSize={24} fontWeight='bold' color='blue9' textAlign={['center', 'left']}>
-          {title}
-        </Text>
+        <Flex>
+          <Text fontSize={24} fontWeight='bold' color='blue9'>
+            {title}
+          </Text>
+        </Flex>
       </Box>
       {/* Optional Description */}
       {description && <Box mt={4} mb={3}>
         <Text fontSize={20}>{description}</Text>
       </Box>}
-      <Flex flexWrap='wrap'>
+      <StyledGrid>
         {/* HighlightBoxes */}
         {
           highlights.map((item, index) => (
             <HighlightBox
               key={index}
-              {...item}
+              title={item.title ? intl.formatMessage({id: item.title}) : ''}
+              text={item.text ? intl.formatMessage({id: item.text}) : ''}
+              countryCode={item.countryCode}
+              footer={
+                <Flex justifyContent={'space-between'}>
+                  {item.explore && 
+                    <Box>
+                      <NLink href={item.explore}>
+                        <Button type='button' hollow size='small'>
+                          {intl.formatMessage({id: 'Home.Highlights.Explore'})}
+                        </Button>
+                      </NLink>
+                    </Box>
+                  }
+                  {item.report && 
+                    <Box>
+                      <a href={item.report}>
+                        <Button type='button' hollow size='small'>{intl.formatMessage({id: 'Home.Highlights.ReadReport'})}</Button>
+                      </a>
+                    </Box>
+                  }
+                </Flex>
+              }
             />
           ))
         }
-      </Flex>
+      </StyledGrid>
     </section>
   )
 }
@@ -46,7 +80,6 @@ HighlightSection.propTypes = {
   ]),
   highlights: PropTypes.arrayOf(PropTypes.shape({
     countryCode: PropTypes.string.isRequired,
-    countryName: PropTypes.string.isRequired,
     title: PropTypes.string,
     text: PropTypes.string,
     report: PropTypes.string,

@@ -1,13 +1,18 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import styled from 'styled-components'
+import NLink from 'next/link'
 import {
   Flex,
   Container,
   Box,
-  Text
+  Text,
+  Link,
 } from 'ooni-components'
 import { useIntl } from 'react-intl'
+import dayjs from 'services/dayjs'
+import { MdOutlineFactCheck } from 'react-icons/md'
+import { BiShareAlt } from 'react-icons/bi'
 
 import Flag from '../Flag'
 
@@ -20,88 +25,76 @@ const StyledSummaryItemLabel = styled(Text)`
   font-weight: 600;
 `
 
-const SummaryItemBox = ({
-  label,
-  content
-}) => (
-  <Box width={[1, 1/3]} px={4} py={2}>
-    <Text fontSize={24} fontWeight={300}>
-      {content}
-    </Text>
-    <StyledSummaryItemLabel fontSize={16} >
-      {label}
-    </StyledSummaryItemLabel>
-  </Box>
-)
-
-SummaryItemBox.propTypes = {
-  label: PropTypes.string,
-  content: PropTypes.node
-}
-
 const CommonSummary = ({
   color,
-  test_start_time,
+  measurement_start_time,
   probe_asn,
   probe_cc,
-  country
+  networkName,
+  country,
+  hero,
+  onVerifyClick
 }) => {
   const intl = useIntl()
-  const startTime = test_start_time
+  const startTime = measurement_start_time
   const network = probe_asn
   const countryCode = probe_cc
-
-  const countryBlock = <Flex flexWrap='wrap'>
-    <Box mr={2} pb={1} width={1}>
-      <Flag countryCode={countryCode} size={60} border />
-    </Box>
-    <Box>
-      {country}
-    </Box>
-  </Flex>
-
-  const formattedDate = intl.formatDate(startTime, {
-    year: 'numeric',
-    month: 'long',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: 'numeric',
-    timeZone: 'UTC',
-    timeZoneName: 'short'
-  })
-
+  const formattedDate = new Intl.DateTimeFormat(intl.locale, { dateStyle: 'long', timeStyle: 'long', timeZone: 'UTC' }).format(new Date(startTime))
+  
   return (
-    <React.Fragment>
-      <SummaryContainer py={4} color={color}>
+    <>
+      <SummaryContainer py={4} color={color} data-test-id='common-summary'>
         <Container>
-          <Flex flexWrap='wrap' alignItems='flex-end' justifyContent='space-around'>
-            {/*<SummaryItemBox
-              label='Network Name'
-              content='AT&T Lorem Ipsum Name A.T.T Internationale'
-            />*/}
-            <SummaryItemBox
-              label={intl.formatMessage({ id: 'Measurement.CommonSummary.Label.Country' })}
-              content={countryBlock}
-            />
-            <SummaryItemBox
-              label={intl.formatMessage({ id: 'Measurement.CommonSummary.Label.ASN' })}
-              content={network}
-            />
-            <SummaryItemBox
-              label={intl.formatMessage({ id: 'Measurement.CommonSummary.Label.DateTime' })}
-              content={formattedDate}
-            />
+          <Flex justifyContent='space-between'>
+            <Box fontSize={1}>
+              {formattedDate}
+            </Box>
+            <Box>
+              <Flex sx={{gap: 14}}>
+              {/* <Box>
+                <Box fontSize={18} textAlign='center'><BiShareAlt /></Box>
+                <Box fontSize={0} fontWeigh={600} textAlign='center'>{'Share'.toUpperCase()}</Box>
+              </Box> */}
+              <Box sx={{cursor: 'pointer'}} onClick={onVerifyClick}>
+                <Box fontSize={18} textAlign='center'><MdOutlineFactCheck /></Box>
+                <Box fontSize={0} fontWeigh={600} textAlign='center'>{intl.formatMessage({id: 'Measurement.CommonSummary.Verify'}).toUpperCase()}</Box>
+              </Box>
+              </Flex>
+            </Box>
+          </Flex>
+          {hero}
+          <Flex mt={2} sx={{textDecoration:'underline'}}>
+            <Box width={[1, 1, 1/2]}>
+              <NLink href={`/country/${countryCode}`} passHref><Link color='white'>
+                <Flex alignItems='center'>
+                  <Box mr={2}>
+                    <Flag countryCode={countryCode} size={33} />
+                  </Box>
+                  <Box fontSize={2}>
+                    {country}
+                  </Box>
+                </Flex>
+              </Link></NLink>
+              <Text fontSize={1}>
+                <NLink href={`/as/${network}`} passHref>
+                  <Link color='white'>
+                    <Text mb={2} mt={2}>{network} {networkName}</Text>
+                  </Link>
+                </NLink>
+              </Text>
+            </Box>
           </Flex>
         </Container>
       </SummaryContainer>
-    </React.Fragment>
+    </>
   )
 }
 
 CommonSummary.propTypes = {
-  test_start_time: PropTypes.string.isRequired,
-  probe_asn: PropTypes.number.isRequired,
+  measurement_start_time: PropTypes.string.isRequired,
+  probe_asn: PropTypes.string.isRequired,
   probe_cc: PropTypes.string.isRequired,
+  networkName: PropTypes.string,
   country: PropTypes.string.isRequired,
   color: PropTypes.string.isRequired
 }

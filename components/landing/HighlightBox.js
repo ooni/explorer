@@ -1,14 +1,18 @@
 import React from 'react'
+import { useIntl } from 'react-intl'
 import PropTypes from 'prop-types'
-import NLink from 'next/link'
-import { Flex, Box, Link, theme, Text } from 'ooni-components'
+import { Flex, Box, Text, Heading, Link, theme } from 'ooni-components'
 import styled from 'styled-components'
 import Markdown from 'markdown-to-jsx'
+import { getLocalisedRegionName } from 'utils/i18nCountries'
 
 import Flag from '../Flag'
 
 const StyledFlex = styled(Flex)`
   min-height: 350px;
+  a:hover {
+    color: ${props => props.theme.colors.white};
+  }
 `
 
 const FlexGrowBox = styled(Box)`
@@ -17,66 +21,70 @@ const FlexGrowBox = styled(Box)`
 
 const HighlightBox = ({
   countryCode,
-  countryName,
   title,
   text,
-  report,
-  explore,
-  tileColor = 'black'
-}) => (
-  <Box width={[1, 1/3]}>
-    <StyledFlex flexDirection='column' p={4} mx={[0, 3]} my={3} bg={tileColor} color='white'>
-      <Flex flexWrap='wrap' alignItems='center' my={3}>
-        <Flag countryCode={countryCode} size={40} border />
-        <Text fontSize={24} fontWeight='bold' mx={3}>{countryName}</Text>
-      </Flex>
-      <FlexGrowBox flexWrap='wrap' my={1}>
-        {title && <Box my={2}>
-          <Text fontSize={24} fontWeight='bold'>{title}</Text>
-        </Box>}
-        <Box mb={3}>
-          <Text fontSize={20}>
-            <Markdown
-              options={{
-                overrides: {
-                  a: {
-                    component: Link,
-                    props: {
-                      color: theme.colors.blue3
-                    }
-                  },
-                }
-              }}
-            >
-              {text}
-            </Markdown>
-          </Text>
-        </Box>
-      </FlexGrowBox>
-      <Flex>
-        {explore && <Box my={2} width={1/2}>
-          <Text fontSize={20}>
-            <NLink href={explore} passHref><Link color='white'>Explore</Link></NLink>
-          </Text>
-        </Box>}
-        {report && <Box my={2} width={1/2}>
-          <Text fontSize={20}>
-            <Link href={report} color='white'> Read Report </Link>
-          </Text>
-        </Box>}
-      </Flex>
-    </StyledFlex>
-  </Box>
-)
+  dates,
+  footer
+}) => {
+  const intl = useIntl()
+
+  return (
+    <Flex 
+      py={4}
+      px={24}
+      sx={{
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+        border: '1px solid',
+        borderColor: 'gray3',
+        borderLeft: '10px solid',
+        borderLeftColor: 'blue5',
+        minHeight: '328px'
+      }}
+    >
+      <Box>
+        {countryCode && (
+          <Flex alignItems="center">
+            <Flag countryCode={countryCode} size={32} />
+            <Heading h={28} ml={2} my={0}>
+              {getLocalisedRegionName(countryCode, intl.locale)}
+            </Heading>
+          </Flex>
+        )}
+        {dates}
+        {/* <Text color="gray6">{startDate && formatLongDate(startDate, intl.locale)} - {endDate ? formatLongDate(endDate, intl.locale) : 'ongoing'}</Text> */}
+        <Heading h={4} lineHeight='1.1'>{title}</Heading>
+        <Text fontSize={20} as='p'>
+          <Markdown
+            options={{
+              overrides: {
+                a: {
+                  component: Link,
+                  props: {
+                    color: theme.colors.blue3
+                  }
+                },
+              }
+            }}
+          >
+            {text}
+          </Markdown>
+        </Text>
+      </Box>
+      {footer}
+    </Flex>
+  )
+}
+  
+
 
 HighlightBox.propTypes = {
-  countryCode: PropTypes.string.isRequired,
-  countryName: PropTypes.string.isRequired,
+  countryCode: PropTypes.string,
+  countryName: PropTypes.string,
   title: PropTypes.string,
   text: PropTypes.string.isRequired,
-  report: PropTypes.string,
-  explore: PropTypes.string,
-  tileColor: PropTypes.string
+  footer: PropTypes.element,
+  dates: PropTypes.element
 }
 
 export default HighlightBox

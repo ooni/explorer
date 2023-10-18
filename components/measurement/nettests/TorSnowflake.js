@@ -49,7 +49,7 @@ const TorSnowflakeDetails = ({ isAnomaly, isFailure, measurement, render }) => {
   }
 
   return (
-    <React.Fragment>
+    <>
       {render({
         status: status,
         statusInfo: hint,
@@ -59,7 +59,7 @@ const TorSnowflakeDetails = ({ isAnomaly, isFailure, measurement, render }) => {
           formatted: false
         },
         details: (
-          <React.Fragment>
+          <>
             <Container>
               <Flex>
                 { isAnomaly &&
@@ -80,10 +80,10 @@ const TorSnowflakeDetails = ({ isAnomaly, isFailure, measurement, render }) => {
                 }
               </Flex>
             </Container>
-          </React.Fragment>
+          </>
         )
       })}
-    </React.Fragment>
+    </>
   )
 }
 

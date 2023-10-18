@@ -71,55 +71,49 @@ const TelegramDetails = ({ measurement, render }) => {
         formatted: false
       },
       details: (
-        <React.Fragment>
-          <Container>
-            <Flex>
-              <DetailsBox content={
-                <React.Fragment>
-                  <Flex>
-                    <Box width={1/4}>
-                      <AccessPointStatus
-                        icon={<MdPhoneAndroid />}
-                        label={<FormattedMessage id='Measurement.Details.Telegram.Endpoint.Label.Mobile' />}
-                        ok={telegramDesktopOK}
+        <>
+          <Flex mb={4}>
+            <Box width={1/4}>
+              <AccessPointStatus
+                icon={<MdPhoneAndroid />}
+                label={<FormattedMessage id='Measurement.Details.Telegram.Endpoint.Label.Mobile' />}
+                ok={telegramDesktopOK}
+              />
+            </Box>
+            <Box width={1/4}>
+              <AccessPointStatus
+                icon={<MdWebAsset />}
+                label={<FormattedMessage id='Measurement.Details.Telegram.Endpoint.Label.Web' />}
+                ok={telegramWebOK}
+              />
+            </Box>
+          </Flex>
+          {Array.isArray(tcp_connect) && tcp_connect.length > 0 &&
+            <DetailsBox
+              title={<FormattedMessage id='Measurement.Details.Telegram.Endpoint.Status.Heading' />}
+              collapsed={false}
+            >
+              {tcp_connect.map((connection, index) => (
+                <Flex key={index}>
+                  <Box>
+                    <Text>
+                      {connection.status.failure &&
+                      <FormattedMessage id="Measurement.Details.Telegram.Endpoint.ConnectionTo.Failed"
+                        values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
                       />
-                    </Box>
-                    <Box width={1/4}>
-                      <AccessPointStatus
-                        icon={<MdWebAsset />}
-                        label={<FormattedMessage id='Measurement.Details.Telegram.Endpoint.Label.Web' />}
-                        ok={telegramWebOK}
-                      />
-                    </Box>
-                  </Flex>
-                  {Array.isArray(tcp_connect) && tcp_connect.length > 0 &&
-                  <div>
-                    <Heading h={4}> <FormattedMessage id='Measurement.Details.Telegram.Endpoint.Status.Heading' /> </Heading>
-                    {tcp_connect.map((connection, index) => (
-                      <Flex key={index}>
-                        <Box>
-                          <Text>
-                            {connection.status.failure &&
-                            <FormattedMessage id="Measurement.Details.Telegram.Endpoint.ConnectionTo.Failed"
-                              values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
-                            />
-                            }
-                            {connection.status.success &&
-                              <FormattedMessage id="Measurement.Details.Telegram.Endpoint.ConnectionTo.Successful"
-                                values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
-                              />
-                            }
-                          </Text>
-                        </Box>
-                      </Flex>
-                    ))}
-                  </div>
-                  }
-                </React.Fragment>
-              } />
-            </Flex>
-          </Container>
-        </React.Fragment>
+                      }
+                      {connection.status.success &&
+                        <FormattedMessage id="Measurement.Details.Telegram.Endpoint.ConnectionTo.Successful"
+                          values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
+                        />
+                      }
+                    </Text>
+                  </Box>
+                </Flex>
+              ))}
+            </DetailsBox>
+          }
+        </>
       )
     })
   )

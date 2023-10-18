@@ -1,13 +1,15 @@
 {
+  "root": true,
   "plugins": ["cypress"],
-  "extends": [
-    "next/core-web-vitals",
-    "plugin:cypress/recommended"
-  ],
+  "extends": ["next/core-web-vitals", "plugin:cypress/recommended", "prettier"],
   "rules": {
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "single"],
     "semi": ["error", "never"]
   },
-  "ignorePatterns": ["components/vendor", "static"]
+  "parserOptions": {
+    "ecmaVersion": "latest",
+    "sourceType": "module"
+  },
+  "ignorePatterns": ["node_modules", "components/vendor", "static"]
 }

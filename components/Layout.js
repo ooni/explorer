@@ -6,8 +6,9 @@ import { theme } from 'ooni-components'
 
 import Header from './Header'
 import Footer from './Footer'
-import withIntl from './withIntl'
-// import FeedbackButton from '../components/FeedbackFloat'
+import { useIntl } from 'react-intl'
+import { getDirection } from 'components/withIntl'
+import { UserProvider } from 'hooks/useUser'
 
 theme.maxWidth = 1024
 
@@ -17,6 +18,7 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
   body, html {
+    direction: ${props => props.direction};
     margin: 0;
     padding: 0;
     font-family: "Fira Sans";
@@ -51,6 +53,7 @@ const matomoInstance = createInstance({
 })
 
 const Layout = ({ children, disableFooter = false }) => {
+  const { locale } = useIntl()
   useEffect(() => {
     matomoInstance.trackPageView()
   }, [])
@@ -58,23 +61,24 @@ const Layout = ({ children, disableFooter = false }) => {
   return (
     <MatomoProvider value={matomoInstance}>
       <ThemeProvider theme={theme}>
-        <GlobalStyle />
-        <div className="site">
-          <Header />
-          <div className="content">
-            { children }
+        <UserProvider>
+          <GlobalStyle direction={getDirection(locale)} />
+          <div className="site">
+            <Header />
+            <div className="content">
+              { children }
+            </div>
+            {!disableFooter && <Footer />}
           </div>
-          {!disableFooter && <Footer />}
-        </div>
-        {/* <FeedbackButton /> */}
+        </UserProvider>
       </ThemeProvider>
     </MatomoProvider>
   )
 }
 
 Layout.propTypes = {
-  children: PropTypes.array.isRequired,
+  children: PropTypes.object.isRequired,
   disableFooter: PropTypes.bool
 }
 
-export default withIntl(Layout)
+export default Layout

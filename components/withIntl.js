@@ -1,41 +1,42 @@
 /* global require */
-import React, {Component} from 'react'
+import React, { useMemo } from 'react'
 import { IntlProvider } from 'react-intl'
+import { useRouter } from 'next/router'
 
-let messages = {
-  en: require('../public/static/lang/en.json')
-}
-
-const getLocale = () => {
-  let navigatorLang = 'en-US'
-  if (typeof window !== 'undefined') {
-    navigatorLang = window.navigator.userLanguage || window.navigator.language
+export const getDirection = locale => {
+  switch (locale) {
+    case 'fa':
+      return 'rtl'
+    default:
+      return 'ltr'
   }
-  return navigatorLang.split('-')[0]
 }
 
-if (typeof window !== 'undefined' && window.OONITranslations) {
-  messages = window.OONITranslations
-}
+export const LocaleProvider = ({ children }) => {
+  const { locale, defaultLocale } = useRouter()
 
-const withIntl = (Page) => {
+  const messages = useMemo(() => {
+    try {
+      const messages = require(`../public/static/lang/${locale}.json`)
+      const defaultMessages = require(`../public/static/lang/${defaultLocale}.json`)
 
-  return class PageWithIntl extends Component {
-    render () {
-      const now = Date.now()
-      let locale = getLocale()
-      // Use 'en' when locale is unsupported
-      if (Object.keys(messages).indexOf(locale) < 0) {
-        locale = 'en'
-      }
-      const messagesToLoad = Object.assign({}, messages[locale], messages['en'])
-      return (
-        <IntlProvider locale={locale} messages={messagesToLoad} initialNow={now}>
-          <Page {...this.props} />
-        </IntlProvider>
-      )
+      const mergedMessages = Object.assign({}, defaultMessages, messages)
+      return mergedMessages
+    } catch (e) {
+      console.error(`Failed to load messages for ${locale}: ${e.message}`)
+      const defaultMessages = require(`../public/static/lang/${defaultLocale}.json`)
+      return defaultMessages
     }
-  }
-}
+  }, [locale, defaultLocale])
 
-export default withIntl
+  return (
+    <IntlProvider 
+      defaultLocale={defaultLocale}
+      locale={locale}
+      messages={messages}
+      key={locale}
+    >
+      {children}
+    </IntlProvider>
+  )
+}

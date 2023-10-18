@@ -25,24 +25,6 @@ CountryContextProvider.propTypes = {
   children: PropTypes.any
 }
 
-
-/* HoC to inject Country context into wrapped components */
-export const inCountry = (WrappedComponent) => {
-  return function InjectCountry(props) {
-    return (
-      <CountryContext.Consumer>
-        {({countryCode, countryName}) => (
-          <WrappedComponent
-            {...props}
-            countryCode={countryCode}
-            countryName={countryName}
-          />
-        )}
-      </CountryContext.Consumer>
-    )
-  }
-}
-
 /* Custom Hook to use CountryContext */
 export const useCountry = () => {
   return useContext(CountryContext)

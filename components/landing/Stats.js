@@ -9,7 +9,7 @@ import {
   VictoryLegend
 } from 'victory'
 import axios from 'axios'
-import moment from 'moment'
+import dayjs from 'services/dayjs'
 import { Flex, Text, theme } from 'ooni-components'
 import { useIntl } from 'react-intl'
 import useSWR from 'swr'
@@ -30,7 +30,7 @@ const getMaxima = (data) => {
   return maxima
 }
 
-const BASE_URL = `${process.env.NEXT_PUBLIC_MEASUREMENTS_URL}`
+const BASE_URL = `${process.env.NEXT_PUBLIC_OONI_API}`
 
 const dataFetcher = query => (
   axios.get( BASE_URL + query).then(r => r.data)
@@ -81,7 +81,7 @@ const CoverageChart = () => {
     const VictoryCursorVoronoiContainer = createContainer('cursor', 'voronoi')
 
     return (
-      <React.Fragment>
+      <>
         <Flex justifyContent='center'>
           <Text fontSize={18}>
             <FormattedMarkdown id={'Home.MonthlyStats.SummaryText'}
@@ -150,7 +150,7 @@ const CoverageChart = () => {
           />
           <VictoryAxis
             tickCount={12}
-            tickFormat={(t) => moment(t).format('MMM[\']YY')}
+            tickFormat={(t) => dayjs(t).format('MMM\'YY')}
           />
           <VictoryAxis
             dependentAxis
@@ -225,7 +225,7 @@ const CoverageChart = () => {
             }}
           />
         </VictoryChart>
-      </React.Fragment>
+      </>
     )
   } else {
     return (<ChartLoader />)

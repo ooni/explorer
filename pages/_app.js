@@ -2,12 +2,17 @@
 // https://github.com/zeit/next.js/blob/master/examples/with-sentry
 // https://github.com/vercel/next.js/blob/canary/examples/with-loading/pages/_app.js
 import 'scripts/wdyr'
+import 'regenerator-runtime/runtime'
 import { useEffect } from 'react'
+import 'regenerator-runtime/runtime'
 import NProgress from 'nprogress'
 import { useRouter } from 'next/router'
-import 'fontsource-fira-sans/latin.css'
+import '@fontsource/fira-sans'
+import '@fontsource/fira-sans/300.css'
 
 import '../public/static/nprogress.css'
+import Layout from '../components/Layout'
+import { LocaleProvider } from 'components/withIntl'
 
 export default function App({ Component, pageProps, err }) {
   const router = useRouter()
@@ -33,5 +38,11 @@ export default function App({ Component, pageProps, err }) {
   }, [router])
 
   // Workaround for https://github.com/vercel/next.js/issues/8592
-  return <Component {...pageProps} err={err} />
+  return (
+    <LocaleProvider>
+      <Layout>
+        <Component {...pageProps} err={err} />
+      </Layout>
+    </LocaleProvider>
+  )
 }

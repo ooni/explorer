@@ -55,11 +55,11 @@ export const CustomBarItem = ({
   useEffect(() => {
     // We receive tooltip coordinates in `enableLabel` 
     // to determine if a tooltip is enabled and if the column should be highlighted.
-    if (enableLabel[0] === false) {
+    if (enableLabel === false) {
       hideTooltip()
       setExtraBorderWidth(0)
     } else {
-      setExtraBorderWidth(enableLabel[1] === data.indexValue ? 2 : 0)
+      setExtraBorderWidth(enableLabel === data.indexValue ? 2 : 0)
     }
   }, [data.indexValue, enableLabel, hideTooltip])
 
@@ -69,22 +69,9 @@ export const CustomBarItem = ({
 
   const handleClick = useCallback(
     (event) => {
-      onClick?.({ color: bar.color, column: data.indexValue, ...data }, event)
-      // If the clicked bar is located near the upper edge of the react-window container,
-      // then anchor the tooltip to the bottom of the bar
-      const outerListElement = event.currentTarget.closest('.outerListElement')
-      if (!outerListElement) {
-        return
-      }
-      const {y: chartContainerY} = outerListElement.getBoundingClientRect()
-      const nearTopEdge = (event.clientY - chartContainerY) < 200
-      showTooltipAt(
-        renderTooltip(),
-        nearTopEdge ? [bar.x + bar.width / 2, bar.y + bar.height] :[bar.x + bar.width / 2, bar.y],
-        nearTopEdge ? 'bottom' : 'top'
-      )
+      onClick?.({ color: bar.color, ...data }, event)
     },
-    [bar, data, onClick, renderTooltip, showTooltipAt]
+    [bar, data, onClick]
   )
   // Disable events upon mouse movement events
   // const handleTooltip = useCallback(
@@ -123,7 +110,7 @@ export const CustomBarItem = ({
         rx={borderRadius}
         ry={borderRadius}
         fill={data.fill ?? color}
-        opacity={0.8 + (Number(isHovering) * 0.2)}
+        opacity={isHovering ? 0.8 : 1}
         strokeWidth={borderWidth + extraBorderWidth}
         stroke={borderColor}
         focusable={isFocusable}

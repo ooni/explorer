@@ -7,6 +7,9 @@ package-lock.json
 public/static/lang/.messages/
 .env*.local
 .vercel
+cypress/screenshots
+.yalc
+yalc.lock
 
 # Sentry
 .sentryclirc

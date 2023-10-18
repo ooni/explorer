@@ -39,9 +39,9 @@ const mapTestDetails = {
 const MeasurementContainer = ({ testName, measurement, ...props }) => {
   const TestDetails = testName in mapTestDetails ? mapTestDetails[testName] : DefaultTestDetails
   return (
-    <React.Fragment>
+    <>
       <TestDetails measurement={measurement} {...props} />
-    </React.Fragment>
+    </>
   )
 }
 

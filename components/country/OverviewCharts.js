@@ -1,6 +1,6 @@
 import React from 'react'
 import styled from 'styled-components'
-import { Heading, Button, Flex, Box, Text, theme } from 'ooni-components'
+import { Flex, Box, theme } from 'ooni-components'
 import {
   VictoryChart,
   VictoryBar,
@@ -11,13 +11,13 @@ import {
   VictoryVoronoiContainer
 } from 'victory'
 import { FormattedMessage, injectIntl } from 'react-intl'
-import NLink from 'next/link'
 
 import Tooltip from './Tooltip'
 import VictoryTheme from '../VictoryTheme'
 import { testGroups } from '../test-info'
 import FormattedMarkdown from '../FormattedMarkdown'
 import { useCountry } from './CountryContext'
+import CTABox from 'components/CallToActionBox'
 
 const Circle = styled.span`
   height: 16px;
@@ -35,28 +35,15 @@ const StyledTestGroupSelector = styled(Flex)`
 const CallToActionBox = () => {
   const { countryName } = useCountry()
   return (
-    <Flex my={4} bg='gray3' flexWrap='wrap'>
-      <Box width={1} mx={4} my={2}>
-        <Heading h={4}>
-          <FormattedMessage id='Country.Overview.NoData.Title' />
-        </Heading>
-        <Text fontSize={2}>
-          <FormattedMarkdown
-            id='Country.Overview.NoData.CallToAction'
-            values={{
-              country: countryName
-            }}
-          />
-        </Text>
-      </Box>
-      <Flex alignItems='center' mx={4} my={4} flexDirection={['column', 'row']}>
-        <Box mr={4} mb={[3, 0]}>
-          <NLink href='https://ooni.org/install'><a>
-            <Button><FormattedMessage id='Country.Overview.NoData.Button.InstallProbe' /></Button>
-          </a></NLink>
-        </Box>
-      </Flex>
-    </Flex>
+    <CTABox
+      title={<FormattedMessage id='Country.Overview.NoData.Title' />}
+      text={<FormattedMarkdown
+        id='Country.Overview.NoData.CallToAction'
+        values={{
+          country: countryName
+        }}
+      />
+    } />
   )
 }
 
@@ -111,7 +98,7 @@ class TestsByGroup extends React.Component {
 
     // Use react-intl's imperative API to render localized test names in chart tooltips
     const testGroupNames = {
-      'websites': intl.formatMessage({id: 'Tests.Groups.Webistes.Name'}),
+      'websites': intl.formatMessage({id: 'Tests.Groups.Websites.Name'}),
       'im': intl.formatMessage({id: 'Tests.Groups.Instant Messagging.Name'}),
       'middlebox': intl.formatMessage({id: 'Tests.Groups.Middlebox.Name'}),
       'performance': intl.formatMessage({id: 'Tests.Groups.Performance.Name'}),
@@ -264,7 +251,7 @@ class TestsByGroup extends React.Component {
     }
 
     return (
-      <React.Fragment>
+      <>
         {notEnoughData && <CallToActionBox />}
         <Flex my={4} flexWrap='wrap' justifyContent='space-between'>
           {
@@ -284,7 +271,7 @@ class TestsByGroup extends React.Component {
             {notEnoughData ? renderEmptyChart() : renderCharts()}
           </Box>
         </Flex>
-      </React.Fragment>
+      </>
     )
   }
 }

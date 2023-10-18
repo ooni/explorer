@@ -33,7 +33,10 @@ export const DetailsBoxTable = ({
 )
 
 DetailsBoxTable.propTypes = {
-  title: PropTypes.string,
+  title: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element
+  ]),
   items: PropTypes.arrayOf(PropTypes.shape({
     label: PropTypes.string.isRequired,
     value: PropTypes.string
@@ -47,13 +50,14 @@ const StyledDetailsBox = styled(Box)`
 
 const StyledDetailsBoxHeader = styled(Flex)`
   cursor: pointer;
+  justify-content: space-between;
 `
 
 const StyledDetailsBoxContent = styled(Box)`
   overflow-x: auto;
 `
 
-export const DetailsBox = ({ title, content, collapsed = false, ...rest }) => {
+export const DetailsBox = ({ title, content, collapsed = false, children, ...rest }) => {
   const [isOpen, setIsOpen] = useState(!collapsed)
 
   const onToggle = useCallback(() => {
@@ -67,14 +71,14 @@ export const DetailsBox = ({ title, content, collapsed = false, ...rest }) => {
           <Box>
             <Heading h={4}>{title}</Heading>
           </Box>
-          <Box ml='auto'>
+          <Box>
             <CollapseTrigger size={36} $open={isOpen} />
           </Box>
         </StyledDetailsBoxHeader>
       }
       {isOpen &&
         <StyledDetailsBoxContent p={3} flexWrap='wrap'>
-          {content}
+          {content || children}
         </StyledDetailsBoxContent>
       }
     </StyledDetailsBox>
@@ -84,8 +88,8 @@ export const DetailsBox = ({ title, content, collapsed = false, ...rest }) => {
 DetailsBox.propTypes = {
   title: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.instanceOf(FormattedMessage)
-  ]).isRequired,
+    PropTypes.element
+  ]),
   content: PropTypes.node,
   collapsed: PropTypes.bool
 }

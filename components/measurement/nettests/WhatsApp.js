@@ -13,6 +13,7 @@ import { MdPersonAdd } from 'react-icons/md'
 import styled from 'styled-components'
 
 import AccessPointStatus from '../AccessPointStatus'
+import { DetailsBox } from '../DetailsBox'
 
 const BugBox = styled(Box)`
   margin-bottom: 30px;
@@ -71,8 +72,8 @@ const WhatsAppDetails = ({ isAnomaly, scores, measurement, render }) => {
       formatted: false
     },
     details: (
-      <React.Fragment>
-        <Box width={1/2}>
+      <>
+        <Box mb={4} width={1/2}>
           <Flex>
             <Box width={1/3}>
               <AccessPointStatus
@@ -98,29 +99,35 @@ const WhatsAppDetails = ({ isAnomaly, scores, measurement, render }) => {
           </Flex>
         </Box>
         {Array.isArray(tcp_connect) && tcp_connect.length > 0 &&
-          <React.Fragment>
-            <Heading h={4}> <FormattedMessage id='Measurement.Details.WhatsApp.Endpoint.Status.Heading' /> </Heading>
-            {tcp_connect.map((connection, index) => (
-              <Flex key={index}>
-                <Box>
-                  <Text>
-                    {connection.status.failure &&
-                      <FormattedMessage id="Measurement.Details.WhatsApp.Endpoint.ConnectionTo.Failed"
-                        values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
-                      />
-                    }
-                    {connection.status.success &&
-                      <FormattedMessage id="Measurement.Details.WhatsApp.Endpoint.ConnectionTo.Successful"
-                        values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
-                      />
-                    }
-                  </Text>
-                </Box>
-              </Flex>
-            ))}
-          </React.Fragment>
+          <>
+            <DetailsBox
+              title={<FormattedMessage id='Measurement.Details.WhatsApp.Endpoint.Status.Heading' />}
+              content={
+                <>
+                  {tcp_connect.map((connection, index) => (
+                    <Flex key={index}>
+                      <Box>
+                        <Text>
+                          {connection.status.failure &&
+                            <FormattedMessage id="Measurement.Details.WhatsApp.Endpoint.ConnectionTo.Failed"
+                              values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
+                            />
+                          }
+                          {connection.status.success &&
+                            <FormattedMessage id="Measurement.Details.WhatsApp.Endpoint.ConnectionTo.Successful"
+                              values={{ destination: <strong> {connection.ip}:{connection.port} </strong> }}
+                            />
+                          }
+                        </Text>
+                      </Box>
+                    </Flex>
+                  ))}
+                </>
+              }
+            />
+          </>
         }
-      </React.Fragment>
+      </>
     )
   })
 }

@@ -2,22 +2,23 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import bufferFrom from 'buffer-from'
 import url from 'url'
+import NLink from 'next/link'
 import {
   Heading,
   Flex,
   Box,
-  Text
+  Text,
+  Link,
 } from 'ooni-components'
 
-import moment from 'moment'
-import { Tick, Cross } from 'ooni-components/dist/icons'
+import { Tick, Cross } from 'ooni-components/icons'
 import deepmerge from 'deepmerge'
 import styled from 'styled-components'
 
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 
 import { DetailsBox } from '../DetailsBox'
-import FormattedMarkdown from '../../FormattedMarkdown'
+import StatusInfo from '../StatusInfo'
 
 const messages = defineMessages({
   'blockingReason.http-diff': {
@@ -49,22 +50,6 @@ const messages = defineMessages({
     defaultMessage: ''
   },
 })
-
-const StatusInfo = ({ url, message}) => (
-  <Flex flexDirection='column'>
-    <Box mb={3}>
-      <Text textAlign='center' fontSize={28}> {url} </Text>
-    </Box>
-    <Box>
-      <Text textAlign='center' fontSize={20} fontWeight='bold'> {message} </Text>
-    </Box>
-  </Flex>
-)
-
-StatusInfo.propTypes = {
-  url: PropTypes.string,
-  message: PropTypes.string
-}
 
 // From https://css-tricks.com/snippets/css/make-pre-text-wrap/
 const WrappedPre = styled.pre`
@@ -109,7 +94,7 @@ const RequestResponseContainer = ({request}) => {
     // e.g ?report_id=20180709T222326Z_AS37594_FFQFSoqLJWYMgU0EnSbIK7PxicwJTFenIz9PupZYZWoXwtpCTy
     request.failure ? (
       <Box>
-        <FormattedMessage id='Measurement.Details.Websites.HTTP.NoData' />
+        <FormattedMessage id='General.NoData' />
       </Box>
     ) : (
     // !request.failure &&
@@ -161,7 +146,7 @@ RequestResponseContainer.propTypes = {
 
 const FailureString = ({failure}) => {
   if (typeof failure === 'undefined') {
-    return (<FormattedMessage id='Measurement.Details.Websites.Failures.Values.Unknown' />)
+    return (<FormattedMessage id='General.NoData' />)
   }
   if (!failure) {
     return (
@@ -182,32 +167,45 @@ FailureString.propTypes = {
   failure: PropTypes.string
 }
 
+const DnsNarrowAnswerCell = (props) => (
+  <Box width={1/12}>{props.children}</Box>
+)
+
 const DnsAnswerCell = (props) => (
-  <Box width={1/8}>{props.children}</Box>
+  <Box width={1/4}>{props.children}</Box>
 )
 
 DnsAnswerCell.propTypes = {
   children: PropTypes.any
 }
 
-const FiveColRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = 'Type', data = 'DATA', header = false}) => (
+const dnsAnswerIpInfo = (dnsAnswer) => {
+    const asn = dnsAnswer.asn ? `AS${dnsAnswer.asn}` : 'Unknown AS'
+    const asOrgName = dnsAnswer.as_org_name ? `(${dnsAnswer.as_org_name})` : ''
+
+    return `${asn} ${asOrgName}`.trim()
+}
+
+const DnsAnswerRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = 'Type', data = 'DATA', answer_ip_info = 'Answer IP Info', header = false}) => (
   <Text fontWeight={header ? 'bold' : undefined}>
     <Flex flexWrap='wrap' mb={2}>
       <DnsAnswerCell>{name}</DnsAnswerCell>
-      <DnsAnswerCell>{netClass}</DnsAnswerCell>
-      <DnsAnswerCell>{ttl}</DnsAnswerCell>
-      <DnsAnswerCell>{type}</DnsAnswerCell>
+      <DnsNarrowAnswerCell>{netClass}</DnsNarrowAnswerCell>
+      <DnsNarrowAnswerCell>{ttl}</DnsNarrowAnswerCell>
+      <DnsNarrowAnswerCell>{type}</DnsNarrowAnswerCell>
       <DnsAnswerCell>{data}</DnsAnswerCell>
+      <DnsAnswerCell>{answer_ip_info}</DnsAnswerCell>
     </Flex>
   </Text>
 )
 
-FiveColRow.propTypes = {
+DnsAnswerRow.propTypes = {
   name: PropTypes.string,
   netClass: PropTypes.string,
   ttl: PropTypes.number,
   type: PropTypes.string,
   data: PropTypes.string,
+  answer_ip_info: PropTypes.string,
   header: PropTypes.bool
 }
 
@@ -243,9 +241,9 @@ const QueryContainer = ({query}) => {
       {failure && <Box width={1}><FailureString failure={failure} /></Box>}
       {!failure &&
         <Box width={1}>
-          <FiveColRow header />
+          <DnsAnswerRow header />
           {Array.isArray(answers) && answers.map((dnsAnswer, index) => (
-            <FiveColRow
+            <DnsAnswerRow
               key={index}
               name='@'
               netClass='IN'
@@ -259,6 +257,7 @@ const QueryContainer = ({query}) => {
                     ? dnsAnswer.hostname
                     : null // for any other answer_type, DATA column will be empty
               }
+              answer_ip_info={dnsAnswerIpInfo(dnsAnswer)}
             />
           ))}
         </Box>
@@ -271,8 +270,6 @@ const QueryContainer = ({query}) => {
 QueryContainer.propTypes = {
   query: PropTypes.object
 }
-
-
 
 /*
  * This validation function can either be evolved into a generic one to run before
@@ -307,6 +304,8 @@ const validateMeasurement = (measurement) => {
   return deepmerge(validDefaults, measurement)
 }
 
+const getSearchHref = (input) => (`${process.env.NEXT_PUBLIC_EXPLORER_URL}/search?input=${input}`)
+
 const WebConnectivityDetails = ({
   isConfirmed,
   isAnomaly,
@@ -314,7 +313,7 @@ const WebConnectivityDetails = ({
   country,
   measurement,
   scores,
-  test_start_time,
+  measurement_start_time,
   probe_asn,
   input,
   render
@@ -334,16 +333,8 @@ const WebConnectivityDetails = ({
   } = validateMeasurement(measurement ?? {})
 
   const intl = useIntl()
-  const date = intl.formatDate(moment.utc(test_start_time).toDate(), {
-    year: 'numeric',
-    month: 'long',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: 'numeric',
-    timeZone: 'UTC',
-    timeZoneName: 'short'
-  })
-
+  const date = new Intl.DateTimeFormat(intl.locale, { dateStyle: 'long', timeStyle: 'long', timeZone: 'UTC' }).format(new Date(measurement_start_time))
+  
   const p = url.parse(input)
   const hostname = p.host
 
@@ -355,140 +346,131 @@ const WebConnectivityDetails = ({
   if (isFailure) {
     status = 'error'
     reason = null
-    summaryText = (
-      <FormattedMessage
-        id='Measurement.SummaryText.Websites.Failed'
-        values={{
-          date: date,
-          WebsiteURL: input,
-          network: probe_asn,
-          country: country,
-        }}
-      />
-    )
+    summaryText = <FormattedMessage
+      id='Measurement.SummaryText.Websites.Failed'
+      values={{
+        date,
+        WebsiteURL: <NLink href={getSearchHref(input)}><a>{input}</a></NLink>,
+        network: probe_asn,
+        country
+      }}
+    />
   } else if(isConfirmed) {
     status = 'confirmed'
-    summaryText = intl.formatMessage(
-      {
-        id: 'Measurement.SummaryText.Websites.ConfirmedBlocked'
-      },
-      {
-        date: date,
-        WebsiteURL: input,
+    summaryText = <FormattedMessage
+      id='Measurement.SummaryText.Websites.ConfirmedBlocked'
+      values={{
+        date,
+        WebsiteURL: <NLink href={getSearchHref(input)}><a>{input}</a></NLink>,
         network: probe_asn,
-        country: country,
-      }
-    )
+        country
+      }}
+    />
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.ConfirmedBlocked',
         defaultMessage: '{hostname} was blocked in {country}'
       },
       {
-        date: date,
+        date,
         hostname,
-        country: country,
+        country,
       }
     )
   } else if (isAnomaly) {
     status = 'anomaly'
     const blockingReason = blocking ?? scores?.analysis?.blocking_type ?? null
     reason = messages[`blockingReason.${blockingReason}`] && intl.formatMessage(messages[`blockingReason.${blockingReason}`])
-    summaryText = (<FormattedMarkdown
+    summaryText = <FormattedMessage
       id='Measurement.SummaryText.Websites.Anomaly'
       values={{
-        date: date,
-        WebsiteURL: input,
+        date,
+        WebsiteURL: <NLink href={getSearchHref(input)}><a>{input}</a></NLink>,
+        'link-to-docs': (string) => (<a href="https://ooni.org/support/faq/#why-do-false-positives-occur">{string}</a>),
         network: probe_asn,
-        country: country,
-        BlockingReason: reason && `**${reason}**`
+        country,
+        reason
       }}
-    />)
+    />
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Anomaly',
         defaultMessage: '{hostname} showed signs of {reason} in {country}'
       },
       {
-        date: date,
+        date,
         hostname,
-        country: country,
-        reason: reason
+        country,
+        reason
       }
     )
   } else if (accessible) {
     status = 'reachable'
-    summaryText = intl.formatMessage(
-      {
-        id: 'Measurement.SummaryText.Websites.Accessible'
-      },
-      {
-        date: date,
-        WebsiteURL: input,
+    summaryText = <FormattedMessage
+      id='Measurement.SummaryText.Websites.Accessible'
+      values={{
+        date,
+        WebsiteURL: <NLink href={getSearchHref(input)}><a>{input}</a></NLink>,
         network: probe_asn,
-        country: country
-      }
-    )
+        country
+      }}
+    />
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Accessible',
         defaultMessage: '{hostname} was accessible in {country}'
       },
       {
-        date: date,
+        date,
         hostname,
-        country: country,
+        country,
       }
     )
   } else if (blocking === false) {
     // When not accessible, but also not blocking, it must be down
     status = 'down'
-    summaryText = intl.formatMessage(
-      {
-        id: 'Measurement.SummaryText.Websites.Down'
-      },
-      {
-        date: date,
-        WebsiteURL: input,
+    summaryText = <FormattedMessage
+      id='Measurement.SummaryText.Websites.Down'
+      values={{
+        date,
+        WebsiteURL: <NLink href={getSearchHref(input)}><a>{input}</a></NLink>,
         network: probe_asn,
-        country: country
-      }
-    )
+        country
+      }}
+    />
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Down',
-        defaultmessage: '{hostname} was down in {country}'
+        defaultMessage: '{hostname} was down in {country}'
       },
       {
-        date: date,
+        date,
         hostname,
-        country: country,
+        country,
       }
     )
   } else {
     // Fallback condition to handle older measurements not present in fastpath
     // See: https://github.com/ooni/explorer/issues/426#issuecomment-612094244
     status = 'error'
-    summaryText = intl.formatMessage(
-      {
-        id: 'Measurement.SummaryText.Websites.Failed'
-      },
-      {
-        date: date,
-        WebsiteURL: input,
+    summaryText = <FormattedMessage
+      id='Measurement.SummaryText.Websites.Failed'
+      values={{
+        date,
+        WebsiteURL: <NLink href={getSearchHref(input)}><a>{input}</a></NLink>,
         network: probe_asn,
-        country: country
-      }
-    )
+        country
+      }}
+    />
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Failed',
-        defaultmessage: '{hostname} failed to be measured in {country}'
+        defaultMessage: '{hostname} failed to be measured in {country}'
       },
       {
-        date: date,
+        date,
         hostname,
-        country: country,
+        country,
       }
     )
   }
@@ -503,14 +485,21 @@ const WebConnectivityDetails = ({
   }) : []
 
   return (
-    <React.Fragment>
+    <>
       {render({
         status: status,
-        statusInfo: <StatusInfo url={input} message={reason} />,
+        statusInfo: <StatusInfo 
+          title={
+            <NLink passHref href={`/domain/${hostname}`}>
+              <Link sx={{textDecoration: 'underline'}} color='white'>{input}</Link>
+            </NLink>
+          }
+          message={reason} 
+        />,
         summaryText: summaryText,
         headMetadata: headMetadata,
         details: (
-          <React.Fragment>
+          <>
             {/* Failures */}
             <Flex>
               <DetailsBox
@@ -545,7 +534,7 @@ const WebConnectivityDetails = ({
                 title={<FormattedMessage id='Measurement.Details.Websites.DNSQueries.Heading' />}
                 content={
                   Array.isArray(queries) ? (
-                    <React.Fragment>
+                    <>
                       <Flex flexWrap='wrap' mb={2}>
                         <Box mr={1}>
                           <strong><FormattedMessage id='Measurement.Details.Websites.DNSQueries.Label.Resolver' />:</strong>
@@ -557,9 +546,9 @@ const WebConnectivityDetails = ({
                       <Box width={1}>
                         {queries.map((query, index) => <QueryContainer key={index} query={query} />)}
                       </Box>
-                    </React.Fragment>
+                    </>
                   ) : (
-                    <FormattedMessage id='Measurement.Details.Websites.DNSQueries.NoData' />
+                    <FormattedMessage id='General.NoData' />
                   )
                 }
               />
@@ -586,7 +575,7 @@ const WebConnectivityDetails = ({
                       </Flex>
                     ))
                   ) : (
-                    <FormattedMessage id='Measurement.Details.Websites.TCP.NoData' />
+                    <FormattedMessage id='General.NoData' />
                   )
                 }
               />
@@ -603,15 +592,15 @@ const WebConnectivityDetails = ({
                       {requests.map((request, index) => <RequestResponseContainer key={index} request={request} />)}
                     </Box>
                   ) : (
-                    <FormattedMessage id='Measurement.Details.Websites.HTTP.NoData' />
+                    <FormattedMessage id='General.NoData' />
                   )
                 }
               />
             </Flex>
-          </React.Fragment>
+          </>
         )
       })}
-    </React.Fragment>
+    </>
   )
 }
 
@@ -629,7 +618,7 @@ WebConnectivityDetails.propTypes = {
       blocking_type: PropTypes.any
     })
   }),
-  test_start_time: PropTypes.any
+  measurement_start_time: PropTypes.any
 }
 
 export default WebConnectivityDetails

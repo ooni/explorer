@@ -45,7 +45,7 @@ export const Debug = ({ query, children, ...rest }) => {
   const tableReshapeTime = (tableReshapeTimeRef.current.pre > -1) ? Number(tableReshapeTimeRef.current.post - tableReshapeTimeRef.current.pre).toFixed(3) : undefined
   const chartReshapeTime = (chartsReshapeTimeRef.current.pre > -1) ? Number(chartsReshapeTimeRef.current.post - chartsReshapeTimeRef.current.pre).toFixed(3) : undefined
   const renderTime = Number([...renderTimeRef.current].pop() - chartsReshapeTimeRef.current.post).toFixed(3)
-  const apiQuery = `${process.env.NEXT_PUBLIC_AGGREGATION_API || process.env.NEXT_PUBLIC_MEASUREMENTS_URL}/api/v1/aggregation?${paramsToQuery(params)}`
+  const apiQuery = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation?${paramsToQuery(params)}`
 
   return (
     <Flex color='gray6' {...rest}>

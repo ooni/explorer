@@ -4,7 +4,7 @@ import { FormattedMessage, defineMessages } from 'react-intl'
 import { Flex, Text, Container, theme } from 'ooni-components'
 import styled from 'styled-components'
 import { useTable, useSortBy } from 'react-table'
-import { Cross, Tick } from 'ooni-components/dist/icons'
+import { Cross, Tick } from 'ooni-components/icons'
 import { useClipboard } from 'use-clipboard-copy'
 import { FaClipboard } from 'react-icons/fa'
 
@@ -14,6 +14,8 @@ const TableStyles = styled.div`
   table {
     border-spacing: 0;
     border: 1px solid black;
+    table-layout: fixed;
+    word-break: break-all;
     width: 100%;
     tr {
       :last-child {
@@ -54,7 +56,7 @@ const NameCell = ({ children }) => {
   const clipboard = useClipboard({ copiedTimeout: 1500 })
 
   return (
-    <React.Fragment>
+    <>
       <StyledNameCell
         title={`${children} (Click to copy)`}
         onClick={() => clipboard.copy(children)}
@@ -65,12 +67,15 @@ const NameCell = ({ children }) => {
         </ClipboardIcon>
       </StyledNameCell>
 
-    </React.Fragment>
+    </>
   )
 }
 
 NameCell.propTypes = {
-  children: PropTypes.element.isRequired
+  children: PropTypes.oneOfType([
+    PropTypes.string,
+    PropTypes.element
+  ]).isRequired
 }
 
 const Table = ({ columns, data }) => {
@@ -136,9 +141,9 @@ const ConnectionStatusCell = ({ cell: { value} }) => {
     statusIcon = value === null ? <Tick color={theme.colors.green7} /> : <Cross color={theme.colors.red7} />
   }
   return (
-    <React.Fragment>
+    <>
       {statusIcon} {value}
-    </React.Fragment>
+    </>
   )
 }
 
@@ -194,40 +199,20 @@ const TorDetails = ({
       accessor: 'type'
     },
     {
-      Header: <FormattedMessage id='Measurement.Details.Tor.Table.Header.Connect' />,
-      accessor: 'connect',
+      Header: <FormattedMessage id='General.Accessible' />,
+      accessor: 'failure',
       collapse: true,
       Cell: ConnectionStatusCell
     },
-    {
-      Header: <FormattedMessage id='Measurement.Details.Tor.Table.Header.Handshake' />,
-      accessor: 'handshake',
-      collapse: true,
-      Cell: ConnectionStatusCell
-    }
   ], [])
 
   const data = useMemo(() => (
     Object.keys(targets).map(target => {
-      // Connection Status values
-      // false: Didn't run (N/A)
-      // null: No failure a.k.a success
-      // string: Failure with error string
-      let connectStatus = false, handshakeStatus = false
-      if (targets[target].summary.connect) {
-        connectStatus = targets[target].summary.connect.failure
-      }
-
-      if (targets[target].summary.handshake) {
-        handshakeStatus = targets[target].summary.handshake.failure
-      }
-
       return {
         name: targets[target].target_name || target,
         address: targets[target].target_address,
         type: targets[target].target_protocol,
-        connect: connectStatus,
-        handshake: handshakeStatus
+        failure: targets[target].failure,
       }
     })
   ), [targets])
@@ -240,7 +225,7 @@ const TorDetails = ({
   })
 
   return (
-    <React.Fragment>
+    <>
       {render({
         status: status,
         statusInfo: hint,
@@ -250,53 +235,51 @@ const TorDetails = ({
           formatted: false
         },
         details: (
-          <React.Fragment>
-            <Container>
-              <Flex my={4}>
-                <AccessPointStatus
-                  width={1/2}
-                  label={<FormattedMessage id='Measurement.Details.Tor.Bridges.Label.Title' />}
-                  content={
-                    <FormattedMessage
-                      id='Measurement.Details.Tor.Bridges.Label.OK'
-                      defaultMessage='{bridgesAccessible}/{bridgesTotal} OK'
-                      values={{
-                        bridgesAccessible: obfs4_accessible,
-                        bridgesTotal: obfs4_total
-                      }}
-                    />
-                  }
-                  ok={true}
-                  color='blue5'
-                />
-                <AccessPointStatus
-                  width={1/2}
-                  label={<FormattedMessage id='Measurement.Details.Tor.DirAuth.Label.Title' />}
-                  content={
-                    <FormattedMessage
-                      id='Measurement.Details.Tor.DirAuth.Label.OK'
-                      defaultMessage='{dirAuthAccessible}/{dirAuthTotal} OK'
-                      values={{
-                        dirAuthAccessible: or_port_dirauth_accessible,
-                        dirAuthTotal: or_port_dirauth_total
-                      }}
-                    />
-                  }
-                  ok={true}
-                  color='blue5'
-                />
-              </Flex>
-              <TableStyles>
-                <Table
-                  columns={columns}
-                  data={data}
-                />
-              </TableStyles>
-            </Container>
-          </React.Fragment>
+          <>
+            <Flex my={4}>
+              <AccessPointStatus
+                width={1/2}
+                label={<FormattedMessage id='Measurement.Details.Tor.Bridges.Label.Title' />}
+                content={
+                  <FormattedMessage
+                    id='Measurement.Details.Tor.Bridges.Label.OK'
+                    defaultMessage='{bridgesAccessible}/{bridgesTotal} OK'
+                    values={{
+                      bridgesAccessible: obfs4_accessible,
+                      bridgesTotal: obfs4_total
+                    }}
+                  />
+                }
+                ok={true}
+                color='blue5'
+              />
+              <AccessPointStatus
+                width={1/2}
+                label={<FormattedMessage id='Measurement.Details.Tor.DirAuth.Label.Title' />}
+                content={
+                  <FormattedMessage
+                    id='Measurement.Details.Tor.DirAuth.Label.OK'
+                    defaultMessage='{dirAuthAccessible}/{dirAuthTotal} OK'
+                    values={{
+                      dirAuthAccessible: or_port_dirauth_accessible,
+                      dirAuthTotal: or_port_dirauth_total
+                    }}
+                  />
+                }
+                ok={true}
+                color='blue5'
+              />
+            </Flex>
+            <TableStyles>
+              <Table
+                columns={columns}
+                data={data}
+              />
+            </TableStyles>
+          </>
         )
       })}
-    </React.Fragment>
+    </>
   )
 }
 

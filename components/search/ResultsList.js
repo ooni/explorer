@@ -1,16 +1,17 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import url from 'url'
-import moment from 'moment'
+import dayjs from 'services/dayjs'
 import NLink from 'next/link'
 import styled from 'styled-components'
-import { defineMessages, useIntl } from 'react-intl'
+import { useIntl, defineMessages } from 'react-intl'
 import {
   Flex, Box,
   Link,
   Text
 } from 'ooni-components'
 
+import { testNames } from '/components/test-info'
 import {
   colorNormal,
   colorError,
@@ -57,152 +58,156 @@ const imTests = [
 ]
 
 const messages = defineMessages({
-  'Search.WebConnectivity.Results.Reachable': {
-    id: 'Search.WebConnectivity.Results.Reachable',
+  'Search.web_connectivity.Results.Reachable': {
+    id: 'General.Accessible',
     defaultMessage: ''
   },
-  'Search.WebConnectivity.Results.Anomaly': {
-    id: 'Search.WebConnectivity.Results.Anomaly',
+  'Search.web_connectivity.Results.Anomaly': {
+    id: 'General.Anomaly',
     defaultMessage: ''
   },
-  'Search.WebConnectivity.Results.Blocked': {
+  'Search.web_connectivity.Results.Blocked': {
     id: 'Search.WebConnectivity.Results.Blocked',
     defaultMessage: ''
   },
-  'Search.WebConnectivity.Results.Error': {
-    id: 'Search.WebConnectivity.Results.Error',
+  'Search.web_connectivity.Results.Error': {
+    id: 'General.Error',
     defaultMessage: ''
   },
-  'Search.WhatsApp.Results.Reachable': {
-    id: 'Search.WhatsApp.Results.Reachable',
+  'Search.whatsapp.Results.Reachable': {
+    id: 'General.Accessible',
     defaultMessage: ''
   },
-  'Search.WhatsApp.Results.Anomaly': {
-    id: 'Search.WhatsApp.Results.Anomaly',
+  'Search.whatsapp.Results.Anomaly': {
+    id: 'General.Anomaly',
     defaultMessage: ''
   },
-  'Search.WhatsApp.Results.Error': {
-    id: 'Search.WhatsApp.Results.Error',
+  'Search.whatsapp.Results.Error': {
+    id: 'General.Error',
     defaultMessage: ''
   },
-  'Search.FacebookMessenger.Results.Reachable': {
-    id: 'Search.FacebookMessenger.Results.Reachable',
+  'Search.facebook_messenger.Results.Reachable': {
+    id: 'General.Accessible',
     defaultMessage: ''
   },
-  'Search.FacebookMessenger.Results.Anomaly': {
-    id: 'Search.FacebookMessenger.Results.Anomaly',
+  'Search.facebook_messenger.Results.Anomaly': {
+    id: 'General.Anomaly',
     defaultMessage: ''
   },
-  'Search.FacebookMessenger.Results.Error': {
-    id: 'Search.FacebookMessenger.Results.Error',
+  'Search.facebook_messenger.Results.Error': {
+    id: 'General.Error',
     defaultMessage: ''
   },
-  'Search.Telegram.Results.Reachable': {
-    id: 'Search.Telegram.Results.Reachable',
+  'Search.telegram.Results.Reachable': {
+    id: 'General.Accessible',
     defaultMessage: ''
   },
-  'Search.Telegram.Results.Anomaly': {
-    id: 'Search.Telegram.Results.Anomaly',
+  'Search.telegram.Results.Anomaly': {
+    id: 'General.Anomaly',
     defaultMessage: ''
   },
-  'Search.Telegram.Results.Error': {
-    id: 'Search.Telegram.Results.Error',
+  'Search.telegram.Results.Error': {
+    id: 'General.Error',
     defaultMessage: ''
   },
-  'Search.Signal.Results.Reachable': {
-    id: 'Search.Signal.Results.Reachable',
+  'Search.signal.Results.Reachable': {
+    id: 'General.Accessible',
     defaultMessage: ''
   },
-  'Search.Signal.Results.Anomaly': {
-    id: 'Search.Signal.Results.Anomaly',
+  'Search.signal.Results.Anomaly': {
+    id: 'General.Anomaly',
     defaultMessage: ''
   },
-  'Search.Signal.Results.Error': {
-    id: 'Search.Signal.Results.Error',
+  'Search.signal.Results.Error': {
+    id: 'General.Error',
     defaultMessage: ''
   },
-  'Search.HTTPInvalidRequestLine.Results.Anomaly': {
-    id: 'Search.HTTPInvalidRequestLine.Results.Anomaly',
+  'Search.http_invalid_request_line.Results.Anomaly': {
+    id: 'General.Anomaly',
     defaultMessage: ''
   },
-  'Search.HTTPInvalidRequestLine.Results.Reachable': {
-    id: 'Search.HTTPInvalidRequestLine.Results.Reachable',
+  'Search.http_invalid_request_line.Results.Reachable': {
+    id: 'General.OK',
     defaultMessage: ''
   },
-  'Search.HTTPInvalidRequestLine.Results.Error': {
-    id: 'Search.HTTPInvalidRequestLine.Results.Error',
+  'Search.http_invalid_request_line.Results.Error': {
+    id: 'General.Error',
     defaultMessage: ''
   },
-  'Search.HTTPHeaderFieldManipulation.Results.Anomaly': {
-    id: 'Search.HTTPHeaderFieldManipulation.Results.Anomaly',
+  'Search.http_header_field_manipulation.Results.Anomaly': {
+    id: 'General.Anomaly',
     defaultMessage: ''
   },
-  'Search.HTTPHeaderFieldManipulation.Results.Reachable': {
-    id: 'Search.HTTPHeaderFieldManipulation.Results.Reachable',
+  'Search.http_header_field_manipulation.Results.Reachable': {
+    id: 'General.OK',
     defaultMessage: ''
   },
-  'Search.HTTPHeaderFieldManipulation.Results.Error': {
-    id: 'Search.HTTPHeaderFieldManipulation.Results.Error',
+  'Search.http_header_field_manipulation.Results.Error': {
+    id: 'General.Error',
     defaultMessage: ''
   },
-  'Search.HTTPRequests.Results.Reachable': {
+  'Search.http_requests.Results.Reachable': {
     id: 'Search.HTTPRequests.Results.Reachable',
     defaultMessage: ''
   },
-  'Search.HTTPRequests.Results.Error': {
+  'Search.http_requests.Results.Error': {
     id: 'Search.HTTPRequests.Results.Error',
     defaultMessage: ''
   },
-  'Search.HTTPRequests.Results.Blocked': {
+  'Search.http_requests.Results.Blocked': {
     id: 'Search.HTTPRequests.Results.Blocked',
     defaultMessage: ''
   },
-  'Search.HTTPRequests.Results.Anomaly': {
+  'Search.http_requests.Results.Anomaly': {
     id: 'Search.HTTPRequests.Results.Anomaly',
     defaultMessage: ''
   },
-  'Search.Tor.Results.Reachable': {
-    id: 'Search.Tor.Results.Reachable',
+  'Search.tor.Results.Reachable': {
+    id: 'General.OK',
     defaultMessage: ''
   },
-  'Search.Tor.Results.Anomaly': {
-    id: 'Search.Tor.Results.Anomaly',
+  'Search.tor.Results.Anomaly': {
+    id: 'General.Anomaly',
     defaultMessage: ''
   },
-  'Search.TorSnowflake.Results.Reachable': {
-    id: 'Search.TorSnowflake.Results.Reachable',
+  'Search.tor.Results.Error': {
+    id: 'General.Error',
+    defaultMessage: ''
+  },
+  'Search.torsf.Results.Reachable': {
+    id: 'General.OK',
     defaultMessage: 'Reachable'
   },
-  'Search.TorSnowflake.Results.Anomaly': {
-    id: 'Search.TorSnowflake.Results.Anomaly',
+  'Search.torsf.Results.Anomaly': {
+    id: 'General.Anomaly',
     defaultMessage: 'Anomaly'
   },
-  'Search.TorSnowflake.Results.Error': {
-    id: 'Search.TorSnowflake.Results.Anomaly',
+  'Search.torsf.Results.Error': {
+    id: 'General.Error',
     defaultMessage: 'Anomaly'
   },
-  'Search.Psiphon.Results.Reachable': {
-    id: 'Search.Psiphon.Results.Reachable',
+  'Search.psiphon.Results.Reachable': {
+    id: 'General.OK',
     defaultMessage: ''
   },
-  'Search.Psiphon.Results.Anomaly': {
-    id: 'Search.Psiphon.Results.Anomaly',
+  'Search.psiphon.Results.Anomaly': {
+    id: 'General.Anomaly',
     defaultMessage: ''
   },
-  'Search.Psiphon.Results.Error': {
-    id: 'Search.Psiphon.Results.Error',
+  'Search.psiphon.Results.Error': {
+    id: 'General.Error',
     defaultMessage: ''
   },
-  'Search.RiseupVPN.Results.Reachable': {
-    id: 'Search.RiseupVPN.Results.Reachable',
+  'Search.riseupvpn.Results.Reachable': {
+    id: 'General.Accessible',
     defaultMessage: ''
   },
-  'Search.RiseupVPN.Results.Anomaly': {
-    id: 'Search.RiseupVPN.Results.Anomaly',
+  'Search.riseupvpn.Results.Anomaly': {
+    id: 'General.Anomaly',
     defaultMessage: ''
   },
-  'Search.RiseupVPN.Results.Error': {
-    id: 'Search.RiseupVPN.Results.Error',
+  'Search.riseupvpn.Results.Error': {
+    id: 'General.Error',
     defaultMessage: ''
   },
 })
@@ -226,11 +231,9 @@ const StyledViewDetailsLink = styled(Link)`
   }
 `
 
-const ViewDetailsLink = ({reportId, input, children}) => {
-  let href = `/measurement/${reportId}`
-  if (input) {
-    href += `?input=${encodeURIComponent(input)}`
-  }
+const ViewDetailsLink = ({measurementUid, children}) => {
+  let href = `/m/${measurementUid}`
+
   return (
     <NLink href={href}>
       <StyledViewDetailsLink href={href}>{children}</StyledViewDetailsLink>
@@ -239,8 +242,7 @@ const ViewDetailsLink = ({reportId, input, children}) => {
 }
 
 ViewDetailsLink.propTypes = {
-  reportId: PropTypes.string,
-  input: PropTypes.string,
+  measurementUid: PropTypes.string,
   children: PropTypes.element.isRequired
 }
 
@@ -269,15 +271,14 @@ const ResultInput = styled.div`
   color: ${props => props.theme.colors.gray5};
 `
 
-const getIndicators = ({ test_name, testDisplayName, scores = {}, confirmed, anomaly, failure, intl }) => {
+const getIndicators = ({ test_name, scores = {}, confirmed, anomaly, failure, intl }) => {
   let color = '', tag = null
   if (testsWithStates.includes(test_name)) {
     if (imTests.includes(test_name) && Object.entries(scores).length === 0) {
       return [color, tag]
     }
 
-    const testName = testDisplayName.replace(/ /gi, '')
-    const computedMessageIdPrefix = `Search.${testName}.Results`
+    const computedMessageIdPrefix = `Search.${test_name}.Results`
     const blockingType = scores.analysis && scores.analysis.blocking_type
 
     if (failure === true) {
@@ -322,9 +323,8 @@ const getIndicators = ({ test_name, testDisplayName, scores = {}, confirmed, ano
 
 const ResultItem = ({
   test_name,
-  testDisplayName,
   input,
-  report_id,
+  measurement_uid,
   probe_cc,
   probe_asn,
   measurement_start_time,
@@ -358,10 +358,11 @@ const ResultItem = ({
     }
   }
 
-  const [indicatorColor, tag] = getIndicators({test_name, testDisplayName, scores, confirmed, anomaly, failure, intl})
+  const [indicatorColor, tag] = getIndicators({test_name, scores, confirmed, anomaly, failure, intl})
+  const testName = testNames[test_name]?.name || test_name
 
   return (
-    <ViewDetailsLink reportId={report_id} input={input}>
+    <ViewDetailsLink measurementUid={measurement_uid}>
       <ResultRow flexWrap='wrap' alignItems='stretch'>
         <Box width={1/32}>
           <ColoredIndicator color={indicatorColor} />
@@ -380,10 +381,10 @@ const ResultItem = ({
                   <ASNBox asn={probe_asn} />
                 </Box>
                 <Box width={5/16}>
-                  {moment.utc(measurement_start_time).format('YYYY-MM-DD HH:mm [UTC]')}
+                  {dayjs.utc(measurement_start_time).format('YYYY-MM-DD HH:mm [UTC]')}
                 </Box>
                 <Box width={5/16}>
-                  {testDisplayName}
+                  {testName}
                 </Box>
               </Flex>
             </Box>
@@ -403,7 +404,6 @@ const ResultItem = ({
             </Box>
           </Flex>
         </Box>
-
       </ResultRow>
     </ViewDetailsLink>
   )
@@ -411,9 +411,8 @@ const ResultItem = ({
 
 ResultItem.propTypes = {
   test_name: PropTypes.string,
-  testDisplayName: PropTypes.string,
   input: PropTypes.string,
-  report_id: PropTypes.string,
+  measurement_uid: PropTypes.string,
   probe_cc: PropTypes.string,
   probe_asn: PropTypes.string,
   measurement_start_time: PropTypes.string,
@@ -429,12 +428,11 @@ const ResultContainer = styled(Box)`
   overflow: hidden;
 `
 
-const ResultsList = ({results, testNamesKeyed}) => {
+const ResultsList = ({ results }) => {
   return (
     <Flex>
-      <ResultContainer my={4} width={1} data-test-id='results-list'>
+      <ResultContainer width={1} data-test-id='results-list'>
         {results.map((msmt, idx) => {
-          msmt.testDisplayName = testNamesKeyed[msmt.test_name]
           return <ResultItem key={idx} {...msmt} />
         })}
       </ResultContainer>
@@ -444,7 +442,6 @@ const ResultsList = ({results, testNamesKeyed}) => {
 
 ResultsList.propTypes = {
   results: PropTypes.array,
-  testNamesKeyed: PropTypes.object,
 }
 
 export default ResultsList

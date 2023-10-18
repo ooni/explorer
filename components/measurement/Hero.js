@@ -1,31 +1,30 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Container, Flex, Box, Text } from 'ooni-components'
-import { Tick, Cross } from 'ooni-components/dist/icons'
+import { Tick, Cross } from 'ooni-components/icons'
 import { MdWarning, MdPriorityHigh} from 'react-icons/md'
 import { FaQuestion } from 'react-icons/fa'
 import styled from 'styled-components'
 import { FormattedMessage } from 'react-intl'
 
 const HeroContainer = styled(Box)`
-  background-color: ${props => props.color};
   color: white;
 `
 
-const Hero = ({ status, color, icon, label, info }) => {
+const Hero = ({ status, icon, label, info }) => {
   let computedLabel = ''
   if (status) {
     switch (status) {
     case 'anomaly':
-      computedLabel = <FormattedMessage id='Measurement.Hero.Status.Anomaly' />
+      computedLabel = <FormattedMessage id='General.Anomaly' />
       icon = <MdPriorityHigh />
       break
     case 'reachable':
-      computedLabel = <FormattedMessage id='Measurement.Hero.Status.Reachable' />
+      computedLabel = <FormattedMessage id='General.OK' />
       icon = <Tick />
       break
     case 'error':
-      computedLabel = <FormattedMessage id='Measurement.Hero.Status.Error' />
+      computedLabel = <FormattedMessage id='General.Error' />
       icon = <FaQuestion size={36}/>
       break
     case 'confirmed':
@@ -46,15 +45,15 @@ const Hero = ({ status, color, icon, label, info }) => {
   }
 
   return (
-    <HeroContainer py={4} color={color} data-test-id='hero'>
+    <HeroContainer py={2}>
       <Container>
-        <Text fontWeight={600} fontSize={4} as='div'>
+        <Text fontWeight={400} fontSize={24} as='div'>
           <Flex my={2} justifyContent='center' alignItems='center'>
-            <Box>{icon}</Box> <Box>{label}</Box>
+            {icon} <Box>{label}</Box>
           </Flex>
         </Text>
         {info &&
-          <Text fontSize={28} textAlign='center' as='div'>
+          <Text fontSize={3} fontWeight={300} textAlign='center' as='div'>
             {info}
           </Text>
         }
@@ -65,7 +64,6 @@ const Hero = ({ status, color, icon, label, info }) => {
 
 Hero.propTypes = {
   status: PropTypes.string,
-  color: PropTypes.string,
   icon: PropTypes.node,
   label: PropTypes.string,
   info: PropTypes.node

@@ -1,18 +1,35 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { useRouter } from 'next/router'
-import { Container, Heading } from 'ooni-components'
+import { Container, Heading, Box } from 'ooni-components'
 import { FormattedMessage } from 'react-intl'
 import axios from 'axios'
+import dayjs from 'dayjs'
 
-import Layout from 'components/Layout'
 import NavBar from 'components/NavBar'
 import { MetaTags } from 'components/dashboard/MetaTags'
 import { Form } from 'components/dashboard/Form'
 import Charts from 'components/dashboard/Charts'
+import FormattedMarkdown from 'components/FormattedMarkdown'
 
 const DashboardCircumvention = ({ availableCountries }) => {
   const router = useRouter()
   const query = router.query
+
+  useEffect(() => {
+    const { query } = router
+    const tomorrow = dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
+    const monthAgo = dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD')
+    const probe_cc = ['CN', 'IR', 'RU'].join(',')
+    const href = {
+      query: {
+        since: monthAgo,
+        until: tomorrow,
+        probe_cc,
+        ...query
+      },
+    }
+    router.replace(href, undefined, { shallow: true })
+  }, [])
 
   // Sync page URL params with changes from form values
   const onChange = useCallback(({ since, until, probe_cc }) => {
@@ -26,31 +43,31 @@ const DashboardCircumvention = ({ availableCountries }) => {
     if (probe_cc) {
       params['probe_cc'] = probe_cc
     }
-    const href = {
-      pathname: router.pathname,
-      query: params,
-    }
     if (query.since !== since
       || query.until !== until
       || query.probe_cc !== probe_cc
     ) {
-      router.push(href, href, { shallow: true })
+      router.push({ query: params }, undefined, { shallow: true })
     }
-
   }, [router, query])
 
   return (
-    <Layout>
+    <>
       <MetaTags />
       <NavBar />
       <Container>
         <Heading h={1}><FormattedMessage id='ReachabilityDash.Heading.CircumventionTools' /></Heading>
-        {router.isReady && <React.Fragment>
-          <Form onChange={onChange} query={query} availableCountries={availableCountries} />
-          <Charts />
-        </React.Fragment>}
+          <Box my={2} bg='gray0' p={3}>
+            <FormattedMarkdown id='ReachabilityDash.CircumventionTools.Description' />
+          </Box>
+          {Object.keys(query).length > 0 &&
+            <>
+              <Form onChange={onChange} query={query} availableCountries={availableCountries} />
+              <Charts />
+            </>
+          }
       </Container>
-    </Layout>
+    </>
   )
 }
 
@@ -59,7 +76,7 @@ const DashboardCircumvention = ({ availableCountries }) => {
 export async function getServerSideProps () {
   let availableCountries = []
   try {
-    const client = axios.create({baseURL: process.env.NEXT_PUBLIC_MEASUREMENTS_URL}) // eslint-disable-line
+    const client = axios.create({baseURL: process.env.NEXT_PUBLIC_OONI_API}) // eslint-disable-line
     const res = await client.get('/api/_/circumvention_stats_by_country')
     const { results } = res.data
 
