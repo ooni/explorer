@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 import ErrorPage from 'pages/_error'
-import MeasurementNotFound from 'components/measurement/MeasurementNotFound'
+import NotFound from '../../components/NotFound'
 
 export async function getServerSideProps({ query }) {
   let error = null
@@ -12,7 +12,7 @@ export async function getServerSideProps({ query }) {
   // It can also catch /measurement/report_id/extra/segments
   // in which case, the extra segments are available inside query.report_id[1+]
   const report_id = query?.report_id?.[0]
-  // If there is no report_id to use, fail early with MeasurementNotFound
+  // If there is no report_id to use, fail early with NotFound
   if (typeof report_id !== 'string' || !report_id.match(/[a-zA-Z0-9_-]{40,100}/)) {
     return {
       props: {}
@@ -55,7 +55,7 @@ const Measurement = ({ error }) => (
   <>
     {error ? 
       <ErrorPage statusCode={501} error={error} /> : 
-      <MeasurementNotFound />
+      <NotFound title={intl.formatMessage({id: 'Measurement.NotFound' })} />
     } 
   </>
 )

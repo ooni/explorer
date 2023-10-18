@@ -28,7 +28,7 @@ const Form = ({ onSubmit, availableCountries = [] }) => {
         name: getLocalisedRegionName(c, intl.locale),
         value: c,
       })),
-    [availableCountries, intl.locale]
+    [availableCountries, intl.locale],
   )
 
   const query2formValues = useMemo(() => {
@@ -97,7 +97,7 @@ const Form = ({ onSubmit, availableCountries = [] }) => {
           <Flex>
             <Box width={2 / 3} mr={3}>
               <Controller
-                name='since'
+                name="since"
                 control={control}
                 render={({ field }) => (
                   <Input
@@ -111,7 +111,7 @@ const Form = ({ onSubmit, availableCountries = [] }) => {
             </Box>
             <Box width={2 / 3} mr={3}>
               <Controller
-                name='until'
+                name="until"
                 control={control}
                 render={({ field }) => (
                   <Input
@@ -138,15 +138,15 @@ const Form = ({ onSubmit, availableCountries = [] }) => {
         <Box width={[1, 1 / 4]} mr={3} sx={{ zIndex: 2 }}>
           <Controller
             control={control}
-            name='probe_cc'
+            name="probe_cc"
             render={({ field }) => (
               <Select
                 {...field}
                 pt={2}
                 label={intl.formatMessage({ id: 'Search.Sidebar.Country' })}
-                data-test-id='country-filter'
+                data-test-id="country-filter"
               >
-                <option key='empty' value=''>
+                <option key="empty" value="">
                   {intl.formatMessage({ id: 'MAT.Form.AllCountries' })}
                 </option>
                 {countriesList.map(({ value, name }, i) => {

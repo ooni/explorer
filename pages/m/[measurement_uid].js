@@ -13,7 +13,6 @@ import FeedbackBox from 'components/measurement/FeedbackBox'
 import HeadMetadata from 'components/measurement/HeadMetadata'
 import Hero from 'components/measurement/Hero'
 import MeasurementContainer from 'components/measurement/MeasurementContainer'
-import MeasurementNotFound from 'components/measurement/MeasurementNotFound'
 import SummaryText from 'components/measurement/SummaryText'
 
 import NavBar from 'components/NavBar'
@@ -21,6 +20,7 @@ import useUser from 'hooks/useUser'
 import ErrorPage from 'pages/_error'
 import { useIntl } from 'react-intl'
 import { fetcher } from '/lib/api'
+import NotFound from '../../components/NotFound'
 
 const pageColors = {
   default: theme.colors.base,
@@ -38,7 +38,7 @@ export async function getServerSideProps({ query }) {
   }
 
   const measurement_uid = query?.measurement_uid
-  // If there is no measurement_uid to use, fail early with MeasurementNotFound
+  // If there is no measurement_uid to use, fail early with NotFound
   if (typeof measurement_uid !== 'string' || measurement_uid.length < 10) {
     initialProps.notFound = true
     return {
@@ -135,18 +135,16 @@ const Measurement = ({
     )
   }
 
-  const hideModal = () => {
-    setShowModal(false)
-    setSubmitted(false)
-  }
-
   return (
     <>
       <Head>
         <title>{intl.formatMessage({id: 'General.OoniExplorer'})}</title>
       </Head>
       {notFound ? (
-        <MeasurementNotFound />
+        <>
+          <NavBar />
+          <NotFound title={intl.formatMessage({id: 'Measurement.NotFound' })} />
+        </>
       ): (
         <>
           <MeasurementContainer

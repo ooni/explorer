@@ -42,7 +42,17 @@ export const handlers = [
 ]
 
 export const failedAccountMetadata = rest.get('https://ams-pg-test.ooni.org/api/_/account_metadata', (req, res, ctx) => {
-    return res(
-      ctx.status(401),
-    )
-  })
+  return res(
+    ctx.status(401),
+  )
+})
+
+export const userAccountMetadata = rest.get('https://ams-pg-test.ooni.org/api/_/account_metadata', (req, res, ctx) => {
+  return res(
+    ctx.status(200),
+    ctx.json({
+      logged_in: true,
+      role: 'user',
+    }),
+  )
+})

@@ -9,15 +9,15 @@ import { NoCharts } from './NoCharts'
 
 const ChartContainer = styled(Flex)`
   position: relative;
-  border: 2px solid ${props => props.theme.colors.gray1};
-  padding: 16px;
+  // border: 2px solid ${props => props.theme.colors.gray1};
+  // padding: 16px;
 `
 
 export const StackedBarChart = ({ data, query }) => {
   const intl = useIntl()
 
   try { 
-    const [gridData, rows ] = prepareDataForGridChart(data.data.result, query, intl.locale)
+    const [gridData, rows ] = prepareDataForGridChart(data, query, intl.locale)
 
     return (
       <ChartContainer flexDirection={['column']}>

@@ -1,6 +1,5 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState, useCallback, useContext, createContext, useMemo } from 'react'
-import useSWR from 'swr'
 
 import { apiEndpoints, loginUser, refreshToken, getAPI } from '/lib/api'
 
@@ -9,27 +8,30 @@ const TEN_MINUTES = 1000 * 60 * 10
 
 const UserContext = createContext({})
 
-export const UserProvider = ({children}) => {
+export const UserProvider = ({ children }) => {
   const router = useRouter()
   const { token } = router.query
   const [user, setUser] = useState()
   const [error, setError] = useState()
-  const [loading, setLoading] = useState(false)
-  const [loadingInitial, setLoadingInitial] = useState(true)
+  const [loading, setLoading] = useState(true)
+  // const [loadingInitial, setLoadingInitial] = useState(true)
 
   const getUser = () => {
     return getAPI(apiEndpoints.ACCOUNT_METADATA)
       .then((user) => setUser(user))
       .catch(() => setUser(undefined))
-      .finally(() => setLoadingInitial(false))
+      .finally(() => setLoading(false))
   }
 
-  const afterLogin = useCallback((redirectTo) => {
-    const { pathname, searchParams } = new URL(redirectTo)
-    setTimeout(() => {
-      router.push({ pathname, query: Object.fromEntries([...searchParams]) })
-    }, 3000)
-  }, [router])
+  const afterLogin = useCallback(
+    (redirectTo) => {
+      const { pathname, searchParams } = new URL(redirectTo)
+      setTimeout(() => {
+        router.push({ pathname, query: Object.fromEntries([...searchParams]) })
+      }, 3000)
+    },
+    [router]
+  )
 
   useEffect(() => {
     if (token && router.pathname === '/login') {
@@ -37,7 +39,8 @@ export const UserProvider = ({children}) => {
         .then((data) => {
           getUser()
           if (data?.redirect_to) afterLogin(data.redirect_to)
-        }).catch((e)=> {
+        })
+        .catch((e) => {
           console.log(e)
           setError(e.message)
         })
@@ -78,10 +81,12 @@ export const UserProvider = ({children}) => {
       .then((data) => {
         setUser(data)
         if (data?.redirect_to) afterLogin(data.redirect_to)
-      }).catch((e)=> {
+      })
+      .catch((e) => {
         console.log(e)
         setError(error)
-      }).finally(() => setLoading(false))
+      })
+      .finally(() => setLoading(false))
   }
 
   function logout() {
@@ -100,11 +105,7 @@ export const UserProvider = ({children}) => {
     [user, loading, error]
   )
 
-  return (
-    <UserContext.Provider value={memoedValue}>
-      {children}
-    </UserContext.Provider>
-  )
+  return <UserContext.Provider value={memoedValue}>{children}</UserContext.Provider>
 }
 
 const useUser = () => {

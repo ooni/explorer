@@ -14,7 +14,6 @@ import {
 import { Tick, Cross } from 'ooni-components/icons'
 import deepmerge from 'deepmerge'
 import styled from 'styled-components'
-import dayjs from 'services/dayjs'
 
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 

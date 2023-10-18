@@ -106,21 +106,28 @@ export const NavBar = ({ color }) => {
           </Box>
           <Box mt={[2, 0]}>
             <Flex flexDirection={['column', 'row']} alignItems={'center'}>
-              <NavItem label={<FormattedMessage id='Navbar.Search' />} href='/search' />
-              <NavItem label={<FormattedMessage id='Navbar.Charts.MAT' />} href='/chart/mat' />
-              <NavItem label={<FormattedMessage id='Navbar.Charts.Circumvention' />} href='/chart/circumvention' />
-              <NavItem label={<FormattedMessage id='Navbar.Countries' />} href='/countries' />
-              <NavItem label={<FormattedMessage id='Navbar.Networks' />} href='/networks' />
-              <NavItem label={<FormattedMessage id='Navbar.Domains' />} href='/domains' />
-              {user?.logged_in && (
+              <NavItem label={<FormattedMessage id="Navbar.Search" />} href="/search" />
+              <NavItem label={<FormattedMessage id="Navbar.Charts.MAT" />} href="/chart/mat" />
+              <NavItem
+                label={<FormattedMessage id="Navbar.Charts.Circumvention" />}
+                href="/chart/circumvention"
+              />
+              <NavItem label={<FormattedMessage id="Navbar.Countries" />} href="/countries" />
+              <NavItem label={<FormattedMessage id="Navbar.Networks" />} href="/networks" />
+              <NavItem label={<FormattedMessage id="Navbar.Domains" />} href="/domains" />
+              {/* <NavItem label={<FormattedMessage id="Navbar.Incidents" />} href="/incidents" /> */}
+              {user?.logged_in ? (
                 <Box ml={[0, 4]} my={[2, 0]}>
                   <StyledNavItem>
                     <NavItemLabel onClick={logoutUser}>
-                      <FormattedMessage id='General.Logout' />
+                      <FormattedMessage id="General.Logout" />
                     </NavItemLabel>
                     <Underline />
                   </StyledNavItem>
                 </Box>
+              ) : (
+                <></>
+                // <NavItem label={<FormattedMessage id="General.Login" />} href="/login" />
               )}
               <Box ml={[0, 4]} my={[2, 0]}>
                 <LanguageSelect ml={[0, 4]} onChange={handleLocaleChange} value={locale}>

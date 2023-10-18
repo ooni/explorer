@@ -320,21 +320,25 @@ describe('Measurement Page Tests', () => {
     })
 
     it('can login', () => {
-      cy.interceptRequest(failedAccountMetadata)
-
+      cy.intercept('/api/_/account_metadata', {statusCode: 401})
+      cy.intercept('/api/v1/user_register', {statusCode: 200})
+      
       const measurementUrl = '/m/20230307142542.625294_US_webconnectivity_9215f30cf2412f49'
       cy.visit(measurementUrl)
       cy.findByText('VERIFY').click()
 
-      cy.findByRole('textbox').click().type('randomEmail@randomEmail.com')
+      cy.findByRole('textbox').click()
+      cy.findByRole('textbox').type('randomEmail@randomEmail.com')
       cy.findByText('Login').click()
       cy.findByText('Login link sent')
     })
 
-
     it('can submit feedback', () => {
-      const measurementUrl = '/m/20230307142542.625294_US_webconnectivity_9215f30cf2412f49'
+      cy.intercept('/api/_/account_metadata', {logged_in: true, role: 'user'})
+      cy.intercept('/api/_/measurement_feedback', {statusCode: 200})
 
+      const measurementUrl = '/m/20230307142542.625294_US_webconnectivity_9215f30cf2412f49'
+      
       cy.visit(measurementUrl)
       cy.findByText('VERIFY').click()
 

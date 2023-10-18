@@ -605,7 +605,7 @@
   "Highlights.Lgbtqi.Ethiopia.Text": "Bloqueio do QueerNet",
   "Highlights.Changes.Cuba.Text": "Cuba [costumava servir principalmente páginas de bloco em branco](https://ooni.torproject.org/post/cuba-internet-censorship-2017/), bloqueando apenas a versão HTTP de sites. Agora eles censuram o acesso a sites que suportam HTTPS por meio de [bloqueio de IP](https://ooni.org/post/cuba-referendo/).",
   "Highlights.Changes.Venezuela.Text": "Os ISPs venezuelanos costumavam bloquear principalmente sites por meio de [adulteração de DNS](https://ooni.torproject.org/post/venezuela-internet-censorship/). Agora, a estatal CANTV também implementa [filtragem baseada em SNI](https://ooni.torproject.org/post/venezuela-blocking-wikipedia-and-social-media-2019/).",
-  "Highlights.Changes.Ethiopia.Text": "A Etiópia [costumava bloquear] (https://ooni.org/post/ethiopia-report/) inúmeros sites de notícias, LGBTQI, oposição política e sites de ferramentas de evasão. Como parte das reformas políticas de 2018, a maioria desses sites foi [desbloqueada](https://ooni.org/post/ethiopia-desbloqueio/).",
+  "Highlights.Changes.Ethiopia.Text": "A Etiópia [costumava bloquear](https://ooni.org/post/ethiopia-report/) inúmeros sites de notícias, LGBTQI, oposição política e sites de ferramentas de evasão. Como parte das reformas políticas de 2018, a maioria desses sites foi [desbloqueada](https://ooni.org/post/ethiopia-unblocking/).",
   "Domains.Title": "Domínios ",
   "Domains.SearchPlaceholder": "Pesquisar por domínio",
   "Domains.SearchError": "Nenhum domínio encontrado",

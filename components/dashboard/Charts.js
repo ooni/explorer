@@ -102,7 +102,6 @@ const Chart = React.memo(function Chart({ testName }) {
             data={chartData}
             rowKeys={rowKeys}
             rowLabels={rowLabels}
-            isGrouped={false}
             header={headerOptions}
           />
         )}

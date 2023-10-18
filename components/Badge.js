@@ -7,30 +7,28 @@ import { getTestMetadata } from './utils'
 import * as icons from 'ooni-components/icons'
 
 // XXX replace what is inside of search/results-list.StyledResultTag
-const Badge = styled(Box)`
+export const Badge = styled(Box)`
   display: inline-block;
   border-radius: 4px;
   padding: 4px 8px;
   line-height: 16px;
   font-size: 12px;
   text-transform: uppercase;
-  background-color: ${props => props.bg || props.theme.colors.gray8};
-  border: ${props => props.borderColor ? `1px solid ${props.borderColor}` : 'none'}; 
-  color: ${props => props.color || props.theme.colors.white};
+  background-color: ${(props) => props.bg || props.theme.colors.gray8};
+  border: ${(props) => (props.borderColor ? `1px solid ${props.borderColor}` : 'none')};
+  color: ${(props) => props.color || props.theme.colors.white};
   letter-spacing: 1.25px;
   font-weight: 600;
 `
 
 const TestGroupBadge = ({ testName, ...props }) => {
-  const {icon, groupName, color} = getTestMetadata(testName)
+  const { icon, groupName, color } = getTestMetadata(testName)
 
   return (
-    <Badge bg={color} color='white' {...props}>
-      <Flex sx={{gap: 1}} alignItems='center'>
-        <Text>
-          {groupName}
-        </Text>
-        {cloneElement(icon, {size: 12})}
+    <Badge bg={color} color="white" {...props}>
+      <Flex sx={{ gap: 1 }} alignItems="center">
+        <Text>{groupName}</Text>
+        {cloneElement(icon, { size: 12 })}
       </Flex>
     </Badge>
   )
@@ -45,8 +43,8 @@ export const CategoryBadge = ({ categoryCode }) => {
   }
 
   return (
-    <Badge bg='#ffffff' borderColor={theme.colors.gray5} color={theme.colors.gray7}>
-      <Flex sx={{gap: 1}} alignItems='center'>
+    <Badge bg="#ffffff" borderColor={theme.colors.gray5} color={theme.colors.gray7}>
+      <Flex sx={{ gap: 1 }} alignItems="center">
         <Box>
           <FormattedMessage id={`CategoryCode.${categoryCode}.Name`} />
         </Box>

@@ -17,7 +17,7 @@ z-index: 100;
 
 export const StyledStickySubMenu = styled.div`
 position: sticky;
-top: 65.5px;
+top: 66px;
 background: white;
 z-index: 100;
 border-bottom: 1px solid ${props => props.theme.colors.gray3};
