@@ -637,5 +637,19 @@
   "Incidents.Create.Title": "Create Incident",
   "Incidents.Dashboard.Title": "Incidents Dashboard",
   "Incidents.Dashboard.Edit": "Edit",
-  "Incidents.Dashboard.Add": "Add Incident"
+  "Incidents.Dashboard.Add": "Add Incident",
+  "Incidents.Form.ASNs.Label": "ASNs",
+  "Incidents.Form.ASNs.Placeholder": "Press Enter to add ASNs",
+  "Incidents.Form.Domains.Placeholder": "Press Enter to add domains",
+  "Incidents.Form.Tags.Label": "Tags",
+  "Incidents.Form.Tags.Placeholder": "Press Enter to add tags",
+  "Incidents.Form.ShortDescription.Label": "Short Description",
+  "Incidents.Form.TestNames.Label": "Test Names",
+  "Incidents.Form.StartTime.Label": "Start Time*",
+  "Incidents.Form.EndTime.Label": "End Time",
+  "Incidents.Form.Text.Label": "Text*",
+  "Incidents.Form.Title.Label": "Title*",
+  "Incidents.Form.Author.Label": "Author*",
+  "Incidents.Form.EmailAddress.Label": "Email Address*",
+  "Incidents.Form.Published.Label": "Published"
 }
