@@ -14,7 +14,6 @@ export const UserProvider = ({ children }) => {
   const [user, setUser] = useState()
   const [error, setError] = useState()
   const [loading, setLoading] = useState(true)
-  // const [loadingInitial, setLoadingInitial] = useState(true)
 
   const getUser = () => {
     return getAPI(apiEndpoints.ACCOUNT_METADATA)

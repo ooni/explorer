@@ -34,7 +34,7 @@ const StyledRow = styled.tr`
 
 const IncidentsDashboard = () => {
   const intl = useIntl()
-  const { user } = useUser()
+  const { user, loading } = useUser()
   const router = useRouter()
 
   const { data, error } = useSWR(apiEndpoints.SEARCH_INCIDENTS, fetcher)
@@ -45,8 +45,8 @@ const IncidentsDashboard = () => {
 
   // redirect non-admin users
   useEffect(() => {
-    if (user && user?.role !== 'admin') router.replace('/incidents')
-  }, [user, router])
+    if (!loading && user?.role !== 'admin') router.replace('/incidents')
+  }, [user, loading, router])
 
   const columns = useMemo(
     () => [
