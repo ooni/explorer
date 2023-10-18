@@ -13,7 +13,6 @@ import HttpInvalidRequestLine from './nettests/HTTPInvalidRequestLine'
 import VanillaTorDetails from './nettests/VanillaTor'
 import PsiphonDetails from './nettests/Psiphon'
 import TorDetails from './nettests/Tor'
-import RiseupVPNDetails from './nettests/RiseupVPN'
 
 import DefaultTestDetails from './nettests/Default'
 import TorSnowflakeDetails from './nettests/TorSnowflake'
@@ -31,7 +30,6 @@ const mapTestDetails = {
   vanilla_tor: VanillaTorDetails,
   psiphon: PsiphonDetails,
   tor: TorDetails,
-  riseupvpn: RiseupVPNDetails,
   torsf: TorSnowflakeDetails
 }
 
