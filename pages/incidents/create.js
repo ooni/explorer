@@ -8,6 +8,7 @@ import useUser from 'hooks/useUser'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { getUserEmail } from 'lib/api'
+import dayjs from 'services/dayjs'
 
 const defaultValues = {
   reported_by: '',
@@ -16,7 +17,7 @@ const defaultValues = {
   text: '',
   short_description: '',
   published: false,
-  start_time: '',
+  start_time: dayjs().startOf('date').format('YYYY-MM-DDTHH:mm'),
   end_time: '',
   tags: [],
   CCs: [],

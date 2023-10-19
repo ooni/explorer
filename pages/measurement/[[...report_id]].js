@@ -2,6 +2,7 @@ import axios from 'axios'
 
 import ErrorPage from 'pages/_error'
 import NotFound from '../../components/NotFound'
+import { useIntl } from 'react-intl'
 
 export async function getServerSideProps({ query }) {
   let error = null
@@ -51,13 +52,17 @@ export async function getServerSideProps({ query }) {
   }
 }
 
-const Measurement = ({ error }) => (
-  <>
+const Measurement = ({ error }) => {
+  const intl = useIntl()
+
+  return (
+    <>
     {error ? 
       <ErrorPage statusCode={501} error={error} /> : 
       <NotFound title={intl.formatMessage({id: 'Measurement.NotFound' })} />
     } 
   </>
-)
+  )
+}
 
 export default Measurement

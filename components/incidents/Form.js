@@ -66,6 +66,7 @@ const Form = ({ defaultValues, onSubmit }) => {
   }
 
   const { handleSubmit, control, getValues, formState } = useForm({
+    mode: 'onTouched',
     defaultValues,
     resolver: yupResolver(schema),
   })
@@ -150,7 +151,7 @@ const Form = ({ defaultValues, onSubmit }) => {
           control={control}
           name="email_address"
           render={({ field }) => (
-            <Input mb={3} bg="gray2" className="required" {...field} label={intl.formatMessage({ id: 'Incidents.Form.EmailAddress.Label' })} error={errors?.title?.message} disabled />
+            <Input mb={3} bg="gray2" className="required" {...field} label={intl.formatMessage({ id: 'Incidents.Form.EmailAddress.Label' })} error={errors?.email_address?.message} disabled />
           )}
         />
         <Flex flexDirection={['column', 'row']} mb={3}>
