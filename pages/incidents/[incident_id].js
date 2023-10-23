@@ -8,9 +8,12 @@ import { useRouter } from 'next/router'
 import SpinLoader from 'components/vendor/SpinLoader'
 import NotFound from 'components/NotFound'
 import ReportDisplay from '../../components/incidents/ReportDisplay'
+import { useIntl } from 'react-intl'
+import { useMemo } from 'react'
 
 const ReportView = () => {
   const { query } = useRouter()
+  const intl = useIntl()
 
   const { data, error, loading } = useSWR(
     query.incident_id
@@ -19,11 +22,25 @@ const ReportView = () => {
     fetcher
   )
 
+  const metaTitle = useMemo(() => (data?.incident?.title || intl.formatMessage({ id: 'General.OoniExplorer' })), [data])
+  const metaDescription = useMemo(() => (data?.incident?.short_description || ''), [data])
+
   return (
     <>
       <Head>
-        <title></title>
-      </Head>
+      <title>{metaTitle}</title>
+      <meta name="description" content={metaDescription} />
+      <meta
+        key="og:title"
+        property="og:title"
+        content={metaTitle}
+      />
+      <meta
+        key="og:description"
+        property="og:description"
+        content={metaDescription}
+      />
+    </Head>
       <NavBar />
       <Container>
         {loading && <SpinLoader />}
