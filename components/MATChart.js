@@ -10,7 +10,6 @@ import { axiosResponseTime } from 'components/axios-plugins'
 import axios from 'axios'
 import { MATContextProvider } from 'components/aggregation/mat/MATContext'
 import { useIntl } from 'react-intl'
-import { ResizableBox } from './aggregation/mat/Resizable'
 import { FormattedMarkdownBase } from './FormattedMarkdown'
 
 axiosResponseTime(axios)
@@ -67,7 +66,7 @@ export const MATChartReportWrapper = ({link, caption}) => {
 
   return !!searchParams && 
     <Box my={4}>
-      <MATChart query={query} />
+      <MATChart query={query} showFilters={false} />
       {caption && (
         <Text fontSize={1} mt={2}>
           <FormattedMarkdownBase>{caption}</FormattedMarkdownBase>
@@ -76,7 +75,7 @@ export const MATChartReportWrapper = ({link, caption}) => {
     </Box>
 }
 
-const MATChart = ({ query }) => {
+const MATChart = ({ query, showFilters = true }) => {
   const intl = useIntl()
   const { data, error, isValidating } = useSWR(query ? query : null, fetcher, swrOptions)
 
@@ -97,9 +96,9 @@ const MATChart = ({ query }) => {
                   {data && data.data.dimension_count == 0 && <FunnelChart data={data.data.result} />}
                   {data && data.data.dimension_count == 1 && <StackedBarChart data={data.data.result} query={query} />}
                   {data && data.data.dimension_count > 1 && (
-                    <TableView data={data.data.result} query={query} />
+                    <TableView data={data.data.result} query={query} showFilters={showFilters} />
                   )}
-                </Box> : <ResizableBox><NoCharts /></ResizableBox>
+                </Box> : <NoCharts />
               }
             </>
           )}

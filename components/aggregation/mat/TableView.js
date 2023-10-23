@@ -4,7 +4,6 @@ import { useIntl } from 'react-intl'
 
 import Filters from './Filters'
 import GridChart, { prepareDataForGridChart } from './GridChart'
-import { ResizableBox } from './Resizable'
 
 const prepareDataforTable = (data, query, locale) => {
   const table = []
@@ -37,7 +36,7 @@ const prepareDataforTable = (data, query, locale) => {
 // Maybe this can also be `[]`
 const noRowsSelected = null
 
-const TableView = ({ data, query }) => {
+const TableView = ({ data, query, showFilters = true }) => {
   const intl = useIntl()
   const resetTableRef = useRef(false)
   const yAxis = query.axis_y
@@ -60,19 +59,19 @@ const TableView = ({ data, query }) => {
 
   return (
     <Flex flexDirection='column'>
-      <Filters
-        query={query}
-        tableData={tableData}
-        setDataForCharts={setDataForCharts}
-       />
-      <ResizableBox>
-        <GridChart
-          data={reshapedData}
-          selectedRows={dataForCharts}
-          rowKeys={rowKeys}
-          rowLabels={rowLabels}
+      {showFilters && 
+        <Filters
+          query={query}
+          tableData={tableData}
+          setDataForCharts={setDataForCharts}
         />
-      </ResizableBox>
+      }
+      <GridChart
+        data={reshapedData}
+        selectedRows={dataForCharts}
+        rowKeys={rowKeys}
+        rowLabels={rowLabels}
+      />
     </Flex>
   )
 }
