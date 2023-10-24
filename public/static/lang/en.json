@@ -637,6 +637,8 @@
   "Incidents.Create.Title": "Create Incident",
   "Incidents.Dashboard.Title": "Incidents Dashboard",
   "Incidents.Dashboard.Edit": "Edit",
+  "Incidents.Dashboard.Publish": "Publish",
+  "Incidents.Dashboard.Unpublish": "Unpublish",
   "Incidents.Dashboard.Add": "Add Incident",
   "Incidents.Form.ASNs.Label": "ASNs",
   "Incidents.Form.ASNs.Placeholder": "Press Enter to add ASNs",

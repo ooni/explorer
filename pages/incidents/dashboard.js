@@ -6,17 +6,21 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
+import useSWRMutation from 'swr/mutation'
 import { Button, Container, Heading } from 'ooni-components'
 import useSWR from 'swr'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import { apiEndpoints, fetcher } from 'lib/api'
 import useUser from 'hooks/useUser'
 import NavBar from 'components/NavBar'
 import SpinLoader from 'components/vendor/SpinLoader'
 import { useEffect, useMemo, useState } from 'react'
 import { styled } from 'styled-components'
-import { formatMediumDateTime } from '../../utils'
+import { formatMediumDateTime } from 'utils'
 import { useRouter } from 'next/router'
 import { useIntl } from 'react-intl'
+import { publishIncidentReport, unpublishIncidentReport } from 'lib/api'
 
 const StyledTable = styled.table`
 border-collapse: collapse;
@@ -37,11 +41,36 @@ const IncidentsDashboard = () => {
   const { user, loading } = useUser()
   const router = useRouter()
 
-  const { data, error } = useSWR(apiEndpoints.SEARCH_INCIDENTS, fetcher)
+  const { data, error, mutate } = useSWR(apiEndpoints.SEARCH_INCIDENTS, fetcher)
 
   const tableData = useMemo(() => (data?.incidents ? data.incidents : []), [data])
 
   const [sorting, setSorting] = useState([])
+
+  const onError = (error) => {
+    toast.error(`Error: ${error?.message}`, {
+      position: toast.POSITION.BOTTOM_RIGHT,
+      toastId: 'error'
+    })
+  }
+
+  const { trigger: publish, isMutating: isPublishMutating } = useSWRMutation(
+    'publish',
+    (_, { arg }) => publishIncidentReport(arg),
+    { onSuccess: () => { mutate() },
+      throwOnError: false,
+      onError
+    }
+  )
+
+  const { trigger: unpublish, isMutating: isUnpublishMutating } = useSWRMutation(
+    'unpublish',
+    (_, { arg }) => unpublishIncidentReport(arg),
+    { onSuccess: () => { mutate() },
+      throwOnError: false,
+      onError
+    }
+  )
 
   // redirect non-admin users
   useEffect(() => {
@@ -53,7 +82,6 @@ const IncidentsDashboard = () => {
       {
         header: 'Title',
         accessorKey: 'title',
-        footer: props => props.column.id,
         cell: info => (
           <NLink href={`/incidents/${info.row.original.id}`}>
             <Button variant='link'>{info.getValue()}</Button>
@@ -63,46 +91,50 @@ const IncidentsDashboard = () => {
       {
         header: 'Last Update',
         accessorKey: 'update_time',
-        footer: props => props.column.id,
         cell: (info) => (formatMediumDateTime(info.getValue()))
       },
       {
         header: 'Reported by',
         accessorKey: 'reported_by',
-        footer: props => props.column.id,
       },
       {
         header: 'Email Address',
         accessorKey: 'email_address',
-        footer: props => props.column.id,
       },
       {
         header: 'Start Time',
         accessorKey: 'start_time',
-        footer: props => props.column.id,
         cell: (info) => (formatMediumDateTime(info.getValue()))
       },
       {
         header: 'End Time',
         accessorKey: 'end_time',
-        footer: props => props.column.id,
         cell: (info) => (info.getValue() && formatMediumDateTime(info.getValue()))
       },
       {
         header: 'Published',
         accessorKey: 'published',
-        footer: props => props.column.id,
         cell: (info) => (info.getValue() ? '✅' : '❌')
       },
       {
         header: '',
         accessorKey: 'id',
-        cell: (id) => (
-          <NLink href={`/incidents/edit/${id.getValue()}`}>
-            <Button type="button" size="small" hollow>
-              <>{intl.formatMessage({id: 'Incidents.Dashboard.Edit'})}</>
-            </Button>
-          </NLink>
+        cell: info => (
+          <>
+            <NLink href={`/incidents/edit/${info.getValue()}`}>
+              <Button mr={1} type="button" size="small" hollow>
+                {intl.formatMessage({id: 'Incidents.Dashboard.Edit'})}
+              </Button>
+            </NLink>
+            {info.row.original.published ? 
+              <Button onClick={() => unpublish({id: info.getValue()})} disabled={isPublishMutating} p={1} type="button" size="small" hollow>
+                {intl.formatMessage({id: 'Incidents.Dashboard.Unpublish'})}
+              </Button> :
+              <Button onClick={() => publish({id: info.getValue()})} disabled={isUnpublishMutating} mr={1} type="button" size="small" hollow>
+                {intl.formatMessage({id: 'Incidents.Dashboard.Publish'})}
+              </Button>
+            }
+          </>
         )
       }
     ],
@@ -118,7 +150,7 @@ const IncidentsDashboard = () => {
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    debugTable: true,
+    // debugTable: true,
   })
 
   return (
@@ -129,6 +161,7 @@ const IncidentsDashboard = () => {
       <NavBar />
       {user?.role === 'admin' ? (
         <Container>
+          <ToastContainer />
           <Heading h={1} mt={4}>{intl.formatMessage({id: 'Incidents.Dashboard.Title'})}</Heading>
           <StyledTable>
             <thead>
