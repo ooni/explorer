@@ -103,8 +103,8 @@ const Form = ({ defaultValues, onSubmit }) => {
     console.log(report)
     return onSubmit({
       ...report,
-      start_time: `${report.start_time}:00Z`,
-      ...(report.end_time ? { end_time: `${report.end_time}:00Z` } : {end_time: null}),
+      start_time: `${report.start_time}T00:00:00Z`,
+      ...(report.end_time ? { end_time: `${report.end_time}T00:00:00Z` } : {end_time: null}),
       test_names: report.test_names.length ? report.test_names.map((test_name) => test_name.value) : [],
       CCs: report.CCs.length ? report.CCs.map((cc) => cc.value) : [],
       tags: report.tags.length ? report.tags.map((t) => t.value) : [],
@@ -162,7 +162,7 @@ const Form = ({ defaultValues, onSubmit }) => {
               render={({ field }) => (
                 <Input
                   {...field}
-                  type="datetime-local"
+                  type="date"
                   label={intl.formatMessage({ id: 'Incidents.Form.StartTime.Label' })}
                   id="start_time"
                   error={errors?.start_time?.message}
@@ -177,7 +177,7 @@ const Form = ({ defaultValues, onSubmit }) => {
               render={({ field }) => (
                 <Input
                   {...field}
-                  type="datetime-local"
+                  type="date"
                   error={errors?.end_time?.message}
                   label={intl.formatMessage({ id: 'Incidents.Form.EndTime.Label' })}
                   id="end_time"

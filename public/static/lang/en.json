@@ -645,7 +645,7 @@
   "Incidents.Form.Domains.Placeholder": "Press Enter to add domains",
   "Incidents.Form.Tags.Label": "Tags",
   "Incidents.Form.Tags.Placeholder": "Press Enter to add tags",
-  "Incidents.Form.ShortDescription.Label": "Short Description",
+  "Incidents.Form.ShortDescription.Label": "Short Description*",
   "Incidents.Form.TestNames.Label": "Test Names",
   "Incidents.Form.StartTime.Label": "Start Time*",
   "Incidents.Form.EndTime.Label": "End Time",

@@ -17,7 +17,7 @@ import NavBar from 'components/NavBar'
 import SpinLoader from 'components/vendor/SpinLoader'
 import { useEffect, useMemo, useState } from 'react'
 import { styled } from 'styled-components'
-import { formatMediumDateTime } from 'utils'
+import { formatMediumDate } from 'utils'
 import { useRouter } from 'next/router'
 import { useIntl } from 'react-intl'
 import { publishIncidentReport, unpublishIncidentReport } from 'lib/api'
@@ -91,7 +91,7 @@ const IncidentsDashboard = () => {
       {
         header: 'Last Update',
         accessorKey: 'update_time',
-        cell: (info) => (formatMediumDateTime(info.getValue()))
+        cell: (info) => (formatMediumDate(info.getValue()))
       },
       {
         header: 'Reported by',
@@ -102,14 +102,14 @@ const IncidentsDashboard = () => {
         accessorKey: 'email_address',
       },
       {
-        header: 'Start Time',
+        header: 'Start Date',
         accessorKey: 'start_time',
-        cell: (info) => (formatMediumDateTime(info.getValue()))
+        cell: (info) => (formatMediumDate(info.getValue()))
       },
       {
-        header: 'End Time',
+        header: 'End Date',
         accessorKey: 'end_time',
-        cell: (info) => (info.getValue() && formatMediumDateTime(info.getValue()))
+        cell: (info) => (info.getValue() && formatMediumDate(info.getValue()))
       },
       {
         header: 'Published',

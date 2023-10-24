@@ -36,8 +36,8 @@ const EditReport = () => {
   const defaultValues = useMemo(() => {
     if (data) {
       const { update_time, mine, ...rest } = data.incident
-      rest.start_time = rest.start_time.slice(0, -4)
-      rest.end_time = rest?.end_time ? rest.end_time.slice(0, -4) : null
+      rest.start_time = rest.start_time.split('T')[0]
+      rest.end_time = rest?.end_time ? rest.end_time.split('T')[0] : null
       return rest
     } else {
       return null

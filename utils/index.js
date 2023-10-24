@@ -58,3 +58,7 @@ export const formatLongDate = (date, locale) => (
 export const formatMediumDateTime = (date, locale) => (
   new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'medium', timeZone: 'UTC' }).format(new Date(date))
 )
+
+export const formatMediumDate = (date, locale) => (
+  new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(date))
+)
