@@ -28,7 +28,7 @@
     "flag-icons": "^6.11.1",
     "lodash.debounce": "^4.0.8",
     "lru-cache": "^7.14.1",
-    "markdown-to-jsx": "^7.1.9",
+    "markdown-to-jsx": "^7.3.2",
     "next": "^12.3.1",
     "nprogress": "^0.2.0",
     "ooni-components": "0.6.0-alpha.1",

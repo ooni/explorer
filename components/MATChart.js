@@ -42,8 +42,9 @@ const fetcher = (query) => {
     })
 }
 
-export const MATChartReportWrapper = ({link, caption}) => {
+export const MATChartReportWrapper = ({ link, caption }) => {
   let searchParams
+  const captionText = typeof caption === 'string' ? caption : ''
   const today = dayjs.utc().add(1, 'day')
   const monthAgo = dayjs.utc(today).subtract(1, 'month')
 
@@ -69,7 +70,7 @@ export const MATChartReportWrapper = ({link, caption}) => {
       <MATChart query={query} showFilters={false} />
       {caption && (
         <Text fontSize={1} mt={2}>
-          <FormattedMarkdownBase>{caption}</FormattedMarkdownBase>
+          <FormattedMarkdownBase>{captionText}</FormattedMarkdownBase>
         </Text>
       )}
     </Box>
