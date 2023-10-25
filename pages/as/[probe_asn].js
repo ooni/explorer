@@ -217,13 +217,12 @@ const NetworkDashboard = ({ probe_asn, networkName, countriesData }) => {
   const { data: calendarData, error: calendarDataError } = useSWR(
     [
       '/api/v1/aggregation',
-      {
+      { params: {
         probe_asn,
         since: dayjs.utc().subtract(12, 'year').format('YYYY-MM-DD'),
         until: dayjs.utc().add(1, 'day').format('YYYY-MM-DD'),
         axis_x: 'measurement_start_day',
-      },
-      {
+        },
         resultKey: 'result',
         preprocessFn: prepareDataForCalendar,
       },

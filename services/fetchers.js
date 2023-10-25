@@ -26,7 +26,7 @@ export const MATFetcher = (query) => {
 
 export const simpleFetcher = (url, params) => (client.get(url, { params }).then(res => res.data.results))
 
-export const fetcherWithPreprocessing = (url, params, {resultKey = 'results', preprocessFn}) => {
+export const fetcherWithPreprocessing = ([url, {params, resultKey = 'results', preprocessFn}]) => {
   return client.get(url, { params }).then(res => {
     if (preprocessFn) return preprocessFn(res.data[resultKey])
     return res.data[resultKey]
