@@ -6,6 +6,7 @@ import { useRouter } from 'next/router'
 export const getDirection = locale => {
   switch (locale) {
     case 'fa':
+    case 'ar':
       return 'rtl'
     default:
       return 'ltr'
