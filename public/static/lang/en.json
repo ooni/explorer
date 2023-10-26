@@ -451,6 +451,7 @@
   "Search.Sidebar.From": "From",
   "Search.Sidebar.Until": "Until",
   "Search.Sidebar.HideFailed": "Hide failed measurements",
+  "Search.Sidebar.OoniRunLinkId": "OONI Run Link ID",
   "Search.Sidebar.Button.FilterResults": "Filter Results",
   "Search.FilterButton.AllResults": "All Results",
   "Search.FilterButton.Confirmed": "Confirmed",
