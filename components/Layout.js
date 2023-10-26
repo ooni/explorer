@@ -18,7 +18,7 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
   body, html {
-    direction: ${props => props.direction};
+    // direction: ${props => props.direction};
     margin: 0;
     padding: 0;
     font-family: "Fira Sans";
