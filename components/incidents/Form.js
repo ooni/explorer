@@ -117,11 +117,14 @@ const Form = ({ defaultValues, onSubmit }) => {
     <>
       <Modal
         show={showPreview}
-        p={4}
-        minWidth={1200}
+        maxWidth={1200}
+        px={2}
+        width="100%"
         onHideClick={() => setShowPreview(!showPreview)}
       >
+        <Box p={4}>
         <ReportDisplay report={getPreviewValues()} />
+        </Box>
       </Modal>
       <form onSubmit={(e) => handleSubmit(submit)(e).catch((e) => setSubmitError(e.message))}>
         {user?.role === 'admin' &&
