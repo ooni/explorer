@@ -3,7 +3,6 @@ import { useIntl } from 'react-intl'
 import NavBar from 'components/NavBar'
 import ErrorPage from 'pages/_error'
 import NotFound from '../../components/NotFound'
-import { useIntl } from 'react-intl'
 
 export async function getServerSideProps({ query }) {
   let error = null
