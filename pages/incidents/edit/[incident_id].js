@@ -1,9 +1,9 @@
 import Head from 'next/head'
 import NavBar from 'components/NavBar'
-import { Container, Heading, Button } from 'ooni-components'
-
+import { Container, Heading, Button, Flex } from 'ooni-components'
 import { updateIncidentReport, fetcher, apiEndpoints } from '/lib/api'
 import { useIntl } from 'react-intl'
+import NLink from 'next/link'
 import Form from 'components/incidents/Form'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
@@ -65,7 +65,10 @@ const EditReport = () => {
       </Head>
       <NavBar />
       <Container>
-        <Heading h={1}>{intl.formatMessage({id: 'Incidents.Edit.Title'})}</Heading>
+        <Flex justifyContent="space-between" alignItems="center">
+          <Heading h={1}>{intl.formatMessage({id: 'Incidents.Edit.Title'})}</Heading>
+          <NLink href='/incidents/dashboard'><Button hollow>{intl.formatMessage({id: 'Incidents.Dashboard.Short'})}</Button></NLink>
+        </Flex>
         {defaultValues && (
           <>
             <Form onSubmit={onSubmit} defaultValues={defaultValues} />

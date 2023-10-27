@@ -7,7 +7,7 @@ import {
   useReactTable,
 } from '@tanstack/react-table'
 import useSWRMutation from 'swr/mutation'
-import { Button, Container, Heading } from 'ooni-components'
+import { Button, Container, Flex, Heading } from 'ooni-components'
 import useSWR from 'swr'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
@@ -150,7 +150,6 @@ const IncidentsDashboard = () => {
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    // debugTable: true,
   })
 
   return (
@@ -217,9 +216,14 @@ const IncidentsDashboard = () => {
                 })}
             </tbody>
           </StyledTable>
-          <NLink href="/incidents/create">
-            <Button type="button" hollow mt={4}>{intl.formatMessage({id: 'Incidents.Dashboard.Add'})}</Button>
-          </NLink>
+          <Flex mt={4}>
+            <NLink href="/incidents/create">
+              <Button type="button" mr={3}>{intl.formatMessage({id: 'Incidents.Dashboard.Add'})}</Button>
+            </NLink>
+            <NLink href="/incidents">
+              <Button type="button" hollow>{intl.formatMessage({id: 'Incidents.Dashboard.ViewPublished'})}</Button>
+            </NLink>
+          </Flex>
         </Container>
       ) : (
         <Container pt={6}><SpinLoader /></Container>

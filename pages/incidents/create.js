@@ -1,6 +1,6 @@
 import Head from 'next/head'
 import NavBar from '/components/NavBar'
-import { Container, Heading } from 'ooni-components'
+import { Container, Heading, Flex, Button } from 'ooni-components'
 import { createIncidentReport } from '/lib/api'
 import { useIntl } from 'react-intl'
 import Form from '/components/incidents/Form'
@@ -9,6 +9,7 @@ import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 import { getUserEmail } from 'lib/api'
 import dayjs from 'services/dayjs'
+import NLink from 'next/link'
 
 const defaultValues = {
   reported_by: '',
@@ -48,7 +49,10 @@ const CreateReport = () => {
       </Head>
       <NavBar />
       <Container>
-        <Heading h={1}>{intl.formatMessage({id: 'Incidents.Create.Title'})}</Heading>
+        <Flex justifyContent="space-between" alignItems="center">
+          <Heading h={1}>{intl.formatMessage({id: 'Incidents.Create.Title'})}</Heading>
+          <NLink href='/incidents/dashboard'><Button hollow>{intl.formatMessage({id: 'Incidents.Dashboard.Short'})}</Button></NLink>
+        </Flex>
         <Form onSubmit={onSubmit} defaultValues={defaultValues} />
       </Container>
     </>

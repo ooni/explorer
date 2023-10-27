@@ -88,7 +88,7 @@ const ReportIndex = () => {
       </StyledStickyNavBar>
       <Container>
         {user?.role === 'admin' && (
-          <Flex justifyContent="end" mt={3}><NLink href="/incidents/dashboard"><Button hollow>Dashboard</Button></NLink></Flex>
+          <Flex justifyContent="end" mt={3}><NLink href="/incidents/dashboard"><Button hollow>{intl.formatMessage({id: 'Incidents.Dashboard.Short'})}</Button></NLink></Flex>
         )}
         <StyledStickySubMenu>
           <Flex mt={user?.role === 'admin' ? 0 : 5} mb={2} justifyContent='space-between' alignItems='baseline'>

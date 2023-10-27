@@ -1,4 +1,4 @@
-import { Input, Textarea, Button, Flex, Box, Checkbox, Modal, MultiSelectCreatable, MultiSelect} from 'ooni-components'
+import { Input, Textarea, Button, Flex, Box, Checkbox, Modal, MultiSelectCreatable, MultiSelect, Text} from 'ooni-components'
 import { useForm, Controller } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 import { useCallback, useState } from 'react'
@@ -239,7 +239,13 @@ const Form = ({ defaultValues, onSubmit }) => {
           {intl.formatMessage({id: 'Incidents.Edit.ShowPreview'})}
         </Button>
         <Button type="submit">{intl.formatMessage({id: 'General.Submit'})}</Button>
-        <p>{submitError && <>{submitError}</>}</p>
+        {submitError && 
+          <Text mt={3} color='red6'>
+            {intl.formatMessage({id: 'Measurement.Feedback.Failure'})}
+            <br/>
+            Error: {submitError}
+          </Text>
+        }
       </form>
     </>
   )
