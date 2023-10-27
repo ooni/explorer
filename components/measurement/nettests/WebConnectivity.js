@@ -350,7 +350,7 @@ const WebConnectivityDetails = ({
       id='Measurement.SummaryText.Websites.Failed'
       values={{
         date,
-        WebsiteURL: <NLink href={getSearchHref(input)}><a>{input}</a></NLink>,
+        WebsiteURL: <NLink href={getSearchHref(input)}><a dir='ltr'>{input}</a></NLink>,
         network: probe_asn,
         country
       }}
@@ -361,7 +361,7 @@ const WebConnectivityDetails = ({
       id='Measurement.SummaryText.Websites.ConfirmedBlocked'
       values={{
         date,
-        WebsiteURL: <NLink href={getSearchHref(input)}><a>{input}</a></NLink>,
+        WebsiteURL: <NLink href={getSearchHref(input)}><a dir='ltr'>{input}</a></NLink>,
         network: probe_asn,
         country
       }}
@@ -385,7 +385,7 @@ const WebConnectivityDetails = ({
       id='Measurement.SummaryText.Websites.Anomaly'
       values={{
         date,
-        WebsiteURL: <NLink href={getSearchHref(input)}><a>{input}</a></NLink>,
+        WebsiteURL: <NLink href={getSearchHref(input)}><a dir='ltr'>{input}</a></NLink>,
         'link-to-docs': (string) => (<a href="https://ooni.org/support/faq/#why-do-false-positives-occur">{string}</a>),
         network: probe_asn,
         country,
@@ -410,7 +410,7 @@ const WebConnectivityDetails = ({
       id='Measurement.SummaryText.Websites.Accessible'
       values={{
         date,
-        WebsiteURL: <NLink href={getSearchHref(input)}><a>{input}</a></NLink>,
+        WebsiteURL: <NLink href={getSearchHref(input)}><a dir='ltr'>{input}</a></NLink>,
         network: probe_asn,
         country
       }}
@@ -433,7 +433,7 @@ const WebConnectivityDetails = ({
       id='Measurement.SummaryText.Websites.Down'
       values={{
         date,
-        WebsiteURL: <NLink href={getSearchHref(input)}><a>{input}</a></NLink>,
+        WebsiteURL: <NLink href={getSearchHref(input)}><a dir='ltr'>{input}</a></NLink>,
         network: probe_asn,
         country
       }}
@@ -457,7 +457,7 @@ const WebConnectivityDetails = ({
       id='Measurement.SummaryText.Websites.Failed'
       values={{
         date,
-        WebsiteURL: <NLink href={getSearchHref(input)}><a>{input}</a></NLink>,
+        WebsiteURL: <NLink href={getSearchHref(input)}><a dir='ltr'>{input}</a></NLink>,
         network: probe_asn,
         country
       }}

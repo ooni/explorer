@@ -11,6 +11,7 @@ import { useMATContext } from './MATContext'
 import { getXAxisTicks } from './timeScaleXAxis'
 import { defineMessages, useIntl } from 'react-intl'
 import styled from 'styled-components'
+import { getDirection } from '../../withIntl'
 
 const keys = [
   'anomaly_count',
@@ -58,7 +59,7 @@ const chartProps1D = (query, intl) => ({
   axisBottom: {
     tickSize: 5,
     tickPadding: 5,
-    tickRotation: 45,
+    tickRotation: getDirection(intl.locale) === 'ltr' ? 45 : -315,
     legendPosition: 'middle',
     legendOffset: 70,
     tickValues: getXAxisTicks(query),

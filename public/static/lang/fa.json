@@ -82,7 +82,7 @@
   "Measurement.Status.Hint.Websites.NoCensorship": "هیچ مسدودیتی یافت نشد",
   "Measurement.Status.Hint.Websites.TCPBlock": "مسدودیت TCP/IP",
   "Measurement.Status.Hint.Websites.Unavailable": "وبسایت از کار افتاده",
-  "Measurement.SummaryText.Websites.Accessible": "در {date}، {Website URL} هنگام آزمایش در {network} در {country} قابل دسترسی بود.",
+  "Measurement.SummaryText.Websites.Accessible": "در {date}، {WebsiteURL} هنگام آزمایش در {network} در {country} قابل دسترسی بود.",
   "Measurement.SummaryText.Websites.Anomaly": "در {date}، {WebsiteURL} نشانه‌های {reason} را در {network} در {country} نشان داد.\n\nاین ممکن است به این معنی باشد که {WebsiteURL} مسدود شده است، اما ممکن است نتایج <link-to-docs>مثبت کاذب</link-to-docs> رخ دهد.\n\nلطفا داده‌های اندازه‌گیری شبکه را در زیر بررسی کنید.",
   "Measurement.SummaryText.Websites.Anomaly.BlockingReason.DNS": "دستکاری DNS",
   "Measurement.SummaryText.Websites.Anomaly.BlockingReason.TCP": "مسدودیت TCP/IP",

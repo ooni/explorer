@@ -1,5 +1,6 @@
 import axios from 'axios'
-
+import { useIntl } from 'react-intl'
+import NavBar from 'components/NavBar'
 import ErrorPage from 'pages/_error'
 import NotFound from '../../components/NotFound'
 import { useIntl } from 'react-intl'
@@ -57,11 +58,12 @@ const Measurement = ({ error }) => {
 
   return (
     <>
-    {error ? 
-      <ErrorPage statusCode={501} error={error} /> : 
-      <NotFound title={intl.formatMessage({id: 'Measurement.NotFound' })} />
-    } 
-  </>
+      <NavBar />
+      {error ? 
+        <ErrorPage statusCode={501} error={error} /> : 
+        <NotFound title={intl.formatMessage({id: 'Measurement.NotFound' })} />
+      } 
+    </>
   )
 }
 

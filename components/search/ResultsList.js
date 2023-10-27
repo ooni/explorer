@@ -46,7 +46,6 @@ const testsWithStates = [
   'tor',
   'torsf',
   'psiphon',
-  'riseupvpn',
   'http_header_field_manipulation',
   'http_invalid_request_line',
 ]

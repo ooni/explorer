@@ -16,7 +16,12 @@ import fr from 'date-fns/locale/fr'
 import is from 'date-fns/locale/is'
 import ru from 'date-fns/locale/ru'
 import tr from 'date-fns/locale/tr'
+import ar from 'date-fns/locale/ar'
+import pt from 'date-fns/locale/pt'
+import th from 'date-fns/locale/th'
+import vi from 'date-fns/locale/vi'
 import zh from 'date-fns/locale/zh-CN'
+import zhHant from 'date-fns/locale/zh-HK'
 
 const StyledDatetime = styled.div`
 z-index: 99999;
@@ -58,16 +63,26 @@ const getDateFnsLocale = locale => {
       return es
     case 'fa':
       return fa
+    case 'ar':
+      return ar
     case 'fr':
       return fr
     case 'is':
       return is
+    case 'pt-BR':
+      return pt
     case 'ru':
       return ru
     case 'tr':
       return tr
-    case 'zh':
+    case 'th':
+      return th
+    case 'vi':
+      return vi
+    case 'zh-CN':
       return zh
+    case 'zh-Hant':
+      return zhHant
     default:
       return en
   }
