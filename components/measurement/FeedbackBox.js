@@ -270,7 +270,7 @@ const FeedbackBox = ({user, measurement_uid, setShowModal, previousFeedback, mut
             </form>
           }
           {state.value === 'submit' && 
-            <SpinLoader background={theme.colors.gray0} />
+            <SpinLoader $background={theme.colors.gray0} />
           }
           {state.value === 'success' && 
             <>

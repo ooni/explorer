@@ -15,24 +15,24 @@ const loading = keyframes`
 
 const spinnerAnimation = props =>
   css`
-    ${loading} ${props.duration}s infinite linear;
+    ${loading} ${props.$duration}s infinite linear;
   `
 
 const Spin = styled.div`
   animation: ${spinnerAnimation};
-  background: ${props => props.color};
-  background: ${props => `linear-gradient(to right, ${props.color} 10%, rgba(255, 255, 255, 0) 42%);`};
+  background: ${props => props.$color};
+  background: ${props => `linear-gradient(to right, ${props.$color} 10%, rgba(255, 255, 255, 0) 42%);`};
   border-radius: 50%;
-  font-size: ${props => `${props.size}px`};
+  font-size: ${props => `${props.$size}px`};
   height: 11em;
-  margin: ${props => props.margin};
+  margin: ${props => props.$margin};
   position: relative;
   text-indent: -9999em;
   transform: translateZ(0);
   width: 11em;
 
   &:before {
-    background: ${props => props.color};
+    background: ${props => props.$color};
     border-radius: 100% 0 0 0;
     content: '';
     height: 50%;
@@ -43,7 +43,7 @@ const Spin = styled.div`
   }
 
   &:after {
-    background: ${props => props.background};
+    background: ${props => props.$background};
     border-radius: 50%;
     bottom: 0;
     content: '';
@@ -62,19 +62,19 @@ const SpinLoader = props => (
 )
 
 SpinLoader.propTypes = {
-  background: PropTypes.string,
-  color: PropTypes.string,
-  duration: PropTypes.number,
-  size: PropTypes.number,
-  margin: PropTypes.string,
+  $background: PropTypes.string,
+  $color: PropTypes.string,
+  $duration: PropTypes.number,
+  $size: PropTypes.number,
+  $margin: PropTypes.string,
 }
 
 SpinLoader.defaultProps = {
-  background: '#fff',
-  color: theme.colors.blue5,
-  duration: 1.4,
-  size: 5,
-  margin: '50px auto',
+  $background: '#fff',
+  $color: theme.colors.blue5,
+  $duration: 1.4,
+  $size: 5,
+  $margin: '50px auto',
 }
 
 export default SpinLoader
