@@ -1,11 +1,8 @@
 /* global process */
-import React, { useCallback, useEffect, useMemo } from 'react'
-import PropTypes from 'prop-types'
+import React, { useCallback, useEffect } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import axios from 'axios'
-import { Container, Heading, Flex, Box, Button, Link } from 'ooni-components'
-import useSWR from 'swr'
+import { Container, Heading, Flex, Box, Link } from 'ooni-components'
 import { FormattedMessage, useIntl } from 'react-intl'
 
 import NavBar from 'components/NavBar'

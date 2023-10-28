@@ -5,11 +5,12 @@ import { createIncidentReport } from '/lib/api'
 import { useIntl } from 'react-intl'
 import Form from '/components/incidents/Form'
 import useUser from 'hooks/useUser'
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
 import { getUserEmail } from 'lib/api'
 import dayjs from 'services/dayjs'
 import NLink from 'next/link'
+import LoginRequiredModal from 'components/incidents/LoginRequiredModal'
 
 const defaultValues = {
   reported_by: '',
@@ -33,10 +34,15 @@ const CreateReport = () => {
   const intl = useIntl()
   const router = useRouter()
   const { loading, user } = useUser()
+  const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
     if (!user && !loading) router.push('/incidents')
   }, [user, loading])
+
+  useEffect(() => {
+    if (!getUserEmail()) setShowModal(true)
+  }, [])
 
   const onSubmit = (report) => {
     return createIncidentReport(report).then((data) => router.push(`/incidents/${data.id}`))
@@ -48,6 +54,7 @@ const CreateReport = () => {
         <title></title>
       </Head>
       <NavBar />
+      <LoginRequiredModal show={showModal} />
       <Container>
         <Flex justifyContent="space-between" alignItems="center">
           <Heading h={1}>{intl.formatMessage({id: 'Incidents.Create.Title'})}</Heading>

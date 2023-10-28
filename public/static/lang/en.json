@@ -655,5 +655,6 @@
   "Incidents.Form.Title.Label": "Title*",
   "Incidents.Form.Author.Label": "Author*",
   "Incidents.Form.EmailAddress.Label": "Email Address*",
-  "Incidents.Form.Published.Label": "Published"
+  "Incidents.Form.Published.Label": "Published",
+  "Incidents.LoginRequiredModal.Title": "Email address is missing. Please log in again to be able to create an incident."
 }

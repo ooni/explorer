@@ -22,12 +22,12 @@ const Login = () => {
 
   const { user, loading, error } = useUser()
 
-  // If user is already logged in, redirect to home page
-  useEffect(() => {
-    if (!loading && user && !token) {
-      router.replace('/')
-    }
-  }, [user, loading, router, token])
+  // // If user is already logged in, redirect to home page
+  // useEffect(() => {
+  //   if (!loading && user && !token) {
+  //     router.replace('/')
+  //   }
+  // }, [user, loading, router, token])
 
   return (
     <>
