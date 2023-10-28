@@ -18,9 +18,8 @@ const LoginRequiredModal = ({ show }) => {
   const router = useRouter()
 
   const handleClick = () => {
-    router.push('/login').then(() => {
-      logout()
-    })
+    logout()
+    router.push('/login')
   }
 
   return (

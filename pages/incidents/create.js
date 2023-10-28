@@ -1,16 +1,17 @@
 import Head from 'next/head'
-import NavBar from '/components/NavBar'
 import { Container, Heading, Flex, Button } from 'ooni-components'
-import { createIncidentReport } from '/lib/api'
 import { useIntl } from 'react-intl'
-import Form from '/components/incidents/Form'
-import useUser from 'hooks/useUser'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { getUserEmail } from 'lib/api'
-import dayjs from 'services/dayjs'
 import NLink from 'next/link'
+import dayjs from 'services/dayjs'
+import { getUserEmail } from 'lib/api'
+import { createIncidentReport } from 'lib/api'
+import NavBar from 'components/NavBar'
+import Form from 'components/incidents/Form'
+import useUser from 'hooks/useUser'
 import LoginRequiredModal from 'components/incidents/LoginRequiredModal'
+import SpinLoader from 'components/vendor/SpinLoader'
 
 const defaultValues = {
   reported_by: '',
@@ -37,11 +38,11 @@ const CreateReport = () => {
   const [showModal, setShowModal] = useState(false)
 
   useEffect(() => {
-    if (!user && !loading) router.push('/incidents')
-  }, [user, loading])
+    if (!user && !loading && !showModal) router.push('/incidents')
+  }, [user, loading, showModal])
 
   useEffect(() => {
-    if (!getUserEmail()) setShowModal(true)
+    if (user && !loading && !getUserEmail()) setShowModal(true)
   }, [])
 
   const onSubmit = (report) => {
@@ -54,14 +55,17 @@ const CreateReport = () => {
         <title></title>
       </Head>
       <NavBar />
-      <LoginRequiredModal show={showModal} />
-      <Container>
-        <Flex justifyContent="space-between" alignItems="center">
-          <Heading h={1}>{intl.formatMessage({id: 'Incidents.Create.Title'})}</Heading>
-          <NLink href='/incidents/dashboard'><Button hollow>{intl.formatMessage({id: 'Incidents.Dashboard.Short'})}</Button></NLink>
-        </Flex>
-        <Form onSubmit={onSubmit} defaultValues={defaultValues} />
-      </Container>
+      {user ?
+        <Container>
+          <LoginRequiredModal show={showModal} />
+          <Flex justifyContent="space-between" alignItems="center">
+            <Heading h={1}>{intl.formatMessage({id: 'Incidents.Create.Title'})}</Heading>
+            <NLink href='/incidents/dashboard'><Button hollow>{intl.formatMessage({id: 'Incidents.Dashboard.Short'})}</Button></NLink>
+          </Flex>
+          <Form onSubmit={onSubmit} defaultValues={defaultValues} />
+        </Container> :
+        <Container pt={6}><SpinLoader /></Container>
+      }
     </>
   )
 }
