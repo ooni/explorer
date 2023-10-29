@@ -74,6 +74,7 @@ const EditReport = () => {
             <Form onSubmit={onSubmit} defaultValues={defaultValues} />
             <Button 
               hollow
+              mt={4}
               sx={{ color: 'red7', borderColor: 'red7', '&:hover&:enabled': {color: 'red9', borderColor: 'red9'} }}
               onClick={() => trigger()}
               loading={isMutating}
