@@ -108,7 +108,7 @@ const Form = ({ defaultValues, onSubmit }) => {
       test_names: report.test_names.length ? report.test_names.map((test_name) => test_name.value) : [],
       CCs: report.CCs.length ? report.CCs.map((cc) => cc.value) : [],
       tags: report.tags.length ? report.tags.map((t) => t.value) : [],
-      ASNs: report.ASNs.length ? report.ASNs.map((as) => as.value) : [],
+      ASNs: report.ASNs.length ? report.ASNs.map((as) => Number(as.value)) : [],
       domains: report.domains.length ? report.domains.map((d) => d.value) : [],
     })
   }
