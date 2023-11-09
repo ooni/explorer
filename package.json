@@ -17,7 +17,7 @@
     "@nivo/heatmap": "^0.80.0",
     "@nivo/line": "^0.80.0",
     "@nivo/tooltip": "0.80.0",
-    "@sentry/nextjs": "^7.61.1",
+    "@sentry/nextjs": "^7.77.0",
     "@tanstack/react-table": "^8.9.3",
     "axios": "^0.27.2",
     "buffer-from": "^1.1.2",
