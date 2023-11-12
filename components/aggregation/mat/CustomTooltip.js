@@ -41,9 +41,22 @@ export const generateSearchQuery = (data, query) => {
   // use that value to limit date range on `/search` page
   if ('measurement_start_day' in data) {
     sinceFilter = data.measurement_start_day
-    const untilPlus1 = new Date(Date.parse(sinceFilter))
-    untilPlus1.setUTCDate(untilPlus1.getUTCDate() + 1)
-    untilFilter = untilPlus1.toISOString().split('T')[0]
+    const untilDateObj = new Date(Date.parse(sinceFilter))
+    switch(query.time_grain){
+      case 'hour':
+        untilDateObj.setUTCHours(untilDateObj.getUTCHours() + 1)
+        break
+      case 'week':
+        untilDateObj.setUTCDate(untilDateObj.getUTCDate() + 7)
+        break
+      case 'month':
+        untilDateObj.setUTCDate(untilDateObj.getUTCDate() + 30)
+        break
+      default:
+        untilDateObj.setUTCDate(untilDateObj.getUTCDate() + 1)
+        break
+    }
+    untilFilter = untilDateObj.toISOString().split('.')[0] + 'Z'
   }
 
   const queryObj = ['probe_cc', 'test_name', 'category_code', 'probe_asn', 'input', 'domain'].reduce((q, k) => {
