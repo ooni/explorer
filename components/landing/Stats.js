@@ -56,14 +56,9 @@ const CoverageChart = () => {
   const intl = useIntl()
 
   if (data) {
-    const {
-      countries_by_month: countryCoverage,
-      networks_by_month: networkCoverage,
-      measurements_by_month: measurementsByMonth
-    } = data
-    countryCoverage.pop()
-    networkCoverage.pop()
-    measurementsByMonth.pop()
+    const countryCoverage = data.countries_by_month.slice(0, -1),
+      networkCoverage = data.networks_by_month.slice(0, -1),
+      measurementsByMonth = data.measurements_by_month.slice(0, -1)
 
     // API responses are ordered by date, with most recent month at the end
     const lastMonth = {
