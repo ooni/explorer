@@ -49,7 +49,7 @@ const ReportDisplay = ({ report }) => {
           ))}
         </Flex>
       )}
-      <Text color="gray6" mb={4}>created by {report?.reported_by} on {formatLongDate(report?.create_time, intl.locale)}</Text>
+      <Text color="gray6" mb={4}>created by {report?.reported_by} on {report?.create_time && formatLongDate(report?.create_time, intl.locale)}</Text>
       <Box fontSize={18} lineHeight="1.5">{report?.text && <FormattedMarkdown>{report.text}</FormattedMarkdown>}</Box>
     </>
   )

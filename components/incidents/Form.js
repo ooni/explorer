@@ -17,7 +17,7 @@ const schema = yup
     short_description: yup.string().required(),
     ASNs: yup.array().test({
       name: 'ASNsError',
-      message: 'Only numbers allowed',
+      message: 'Only numeric values allowed',
       test: (val) => val.every((v) => !isNaN(v.value)),
     }),
     start_time: yup.string().required(),
@@ -66,7 +66,7 @@ const Form = ({ defaultValues, onSubmit }) => {
   }
 
   const { handleSubmit, control, getValues, formState } = useForm({
-    mode: 'onTouched',
+    mode: 'onChange',
     defaultValues,
     resolver: yupResolver(schema),
   })
