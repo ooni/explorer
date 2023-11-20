@@ -93,7 +93,7 @@ const ReportIndex = () => {
         <StyledStickySubMenu>
           <Flex mt={user?.role === 'admin' ? 0 : 5} mb={2} justifyContent='space-between' alignItems='baseline'>
             <Heading h={1} mt={1} mb={0}>
-              {intl.formatMessage({id: 'Incidents.Title'})}
+              {intl.formatMessage({id: 'Incidents.Title'}, {amount: sortedAndFilteredData.length})}
             </Heading>
             <Flex sx={{gap: 3}}>
               <Box>
