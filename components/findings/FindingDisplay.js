@@ -24,7 +24,7 @@ const FormattedMarkdown = ({ children }) => {
   )
 }
 
-const ReportDisplay = ({ report }) => {
+const FindingDisplay = ({ report }) => {
   const intl = useIntl()
 
   return (
@@ -57,4 +57,4 @@ const ReportDisplay = ({ report }) => {
   )
 }
 
-export default ReportDisplay
+export default FindingDisplay

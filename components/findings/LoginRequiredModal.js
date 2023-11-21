@@ -27,7 +27,7 @@ const LoginRequiredModal = ({ show }) => {
       <Container px={[1,3]} py={4} textAlign='center'>
         <Flex>
           <Heading h={4}>
-            {intl.formatMessage({ id: 'Incidents.LoginRequiredModal.Title' })}
+            {intl.formatMessage({ id: 'Findings.LoginRequiredModal.Title' })}
           </Heading>
         </Flex>
         <Button m={3} onClick={handleClick}>

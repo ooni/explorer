@@ -4,7 +4,7 @@ import { Container, Heading, Button, Flex } from 'ooni-components'
 import { updateIncidentReport, fetcher, apiEndpoints } from '/lib/api'
 import { useIntl } from 'react-intl'
 import NLink from 'next/link'
-import Form from 'components/incidents/Form'
+import Form from 'components/findings/Form'
 import { useRouter } from 'next/router'
 import useSWR from 'swr'
 import useSWRMutation from 'swr/mutation'
@@ -29,8 +29,8 @@ const EditReport = () => {
 
   // redirect if user not logged in or not admin/report creator
   useEffect(() => {
-    if (!user && !loading) router.replace('/incidents')
-    if ((data && !data.incident.mine) && user?.role !== 'admin') router.replace('/incidents')
+    if (!user && !loading) router.replace('/findings')
+    if ((data && !data.incident.mine) && user?.role !== 'admin') router.replace('/findings')
   }, [user, loading, router, data])
 
   const defaultValues = useMemo(() => {
@@ -45,7 +45,7 @@ const EditReport = () => {
   }, [data])
 
   const onSubmit = (report) => {
-    return updateIncidentReport(report).then((data) => router.push(`/incidents/${data.id}`))
+    return updateIncidentReport(report).then((data) => router.push(`/findings/${data.id}`))
   }
 
   const { trigger, isMutating } = useSWRMutation(
@@ -53,7 +53,7 @@ const EditReport = () => {
     () => deleteIncidentReport({id: query.incident_id}),
     {
       onSuccess: () => {
-        router.push('/incidents/dashboard')
+        router.push('/findings/dashboard')
       },
     }
   )
@@ -66,8 +66,8 @@ const EditReport = () => {
       <NavBar />
       <Container>
         <Flex justifyContent="space-between" alignItems="center">
-          <Heading h={1}>{intl.formatMessage({id: 'Incidents.Edit.Title'})}</Heading>
-          <NLink href='/incidents/dashboard'><Button hollow>{intl.formatMessage({id: 'Incidents.Dashboard.Short'})}</Button></NLink>
+          <Heading h={1}>{intl.formatMessage({id: 'Findings.Edit.Title'})}</Heading>
+          <NLink href='/findings/dashboard'><Button hollow>{intl.formatMessage({id: 'Findings.Dashboard.Short'})}</Button></NLink>
         </Flex>
         {defaultValues && (
           <>
@@ -80,7 +80,7 @@ const EditReport = () => {
               loading={isMutating}
               disabled={isMutating}
               spinner={<ButtonSpinner />}
-            >{intl.formatMessage({id: 'Incidents.Edit.Delete'})}</Button>
+            >{intl.formatMessage({id: 'Findings.Edit.Delete'})}</Button>
           </>
         )}
       </Container>

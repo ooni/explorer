@@ -26,7 +26,7 @@ grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
 gap: 24px;
 `
 
-const ReportIndex = () => {
+const Index = () => {
   const intl = useIntl()
   const { user } = useUser()
 
@@ -88,21 +88,21 @@ const ReportIndex = () => {
       </StyledStickyNavBar>
       <Container>
         {user?.role === 'admin' && (
-          <Flex justifyContent="end" mt={3}><NLink href="/incidents/dashboard"><Button hollow>{intl.formatMessage({id: 'Incidents.Dashboard.Short'})}</Button></NLink></Flex>
+          <Flex justifyContent="end" mt={3}><NLink href="/findings/dashboard"><Button hollow>{intl.formatMessage({id: 'Findings.Dashboard.Short'})}</Button></NLink></Flex>
         )}
         <StyledStickySubMenu>
           <Flex mt={user?.role === 'admin' ? 0 : 5} mb={2} justifyContent='space-between' alignItems='baseline'>
             <Heading h={1} mt={1} mb={0}>
-              {intl.formatMessage({id: 'Incidents.Title'}, {amount: sortedAndFilteredData.length})}
+              {intl.formatMessage({id: 'Findings.Title'}, {amount: sortedAndFilteredData.length})}
             </Heading>
             <Flex sx={{gap: 3}}>
               <Box>
                 <Input
                   onChange={(e) => debouncedSearchHandler(e.target.value)}
-                  placeholder={intl.formatMessage({id: 'Incidents.SearchPlaceholder'})}
+                  placeholder={intl.formatMessage({id: 'Findings.SearchPlaceholder'})}
                   error={
                     (searchValue && sortedAndFilteredData?.length === 0) && 
-                    <>{intl.formatMessage({id: 'Incidents.SearchError'})}</>
+                    <>{intl.formatMessage({id: 'Findings.SearchError'})}</>
                   }
                 />
               </Box>
@@ -130,7 +130,7 @@ const ReportIndex = () => {
               }
               footer={
                 <Box textAlign="center" mt={2}>
-                  <NLink href={`/incidents/${incident.id}`}>
+                  <NLink href={`/findings/${incident.id}`}>
                     <Button size="small" hollow>Read More</Button>
                   </NLink>
                 </Box>
@@ -143,4 +143,4 @@ const ReportIndex = () => {
   )
 }
 
-export default ReportIndex
+export default Index

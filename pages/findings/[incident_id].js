@@ -7,7 +7,7 @@ import { useRouter } from 'next/router'
 
 import SpinLoader from 'components/vendor/SpinLoader'
 import NotFound from 'components/NotFound'
-import ReportDisplay from '../../components/incidents/ReportDisplay'
+import FindingDisplay from 'components/findings/FindingDisplay'
 import { useIntl } from 'react-intl'
 import { useMemo } from 'react'
 
@@ -45,7 +45,7 @@ const ReportView = () => {
       <Container>
         {loading && <SpinLoader />}
         {error && <NotFound title="Report not found" />}
-        {data && <ReportDisplay report={data.incident} />}
+        {data && <FindingDisplay report={data.incident} />}
       </Container>
     </>
   )

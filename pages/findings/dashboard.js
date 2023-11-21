@@ -36,7 +36,7 @@ const StyledRow = styled.tr`
 // }
 `
 
-const IncidentsDashboard = () => {
+const Dashboard = () => {
   const intl = useIntl()
   const { user, loading } = useUser()
   const router = useRouter()
@@ -74,7 +74,7 @@ const IncidentsDashboard = () => {
 
   // redirect non-admin users
   useEffect(() => {
-    if (!loading && user?.role !== 'admin') router.replace('/incidents')
+    if (!loading && user?.role !== 'admin') router.replace('/findings')
   }, [user, loading, router])
 
   const columns = useMemo(
@@ -83,7 +83,7 @@ const IncidentsDashboard = () => {
         header: 'Title',
         accessorKey: 'title',
         cell: info => (
-          <NLink href={`/incidents/${info.row.original.id}`}>
+          <NLink href={`/findings/${info.row.original.id}`}>
             <Button variant='link'>{info.getValue()}</Button>
           </NLink>
         )
@@ -121,17 +121,17 @@ const IncidentsDashboard = () => {
         accessorKey: 'id',
         cell: info => (
           <>
-            <NLink href={`/incidents/edit/${info.getValue()}`}>
+            <NLink href={`/findings/edit/${info.getValue()}`}>
               <Button mr={1} type="button" size="small" hollow>
-                {intl.formatMessage({id: 'Incidents.Dashboard.Edit'})}
+                {intl.formatMessage({id: 'Findings.Dashboard.Edit'})}
               </Button>
             </NLink>
             {info.row.original.published ? 
               <Button onClick={() => unpublish({id: info.getValue()})} disabled={isPublishMutating} p={1} type="button" size="small" hollow>
-                {intl.formatMessage({id: 'Incidents.Dashboard.Unpublish'})}
+                {intl.formatMessage({id: 'Findings.Dashboard.Unpublish'})}
               </Button> :
               <Button onClick={() => publish({id: info.getValue()})} disabled={isUnpublishMutating} mr={1} type="button" size="small" hollow>
-                {intl.formatMessage({id: 'Incidents.Dashboard.Publish'})}
+                {intl.formatMessage({id: 'Findings.Dashboard.Publish'})}
               </Button>
             }
           </>
@@ -161,7 +161,7 @@ const IncidentsDashboard = () => {
       {user?.role === 'admin' ? (
         <Container>
           <ToastContainer />
-          <Heading h={1} mt={4}>{intl.formatMessage({id: 'Incidents.Dashboard.Title'})}</Heading>
+          <Heading h={1} mt={4}>{intl.formatMessage({id: 'Findings.Dashboard.Title'})}</Heading>
           <StyledTable>
             <thead>
               {table.getHeaderGroups().map(headerGroup => (
@@ -217,11 +217,11 @@ const IncidentsDashboard = () => {
             </tbody>
           </StyledTable>
           <Flex mt={4}>
-            <NLink href="/incidents/create">
-              <Button type="button" mr={3}>{intl.formatMessage({id: 'Incidents.Dashboard.Add'})}</Button>
+            <NLink href="/findings/create">
+              <Button type="button" mr={3}>{intl.formatMessage({id: 'Findings.Create.Title'})}</Button>
             </NLink>
-            <NLink href="/incidents">
-              <Button type="button" hollow>{intl.formatMessage({id: 'Incidents.Dashboard.ViewPublished'})}</Button>
+            <NLink href="/findings">
+              <Button type="button" hollow>{intl.formatMessage({id: 'Findings.Dashboard.ViewPublished'})}</Button>
             </NLink>
           </Flex>
         </Container>
@@ -232,4 +232,4 @@ const IncidentsDashboard = () => {
   )
 }
 
-export default IncidentsDashboard
+export default Dashboard
