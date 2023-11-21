@@ -6,6 +6,7 @@ import { MATChartReportWrapper } from 'components/MATChart'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
 import { useIntl } from 'react-intl'
 import { formatLongDate } from 'utils'
+import NLink from 'next/link'
 
 const FormattedMarkdown = ({ children }) => {
   return (
@@ -35,7 +36,7 @@ const ReportDisplay = ({ report }) => {
         <Flex alignItems="center">
           <Flag countryCode={report.CCs[0]} size={32} />
           <Heading h={3} ml={2}>
-            {getLocalisedRegionName(report.CCs[0], intl.locale)} {!!report?.ASNs?.length && <>({report.ASNs.map((as) => (`AS${as}`)).join(', ')})</>}
+            {getLocalisedRegionName(report.CCs[0], intl.locale)}
           </Heading>
         </Flex>
       )}
@@ -50,6 +51,7 @@ const ReportDisplay = ({ report }) => {
         </Flex>
       )}
       <Text color="gray6" mb={4}>created by {report?.reported_by} on {report?.create_time && formatLongDate(report?.create_time, intl.locale)}</Text>
+      {!!report?.ASNs?.length && <Box mb={3} fontSize={18} lineHeight="1.5">Network: {report.ASNs.map((as) => (<NLink key={as} href={`/as/AS${as}`}>{`AS${as}`}</NLink>)).reduce((prev, curr) => (prev ? [prev, ', ', curr] : curr), null)}</Box>}
       <Box fontSize={18} lineHeight="1.5">{report?.text && <FormattedMarkdown>{report.text}</FormattedMarkdown>}</Box>
     </>
   )
