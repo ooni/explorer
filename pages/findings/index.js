@@ -124,9 +124,14 @@ const Index = () => {
               title={incident.title}
               text={incident.short_description}
               dates={
-                <Text color="gray6">
-                  {incident.start_time && formatLongDate(incident.start_time, intl.locale)} - {incident.end_time ? formatLongDate(incident.end_time, intl.locale) : 'ongoing'}
-                </Text>
+                <>
+                  <Text color="gray6" mb={2}>
+                    {incident.start_time && formatLongDate(incident.start_time, intl.locale)} - {incident.end_time ? formatLongDate(incident.end_time, intl.locale) : 'ongoing'}
+                  </Text>
+                  <Text color="gray6">
+                    created on {incident?.create_time && formatLongDate(incident?.create_time, intl.locale)}
+                  </Text>
+                </>
               }
               footer={
                 <Box textAlign="center" mt={2}>
