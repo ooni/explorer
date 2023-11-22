@@ -63,7 +63,8 @@
     "https-proxy-agent": "^2.2.3",
     "minimist": "^1.2.6",
     "node-fetch": "^2.6.7",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "jackspeak": "2.1.1"
   },
   "devDependencies": {
     "@svgr/webpack": "^8.1.0",
