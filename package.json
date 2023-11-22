@@ -26,6 +26,7 @@
     "dayjs": "^1.11.5",
     "deepmerge": "^4.2.2",
     "flag-icons": "^6.11.1",
+    "html-validate": "^8.7.2",
     "lodash.debounce": "^4.0.8",
     "lru-cache": "^7.14.1",
     "markdown-to-jsx": "^7.3.2",

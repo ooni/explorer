@@ -2,12 +2,50 @@ import { Input, Textarea, Button, Flex, Box, Checkbox, Modal, MultiSelectCreatab
 import { useForm, Controller } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 import { useCallback, useState } from 'react'
+import { HtmlValidate, StaticConfigLoader, defineMetadata } from 'html-validate/browser'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { localisedCountries } from 'utils/i18nCountries'
 import FindingDisplay from './FindingDisplay'
 import { testNames } from '/components/test-info'
 import useUser from '../../hooks/useUser'
 import * as yup from 'yup'
+
+const elements = [
+  defineMetadata({
+    'MAT': {
+      void: false,
+      attributes: {
+        link: {
+          required: true,
+          // boolean: false,
+          // omit: false,
+          enum: [/https:\/\/explorer.ooni.org\/chart\/mat\?\S*/],
+        },
+        caption: {
+          boolean: false,
+          omit: false,
+        },
+      }
+    },
+  })
+]
+
+const loader = new StaticConfigLoader({
+  rules: {
+    'void-style': ['error', { 'style': 'selfclose' }],
+    'void-content': 'error',
+    'element-case': ['error', {'style': 'uppercase'}],
+    'element-name': ['error', {'whitelist': ['MAT']}],
+    'attr-quotes': ['error', {'style': 'auto', 'unquoted': false}],
+    'element-required-attributes': 'error',
+    'attribute-allowed-values': 'error',
+		'attribute-boolean-style': 'error',
+		'attribute-empty-style': 'error',
+  },
+  elements,
+})
+
+const htmlvalidate = new HtmlValidate(loader)
 
 const schema = yup
   .object({
@@ -30,29 +68,17 @@ const schema = yup
         return true
       },
     }),
-    // text: yup.string().required()
-    //   .test(
-    //     'ValidLink',
-    //     'Contains invalid MAT url',
-    //     (val, bla) => {
-    //       // console.log("val", val, bla)
-    //       const regexp = /<(?:MAT.*link)=(?:"|')(?<link>[^"']*)(?:"|').*\/?>/g
-    //       const MATurlRegexp = /https:\/\/explorer\.ooni\.org\/chart\/mat\S*/
-    //       const matches = [...val.matchAll(regexp)]
-    //       console.log("matches", matches)
-    //       return matches.every((match) => match[1].match(MATurlRegexp))
-    //     },
-    //   )
-      // .test(
-      //   'ValidFormat',
-      //   'MAT tag is not formatted correctly',
-      //   (val) => {
-      //     const regexp = /<(?:MAT.*link)=(?:"|')(?<link>[^"']*)(?:"|').*\/>/g
-      //     const MATurlRegexp = /https:\/\/explorer\.ooni\.org\/chart\/mat\S*/
-      //     const matches = [...val.matchAll(regexp)]
-      //     return matches.every((match) => match[1].match(MATurlRegexp))
-      //   },
-      // ),
+    text: yup.string().required().test({
+      test: async (value, context) => {
+        const validation = await htmlvalidate.validateString(value)
+        if (!validation.valid) {
+          const message = validation.results.map((obj) => obj.messages.map((m) => m.message).join(', ')).join(', ')
+          return context.createError({ message, path: 'text' })
+        } else {
+          return true
+        }
+      },
+    }),
   })
 
 const Form = ({ defaultValues, onSubmit }) => {
