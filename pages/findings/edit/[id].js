@@ -21,8 +21,8 @@ const EditReport = () => {
   const { query } = router
 
   const { data, error } = useSWR(
-    query.incident_id && user
-      ? apiEndpoints.SHOW_INCIDENT.replace(':incident_id', query.incident_id)
+    query.id && user
+      ? apiEndpoints.SHOW_INCIDENT.replace(':id', query.id)
       : null,
     fetcher
   )
@@ -49,8 +49,8 @@ const EditReport = () => {
   }
 
   const { trigger, isMutating } = useSWRMutation(
-    `DELETE${query.incident_id}`,
-    () => deleteIncidentReport({id: query.incident_id}),
+    `DELETE${query.id}`,
+    () => deleteIncidentReport({id: query.id}),
     {
       onSuccess: () => {
         router.push('/findings/dashboard')

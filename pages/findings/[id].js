@@ -16,8 +16,8 @@ const ReportView = () => {
   const intl = useIntl()
 
   const { data, error, loading } = useSWR(
-    query.incident_id
-      ? apiEndpoints.SHOW_INCIDENT.replace(':incident_id', query.incident_id)
+    query.id
+      ? apiEndpoints.SHOW_INCIDENT.replace(':id', query.id)
       : null,
     fetcher
   )
