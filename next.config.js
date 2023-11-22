@@ -97,9 +97,11 @@ module.exports = withSentryConfig({
       }
     }
 
-    config.resolve.fallback = {
-      ...config.resolve.fallback,  
-      fs: false,
+    if (!options.isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,  
+        fs: false,
+      }
     }
 
     return config
