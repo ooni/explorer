@@ -80,13 +80,13 @@ const formatLoNI = (data) => {
   let loni_down_map = {}
   let loni_blocked_map = {}
   Object.keys(data['loni_down_map']).forEach((orig_key) => {
-    const key = orig_key.split(".").slice(0, 2).join(".")
+    const key = orig_key.split('.').slice(0, 2).join('.')
     loni_down_map[key] = loni_down_map[key] | 0
     loni_down_map[key] += data['loni_down_map'][orig_key]
   })
   console.log(data)
   Object.keys(data['loni_blocked_map']).forEach((orig_key) => {
-    const key = orig_key.split(".").slice(0, 2).join(".")
+    const key = orig_key.split('.').slice(0, 2).join('.')
     loni_blocked_map[key] = loni_blocked_map[key] | 0
     loni_blocked_map[key] += data['loni_blocked_map'][orig_key]
   })
