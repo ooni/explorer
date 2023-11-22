@@ -3,6 +3,7 @@ import { Chip } from '@nivo/tooltip'
 import { useTheme } from '@nivo/core'
 import { Box, Flex, Text, Link, theme } from 'ooni-components'
 import NLink from 'next/link'
+import dynamic from 'next/dynamic'
 
 import { colorMap } from './colorMap'
 import { MdClear } from 'react-icons/md'
@@ -68,6 +69,40 @@ export const generateSearchQuery = (data, query) => {
   }
 }
 
+
+const ReactJson = dynamic(
+  () => import('react-json-view'),
+  { ssr: false }
+)
+
+
+const formatLoNI = (data) => {
+  let loni_down_map = {}
+  let loni_blocked_map = {}
+  Object.keys(data['loni_down_map']).forEach((orig_key) => {
+    const key = orig_key.split(".").slice(0, 2).join(".")
+    loni_down_map[key] = loni_down_map[key] | 0
+    loni_down_map[key] += data['loni_down_map'][orig_key]
+  })
+  console.log(data)
+  Object.keys(data['loni_blocked_map']).forEach((orig_key) => {
+    const key = orig_key.split(".").slice(0, 2).join(".")
+    loni_blocked_map[key] = loni_blocked_map[key] | 0
+    loni_blocked_map[key] += data['loni_blocked_map'][orig_key]
+  })
+
+  return (
+  <div>
+    <div>observation count: {data['observation_count']}</div>
+    <div>vp count: {data['vantage_point_count']}</div>
+    <div>down: {data['loni_down_value']}</div>
+    <div>ok: {data['loni_ok_value']}</div>
+    <div>blocked: {data['loni_blocked_value']}</div>
+    <div>down_map: <ReactJson collapsed={true} src={loni_down_map} name={null} indentWidth={2} /></div>
+    <div>blocked_map: <ReactJson collapsed={true} src={loni_blocked_map} name={null} indentWidth={2} /></div>
+  </div>
+  )
+}
 const CustomToolTip = React.memo(({ data, onClose, title, link = true }) => {
   const theme = useTheme()
   const intl = useIntl()
@@ -106,6 +141,9 @@ const CustomToolTip = React.memo(({ data, onClose, title, link = true }) => {
             </Flex>
           </Box>
         ))}
+        <Box fontSize={16}>
+          {formatLoNI(data)}
+        </Box>
       </Flex>
       {link &&
         <NLink passHref href={linkToMeasurements}>
