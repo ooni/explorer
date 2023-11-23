@@ -20,40 +20,40 @@ const incident = {
   }
 }
 
-describe('Incidents Dashboard', () => {
+describe('Findings Dashboard', () => {
   it.skip('admin can see the dashboard', () => {
     cy.intercept('/api/_/account_metadata', {logged_in: true, role: 'admin'}).as('accountMetadata')
-    const dashboardUrl = '/incidents/dashboard'
+    const dashboardUrl = '/findings/dashboard'
     cy.visit(dashboardUrl)
     cy.wait('@accountMetadata')
-    cy.findByText('Incidents Dashboard').should('exist')
+    cy.findByText('Findings Dashboard').should('exist')
   })
 
   it.skip('redirects user if not logged in', () => {
     cy.intercept('/api/_/account_metadata', {statusCode: 401}).as('accountMetadata')
-    const dashboardUrl = '/incidents/dashboard'
+    const dashboardUrl = '/findings/dashboard'
     cy.visit(dashboardUrl)
     cy.wait('@accountMetadata')
-    cy.findByText('Incidents Dashboard').should('not.exist')
-    cy.url({timeout: 6000}).should('eq', 'http://localhost:3100/incidents')
+    cy.findByText('Findings Dashboard').should('not.exist')
+    cy.url({timeout: 6000}).should('eq', 'http://localhost:3100/findings')
   })
 
   it.skip('redirects user if not admin', () => {
     cy.intercept('/api/_/account_metadata', {logged_in: true, role: 'user'}).as('accountMetadata')
-    const dashboardUrl = '/incidents/dashboard'
+    const dashboardUrl = '/findings/dashboard'
     cy.visit(dashboardUrl)
     cy.wait('@accountMetadata')
-    cy.findByText('Incidents Dashboard').should('not.exist')
-    cy.url({timeout: 6000}).should('eq', 'http://localhost:3100/incidents')
+    cy.findByText('Findings Dashboard').should('not.exist')
+    cy.url({timeout: 6000}).should('eq', 'http://localhost:3100/findings')
   })
 })
 
-describe('Incidents Edit', () => {
+describe('Findings Edit', () => {
   it.skip('admin can see edit incident page', () => {
     cy.intercept('/api/_/account_metadata', {logged_in: true, role: 'admin'}).as('accountMetadata')
     cy.intercept('/api/v1/incidents/show/1234', incident).as('showIncident')
     
-    const dashboardUrl = '/incidents/edit/1234'
+    const dashboardUrl = '/findings/edit/1234'
     cy.visit(dashboardUrl)
     cy.wait('@accountMetadata')
     cy.wait('@showIncident')
@@ -64,7 +64,7 @@ describe('Incidents Edit', () => {
     cy.intercept('/api/_/account_metadata', {logged_in: true, role: 'user'}).as('accountMetadata')
     cy.intercept('/api/v1/incidents/show/1234', incident).as('showIncident')
     
-    const dashboardUrl = '/incidents/edit/1234'
+    const dashboardUrl = '/findings/edit/1234'
     cy.visit(dashboardUrl)
     cy.wait('@accountMetadata')
     cy.wait('@showIncident')
@@ -73,22 +73,22 @@ describe('Incidents Edit', () => {
 
   it.skip('redirects user if not logged in', () => {
     cy.intercept('/api/_/account_metadata', {statusCode: 401}).as('accountMetadata')
-    const dashboardUrl = '/incidents/edit/1234'
+    const dashboardUrl = '/findings/edit/1234'
     cy.visit(dashboardUrl)
     cy.wait('@accountMetadata')
     cy.findByText('Edit Incident Report').should('not.exist')
-    cy.url({timeout: 6000}).should('eq', 'http://localhost:3100/incidents')
+    cy.url({timeout: 6000}).should('eq', 'http://localhost:3100/findings')
   })
 
   it.skip('redirects user if not admin', () => {
     cy.intercept('/api/_/account_metadata', {logged_in: true, role: 'user'}).as('accountMetadata')
     cy.intercept('/api/v1/incidents/show/1234', incident).as('showIncident')
 
-    const dashboardUrl = '/incidents/edit/1234'
+    const dashboardUrl = '/findings/edit/1234'
     cy.visit(dashboardUrl)
     cy.wait('@accountMetadata')
     cy.wait('@showIncident')
     cy.findByText('Edit Incident Report').should('not.exist')
-    cy.url({timeout: 6000}).should('eq', 'http://localhost:3100/incidents')
+    cy.url({timeout: 6000}).should('eq', 'http://localhost:3100/findings')
   })
 })

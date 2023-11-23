@@ -6,17 +6,21 @@ import {
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { Button, Container, Heading } from 'ooni-components'
+import useSWRMutation from 'swr/mutation'
+import { Button, Container, Flex, Heading } from 'ooni-components'
 import useSWR from 'swr'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
 import { apiEndpoints, fetcher } from 'lib/api'
 import useUser from 'hooks/useUser'
 import NavBar from 'components/NavBar'
 import SpinLoader from 'components/vendor/SpinLoader'
 import { useEffect, useMemo, useState } from 'react'
 import { styled } from 'styled-components'
-import { formatMediumDateTime } from '../../utils'
+import { formatMediumDate } from 'utils'
 import { useRouter } from 'next/router'
 import { useIntl } from 'react-intl'
+import { publishIncidentReport, unpublishIncidentReport } from 'lib/api'
 
 const StyledTable = styled.table`
 border-collapse: collapse;
@@ -32,20 +36,45 @@ const StyledRow = styled.tr`
 // }
 `
 
-const IncidentsDashboard = () => {
+const Dashboard = () => {
   const intl = useIntl()
   const { user, loading } = useUser()
   const router = useRouter()
 
-  const { data, error } = useSWR(apiEndpoints.SEARCH_INCIDENTS, fetcher)
+  const { data, error, mutate } = useSWR(apiEndpoints.SEARCH_INCIDENTS, fetcher)
 
   const tableData = useMemo(() => (data?.incidents ? data.incidents : []), [data])
 
   const [sorting, setSorting] = useState([])
 
+  const onError = (error) => {
+    toast.error(`Error: ${error?.message}`, {
+      position: toast.POSITION.BOTTOM_RIGHT,
+      toastId: 'error'
+    })
+  }
+
+  const { trigger: publish, isMutating: isPublishMutating } = useSWRMutation(
+    'publish',
+    (_, { arg }) => publishIncidentReport(arg),
+    { onSuccess: () => { mutate() },
+      throwOnError: false,
+      onError
+    }
+  )
+
+  const { trigger: unpublish, isMutating: isUnpublishMutating } = useSWRMutation(
+    'unpublish',
+    (_, { arg }) => unpublishIncidentReport(arg),
+    { onSuccess: () => { mutate() },
+      throwOnError: false,
+      onError
+    }
+  )
+
   // redirect non-admin users
   useEffect(() => {
-    if (!loading && user?.role !== 'admin') router.replace('/incidents')
+    if (!loading && user?.role !== 'admin') router.replace('/findings')
   }, [user, loading, router])
 
   const columns = useMemo(
@@ -53,9 +82,8 @@ const IncidentsDashboard = () => {
       {
         header: 'Title',
         accessorKey: 'title',
-        footer: props => props.column.id,
         cell: info => (
-          <NLink href={`/incidents/${info.row.original.id}`}>
+          <NLink href={`/findings/${info.row.original.id}`}>
             <Button variant='link'>{info.getValue()}</Button>
           </NLink>
         )
@@ -63,46 +91,50 @@ const IncidentsDashboard = () => {
       {
         header: 'Last Update',
         accessorKey: 'update_time',
-        footer: props => props.column.id,
-        cell: (info) => (formatMediumDateTime(info.getValue()))
+        cell: (info) => (formatMediumDate(info.getValue()))
       },
       {
         header: 'Reported by',
         accessorKey: 'reported_by',
-        footer: props => props.column.id,
       },
       {
         header: 'Email Address',
         accessorKey: 'email_address',
-        footer: props => props.column.id,
       },
       {
-        header: 'Start Time',
+        header: 'Start Date',
         accessorKey: 'start_time',
-        footer: props => props.column.id,
-        cell: (info) => (formatMediumDateTime(info.getValue()))
+        cell: (info) => (formatMediumDate(info.getValue()))
       },
       {
-        header: 'End Time',
+        header: 'End Date',
         accessorKey: 'end_time',
-        footer: props => props.column.id,
-        cell: (info) => (info.getValue() && formatMediumDateTime(info.getValue()))
+        cell: (info) => (info.getValue() && formatMediumDate(info.getValue()))
       },
       {
         header: 'Published',
         accessorKey: 'published',
-        footer: props => props.column.id,
         cell: (info) => (info.getValue() ? '✅' : '❌')
       },
       {
         header: '',
         accessorKey: 'id',
-        cell: (id) => (
-          <NLink href={`/incidents/edit/${id.getValue()}`}>
-            <Button type="button" size="small" hollow>
-              <>{intl.formatMessage({id: 'Incidents.Dashboard.Edit'})}</>
-            </Button>
-          </NLink>
+        cell: info => (
+          <>
+            <NLink href={`/findings/edit/${info.getValue()}`}>
+              <Button mr={1} type="button" size="small" hollow>
+                {intl.formatMessage({id: 'Findings.Dashboard.Edit'})}
+              </Button>
+            </NLink>
+            {info.row.original.published ? 
+              <Button onClick={() => unpublish({id: info.getValue()})} disabled={isPublishMutating} p={1} type="button" size="small" hollow>
+                {intl.formatMessage({id: 'Findings.Dashboard.Unpublish'})}
+              </Button> :
+              <Button onClick={() => publish({id: info.getValue()})} disabled={isUnpublishMutating} mr={1} type="button" size="small" hollow>
+                {intl.formatMessage({id: 'Findings.Dashboard.Publish'})}
+              </Button>
+            }
+          </>
         )
       }
     ],
@@ -118,7 +150,6 @@ const IncidentsDashboard = () => {
     onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
-    debugTable: true,
   })
 
   return (
@@ -129,7 +160,8 @@ const IncidentsDashboard = () => {
       <NavBar />
       {user?.role === 'admin' ? (
         <Container>
-          <Heading h={1} mt={4}>{intl.formatMessage({id: 'Incidents.Dashboard.Title'})}</Heading>
+          <ToastContainer />
+          <Heading h={1} mt={4}>{intl.formatMessage({id: 'Findings.Dashboard.Title'})}</Heading>
           <StyledTable>
             <thead>
               {table.getHeaderGroups().map(headerGroup => (
@@ -165,7 +197,7 @@ const IncidentsDashboard = () => {
             <tbody>
               {table
                 .getRowModel()
-                .rows.slice(0, 10)
+                .rows
                 .map(row => {
                   return (
                     <StyledRow key={row.id}>
@@ -184,9 +216,14 @@ const IncidentsDashboard = () => {
                 })}
             </tbody>
           </StyledTable>
-          <NLink href="/incidents/create">
-            <Button type="button" hollow mt={4}>{intl.formatMessage({id: 'Incidents.Dashboard.Add'})}</Button>
-          </NLink>
+          <Flex mt={4}>
+            <NLink href="/findings/create">
+              <Button type="button" mr={3}>{intl.formatMessage({id: 'Findings.Create.Title'})}</Button>
+            </NLink>
+            <NLink href="/findings">
+              <Button type="button" hollow>{intl.formatMessage({id: 'Findings.Dashboard.ViewPublished'})}</Button>
+            </NLink>
+          </Flex>
         </Container>
       ) : (
         <Container pt={6}><SpinLoader /></Container>
@@ -195,4 +232,4 @@ const IncidentsDashboard = () => {
   )
 }
 
-export default IncidentsDashboard
+export default Dashboard

@@ -162,11 +162,11 @@ const LandingPage = ({ measurementCount, asnCount, countryCount}) => {
               <Text fontSize={[32, 64]} color='#ffffff'><FormattedMessage id='Home.Banner.Title.UncoverEvidence' /></Text>
             </Heading>
             <Text fontSize={[18, 24]} color='blue1'><FormattedMessage id='Home.Banner.Subtitle.ExploreCensorshipEvents' /></Text>
-            <ExploreButton mt={48} px={5} hollow fontSize={24} onClick={() => (
-              Router.push('/chart/mat')
-            )}>
-              <FormattedMessage id='Home.Banner.Button.Explore' />
-            </ExploreButton>
+            <NLink href='/chart/mat'>
+              <ExploreButton mt={48} px={5} hollow fontSize={24}>
+                <FormattedMessage id='Home.Banner.Button.Explore' />
+              </ExploreButton>
+            </NLink>
           </Text>
         </StyledContainer>
       </HeroUnit>

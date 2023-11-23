@@ -1,13 +1,51 @@
-import { Input, Textarea, Button, Flex, Box, Checkbox, Modal, MultiSelectCreatable, MultiSelect} from 'ooni-components'
+import { Input, Textarea, Button, Flex, Box, Checkbox, Modal, MultiSelectCreatable, MultiSelect, Text} from 'ooni-components'
 import { useForm, Controller } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 import { useCallback, useState } from 'react'
+import { HtmlValidate, StaticConfigLoader, defineMetadata } from 'html-validate/browser'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { localisedCountries } from 'utils/i18nCountries'
-import ReportDisplay from './ReportDisplay'
+import FindingDisplay from './FindingDisplay'
 import { testNames } from '/components/test-info'
 import useUser from '../../hooks/useUser'
 import * as yup from 'yup'
+
+const elements = [
+  defineMetadata({
+    'MAT': {
+      void: false,
+      attributes: {
+        link: {
+          required: true,
+          // boolean: false,
+          // omit: false,
+          enum: [/https:\/\/explorer.ooni.org\/chart\/mat\?\S*/],
+        },
+        caption: {
+          boolean: false,
+          omit: false,
+        },
+      }
+    },
+  })
+]
+
+const loader = new StaticConfigLoader({
+  rules: {
+    'void-style': ['error', { 'style': 'selfclose' }],
+    'void-content': 'error',
+    'element-case': ['error', {'style': 'uppercase'}],
+    'element-name': ['error', {'whitelist': ['MAT']}],
+    'attr-quotes': ['error', {'style': 'auto', 'unquoted': false}],
+    'element-required-attributes': 'error',
+    'attribute-allowed-values': 'error',
+		'attribute-boolean-style': 'error',
+		'attribute-empty-style': 'error',
+  },
+  elements,
+})
+
+const htmlvalidate = new HtmlValidate(loader)
 
 const schema = yup
   .object({
@@ -17,7 +55,7 @@ const schema = yup
     short_description: yup.string().required(),
     ASNs: yup.array().test({
       name: 'ASNsError',
-      message: 'Only numbers allowed',
+      message: 'Only numeric values allowed',
       test: (val) => val.every((v) => !isNaN(v.value)),
     }),
     start_time: yup.string().required(),
@@ -31,13 +69,14 @@ const schema = yup
       },
     }),
     text: yup.string().required().test({
-      name: 'TextError',
-      message: 'Contains invalid MAT url',
-      test: (val) => {
-        const regexp = /<(?:MAT.*link)=(?:"|')(?<link>[^"']*)(?:"|').*\/>/g
-        const MATurlRegexp = /https:\/\/explorer\.ooni\.org\/chart\/mat\S*/
-        const matches = [...val.matchAll(regexp)]
-        return matches.every((match) => match[1].match(MATurlRegexp))
+      test: async (value, context) => {
+        const validation = await htmlvalidate.validateString(value)
+        if (!validation.valid) {
+          const message = validation.results.map((obj) => obj.messages.map((m) => m.message).join(', ')).join(', ')
+          return context.createError({ message, path: 'text' })
+        } else {
+          return true
+        }
       },
     }),
   })
@@ -66,6 +105,7 @@ const Form = ({ defaultValues, onSubmit }) => {
   }
 
   const { handleSubmit, control, getValues, formState } = useForm({
+    mode: 'onChange',
     defaultValues,
     resolver: yupResolver(schema),
   })
@@ -98,17 +138,17 @@ const Form = ({ defaultValues, onSubmit }) => {
     }
   }, [getValues])
 
-  const submit = (report) => {
-    console.log(report)
+  const submit = (incident) => {
+    console.log(incident)
     return onSubmit({
-      ...report,
-      start_time: `${report.start_time}:00Z`,
-      ...(report.end_time ? { end_time: `${report.end_time}:00Z` } : {end_time: null}),
-      test_names: report.test_names.length ? report.test_names.map((test_name) => test_name.value) : [],
-      CCs: report.CCs.length ? report.CCs.map((cc) => cc.value) : [],
-      tags: report.tags.length ? report.tags.map((t) => t.value) : [],
-      ASNs: report.ASNs.length ? report.ASNs.map((as) => as.value) : [],
-      domains: report.domains.length ? report.domains.map((d) => d.value) : [],
+      ...incident,
+      start_time: `${incident.start_time}T00:00:00Z`,
+      ...(incident.end_time ? { end_time: `${incident.end_time}T00:00:00Z` } : {end_time: null}),
+      test_names: incident.test_names.length ? incident.test_names.map((test_name) => test_name.value) : [],
+      CCs: incident.CCs.length ? incident.CCs.map((cc) => cc.value) : [],
+      tags: incident.tags.length ? incident.tags.map((t) => t.value) : [],
+      ASNs: incident.ASNs.length ? incident.ASNs.map((as) => Number(as.value)) : [],
+      domains: incident.domains.length ? incident.domains.map((d) => d.value) : [],
     })
   }
 
@@ -116,11 +156,14 @@ const Form = ({ defaultValues, onSubmit }) => {
     <>
       <Modal
         show={showPreview}
-        p={4}
-        minWidth={1200}
+        maxWidth={1200}
+        px={2}
+        width="100%"
         onHideClick={() => setShowPreview(!showPreview)}
       >
-        <ReportDisplay report={getPreviewValues()} />
+        <Box p={4}>
+          <FindingDisplay incident={getPreviewValues()} />
+        </Box>
       </Modal>
       <form onSubmit={(e) => handleSubmit(submit)(e).catch((e) => setSubmitError(e.message))}>
         {user?.role === 'admin' &&
@@ -128,7 +171,7 @@ const Form = ({ defaultValues, onSubmit }) => {
             <Controller
               control={control}
               name="published"
-              render={({ field }) => <Checkbox {...field} label={intl.formatMessage({ id: 'Incidents.Form.Published.Label' })} checked={field.value} />}
+              render={({ field }) => <Checkbox {...field} label={intl.formatMessage({ id: 'Findings.Form.Published.Label' })} checked={field.value} />}
             />
           </Box>
         }
@@ -136,21 +179,21 @@ const Form = ({ defaultValues, onSubmit }) => {
           control={control}
           name="title"
           render={({ field }) => (
-            <Input mb={3} {...field} className="required" label={intl.formatMessage({ id: 'Incidents.Form.Title.Label' })} error={errors?.title?.message} />
+            <Input mb={3} {...field} className="required" label={intl.formatMessage({ id: 'Findings.Form.Title.Label' })} error={errors?.title?.message} />
           )}
         />
         <Controller
           control={control}
           name="reported_by"
           render={({ field }) => (
-            <Input mb={3} {...field} className="required" label={intl.formatMessage({ id: 'Incidents.Form.Author.Label' })} error={errors?.reported_by?.message} />
+            <Input mb={3} {...field} className="required" label={intl.formatMessage({ id: 'Findings.Form.Author.Label' })} error={errors?.reported_by?.message} />
           )}
         />
         <Controller
           control={control}
           name="email_address"
           render={({ field }) => (
-            <Input mb={3} bg="gray2" className="required" {...field} label={intl.formatMessage({ id: 'Incidents.Form.EmailAddress.Label' })} error={errors?.title?.message} disabled />
+            <Input mb={3} bg="gray2" className="required" {...field} label={intl.formatMessage({ id: 'Findings.Form.EmailAddress.Label' })} error={errors?.email_address?.message} disabled />
           )}
         />
         <Flex flexDirection={['column', 'row']} mb={3}>
@@ -161,8 +204,8 @@ const Form = ({ defaultValues, onSubmit }) => {
               render={({ field }) => (
                 <Input
                   {...field}
-                  type="datetime-local"
-                  label={intl.formatMessage({ id: 'Incidents.Form.StartTime.Label' })}
+                  type="date"
+                  label={intl.formatMessage({ id: 'Findings.Form.StartTime.Label' })}
                   id="start_time"
                   error={errors?.start_time?.message}
                 />
@@ -176,9 +219,9 @@ const Form = ({ defaultValues, onSubmit }) => {
               render={({ field }) => (
                 <Input
                   {...field}
-                  type="datetime-local"
+                  type="date"
                   error={errors?.end_time?.message}
-                  label={intl.formatMessage({ id: 'Incidents.Form.EndTime.Label' })}
+                  label={intl.formatMessage({ id: 'Findings.Form.EndTime.Label' })}
                   id="end_time"
                 />
               )}
@@ -189,13 +232,13 @@ const Form = ({ defaultValues, onSubmit }) => {
           control={control}
           name="tags"
           render={({ field }) => 
-          <MultiSelectCreatable {...field} mb={3} label={intl.formatMessage({ id: 'Incidents.Form.Tags.Label' })} components={{ DropdownIndicator: null }} menuIsOpen={false} placeholder={intl.formatMessage({ id: 'Incidents.Form.Tags.Placeholder' })} />
+          <MultiSelectCreatable {...field} mb={3} label={intl.formatMessage({ id: 'Findings.Form.Tags.Label' })} components={{ DropdownIndicator: null }} menuIsOpen={false} placeholder={intl.formatMessage({ id: 'Findings.Form.Tags.Placeholder' })} />
         }
         />
         <Controller
           control={control}
           name="test_names"
-          render={({ field }) => <MultiSelectCreatable {...field} mb={3} options={testNamesOptions} label={intl.formatMessage({ id: 'Incidents.Form.TestNames.Label' })} />}
+          render={({ field }) => <MultiSelectCreatable {...field} mb={3} options={testNamesOptions} label={intl.formatMessage({ id: 'Findings.Form.TestNames.Label' })} />}
         />
         <Controller
           control={control}
@@ -206,18 +249,18 @@ const Form = ({ defaultValues, onSubmit }) => {
           control={control}
           name="ASNs"
           error={errors?.ASNs?.message}
-          render={({ field }) => <MultiSelectCreatable {...field}  menuIsOpen={false} components={{DropdownIndicator: null}} mb={3} label={intl.formatMessage({ id: 'Incidents.Form.ASNs.Label' })} placeholder={intl.formatMessage({ id: 'Incidents.Form.ASNs.Placeholder' })} error={errors?.ASNs?.message} />}
+          render={({ field }) => <MultiSelectCreatable {...field}  menuIsOpen={false} components={{DropdownIndicator: null}} mb={3} label={intl.formatMessage({ id: 'Findings.Form.ASNs.Label' })} placeholder={intl.formatMessage({ id: 'Findings.Form.ASNs.Placeholder' })} error={errors?.ASNs?.message} />}
         />
         <Controller
           control={control}
           name="domains"
-          render={({ field }) => <MultiSelectCreatable {...field} mb={3} label={intl.formatMessage({ id: 'Navbar.Domains' })} placeholder={intl.formatMessage({ id: 'Incidents.Form.Domains.Placeholder' })} />}
+          render={({ field }) => <MultiSelectCreatable {...field} mb={3} label={intl.formatMessage({ id: 'Navbar.Domains' })} placeholder={intl.formatMessage({ id: 'Findings.Form.Domains.Placeholder' })} />}
         />
         <Controller
           control={control}
           name="short_description"
           render={({ field }) => (
-            <Input mb={3} {...field} error={errors?.short_description?.message} label={intl.formatMessage({ id: 'Incidents.Form.ShortDescription.Label' })} />
+            <Input mb={3} {...field} error={errors?.short_description?.message} label={intl.formatMessage({ id: 'Findings.Form.ShortDescription.Label' })} />
           )}
         />
         <Controller
@@ -227,7 +270,7 @@ const Form = ({ defaultValues, onSubmit }) => {
             <Textarea
               {...field}
               className="required"
-              label={intl.formatMessage({ id: 'Incidents.Form.Text.Label' })}
+              label={intl.formatMessage({ id: 'Findings.Form.Text.Label' })}
               mb={3}
               minHeight={500}
               error={errors?.text?.message}
@@ -235,10 +278,16 @@ const Form = ({ defaultValues, onSubmit }) => {
           )}
         />
         <Button hollow mr={3} type="button" onClick={() => setShowPreview(true)}>
-          {intl.formatMessage({id: 'Incidents.Edit.ShowPreview'})}
+          {intl.formatMessage({id: 'Findings.Edit.ShowPreview'})}
         </Button>
         <Button type="submit">{intl.formatMessage({id: 'General.Submit'})}</Button>
-        <p>{submitError && <>{submitError}</>}</p>
+        {submitError && 
+          <Text mt={3} color='red6'>
+            {intl.formatMessage({id: 'Measurement.Feedback.Failure'})}
+            <br/>
+            Error: {submitError}
+          </Text>
+        }
       </form>
     </>
   )

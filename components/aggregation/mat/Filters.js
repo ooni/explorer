@@ -1,12 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef } from 'react'
 import { useTable, useFlexLayout, useRowSelect, useSortBy, useGlobalFilter, useAsyncDebounce } from 'react-table'
 import { FormattedMessage, useIntl } from 'react-intl'
-import { defaultRangeExtractor, useVirtual } from 'react-virtual'
+import { useVirtual } from 'react-virtual'
 import styled from 'styled-components'
 import { Flex, Box, Button, Text } from 'ooni-components'
 
-import GridChart, { prepareDataForGridChart } from './GridChart'
-import { ResizableBox } from './Resizable'
 import { DetailsBox } from '../../measurement/DetailsBox'
 import { sortRows } from './computations'
 
