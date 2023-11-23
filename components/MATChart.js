@@ -42,7 +42,7 @@ const fetcher = (query) => {
     })
 }
 
-export const MATChartReportWrapper = ({ link, caption }) => {
+export const MATChartWrapper = ({ link, caption }) => {
   let searchParams
   const captionText = typeof caption === 'string' ? caption : ''
   const today = dayjs.utc().add(1, 'day')

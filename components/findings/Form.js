@@ -138,17 +138,17 @@ const Form = ({ defaultValues, onSubmit }) => {
     }
   }, [getValues])
 
-  const submit = (report) => {
-    console.log(report)
+  const submit = (incident) => {
+    console.log(incident)
     return onSubmit({
-      ...report,
-      start_time: `${report.start_time}T00:00:00Z`,
-      ...(report.end_time ? { end_time: `${report.end_time}T00:00:00Z` } : {end_time: null}),
-      test_names: report.test_names.length ? report.test_names.map((test_name) => test_name.value) : [],
-      CCs: report.CCs.length ? report.CCs.map((cc) => cc.value) : [],
-      tags: report.tags.length ? report.tags.map((t) => t.value) : [],
-      ASNs: report.ASNs.length ? report.ASNs.map((as) => Number(as.value)) : [],
-      domains: report.domains.length ? report.domains.map((d) => d.value) : [],
+      ...incident,
+      start_time: `${incident.start_time}T00:00:00Z`,
+      ...(incident.end_time ? { end_time: `${incident.end_time}T00:00:00Z` } : {end_time: null}),
+      test_names: incident.test_names.length ? incident.test_names.map((test_name) => test_name.value) : [],
+      CCs: incident.CCs.length ? incident.CCs.map((cc) => cc.value) : [],
+      tags: incident.tags.length ? incident.tags.map((t) => t.value) : [],
+      ASNs: incident.ASNs.length ? incident.ASNs.map((as) => Number(as.value)) : [],
+      domains: incident.domains.length ? incident.domains.map((d) => d.value) : [],
     })
   }
 
@@ -162,7 +162,7 @@ const Form = ({ defaultValues, onSubmit }) => {
         onHideClick={() => setShowPreview(!showPreview)}
       >
         <Box p={4}>
-          <FindingDisplay report={getPreviewValues()} />
+          <FindingDisplay incident={getPreviewValues()} />
         </Box>
       </Modal>
       <form onSubmit={(e) => handleSubmit(submit)(e).catch((e) => setSubmitError(e.message))}>

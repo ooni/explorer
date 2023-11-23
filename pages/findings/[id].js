@@ -45,7 +45,7 @@ const ReportView = () => {
       <Container>
         {loading && <SpinLoader />}
         {error && <NotFound title="Report not found" />}
-        {data && <FindingDisplay report={data.incident} />}
+        {data && <FindingDisplay incident={data.incident} />}
       </Container>
     </>
   )
