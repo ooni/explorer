@@ -197,7 +197,7 @@ const Dashboard = () => {
             <tbody>
               {table
                 .getRowModel()
-                .rows.slice(0, 10)
+                .rows
                 .map(row => {
                   return (
                     <StyledRow key={row.id}>
