@@ -55,24 +55,26 @@ const Index = () => {
   }, [data])
 
   const sortedAndFilteredData = useMemo(() => {
-    const sortedData = displayData.sort((a, b) => {
-      if (sortValue === 'start_asc') {
-        return a.start_time - b.start_time
-      } else if (sortValue === 'start_desc') {
-        return b.start_time - a.start_time
-      } else if (sortValue === 'end_asc') {
-        return a.sort_end_time - b.sort_end_time
-      } else {
-        // default to 'end_desc' sort
-        return b.sort_end_time - a.sort_end_time
-      }
-    })
+    const sortedData = displayData
+      .sort((a, b) => (b.start_time - a.start_time)) // make sure ongoing events are always chronologically sorted
+      .sort((a, b) => {
+        if (sortValue === 'start_asc') {
+          return a.start_time - b.start_time
+        } else if (sortValue === 'start_desc') {
+          return b.start_time - a.start_time
+        } else if (sortValue === 'end_asc') {
+          return a.sort_end_time - b.sort_end_time
+        } else {
+          // default to 'end_desc' sort
+          return b.sort_end_time - a.sort_end_time
+        }})
 
     const filteredData = !!searchValue.length ?
-      sortedData.filter((incident) => {
-        const fitsSearchValue = !!searchValue ? incident.title.toLowerCase().includes(searchValue.toLowerCase()) : true
-        return fitsSearchValue
-      }) :
+      sortedData.filter((incident) => (
+        !!searchValue ? 
+        incident.title.toLowerCase().includes(searchValue.toLowerCase()) || incident.short_description.toLowerCase().includes(searchValue.toLowerCase()) : 
+        true
+      )) :
       sortedData
 
     return filteredData
