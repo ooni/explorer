@@ -44,7 +44,7 @@ const ReportView = () => {
       <NavBar />
       <Container>
         {loading && <SpinLoader />}
-        {error && <NotFound title="Report not found" />}
+        {error && <NotFound title={intl.formatMessage({id: 'Findings.Display.NotFound'})} />}
         {data && <FindingDisplay incident={data.incident} />}
       </Container>
     </>

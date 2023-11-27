@@ -90,21 +90,21 @@ const Index = () => {
       </StyledStickyNavBar>
       <Container>
         {user?.role === 'admin' && (
-          <Flex justifyContent="end" mt={3}><NLink href="/findings/dashboard"><Button hollow>{intl.formatMessage({id: 'Findings.Dashboard.Short'})}</Button></NLink></Flex>
+          <Flex justifyContent="end" mt={3}><NLink href="/findings/dashboard"><Button hollow>{intl.formatMessage({id: 'Findings.Dashboard.ShortTitle'})}</Button></NLink></Flex>
         )}
         <StyledStickySubMenu>
           <Flex mt={user?.role === 'admin' ? 0 : 5} mb={2} justifyContent='space-between' alignItems='baseline'>
             <Heading h={1} mt={1} mb={0}>
-              {intl.formatMessage({id: 'Findings.Title'}, {amount: sortedAndFilteredData.length})}
+              {intl.formatMessage({id: 'Findings.Index.Title'}, {amount: sortedAndFilteredData.length})}
             </Heading>
             <Flex sx={{gap: 3}}>
               <Box>
                 <Input
                   onChange={(e) => debouncedSearchHandler(e.target.value)}
-                  placeholder={intl.formatMessage({id: 'Findings.SearchPlaceholder'})}
+                  placeholder={intl.formatMessage({id: 'Findings.Index.SearchPlaceholder'})}
                   error={
                     (searchValue && sortedAndFilteredData?.length === 0) && 
-                    <>{intl.formatMessage({id: 'Findings.SearchError'})}</>
+                    <>{intl.formatMessage({id: 'Findings.Index.SearchError'})}</>
                   }
                 />
               </Box>
@@ -131,14 +131,14 @@ const Index = () => {
                     {incident.start_time && formatLongDate(incident.start_time, intl.locale)} - {incident.end_time ? formatLongDate(incident.end_time, intl.locale) : 'ongoing'}
                   </Text>
                   <Text color="gray6">
-                    created on {incident?.create_time && formatLongDate(incident?.create_time, intl.locale)}
+                    {intl.formatMessage({id: 'Findings.Index.HighLightBox.CreatedOn'}, {date: incident?.create_time && formatLongDate(incident?.create_time, intl.locale)})}
                   </Text>
                 </>
               }
               footer={
                 <Box textAlign="center" mt={2}>
                   <NLink href={`/findings/${incident.id}`}>
-                    <Button size="small" hollow>Read More</Button>
+                    <Button size="small" hollow>{intl.formatMessage({id: 'Findings.Index.HighLightBox.ReadMore'})}</Button>
                   </NLink>
                 </Box>
               }

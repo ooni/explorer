@@ -30,12 +30,6 @@ th, td {
 }
 `
 
-const StyledRow = styled.tr`
-// &:nth-child(even) {
-//   background-color: gray;
-// }
-`
-
 const Dashboard = () => {
   const intl = useIntl()
   const { user, loading } = useUser()
@@ -83,9 +77,7 @@ const Dashboard = () => {
         header: 'Title',
         accessorKey: 'title',
         cell: info => (
-          <NLink href={`/findings/${info.row.original.id}`}>
-            <Button variant='link'>{info.getValue()}</Button>
-          </NLink>
+          <NLink href={`/findings/${info.row.original.id}`}>{info.getValue()}</NLink>
         )
       },
       {
@@ -166,9 +158,9 @@ const Dashboard = () => {
             <thead>
               {table.getHeaderGroups().map(headerGroup => (
                 <tr key={headerGroup.id}>
-                  {headerGroup.headers.map(header => {
+                  {headerGroup.headers.map((header, i) => {
                     return (
-                      <th key={header.id} colSpan={header.colSpan}>
+                      <th key={header.id} colSpan={header.colSpan} style={i === 0 ? {width: '370px'} : {}}>
                         {header.isPlaceholder ? null : (
                           <div
                             {...{
@@ -200,7 +192,7 @@ const Dashboard = () => {
                 .rows
                 .map(row => {
                   return (
-                    <StyledRow key={row.id}>
+                    <tr key={row.id}>
                       {row.getVisibleCells().map(cell => {
                         return (
                           <td key={cell.id}>
@@ -211,7 +203,7 @@ const Dashboard = () => {
                           </td>
                         )
                       })}
-                    </StyledRow>
+                    </tr>
                   )
                 })}
             </tbody>

@@ -27,6 +27,10 @@ const FormattedMarkdown = ({ children }) => {
 const FindingDisplay = ({ incident }) => {
   const intl = useIntl()
 
+  const reportedBy = incident?.reported_by
+  const formattedCreationDate = incident?.create_time && formatLongDate(incident?.create_time, intl.locale)
+  const listOfNetworks = incident?.ASNs?.map((as) => (<NLink key={as} href={`/as/AS${as}`}>{`AS${as}`}</NLink>)).reduce((prev, curr) => (prev ? [prev, ', ', curr] : curr), null)
+
   return (
     <>
       <Heading h={1} mt={4} mb={4} pb={3} sx={{borderBottom: '1px solid', borderColor: 'gray3'}}>
@@ -50,8 +54,12 @@ const FindingDisplay = ({ incident }) => {
           ))}
         </Flex>
       )}
-      <Text color="gray6" mb={4}>created by {incident?.reported_by} on {incident?.create_time && formatLongDate(incident?.create_time, intl.locale)}</Text>
-      {!!incident?.ASNs?.length && <Box mb={3} fontSize={18} lineHeight="1.5">Network: {incident.ASNs.map((as) => (<NLink key={as} href={`/as/AS${as}`}>{`AS${as}`}</NLink>)).reduce((prev, curr) => (prev ? [prev, ', ', curr] : curr), null)}</Box>}
+      <Text color="gray6" mb={4}>{intl.formatMessage({id: 'Findings.Display.CreatedByOn'}, {reportedBy, formattedDate: formattedCreationDate})}</Text>
+      {!!incident?.ASNs?.length && 
+        <Box mb={3} fontSize={18} lineHeight="1.5">
+          {intl.formatMessage({id: 'Findings.Display.Network'}, { listOfNetworks })}
+        </Box>
+      }
       <Box fontSize={18} lineHeight="1.5">{incident?.text && <FormattedMarkdown>{incident.text}</FormattedMarkdown>}</Box>
     </>
   )
