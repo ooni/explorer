@@ -67,7 +67,7 @@ const EditReport = () => {
       <Container>
         <Flex justifyContent="space-between" alignItems="center">
           <Heading h={1}>{intl.formatMessage({id: 'Findings.Edit.Title'})}</Heading>
-          <NLink href='/findings/dashboard'><Button hollow>{intl.formatMessage({id: 'Findings.Dashboard.Short'})}</Button></NLink>
+          <NLink href='/findings/dashboard'><Button hollow>{intl.formatMessage({id: 'Findings.Dashboard.ShortTitle'})}</Button></NLink>
         </Flex>
         {defaultValues && (
           <>

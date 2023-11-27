@@ -21,6 +21,7 @@ import { formatMediumDate } from 'utils'
 import { useRouter } from 'next/router'
 import { useIntl } from 'react-intl'
 import { publishIncidentReport, unpublishIncidentReport } from 'lib/api'
+import { FaSort, FaSortDown, FaSortUp } from 'react-icons/fa'
 
 const StyledTable = styled.table`
 border-collapse: collapse;
@@ -160,7 +161,7 @@ const Dashboard = () => {
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map((header, i) => {
                     return (
-                      <th key={header.id} colSpan={header.colSpan} style={i === 0 ? {width: '370px'} : {}}>
+                      <th key={header.id} colSpan={header.colSpan} style={i === 0 ? {width: '328px'} : {}}>
                         {header.isPlaceholder ? null : (
                           <div
                             {...{
@@ -169,15 +170,16 @@ const Dashboard = () => {
                                 : '',
                               onClick: header.column.getToggleSortingHandler(),
                             }}
+                            style={{display: 'ruby', cursor: 'pointer'}}
                           >
                             {flexRender(
                               header.column.columnDef.header,
                               header.getContext()
                             )}
                             {{
-                              asc: ' 🔼',
-                              desc: ' 🔽',
-                            }[header.column.getIsSorted()] ?? null}
+                              asc: <> <FaSortUp /></>,
+                              desc: <> <FaSortDown /></>,
+                            }[header.column.getIsSorted()] ?? <> <FaSort /></>}
                           </div>
                         )}
                       </th>
