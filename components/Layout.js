@@ -26,7 +26,13 @@ const GlobalStyle = createGlobalStyle`
     height: 100%;
     background-color: #ffffff;
   }
-
+  a {
+    text-decoration: none;
+    color: ${(props) => props.theme.colors.blue6};
+    &:hover {
+      color: ${(props) => props.theme.colors.blue9};
+    }
+  }
   /*
     Sticky Footer fix
     Based on: https://philipwalton.github.io/solved-by-flexbox/demos/sticky-footer/
@@ -36,7 +42,6 @@ const GlobalStyle = createGlobalStyle`
       flex-direction: column;
       min-height: 100vh;
   }
-
   .content {
     flex: 1 0 auto;
   }
