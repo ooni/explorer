@@ -632,7 +632,7 @@
   "Findings.Index.SearchPlaceholder": "Search for findings",
   "Findings.Index.SearchError": "No findings found",
   "Findings.Index.HighLightBox.ReadMore": "Read More",
-  "Findings.Index.HighLightBox.CreatedOn": "created on {date}",
+  "Findings.Index.HighLightBox.CreatedOn": "published on {date}",
   "Findings.Edit.Title": "Edit Censorship Finding",
   "Findings.Edit.ShowPreview": "Show Preview",
   "Findings.Edit.Delete": "Delete",
@@ -659,6 +659,6 @@
   "Findings.Form.Published.Label": "Published",
   "Findings.LoginRequiredModal.Title": "Email address is missing. Please log in again to be able to create a censorship finding.",
   "Findings.Display.NotFound": "Censorship Finding not found",
-  "Findings.Display.CreatedByOn": "created by {reportedBy} on {formattedDate}",
-  "Findings.Display.Network": "Network: {listOfNetworks}"
+  "Findings.Display.CreatedByOn": "published by {reportedBy} on {formattedDate}",
+  "Findings.Display.Network": "Network(s): {listOfNetworks}"
 }
