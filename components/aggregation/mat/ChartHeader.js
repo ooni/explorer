@@ -50,7 +50,7 @@ export const SubtitleStr = ({ query }) => {
     })
   }
   if (query.domain) {
-    params.add(query.domain)
+    params.add(query.domain.split(',').join(', '))
   }
   if (query.input) {
     params.add(query.input)
