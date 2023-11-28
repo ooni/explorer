@@ -11,16 +11,18 @@ import FindingDisplay from 'components/findings/FindingDisplay'
 import { useIntl } from 'react-intl'
 import { useMemo } from 'react'
 
-const ReportView = () => {
-  const { query } = useRouter()
-  const intl = useIntl()
+export const getServerSideProps = async ({ query }) => {
+  const data = await fetcher(apiEndpoints.SHOW_INCIDENT.replace(':id', query.id)).catch(() => (null))
 
-  const { data, error, loading } = useSWR(
-    query.id
-      ? apiEndpoints.SHOW_INCIDENT.replace(':id', query.id)
-      : null,
-    fetcher
-  )
+  return {
+    props: {
+      data,
+    }
+  }
+}
+
+const ReportView = ({ data }) => {
+  const intl = useIntl()
 
   const metaTitle = useMemo(() => (data?.incident?.title || intl.formatMessage({ id: 'General.OoniExplorer' })), [data])
   const metaDescription = useMemo(() => (data?.incident?.short_description || ''), [data])
@@ -28,24 +30,25 @@ const ReportView = () => {
   return (
     <>
       <Head>
-      <title>{metaTitle}</title>
-      <meta name="description" content={metaDescription} />
-      <meta
-        key="og:title"
-        property="og:title"
-        content={metaTitle}
-      />
-      <meta
-        key="og:description"
-        property="og:description"
-        content={metaDescription}
-      />
-    </Head>
+        <title>{metaTitle}</title>
+        <meta name="description" content={metaDescription} />
+        <meta
+          key="og:title"
+          property="og:title"
+          content={metaTitle}
+        />
+        <meta
+          key="og:description"
+          property="og:description"
+          content={metaDescription}
+        />
+      </Head>
       <NavBar />
       <Container>
-        {loading && <SpinLoader />}
-        {error && <NotFound title={intl.formatMessage({id: 'Findings.Display.NotFound'})} />}
-        {data && <FindingDisplay incident={data.incident} />}
+        {data ?
+          <FindingDisplay incident={data.incident} /> :
+          <NotFound title={intl.formatMessage({id: 'Findings.Display.NotFound'})} />
+        }
       </Container>
     </>
   )
