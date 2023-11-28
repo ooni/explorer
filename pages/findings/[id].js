@@ -32,16 +32,10 @@ const ReportView = ({ data }) => {
       <Head>
         <title>{metaTitle}</title>
         <meta name="description" content={metaDescription} />
-        <meta
-          key="og:title"
-          property="og:title"
-          content={metaTitle}
-        />
-        <meta
-          key="og:description"
-          property="og:description"
-          content={metaDescription}
-        />
+        <meta property="og:title" content={metaTitle} />
+        <meta property="og:description" content={metaDescription} />
+        <meta name="twitter:title" content={metaTitle} />
+        <meta name="twitter:description" content={metaDescription} />
       </Head>
       <NavBar />
       <Container>
