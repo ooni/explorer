@@ -93,7 +93,7 @@ const MATChart = ({ query, showFilters = true }) => {
           ) : (
             <>
               {data?.data?.result?.length > 0 ? 
-                <Box sx={{ minHeight: '500px' }}>
+                <Box>
                   {data && data.data.dimension_count == 0 && <FunnelChart data={data.data.result} />}
                   {data && data.data.dimension_count == 1 && <StackedBarChart data={data.data.result} query={query} />}
                   {data && data.data.dimension_count > 1 && (
