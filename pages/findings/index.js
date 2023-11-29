@@ -2,6 +2,7 @@ import Head from 'next/head'
 import NavBar from 'components/NavBar'
 import { Container, Heading, Box, Flex, Input, Select, Button, Text } from 'ooni-components'
 import { StyledStickyNavBar, StyledStickySubMenu } from 'components/SharedStyledComponents'
+import SpinLoader from 'components/vendor/SpinLoader'
 import useFilterWithSort from 'hooks/useFilterWithSort'
 import useSWR from 'swr'
 import { apiEndpoints, fetcher } from '/lib/api'
@@ -30,7 +31,7 @@ const Index = () => {
   const intl = useIntl()
   const { user } = useUser()
 
-  const { data, error } = useSWR(apiEndpoints.SEARCH_INCIDENTS, fetcher)
+  const { data, isLoading, error } = useSWR(apiEndpoints.SEARCH_INCIDENTS, fetcher)
 
   const {
     searchValue,
@@ -118,33 +119,38 @@ const Index = () => {
             </Flex>
           </Flex>
         </StyledStickySubMenu>
-        <StyledGrid mt={4}>
-          {sortedAndFilteredData.map((incident) => (
-            <HighlightBox 
-              key={incident.id}
-              countryCode={incident.CCs[0]}
-              title={incident.title}
-              text={incident.short_description}
-              dates={
-                <>
-                  <Text color="gray6" mb={2}>
-                    {incident.start_time && formatLongDate(incident.start_time, intl.locale)} - {incident.end_time ? formatLongDate(incident.end_time, intl.locale) : 'ongoing'}
-                  </Text>
-                  <Text color="gray6">
-                    {intl.formatMessage({id: 'Findings.Index.HighLightBox.CreatedOn'}, {date: incident?.create_time && formatLongDate(incident?.create_time, intl.locale)})}
-                  </Text>
-                </>
-              }
-              footer={
-                <Box textAlign="center" mt={2}>
-                  <NLink href={`/findings/${incident.id}`}>
-                    <Button size="small" hollow>{intl.formatMessage({id: 'Findings.Index.HighLightBox.ReadMore'})}</Button>
-                  </NLink>
-                </Box>
-              }
-            />
-          ))}
-        </StyledGrid>
+        {isLoading && 
+          <Container pt={6}><SpinLoader /></Container>
+        }
+        {!!sortedAndFilteredData?.length && 
+          <StyledGrid mt={4}>
+            {sortedAndFilteredData.map((incident) => (
+              <HighlightBox 
+                key={incident.id}
+                countryCode={incident.CCs[0]}
+                title={incident.title}
+                text={incident.short_description}
+                dates={
+                  <>
+                    <Text color="gray6" mb={2}>
+                      {incident.start_time && formatLongDate(incident.start_time, intl.locale)} - {incident.end_time ? formatLongDate(incident.end_time, intl.locale) : 'ongoing'}
+                    </Text>
+                    <Text color="gray6">
+                      {intl.formatMessage({id: 'Findings.Index.HighLightBox.CreatedOn'}, {date: incident?.create_time && formatLongDate(incident?.create_time, intl.locale)})}
+                    </Text>
+                  </>
+                }
+                footer={
+                  <Box textAlign="center" mt={2}>
+                    <NLink href={`/findings/${incident.id}`}>
+                      <Button size="small" hollow>{intl.formatMessage({id: 'Findings.Index.HighLightBox.ReadMore'})}</Button>
+                    </NLink>
+                  </Box>
+                }
+              />
+            ))}
+          </StyledGrid>
+        }
       </Container>
     </>
   )
