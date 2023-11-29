@@ -24,7 +24,9 @@ export const getServerSideProps = async ({ query }) => {
 const ReportView = ({ data }) => {
   const intl = useIntl()
 
-  const metaTitle = useMemo(() => (data?.incident?.title || intl.formatMessage({ id: 'General.OoniExplorer' })), [data])
+  const metaTitle = useMemo(() => (
+    `${intl.formatMessage({ id: 'General.OoniExplorer' })}${!!data?.incident?.title && ` - ${data?.incident?.title}`}`
+  ), [data, intl])
   const metaDescription = useMemo(() => (data?.incident?.short_description || ''), [data])
 
   return (
