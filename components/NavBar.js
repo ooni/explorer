@@ -97,6 +97,10 @@ const StyledResponsiveMenu = styled(Box)`
         flex-direction: column;
         align-items: start;
         
+        a {
+          border-color: ${(props) => props.theme.colors.black};
+        }
+        
         a, select {
           opacity: 1;
           color: ${(props) => props.theme.colors.black};
