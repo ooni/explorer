@@ -93,7 +93,7 @@ const StyledResponsiveMenu = styled(Box)`
       z-index: 999;
       
       .menuItems {
-        padding-top: ${(props) => props.theme.space[4]}px;
+        padding-top: ${(props) => props.theme.space[2]}px;
         flex-direction: column;
         align-items: start;
         
