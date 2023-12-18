@@ -72,24 +72,35 @@ const StyledResponsiveMenu = styled(Box)`
     display: block;
   }
 
+  .closeIcon {
+    color: ${(props) => props.theme.colors.black};
+    cursor: pointer;
+  }
+
   .menuItemsWrapper {
     display: none;
 
     &.visible {
       display: block;
-      padding: ${(props) => props.theme.space[4]}px ${(props) => props.theme.space[3]}px;
+      overflow-y: scroll;
+      max-height: 100%;
+      padding: ${(props) => props.theme.space[4]}px;
       font-Size: 16px;
       position: fixed;
       top: 0;
-      left: 0;
       right: 0;
-      bottom: 0;
-      background: ${(props) => props.theme.colors.blue5};
+      background: ${(props) => props.theme.colors.gray0};
       z-index: 999;
-
+      
       .menuItems {
         padding-top: ${(props) => props.theme.space[4]}px;
         flex-direction: column;
+        align-items: start;
+        
+        a, select {
+          opacity: 1;
+          color: ${(props) => props.theme.colors.black};
+        }
       }
     }
   }
@@ -136,7 +147,7 @@ export const NavBar = ({ color }) => {
                   <MdClose size="28px" className='closeIcon' onClick={() => setShowMenu(!showMenu)} />
                 </Flex>
               )}
-              <Flex className='menuItems' alignItems='center' sx={{gap: [4, 4, 3, 4]}}>
+              <Flex className='menuItems' alignItems='center' sx={{gap: [3, 3, 3, 4]}}>
                 <NavItem label={<FormattedMessage id="Navbar.Search" />} href="/search" />
                 <NavItem label={<FormattedMessage id="Navbar.Charts.MAT" />} href="/chart/mat" />
                 <NavItem label={<FormattedMessage id="Navbar.Charts.Circumvention" />} href="/chart/circumvention" />
