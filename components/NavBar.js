@@ -70,11 +70,11 @@ const StyledResponsiveMenu = styled(Box)`
   .menuIcon,
   .closeIcon {
     display: block;
+    cursor: pointer;
   }
 
   .closeIcon {
     color: ${(props) => props.theme.colors.black};
-    cursor: pointer;
   }
 
   .menuItemsWrapper {
@@ -100,7 +100,7 @@ const StyledResponsiveMenu = styled(Box)`
         a {
           border-color: ${(props) => props.theme.colors.black};
         }
-        
+
         a, select {
           opacity: 1;
           color: ${(props) => props.theme.colors.black};
