@@ -1,8 +1,9 @@
-import React from 'react'
-import { useRouter, withRouter } from 'next/router'
+import React, { useState } from 'react'
+import { useRouter } from 'next/router'
 import NLink from 'next/link'
 import styled from 'styled-components'
 import { FormattedMessage, useIntl } from 'react-intl'
+import { MdMenu, MdClose } from 'react-icons/md'
 import { getLocalisedLanguageName } from 'utils/i18nCountries'
 import ExplorerLogo from 'ooni-components/svgs/logos/Explorer-HorizontalMonochromeInverted.svg'
 import { Link, Flex, Box, Container } from 'ooni-components'
@@ -10,33 +11,18 @@ import useUser from 'hooks/useUser'
 import { getDirection } from './withIntl'
 
 const StyledNavItem = styled.a`
-  text-decoration: none;
   position: relative;
-  display: inline;
-  padding-top: 4px;
-`
-
-const NavItemLabel = styled.span`
   color: ${(props) => props.theme.colors.white};
   cursor: pointer;
-  opacity: ${(props) => (props.$active ? '1' : '0.6 ')};
+  padding-bottom: ${(props) => (props.$active ? '4px' : '6px')};
+  opacity: ${(props) => (props.$active ? '1' : '0.6')};
+  border-bottom: ${(props) => (props.$active ? `2px solid ${props.theme.colors.white}` : 'none')};
 
-  ${StyledNavItem}:hover & {
+  &:hover {
+    padding-bottom: 4px;
+    color: ${(props) => props.theme.colors.white};
     opacity: 1;
-  }
-`
-
-const Underline = styled.span`
-  display: block;
-  height: 2px;
-  background: ${(props) => props.theme.colors.white};
-  position: absolute;
-  left: 0;
-  bottom: -6px;
-
-  width: ${(props) => (props.$active ? '100%' : '0px')};
-  ${StyledNavItem}:hover & {
-    width: calc(100%);
+    border-bottom: 2px solid ${(props) => props.theme.colors.white};
   }
 `
 
@@ -47,29 +33,84 @@ const LanguageSelect = styled.select`
   border: none;
   text-transform: capitalize;
   cursor: pointer;
+  font-family: inherit;
+  font-size: inherit;
+  padding: 0;
+  padding-bottom: 6px;
+  &:hover {
+    opacity: 1;
+  }
 `
 
-const NavItemComponent = ({ router, label, href }) => {
-  const active = router.pathname === href
+const NavItem = ({ label, href }) => {
+  const { pathname } = useRouter()
+  const active = pathname === href
+
   return (
-    <Box ml={[0, 4]} my={[2, 0]}>
-      <NLink href={href} passHref>
-        <StyledNavItem>
-          <NavItemLabel $active={active}>{label}</NavItemLabel>
-          <Underline $active={active} />
-        </StyledNavItem>
-      </NLink>
-    </Box>
+    <NLink href={href} passHref>
+      <StyledNavItem $active={active}>{label}</StyledNavItem>
+    </NLink>
   )
 }
-const NavItem = withRouter(NavItemComponent)
 
 const StyledNavBar = styled.div`
-  background-color: ${(props) => props.color || props.theme.colors.blue5};
+  background-color: ${(props) => props.$bgColor || props.theme.colors.blue5};
   padding-top: 16px;
   padding-bottom: 20px;
   z-index: 999;
 `
+
+const StyledResponsiveMenu = styled(Box)`
+.menuIcon,
+.closeIcon {
+  display: none;
+}
+
+@media screen and (max-width: 948px) {
+  .menuIcon,
+  .closeIcon {
+    display: block;
+    cursor: pointer;
+  }
+
+  .closeIcon {
+    color: ${(props) => props.theme.colors.black};
+  }
+
+  .menuItemsWrapper {
+    display: none;
+
+    &.visible {
+      display: block;
+      overflow-y: scroll;
+      max-height: 100%;
+      padding: ${(props) => props.theme.space[4]}px;
+      font-Size: 16px;
+      position: fixed;
+      top: 0;
+      right: 0;
+      background: ${(props) => props.theme.colors.gray0};
+      z-index: 999;
+      
+      .menuItems {
+        padding-top: ${(props) => props.theme.space[2]}px;
+        flex-direction: column;
+        align-items: start;
+        
+        a {
+          border-color: ${(props) => props.theme.colors.black};
+        }
+
+        a, select {
+          opacity: 1;
+          color: ${(props) => props.theme.colors.black};
+        }
+      }
+    }
+  }
+}
+`
+
 const languages = process.env.LOCALES
 
 export const NavBar = ({ color }) => {
@@ -77,6 +118,8 @@ export const NavBar = ({ color }) => {
   const router = useRouter()
   const { pathname, asPath, query } = router
   const { user, logout } = useUser()
+
+  const [showMenu, setShowMenu] = useState(false)
 
   const handleLocaleChange = (event) => {
     const htmlEl = document.documentElement
@@ -90,13 +133,9 @@ export const NavBar = ({ color }) => {
   }
 
   return (
-    <StyledNavBar color={color}>
+    <StyledNavBar $bgColor={color}>
       <Container>
-        <Flex
-          flexDirection={['column', 'row']}
-          justifyContent={['flex-start', 'space-between']}
-          alignItems={['flex-start', 'center']}
-        >
+        <Flex flexDirection='row' justifyContent='space-between' alignItems='end'>
           <Box style={{ zIndex: 1 }}>
             <NLink href='/' passHref>
               <Link>
@@ -104,42 +143,35 @@ export const NavBar = ({ color }) => {
               </Link>
             </NLink>
           </Box>
-          <Box mt={[2, 0]}>
-            <Flex flexDirection={['column', 'row']} alignItems={'center'}>
-              <NavItem label={<FormattedMessage id="Navbar.Search" />} href="/search" />
-              <NavItem label={<FormattedMessage id="Navbar.Charts.MAT" />} href="/chart/mat" />
-              <NavItem
-                label={<FormattedMessage id="Navbar.Charts.Circumvention" />}
-                href="/chart/circumvention"
-              />
-              <NavItem label={<FormattedMessage id="Navbar.Countries" />} href="/countries" />
-              <NavItem label={<FormattedMessage id="Navbar.Networks" />} href="/networks" />
-              <NavItem label={<FormattedMessage id="Navbar.Domains" />} href="/domains" />
-              <NavItem label={<FormattedMessage id="Navbar.Findings" />} href="/findings" />
-              {user?.logged_in ? (
-                <Box ml={[0, 4]} my={[2, 0]}>
-                  <StyledNavItem>
-                    <NavItemLabel onClick={logoutUser}>
-                      <FormattedMessage id="General.Logout" />
-                    </NavItemLabel>
-                    <Underline />
-                  </StyledNavItem>
-                </Box>
-              ) : (
-                <></>
-                // <NavItem label={<FormattedMessage id="General.Login" />} href="/login" />
+          <StyledResponsiveMenu color='white'>
+            <MdMenu size="28px" className='menuIcon' onClick={() => setShowMenu(!showMenu)} />
+            <Box className={`menuItemsWrapper ${showMenu ? 'visible' : ''}`}>
+              {showMenu && (
+                <Flex justifyContent='end'>
+                  <MdClose size="28px" className='closeIcon' onClick={() => setShowMenu(!showMenu)} />
+                </Flex>
               )}
-              <Box ml={[0, 4]} my={[2, 0]}>
-                <LanguageSelect ml={[0, 4]} onChange={handleLocaleChange} value={locale}>
+              <Flex className='menuItems' alignItems='center' sx={{gap: [3, 3, 3, 4]}}>
+                <NavItem label={<FormattedMessage id="Navbar.Search" />} href="/search" />
+                <NavItem label={<FormattedMessage id="Navbar.Charts.MAT" />} href="/chart/mat" />
+                <NavItem label={<FormattedMessage id="Navbar.Charts.Circumvention" />} href="/chart/circumvention" />
+                <NavItem label={<FormattedMessage id="Navbar.Countries" />} href="/countries" />
+                <NavItem label={<FormattedMessage id="Navbar.Networks" />} href="/networks" />
+                <NavItem label={<FormattedMessage id="Navbar.Domains" />} href="/domains" />
+                <NavItem label={<FormattedMessage id="Navbar.Findings" />} href="/findings" />
+                {user?.logged_in && (
+                  <StyledNavItem onClick={logoutUser}><FormattedMessage id="General.Logout" /></StyledNavItem>
+                )}
+                <LanguageSelect onChange={handleLocaleChange} value={locale}>
                   {languages.map((c) => (
                     <option key={c} value={c}>
                       {getLocalisedLanguageName(c, c)}
                     </option>
                   ))}
                 </LanguageSelect>
-              </Box>
-            </Flex>
-          </Box>
+              </Flex>
+            </Box>
+          </StyledResponsiveMenu>
         </Flex>
       </Container>
     </StyledNavBar>
