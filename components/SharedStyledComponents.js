@@ -5,7 +5,7 @@ export const StyledSticky = styled.div`
 position: sticky;
 top: 0;
 background: white;
-z-index: 100;
+z-index: 99;
 border-bottom: 1px solid ${props => props.theme.colors.gray3};
 `
 
@@ -19,7 +19,7 @@ export const StyledStickySubMenu = styled.div`
 position: sticky;
 top: 66px;
 background: white;
-z-index: 100;
+z-index: 99;
 border-bottom: 1px solid ${props => props.theme.colors.gray3};
 `
 

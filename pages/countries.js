@@ -102,7 +102,7 @@ const StyledRegionLink = styled.a`
 `
 
 const RegionLink = ({ href, label }) => (
-  <Box px={[1,3]} py={[2,4]}>
+  <Box px={[2,3]} py={[2,2,4]}>
     <StyledRegionLink href={href}>
       <Text fontSize={[16, 20]}>{label}</Text>
     </StyledRegionLink>
@@ -164,12 +164,11 @@ const Countries = ({countries}) => {
       <StyledStickyNavBar>
         <NavBar />
         <RegionMenu>
-      
           <Container>
             <Flex
-              flexDirection={['column', 'row']}
+              flexDirection={['column', 'column', 'row']}
               justifyContent={['flex-start', 'flex-end']}
-              alignItems={['flex-start', 'center']}
+              alignItems={['flex-start', 'flex-start', 'center']}
             >
               <Box my={2}>
                 <Input
@@ -178,12 +177,17 @@ const Countries = ({countries}) => {
                   error={filteredCountries.length === 0}
                 />
               </Box>
-              <RegionLink href={`#${getLocalisedRegionName('002', intl.locale)}`} label={getLocalisedRegionName('002', intl.locale)} />
-              <RegionLink href={`#${getLocalisedRegionName('019', intl.locale)}`} label={getLocalisedRegionName('019', intl.locale)} />
-              <RegionLink href={`#${getLocalisedRegionName('142', intl.locale)}`} label={getLocalisedRegionName('142', intl.locale)} />
-              <RegionLink href={`#${getLocalisedRegionName('150', intl.locale)}`} label={getLocalisedRegionName('150', intl.locale)} />
-              <RegionLink href={`#${getLocalisedRegionName('009', intl.locale)}`} label={getLocalisedRegionName('009', intl.locale)} />
-              <RegionLink href={`#${getLocalisedRegionName('AQ', intl.locale)}`} label={getLocalisedRegionName('AQ', intl.locale)} />
+              <Flex
+                flexDirection='row'
+                flexWrap='wrap'
+              >
+                <RegionLink href={`#${getLocalisedRegionName('002', intl.locale)}`} label={getLocalisedRegionName('002', intl.locale)} />
+                <RegionLink href={`#${getLocalisedRegionName('019', intl.locale)}`} label={getLocalisedRegionName('019', intl.locale)} />
+                <RegionLink href={`#${getLocalisedRegionName('142', intl.locale)}`} label={getLocalisedRegionName('142', intl.locale)} />
+                <RegionLink href={`#${getLocalisedRegionName('150', intl.locale)}`} label={getLocalisedRegionName('150', intl.locale)} />
+                <RegionLink href={`#${getLocalisedRegionName('009', intl.locale)}`} label={getLocalisedRegionName('009', intl.locale)} />
+                <RegionLink href={`#${getLocalisedRegionName('AQ', intl.locale)}`} label={getLocalisedRegionName('AQ', intl.locale)} />
+              </Flex>
             </Flex>
           </Container>
         </RegionMenu>

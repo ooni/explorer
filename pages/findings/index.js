@@ -23,8 +23,12 @@ const sortOptions = [
 
 const StyledGrid = styled(Box)`
 display: grid;
-grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+grid-template-columns: 1fr 1fr;
 gap: 24px;
+
+@media screen and (max-width: 48em) {
+  grid-template-columns: 1fr;
+}
 `
 
 const Index = () => {
@@ -94,11 +98,11 @@ const Index = () => {
           <Flex justifyContent="end" mt={3}><NLink href="/findings/dashboard"><Button hollow>{intl.formatMessage({id: 'Findings.Dashboard.ShortTitle'})}</Button></NLink></Flex>
         )}
         <StyledStickySubMenu>
-          <Flex mt={user?.role === 'admin' ? 0 : 5} mb={2} justifyContent='space-between' alignItems='baseline'>
-            <Heading h={1} mt={1} mb={0}>
+          <Flex mt={user?.role === 'admin' ? 0 : [0, 5]} mb={2} justifyContent='space-between' alignItems='baseline' flexDirection={['column', 'column', 'row']}>
+            <Heading h={1} mt={1} mb={0} fontSize={[4, 5]}>
               {intl.formatMessage({id: 'Findings.Index.Title'}, {amount: sortedAndFilteredData.length})}
             </Heading>
-            <Flex sx={{gap: 3}}>
+            <Flex sx={{gap: 3}} flexDirection={['column', 'column', 'row']} width={[1, 'auto']}>
               <Box>
                 <Input
                   onChange={(e) => debouncedSearchHandler(e.target.value)}

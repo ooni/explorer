@@ -79,15 +79,15 @@ const Networks = () => {
       </StyledStickyNavBar>
       <Container>
         <StyledStickySubMenu>
-          <Flex mt={5} mb={2} justifyContent='space-between' alignItems='baseline'>
-            <Heading h={1} mt={1} mb={0}>
+          <Flex mt={[0, 5]} mb={2} justifyContent='space-between' alignItems='baseline' flexDirection={['column', 'column', 'row']}>
+            <Heading h={1} mt={1} mb={0} fontSize={[4, 5]}>
               {
                 intl.formatMessage({id: 'Networks.Title'})
               } {!!sortedAndFilteredData.length && 
                 <>({new Intl.NumberFormat().format(sortedAndFilteredData.length)})</>
               }
             </Heading>
-            <Flex sx={{gap: 3}}>
+            <Flex sx={{gap: 3}} flexDirection={['column', 'column', 'row']} width={[1, 'auto']}>
               <Box>
                 <Input
                   onChange={(e) => debouncedSearchHandler(e.target.value)}
