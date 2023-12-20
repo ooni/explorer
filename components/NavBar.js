@@ -37,6 +37,12 @@ const LanguageSelect = styled.select`
   font-size: inherit;
   padding: 0;
   padding-bottom: 6px;
+  outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  -ms-appearance: none;
+  -o-appearance: none;
   &:hover {
     opacity: 1;
   }
@@ -57,7 +63,7 @@ const StyledNavBar = styled.div`
   background-color: ${(props) => props.$bgColor || props.theme.colors.blue5};
   padding-top: 16px;
   padding-bottom: 20px;
-  z-index: 999;
+  z-index: 9999;
 `
 
 const StyledResponsiveMenu = styled(Box)`
@@ -81,6 +87,7 @@ const StyledResponsiveMenu = styled(Box)`
     display: none;
 
     &.visible {
+      z-index: 999999;
       display: block;
       overflow-y: scroll;
       max-height: 100%;
@@ -90,7 +97,6 @@ const StyledResponsiveMenu = styled(Box)`
       top: 0;
       right: 0;
       background: ${(props) => props.theme.colors.gray0};
-      z-index: 999;
       
       .menuItems {
         padding-top: ${(props) => props.theme.space[2]}px;

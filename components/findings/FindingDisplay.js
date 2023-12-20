@@ -46,9 +46,9 @@ const FindingDisplay = ({ incident }) => {
       )}
       <Text color="gray6" mb={3}>{incident?.start_time && formatLongDate(incident?.start_time, intl.locale)} - {incident?.end_time ? formatLongDate(incident?.end_time, intl.locale) : 'ongoing'}</Text>
       {!!incident?.tags?.length && (
-        <Flex mb={3}>
+        <Flex mb={3} flexWrap='wrap' sx={{gap: 2}}>
           {incident.tags.map((tag) => (
-            <Box key={tag} mr={2}>
+            <Box key={tag}>
               <Badge>{tag}</Badge>
             </Box>
           ))}
