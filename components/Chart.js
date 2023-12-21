@@ -26,12 +26,10 @@ export const MATLink = ({ query }) => {
     <Flex mt={3} justifyContent='space-between' alignItems='center'>
       <Box>
         {showMATButton &&
-          <NLink href={`/chart/mat?${queryToSearchParams}`}passHref>
-            <a>
-              <StyledHollowButton>
-                {intl.formatMessage({id: 'MAT.Charts.SeeOnMAT'})} <MdBarChart size={20} style={{verticalAlign: 'bottom'}} />
-              </StyledHollowButton>
-            </a>
+          <NLink href={`/chart/mat?${queryToSearchParams}`}>
+            <StyledHollowButton>
+              {intl.formatMessage({id: 'MAT.Charts.SeeOnMAT'})} <MdBarChart size={20} style={{verticalAlign: 'bottom'}} />
+            </StyledHollowButton>
           </NLink>
         }
       </Box>
@@ -39,8 +37,8 @@ export const MATLink = ({ query }) => {
         <NLink passHref href={apiUrl}>
           <Link mr={3}>{intl.formatMessage({id: 'MAT.Charts.DownloadJSONData'})} <MdOutlineFileDownload style={{verticalAlign: 'bottom'}} size={20} /></Link>
         </NLink>
-        <NLink passHref href={`${apiUrl}&format=CSV`}>
-          <Link>{intl.formatMessage({id: 'MAT.Charts.DownloadCSVData'})} <MdOutlineFileDownload style={{verticalAlign: 'bottom'}} size={20} /></Link>
+        <NLink href={`${apiUrl}&format=CSV`}>
+          {intl.formatMessage({id: 'MAT.Charts.DownloadCSVData'})} <MdOutlineFileDownload style={{verticalAlign: 'bottom'}} size={20} />
         </NLink>
       </Box>
     </Flex>

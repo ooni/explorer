@@ -291,9 +291,7 @@ const LandingPage = ({ measurementCount, asnCount, countryCount}) => {
               <FormattedMessage 
                 id="Home.Highlights.CTA"
                 values={{'link-to-search': (string) => (
-                  <NLink href='/search' passHref>
-                    <Link color='blue7'>{string}</Link>
-                  </NLink>
+                  <NLink href='/search'>{string}</NLink>
                   )
                 }}
               />
