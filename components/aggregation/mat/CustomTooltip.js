@@ -56,7 +56,12 @@ export const generateSearchQuery = (data, query) => {
         untilDateObj.setUTCDate(untilDateObj.getUTCDate() + 1)
         break
     }
-    untilFilter = untilDateObj.toISOString().split('.')[0] + 'Z'
+    untilFilter = untilDateObj.toISOString()
+    if (query.time_grain !== 'hour') {
+      untilFilter = untilFilter.split('T')[0]
+    } else {
+      untilFilter = untilFilter.split('.')[0] + 'Z'
+    }
   }
 
   const queryObj = ['probe_cc', 'test_name', 'category_code', 'probe_asn', 'input', 'domain'].reduce((q, k) => {
