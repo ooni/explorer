@@ -1,14 +1,14 @@
 import axios from 'axios'
-import Calendar from 'components/as/Calendar'
-import Loader from 'components/as/Loader'
 import CallToActionBox from 'components/CallToActionBox'
 import Chart from 'components/Chart'
 import CountryList from 'components/CountryBox'
-import Form from 'components/domain/Form'
 import NavBar from 'components/NavBar'
-import ResultsList from 'components/search/ResultsList'
 import { StyledHollowButton, StyledSticky } from 'components/SharedStyledComponents'
 import ThirdPartyDataChart from 'components/ThirdPartyDataChart'
+import Calendar from 'components/as/Calendar'
+import Loader from 'components/as/Loader'
+import Form from 'components/domain/Form'
+import ResultsList from 'components/search/ResultsList'
 import Head from 'next/head'
 import NLink from 'next/link'
 import { useRouter } from 'next/router'
@@ -120,13 +120,11 @@ export const RecentMeasurements = ({ recentMeasurements, query }) => {
         {intl.formatMessage({ id: 'Domain.RecentMeasurements.Title' })}
       </Heading>
       <ResultsList results={recentMeasurements} />
-      <NLink href={`/search?${new URLSearchParams(query)}`} passHref>
-        <a>
-          <StyledHollowButton hollow mt={3} mb={5}>
-            {intl.formatMessage({ id: 'Domain.Button.SearchResults' })}{' '}
-            <MdOutlineSearch size={20} style={{ verticalAlign: 'bottom' }} />
-          </StyledHollowButton>
-        </a>
+      <NLink href={`/search?${new URLSearchParams(query)}`}>
+        <StyledHollowButton hollow mt={3} mb={5}>
+          {intl.formatMessage({ id: 'Domain.Button.SearchResults' })}{' '}
+          <MdOutlineSearch size={20} style={{ verticalAlign: 'bottom' }} />
+        </StyledHollowButton>
       </NLink>
     </>
   )

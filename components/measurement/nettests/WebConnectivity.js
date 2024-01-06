@@ -1,18 +1,17 @@
-import React from 'react'
-import PropTypes from 'prop-types'
 import bufferFrom from 'buffer-from'
-import url from 'url'
 import NLink from 'next/link'
 import {
-  Heading,
-  Flex,
   Box,
-  Text,
-  Link,
+  Flex,
+  Heading,
+  Text
 } from 'ooni-components'
+import PropTypes from 'prop-types'
+import React from 'react'
+import url from 'url'
 
-import { Tick, Cross } from 'ooni-components/icons'
 import deepmerge from 'deepmerge'
+import { Cross, Tick } from 'ooni-components/icons'
 import styled from 'styled-components'
 
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
@@ -350,7 +349,7 @@ const WebConnectivityDetails = ({
       id='Measurement.SummaryText.Websites.Failed'
       values={{
         date,
-        WebsiteURL: <NLink href={getSearchHref(input)}><a dir='ltr'>{input}</a></NLink>,
+        WebsiteURL: <Box dir='ltr'><NLink href={getSearchHref(input)}>{input}</NLink></Box>,
         network: probe_asn,
         country
       }}
@@ -361,7 +360,7 @@ const WebConnectivityDetails = ({
       id='Measurement.SummaryText.Websites.ConfirmedBlocked'
       values={{
         date,
-        WebsiteURL: <NLink href={getSearchHref(input)}><a dir='ltr'>{input}</a></NLink>,
+        WebsiteURL: <Box dir='ltr'><NLink href={getSearchHref(input)}>{input}</NLink></Box>,
         network: probe_asn,
         country
       }}
@@ -385,7 +384,7 @@ const WebConnectivityDetails = ({
       id='Measurement.SummaryText.Websites.Anomaly'
       values={{
         date,
-        WebsiteURL: <NLink href={getSearchHref(input)}><a dir='ltr'>{input}</a></NLink>,
+        WebsiteURL: <Box dir='ltr'><NLink href={getSearchHref(input)}>{input}</NLink></Box>,
         'link-to-docs': (string) => (<a href="https://ooni.org/support/faq/#why-do-false-positives-occur">{string}</a>),
         network: probe_asn,
         country,
@@ -410,7 +409,7 @@ const WebConnectivityDetails = ({
       id='Measurement.SummaryText.Websites.Accessible'
       values={{
         date,
-        WebsiteURL: <NLink href={getSearchHref(input)}><a dir='ltr'>{input}</a></NLink>,
+        WebsiteURL: <Box dir='ltr'><NLink href={getSearchHref(input)}>{input}</NLink></Box>,
         network: probe_asn,
         country
       }}
@@ -433,7 +432,7 @@ const WebConnectivityDetails = ({
       id='Measurement.SummaryText.Websites.Down'
       values={{
         date,
-        WebsiteURL: <NLink href={getSearchHref(input)}><a dir='ltr'>{input}</a></NLink>,
+        WebsiteURL: <Box dir='ltr'><NLink href={getSearchHref(input)}>{input}</NLink></Box>,
         network: probe_asn,
         country
       }}
@@ -457,7 +456,7 @@ const WebConnectivityDetails = ({
       id='Measurement.SummaryText.Websites.Failed'
       values={{
         date,
-        WebsiteURL: <NLink href={getSearchHref(input)}><a dir='ltr'>{input}</a></NLink>,
+        WebsiteURL: <Box dir='ltr'><NLink href={getSearchHref(input)}>{input}</NLink></Box>,
         network: probe_asn,
         country
       }}
@@ -490,8 +489,8 @@ const WebConnectivityDetails = ({
         status: status,
         statusInfo: <StatusInfo 
           title={
-            <NLink passHref href={`/domain/${hostname}`}>
-              <Link sx={{textDecoration: 'underline'}} color='white'>{input}</Link>
+            <NLink href={`/domain/${hostname}`}>
+              {input}
             </NLink>
           }
           message={reason} 
