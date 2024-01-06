@@ -63,7 +63,6 @@
     "@testing-library/cypress": "^10.0.1",
     "@welldone-software/why-did-you-render": "^7.0.1",
     "cypress": "^13.6.2",
-    "cypress-recurse": "^1.27.0",
     "eslint": "^8.56.0",
     "eslint-config-next": "^14.0.4",
     "eslint-config-prettier": "^9.1.0",
