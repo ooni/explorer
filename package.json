@@ -19,7 +19,7 @@
     "@nivo/tooltip": "0.80.0",
     "@sentry/nextjs": "^7.61.1",
     "@tanstack/react-table": "^8.9.3",
-    "axios": "^0.27.2",
+    "axios": "^1.6.5",
     "buffer-from": "^1.1.2",
     "country-util": "^0.2.0",
     "date-fns": "^2.29.1",
@@ -53,7 +53,7 @@
     "react-virtualized": "^9.22.3",
     "react-window": "^1.8.7",
     "styled-components": "^6.1.2",
-    "swr": "^2.2.2",
+    "swr": "^2.2.4",
     "use-clipboard-copy": "^0.2.0",
     "victory": "^32.0.2",
     "yup": "^1.2.0"
