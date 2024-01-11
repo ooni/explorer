@@ -18,7 +18,7 @@ const swrOptions = {
 export const MATLink = ({ query }) => {
   const intl = useIntl()
   const queryToSearchParams = new URLSearchParams(query)
-  const apiUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation?${queryToSearchParams}`
+  const apiUrl = `${process.env.NEXT_PUBLIC_OONI_DATA_API}/api/v1/aggregation?${queryToSearchParams}`
 
   const showMATButton = !Array.isArray(query.test_name)
 
