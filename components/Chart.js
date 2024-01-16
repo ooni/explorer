@@ -23,7 +23,7 @@ export const MATLink = ({ query }) => {
   const showMATButton = !Array.isArray(query.test_name)
 
   return (
-    <Flex mt={3} justifyContent='space-between' alignItems='center'>
+    <Flex mt={3} justifyContent='space-between' alignItems='center' flexWrap="wrap" sx={{gap: 3}}>
       <Box>
         {showMATButton &&
           <NLink href={`/chart/mat?${queryToSearchParams}`}>
@@ -33,16 +33,14 @@ export const MATLink = ({ query }) => {
           </NLink>
         }
       </Box>
-      <Box>
-        <Box mr={3}>
-          <NLink href={apiUrl}>
-            {intl.formatMessage({id: 'MAT.Charts.DownloadJSONData'})} <MdOutlineFileDownload style={{verticalAlign: 'bottom'}} size={20} />
-          </NLink>
-        </Box>
+      <Flex sx={{gap: 3}} flexWrap="wrap">
+        <NLink href={apiUrl}>
+          {intl.formatMessage({id: 'MAT.Charts.DownloadJSONData'})} <MdOutlineFileDownload style={{verticalAlign: 'bottom'}} size={20} />
+        </NLink>
         <NLink href={`${apiUrl}&format=CSV`}>
           {intl.formatMessage({id: 'MAT.Charts.DownloadCSVData'})} <MdOutlineFileDownload style={{verticalAlign: 'bottom'}} size={20} />
         </NLink>
-      </Box>
+      </Flex>
     </Flex>
   )
 }

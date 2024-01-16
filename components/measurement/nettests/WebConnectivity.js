@@ -305,6 +305,19 @@ const validateMeasurement = (measurement) => {
 
 const getSearchHref = (input) => (`${process.env.NEXT_PUBLIC_EXPLORER_URL}/search?input=${input}`)
 
+const StyledLink = styled(NLink)`
+  direction: ltr;
+  display: inline;
+`
+
+const StyledStatusInfoLink = styled(NLink)`
+  color: white;
+  text-decoration: underline;
+  &:hover {
+    color: white;
+  }
+`
+
 const WebConnectivityDetails = ({
   isConfirmed,
   isAnomaly,
@@ -349,7 +362,7 @@ const WebConnectivityDetails = ({
       id='Measurement.SummaryText.Websites.Failed'
       values={{
         date,
-        WebsiteURL: <Box dir='ltr'><NLink href={getSearchHref(input)}>{input}</NLink></Box>,
+        WebsiteURL: <StyledLink href={getSearchHref(input)}>{input}</StyledLink>,
         network: probe_asn,
         country
       }}
@@ -360,7 +373,7 @@ const WebConnectivityDetails = ({
       id='Measurement.SummaryText.Websites.ConfirmedBlocked'
       values={{
         date,
-        WebsiteURL: <Box dir='ltr'><NLink href={getSearchHref(input)}>{input}</NLink></Box>,
+        WebsiteURL: <StyledLink href={getSearchHref(input)}>{input}</StyledLink>,
         network: probe_asn,
         country
       }}
@@ -384,7 +397,7 @@ const WebConnectivityDetails = ({
       id='Measurement.SummaryText.Websites.Anomaly'
       values={{
         date,
-        WebsiteURL: <Box dir='ltr'><NLink href={getSearchHref(input)}>{input}</NLink></Box>,
+        WebsiteURL: <StyledLink href={getSearchHref(input)}>{input}</StyledLink>,
         'link-to-docs': (string) => (<a href="https://ooni.org/support/faq/#why-do-false-positives-occur">{string}</a>),
         network: probe_asn,
         country,
@@ -409,7 +422,7 @@ const WebConnectivityDetails = ({
       id='Measurement.SummaryText.Websites.Accessible'
       values={{
         date,
-        WebsiteURL: <Box dir='ltr'><NLink href={getSearchHref(input)}>{input}</NLink></Box>,
+        WebsiteURL: <StyledLink href={getSearchHref(input)}>{input}</StyledLink>,
         network: probe_asn,
         country
       }}
@@ -432,7 +445,7 @@ const WebConnectivityDetails = ({
       id='Measurement.SummaryText.Websites.Down'
       values={{
         date,
-        WebsiteURL: <Box dir='ltr'><NLink href={getSearchHref(input)}>{input}</NLink></Box>,
+        WebsiteURL: <StyledLink href={getSearchHref(input)}>{input}</StyledLink>,
         network: probe_asn,
         country
       }}
@@ -456,7 +469,7 @@ const WebConnectivityDetails = ({
       id='Measurement.SummaryText.Websites.Failed'
       values={{
         date,
-        WebsiteURL: <Box dir='ltr'><NLink href={getSearchHref(input)}>{input}</NLink></Box>,
+        WebsiteURL: <StyledLink href={getSearchHref(input)}>{input}</StyledLink>,
         network: probe_asn,
         country
       }}
@@ -489,9 +502,9 @@ const WebConnectivityDetails = ({
         status: status,
         statusInfo: <StatusInfo 
           title={
-            <NLink href={`/domain/${hostname}`}>
+            <StyledStatusInfoLink href={`/domain/${hostname}`}>
               {input}
-            </NLink>
+            </StyledStatusInfoLink>
           }
           message={reason} 
         />,
@@ -603,21 +616,5 @@ const WebConnectivityDetails = ({
   )
 }
 
-WebConnectivityDetails.propTypes = {
-  country: PropTypes.string.isRequired,
-  input: PropTypes.any,
-  isAnomaly: PropTypes.bool.isRequired,
-  isConfirmed: PropTypes.bool.isRequired,
-  isFailure: PropTypes.bool.isRequired,
-  measurement: PropTypes.object.isRequired,
-  probe_asn: PropTypes.any,
-  render: PropTypes.func,
-  scores: PropTypes.shape({
-    analysis: PropTypes.shape({
-      blocking_type: PropTypes.any
-    })
-  }),
-  measurement_start_time: PropTypes.any
-}
 
 export default WebConnectivityDetails

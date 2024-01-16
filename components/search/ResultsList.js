@@ -220,8 +220,7 @@ ASNBox.propTypes = {
   asn: PropTypes.string
 }
 
-// XXX add this to the design system
-const StyledViewDetailsLink = styled.span`
+const StyledViewDetailsLink = styled(NLink)`
   cursor: pointer;
   text-decoration: none;
   color: ${props => props.theme.colors.blue5};
@@ -234,9 +233,7 @@ const ViewDetailsLink = ({measurementUid, children}) => {
   let href = `/m/${measurementUid}`
 
   return (
-    <NLink href={href}>
-      <StyledViewDetailsLink>{children}</StyledViewDetailsLink>
-    </NLink>
+    <StyledViewDetailsLink href={href}>{children}</StyledViewDetailsLink>
   )
 }
 

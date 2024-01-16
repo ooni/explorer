@@ -18,8 +18,11 @@ const SummaryContainer = styled(Box)`
   color: white;
 `
 
-const StyledSummaryItemLabel = styled(Text)`
-  font-weight: 600;
+const StyledLink = styled(NLink)`
+  color: white;
+  &:hover {
+    color: white;
+  }
 `
 
 const CommonSummary = ({
@@ -62,7 +65,7 @@ const CommonSummary = ({
           {hero}
           <Flex mt={2} sx={{textDecoration:'underline'}}>
             <Box width={[1, 1, 1/2]}>
-              <NLink href={`/country/${countryCode}`}>
+              <StyledLink href={`/country/${countryCode}`}>
                 <Flex alignItems='center'>
                   <Box mr={2}>
                     <Flag countryCode={countryCode} size={33} />
@@ -71,11 +74,11 @@ const CommonSummary = ({
                     {country}
                   </Box>
                 </Flex>
-              </NLink>
+              </StyledLink>
               <Text fontSize={1}>
-                <NLink href={`/as/${network}`}>
+                <StyledLink href={`/as/${network}`}>
                   <Text mb={2} mt={2}>{network} {networkName}</Text>
-                </NLink>
+                </StyledLink>
               </Text>
             </Box>
           </Flex>

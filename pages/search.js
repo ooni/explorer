@@ -17,15 +17,15 @@ import styled from 'styled-components'
 
 import NavBar from '/components/NavBar'
 
+import dynamic from 'next/dynamic'
+import { sortByKey } from '../utils'
 import FormattedMarkdown from '/components/FormattedMarkdown'
 import FilterSidebar, { queryToFilterMap } from '/components/search/FilterSidebar'
-// import { Loader } from '/components/search/Loader'
 import ResultsList from '/components/search/ResultsList'
 
 const Loader = dynamic(() => import('/components/search/Loader'), { ssr: false })
 
-import dynamic from 'next/dynamic'
-import { sortByKey } from '../utils'
+
 
 export const getServerSideProps = async ({query}) => {
   // By default, on '/search' show measurements published until today
