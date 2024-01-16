@@ -193,12 +193,12 @@ const DomainDashboard = ({ domain, categoryCode, canonicalDomain, countries }) =
     }
   }
 
+  const title = `${intl.formatMessage({ id: 'General.OoniExplorer' })} | ${domain}`
+
   return (
     <>
       <Head>
-        <title>
-          {intl.formatMessage({ id: 'General.OoniExplorer' })} | {domain}
-        </title>
+        <title>{title}</title>
       </Head>
       <NavBar />
       <Container mt={5}>

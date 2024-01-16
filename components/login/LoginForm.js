@@ -1,13 +1,12 @@
-import React, { useState, useCallback, useEffect } from 'react'
-import { useForm, Controller } from 'react-hook-form'
-import { Flex, Box, Input, Button, Modal, Text, Heading, Container } from 'ooni-components'
+import { Box, Button, Flex, Input } from 'ooni-components'
+import React, { useCallback, useEffect, useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
 import styled from 'styled-components'
-import NLink from 'next/link'
 
-import { registerUser } from '/lib/api'
+import SpinLoader from 'components/vendor/SpinLoader'
 import { useRouter } from 'next/router'
 import { FormattedMessage } from 'react-intl'
-import SpinLoader from 'components/vendor/SpinLoader'
+import { registerUser } from '/lib/api'
 
 const StyledError = styled.small`
   color: ${props => props.theme.colors.red5};

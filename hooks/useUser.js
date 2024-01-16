@@ -1,7 +1,7 @@
 import { useRouter } from 'next/router'
-import { useEffect, useState, useCallback, useContext, createContext, useMemo } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
-import { apiEndpoints, loginUser, refreshToken, getAPI } from '/lib/api'
+import { apiEndpoints, getAPI, loginUser, refreshToken } from '/lib/api'
 
 const TWELVE_HOURS = 1000 * 60 * 60 * 12
 const TEN_MINUTES = 1000 * 60 * 10

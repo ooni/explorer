@@ -1,10 +1,9 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import { Flex, Box, Container, Link } from 'ooni-components'
+import { Box, Container, Flex, Link } from 'ooni-components'
 import ExplorerLogo from 'ooni-components/svgs/logos/OONI-HorizontalMonochromeInverted.svg'
+import PropTypes from 'prop-types'
+import React from 'react'
 import { useIntl } from 'react-intl'
-import dayjs from 'dayjs'
+import styled from 'styled-components'
 
 const StyledFooter = styled.footer`
   background-color: ${(props) => props.theme.colors.blue9};
