@@ -503,7 +503,7 @@
   "Error.404.PageNotFound": "La page est introuvable",
   "Error.404.GoBack": "Retour",
   "Error.404.Heading": "La page demandée n’existe pas",
-  "Error.404.Message": "Nous n’avons pas pu trouver le contenu que vous cherchiez. Essayez peut-être {measurmentLink} ou visitez {homePageLink}.",
+  "Error.404.Message": "Nous n’avons pas pu trouver le contenu que vous cherchiez. Essayez peut-être {measurementLink} ou visitez {homePageLink}.",
   "Error.404.MeasurmentLinkText": "d’explorer des mesures",
   "Error.404.HomepageLinkText": "la page d’accueil",
   "MAT.Title": "Boîte à outils d’agrégation des mesures OONI (BAM)",

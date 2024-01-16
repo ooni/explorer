@@ -503,7 +503,7 @@
   "Error.404.PageNotFound": "Страница не найдена",
   "Error.404.GoBack": "Назад",
   "Error.404.Heading": "Запрашиваемая страница не существует",
-  "Error.404.Message": "Мы не смогли найти то что вы искали. Можно попробовать {measurmentLink} или посмотреть {homePageLink}.",
+  "Error.404.Message": "Мы не смогли найти то что вы искали. Можно попробовать {measurementLink} или посмотреть {homePageLink}.",
   "Error.404.MeasurmentLinkText": "изучаем некоторые измерения",
   "Error.404.HomepageLinkText": "домашняя страница",
   "MAT.Title": "OONI инструмент для агрегации измерений (MAT)",

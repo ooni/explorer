@@ -503,7 +503,7 @@
   "Error.404.PageNotFound": "صفحة غير موجودة",
   "Error.404.GoBack": "العودة",
   "Error.404.Heading": "الصفحة المطلوبة غير موجودة",
-  "Error.404.Message": "لم نعثر على المحتوى الذي تبحث عنه. يمكنك محاولة {measurmentLink} أو البحث على{homePageLink}.",
+  "Error.404.Message": "لم نعثر على المحتوى الذي تبحث عنه. يمكنك محاولة {measurementLink} أو البحث على{homePageLink}.",
   "Error.404.MeasurmentLinkText": "استعراض بعض القياسات",
   "Error.404.HomepageLinkText": "الصحفة الأساسية",
   "MAT.Title": "\"مجموعة أدوات OONI لتجميع القياسات  (OONI Measurement Aggregation Toolkit)\"",

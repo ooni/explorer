@@ -502,7 +502,7 @@
   "Error.404.PageNotFound": "Página no encontrada",
   "Error.404.GoBack": "Ir hacia atrás",
   "Error.404.Heading": "La página solicitada no existe.",
-  "Error.404.Message": "No pudimos encontrar el contenido que está buscando. Intente tal vez con {measurmentLink} o lea {homePageLink}.",
+  "Error.404.Message": "No pudimos encontrar el contenido que está buscando. Intente tal vez con {measurementLink} o lea {homePageLink}.",
   "Error.404.MeasurmentLinkText": "explorando algunas mediciones",
   "Error.404.HomepageLinkText": "La página de inicio",
   "MAT.Title": "Conjunto de herramientas para agregar medidas OONI (MAT)",

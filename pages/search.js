@@ -25,8 +25,6 @@ import ResultsList from '/components/search/ResultsList'
 
 const Loader = dynamic(() => import('/components/search/Loader'), { ssr: false })
 
-
-
 export const getServerSideProps = async ({query}) => {
   // By default, on '/search' show measurements published until today
   // including the measurements of today (so the date of tomorrow).
@@ -56,7 +54,6 @@ export const getServerSideProps = async ({query}) => {
     }
   }
 }
-
 
 const queryToParams = ({ query }) => {
   let params = {},
