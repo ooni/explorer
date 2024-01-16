@@ -1,9 +1,9 @@
-import { rest } from 'msw'
+import { http } from 'msw'
  
 const apiBase = Cypress.env('apiUrl')
 
 export const handlers = [
-  rest.get(`${apiBase}/api/_/account_metadata`, (req, res, ctx) => {
+  http.get(`${apiBase}/api/_/account_metadata`, (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -13,7 +13,7 @@ export const handlers = [
     )
   }),
 
-  rest.post(`${apiBase}/api/v1/user_register`, (req, res, ctx) => {
+  http.post(`${apiBase}/api/v1/user_register`, (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -22,7 +22,7 @@ export const handlers = [
     )
   }),
 
-  rest.get(`${apiBase}/api/v1/user_login`, (req, res, ctx) => {
+  http.get(`${apiBase}/api/v1/user_login`, (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -32,7 +32,7 @@ export const handlers = [
     )
   }),
 
-  rest.post(`${apiBase}/api/_/measurement_feedback`, (req, res, ctx) => {
+  http.post(`${apiBase}/api/_/measurement_feedback`, (req, res, ctx) => {
     return res(
       ctx.status(200),
       ctx.json({
@@ -41,13 +41,13 @@ export const handlers = [
   }),
 ]
 
-export const failedAccountMetadata = rest.get('https://ams-pg-test.ooni.org/api/_/account_metadata', (req, res, ctx) => {
+export const failedAccountMetadata = http.get('https://ams-pg-test.ooni.org/api/_/account_metadata', (req, res, ctx) => {
   return res(
     ctx.status(401),
   )
 })
 
-export const userAccountMetadata = rest.get('https://ams-pg-test.ooni.org/api/_/account_metadata', (req, res, ctx) => {
+export const userAccountMetadata = http.get('https://ams-pg-test.ooni.org/api/_/account_metadata', (req, res, ctx) => {
   return res(
     ctx.status(200),
     ctx.json({
