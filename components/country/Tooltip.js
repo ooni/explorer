@@ -1,11 +1,12 @@
 import React from 'react'
 
 import {
-  VictoryTooltip,
-  VictoryLabel
+  VictoryLabel,
+  VictoryTooltip
 } from 'victory'
 
 import { theme } from 'ooni-components'
+import { firaSans } from '../../pages/_app'
 
 const Tooltip = (props) => (
   <VictoryTooltip
@@ -14,7 +15,7 @@ const Tooltip = (props) => (
       <VictoryLabel
         style={{
           fill: theme.colors.white,
-          fontFamily: '"Fira Sans", sans-serif',
+          fontFamily: `${firaSans.style.fontFamily}, sans-serif`,
           fontSize: props.fontSize || 8
         }}
       />

@@ -1,14 +1,14 @@
-import React, { useEffect } from 'react'
-import PropTypes from 'prop-types'
 import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react'
-import { createGlobalStyle, ThemeProvider } from 'styled-components'
 import { theme } from 'ooni-components'
+import PropTypes from 'prop-types'
+import React, { useEffect } from 'react'
+import { ThemeProvider, createGlobalStyle } from 'styled-components'
 
-import Header from './Header'
-import Footer from './Footer'
-import { useIntl } from 'react-intl'
 import { getDirection } from 'components/withIntl'
 import { UserProvider } from 'hooks/useUser'
+import { useIntl } from 'react-intl'
+import Footer from './Footer'
+import Header from './Header'
 
 theme.maxWidth = 1024
 
@@ -21,7 +21,6 @@ const GlobalStyle = createGlobalStyle`
     // direction: ${props => props.direction};
     margin: 0;
     padding: 0;
-    font-family: "Fira Sans";
     font-size: 14px;
     height: 100%;
     background-color: #ffffff;
