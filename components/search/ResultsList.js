@@ -1,24 +1,24 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import url from 'url'
-import dayjs from 'services/dayjs'
 import NLink from 'next/link'
-import styled from 'styled-components'
-import { useIntl, defineMessages } from 'react-intl'
 import {
-  Flex, Box,
-  Link,
+  Box,
+  Flex,
   Text
 } from 'ooni-components'
+import PropTypes from 'prop-types'
+import React from 'react'
+import { defineMessages, useIntl } from 'react-intl'
+import dayjs from 'services/dayjs'
+import styled from 'styled-components'
+import url from 'url'
 
-import { testNames } from '/components/test-info'
-import {
-  colorNormal,
-  colorError,
-  colorConfirmed,
-  colorAnomaly
-} from '../colors'
 import Flag from '../Flag'
+import {
+  colorAnomaly,
+  colorConfirmed,
+  colorError,
+  colorNormal
+} from '../colors'
+import { testNames } from '/components/test-info'
 
 const StyledResultTag = styled.div`
   border-radius: 16px;
@@ -220,8 +220,7 @@ ASNBox.propTypes = {
   asn: PropTypes.string
 }
 
-// XXX add this to the design system
-const StyledViewDetailsLink = styled(Link)`
+const StyledViewDetailsLink = styled(NLink)`
   cursor: pointer;
   text-decoration: none;
   color: ${props => props.theme.colors.blue5};
@@ -234,9 +233,7 @@ const ViewDetailsLink = ({measurementUid, children}) => {
   let href = `/m/${measurementUid}`
 
   return (
-    <NLink href={href}>
-      <StyledViewDetailsLink href={href}>{children}</StyledViewDetailsLink>
-    </NLink>
+    <StyledViewDetailsLink href={href}>{children}</StyledViewDetailsLink>
   )
 }
 

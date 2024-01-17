@@ -1,27 +1,29 @@
-import React, { useState, useEffect } from 'react'
-import PropTypes from 'prop-types'
+import axios from 'axios'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import axios from 'axios'
-import styled from 'styled-components'
 import {
-  Flex, Box,
-  Container,
+  Box,
   Button,
+  Container,
+  Flex,
   Heading,
   Text
 } from 'ooni-components'
+import PropTypes from 'prop-types'
+import React, { useEffect, useState } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
+import styled from 'styled-components'
 
 import NavBar from '/components/NavBar'
 
-import ResultsList from '/components/search/ResultsList'
-import FilterSidebar, { queryToFilterMap } from '/components/search/FilterSidebar'
-import { Loader } from '/components/search/Loader'
-import FormattedMarkdown from '/components/FormattedMarkdown'
-
+import dynamic from 'next/dynamic'
 import { sortByKey } from '../utils'
+import FormattedMarkdown from '/components/FormattedMarkdown'
+import FilterSidebar, { queryToFilterMap } from '/components/search/FilterSidebar'
+import ResultsList from '/components/search/ResultsList'
+
+const Loader = dynamic(() => import('/components/search/Loader'), { ssr: false })
 
 export const getServerSideProps = async ({query}) => {
   // By default, on '/search' show measurements published until today
@@ -52,7 +54,6 @@ export const getServerSideProps = async ({query}) => {
     }
   }
 }
-
 
 const queryToParams = ({ query }) => {
   let params = {},
@@ -165,18 +166,17 @@ const Search = ({ countries, query: queryProp }) => {
   const [nextURL, setNextURL] = useState(null)
   const [loading, setLoading] = useState(true)
   const [results, setResults] = useState([])
-  const [filters, setFilters] = useState({})
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    const query = query || queryProp
+    const q = query || queryProp
     const href = {
       pathname: '/search',
-      query: query
+      query: q
     }
     replace(href, href, { shallow: true })
 
-    getMeasurements(query)
+    getMeasurements(q)
       .then(({ data: { results, metadata: { next_url } } }) => {
         setLoading(false)
         setResults(results)

@@ -1,13 +1,11 @@
-import React from 'react'
-import debounce from 'lodash.debounce'
-import styled from 'styled-components'
 import NLink from 'next/link'
-import { Container, Text, Box, Flex, Link, Heading } from 'ooni-components'
-import Head from 'next/head'
+import { Box, Flex, Text } from 'ooni-components'
+import React from 'react'
 import { FormattedMessage } from 'react-intl'
-import { List, WindowScroller, AutoSizer, Table, Column } from 'react-virtualized'
+import { AutoSizer, List, WindowScroller } from 'react-virtualized'
+import styled from 'styled-components'
 
-const StyledLink = styled(Link)`
+const StyledLink = styled(NLink)`
 &:hover {
   filter: none;
 }
@@ -34,38 +32,36 @@ export const GridBox = ({ title, count = null, href, tag, multiCount = null }) =
   const hasCount = Number.isInteger(count)
   return (
     <Box>
-      <NLink passHref href={href}>
-        <StyledLink>
-          <StyledFlex p={3} justifyContent='space-between' minHeight={150}>
-            <Box>
-              <StyledName fontSize={1} fontWeight={600} >{title}</StyledName>
-            </Box>
-            {(hasCount || tag) && 
-              <Text fontSize={12}>
-                {tag && 
-                  <Box mb={2}>{tag}</Box>
-                }
-                {hasCount && 
-                  <FormattedMessage
-                    id='Network.Summary.Country.Measurements'
-                    values={{measurementsTotal: <Text as='span' fontWeight={600} color='blue5'>{count}</Text>}} 
-                  />
-                }
-              </Text>
-            }
-            {multiCount && 
-              <Text fontSize={12}>
-                {Object.entries(multiCount).map(([key, value]) => (
-                  <Box mb={1} key={key}>
-                    <Text as='span' fontWeight={600} color='blue5'>{value} </Text>
-                    <FormattedMessage id={`Domain.CountriesBlocking.CountryList.${key}`} />
-                  </Box>
-                ))}
-              </Text>
-            }
-          </StyledFlex>
-        </StyledLink>
-      </NLink>
+      <StyledLink href={href}>
+        <StyledFlex p={3} justifyContent='space-between' minHeight={150}>
+          <Box>
+            <StyledName fontSize={1} fontWeight={600} >{title}</StyledName>
+          </Box>
+          {(hasCount || tag) && 
+            <Text fontSize={12}>
+              {tag && 
+                <Box mb={2}>{tag}</Box>
+              }
+              {hasCount && 
+                <FormattedMessage
+                  id='Network.Summary.Country.Measurements'
+                  values={{measurementsTotal: <Text as='span' fontWeight={600} color='blue5'>{count}</Text>}} 
+                />
+              }
+            </Text>
+          }
+          {multiCount && 
+            <Text fontSize={12}>
+              {Object.entries(multiCount).map(([key, value]) => (
+                <Box mb={1} key={key}>
+                  <Text as='span' fontWeight={600} color='blue5'>{value} </Text>
+                  <FormattedMessage id={`Domain.CountriesBlocking.CountryList.${key}`} />
+                </Box>
+              ))}
+            </Text>
+          }
+        </StyledFlex>
+      </StyledLink>
     </Box>
   )
 }

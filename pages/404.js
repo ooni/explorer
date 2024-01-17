@@ -1,14 +1,14 @@
-import React from 'react'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import {
-  Container,
   Box,
+  Container,
   Flex,
-  Text,
-  Heading
+  Heading,
+  Text
 } from 'ooni-components'
+import React from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 
 import NavBar from '../components/NavBar'
@@ -32,13 +32,13 @@ const Custom404 = () => {
             <Text mb={3}>
               <FormattedMessage
                 id='Error.404.Message'
-                defaultMessage='We could not find the content you were looking for. Maybe try {measurmentLink} or look at {homePageLink}.'
+                defaultMessage='We could not find the content you were looking for. Maybe try {measurementLink} or look at {homePageLink}.'
                 values={{
-                  measurmentLink: <FormattedMessage id='Error.404.MeasurmentLinkText'>
-                    {message => <Link href='/countries'><a>{message}</a></Link>}
+                  measurementLink: <FormattedMessage id='Error.404.MeasurmentLinkText'>
+                    {message => <Link href='/countries'>{message}</Link>}
                   </FormattedMessage>,
                   homePageLink: <FormattedMessage id='Error.404.HomepageLinkText'>
-                    {message => <Link href='/'><a>{message}</a></Link>}
+                    {message => <Link href='/'>{message}</Link>}
                   </FormattedMessage>
                 }}
               />

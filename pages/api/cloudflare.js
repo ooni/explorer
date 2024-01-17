@@ -1,12 +1,12 @@
 import axios from 'axios'
+import { LRUCache } from 'lru-cache'
 import dayjs from 'services/dayjs'
-import LRU from 'lru-cache'
 
 const CACHE_MAX_SIZE = process.env.CACHE_MAX_SIZE || 100
 const CACHE_MAX_AGE_IN_S = process.env.CACHE_MAX_AGE_IN_S || 60 * 60
 
 const context = {
-  cache: new LRU({
+  cache: new LRUCache({
     max: CACHE_MAX_SIZE,
     ttl: CACHE_MAX_AGE_IN_S
   })

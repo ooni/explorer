@@ -1,12 +1,11 @@
-import React, { useCallback, useEffect, useState } from 'react'
-import { Box, Flex, Heading, Text, Link, Container } from 'ooni-components'
-import { useRouter } from 'next/router'
-import NLink from 'next/link'
 import Head from 'next/head'
+import NLink from 'next/link'
+import { useRouter } from 'next/router'
+import { Box, Container, Flex, Heading, Text } from 'ooni-components'
+import React, { useEffect, useState } from 'react'
 
 import NavBar from 'components/NavBar'
 import LoginForm from 'components/login/LoginForm'
-import { mutate } from 'swr'
 import SpinLoader from 'components/vendor/SpinLoader'
 import useUser from 'hooks/useUser'
 import { FormattedMessage, useIntl } from 'react-intl'
@@ -83,7 +82,7 @@ const Login = () => {
           {error &&
             <Box width={[1, 1 / 3]} mx='auto' textAlign={'center'}>
               <Box mb={3} p={4} bg='red1'>{error}</Box>
-              <NLink href='/login' passHref><a><FormattedMessage id="Login.Failure" /></a></NLink>
+              <NLink href='/login'><FormattedMessage id="Login.Failure" /></NLink>
             </Box>
           }
         </Flex>

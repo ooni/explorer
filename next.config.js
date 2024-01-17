@@ -71,18 +71,22 @@ module.exports = withSentryConfig({
     )
     
     // SVG
-    config.module.rules.push({
-      test: /\.svg$/,
-      issuer: /\.js?$/,
-      include: [options.dir],
-      use: [
-        'next-swc-loader',
-        {
-          loader: '@svgr/webpack',
-          options: { babel: false }
-        }
-      ],
-    })
+    // Grab the existing rule that handles SVG imports
+    const fileLoaderRule = config.module.rules.find((rule) =>
+      rule.test?.test?.('.svg'),
+    )
+
+    config.module.rules.push(
+      // Convert all *.svg imports to React components
+      {
+        test: /\.svg$/i,
+        issuer: /\.[jt]sx?$/,
+        use: ['@svgr/webpack'],
+      },
+    )
+
+    // Modify the file loader rule to ignore *.svg, since we have it handled
+    fileLoaderRule.exclude = /\.svg$/i
 
     // whyDidYouRender
     if (options.dev && !options.isServer) {

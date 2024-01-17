@@ -1,6 +1,6 @@
-import { Flex, Heading, Box, Text, Button } from 'ooni-components'
-import { FormattedMessage } from 'react-intl'
 import NLink from 'next/link'
+import { Box, Button, Flex, Heading, Text } from 'ooni-components'
+import { FormattedMessage } from 'react-intl'
 
 const CallToActionBox = ({title, text}) => {
   return (
@@ -16,11 +16,9 @@ const CallToActionBox = ({title, text}) => {
       <Flex alignItems='center' mx={4} my={4} flexDirection={['column', 'row']}>
         <Box mr={4} mb={[3, 0]}>
           <NLink href='https://ooni.org/install'>
-            <a>
-              <Button>
-                <FormattedMessage id='Country.Overview.NoData.Button.InstallProbe' />
-              </Button>
-            </a>
+            <Button>
+              <FormattedMessage id='Country.Overview.NoData.Button.InstallProbe' />
+            </Button>
           </NLink>
         </Box>
       </Flex>

@@ -1,11 +1,9 @@
 import PropTypes from 'prop-types'
 import { Box } from 'ooni-components'
-import NLink from 'next/link'
 
 import { testNames } from '../../test-info'
 import { getCategoryCodesMap } from '../../utils/categoryCodes'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
-import { FormattedMessage, useIntl } from 'react-intl'
 
 const InputRowLabel = ({ input }) => {
   const truncatedInput = input

@@ -1,18 +1,22 @@
 //FROM: 
 // https://github.com/zeit/next.js/blob/master/examples/with-sentry
 // https://github.com/vercel/next.js/blob/canary/examples/with-loading/pages/_app.js
-import 'scripts/wdyr'
-import 'regenerator-runtime/runtime'
-import { useEffect } from 'react'
-import 'regenerator-runtime/runtime'
-import NProgress from 'nprogress'
+import { Fira_Sans } from 'next/font/google'
 import { useRouter } from 'next/router'
-import '@fontsource/fira-sans'
-import '@fontsource/fira-sans/300.css'
+import NProgress from 'nprogress'
+import { useEffect } from 'react'
+import 'scripts/wdyr'
 
+import dynamic from 'next/dynamic'
 import '../public/static/nprogress.css'
-import Layout from '../components/Layout'
-import { LocaleProvider } from 'components/withIntl'
+
+const Layout = dynamic(() => import('components/Layout'))
+const LocaleProvider = dynamic(() => import('components/withIntl').then((c) => c.LocaleProvider))
+
+export const firaSans = Fira_Sans({
+  weight: ['300', '400', '600'],
+  subsets: ['latin'],
+})
 
 export default function App({ Component, pageProps, err }) {
   const router = useRouter()
@@ -39,10 +43,17 @@ export default function App({ Component, pageProps, err }) {
 
   // Workaround for https://github.com/vercel/next.js/issues/8592
   return (
-    <LocaleProvider>
-      <Layout>
-        <Component {...pageProps} err={err} />
-      </Layout>
-    </LocaleProvider>
+    <>
+      <style jsx global>{`
+        html {
+          font-family: ${firaSans.style.fontFamily};
+        }
+      `}</style>
+      <LocaleProvider>
+        <Layout>
+          <Component {...pageProps} err={err} />
+        </Layout>
+      </LocaleProvider>
+    </>
   )
 }

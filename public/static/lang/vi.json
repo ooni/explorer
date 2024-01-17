@@ -503,7 +503,7 @@
   "Error.404.PageNotFound": "Không Tìm thấy Trang",
   "Error.404.GoBack": "Quay lại",
   "Error.404.Heading": "Trang yêu cầu không có",
-  "Error.404.Message": "Chúng tôi không tìm được nội dung bạn muốn tìm kiếm. Có thể thử {measurmentLink} hoặc xem {homePageLink}.",
+  "Error.404.Message": "Chúng tôi không tìm được nội dung bạn muốn tìm kiếm. Có thể thử {measurementLink} hoặc xem {homePageLink}.",
   "Error.404.MeasurmentLinkText": "xem xét một số đo lường",
   "Error.404.HomepageLinkText": "trang nhà",
   "MAT.Title": "Công Cụ Tập Hợp các Đo Lường (MAT) của OONI",

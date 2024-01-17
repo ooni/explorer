@@ -1,18 +1,15 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import styled from 'styled-components'
 import NLink from 'next/link'
 import {
-  Flex,
-  Container,
   Box,
-  Text,
-  Link,
+  Container,
+  Flex,
+  Text
 } from 'ooni-components'
-import { useIntl } from 'react-intl'
-import dayjs from 'services/dayjs'
+import PropTypes from 'prop-types'
+import React from 'react'
 import { MdOutlineFactCheck } from 'react-icons/md'
-import { BiShareAlt } from 'react-icons/bi'
+import { useIntl } from 'react-intl'
+import styled from 'styled-components'
 
 import Flag from '../Flag'
 
@@ -21,8 +18,11 @@ const SummaryContainer = styled(Box)`
   color: white;
 `
 
-const StyledSummaryItemLabel = styled(Text)`
-  font-weight: 600;
+const StyledLink = styled(NLink)`
+  color: white;
+  &:hover {
+    color: white;
+  }
 `
 
 const CommonSummary = ({
@@ -65,7 +65,7 @@ const CommonSummary = ({
           {hero}
           <Flex mt={2} sx={{textDecoration:'underline'}}>
             <Box width={[1, 1, 1/2]}>
-              <NLink href={`/country/${countryCode}`} passHref><Link color='white'>
+              <StyledLink href={`/country/${countryCode}`}>
                 <Flex alignItems='center'>
                   <Box mr={2}>
                     <Flag countryCode={countryCode} size={33} />
@@ -74,13 +74,11 @@ const CommonSummary = ({
                     {country}
                   </Box>
                 </Flex>
-              </Link></NLink>
+              </StyledLink>
               <Text fontSize={1}>
-                <NLink href={`/as/${network}`} passHref>
-                  <Link color='white'>
-                    <Text mb={2} mt={2}>{network} {networkName}</Text>
-                  </Link>
-                </NLink>
+                <StyledLink href={`/as/${network}`}>
+                  <Text mb={2} mt={2}>{network} {networkName}</Text>
+                </StyledLink>
               </Text>
             </Box>
           </Flex>

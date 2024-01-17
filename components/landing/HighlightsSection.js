@@ -1,10 +1,10 @@
-import React from 'react'
-import PropTypes from 'prop-types'
-import { Flex, Box, Text, Button } from 'ooni-components'
 import NLink from 'next/link'
-import HighlightBox from './HighlightBox'
-import { styled } from 'styled-components'
+import { Box, Button, Flex, Text } from 'ooni-components'
+import PropTypes from 'prop-types'
+import React from 'react'
 import { useIntl } from 'react-intl'
+import { styled } from 'styled-components'
+import HighlightBox from './HighlightBox'
 
 const StyledGrid = styled(Box)`
 display: grid;
@@ -54,9 +54,9 @@ const HighlightSection = ({
                   }
                   {item.report && 
                     <Box>
-                      <a href={item.report}>
+                      <NLink href={item.report}>
                         <Button type='button' hollow size='small'>{intl.formatMessage({id: 'Home.Highlights.ReadReport'})}</Button>
-                      </a>
+                      </NLink>
                     </Box>
                   }
                 </Flex>

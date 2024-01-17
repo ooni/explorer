@@ -6,11 +6,11 @@ import { useMemo, useState } from 'react'
 import { useIntl } from 'react-intl'
 
 import TestGroupBadge, { CategoryBadge } from 'components/Badge'
-import Form from 'components/domain/Form'
 import Chart from 'components/DomainChart'
 import NavBar from 'components/NavBar'
 import { StyledSticky } from 'components/SharedStyledComponents'
 import { GridBox } from 'components/VirtualizedGrid'
+import Form from 'components/domain/Form'
 import Head from 'next/head'
 import NLink from 'next/link'
 import { RecentMeasurements } from 'pages/as/[probe_asn]'
@@ -126,7 +126,7 @@ const Canonical = ({ canonicalDomain }) => {
         { id: 'Domain.Canonical' },
         {
           canonicalDomain: (
-            <NLink passHref href={`/domain/${canonicalDomain}`}>
+            <NLink href={`/domain/${canonicalDomain}`}>
               {canonicalDomain}
             </NLink>
           ),
@@ -193,12 +193,12 @@ const DomainDashboard = ({ domain, categoryCode, canonicalDomain, countries }) =
     }
   }
 
+  const title = `${intl.formatMessage({ id: 'General.OoniExplorer' })} | ${domain}`
+
   return (
     <>
       <Head>
-        <title>
-          {intl.formatMessage({ id: 'General.OoniExplorer' })} | {domain}
-        </title>
+        <title>{title}</title>
       </Head>
       <NavBar />
       <Container mt={5}>

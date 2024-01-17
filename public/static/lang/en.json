@@ -508,7 +508,7 @@
   "Error.404.PageNotFound": "Page Not Found",
   "Error.404.GoBack": "Go back",
   "Error.404.Heading": "The requested page does not exist",
-  "Error.404.Message": "We could not find the content you were looking for. Maybe try {measurmentLink} or look at {homePageLink}.",
+  "Error.404.Message": "We could not find the content you were looking for. Maybe try {measurementLink} or look at {homePageLink}.",
   "Error.404.MeasurmentLinkText": "exploring some measurement",
   "Error.404.HomepageLinkText": "the homepage",
   "MAT.Title": "OONI Measurement Aggregation Toolkit (MAT)",

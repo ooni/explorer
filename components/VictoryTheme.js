@@ -1,4 +1,5 @@
 import { theme } from 'ooni-components'
+import { firaSans } from '../pages/_app'
 
 const colors = theme.colors
 // Color scale
@@ -15,7 +16,7 @@ const colorScale = [
 const primaryColor = colors.base
 
 // Typography
-export const sansSerif = '"Fira Sans", sans-serif'
+export const sansSerif = `${firaSans.style.fontFamily}, sans-serif`
 const letterSpacing = 'normal'
 const fontSize = 8
 

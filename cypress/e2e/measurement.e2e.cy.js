@@ -1,4 +1,3 @@
-import { failedAccountMetadata } from '/cypress/mocks/handlers'
 
 describe('Measurement Page Tests', () => {
 
@@ -217,7 +216,7 @@ describe('Measurement Page Tests', () => {
     it('renders a valid og:description', () => {
       cy.visit('/m/20221110105942.212061_TR_httpinvalidrequestline_f99ce62beb3badb9')
       cy.get('head meta[property="og:description"]')
-        .should('have.attr', 'content', 'OONI data suggests Network traffic manipulation was not detected in Turkey on November 10, 2022 at 10:59:36 AM UTC, find more open data on internet censorship on OONI Explorer.')
+        .should('have.attr', 'content', 'OONI data suggests Network traffic manipulation was not detected in Türkiye on November 10, 2022 at 10:59:36 AM UTC, find more open data on internet censorship on OONI Explorer.')
     })
     it('render an anomaly og:description', () => {
       cy.visit('/m/20221110105947.714767_US_httpinvalidrequestline_48ce6c10181803ab')

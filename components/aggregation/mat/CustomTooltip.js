@@ -1,13 +1,13 @@
-import React, { useMemo } from 'react'
-import { Chip } from '@nivo/tooltip'
 import { useTheme } from '@nivo/core'
-import { Box, Flex, Text, Link, theme } from 'ooni-components'
+import { Chip } from '@nivo/tooltip'
 import NLink from 'next/link'
+import { Box, Flex, Text, theme } from 'ooni-components'
+import React, { useMemo } from 'react'
 
-import { colorMap } from './colorMap'
 import { MdClear } from 'react-icons/md'
 import { useIntl } from 'react-intl'
 import { useMATContext } from './MATContext'
+import { colorMap } from './colorMap'
 
 export const themeForInvisibleTooltip = {
   tooltip: {
@@ -126,9 +126,11 @@ const CustomToolTip = React.memo(({ data, onClose, title, link = true }) => {
         ))}
       </Flex>
       {link &&
-        <NLink passHref href={linkToMeasurements}>
-          <Link target='_blank' my={2} ml='auto' pr={3}>{intl.formatMessage({id: 'MAT.CustomTooltip.ViewMeasurements'})} &gt;</Link>
-        </NLink>
+        <Box my={2} ml='auto' pr={3}>
+          <NLink target='_blank' href={linkToMeasurements}>
+            {intl.formatMessage({id: 'MAT.CustomTooltip.ViewMeasurements'})} &gt;
+          </NLink>
+        </Box>
       }
     </Flex>
   )

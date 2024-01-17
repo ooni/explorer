@@ -2,7 +2,7 @@ import GridChart, { prepareDataForGridChart } from 'components/aggregation/mat/G
 import { MATContextProvider } from 'components/aggregation/mat/MATContext'
 import { DetailsBox } from 'components/measurement/DetailsBox'
 import NLink from 'next/link'
-import { Box, Flex, Heading, Link } from 'ooni-components'
+import { Box, Flex } from 'ooni-components'
 import React, { useEffect, useMemo } from 'react'
 import { MdBarChart, MdOutlineFileDownload } from 'react-icons/md'
 import { FormattedMessage, useIntl } from 'react-intl'
@@ -23,26 +23,24 @@ export const MATLink = ({ query }) => {
   const showMATButton = !Array.isArray(query.test_name)
 
   return (
-    <Flex mt={3} justifyContent='space-between' alignItems='center'>
+    <Flex mt={3} justifyContent='space-between' alignItems='center' flexWrap="wrap" sx={{gap: 3}}>
       <Box>
         {showMATButton &&
-          <NLink href={`/chart/mat?${queryToSearchParams}`}passHref>
-            <a>
-              <StyledHollowButton>
-                {intl.formatMessage({id: 'MAT.Charts.SeeOnMAT'})} <MdBarChart size={20} style={{verticalAlign: 'bottom'}} />
-              </StyledHollowButton>
-            </a>
+          <NLink href={`/chart/mat?${queryToSearchParams}`}>
+            <StyledHollowButton>
+              {intl.formatMessage({id: 'MAT.Charts.SeeOnMAT'})} <MdBarChart size={20} style={{verticalAlign: 'bottom'}} />
+            </StyledHollowButton>
           </NLink>
         }
       </Box>
-      <Box>
-        <NLink passHref href={apiUrl}>
-          <Link mr={3}>{intl.formatMessage({id: 'MAT.Charts.DownloadJSONData'})} <MdOutlineFileDownload style={{verticalAlign: 'bottom'}} size={20} /></Link>
+      <Flex sx={{gap: 3}} flexWrap="wrap">
+        <NLink href={apiUrl}>
+          {intl.formatMessage({id: 'MAT.Charts.DownloadJSONData'})} <MdOutlineFileDownload style={{verticalAlign: 'bottom'}} size={20} />
         </NLink>
-        <NLink passHref href={`${apiUrl}&format=CSV`}>
-          <Link>{intl.formatMessage({id: 'MAT.Charts.DownloadCSVData'})} <MdOutlineFileDownload style={{verticalAlign: 'bottom'}} size={20} /></Link>
+        <NLink href={`${apiUrl}&format=CSV`}>
+          {intl.formatMessage({id: 'MAT.Charts.DownloadCSVData'})} <MdOutlineFileDownload style={{verticalAlign: 'bottom'}} size={20} />
         </NLink>
-      </Box>
+      </Flex>
     </Flex>
   )
 }

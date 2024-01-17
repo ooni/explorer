@@ -1,16 +1,16 @@
-import React, { useState } from 'react'
-import { useRouter } from 'next/router'
-import NLink from 'next/link'
-import styled from 'styled-components'
-import { FormattedMessage, useIntl } from 'react-intl'
-import { MdMenu, MdClose } from 'react-icons/md'
-import { getLocalisedLanguageName } from 'utils/i18nCountries'
-import ExplorerLogo from 'ooni-components/svgs/logos/Explorer-HorizontalMonochromeInverted.svg'
-import { Link, Flex, Box, Container } from 'ooni-components'
 import useUser from 'hooks/useUser'
+import NLink from 'next/link'
+import { useRouter } from 'next/router'
+import { Box, Container, Flex } from 'ooni-components'
+import ExplorerLogo from 'ooni-components/svgs/logos/Explorer-HorizontalMonochromeInverted.svg'
+import React, { useEffect, useState } from 'react'
+import { MdClose, MdMenu } from 'react-icons/md'
+import { FormattedMessage, useIntl } from 'react-intl'
+import styled from 'styled-components'
+import { getLocalisedLanguageName } from 'utils/i18nCountries'
 import { getDirection } from './withIntl'
 
-const StyledNavItem = styled.a`
+const StyledNavItem = styled(NLink)`
   position: relative;
   color: ${(props) => props.theme.colors.white};
   cursor: pointer;
@@ -50,12 +50,14 @@ const LanguageSelect = styled.select`
 
 const NavItem = ({ label, href }) => {
   const { pathname } = useRouter()
-  const active = pathname === href
+  const [isActive, setIsActive] = useState(false)
+ 
+  useEffect(() => {
+    setIsActive(pathname === href)
+  }, [pathname, href])
 
   return (
-    <NLink href={href} passHref>
-      <StyledNavItem $active={active}>{label}</StyledNavItem>
-    </NLink>
+    <StyledNavItem href={href} $active={isActive}>{label}</StyledNavItem>
   )
 }
 
@@ -143,10 +145,8 @@ export const NavBar = ({ color }) => {
       <Container>
         <Flex flexDirection='row' justifyContent='space-between' alignItems='end'>
           <Box style={{ zIndex: 1 }}>
-            <NLink href='/' passHref>
-              <Link>
-                <ExplorerLogo height='26px' />
-              </Link>
+            <NLink href='/'>
+              <ExplorerLogo height='26px' />
             </NLink>
           </Box>
           <StyledResponsiveMenu color='white'>
@@ -166,7 +166,7 @@ export const NavBar = ({ color }) => {
                 <NavItem label={<FormattedMessage id="Navbar.Domains" />} href="/domains" />
                 <NavItem label={<FormattedMessage id="Navbar.Findings" />} href="/findings" />
                 {user?.logged_in && (
-                  <StyledNavItem onClick={logoutUser}><FormattedMessage id="General.Logout" /></StyledNavItem>
+                  <StyledNavItem href="" onClick={logoutUser}><FormattedMessage id="General.Logout" /></StyledNavItem>
                 )}
                 <LanguageSelect onChange={handleLocaleChange} value={locale}>
                   {languages.map((c) => (
