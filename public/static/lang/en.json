@@ -90,6 +90,7 @@
   "Measurement.SummaryText.Websites.Anomaly": "On {date}, {WebsiteURL} presented signs of {reason} on {network} in {country}.\n\nThis might mean that {WebsiteURL} was blocked, but <link-to-docs>false positives</link-to-docs> can occur.\n\nPlease explore the network measurement data below.",
   "Measurement.SummaryText.Websites.Anomaly.BlockingReason.DNS": "DNS tampering",
   "Measurement.SummaryText.Websites.Anomaly.BlockingReason.TCP": "TCP/IP blocking",
+  "Measurement.SummaryText.Websites.Anomaly.BlockingReason.TLS": "TLS blocking",
   "Measurement.SummaryText.Websites.Anomaly.BlockingReason.HTTP-failure": "HTTP blocking (HTTP requests failed)",
   "Measurement.SummaryText.Websites.Anomaly.BlockingReason.HTTP-diff": "HTTP blocking (a blockpage might be served)",
   "Measurement.SummaryText.Websites.ConfirmedBlocked": "On {date}, {WebsiteURL} was blocked on {network} in {country}.\n\nThis is confirmed because a block page was served, as illustrated through the network measurement data below.",

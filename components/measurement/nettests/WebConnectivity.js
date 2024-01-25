@@ -36,6 +36,10 @@ const messages = defineMessages({
     id: 'Measurement.SummaryText.Websites.Anomaly.BlockingReason.TCP',
     defaultMessage: ''
   },
+  'blockingReason.tls': {
+    id: 'Measurement.SummaryText.Websites.Anomaly.BlockingReason.TLS',
+    defaultMessage: ''
+  },
   'connection.Success': {
     id: 'Measurement.Details.Websites.TCP.ConnectionTo.Success',
     defaultMessage: ''
@@ -64,7 +68,7 @@ const HttpResponseBodyContainer = styled(WrappedPre)`
   overflow: auto;
 `
 
-const HttpResponseBody = ({request}) => {
+const HttpResponseBody = ({ request }) => {
   let body
 
   if (!request || !request.response || !request.response.body) {
@@ -86,7 +90,7 @@ HttpResponseBody.propTypes = {
   request: PropTypes.object.isRequired
 }
 
-const RequestResponseContainer = ({request}) => {
+const RequestResponseContainer = ({ request }) => {
   return (
     // FIXME: This sometime ends up creating empty sections with just a title
     // when request data contains states like 'generic_timeout_error'
@@ -96,7 +100,7 @@ const RequestResponseContainer = ({request}) => {
         <FormattedMessage id='General.NoData' />
       </Box>
     ) : (
-    // !request.failure &&
+      // !request.failure &&
       <Box>
         <Flex flexWrap='wrap'>
           {/* Request URL */}
@@ -143,7 +147,7 @@ RequestResponseContainer.propTypes = {
   request: PropTypes.object.isRequired
 }
 
-const FailureString = ({failure}) => {
+const FailureString = ({ failure }) => {
   if (typeof failure === 'undefined') {
     return (<FormattedMessage id='General.NoData' />)
   }
@@ -167,11 +171,11 @@ FailureString.propTypes = {
 }
 
 const DnsNarrowAnswerCell = (props) => (
-  <Box width={1/12}>{props.children}</Box>
+  <Box width={1 / 12}>{props.children}</Box>
 )
 
 const DnsAnswerCell = (props) => (
-  <Box width={1/4}>{props.children}</Box>
+  <Box width={1 / 4}>{props.children}</Box>
 )
 
 DnsAnswerCell.propTypes = {
@@ -179,13 +183,13 @@ DnsAnswerCell.propTypes = {
 }
 
 const dnsAnswerIpInfo = (dnsAnswer) => {
-    const asn = dnsAnswer.asn ? `AS${dnsAnswer.asn}` : 'Unknown AS'
-    const asOrgName = dnsAnswer.as_org_name ? `(${dnsAnswer.as_org_name})` : ''
+  const asn = dnsAnswer.asn ? `AS${dnsAnswer.asn}` : 'Unknown AS'
+  const asOrgName = dnsAnswer.as_org_name ? `(${dnsAnswer.as_org_name})` : ''
 
-    return `${asn} ${asOrgName}`.trim()
+  return `${asn} ${asOrgName}`.trim()
 }
 
-const DnsAnswerRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = 'Type', data = 'DATA', answer_ip_info = 'Answer IP Info', header = false}) => (
+const DnsAnswerRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = 'Type', data = 'DATA', answer_ip_info = 'Answer IP Info', header = false }) => (
   <Text fontWeight={header ? 'bold' : undefined}>
     <Flex flexWrap='wrap' mb={2}>
       <DnsAnswerCell>{name}</DnsAnswerCell>
@@ -208,7 +212,7 @@ DnsAnswerRow.propTypes = {
   header: PropTypes.bool
 }
 
-const QueryContainer = ({query}) => {
+const QueryContainer = ({ query }) => {
   const {
     query_type,
     answers,
@@ -346,7 +350,7 @@ const WebConnectivityDetails = ({
 
   const intl = useIntl()
   const date = new Intl.DateTimeFormat(intl.locale, { dateStyle: 'long', timeStyle: 'long', timeZone: 'UTC' }).format(new Date(measurement_start_time))
-  
+
   const p = url.parse(input)
   const hostname = p.host
 
@@ -367,7 +371,7 @@ const WebConnectivityDetails = ({
         country
       }}
     />
-  } else if(isConfirmed) {
+  } else if (isConfirmed) {
     status = 'confirmed'
     summaryText = <FormattedMessage
       id='Measurement.SummaryText.Websites.ConfirmedBlocked'
@@ -500,13 +504,13 @@ const WebConnectivityDetails = ({
     <>
       {render({
         status: status,
-        statusInfo: <StatusInfo 
+        statusInfo: <StatusInfo
           title={
             <StyledStatusInfoLink href={`/domain/${hostname}`}>
               {input}
             </StyledStatusInfoLink>
           }
-          message={reason} 
+          message={reason}
         />,
         summaryText: summaryText,
         headMetadata: headMetadata,
@@ -518,22 +522,22 @@ const WebConnectivityDetails = ({
                 title={<FormattedMessage id='Measurement.Details.Websites.Failures.Heading' />}
                 content={
                   <Flex mb={2} flexWrap='wrap'>
-                    <Box width={1/3}>
+                    <Box width={1 / 3}>
                       <FormattedMessage id='Measurement.Details.Websites.Failures.Label.HTTP' />
                     </Box>
-                    <Box width={2/3}>
+                    <Box width={2 / 3}>
                       <FailureString failure={http_experiment_failure} />
                     </Box>
-                    <Box width={1/3}>
+                    <Box width={1 / 3}>
                       <FormattedMessage id='Measurement.Details.Websites.Failures.Label.DNS' />
                     </Box>
-                    <Box width={2/3}>
+                    <Box width={2 / 3}>
                       <FailureString failure={dns_experiment_failure} />
                     </Box>
-                    <Box width={1/3}>
+                    <Box width={1 / 3}>
                       <FormattedMessage id='Measurement.Details.Websites.Failures.Label.Control' />
                     </Box>
-                    <Box width={2/3}>
+                    <Box width={2 / 3}>
                       <FailureString failure={control_failure} />
                     </Box>
                   </Flex>

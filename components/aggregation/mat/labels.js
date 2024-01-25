@@ -2,7 +2,6 @@ import PropTypes from 'prop-types'
 import { Box } from 'ooni-components'
 
 import { testNames } from '../../test-info'
-import { getCategoryCodesMap } from '../../utils/categoryCodes'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
 
 const InputRowLabel = ({ input }) => {
@@ -21,14 +20,13 @@ InputRowLabel.propTypes = {
   input: PropTypes.string,
 }
 
-const categoryCodesMap = getCategoryCodesMap()
-
 const blockingTypeLabels = {
   '': '<empty>',
   'dns': 'DNS Tampering',
   'http-diff': 'HTTP Diff',
   'http-failure': 'HTTP Failure',
-  'tcp_ip': 'TCP/IP Blocking'
+  'tcp_ip': 'TCP/IP Blocking',
+  'tls': 'TLS Blocking'
 }
 
 export const getRowLabel = (key, yAxis, locale = 'en') => {
@@ -47,8 +45,8 @@ export const getRowLabel = (key, yAxis, locale = 'en') => {
     case 'probe_asn':
       return `AS${key}`
     case 'test_name':
-      return Object.keys(testNames).includes(key) ? 
-        messages[testNames[key].id] : 
+      return Object.keys(testNames).includes(key) ?
+        messages[testNames[key].id] :
         key
     default:
       return key
