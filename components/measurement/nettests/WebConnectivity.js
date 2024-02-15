@@ -561,7 +561,11 @@ const WebConnectivityDetails = ({
                       <Flex key={index}>
                         <Box>
                           <Text>
-                            <strong>{connection.destination}</strong>{connection.failure && `: ${connection.failure}`}
+                            <strong>{connection.destination}</strong>: {
+                              connection.failure ?
+                              `${intl.formatMessage({id: 'Measurement.Details.Websites.TCP.ConnectionTo.Failed'})} (${connection.failure})` :
+                              intl.formatMessage({id: 'Measurement.Details.Websites.TCP.ConnectionTo.Success'})
+                            }
                           </Text>
                         </Box>
                       </Flex>

@@ -104,6 +104,8 @@
   "Measurement.Details.Websites.DNSQueries.Label.Resolver": "Resolver",
   "Measurement.Details.Websites.TCP.Heading": "TCP Connections",
   "Measurement.Details.Websites.HTTP.Heading": "HTTP Requests",
+  "Measurement.Details.Websites.TCP.ConnectionTo.Success": "succeeded",
+  "Measurement.Details.Websites.TCP.ConnectionTo.Failed": "failed",
   "Measurement.Details.Websites.HTTP.Label.Response": "Response",
   "Measurement.Details.Websites.HTTP.Request.URL": "URL",
   "Measurement.Details.Websites.HTTP.Response.Body": "Response Body",
