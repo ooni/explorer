@@ -488,11 +488,9 @@ const WebConnectivityDetails = ({
   }
 
   const tcpConnections = Array.isArray(tcp_connect) ? tcp_connect.map((connection) => {
-    const status = (connection.status.success) ? 'Success' :
-      (connection.status.blocked) ? 'Blocked' : 'Failed'
     return {
       destination: connection.ip + ':' + connection.port,
-      status
+      failure: connection.status?.failure
     }
   }) : []
 
@@ -575,13 +573,7 @@ const WebConnectivityDetails = ({
                       <Flex key={index}>
                         <Box>
                           <Text>
-                            <FormattedMessage
-                              id='Measurement.Details.Websites.TCP.ConnectionTo'
-                              values={{
-                                destination: <strong> {connection.destination} </strong>,
-                                connectionStatus: intl.formatMessage(messages[`connection.${connection.status}`])
-                              }}
-                            />
+                            <strong>{connection.destination}</strong>{connection.failure && `: ${connection.failure}`}
                           </Text>
                         </Box>
                       </Flex>
