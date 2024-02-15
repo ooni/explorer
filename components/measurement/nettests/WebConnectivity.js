@@ -36,18 +36,6 @@ const messages = defineMessages({
     id: 'Measurement.SummaryText.Websites.Anomaly.BlockingReason.TCP',
     defaultMessage: ''
   },
-  'connection.Success': {
-    id: 'Measurement.Details.Websites.TCP.ConnectionTo.Success',
-    defaultMessage: ''
-  },
-  'connection.Failed': {
-    id: 'Measurement.Details.Websites.TCP.ConnectionTo.Failed',
-    defaultMessage: ''
-  },
-  'connection.Blocked': {
-    id: 'Measurement.Details.Websites.TCP.ConnectionTo.Blocked',
-    defaultMessage: ''
-  },
 })
 
 // From https://css-tricks.com/snippets/css/make-pre-text-wrap/
