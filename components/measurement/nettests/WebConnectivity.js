@@ -36,18 +36,6 @@ const messages = defineMessages({
     id: 'Measurement.SummaryText.Websites.Anomaly.BlockingReason.TCP',
     defaultMessage: ''
   },
-  'connection.Success': {
-    id: 'Measurement.Details.Websites.TCP.ConnectionTo.Success',
-    defaultMessage: ''
-  },
-  'connection.Failed': {
-    id: 'Measurement.Details.Websites.TCP.ConnectionTo.Failed',
-    defaultMessage: ''
-  },
-  'connection.Blocked': {
-    id: 'Measurement.Details.Websites.TCP.ConnectionTo.Blocked',
-    defaultMessage: ''
-  },
 })
 
 // From https://css-tricks.com/snippets/css/make-pre-text-wrap/
@@ -488,11 +476,9 @@ const WebConnectivityDetails = ({
   }
 
   const tcpConnections = Array.isArray(tcp_connect) ? tcp_connect.map((connection) => {
-    const status = (connection.status.success) ? 'Success' :
-      (connection.status.blocked) ? 'Blocked' : 'Failed'
     return {
       destination: connection.ip + ':' + connection.port,
-      status
+      failure: connection.status?.failure
     }
   }) : []
 
@@ -575,13 +561,11 @@ const WebConnectivityDetails = ({
                       <Flex key={index}>
                         <Box>
                           <Text>
-                            <FormattedMessage
-                              id='Measurement.Details.Websites.TCP.ConnectionTo'
-                              values={{
-                                destination: <strong> {connection.destination} </strong>,
-                                connectionStatus: intl.formatMessage(messages[`connection.${connection.status}`])
-                              }}
-                            />
+                            <strong>{connection.destination}</strong>: {
+                              connection.failure ?
+                              `${intl.formatMessage({id: 'Measurement.Details.Websites.TCP.ConnectionTo.Failed'})} (${connection.failure})` :
+                              intl.formatMessage({id: 'Measurement.Details.Websites.TCP.ConnectionTo.Success'})
+                            }
                           </Text>
                         </Box>
                       </Flex>
