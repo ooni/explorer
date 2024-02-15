@@ -58,7 +58,7 @@ export const getServerSideProps = async ({query}) => {
 const queryToParams = ({ query }) => {
   let params = {},
     show = 50
-  const supportedParams = ['probe_cc', 'domain', 'input','category_code', 'probe_asn', 'test_name', 'since', 'until', 'failure']
+  const supportedParams = ['probe_cc', 'domain', 'input','category_code', 'probe_asn', 'test_name', 'since', 'until', 'failure', 'ooni_run_link_id']
 
   if (query.show) {
     show = parseInt(query.show)
@@ -273,6 +273,7 @@ const Search = ({ countries, query: queryProp }) => {
             <FilterSidebar
               domainFilter={query.domain}
               inputFilter={query.input}
+              ooniRunLinkId={query.ooni_run_link_id}
               categoryFilter={query.category_code}
               testNameFilter={query.test_name}
               countryFilter={query.probe_cc}
