@@ -48,6 +48,7 @@
     "react-virtual": "^2.10.4",
     "react-virtualized": "^9.22.5",
     "react-window": "^1.8.10",
+    "regenerator-runtime": "^0.14.1",
     "styled-components": "^6.1.8",
     "swr": "^2.2.4",
     "use-clipboard-copy": "^0.2.0",

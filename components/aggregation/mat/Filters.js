@@ -1,9 +1,10 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
-import { useTable, useFlexLayout, useRowSelect, useSortBy, useGlobalFilter, useAsyncDebounce } from 'react-table'
+import { Box, Button, Flex, Text } from 'ooni-components'
+import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
+import { useAsyncDebounce, useFlexLayout, useGlobalFilter, useRowSelect, useSortBy, useTable } from 'react-table'
 import { useVirtual } from 'react-virtual'
+import 'regenerator-runtime'
 import styled from 'styled-components'
-import { Flex, Box, Button, Text } from 'ooni-components'
 
 import { DetailsBox } from '../../measurement/DetailsBox'
 import { sortRows } from './computations'
@@ -53,12 +54,12 @@ const TableBody = styled.div`
   overflow: auto;
 `
 
-const IndeterminateCheckbox = React.forwardRef(
+const IndeterminateCheckbox = forwardRef(
   ({ indeterminate, ...rest }, ref) => {
-    const defaultRef = React.useRef()
+    const defaultRef = useRef()
     const resolvedRef = ref || defaultRef
 
-    React.useEffect(() => {
+    useEffect(() => {
       resolvedRef.current.indeterminate = indeterminate
     }, [resolvedRef, indeterminate])
 
@@ -104,7 +105,7 @@ function GlobalFilter({
 }) {
   const intl = useIntl()
   const count = preGlobalFilteredRows.length
-  const [value, setValue] = React.useState(globalFilter)
+  const [value, setValue] = useState(globalFilter)
   const onChange = useAsyncDebounce(value => {
     setGlobalFilter(value || '')
   }, 200)
@@ -150,7 +151,7 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
   const resetTableRef = useRef(false)
   const yAxis = query.axis_y
 
-  const defaultColumn = React.useMemo(
+  const defaultColumn = useMemo(
     () => ({
       // When using the useFlexLayout:
       width: 70, // width is used for both the flex-basis and flex-grow
@@ -164,12 +165,12 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
   )
 
   // Aggregate by the first column
-  const initialState = React.useMemo(() => ({
+  const initialState = useMemo(() => ({
     hiddenColumns: ['yAxisCode'],
     sortBy: [{ id: 'yAxisLabel', desc: false }]
   }),[])
 
-  const getRowId = React.useCallback(row => row[query.axis_y], [query.axis_y])
+  const getRowId = useCallback(row => row[query.axis_y], [query.axis_y])
 
   const columns = useMemo(() => [
     {
@@ -320,13 +321,13 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
     }
   }, [state.globalFilter, toggleAllRowsSelected])
 
-  const parentRef = React.useRef()
+  const parentRef = useRef()
 
   const { virtualItems: virtualRows, totalSize } = useVirtual({
     size: rows.length,
     parentRef,
     overscan: 10,
-    estimateSize: React.useCallback(() => 35, []),
+    estimateSize: useCallback(() => 35, []),
   })
 
   return (
