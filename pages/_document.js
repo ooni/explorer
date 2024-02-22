@@ -27,9 +27,9 @@ export default class MyDocument extends Document {
     <Html dir={getDirection(this.props.locale)} lang={this.props.locale}>
       <Head>
         <script 
-          async
-          src="https://umami.ooni.org/script.js"
-          data-website-id="6db69722-6f49-4b93-972c-922a765327a1"
+          defer
+          src="https://eu.umami.is/script.js"
+          data-website-id="6c9769aa-4b46-4d8d-82a9-a5a6d77206c4"
           data-domains="explorer.ooni.org"
         ></script>
       </Head>
