@@ -1,7 +1,6 @@
-import { MatomoProvider, createInstance } from '@datapunt/matomo-tracker-react'
 import { theme } from 'ooni-components'
 import PropTypes from 'prop-types'
-import React, { useEffect } from 'react'
+import React from 'react'
 import { ThemeProvider, createGlobalStyle } from 'styled-components'
 
 import { getDirection } from 'components/withIntl'
@@ -46,37 +45,22 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-const matomoInstance = createInstance({
-  urlBase: 'https://matomo.ooni.org/',
-  siteId: 2,
-  trackerUrl: 'https://matomo.ooni.org/matomo.php',
-  srcUrl: 'https://matomo.ooni.org/matomo.js',
-  configurations: {
-    disableCookies: true
-  }
-})
-
 const Layout = ({ children, disableFooter = false }) => {
   const { locale } = useIntl()
-  useEffect(() => {
-    matomoInstance.trackPageView()
-  }, [])
 
   return (
-    <MatomoProvider value={matomoInstance}>
-      <ThemeProvider theme={theme}>
-        <UserProvider>
-          <GlobalStyle direction={getDirection(locale)} />
-          <div className="site">
-            <Header />
-            <div className="content">
-              { children }
-            </div>
-            {!disableFooter && <Footer />}
+    <ThemeProvider theme={theme}>
+      <UserProvider>
+        <GlobalStyle direction={getDirection(locale)} />
+        <div className="site">
+          <Header />
+          <div className="content">
+            { children }
           </div>
-        </UserProvider>
-      </ThemeProvider>
-    </MatomoProvider>
+          {!disableFooter && <Footer />}
+        </div>
+      </UserProvider>
+    </ThemeProvider>
   )
 }
 

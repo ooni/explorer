@@ -7,7 +7,6 @@
   "repository": "https://github.com/ooni/explorer",
   "dependencies": {
     "@cassiozen/usestatemachine": "^1.0.1",
-    "@datapunt/matomo-tracker-react": "^0.5.1",
     "@hookform/resolvers": "^3.3.4",
     "@nivo/bar": "^0.80.0",
     "@nivo/calendar": "^0.80.0",
