@@ -109,7 +109,9 @@ module.exports = withSentryConfig(
   {
     // For all available options, see:
     // https://github.com/getsentry/sentry-webpack-plugin#options
-
+    debug: process.env.NODE_ENV === 'development',
+    dryRun: process.env.NODE_ENV === 'development',
+    release: process.env.GIT_COMMIT_SHA,
     // Suppresses source map uploading logs during build
     silent: true,
     org: "ooni",
