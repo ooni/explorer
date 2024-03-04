@@ -11,8 +11,5 @@ cypress/screenshots
 .yalc
 yalc.lock
 
-# Sentry
-.sentryclirc
-
-# Sentry
+# Sentry Config File
 .sentryclirc
