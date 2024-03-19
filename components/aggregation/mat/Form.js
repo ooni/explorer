@@ -1,17 +1,17 @@
-import { useCallback, useEffect, useState, useMemo } from 'react'
-import PropTypes from 'prop-types'
-import { useForm, Controller } from 'react-hook-form'
-import { Flex, Box, Input, Button, Select } from 'ooni-components'
-import dayjs from 'services/dayjs'
 import { format } from 'date-fns'
-import { defineMessages, useIntl, FormattedMessage } from 'react-intl'
+import { Box, Button, Flex, Input, Select } from 'ooni-components'
+import PropTypes from 'prop-types'
+import { useCallback, useEffect, useMemo, useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
+import dayjs from 'services/dayjs'
 import { localisedCountries } from 'utils/i18nCountries'
 
-import { categoryCodes } from '../../utils/categoryCodes'
-import DateRangePicker from '../../DateRangePicker'
-import { ConfirmationModal } from './ConfirmationModal'
-import { TestNameOptions } from '../../TestNameOptions'
 import { useRouter } from 'next/router'
+import DateRangePicker from '../../DateRangePicker'
+import { TestNameOptions } from '../../TestNameOptions'
+import { categoryCodes } from '../../utils/categoryCodes'
+import { ConfirmationModal } from './ConfirmationModal'
 
 const DAY_GRAIN_THRESHOLD_IN_MONTHS = 12
 const WEEK_GRAIN_THRESHOLD_IN_MONTHS = 36
@@ -139,8 +139,11 @@ export const Form = ({ onSubmit, query }) => {
     return () => subscription.unsubscribe()
   }, [watch])
 
-  const sortedCountries = localisedCountries(intl.locale).sort((a, b) =>
-    new Intl.Collator(intl.locale).compare(a.localisedCountryName, b.localisedCountryName)
+  const sortedCountries = useMemo(() => (
+      localisedCountries(intl.locale).sort((a, b) =>
+      new Intl.Collator(intl.locale).compare(a.localisedCountryName, b.localisedCountryName))
+    ),
+    [intl.locale]
   )
 
   const showWebConnectivityFilters = useMemo(

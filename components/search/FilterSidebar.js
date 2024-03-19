@@ -1,15 +1,15 @@
-import React, { useEffect, useMemo, useState } from 'react'
-import styled from 'styled-components'
-import { useIntl } from 'react-intl'
-import { Flex, Box, Button, Input, Label, RadioGroup, RadioButton, Checkbox, Select } from 'ooni-components'
-import dayjs from 'services/dayjs'
-import { useForm, Controller } from 'react-hook-form'
-
-import DateRangePicker from '../DateRangePicker'
 import { format } from 'date-fns'
-import { TestNameOptions } from '../TestNameOptions'
-import { categoryCodes } from '../utils/categoryCodes'
+import { Box, Button, Checkbox, Flex, Input, Label, RadioButton, RadioGroup, Select } from 'ooni-components'
+import React, { useCallback, useEffect, useMemo, useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
+
+import { TestNameOptions } from 'components/TestNameOptions'
+import { categoryCodes } from 'components/utils/categoryCodes'
+import dayjs from 'services/dayjs'
+import styled from 'styled-components'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
+import DateRangePicker from '../DateRangePicker'
 
 const StyledLabel = styled(Label).attrs({
   mb: 1,
@@ -125,8 +125,6 @@ const FilterSidebar = ({
   const { errors } = formState
 
   const testNameFilterValue = watch('testNameFilter')
-  const debugg = categoryFilter
-  //const debugg = watch('categoryFilter')
   const onlyFilterValue = watch('onlyFilter')
 
   // Does the selected testName need a domain filter
@@ -171,7 +169,7 @@ const FilterSidebar = ({
 
   const [showDatePicker, setShowDatePicker] = useState(false)
 
-  const handleRangeSelect = (range) => {
+  const handleRangeSelect = useCallback((range) => {
     if (range?.from) {
       setValue('sinceFilter', format(range.from, 'y-MM-dd'))
     } else {
@@ -183,22 +181,24 @@ const FilterSidebar = ({
       setValue('untilFilter', '')
     }
     setShowDatePicker(false)
-  }
+  }, [setValue])
 
-  //Insert an 'Any' option to test name filter
-  // testNameOptions.unshift({name: intl.formatMessage({id: 'Search.Sidebar.TestName.AllTests'}), id: 'XX'})
+  const countryOptions = useMemo(() => {
+    const options = [
+      ...countries.map((c) => ({
+        ...c,
+        name: getLocalisedRegionName(c.alpha_2, intl.locale),
+      })),
+    ]
+  
+    options.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0))
+    options.unshift({
+      name: intl.formatMessage({ id: 'Search.Sidebar.Country.AllCountries' }),
+      alpha_2: 'XX',
+    })
 
-  const countryOptions = [
-    ...countries.map((c) => ({
-      ...c,
-      name: getLocalisedRegionName(c.alpha_2, intl.locale),
-    })),
-  ]
-  countryOptions.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0))
-  countryOptions.unshift({
-    name: intl.formatMessage({ id: 'Search.Sidebar.Country.AllCountries' }),
-    alpha_2: 'XX',
-  })
+    return options
+  }, [countries, intl])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
