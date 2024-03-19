@@ -1,27 +1,28 @@
-import React, { useState } from 'react'
-import { format, parse, sub, addDays } from 'date-fns'
-import { DayPicker, useInput } from 'react-day-picker'
-import 'react-day-picker/dist/style.css'
-import OutsideClickHandler from 'react-outside-click-handler'
-import { useIntl } from 'react-intl'
-import styled from 'styled-components'
+import { addDays, parse, sub } from 'date-fns'
 import { Button } from 'ooni-components'
-import { getDirection } from 'components/withIntl'
+import React, { useMemo, useState } from 'react'
+import { DayPicker } from 'react-day-picker'
+import 'react-day-picker/dist/style.css'
+import { useIntl } from 'react-intl'
+import OutsideClickHandler from 'react-outside-click-handler'
+import styled from 'styled-components'
 
+import ar from 'date-fns/locale/ar'
 import de from 'date-fns/locale/de'
 import en from 'date-fns/locale/en-US'
 import es from 'date-fns/locale/es'
 import fa from 'date-fns/locale/fa-IR'
 import fr from 'date-fns/locale/fr'
 import is from 'date-fns/locale/is'
-import ru from 'date-fns/locale/ru'
-import tr from 'date-fns/locale/tr'
-import ar from 'date-fns/locale/ar'
 import pt from 'date-fns/locale/pt'
+import ru from 'date-fns/locale/ru'
 import th from 'date-fns/locale/th'
+import tr from 'date-fns/locale/tr'
 import vi from 'date-fns/locale/vi'
 import zh from 'date-fns/locale/zh-CN'
 import zhHant from 'date-fns/locale/zh-HK'
+
+import { getDirection } from 'components/withIntl'
 
 const StyledDatetime = styled.div`
 z-index: 99999;
@@ -55,43 +56,62 @@ justify-content: right;
 gap: 6px;
 `
 
-const getDateFnsLocale = locale => {
-  switch (locale) {
-    case 'de':
-      return de
-    case 'es':
-      return es
-    case 'fa':
-      return fa
-    case 'ar':
-      return ar
-    case 'fr':
-      return fr
-    case 'is':
-      return is
-    case 'pt-BR':
-      return pt
-    case 'ru':
-      return ru
-    case 'tr':
-      return tr
-    case 'th':
-      return th
-    case 'vi':
-      return vi
-    case 'zh-CN':
-      return zh
-    case 'zh-Hant':
-      return zhHant
-    default:
-      return en
-  }
+const Footer = ({ handleRangeSelect, range, close }) => {
+  const intl = useIntl()
+
+  return (
+    <StyledFooter>
+      <Button id='apply-range' onClick={(e) => {
+        e.preventDefault()
+        handleRangeSelect(range)}
+        }>{intl.formatMessage({id: 'DateRange.Apply'})}</Button>
+      <Button
+        hollow
+        onClick={(e) => {
+          e.preventDefault()
+          close()}
+        }>{intl.formatMessage({id: 'DateRange.Cancel'})}</Button>
+    </StyledFooter>
+  )
 }
 
 const DateRangePicker = ({handleRangeSelect, initialRange, close, ...props}) => {
   const intl = useIntl()
   const tomorrow = addDays(new Date(), 1)
   const ranges = ['Today', 'LastWeek', 'LastMonth', 'LastYear']
+
+  const dateFnsLocale = useMemo(() => {
+    switch (intl.locale) {
+      case 'de':
+        return de
+      case 'es':
+        return es
+      case 'fa':
+        return fa
+      case 'ar':
+        return ar
+      case 'fr':
+        return fr
+      case 'is':
+        return is
+      case 'pt-BR':
+        return pt
+      case 'ru':
+        return ru
+      case 'tr':
+        return tr
+      case 'th':
+        return th
+      case 'vi':
+        return vi
+      case 'zh-CN':
+        return zh
+      case 'zh-Hant':
+        return zhHant
+      default:
+        return en
+    }
+  }, [intl.locale])
   
   const selectRange = (range) => {
     switch (range) {
@@ -122,20 +142,7 @@ const DateRangePicker = ({handleRangeSelect, initialRange, close, ...props}) => 
       }}>{intl.formatMessage({id: `DateRange.${range}`})}</Button>
   )
   const [range, setRange] = useState({from: parse(initialRange.from, 'yyyy-MM-dd', new Date()), to: parse(initialRange.to, 'yyyy-MM-dd', new Date())})
-  const Footer = () => (
-    <StyledFooter>
-      <Button id='apply-range' onClick={(e) => {
-        e.preventDefault()
-        handleRangeSelect(range)}
-        }>{intl.formatMessage({id: 'DateRange.Apply'})}</Button>
-      <Button
-        hollow
-        onClick={(e) => {
-          e.preventDefault()
-          close()}
-        }>{intl.formatMessage({id: 'DateRange.Cancel'})}</Button>
-    </StyledFooter>
-  )
+  
   const onSelect = (range) => {
     setRange(range)
   }
@@ -147,12 +154,12 @@ const DateRangePicker = ({handleRangeSelect, initialRange, close, ...props}) => 
         <DayPicker 
           {...props}
           dir={getDirection(intl.locale)}
-          locale={getDateFnsLocale(intl.locale)}
+          locale={dateFnsLocale}
           mode="range"
           toDate={tomorrow}
           selected={range}
           onSelect={onSelect}
-          footer={<Footer/>} />
+          footer={<Footer handleRangeSelect={handleRangeSelect} close={close} range={range} />} />
       </OutsideClickHandler>
     </StyledDatetime>
   )
