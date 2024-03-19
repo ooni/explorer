@@ -1,17 +1,17 @@
-import Head from 'next/head'
-import { Container, Heading, Flex, Button } from 'ooni-components'
-import { useIntl } from 'react-intl'
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/router'
-import NLink from 'next/link'
-import dayjs from 'services/dayjs'
-import { getUserEmail } from 'lib/api'
-import { createIncidentReport } from 'lib/api'
 import NavBar from 'components/NavBar'
 import Form from 'components/findings/Form'
-import useUser from 'hooks/useUser'
 import LoginRequiredModal from 'components/findings/LoginRequiredModal'
 import SpinLoader from 'components/vendor/SpinLoader'
+import useUser from 'hooks/useUser'
+import { getUserEmail } from 'lib/api'
+import { createIncidentReport } from 'lib/api'
+import Head from 'next/head'
+import NLink from 'next/link'
+import { useRouter } from 'next/router'
+import { Button, Container, Flex, Heading } from 'ooni-components'
+import { useEffect, useState } from 'react'
+import { useIntl } from 'react-intl'
+import dayjs from 'services/dayjs'
 
 const defaultValues = {
   reported_by: '',
@@ -46,7 +46,9 @@ const Create = () => {
   }, [])
 
   const onSubmit = (report) => {
-    return createIncidentReport(report).then((data) => router.push(`/findings/${data.id}`))
+    return createIncidentReport(report).then((data) =>
+      router.push(`/findings/${data.id}`),
+    )
   }
 
   return (
@@ -55,17 +57,26 @@ const Create = () => {
         <title></title>
       </Head>
       <NavBar />
-      {user ?
+      {user ? (
         <Container>
           <LoginRequiredModal show={showModal} />
           <Flex justifyContent="space-between" alignItems="center">
-            <Heading h={1}>{intl.formatMessage({id: 'Findings.Create.Title'})}</Heading>
-            <NLink href='/findings/dashboard'><Button hollow>{intl.formatMessage({id: 'Findings.Dashboard.ShortTitle'})}</Button></NLink>
+            <Heading h={1}>
+              {intl.formatMessage({ id: 'Findings.Create.Title' })}
+            </Heading>
+            <NLink href="/findings/dashboard">
+              <Button hollow>
+                {intl.formatMessage({ id: 'Findings.Dashboard.ShortTitle' })}
+              </Button>
+            </NLink>
           </Flex>
           <Form onSubmit={onSubmit} defaultValues={defaultValues} />
-        </Container> :
-        <Container pt={6}><SpinLoader /></Container>
-      }
+        </Container>
+      ) : (
+        <Container pt={6}>
+          <SpinLoader />
+        </Container>
+      )}
     </>
   )
 }

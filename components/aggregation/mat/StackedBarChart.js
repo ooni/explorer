@@ -1,23 +1,23 @@
-import React from 'react'
-import PropTypes from 'prop-types'
 import { Flex } from 'ooni-components'
-import styled from 'styled-components'
+import PropTypes from 'prop-types'
+import React from 'react'
 import { useIntl } from 'react-intl'
+import styled from 'styled-components'
 
 import GridChart, { prepareDataForGridChart } from './GridChart'
 import { NoCharts } from './NoCharts'
 
 const ChartContainer = styled(Flex)`
   position: relative;
-  // border: 2px solid ${props => props.theme.colors.gray1};
+  // border: 2px solid ${(props) => props.theme.colors.gray1};
   // padding: 16px;
 `
 
 export const StackedBarChart = ({ data, query }) => {
   const intl = useIntl()
 
-  try { 
-    const [gridData, rows ] = prepareDataForGridChart(data, query, intl.locale)
+  try {
+    const [gridData, rows] = prepareDataForGridChart(data, query, intl.locale)
 
     return (
       <ChartContainer flexDirection={['column']}>
@@ -31,7 +31,7 @@ export const StackedBarChart = ({ data, query }) => {
       </ChartContainer>
     )
   } catch (e) {
-    return (<NoCharts message={e.message}/>)
+    return <NoCharts message={e.message} />
   }
 }
 
@@ -42,7 +42,7 @@ StackedBarChart.propTypes = {
       result: PropTypes.array,
     }),
     loadTime: PropTypes.number,
-    url: PropTypes.string
+    url: PropTypes.string,
   }),
-  query: PropTypes.object
+  query: PropTypes.object,
 }

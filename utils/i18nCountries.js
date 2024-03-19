@@ -1,5 +1,5 @@
-import { countryList } from 'country-util'
 import '@formatjs/intl-displaynames/polyfill'
+import { countryList } from 'country-util'
 
 const getLocale = (locale) => {
   if (locale === 'zh-CN') return 'zh-Hans'
@@ -16,7 +16,9 @@ process.env.LOCALES.forEach((locale) => {
 export const getLocalisedRegionName = (regionCode, locale) => {
   locale = getLocale(locale)
   try {
-    return new Intl.DisplayNames([locale], { type: 'region' }).of(String(regionCode))
+    return new Intl.DisplayNames([locale], { type: 'region' }).of(
+      String(regionCode),
+    )
   } catch (e) {
     return regionCode
   }
@@ -27,7 +29,7 @@ export const getLocalisedLanguageName = (regionCode, locale) => {
 
   try {
     return new Intl.DisplayNames([locale], { type: 'language' }).of(
-      String(regionCode)
+      String(regionCode),
     )
   } catch (e) {
     return regionCode

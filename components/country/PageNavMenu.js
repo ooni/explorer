@@ -1,9 +1,9 @@
-import React, { useState } from 'react'
+import { Box, Flex, Link } from 'ooni-components'
 import PropTypes from 'prop-types'
-import { Flex, Box, Link } from 'ooni-components'
-import styled from 'styled-components'
-import { FormattedMessage } from 'react-intl'
+import React, { useState } from 'react'
 import { MdExpandLess } from 'react-icons/md'
+import { FormattedMessage } from 'react-intl'
+import styled from 'styled-components'
 import SocialButtons from '../SocialButtons'
 
 const HideInLargeScreens = ({ children }) => (
@@ -12,7 +12,7 @@ const HideInLargeScreens = ({ children }) => (
       display: 'none',
       '@media screen and (max-width: 64em)': {
         display: 'block',
-      }
+      },
     }}
   >
     {children}
@@ -21,17 +21,17 @@ const HideInLargeScreens = ({ children }) => (
 
 const PageNavItem = ({ link, children }) => (
   <Box mx={3} my={1}>
-    <Link p={2} fontSize={16} color='blue5' href={link}>{children}</Link>
+    <Link p={2} fontSize={16} color="blue5" href={link}>
+      {children}
+    </Link>
   </Box>
 )
 
-const ToggleIcon = styled(MdExpandLess).attrs({
-
-})`
+const ToggleIcon = styled(MdExpandLess).attrs({})`
   cursor: pointer;
-  background-color: ${props => props.theme.colors.gray3};
+  background-color: ${(props) => props.theme.colors.gray3};
   border-radius: 50%;
-  transform: ${props => props.open ? 'rotate(0deg)': 'rotate(180deg)'};
+  transform: ${(props) => (props.open ? 'rotate(0deg)' : 'rotate(180deg)')};
   transition: transform 0.1s linear;
 `
 
@@ -45,22 +45,28 @@ const PageNavMenu = ({ countryCode }) => {
         <ToggleIcon size={36} open={isOpen} onClick={() => setOpen(!isOpen)} />
       </HideInLargeScreens>
       <Box width={[1, 'unset']} py={2}>
-        {isOpen && <Flex flexDirection={['column', 'row']} justifyContent='center' py={1}>
-          <PageNavItem link='#overview'>
-            <FormattedMessage id='Country.Heading.Overview'/>
-          </PageNavItem>
-          <PageNavItem link='#websites'>
-            <FormattedMessage id='Country.Heading.Websites' />
-          </PageNavItem>
-          <PageNavItem link='#apps'>
-            <FormattedMessage id='Country.Heading.Apps' />
-          </PageNavItem>
-          <PageNavItem link='#outages'>
-            <FormattedMessage id='Country.Heading.Outages' />
-          </PageNavItem>
-        </Flex>}
+        {isOpen && (
+          <Flex
+            flexDirection={['column', 'row']}
+            justifyContent="center"
+            py={1}
+          >
+            <PageNavItem link="#overview">
+              <FormattedMessage id="Country.Heading.Overview" />
+            </PageNavItem>
+            <PageNavItem link="#websites">
+              <FormattedMessage id="Country.Heading.Websites" />
+            </PageNavItem>
+            <PageNavItem link="#apps">
+              <FormattedMessage id="Country.Heading.Apps" />
+            </PageNavItem>
+            <PageNavItem link="#outages">
+              <FormattedMessage id="Country.Heading.Outages" />
+            </PageNavItem>
+          </Flex>
+        )}
         <Flex justifyContent={['flex-start', 'flex-end']} px={[0, 3]} py={1}>
-          <SocialButtons url={`country/${countryCode}`}/>
+          <SocialButtons url={`country/${countryCode}`} />
         </Flex>
       </Box>
     </>
@@ -68,7 +74,7 @@ const PageNavMenu = ({ countryCode }) => {
 }
 
 PageNavMenu.propTypes = {
-  countryCode: PropTypes.string
+  countryCode: PropTypes.string,
 }
 
 export default PageNavMenu

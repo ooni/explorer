@@ -1,5 +1,4 @@
 describe('Country Page Tests', () => {
-
   before(() => {
     cy.visit('/country/CA')
   })
@@ -21,14 +20,12 @@ describe('Country Page Tests', () => {
 })
 
 describe('Country Page Handles Case Mistakes In URL', () => {
-
-  it('when both letters lower case' , () => {
+  it('when both letters lower case', () => {
     cy.visit('/country/ca')
     cy.url().should('include', '/country/CA')
-
   })
 
-  it('when first letter lower case' , () => {
+  it('when first letter lower case', () => {
     cy.visit('/country/Ca')
     cy.url().should('include', '/country/CA')
   })
@@ -37,5 +34,4 @@ describe('Country Page Handles Case Mistakes In URL', () => {
     cy.visit('/country/cA')
     cy.url().should('include', '/country/CA')
   })
-
 })

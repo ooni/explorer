@@ -1,9 +1,9 @@
+import Markdown from 'markdown-to-jsx'
+import { Box, Flex, Heading, Link, Text, theme } from 'ooni-components'
+import PropTypes from 'prop-types'
 import React from 'react'
 import { useIntl } from 'react-intl'
-import PropTypes from 'prop-types'
-import { Flex, Box, Text, Heading, Link, theme } from 'ooni-components'
 import styled from 'styled-components'
-import Markdown from 'markdown-to-jsx'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
 
 import Flag from '../Flag'
@@ -11,25 +11,19 @@ import Flag from '../Flag'
 const StyledFlex = styled(Flex)`
   min-height: 350px;
   a:hover {
-    color: ${props => props.theme.colors.white};
+    color: ${(props) => props.theme.colors.white};
   }
 `
 
 const FlexGrowBox = styled(Box)`
-  flex-grow: ${props => props.grow || 1};
+  flex-grow: ${(props) => props.grow || 1};
 `
 
-const HighlightBox = ({
-  countryCode,
-  title,
-  text,
-  dates,
-  footer
-}) => {
+const HighlightBox = ({ countryCode, title, text, dates, footer }) => {
   const intl = useIntl()
 
   return (
-    <Flex 
+    <Flex
       py={4}
       px={24}
       sx={{
@@ -39,7 +33,7 @@ const HighlightBox = ({
         borderColor: 'gray3',
         borderLeft: '10px solid',
         borderLeftColor: 'blue5',
-        minHeight: '328px'
+        minHeight: '328px',
       }}
     >
       <Box>
@@ -53,18 +47,20 @@ const HighlightBox = ({
         )}
         {dates}
         {/* <Text color="gray6">{startDate && formatLongDate(startDate, intl.locale)} - {endDate ? formatLongDate(endDate, intl.locale) : 'ongoing'}</Text> */}
-        <Heading h={4} lineHeight='1.1'>{title}</Heading>
-        <Text fontSize={20} as='p'>
+        <Heading h={4} lineHeight="1.1">
+          {title}
+        </Heading>
+        <Text fontSize={20} as="p">
           <Markdown
             options={{
               overrides: {
                 a: {
                   component: Link,
                   props: {
-                    color: theme.colors.blue3
-                  }
+                    color: theme.colors.blue3,
+                  },
                 },
-              }
+              },
             }}
           >
             {text}
@@ -75,8 +71,6 @@ const HighlightBox = ({
     </Flex>
   )
 }
-  
-
 
 HighlightBox.propTypes = {
   countryCode: PropTypes.string,
@@ -84,7 +78,7 @@ HighlightBox.propTypes = {
   title: PropTypes.string,
   text: PropTypes.string.isRequired,
   footer: PropTypes.element,
-  dates: PropTypes.element
+  dates: PropTypes.element,
 }
 
 export default HighlightBox

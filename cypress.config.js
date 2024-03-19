@@ -13,5 +13,5 @@ module.exports = defineConfig({
   },
   env: {
     apiUrl: 'https://ams-pg-test.ooni.org',
-  }
+  },
 })

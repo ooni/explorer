@@ -9,7 +9,7 @@ import { FormattedMessage } from 'react-intl'
 import { registerUser } from '/lib/api'
 
 const StyledError = styled.small`
-  color: ${props => props.theme.colors.red5};
+  color: ${(props) => props.theme.colors.red5};
 `
 
 const StyledInputContainer = styled(Box).attrs({
@@ -22,7 +22,7 @@ const StyledInputContainer = styled(Box).attrs({
     top: -10px;
     right: 0px;
   }
-`  
+`
 
 export const LoginForm = ({ onLogin, redirectTo }) => {
   const router = useRouter()
@@ -31,30 +31,33 @@ export const LoginForm = ({ onLogin, redirectTo }) => {
 
   const { handleSubmit, control, formState, reset } = useForm({
     mode: 'onTouched',
-    defaultValues: { email_address: '' }
+    defaultValues: { email_address: '' },
   })
 
   const { errors, isValid, isDirty } = formState
 
-  const onSubmit = useCallback((data) => {
-    const { email_address } = data
-    const registerApi = async (email_address) => { 
-      try {
-        await registerUser(email_address, redirectTo)
-        if (typeof onLogin === 'function') {
-          onLogin()
+  const onSubmit = useCallback(
+    (data) => {
+      const { email_address } = data
+      const registerApi = async (email_address) => {
+        try {
+          await registerUser(email_address, redirectTo)
+          if (typeof onLogin === 'function') {
+            onLogin()
+          }
+        } catch (e) {
+          setError(e.message)
+          // Reset form to mark `isDirty` as false
+          reset({}, { keepValues: true })
+        } finally {
+          setSubmitting(false)
         }
-      } catch (e) {
-        setError(e.message)
-        // Reset form to mark `isDirty` as false
-        reset({}, { keepValues: true })
-      } finally {
-        setSubmitting(false)
       }
-    }
-    setSubmitting(true)
-    registerApi(email_address)
-  }, [onLogin, reset, redirectTo])
+      setSubmitting(true)
+      registerApi(email_address)
+    },
+    [onLogin, reset, redirectTo],
+  )
 
   useEffect(() => {
     // Remove previous errors when form becomes dirty again
@@ -65,38 +68,34 @@ export const LoginForm = ({ onLogin, redirectTo }) => {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <Flex
-        flexDirection={['column']}
-      >
+      <Flex flexDirection={['column']}>
         <StyledInputContainer>
-           <Controller
-            render={({field}) => (
-              <Input 
-                placeholder='Email *'
-                {...field}
-              />
-            )}
+          <Controller
+            render={({ field }) => <Input placeholder="Email *" {...field} />}
             rules={{
               pattern: {
-                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, 
+                value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
               },
               required: true,
             }}
-            name='email_address'
+            name="email_address"
             control={control}
           />
           <StyledError>{errors?.email_address?.message}</StyledError>
         </StyledInputContainer>
-        {loginError && 
+        {loginError && (
           <Box mt={1}>
             <StyledError>{loginError}</StyledError>
           </Box>
-        }
-        <Box mt={3} alignSelf='center'>
-          {!submitting ? 
-            <Button disabled={!isValid} type='submit'><FormattedMessage id="General.Login" /></Button> :
-            <SpinLoader size={3} margin='1px' />
-          }
+        )}
+        <Box mt={3} alignSelf="center">
+          {!submitting ? (
+            <Button disabled={!isValid} type="submit">
+              <FormattedMessage id="General.Login" />
+            </Button>
+          ) : (
+            <SpinLoader size={3} margin="1px" />
+          )}
         </Box>
       </Flex>
     </form>

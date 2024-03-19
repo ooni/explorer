@@ -1,14 +1,7 @@
 import axios from 'axios'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import {
-  Box,
-  Button,
-  Container,
-  Flex,
-  Heading,
-  Text
-} from 'ooni-components'
+import { Box, Button, Container, Flex, Heading, Text } from 'ooni-components'
 import PropTypes from 'prop-types'
 import React, { useEffect, useState } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
@@ -18,19 +11,25 @@ import styled from 'styled-components'
 import NavBar from '/components/NavBar'
 
 import dynamic from 'next/dynamic'
-import { sortByKey } from '../utils'
 import FormattedMarkdown from '/components/FormattedMarkdown'
-import FilterSidebar, { queryToFilterMap } from '/components/search/FilterSidebar'
+import FilterSidebar, {
+  queryToFilterMap,
+} from '/components/search/FilterSidebar'
 import ResultsList from '/components/search/ResultsList'
+import { sortByKey } from '../utils'
 
-const Loader = dynamic(() => import('/components/search/Loader'), { ssr: false })
+const Loader = dynamic(() => import('/components/search/Loader'), {
+  ssr: false,
+})
 
-export const getServerSideProps = async ({query}) => {
+export const getServerSideProps = async ({ query }) => {
   // By default, on '/search' show measurements published until today
   // including the measurements of today (so the date of tomorrow).
   // This prevents the search page from showing time-travelling future
   // measurements from showing up
-  query.since = query.since || dayjs(query.until).utc().subtract(30, 'day').format('YYYY-MM-DD')
+  query.since =
+    query.since ||
+    dayjs(query.until).utc().subtract(30, 'day').format('YYYY-MM-DD')
   query.until = query.until || dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
 
   // If there is no 'failure' in query, default to a false
@@ -41,7 +40,7 @@ export const getServerSideProps = async ({query}) => {
     query.failure = !(query.failure === 'false')
   }
 
-  const client = axios.create({baseURL: process.env.NEXT_PUBLIC_OONI_API})
+  const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
   const countriesR = await client.get('/api/_/countries')
 
   const countries = countriesR.data.countries
@@ -51,17 +50,27 @@ export const getServerSideProps = async ({query}) => {
     props: {
       countries,
       query,
-    }
+    },
   }
 }
 
 const queryToParams = ({ query }) => {
   let params = {},
     show = 50
-  const supportedParams = ['probe_cc', 'domain', 'input','category_code', 'probe_asn', 'test_name', 'since', 'until', 'failure']
+  const supportedParams = [
+    'probe_cc',
+    'domain',
+    'input',
+    'category_code',
+    'probe_asn',
+    'test_name',
+    'since',
+    'until',
+    'failure',
+  ]
 
   if (query.show) {
-    show = parseInt(query.show)
+    show = Number.parseInt(query.show)
   }
   params['limit'] = show
 
@@ -71,7 +80,7 @@ const queryToParams = ({ query }) => {
   }
 
   for (const p of supportedParams) {
-    if (p in query &&  query[p] !== queryToFilterMap[p][1]) {
+    if (p in query && query[p] !== queryToFilterMap[p][1]) {
       params[p] = query[p]
     }
   }
@@ -86,9 +95,9 @@ const queryToParams = ({ query }) => {
 }
 
 const getMeasurements = (query) => {
-  let client = axios.create({baseURL: process.env.NEXT_PUBLIC_OONI_API})  // eslint-disable-line
+  const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API }) // eslint-disable-line
   const params = queryToParams({ query })
-  return client.get('/api/v1/measurements', {params})
+  return client.get('/api/v1/measurements', { params })
 }
 
 const serializeError = (err) => {
@@ -98,9 +107,13 @@ const serializeError = (err) => {
   return {
     name,
     message,
-    data, status, statusText,
-    baseURL, url, params,
-    stack
+    data,
+    status,
+    statusText,
+    baseURL,
+    url,
+    params,
+    stack,
   }
 }
 
@@ -120,23 +133,19 @@ const ErrorBox = ({ error }) => {
   const { stack, ...restOfError } = error
 
   return (
-    <Box width={[1, 2/3]} mx='auto'>
-      <Flex justifyContent='center' flexDirection='column'>
+    <Box width={[1, 2 / 3]} mx="auto">
+      <Flex justifyContent="center" flexDirection="column">
         <Text my={4}>
-          <FormattedMarkdown id='Search.Error.Message' />
+          <FormattedMarkdown id="Search.Error.Message" />
         </Text>
         <Heading h={5}>
-          <FormattedMessage id='Search.Error.Details.Label' />
+          <FormattedMessage id="Search.Error.Details.Label" />
         </Heading>
-        <Box p={[1, 3]} bg='gray3' my={[1, 2]}>
-          <StyledPre>
-            {JSON.stringify(restOfError, null, '  ')}
-          </StyledPre>
+        <Box p={[1, 3]} bg="gray3" my={[1, 2]}>
+          <StyledPre>{JSON.stringify(restOfError, null, '  ')}</StyledPre>
         </Box>
-        <Box p={[1, 3]} bg='gray3' my={[1, 2]}>
-          <StyledPre>
-            {stack}
-          </StyledPre>
+        <Box p={[1, 3]} bg="gray3" my={[1, 2]}>
+          <StyledPre>{stack}</StyledPre>
         </Box>
       </Flex>
     </Box>
@@ -144,16 +153,23 @@ const ErrorBox = ({ error }) => {
 }
 
 ErrorBox.propTypes = {
-  error: PropTypes.object.isRequired
+  error: PropTypes.object.isRequired,
 }
 
 const NoResults = () => (
-  <Flex alignItems='center' px={[2, 6]} py={6} justifyContent='center' flexWrap='wrap' flexDirection='column'>
-    <Heading h={2} color='blue5'>
-      <FormattedMessage id='Search.Results.Empty.Heading' />
+  <Flex
+    alignItems="center"
+    px={[2, 6]}
+    py={6}
+    justifyContent="center"
+    flexWrap="wrap"
+    flexDirection="column"
+  >
+    <Heading h={2} color="blue5">
+      <FormattedMessage id="Search.Results.Empty.Heading" />
     </Heading>
-    <Heading h={5} textAlign='center'>
-      <FormattedMessage id='Search.Results.Empty.Description' />
+    <Heading h={5} textAlign="center">
+      <FormattedMessage id="Search.Results.Empty.Description" />
     </Heading>
   </Flex>
 )
@@ -172,16 +188,23 @@ const Search = ({ countries, query: queryProp }) => {
     const q = query || queryProp
     const href = {
       pathname: '/search',
-      query: q
+      query: q,
     }
     replace(href, href, { shallow: true })
 
     getMeasurements(q)
-      .then(({ data: { results, metadata: { next_url } } }) => {
-        setLoading(false)
-        setResults(results)
-        setNextURL(next_url)
-      })
+      .then(
+        ({
+          data: {
+            results,
+            metadata: { next_url },
+          },
+        }) => {
+          setLoading(false)
+          setResults(results)
+          setNextURL(next_url)
+        },
+      )
       .catch((err) => {
         console.error(err)
         const error = serializeError(err)
@@ -191,11 +214,19 @@ const Search = ({ countries, query: queryProp }) => {
   }, [])
 
   const loadMore = () => {
-    axios.get(nextURL)
-      .then(({ data: { results:  nextPageResults, metadata: { next_url } } }) => {
-        setResults(results.concat(nextPageResults))
-        setNextURL(next_url)
-      })
+    axios
+      .get(nextURL)
+      .then(
+        ({
+          data: {
+            results: nextPageResults,
+            metadata: { next_url },
+          },
+        }) => {
+          setResults(results.concat(nextPageResults))
+          setNextURL(next_url)
+        },
+      )
       .catch((err) => {
         console.error(err)
         const error = serializeError(err)
@@ -212,26 +243,33 @@ const Search = ({ countries, query: queryProp }) => {
     const query = getFilterQuery(state)
     const href = {
       pathname: '/search',
-      query
+      query,
     }
     router.push(href, href, { shallow: true }).then(() => {
       getMeasurements(query)
-        .then(({ data: { results, metadata: { next_url } } }) => {
-          setLoading(false)
-          setResults(results)
-          setNextURL(next_url)
-        })
+        .then(
+          ({
+            data: {
+              results,
+              metadata: { next_url },
+            },
+          }) => {
+            setLoading(false)
+            setResults(results)
+            setNextURL(next_url)
+          },
+        )
         .catch((err) => {
           console.error(err)
           const error = serializeError(err)
           setError(error)
           setLoading(false)
         })
-      })
+    })
   }
 
   const getFilterQuery = (state) => {
-    let query = {...router.query}
+    const query = { ...router.query }
     const resetValues = [undefined, 'XX', '']
     for (const [queryParam, [key]] of Object.entries(queryToFilterMap)) {
       // If it's unset or marked as XX, let's be sure the path is clean
@@ -262,14 +300,14 @@ const Search = ({ countries, query: queryProp }) => {
   return (
     <>
       <Head>
-        <title>{intl.formatMessage({id: 'Search.PageTitle'})}</title>
+        <title>{intl.formatMessage({ id: 'Search.PageTitle' })}</title>
       </Head>
 
       <NavBar />
 
       <Container>
-        <Flex pt={3} flexWrap='wrap'>
-          <Box width={[1, 1/4]} px={2}>
+        <Flex pt={3} flexWrap="wrap">
+          <Box width={[1, 1 / 4]} px={2}>
             <FilterSidebar
               domainFilter={query.domain}
               inputFilter={query.input}
@@ -285,22 +323,28 @@ const Search = ({ countries, query: queryProp }) => {
               countries={countries}
             />
           </Box>
-          <Box width={[1, 3/4]} px={2}>
+          <Box width={[1, 3 / 4]} px={2}>
             {error && <ErrorBox error={error} />}
-            {loading && <Box my={4}><Loader /></Box>}
-            {!error && !loading && results.length === 0 && <NoResults />}
-            {!error && !loading && results.length > 0 && <>
+            {loading && (
               <Box my={4}>
-                <ResultsList results={results} />
+                <Loader />
               </Box>
-              {nextURL &&
-                <Flex alignItems='center' justifyContent='center'>
-                  <Button onClick={loadMore} data-test-id='load-more-button'>
-                    <FormattedMessage id='Search.Button.LoadMore' />
-                  </Button>
-                </Flex>
-              }
-            </>}
+            )}
+            {!error && !loading && results.length === 0 && <NoResults />}
+            {!error && !loading && results.length > 0 && (
+              <>
+                <Box my={4}>
+                  <ResultsList results={results} />
+                </Box>
+                {nextURL && (
+                  <Flex alignItems="center" justifyContent="center">
+                    <Button onClick={loadMore} data-test-id="load-more-button">
+                      <FormattedMessage id="Search.Button.LoadMore" />
+                    </Button>
+                  </Flex>
+                )}
+              </>
+            )}
           </Box>
         </Flex>
       </Container>

@@ -1,10 +1,10 @@
 import { Box, Flex, Text, theme } from 'ooni-components'
+import * as icons from 'ooni-components/icons'
 import PropTypes from 'prop-types'
 import { cloneElement } from 'react'
 import { FormattedMessage } from 'react-intl'
 import styled from 'styled-components'
 import { getTestMetadata } from './utils'
-import * as icons from 'ooni-components/icons'
 
 // XXX replace what is inside of search/results-list.StyledResultTag
 export const Badge = styled(Box)`
@@ -15,7 +15,8 @@ export const Badge = styled(Box)`
   font-size: 12px;
   text-transform: uppercase;
   background-color: ${(props) => props.bg || props.theme.colors.gray8};
-  border: ${(props) => (props.borderColor ? `1px solid ${props.borderColor}` : 'none')};
+  border: ${(props) =>
+    props.borderColor ? `1px solid ${props.borderColor}` : 'none'};
   color: ${(props) => props.color || props.theme.colors.white};
   letter-spacing: 1.25px;
   font-weight: 600;
@@ -43,7 +44,11 @@ export const CategoryBadge = ({ categoryCode }) => {
   }
 
   return (
-    <Badge bg="#ffffff" borderColor={theme.colors.gray5} color={theme.colors.gray7}>
+    <Badge
+      bg="#ffffff"
+      borderColor={theme.colors.gray5}
+      color={theme.colors.gray7}
+    >
       <Flex sx={{ gap: 1 }} alignItems="center">
         <Box>
           <FormattedMessage id={`CategoryCode.${categoryCode}.Name`} />

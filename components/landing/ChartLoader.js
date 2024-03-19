@@ -1,6 +1,6 @@
+import { theme } from 'ooni-components'
 import React from 'react'
 import ContentLoader from 'react-content-loader'
-import { theme } from 'ooni-components'
 
 export const ChartLoader = () => (
   <ContentLoader
@@ -23,6 +23,5 @@ export const ChartLoader = () => (
 
     <rect x="254" y="155" rx="3" ry="3" width="16" height="4" />
     <rect x="278" y="155" rx="3" ry="3" width="66" height="4" />
-
   </ContentLoader>
 )

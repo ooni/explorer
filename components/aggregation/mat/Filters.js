@@ -1,7 +1,21 @@
 import { Box, Button, Flex, Text } from 'ooni-components'
-import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
-import { useAsyncDebounce, useFlexLayout, useGlobalFilter, useRowSelect, useSortBy, useTable } from 'react-table'
+import {
+  useAsyncDebounce,
+  useFlexLayout,
+  useGlobalFilter,
+  useRowSelect,
+  useSortBy,
+  useTable,
+} from 'react-table'
 import { useVirtual } from 'react-virtual'
 import 'regenerator-runtime'
 import styled from 'styled-components'
@@ -10,7 +24,9 @@ import { DetailsBox } from '../../measurement/DetailsBox'
 import { sortRows } from './computations'
 
 const TableContainer = styled.div`
-  ${'' /* These styles are suggested for the table fill all available space in its containing element */}
+  ${
+    '' /* These styles are suggested for the table fill all available space in its containing element */
+  }
   flex: 1;
 `
 
@@ -54,22 +70,20 @@ const TableBody = styled.div`
   overflow: auto;
 `
 
-const IndeterminateCheckbox = forwardRef(
-  ({ indeterminate, ...rest }, ref) => {
-    const defaultRef = useRef()
-    const resolvedRef = ref || defaultRef
+const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
+  const defaultRef = useRef()
+  const resolvedRef = ref || defaultRef
 
-    useEffect(() => {
-      resolvedRef.current.indeterminate = indeterminate
-    }, [resolvedRef, indeterminate])
+  useEffect(() => {
+    resolvedRef.current.indeterminate = indeterminate
+  }, [resolvedRef, indeterminate])
 
-    return (
-      <>
-        <input type="checkbox" ref={resolvedRef} {...rest} />
-      </>
-    )
-  }
-)
+  return (
+    <>
+      <input type="checkbox" ref={resolvedRef} {...rest} />
+    </>
+  )
+})
 IndeterminateCheckbox.displayName = 'IndeterminateCheckbox'
 
 const SearchFilter = ({
@@ -81,10 +95,13 @@ const SearchFilter = ({
   return (
     <input
       value={filterValue || ''}
-      onChange={e => {
+      onChange={(e) => {
         setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
       }}
-      placeholder={intl.formatMessage({id: 'MAT.Table.FilterPlaceholder'}, {count})}
+      placeholder={intl.formatMessage(
+        { id: 'MAT.Table.FilterPlaceholder' },
+        { count },
+      )}
     />
   )
 }
@@ -106,7 +123,7 @@ function GlobalFilter({
   const intl = useIntl()
   const count = preGlobalFilteredRows.length
   const [value, setValue] = useState(globalFilter)
-  const onChange = useAsyncDebounce(value => {
+  const onChange = useAsyncDebounce((value) => {
     setGlobalFilter(value || '')
   }, 200)
 
@@ -118,14 +135,17 @@ function GlobalFilter({
 
   return (
     <StyledGlobalFilter>
-      {intl.formatMessage({id: 'MAT.Table.Search'})}{' '}
+      {intl.formatMessage({ id: 'MAT.Table.Search' })}{' '}
       <input
         value={value || ''}
-        onChange={e => {
+        onChange={(e) => {
           setValue(e.target.value)
           onChange(e.target.value)
         }}
-        placeholder={intl.formatMessage({id: 'MAT.Table.FilterPlaceholder'}, {count})}
+        placeholder={intl.formatMessage(
+          { id: 'MAT.Table.FilterPlaceholder' },
+          { count },
+        )}
       />
     </StyledGlobalFilter>
   )
@@ -133,12 +153,9 @@ function GlobalFilter({
 
 const SortHandle = ({ isSorted, isSortedDesc }) => {
   return (
-    <Box as='code' ml={1}>
-      {isSorted ? (
-        isSortedDesc ? '▼' : '▲'
-      ) : (
-        <Box as='code'>&nbsp;</Box>
-    )}</Box>
+    <Box as="code" ml={1}>
+      {isSorted ? isSortedDesc ? '▼' : '▲' : <Box as="code">&nbsp;</Box>}
+    </Box>
   )
 }
 
@@ -158,81 +175,87 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
       Filter: SearchFilter,
       Cell: ({ value }) => {
         const intl = useIntl()
-        return typeof value === 'number' ? intl.formatNumber(value, {}) : String(value)
-      }
+        return typeof value === 'number'
+          ? intl.formatNumber(value, {})
+          : String(value)
+      },
     }),
-    []
+    [],
   )
 
   // Aggregate by the first column
-  const initialState = useMemo(() => ({
-    hiddenColumns: ['yAxisCode'],
-    sortBy: [{ id: 'yAxisLabel', desc: false }]
-  }),[])
+  const initialState = useMemo(
+    () => ({
+      hiddenColumns: ['yAxisCode'],
+      sortBy: [{ id: 'yAxisLabel', desc: false }],
+    }),
+    [],
+  )
 
-  const getRowId = useCallback(row => row[query.axis_y], [query.axis_y])
+  const getRowId = useCallback((row) => row[query.axis_y], [query.axis_y])
 
-  const columns = useMemo(() => [
-    {
-      Header: intl.formatMessage({ id: `MAT.Table.Header.${yAxis}`}),
-      Cell: ({ value, row }) => (
-        <Text fontWeight={row.isSelected ? 'bold' : 'initial'}>
-          {value}
-        </Text>
-      ),
-      id: 'yAxisLabel',
-      accessor: 'rowLabel',
-      filter: 'text',
-      style: {
-        width: '35%'
-      }
-    },
-    {
-      id: 'yAxisCode',
-      accessor: yAxis,
-      disableFilters: true,
-    },
-    {
-      Header: <FormattedMessage id='MAT.Table.Header.anomaly_count' />,
-      accessor: 'anomaly_count',
-      width: 150,
-      sortDescFirst: true,
-      disableFilters: true,
-      style: {
-        textAlign: 'end'
-      }
-    },
-    {
-      Header: <FormattedMessage id='MAT.Table.Header.confirmed_count' />,
-      accessor: 'confirmed_count',
-      width: 150,
-      sortDescFirst: true,
-      disableFilters: true,
-      style: {
-        textAlign: 'end'
-      }
-    },
-    {
-      Header: <FormattedMessage id='MAT.Table.Header.failure_count' />,
-      accessor: 'failure_count',
-      width: 150,
-      sortDescFirst: true,
-      disableFilters: true,
-      style: {
-        textAlign: 'end'
-      }
-    },
-    {
-      Header: <FormattedMessage id='MAT.Table.Header.measurement_count' />,
-      accessor: 'measurement_count',
-      width: 150,
-      sortDescFirst: true,
-      disableFilters: true,
-      style: {
-        textAlign: 'end'
-      }
-    }
-  ], [intl, yAxis])
+  const columns = useMemo(
+    () => [
+      {
+        Header: intl.formatMessage({ id: `MAT.Table.Header.${yAxis}` }),
+        Cell: ({ value, row }) => (
+          <Text fontWeight={row.isSelected ? 'bold' : 'initial'}>{value}</Text>
+        ),
+        id: 'yAxisLabel',
+        accessor: 'rowLabel',
+        filter: 'text',
+        style: {
+          width: '35%',
+        },
+      },
+      {
+        id: 'yAxisCode',
+        accessor: yAxis,
+        disableFilters: true,
+      },
+      {
+        Header: <FormattedMessage id="MAT.Table.Header.anomaly_count" />,
+        accessor: 'anomaly_count',
+        width: 150,
+        sortDescFirst: true,
+        disableFilters: true,
+        style: {
+          textAlign: 'end',
+        },
+      },
+      {
+        Header: <FormattedMessage id="MAT.Table.Header.confirmed_count" />,
+        accessor: 'confirmed_count',
+        width: 150,
+        sortDescFirst: true,
+        disableFilters: true,
+        style: {
+          textAlign: 'end',
+        },
+      },
+      {
+        Header: <FormattedMessage id="MAT.Table.Header.failure_count" />,
+        accessor: 'failure_count',
+        width: 150,
+        sortDescFirst: true,
+        disableFilters: true,
+        style: {
+          textAlign: 'end',
+        },
+      },
+      {
+        Header: <FormattedMessage id="MAT.Table.Header.measurement_count" />,
+        accessor: 'measurement_count',
+        width: 150,
+        sortDescFirst: true,
+        disableFilters: true,
+        style: {
+          textAlign: 'end',
+        },
+      },
+    ],
+    [intl, yAxis],
+  )
 
   const {
     getTableProps,
@@ -279,22 +302,33 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
             <div>
               <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
             </div>
-          )
+          ),
         },
-        ...columns
+        ...columns,
       ])
-    }
+    },
   )
-  
-  const updateCharts = useCallback(() => {
-    const selectedRows = Object.keys(state.selectedRowIds).sort((a,b) => sortRows(a, b, query.axis_y, intl.locale))
 
-    if (selectedRows.length > 0 && selectedRows.length !== preGlobalFilteredRows.length) {
+  const updateCharts = useCallback(() => {
+    const selectedRows = Object.keys(state.selectedRowIds).sort((a, b) =>
+      sortRows(a, b, query.axis_y, intl.locale),
+    )
+
+    if (
+      selectedRows.length > 0 &&
+      selectedRows.length !== preGlobalFilteredRows.length
+    ) {
       setDataForCharts(selectedRows)
     } else {
       setDataForCharts(noRowsSelected)
     }
-  }, [preGlobalFilteredRows.length, query.axis_y, state.selectedRowIds, setDataForCharts, intl.locale])
+  }, [
+    preGlobalFilteredRows.length,
+    query.axis_y,
+    state.selectedRowIds,
+    setDataForCharts,
+    intl.locale,
+  ])
 
   /**
    * Reset the table filter
@@ -312,7 +346,12 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
       setGlobalFilter('')
     }
     setDataForCharts(noRowsSelected)
-  }, [setGlobalFilter, state.globalFilter, toggleAllRowsSelected, setDataForCharts])
+  }, [
+    setGlobalFilter,
+    state.globalFilter,
+    toggleAllRowsSelected,
+    setDataForCharts,
+  ])
 
   useEffect(() => {
     if (state.globalFilter == undefined && resetTableRef.current === true) {
@@ -331,11 +370,18 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
   })
 
   return (
-    <DetailsBox title={intl.formatMessage({id: 'MAT.Table.Filters'})} collapsed={false}>
-      <Flex flexDirection='column'>
-        <Flex mb={3} alignItems='center'>
-          <Button hollow onClick={updateCharts}>{intl.formatMessage({id: 'General.Apply'})}</Button>
-          <Button inverted onClick={resetFilter} mx={3}>{intl.formatMessage({id: 'General.Reset'})}</Button>
+    <DetailsBox
+      title={intl.formatMessage({ id: 'MAT.Table.Filters' })}
+      collapsed={false}
+    >
+      <Flex flexDirection="column">
+        <Flex mb={3} alignItems="center">
+          <Button hollow onClick={updateCharts}>
+            {intl.formatMessage({ id: 'General.Apply' })}
+          </Button>
+          <Button inverted onClick={resetFilter} mx={3}>
+            {intl.formatMessage({ id: 'General.Reset' })}
+          </Button>
         </Flex>
         <TableContainer>
           <Table {...getTableProps()}>
@@ -344,20 +390,26 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
                 <TableRow key={i} {...headerGroup.getHeaderGroupProps()}>
                   {headerGroup.headers.map((column, i) => {
                     return (
-                      <Cell key={i} {...column.getHeaderProps([
-                        {
-                          style: column.style
-                        }
-                      ])}>
+                      <Cell
+                        key={i}
+                        {...column.getHeaderProps([
+                          {
+                            style: column.style,
+                          },
+                        ])}
+                      >
                         <span {...column.getSortByToggleProps()}>
                           {column.render('Header')}
-                          {column.canSort &&
-                            <SortHandle isSorted={column.isSorted} isSortedDesc={column.isSortedDesc} />
-                          }
+                          {column.canSort && (
+                            <SortHandle
+                              isSorted={column.isSorted}
+                              isSortedDesc={column.isSortedDesc}
+                            />
+                          )}
                         </span>
                       </Cell>
-                    )}
-                  )}
+                    )
+                  })}
                 </TableRow>
               ))}
               <TableRow>
@@ -374,17 +426,17 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
                 display: 'block',
                 height: '200px',
                 overflow: 'auto',
-                width: '100%'
+                width: '100%',
               }}
             >
               <TableBody
                 style={{
                   display: 'block',
                   height: `${totalSize}px`,
-                  position: 'relative'
+                  position: 'relative',
                 }}
               >
-                {virtualRows.map(virtualRow => {
+                {virtualRows.map((virtualRow) => {
                   const row = rows[virtualRow.index]
                   prepareRow(row)
                   return (
@@ -398,18 +450,20 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
                           left: 0,
                           width: '100%',
                           height: `${virtualRow.size}px`,
-                          transform: `translateY(${virtualRow.start}px)`
-                        }
-                      })}>
+                          transform: `translateY(${virtualRow.start}px)`,
+                        },
+                      })}
+                    >
                       {row.cells.map((cell, i) => {
                         return (
                           <Cell
                             key={i}
                             {...cell.getCellProps([
                               {
-                                style: cell.column.style
-                              }
-                            ])}>
+                                style: cell.column.style,
+                              },
+                            ])}
+                          >
                             {cell.render('Cell')}
                           </Cell>
                         )
