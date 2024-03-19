@@ -1,10 +1,10 @@
+import { useRouter } from 'next/router'
+import { Box, Container, Flex, Heading, Text } from 'ooni-components'
 /* global process */
 import React from 'react'
-import { Container, Flex, Box, Heading, Text } from 'ooni-components'
-import { useRouter } from 'next/router'
 
-import OONI404 from '../public/static/images/OONI_404.svg'
 import { useIntl } from 'react-intl'
+import OONI404 from '../public/static/images/OONI_404.svg'
 
 const NotFound = ({ title }) => {
   const { asPath } = useRouter()

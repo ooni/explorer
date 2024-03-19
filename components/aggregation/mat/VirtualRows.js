@@ -1,10 +1,10 @@
+import { Flex } from 'ooni-components'
 import PropTypes from 'prop-types'
 import React, { useCallback } from 'react'
-import { Flex } from 'ooni-components'
 import styled from 'styled-components'
 
-import RowChart from './RowChart'
 import { defaultRangeExtractor, useVirtual } from 'react-virtual'
+import RowChart from './RowChart'
 
 const GRID_ROW_CSS_SELECTOR = 'outerListElement'
 const ROW_HEIGHT = 70
@@ -24,10 +24,10 @@ const StickyRow = styled.div`
 const useKeepMountedRangeExtractor = () => {
   const renderedRef = React.useRef(new Set())
 
-  const rangeExtractor = React.useCallback(range => {
+  const rangeExtractor = React.useCallback((range) => {
     renderedRef.current = new Set([
       ...renderedRef.current,
-      ...defaultRangeExtractor(range)
+      ...defaultRangeExtractor(range),
     ])
     return Array.from(renderedRef.current)
   }, [])
@@ -35,8 +35,15 @@ const useKeepMountedRangeExtractor = () => {
   return rangeExtractor
 }
 
-export const VirtualRows = ({ data, rows, rowLabels, gridHeight, indexBy, tooltipIndex, xAxis = null }) => {
-
+export const VirtualRows = ({
+  data,
+  rows,
+  rowLabels,
+  gridHeight,
+  indexBy,
+  tooltipIndex,
+  xAxis = null,
+}) => {
   const parentRef = React.useRef()
   const keepMountedRangeExtractor = useKeepMountedRangeExtractor()
 
@@ -49,7 +56,9 @@ export const VirtualRows = ({ data, rows, rowLabels, gridHeight, indexBy, toolti
     paddingStart: 62, // for the sticky x-axis
     overscan: 0,
     keyExtractor,
-    rangeExtractor: retainMountedRows ? keepMountedRangeExtractor : defaultRangeExtractor
+    rangeExtractor: retainMountedRows
+      ? keepMountedRangeExtractor
+      : defaultRangeExtractor,
   })
 
   return (
@@ -64,14 +73,10 @@ export const VirtualRows = ({ data, rows, rowLabels, gridHeight, indexBy, toolti
         style={{
           height: `${rowVirtualizer.totalSize}px`,
           width: '100%',
-          position: 'relative'
+          position: 'relative',
         }}
       >
-        {xAxis &&
-          <StickyRow>
-            {xAxis}
-          </StickyRow>
-        }
+        {xAxis && <StickyRow>{xAxis}</StickyRow>}
         {rowVirtualizer.virtualItems.map((virtualRow) => (
           <div
             key={virtualRow.index}
@@ -82,7 +87,7 @@ export const VirtualRows = ({ data, rows, rowLabels, gridHeight, indexBy, toolti
               width: '100%',
               height: `${virtualRow.size}px`,
               transform: `translateY(${virtualRow.start}px)`,
-              zIndex: tooltipIndex[0] === virtualRow.index ? 1 : 0
+              zIndex: tooltipIndex[0] === virtualRow.index ? 1 : 0,
             }}
           >
             <RowChart

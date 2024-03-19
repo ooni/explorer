@@ -10,7 +10,7 @@ Sentry.init({
   dsn: SENTRY_DSN,
   ignoreErrors: [
     /^ResizeObserver loop limit exceeded$/,
-    /^ResizeObserver loop completed with undelivered notifications.$/
+    /^ResizeObserver loop completed with undelivered notifications.$/,
   ],
   // Adjust this value in production, or use tracesSampler for greater control
   tracesSampleRate: 1,

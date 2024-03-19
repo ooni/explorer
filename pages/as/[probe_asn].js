@@ -3,7 +3,10 @@ import CallToActionBox from 'components/CallToActionBox'
 import Chart from 'components/Chart'
 import CountryList from 'components/CountryBox'
 import NavBar from 'components/NavBar'
-import { StyledHollowButton, StyledSticky } from 'components/SharedStyledComponents'
+import {
+  StyledHollowButton,
+  StyledSticky,
+} from 'components/SharedStyledComponents'
 import ThirdPartyDataChart from 'components/ThirdPartyDataChart'
 import Calendar from 'components/as/Calendar'
 import Loader from 'components/as/Loader'
@@ -20,8 +23,8 @@ import dayjs from 'services/dayjs'
 import { fetcherWithPreprocessing, simpleFetcher } from 'services/fetchers'
 import styled from 'styled-components'
 import useSWR from 'swr'
-import { toCompactNumberUnit } from '../../utils'
 import TestGroupBadge from '/components/Badge'
+import { toCompactNumberUnit } from '../../utils'
 
 const swrOptions = {
   revalidateOnFocus: false,
@@ -41,7 +44,12 @@ StyledSection.defaultProps = {
   my: 4,
 }
 
-const messagingTestNames = ['signal', 'telegram', 'whatsapp', 'facebook_messenger']
+const messagingTestNames = [
+  'signal',
+  'telegram',
+  'whatsapp',
+  'facebook_messenger',
+]
 const circumventionTestNames = ['psiphon', 'tor', 'torsf']
 
 const ChartsContainer = () => {
@@ -62,7 +70,7 @@ const ChartsContainer = () => {
       test_name: 'web_connectivity',
       time_grain: 'day',
     }),
-    [probe_asn, since, until, probe_cc]
+    [probe_asn, since, until, probe_cc],
   )
 
   const queryMessagingApps = useMemo(
@@ -76,7 +84,7 @@ const ChartsContainer = () => {
       ...(probe_cc && { probe_cc }),
       time_grain: 'day',
     }),
-    [probe_asn, since, until, probe_cc]
+    [probe_asn, since, until, probe_cc],
   )
 
   const queryCircumventionTools = useMemo(
@@ -90,21 +98,21 @@ const ChartsContainer = () => {
       ...(probe_cc && { probe_cc }),
       time_grain: 'day',
     }),
-    [probe_asn, since, until, probe_cc]
+    [probe_asn, since, until, probe_cc],
   )
 
   return (
     <>
       <StyledSection>
-        <TestGroupBadge mb={3} testName='web_connectivity' />
+        <TestGroupBadge mb={3} testName="web_connectivity" />
         <Chart queryParams={queryWebsites} />
       </StyledSection>
       <StyledSection>
-        <TestGroupBadge mb={3} testName='signal' />
+        <TestGroupBadge mb={3} testName="signal" />
         <Chart queryParams={queryMessagingApps} />
       </StyledSection>
       <StyledSection>
-        <TestGroupBadge mb={3} testName='tor' />
+        <TestGroupBadge mb={3} testName="tor" />
         <Chart queryParams={queryCircumventionTools} />
       </StyledSection>
     </>
@@ -136,7 +144,7 @@ const StatsItem = ({ label, unit = null, value }) => (
     <Text fontSize={36} fontWeight={300}>
       {value}
       {unit && (
-        <Text as='span' fontSize={32}>
+        <Text as="span" fontSize={32}>
           {unit}
         </Text>
       )}
@@ -150,7 +158,10 @@ const Summary = ({ measurementsTotal, firstMeasurement, lastMeasurement }) => {
     dateStyle: 'long',
     timeZone: 'UTC',
   }).format(new Date(firstMeasurement))
-  measurementsTotal = measurementsTotal < 10000 ? { value: measurementsTotal } : toCompactNumberUnit(measurementsTotal)
+  measurementsTotal =
+    measurementsTotal < 10000
+      ? { value: measurementsTotal }
+      : toCompactNumberUnit(measurementsTotal)
   const formattedLastMeasurement = new Intl.DateTimeFormat(intl.locale, {
     dateStyle: 'long',
     timeZone: 'UTC',
@@ -159,7 +170,7 @@ const Summary = ({ measurementsTotal, firstMeasurement, lastMeasurement }) => {
   return (
     <>
       <Heading h={3} mt={4} mb={3}>
-        <FormattedMessage id='Network.Summary.Coverage' />
+        <FormattedMessage id="Network.Summary.Coverage" />
       </Heading>
       <Flex sx={{ gap: 4 }} mb={3}>
         <StatsItem
@@ -183,13 +194,18 @@ const Summary = ({ measurementsTotal, firstMeasurement, lastMeasurement }) => {
 }
 
 const CountriesList = ({ countriesData }) => {
-  const sortedCountries = countriesData.sort((a, b) => b.measurements - a.measurements)
+  const sortedCountries = countriesData.sort(
+    (a, b) => b.measurements - a.measurements,
+  )
   const numberOfCountries = countriesData.length
 
   return (
     <>
       <Heading h={3}>
-        <FormattedMessage id='Network.Summary.Countries' values={{ numberOfCountries }} />
+        <FormattedMessage
+          id="Network.Summary.Countries"
+          values={{ numberOfCountries }}
+        />
       </Heading>
       <CountryList countries={sortedCountries} />
     </>
@@ -215,33 +231,36 @@ const NetworkDashboard = ({ probe_asn, networkName, countriesData }) => {
   const { data: calendarData, error: calendarDataError } = useSWR(
     [
       '/api/v1/aggregation',
-      { params: {
-        probe_asn,
-        since: dayjs.utc().subtract(12, 'year').format('YYYY-MM-DD'),
-        until: dayjs.utc().add(1, 'day').format('YYYY-MM-DD'),
-        axis_x: 'measurement_start_day',
+      {
+        params: {
+          probe_asn,
+          since: dayjs.utc().subtract(12, 'year').format('YYYY-MM-DD'),
+          until: dayjs.utc().add(1, 'day').format('YYYY-MM-DD'),
+          axis_x: 'measurement_start_day',
         },
         resultKey: 'result',
         preprocessFn: prepareDataForCalendar,
       },
     ],
     fetcherWithPreprocessing,
-    swrOptions
+    swrOptions,
   )
 
   const measurementsTotal = useMemo(() => {
-    return calendarData?.length ? calendarData.reduce((a, b) => a + b.value, 0) : null
+    return calendarData?.length
+      ? calendarData.reduce((a, b) => a + b.value, 0)
+      : null
   }, [calendarData])
 
   const { data: recentMeasurements, error: recentMeasurementsError } = useSWR(
     ['/api/v1/measurements', { limit: 5, failure: false, probe_asn }],
     simpleFetcher,
-    swrOptions
+    swrOptions,
   )
 
   // Sync page URL params with changes from form values
   const onSubmit = (data) => {
-    let params = {}
+    const params = {}
     for (const p of Object.keys(data)) {
       if (data[p]) {
         params[p] = data[p]
@@ -253,7 +272,11 @@ const NetworkDashboard = ({ probe_asn, networkName, countriesData }) => {
 
     const { since, until, probe_cc } = params
 
-    if (query.since !== since || query.until !== until || query.probe_cc !== probe_cc) {
+    if (
+      query.since !== since ||
+      query.until !== until ||
+      query.probe_cc !== probe_cc
+    ) {
       router.push({ query: params }, undefined, { shallow: true })
     }
   }
@@ -262,7 +285,8 @@ const NetworkDashboard = ({ probe_asn, networkName, countriesData }) => {
     <>
       <Head>
         <title>
-          {intl.formatMessage({ id: 'General.OoniExplorer' })} | {probe_asn} {networkName}
+          {intl.formatMessage({ id: 'General.OoniExplorer' })} | {probe_asn}{' '}
+          {networkName}
         </title>
       </Head>
       <NavBar />
@@ -289,21 +313,33 @@ const NetworkDashboard = ({ probe_asn, networkName, countriesData }) => {
                   {/* we want sticky header only while scrolling over the charts */}
                   <StyledSticky>
                     <Box pb={3} pt={2}>
-                      <Form onSubmit={onSubmit} availableCountries={countriesData.map((c) => c.country)} />
+                      <Form
+                        onSubmit={onSubmit}
+                        availableCountries={countriesData.map((c) => c.country)}
+                      />
                     </Box>
                   </StyledSticky>
                   <ChartsContainer />
                 </Box>
-                {since && until && <ThirdPartyDataChart since={since} until={until} asn={displayASN} />}
+                {since && until && (
+                  <ThirdPartyDataChart
+                    since={since}
+                    until={until}
+                    asn={displayASN}
+                  />
+                )}
                 {!!recentMeasurements?.length && (
-                  <RecentMeasurements recentMeasurements={recentMeasurements} query={query} />
+                  <RecentMeasurements
+                    recentMeasurements={recentMeasurements}
+                    query={query}
+                  />
                 )}
               </>
             )}
             {calendarData?.length === 0 && (
               <CallToActionBox
-                title={<FormattedMessage id='Network.NoData.Title' />}
-                text={<FormattedMessage id='Network.NoData.Text' />}
+                title={<FormattedMessage id="Network.NoData.Title" />}
+                text={<FormattedMessage id="Network.NoData.Text" />}
               />
             )}
           </>
@@ -331,7 +367,7 @@ export const getServerSideProps = async (context) => {
         response.data.result.map((res) => ({
           country: res.probe_cc,
           measurements: res.measurement_count,
-        }))
+        })),
       )
 
     const networkName = await client

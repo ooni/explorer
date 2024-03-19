@@ -1,16 +1,16 @@
-/* global process */
-import React, { useCallback, useEffect } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { Container, Heading, Flex, Box, Link } from 'ooni-components'
+import { Box, Container, Flex, Heading, Link } from 'ooni-components'
+/* global process */
+import React, { useCallback, useEffect } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 
+import MATChart from 'components/MATChart'
 import NavBar from 'components/NavBar'
 import { Form } from 'components/aggregation/mat/Form'
-import { FaExternalLinkAlt } from 'react-icons/fa'
 import Help from 'components/aggregation/mat/Help'
+import { FaExternalLinkAlt } from 'react-icons/fa'
 import dayjs from 'services/dayjs'
-import MATChart from 'components/MATChart'
 
 const MeasurementAggregationToolkit = () => {
   const intl = useIntl()
@@ -19,7 +19,7 @@ const MeasurementAggregationToolkit = () => {
 
   const onSubmit = useCallback(
     (data) => {
-      let params = {}
+      const params = {}
       for (const p of Object.keys(data)) {
         if (data[p] !== '') {
           params[p] = data[p]
@@ -31,7 +31,7 @@ const MeasurementAggregationToolkit = () => {
       }
       return router.push(href, href, { shallow: true })
     },
-    [router]
+    [router],
   )
 
   // Upon mount, check if the page was accessed without query params
@@ -59,9 +59,9 @@ const MeasurementAggregationToolkit = () => {
 
   let linkToAPIQuery = null
   try {
-    linkToAPIQuery = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation?${new URLSearchParams(
-      query
-    ).toString()}`
+    linkToAPIQuery = `${
+      process.env.NEXT_PUBLIC_OONI_API
+    }/api/v1/aggregation?${new URLSearchParams(query).toString()}`
   } catch (e) {
     console.error(`Failed to construct API query link: ${e.message}`)
   }
@@ -86,7 +86,12 @@ const MeasurementAggregationToolkit = () => {
             <Box mt={[3]} ml={['unset', 'auto']}>
               <Flex>
                 <Box>
-                  <Link as="a" href={linkToAPIQuery} target="_blank" title="opens in new tab">
+                  <Link
+                    as="a"
+                    href={linkToAPIQuery}
+                    target="_blank"
+                    title="opens in new tab"
+                  >
                     {intl.formatMessage({ id: 'MAT.JSONData' })}
                     <FaExternalLinkAlt />
                   </Link>

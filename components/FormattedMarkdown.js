@@ -1,10 +1,10 @@
+import Markdown from 'markdown-to-jsx'
+import { Link, theme } from 'ooni-components'
+import PropTypes from 'prop-types'
 // Documentation for markdown-to-jsx
 // https://github.com/probablyup/markdown-to-jsx
 import React from 'react'
-import PropTypes from 'prop-types'
 import { useIntl } from 'react-intl'
-import Markdown from 'markdown-to-jsx'
-import { Link, theme } from 'ooni-components'
 
 export const FormattedMarkdownBase = ({ children }) => {
   return (
@@ -14,10 +14,10 @@ export const FormattedMarkdownBase = ({ children }) => {
           a: {
             component: Link,
             props: {
-              color: theme.colors.blue7
-            }
+              color: theme.colors.blue7,
+            },
           },
-        }
+        },
       }}
     >
       {children}
@@ -30,7 +30,7 @@ const FormattedMarkdown = ({ id, defaultMessage, values }) => {
 
   return (
     <FormattedMarkdownBase>
-      {intl.formatMessage({id, defaultMessage}, values )}
+      {intl.formatMessage({ id, defaultMessage }, values)}
     </FormattedMarkdownBase>
   )
 }
@@ -38,7 +38,7 @@ const FormattedMarkdown = ({ id, defaultMessage, values }) => {
 FormattedMarkdown.propTypes = {
   id: PropTypes.string.isRequired,
   defaultMessage: PropTypes.string,
-  values: PropTypes.object
+  values: PropTypes.object,
 }
 
 export default FormattedMarkdown

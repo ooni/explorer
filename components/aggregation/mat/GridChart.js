@@ -1,18 +1,18 @@
-import React, { useMemo, useRef } from 'react'
-import PropTypes from 'prop-types'
-import { TooltipProvider, Tooltip } from '@nivo/tooltip'
 import { Container } from '@nivo/core'
+import { Tooltip, TooltipProvider } from '@nivo/tooltip'
 import { Flex } from 'ooni-components'
+import PropTypes from 'prop-types'
+import React, { useMemo, useRef } from 'react'
 
-import RowChart from './RowChart'
-import { sortRows, fillDataHoles } from './computations'
-import { useMATContext } from './MATContext'
 import { ChartHeader } from './ChartHeader'
-import { getRowLabel } from './labels'
+import { barThemeForTooltip } from './CustomTooltip'
+import { useMATContext } from './MATContext'
+import { NoCharts } from './NoCharts'
+import RowChart from './RowChart'
 import { VirtualRows } from './VirtualRows'
 import { XAxis } from './XAxis'
-import { barThemeForTooltip } from './CustomTooltip'
-import { NoCharts } from './NoCharts'
+import { fillDataHoles, sortRows } from './computations'
+import { getRowLabel } from './labels'
 
 const ROW_HEIGHT = 70
 const XAXIS_HEIGHT = 62
@@ -60,7 +60,9 @@ export const prepareDataForGridChart = (data, query, locale) => {
 
   const reshapedDataWithoutHoles = fillDataHoles(reshapedData, query)
 
-  const sortedRowKeys = rows.sort((a, b) => (sortRows(rowLabels[a], rowLabels[b], query.axis_y, locale)))
+  const sortedRowKeys = rows.sort((a, b) =>
+    sortRows(rowLabels[a], rowLabels[b], query.axis_y, locale),
+  )
 
   return [reshapedDataWithoutHoles, sortedRowKeys, rowLabels]
 }
@@ -86,11 +88,18 @@ export const prepareDataForGridChart = (data, query, locale) => {
  * header - an element showing some summary information on top of the charts
 }
 */
-const GridChart = ({ data, rowKeys, rowLabels, height = 'auto', header, selectedRows = null, noLabels = false }) => {
-
+const GridChart = ({
+  data,
+  rowKeys,
+  rowLabels,
+  height = 'auto',
+  header,
+  selectedRows = null,
+  noLabels = false,
+}) => {
   // Fetch query state from context instead of router
   // because some params not present in the URL are injected in the context
-  const [ query ] = useMATContext()
+  const [query] = useMATContext()
   const { tooltipIndex } = query
   const indexBy = query.axis_x
   const tooltipContainer = useRef(null)
@@ -108,39 +117,39 @@ const GridChart = ({ data, rowKeys, rowLabels, height = 'auto', header, selected
   let gridHeight = height
   if (height === 'auto') {
     const rowCount = selectedRows?.length ?? rowKeys.length
-    gridHeight = Math.min( XAXIS_HEIGHT + (rowCount * ROW_HEIGHT), GRID_MAX_HEIGHT)
+    gridHeight = Math.min(XAXIS_HEIGHT + rowCount * ROW_HEIGHT, GRID_MAX_HEIGHT)
   }
 
   if (!data || data.size < 1) {
-    return (
-      <NoCharts />
-    )
+    return <NoCharts />
   }
 
   // To correctly align with the rows, generate a data row with only x-axis values
   // e.g [ {measurement_start_day: '2022-01-01'}, {measurement_start_day: '2022-01-02'}... ]
-  const xAxisData = data.get(rowKeys[0]).map(d => ({ [query.axis_x]: d[query.axis_x]}))
+  const xAxisData = data
+    .get(rowKeys[0])
+    .map((d) => ({ [query.axis_x]: d[query.axis_x] }))
 
   const rowHeight = noLabels ? 500 : ROW_HEIGHT
 
   return (
     <Container theme={barThemeForTooltip}>
       <TooltipProvider container={tooltipContainer}>
-        <Flex ref={tooltipContainer} flexDirection='column'>
-          <Flex flexDirection='column'>
+        <Flex ref={tooltipContainer} flexDirection="column">
+          <Flex flexDirection="column">
             <ChartHeader options={header} />
             {/* Fake axis on top of list. Possible alternative: dummy chart with axis and valid tickValues */}
             {/* Use a virtual list only for higher count of rows */}
             {rowsToRender.length < 10 ? (
               <Flex
-                className='outerListElement'
-                flexDirection='column'
+                className="outerListElement"
+                flexDirection="column"
                 style={{
-                  height: gridHeight
+                  height: gridHeight,
                 }}
               >
                 {!noLabels && <XAxis data={xAxisData} />}
-                {rowsToRender.map((rowKey, index) => 
+                {rowsToRender.map((rowKey, index) => (
                   <RowChart
                     key={rowKey}
                     rowIndex={index}
@@ -149,7 +158,7 @@ const GridChart = ({ data, rowKeys, rowLabels, height = 'auto', header, selected
                     height={rowHeight}
                     label={rowLabels[rowKey]}
                   />
-                )}
+                ))}
               </Flex>
             ) : (
               <VirtualRows
@@ -175,12 +184,9 @@ GridChart.propTypes = {
   rowKeys: PropTypes.arrayOf(PropTypes.string),
   rowLabels: PropTypes.objectOf(PropTypes.string),
   selectedRows: PropTypes.arrayOf(PropTypes.string),
-  height: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.number
-  ]),
+  height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   header: PropTypes.element,
-  noLabels: PropTypes.bool
+  noLabels: PropTypes.bool,
 }
 
 export default React.memo(GridChart)

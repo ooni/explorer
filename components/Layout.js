@@ -17,7 +17,7 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
   body, html {
-    // direction: ${props => props.direction};
+    // direction: ${(props) => props.direction};
     margin: 0;
     padding: 0;
     font-size: 14px;
@@ -54,9 +54,7 @@ const Layout = ({ children, disableFooter = false }) => {
         <GlobalStyle direction={getDirection(locale)} />
         <div className="site">
           <Header />
-          <div className="content">
-            { children }
-          </div>
+          <div className="content">{children}</div>
           {!disableFooter && <Footer />}
         </div>
       </UserProvider>
@@ -66,7 +64,7 @@ const Layout = ({ children, disableFooter = false }) => {
 
 Layout.propTypes = {
   children: PropTypes.object.isRequired,
-  disableFooter: PropTypes.bool
+  disableFooter: PropTypes.bool,
 }
 
 export default Layout

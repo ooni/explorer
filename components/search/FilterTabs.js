@@ -1,10 +1,8 @@
 import React from 'react'
 
-import styled from 'styled-components'
+import { Box, Flex } from 'ooni-components'
 import { FormattedMessage } from 'react-intl'
-import {
-  Flex, Box
-} from 'ooni-components'
+import styled from 'styled-components'
 
 const StyledFilterTab = styled.button`
   font-size: 14px;
@@ -30,60 +28,68 @@ const StyledFilterTab = styled.button`
   transition: .2s ease-out;
   cursor: pointer;
 
-  background-color: ${props => props.active ? props.theme.colors.blue5 : 'transparent'};
-  color: ${props => props.active ? props.theme.colors.white : props.theme.colors.blue5};
+  background-color: ${(props) =>
+    props.active ? props.theme.colors.blue5 : 'transparent'};
+  color: ${(props) =>
+    props.active ? props.theme.colors.white : props.theme.colors.blue5};
   &:active {
     transition: .2s ease-in;
-    background-color: ${props => props.theme.colors.blue5};
-    color: ${props => props.theme.colors.white};
+    background-color: ${(props) => props.theme.colors.blue5};
+    color: ${(props) => props.theme.colors.white};
   }
   &:hover {
-    background-color: ${props => props.theme.colors.blue5};
-    color: ${props => props.theme.colors.white};
+    background-color: ${(props) => props.theme.colors.blue5};
+    color: ${(props) => props.theme.colors.white};
     transition: .2s ease-in;
   }
 `
 
 const FilterTabLeft = styled(StyledFilterTab)`
   border-radius: 32px 0px 0px 32px;
-  border: 1px solid ${props => props.theme.colors.blue5};
+  border: 1px solid ${(props) => props.theme.colors.blue5};
   border-right: 0px;
 `
 const FilterTabRight = styled(StyledFilterTab)`
-  border: 1px solid ${props => props.theme.colors.blue5};
+  border: 1px solid ${(props) => props.theme.colors.blue5};
   border-radius: 0px 32px 32px 0px;
   border-left: 0px;
 `
 
 const FilterTabCenter = styled(StyledFilterTab)`
-  border: 1px solid ${props => props.theme.colors.blue5};
+  border: 1px solid ${(props) => props.theme.colors.blue5};
   border-radius: 0px;
 `
 
-const FilterTabs = ({onClick, onlyFilter}) => (
+const FilterTabs = ({ onClick, onlyFilter }) => (
   <Flex>
     <Box>
       <FilterTabLeft
-        onClick={() => {onClick('all')}}
+        onClick={() => {
+          onClick('all')
+        }}
         active={onlyFilter === 'all'}
       >
-        <FormattedMessage id='Search.FilterButton.AllResults' />
+        <FormattedMessage id="Search.FilterButton.AllResults" />
       </FilterTabLeft>
     </Box>
     <Box>
       <FilterTabCenter
-        onClick={() => {onClick('confirmed')}}
+        onClick={() => {
+          onClick('confirmed')
+        }}
         active={onlyFilter === 'confirmed'}
       >
-        <FormattedMessage id='Search.FilterButton.Confirmed' />
+        <FormattedMessage id="Search.FilterButton.Confirmed" />
       </FilterTabCenter>
     </Box>
     <Box>
       <FilterTabRight
-        onClick={() => {onClick('anomalies')}}
+        onClick={() => {
+          onClick('anomalies')
+        }}
         active={onlyFilter === 'anomalies'}
       >
-        <FormattedMessage id='Search.FilterButton.Anomalies' />
+        <FormattedMessage id="Search.FilterButton.Anomalies" />
       </FilterTabRight>
     </Box>
   </Flex>

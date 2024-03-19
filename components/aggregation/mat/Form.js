@@ -73,13 +73,24 @@ const yAxisOptions = [
   ['', [], false],
 ]
 
-const testsWithValidDomainFilter = ['web_connectivity', 'http_requests', 'dns_consistency', 'tcp_connect']
+const testsWithValidDomainFilter = [
+  'web_connectivity',
+  'http_requests',
+  'dns_consistency',
+  'tcp_connect',
+]
 
-const filterAxisOptions = (options, countryValue = '', testNameValue = 'web_connectivity') => {
+const filterAxisOptions = (
+  options,
+  countryValue = '',
+  testNameValue = 'web_connectivity',
+) => {
   return options
     .filter(([option, validTestNames, hideForSingleCountry]) => {
       if (hideForSingleCountry && countryValue !== '') return false
-      return validTestNames.length === 0 || validTestNames.includes(testNameValue)
+      return (
+        validTestNames.length === 0 || validTestNames.includes(testNameValue)
+      )
     })
     .map(([option]) => option)
 }
@@ -111,7 +122,10 @@ export const Form = ({ onSubmit, query }) => {
   const router = useRouter()
   const [showConfirmation, setShowConfirmation] = useState(false)
 
-  const defaultValues = useMemo(() => Object.assign({}, defaultDefaultValues, query), [query])
+  const defaultValues = useMemo(
+    () => Object.assign({}, defaultDefaultValues, query),
+    [query],
+  )
 
   const { handleSubmit, control, getValues, watch, reset, setValue } = useForm({
     defaultValues,
@@ -139,16 +153,20 @@ export const Form = ({ onSubmit, query }) => {
     return () => subscription.unsubscribe()
   }, [watch])
 
-  const sortedCountries = useMemo(() => (
+  const sortedCountries = useMemo(
+    () =>
       localisedCountries(intl.locale).sort((a, b) =>
-      new Intl.Collator(intl.locale).compare(a.localisedCountryName, b.localisedCountryName))
-    ),
-    [intl.locale]
+        new Intl.Collator(intl.locale).compare(
+          a.localisedCountryName,
+          b.localisedCountryName,
+        ),
+      ),
+    [intl.locale],
   )
 
   const showWebConnectivityFilters = useMemo(
     () => isValidFilterForTestname(testNameValue, testsWithValidDomainFilter),
-    [testNameValue]
+    [testNameValue],
   )
   // reset domain and input when web_connectivity is deselected
   useEffect(() => {
@@ -178,7 +196,7 @@ export const Form = ({ onSubmit, query }) => {
       setShowConfirmation(false)
       handleSubmit(onSubmit)(e)
     },
-    [handleSubmit, onSubmit]
+    [handleSubmit, onSubmit],
   )
 
   const onCancel = useCallback((e) => {
@@ -190,7 +208,11 @@ export const Form = ({ onSubmit, query }) => {
     (e) => {
       e.preventDefault()
 
-      const [since, until, timeGrain] = getValues(['since', 'until', 'time_grain'])
+      const [since, until, timeGrain] = getValues([
+        'since',
+        'until',
+        'time_grain',
+      ])
       const shouldShowConfirmationModal = () => {
         if (timeGrain === 'month') return false
         const diff = dayjs(until).diff(dayjs(since), 'month')
@@ -205,7 +227,7 @@ export const Form = ({ onSubmit, query }) => {
         onConfirm(e)
       }
     },
-    [getValues, onConfirm]
+    [getValues, onConfirm],
   )
 
   const xAxisOptionsFiltered = useMemo(() => {
@@ -213,7 +235,8 @@ export const Form = ({ onSubmit, query }) => {
   }, [testNameValue, countryValue])
 
   useEffect(() => {
-    if (!xAxisOptionsFiltered.includes(getValues('axis_x'))) setValue('axis_x', 'measurement_start_day')
+    if (!xAxisOptionsFiltered.includes(getValues('axis_x')))
+      setValue('axis_x', 'measurement_start_day')
   }, [setValue, getValues, xAxisOptionsFiltered])
 
   const yAxisOptionsFiltered = useMemo(() => {
@@ -221,37 +244,57 @@ export const Form = ({ onSubmit, query }) => {
   }, [testNameValue, countryValue])
 
   useEffect(() => {
-    if (!yAxisOptionsFiltered.includes(getValues('axis_y'))) setValue('axis_y', '')
+    if (!yAxisOptionsFiltered.includes(getValues('axis_y')))
+      setValue('axis_y', '')
   }, [setValue, getValues, yAxisOptionsFiltered])
 
   const timeGrainOptions = useMemo(() => {
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/
-    if (!until?.match(dateRegex) || !since?.match(dateRegex)) return ['hour', 'day', 'week', 'month']
+    if (!until?.match(dateRegex) || !since?.match(dateRegex))
+      return ['hour', 'day', 'week', 'month']
     const diff = dayjs(until).diff(dayjs(since), 'day')
     if (diff < 8) {
       const availableValues = ['hour', 'day']
-      if (!availableValues.includes(getValues('time_grain'))) setValue('time_grain', 'hour')
+      if (!availableValues.includes(getValues('time_grain')))
+        setValue('time_grain', 'hour')
       return availableValues
     } else if (diff >= 8 && diff < 31) {
       const availableValues = ['day', 'week']
-      if (!availableValues.includes(getValues('time_grain'))) setValue('time_grain', 'day')
+      if (!availableValues.includes(getValues('time_grain')))
+        setValue('time_grain', 'day')
       return availableValues
     } else if (diff >= 31) {
       const availableValues = ['day', 'week', 'month']
-      if (!availableValues.includes(getValues('time_grain'))) setValue('time_grain', 'day')
+      if (!availableValues.includes(getValues('time_grain')))
+        setValue('time_grain', 'day')
       return availableValues
     }
   }, [setValue, getValues, since, until])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <ConfirmationModal show={showConfirmation} onConfirm={onConfirm} onCancel={onCancel} />
-      <Flex my={2} alignItems='center' flexDirection={['column', 'row']} sx={{ gap: 3 }}>
+      <ConfirmationModal
+        show={showConfirmation}
+        onConfirm={onConfirm}
+        onCancel={onCancel}
+      />
+      <Flex
+        my={2}
+        alignItems="center"
+        flexDirection={['column', 'row']}
+        sx={{ gap: 3 }}
+      >
         <Box width={[1, 3 / 12]}>
           <Controller
             render={({ field }) => (
-              <Select {...field} label={intl.formatMessage({ id: 'Search.Sidebar.Country' })} width={1}>
-                <option value=''>{intl.formatMessage({ id: 'MAT.Form.AllCountries' })}</option>
+              <Select
+                {...field}
+                label={intl.formatMessage({ id: 'Search.Sidebar.Country' })}
+                width={1}
+              >
+                <option value="">
+                  {intl.formatMessage({ id: 'MAT.Form.AllCountries' })}
+                </option>
                 {sortedCountries.map((c, idx) => (
                   <option key={idx} value={c.iso3166_alpha2}>
                     {c.localisedCountryName}
@@ -259,16 +302,20 @@ export const Form = ({ onSubmit, query }) => {
                 ))}
               </Select>
             )}
-            name='probe_cc'
+            name="probe_cc"
             control={control}
           />
         </Box>
         <Box width={[1, 1 / 12]}>
           <Controller
-            name='probe_asn'
+            name="probe_asn"
             control={control}
             render={({ field }) => (
-              <Input placeholder='AS1234' label={intl.formatMessage({ id: 'Search.Sidebar.ASN' })} {...field} />
+              <Input
+                placeholder="AS1234"
+                label={intl.formatMessage({ id: 'Search.Sidebar.ASN' })}
+                {...field}
+              />
             )}
           />
         </Box>
@@ -276,7 +323,7 @@ export const Form = ({ onSubmit, query }) => {
           <Flex sx={{ gap: 3 }}>
             <Box width={1}>
               <Controller
-                name='since'
+                name="since"
                 control={control}
                 render={({ field }) => (
                   <Input
@@ -290,7 +337,7 @@ export const Form = ({ onSubmit, query }) => {
             </Box>
             <Box width={1}>
               <Controller
-                name='until'
+                name="until"
                 control={control}
                 render={({ field }) => (
                   <Input
@@ -316,10 +363,14 @@ export const Form = ({ onSubmit, query }) => {
         </Box>
         <Box width={[1, 2 / 12]}>
           <Controller
-            name='time_grain'
+            name="time_grain"
             control={control}
             render={({ field }) => (
-              <Select {...field} label={intl.formatMessage({ id: 'MAT.Form.Label.TimeGrain' })} width={1}>
+              <Select
+                {...field}
+                label={intl.formatMessage({ id: 'MAT.Form.Label.TimeGrain' })}
+                width={1}
+              >
                 {timeGrainOptions.map((option, idx) => (
                   <option key={idx} value={option}>
                     {intl.formatMessage(messages[option])}
@@ -331,13 +382,19 @@ export const Form = ({ onSubmit, query }) => {
         </Box>
         <Box width={[1, 2 / 12]}>
           <Controller
-            name='axis_x'
+            name="axis_x"
             control={control}
             render={({ field }) => (
-              <Select {...field} label={intl.formatMessage({ id: 'MAT.Form.Label.XAxis' })} width={1}>
+              <Select
+                {...field}
+                label={intl.formatMessage({ id: 'MAT.Form.Label.XAxis' })}
+                width={1}
+              >
                 {xAxisOptionsFiltered.map((option, idx) => (
                   <option key={idx} value={option}>
-                    {option.length > 0 ? intl.formatMessage(messages[option]) : option}
+                    {option.length > 0
+                      ? intl.formatMessage(messages[option])
+                      : option}
                   </option>
                 ))}
               </Select>
@@ -346,13 +403,19 @@ export const Form = ({ onSubmit, query }) => {
         </Box>
         <Box width={[1, 2 / 12]}>
           <Controller
-            name='axis_y'
+            name="axis_y"
             control={control}
             render={({ field }) => (
-              <Select {...field} label={intl.formatMessage({ id: 'MAT.Form.Label.YAxis' })} width={1}>
+              <Select
+                {...field}
+                label={intl.formatMessage({ id: 'MAT.Form.Label.YAxis' })}
+                width={1}
+              >
                 {yAxisOptionsFiltered.map((option, idx) => (
                   <option key={idx} value={option}>
-                    {option.length > 0 ? intl.formatMessage(messages[option]) : option}
+                    {option.length > 0
+                      ? intl.formatMessage(messages[option])
+                      : option}
                   </option>
                 ))}
               </Select>
@@ -363,10 +426,14 @@ export const Form = ({ onSubmit, query }) => {
       <Flex my={2} flexDirection={['column', 'row']} sx={{ gap: 3 }}>
         <Box width={[1, 1 / 5]}>
           <Controller
-            name='test_name'
+            name="test_name"
             control={control}
             render={({ field }) => (
-              <Select {...field} label={intl.formatMessage({ id: 'Search.Sidebar.TestName' })} width={1}>
+              <Select
+                {...field}
+                label={intl.formatMessage({ id: 'Search.Sidebar.TestName' })}
+                width={1}
+              >
                 <TestNameOptions includeAllOption={false} />
               </Select>
             )}
@@ -376,12 +443,12 @@ export const Form = ({ onSubmit, query }) => {
           <>
             <Box width={[1, 1 / 5]}>
               <Controller
-                name='domain'
+                name="domain"
                 control={control}
                 render={({ field }) => (
                   <Input
                     label={intl.formatMessage({ id: 'Search.Sidebar.Domain' })}
-                    placeholder='twitter.com'
+                    placeholder="twitter.com"
                     {...field}
                   />
                 )}
@@ -389,12 +456,12 @@ export const Form = ({ onSubmit, query }) => {
             </Box>
             <Box width={[1, 1 / 5]}>
               <Controller
-                name='input'
+                name="input"
                 control={control}
                 render={({ field }) => (
                   <Input
                     label={intl.formatMessage({ id: 'Search.Sidebar.Input' })}
-                    placeholder='https://fbcdn.net/robots.txt'
+                    placeholder="https://fbcdn.net/robots.txt"
                     {...field}
                   />
                 )}
@@ -402,7 +469,7 @@ export const Form = ({ onSubmit, query }) => {
             </Box>
             <Box width={[1, 1 / 5]}>
               <Controller
-                name='category_code'
+                name="category_code"
                 control={control}
                 render={({ field }) => (
                   <Select
@@ -411,7 +478,9 @@ export const Form = ({ onSubmit, query }) => {
                     })}
                     {...field}
                   >
-                    <option value=''>{intl.formatMessage({ id: 'MAT.Form.All' })}</option>
+                    <option value="">
+                      {intl.formatMessage({ id: 'MAT.Form.All' })}
+                    </option>
                     {categoryCodes
                       .sort((a, b) => (a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0))
                       .map(([code, label], idx) => (
@@ -429,8 +498,12 @@ export const Form = ({ onSubmit, query }) => {
         )}
       </Flex>
       <Flex my={4}>
-        <Button data-test-id='mat-form-submit' width={[1, 'unset']} onClick={maybeWarnBeforeSubmit}>
-          <FormattedMessage id='MAT.Form.Submit' />
+        <Button
+          data-test-id="mat-form-submit"
+          width={[1, 'unset']}
+          onClick={maybeWarnBeforeSubmit}
+        >
+          <FormattedMessage id="MAT.Form.Submit" />
         </Button>
       </Flex>
     </form>

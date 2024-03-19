@@ -8,11 +8,11 @@ const CACHE_MAX_AGE_IN_S = process.env.CACHE_MAX_AGE_IN_S || 60 * 60
 const context = {
   cache: new LRUCache({
     max: CACHE_MAX_SIZE,
-    ttl: CACHE_MAX_AGE_IN_S
-  })
+    ttl: CACHE_MAX_AGE_IN_S,
+  }),
 }
 
-const cache = handler => (req, res) => {
+const cache = (handler) => (req, res) => {
   req.cache = context.cache
   return handler(req, res)
 }
@@ -24,9 +24,15 @@ const cloudflareHandler = (req, res) => {
   const asn = req.query?.asn
 
   if (country && asn) {
-    return res.status(400).json('Country and asn can only be requested individually.')
+    return res
+      .status(400)
+      .json('Country and asn can only be requested individually.')
   }
-  if (!dayjs(dateStart).isValid() || dayjs(dateStart).isAfter(dayjs()) || dayjs(dateStart).isAfter(dayjs(dateEnd))) {
+  if (
+    !dayjs(dateStart).isValid() ||
+    dayjs(dateStart).isAfter(dayjs()) ||
+    dayjs(dateStart).isAfter(dayjs(dateEnd))
+  ) {
     return res.status(400).json('Invalid Start Date')
   }
   if (!dayjs(dateEnd).isValid() || dayjs(dateEnd).isAfter(dayjs())) {
@@ -45,37 +51,40 @@ const cloudflareHandler = (req, res) => {
   const diff = dayjs(dateEnd).diff(dayjs(dateStart), 'day')
   const aggInterval = diff <= 30 ? '1h' : '1d'
   const targetParam = asn ? `asn=${asn}` : `location=${country}`
-  const formattedFrom = dateStart.split('.')[0]+'Z'
-  const formattedTo = dateEnd.split('.')[0]+'Z'
+  const formattedFrom = dateStart.split('.')[0] + 'Z'
+  const formattedTo = dateEnd.split('.')[0] + 'Z'
 
   return axios({
-    method:'get',
-    url:`https://api.cloudflare.com/client/v4/radar/netflows/timeseries?name=all&product=all&dateStart=${formattedFrom}&dateEnd=${formattedTo}&${targetParam}&aggInterval=${aggInterval}&normalization=MIN0_MAX`,
+    method: 'get',
+    url: `https://api.cloudflare.com/client/v4/radar/netflows/timeseries?name=all&product=all&dateStart=${formattedFrom}&dateEnd=${formattedTo}&${targetParam}&aggInterval=${aggInterval}&normalization=MIN0_MAX`,
     headers: {
-      Authorization: `Bearer ${process.env.CLOUDFLARE_TOKEN}`
+      Authorization: `Bearer ${process.env.CLOUDFLARE_TOKEN}`,
     },
-   }).then(({data, headers}) => {
-    const timestamps = data.result.all.timestamps
-    const values = data.result.all.values
-    const chartData = timestamps.map((st, i) => {
-      return {
-        'x': st,
-        'y': Number(values[i])
-      }
-    })
-
-    if (req.cache) {
-      req.cache.set(cacheKey, {
-        headers,
-        data: chartData
-      })
-    }
-
-    return res.status(200).json(chartData)
-  }).catch((err) =>{
-    const responseError = err?.response?.data?.errors[0]?.message || err.message
-    return res.status(400).json(responseError)
   })
+    .then(({ data, headers }) => {
+      const timestamps = data.result.all.timestamps
+      const values = data.result.all.values
+      const chartData = timestamps.map((st, i) => {
+        return {
+          x: st,
+          y: Number(values[i]),
+        }
+      })
+
+      if (req.cache) {
+        req.cache.set(cacheKey, {
+          headers,
+          data: chartData,
+        })
+      }
+
+      return res.status(200).json(chartData)
+    })
+    .catch((err) => {
+      const responseError =
+        err?.response?.data?.errors[0]?.message || err.message
+      return res.status(400).json(responseError)
+    })
 }
 
 export default cache(cloudflareHandler)

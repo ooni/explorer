@@ -16,7 +16,8 @@ const StyledNavItem = styled(NLink)`
   cursor: pointer;
   padding-bottom: ${(props) => (props.$active ? '4px' : '6px')};
   opacity: ${(props) => (props.$active ? '1' : '0.6')};
-  border-bottom: ${(props) => (props.$active ? `2px solid ${props.theme.colors.white}` : 'none')};
+  border-bottom: ${(props) =>
+    props.$active ? `2px solid ${props.theme.colors.white}` : 'none'};
 
   &:hover {
     padding-bottom: 4px;
@@ -51,13 +52,15 @@ const LanguageSelect = styled.select`
 const NavItem = ({ label, href }) => {
   const { pathname } = useRouter()
   const [isActive, setIsActive] = useState(false)
- 
+
   useEffect(() => {
     setIsActive(pathname === href)
   }, [pathname, href])
 
   return (
-    <StyledNavItem href={href} $active={isActive}>{label}</StyledNavItem>
+    <StyledNavItem href={href} $active={isActive}>
+      {label}
+    </StyledNavItem>
   )
 }
 
@@ -143,30 +146,69 @@ export const NavBar = ({ color }) => {
   return (
     <StyledNavBar $bgColor={color}>
       <Container>
-        <Flex flexDirection='row' justifyContent='space-between' alignItems='end'>
+        <Flex
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="end"
+        >
           <Box style={{ zIndex: 1 }}>
-            <NLink href='/'>
-              <ExplorerLogo height='26px' />
+            <NLink href="/">
+              <ExplorerLogo height="26px" />
             </NLink>
           </Box>
-          <StyledResponsiveMenu color='white'>
-            <MdMenu size="28px" className='menuIcon' onClick={() => setShowMenu(!showMenu)} />
+          <StyledResponsiveMenu color="white">
+            <MdMenu
+              size="28px"
+              className="menuIcon"
+              onClick={() => setShowMenu(!showMenu)}
+            />
             <Box className={`menuItemsWrapper ${showMenu ? 'visible' : ''}`}>
               {showMenu && (
-                <Flex justifyContent='end'>
-                  <MdClose size="28px" className='closeIcon' onClick={() => setShowMenu(!showMenu)} />
+                <Flex justifyContent="end">
+                  <MdClose
+                    size="28px"
+                    className="closeIcon"
+                    onClick={() => setShowMenu(!showMenu)}
+                  />
                 </Flex>
               )}
-              <Flex className='menuItems' alignItems='center' sx={{gap: [3, 3, 3, 4]}}>
-                <NavItem label={<FormattedMessage id="Navbar.Search" />} href="/search" />
-                <NavItem label={<FormattedMessage id="Navbar.Charts.MAT" />} href="/chart/mat" />
-                <NavItem label={<FormattedMessage id="Navbar.Charts.Circumvention" />} href="/chart/circumvention" />
-                <NavItem label={<FormattedMessage id="Navbar.Countries" />} href="/countries" />
-                <NavItem label={<FormattedMessage id="Navbar.Networks" />} href="/networks" />
-                <NavItem label={<FormattedMessage id="Navbar.Domains" />} href="/domains" />
-                <NavItem label={<FormattedMessage id="Navbar.Findings" />} href="/findings" />
+              <Flex
+                className="menuItems"
+                alignItems="center"
+                sx={{ gap: [3, 3, 3, 4] }}
+              >
+                <NavItem
+                  label={<FormattedMessage id="Navbar.Search" />}
+                  href="/search"
+                />
+                <NavItem
+                  label={<FormattedMessage id="Navbar.Charts.MAT" />}
+                  href="/chart/mat"
+                />
+                <NavItem
+                  label={<FormattedMessage id="Navbar.Charts.Circumvention" />}
+                  href="/chart/circumvention"
+                />
+                <NavItem
+                  label={<FormattedMessage id="Navbar.Countries" />}
+                  href="/countries"
+                />
+                <NavItem
+                  label={<FormattedMessage id="Navbar.Networks" />}
+                  href="/networks"
+                />
+                <NavItem
+                  label={<FormattedMessage id="Navbar.Domains" />}
+                  href="/domains"
+                />
+                <NavItem
+                  label={<FormattedMessage id="Navbar.Findings" />}
+                  href="/findings"
+                />
                 {user?.logged_in && (
-                  <StyledNavItem href="" onClick={logoutUser}><FormattedMessage id="General.Logout" /></StyledNavItem>
+                  <StyledNavItem href="" onClick={logoutUser}>
+                    <FormattedMessage id="General.Logout" />
+                  </StyledNavItem>
                 )}
                 <LanguageSelect onChange={handleLocaleChange} value={locale}>
                   {languages.map((c) => (

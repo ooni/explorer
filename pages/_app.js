@@ -1,4 +1,4 @@
-//FROM: 
+//FROM:
 // https://github.com/zeit/next.js/blob/master/examples/with-sentry
 // https://github.com/vercel/next.js/blob/canary/examples/with-loading/pages/_app.js
 import { Fira_Sans } from 'next/font/google'
@@ -11,7 +11,9 @@ import dynamic from 'next/dynamic'
 import '../public/static/nprogress.css'
 
 const Layout = dynamic(() => import('components/Layout'))
-const LocaleProvider = dynamic(() => import('components/withIntl').then((c) => c.LocaleProvider))
+const LocaleProvider = dynamic(() =>
+  import('components/withIntl').then((c) => c.LocaleProvider),
+)
 
 export const firaSans = Fira_Sans({
   weight: ['300', '400', '600'],
@@ -23,7 +25,6 @@ export default function App({ Component, pageProps, err }) {
 
   useEffect(() => {
     const handleStart = (url) => {
-      
       NProgress.start()
     }
     const handleStop = () => {
