@@ -1,18 +1,17 @@
-import Head from 'next/head'
-import NavBar from 'components/NavBar'
-import { Container, Heading, Box, Flex, Input, Select, Button, Text } from 'ooni-components'
-import { StyledStickyNavBar, StyledStickySubMenu } from 'components/SharedStyledComponents'
+import { StyledStickySubMenu } from 'components/SharedStyledComponents'
+import HighlightBox from 'components/landing/HighlightBox'
 import SpinLoader from 'components/vendor/SpinLoader'
 import useFilterWithSort from 'hooks/useFilterWithSort'
-import useSWR from 'swr'
-import { apiEndpoints, fetcher } from '/lib/api'
-import HighlightBox from 'components/landing/HighlightBox'
-import { styled } from 'styled-components'
-import { useIntl } from 'react-intl'
-import { useMemo } from 'react'
 import useUser from 'hooks/useUser'
+import Head from 'next/head'
 import NLink from 'next/link'
+import { Box, Button, Container, Flex, Heading, Input, Select, Text } from 'ooni-components'
+import { useMemo } from 'react'
+import { useIntl } from 'react-intl'
+import { styled } from 'styled-components'
+import useSWR from 'swr'
 import { formatLongDate } from 'utils'
+import { apiEndpoints, fetcher } from '/lib/api'
 
 const sortOptions = [
   { key: 'start_asc', intlKey: 'Sort.StartAsc' },
@@ -90,9 +89,6 @@ const Index = () => {
       <Head>
         <title></title>
       </Head>
-      <StyledStickyNavBar>
-        <NavBar />
-      </StyledStickyNavBar>
       <Container>
         {user?.role === 'admin' && (
           <Flex justifyContent="end" mt={3}><NLink href="/findings/dashboard"><Button hollow>{intl.formatMessage({id: 'Findings.Dashboard.ShortTitle'})}</Button></NLink></Flex>

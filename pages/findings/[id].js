@@ -1,15 +1,11 @@
 import Head from 'next/head'
-import NavBar from 'components/NavBar'
 import { Container } from 'ooni-components'
-import useSWR from 'swr'
 import { apiEndpoints, fetcher } from '/lib/api'
-import { useRouter } from 'next/router'
 
-import SpinLoader from 'components/vendor/SpinLoader'
 import NotFound from 'components/NotFound'
 import FindingDisplay from 'components/findings/FindingDisplay'
-import { useIntl } from 'react-intl'
 import { useMemo } from 'react'
+import { useIntl } from 'react-intl'
 
 export const getServerSideProps = async ({ query }) => {
   const data = await fetcher(apiEndpoints.SHOW_INCIDENT.replace(':id', query.id)).catch(() => (null))
@@ -39,7 +35,6 @@ const ReportView = ({ data }) => {
         <meta key="twitter:title" name="twitter:title" content={metaTitle} />
         <meta key="twitter:description" name="twitter:description" content={metaDescription} />
       </Head>
-      <NavBar />
       <Container>
         {data ?
           <FindingDisplay incident={data.incident} /> :

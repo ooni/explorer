@@ -15,8 +15,6 @@ import { FormattedMessage, useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
 import styled from 'styled-components'
 
-import NavBar from '/components/NavBar'
-
 import dynamic from 'next/dynamic'
 import { sortByKey } from '../utils'
 import FormattedMarkdown from '/components/FormattedMarkdown'
@@ -264,9 +262,6 @@ const Search = ({ countries, query: queryProp }) => {
       <Head>
         <title>{intl.formatMessage({id: 'Search.PageTitle'})}</title>
       </Head>
-
-      <NavBar />
-
       <Container>
         <Flex pt={3} flexWrap='wrap'>
           <Box width={[1, 1/4]} px={2}>

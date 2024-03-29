@@ -1,13 +1,16 @@
-import { theme } from 'ooni-components'
+import { Box, theme } from 'ooni-components'
 import PropTypes from 'prop-types'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { ThemeProvider, createGlobalStyle } from 'styled-components'
 
+import { StyledStickyNavBar, StyledStickySubMenu } from 'components/SharedStyledComponents'
 import { getDirection } from 'components/withIntl'
 import { UserProvider } from 'hooks/useUser'
+import { useRouter } from 'next/router'
 import { useIntl } from 'react-intl'
 import Footer from './Footer'
 import Header from './Header'
+import NavBar from './NavBar'
 
 theme.maxWidth = 1024
 
@@ -45,8 +48,22 @@ const GlobalStyle = createGlobalStyle`
   }
 `
 
-const Layout = ({ children, disableFooter = false }) => {
+const Layout = ({ children }) => {
   const { locale } = useIntl()
+  const { pathname } = useRouter()
+
+  const navbarColor = useMemo(() => {
+    return pathname === '/' || pathname.match(/^\/m\/\S+/) || pathname.match(/^\/measurement\/\S+/) ? 
+    'transparent'
+    : null
+  }, [pathname])
+  const navbarSticky = useMemo(() => {
+    return pathname === '/countries' ||
+    pathname === '/domains' ||
+    pathname === '/networks' ||
+    pathname === '/findings' ||
+    pathname.match(/^\/country\/\S+/)
+  }, [pathname])
 
   return (
     <ThemeProvider theme={theme}>
@@ -54,10 +71,16 @@ const Layout = ({ children, disableFooter = false }) => {
         <GlobalStyle direction={getDirection(locale)} />
         <div className="site">
           <Header />
-          <div className="content">
+          {navbarSticky ?
+            <StyledStickyNavBar>
+              <NavBar color={navbarColor} />
+            </StyledStickyNavBar> :
+            <NavBar color={navbarColor} />
+          }
+          <Box className="content" mt={navbarColor ? '-66px': 0}>
             { children }
-          </div>
-          {!disableFooter && <Footer />}
+          </Box>
+          <Footer />
         </div>
       </UserProvider>
     </ThemeProvider>
@@ -65,8 +88,7 @@ const Layout = ({ children, disableFooter = false }) => {
 }
 
 Layout.propTypes = {
-  children: PropTypes.object.isRequired,
-  disableFooter: PropTypes.bool
+  children: PropTypes.object.isRequired
 }
 
 export default Layout

@@ -1,28 +1,27 @@
 /* global process */
-import React from 'react'
-import PropTypes from 'prop-types'
+import axios from 'axios'
 import Head from 'next/head'
 import NLink from 'next/link'
 import Router from 'next/router'
-import FormattedMarkdown from '../components/FormattedMarkdown'
-import styled from 'styled-components'
-import axios from 'axios'
-import { FormattedMessage, useIntl } from 'react-intl'
 import {
-  Link,
-  Flex,
   Box,
-  Container,
   Button,
+  Container,
+  Flex,
   Heading,
+  Link,
   Text
 } from 'ooni-components'
+import PropTypes from 'prop-types'
+import React from 'react'
+import { FormattedMessage, useIntl } from 'react-intl'
+import styled from 'styled-components'
+import FormattedMarkdown from '../components/FormattedMarkdown'
 
-import NavBar from '../components/NavBar'
-import { toCompactNumberUnit } from '../utils'
 import HighlightSection from '../components/landing/HighlightsSection'
-import highlightContent from '../components/landing/highlights.json'
 import CoverageChart from '../components/landing/Stats'
+import highlightContent from '../components/landing/highlights.json'
+import { toCompactNumberUnit } from '../utils'
 
 const HeroUnit = styled.div`
   background: linear-gradient(
@@ -155,7 +154,6 @@ const LandingPage = ({ measurementCount, asnCount, countryCount}) => {
         <title>{intl.formatMessage({id: 'General.OoniExplorer'})}</title>
       </Head>
       <HeroUnit>
-        <NavBar color='transparent' />
         <StyledContainer py={[0, 120]} my={[0, 90]}>
           <Text textAlign='center'>
             <Heading h={1}>

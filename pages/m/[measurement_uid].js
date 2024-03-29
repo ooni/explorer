@@ -15,12 +15,11 @@ import Hero from 'components/measurement/Hero'
 import MeasurementContainer from 'components/measurement/MeasurementContainer'
 import SummaryText from 'components/measurement/SummaryText'
 
-import NavBar from 'components/NavBar'
 import useUser from 'hooks/useUser'
 import ErrorPage from 'pages/_error'
 import { useIntl } from 'react-intl'
-import { fetcher } from '/lib/api'
 import NotFound from '../../components/NotFound'
+import { fetcher } from '/lib/api'
 
 const pageColors = {
   default: theme.colors.base,
@@ -142,7 +141,6 @@ const Measurement = ({
       </Head>
       {notFound ? (
         <>
-          <NavBar />
           <NotFound title={intl.formatMessage({id: 'Measurement.NotFound' })} />
         </>
       ): (
@@ -183,7 +181,6 @@ const Measurement = ({
                       date={measurement_start_time}
                     />
                   }
-                  <NavBar color={color} />
                   {showModal &&
                     <FeedbackBox
                       user={user}

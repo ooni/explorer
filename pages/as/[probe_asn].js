@@ -2,7 +2,6 @@ import axios from 'axios'
 import CallToActionBox from 'components/CallToActionBox'
 import Chart from 'components/Chart'
 import CountryList from 'components/CountryBox'
-import NavBar from 'components/NavBar'
 import { StyledHollowButton, StyledSticky } from 'components/SharedStyledComponents'
 import ThirdPartyDataChart from 'components/ThirdPartyDataChart'
 import Calendar from 'components/as/Calendar'
@@ -265,7 +264,6 @@ const NetworkDashboard = ({ probe_asn, networkName, countriesData }) => {
           {intl.formatMessage({ id: 'General.OoniExplorer' })} | {probe_asn} {networkName}
         </title>
       </Head>
-      <NavBar />
       <Container>
         <Heading h={1} mt={5} mb={4}>
           {probe_asn} {networkName}

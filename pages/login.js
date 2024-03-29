@@ -4,7 +4,6 @@ import { useRouter } from 'next/router'
 import { Box, Container, Flex, Heading, Text } from 'ooni-components'
 import React, { useEffect, useState } from 'react'
 
-import NavBar from 'components/NavBar'
 import LoginForm from 'components/login/LoginForm'
 import SpinLoader from 'components/vendor/SpinLoader'
 import useUser from 'hooks/useUser'
@@ -33,8 +32,6 @@ const Login = () => {
       <Head>
         <title>{intl.formatMessage({id: 'General.Login'})}</title>
       </Head>
-      <NavBar />
-
       <Container>
         <Flex alignItems='center' flexDirection='column'>
           <Heading h={1} mt={3} mb={1} fontSize={[3, 5]}>

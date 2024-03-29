@@ -1,8 +1,6 @@
-import NavBar from '/components/NavBar'
-
 import { CategoryBadge } from 'components/Badge'
 import GridLoader from 'components/GridLoader'
-import { StyledStickyNavBar, StyledStickySubMenu } from 'components/SharedStyledComponents'
+import { StyledStickySubMenu } from 'components/SharedStyledComponents'
 import { getCategoryCodesMap } from 'components/utils/categoryCodes'
 import useFilterWithSort from 'hooks/useFilterWithSort'
 import Head from 'next/head'
@@ -93,9 +91,6 @@ const Domains = () => {
       <Head>
         <title>{intl.formatMessage({id: 'General.OoniExplorer'})} | {intl.formatMessage({id: 'Domains.Title'})}</title>
       </Head>
-      <StyledStickyNavBar>
-        <NavBar />
-      </StyledStickyNavBar>
       <Container>
         <StyledStickySubMenu>
           <Flex mt={[0, 5]} mb={2} justifyContent='space-between' alignItems='baseline' flexDirection={['column', 'column', 'row']}>

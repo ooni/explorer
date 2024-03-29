@@ -11,7 +11,6 @@ import {
 import React from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 
-import NavBar from '../components/NavBar'
 import OONI404 from '../public/static/images/OONI_404.svg'
 
 const Custom404 = () => {
@@ -22,7 +21,6 @@ const Custom404 = () => {
       <Head>
         <title>{intl.formatMessage({id: 'Error.404.PageNotFound'})}</title>
       </Head>
-      <NavBar />
       <Container>
         <Flex alignItems='center' justifyContent='center'>
           <Box>
