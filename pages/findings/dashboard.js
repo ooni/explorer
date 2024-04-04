@@ -1,27 +1,25 @@
-import Head from 'next/head'
-import NLink from 'next/link'
 import {
   flexRender,
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import useSWRMutation from 'swr/mutation'
+import SpinLoader from 'components/vendor/SpinLoader'
+import useUser from 'hooks/useUser'
+import { apiEndpoints, fetcher, publishIncidentReport, unpublishIncidentReport } from 'lib/api'
+import Head from 'next/head'
+import NLink from 'next/link'
+import { useRouter } from 'next/router'
 import { Button, Container, Flex, Heading } from 'ooni-components'
-import useSWR from 'swr'
+import { useEffect, useMemo, useState } from 'react'
+import { FaSort, FaSortDown, FaSortUp } from 'react-icons/fa'
+import { useIntl } from 'react-intl'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { apiEndpoints, fetcher } from 'lib/api'
-import useUser from 'hooks/useUser'
-import NavBar from 'components/NavBar'
-import SpinLoader from 'components/vendor/SpinLoader'
-import { useEffect, useMemo, useState } from 'react'
 import { styled } from 'styled-components'
+import useSWR from 'swr'
+import useSWRMutation from 'swr/mutation'
 import { formatMediumDate } from 'utils'
-import { useRouter } from 'next/router'
-import { useIntl } from 'react-intl'
-import { publishIncidentReport, unpublishIncidentReport } from 'lib/api'
-import { FaSort, FaSortDown, FaSortUp } from 'react-icons/fa'
 
 const StyledTable = styled.table`
 border-collapse: collapse;
@@ -150,7 +148,6 @@ const Dashboard = () => {
       <Head>
         <title></title>
       </Head>
-      <NavBar />
       {user?.role === 'admin' ? (
         <Container>
           <ToastContainer />

@@ -1,11 +1,8 @@
 import * as Sentry from '@sentry/nextjs'
-import NavBar from 'components/NavBar'
 import NextErrorComponent from 'next/error'
+
 const ErrorPage = (props) => (
-  <>
-    <NavBar />
-    <NextErrorComponent statusCode={props.statusCode} title={props.error} />
-  </>
+  <NextErrorComponent statusCode={props.statusCode} title={props.error} />
 )
 
 ErrorPage.getInitialProps = async (contextData) => {

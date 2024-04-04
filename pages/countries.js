@@ -9,12 +9,10 @@ import React, { useMemo, useState } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 import styled from 'styled-components'
 
-import NavBar from 'components/NavBar'
-
+import CountryList from 'components/CountryBox'
+import { StyledStickySubMenu } from 'components/SharedStyledComponents'
 import countryUtil from 'country-util'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
-import CountryList from 'components/CountryBox'
-import { StyledStickyNavBar } from 'components/SharedStyledComponents'
 
 const CountryLink = styled(Link)`
   color: ${props => props.theme.colors.black};
@@ -84,11 +82,6 @@ const RegionBlock = ({regionCode, countries}) => {
     </Box>
   )
 }
-
-const RegionMenu = styled.div`
-  background-color: white;
-  border-bottom: 1px solid ${props => props.theme.colors.gray3};
-`
 
 const StyledRegionLink = styled.a`
   display: block;
@@ -161,37 +154,34 @@ const Countries = ({countries}) => {
       <Head>
         <title>{intl.formatMessage({id: 'Countries.PageTitle'})}</title>
       </Head>
-      <StyledStickyNavBar>
-        <NavBar />
-        <RegionMenu>
-          <Container>
+      <StyledStickySubMenu>
+        <Container>
+          <Flex
+            flexDirection={['column', 'column', 'row']}
+            justifyContent={['flex-start', 'flex-end']}
+            alignItems={['flex-start', 'flex-start', 'center']}
+          >
+            <Box my={2}>
+              <Input
+                onChange={(e) => debouncedSearchHandler(e.target.value)}
+                placeholder={intl.formatMessage({id: 'Countries.Search.Placeholder'})}
+                error={filteredCountries.length === 0}
+              />
+            </Box>
             <Flex
-              flexDirection={['column', 'column', 'row']}
-              justifyContent={['flex-start', 'flex-end']}
-              alignItems={['flex-start', 'flex-start', 'center']}
+              flexDirection='row'
+              flexWrap='wrap'
             >
-              <Box my={2}>
-                <Input
-                  onChange={(e) => debouncedSearchHandler(e.target.value)}
-                  placeholder={intl.formatMessage({id: 'Countries.Search.Placeholder'})}
-                  error={filteredCountries.length === 0}
-                />
-              </Box>
-              <Flex
-                flexDirection='row'
-                flexWrap='wrap'
-              >
-                <RegionLink href={`#${getLocalisedRegionName('002', intl.locale)}`} label={getLocalisedRegionName('002', intl.locale)} />
-                <RegionLink href={`#${getLocalisedRegionName('019', intl.locale)}`} label={getLocalisedRegionName('019', intl.locale)} />
-                <RegionLink href={`#${getLocalisedRegionName('142', intl.locale)}`} label={getLocalisedRegionName('142', intl.locale)} />
-                <RegionLink href={`#${getLocalisedRegionName('150', intl.locale)}`} label={getLocalisedRegionName('150', intl.locale)} />
-                <RegionLink href={`#${getLocalisedRegionName('009', intl.locale)}`} label={getLocalisedRegionName('009', intl.locale)} />
-                <RegionLink href={`#${getLocalisedRegionName('AQ', intl.locale)}`} label={getLocalisedRegionName('AQ', intl.locale)} />
-              </Flex>
+              <RegionLink href={`#${getLocalisedRegionName('002', intl.locale)}`} label={getLocalisedRegionName('002', intl.locale)} />
+              <RegionLink href={`#${getLocalisedRegionName('019', intl.locale)}`} label={getLocalisedRegionName('019', intl.locale)} />
+              <RegionLink href={`#${getLocalisedRegionName('142', intl.locale)}`} label={getLocalisedRegionName('142', intl.locale)} />
+              <RegionLink href={`#${getLocalisedRegionName('150', intl.locale)}`} label={getLocalisedRegionName('150', intl.locale)} />
+              <RegionLink href={`#${getLocalisedRegionName('009', intl.locale)}`} label={getLocalisedRegionName('009', intl.locale)} />
+              <RegionLink href={`#${getLocalisedRegionName('AQ', intl.locale)}`} label={getLocalisedRegionName('AQ', intl.locale)} />
             </Flex>
-          </Container>
-        </RegionMenu>
-      </StyledStickyNavBar>
+          </Flex>
+        </Container>
+      </StyledStickySubMenu>
 
       <Container>
         {

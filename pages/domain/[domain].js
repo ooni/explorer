@@ -7,7 +7,6 @@ import { useIntl } from 'react-intl'
 
 import TestGroupBadge, { CategoryBadge } from 'components/Badge'
 import Chart from 'components/DomainChart'
-import NavBar from 'components/NavBar'
 import { StyledSticky } from 'components/SharedStyledComponents'
 import { GridBox } from 'components/VirtualizedGrid'
 import Form from 'components/domain/Form'
@@ -200,7 +199,6 @@ const DomainDashboard = ({ domain, categoryCode, canonicalDomain, countries }) =
       <Head>
         <title>{title}</title>
       </Head>
-      <NavBar />
       <Container mt={5}>
         <Heading h={1} mb={0}>
           {domain}

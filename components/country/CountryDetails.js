@@ -1,7 +1,6 @@
 import axios from 'axios'
 import Flag from 'components/Flag'
-import NavBar from 'components/NavBar'
-import { StyledStickyNavBar, StyledStickySubMenu } from 'components/SharedStyledComponents'
+import { StyledStickySubMenu } from 'components/SharedStyledComponents'
 import ThirdPartyDataChart from 'components/ThirdPartyDataChart'
 import Form from 'components/as/Form'
 import AppsSection from 'components/country/Apps'
@@ -125,9 +124,6 @@ const CountryDetails = ({ countryCode, overviewStats, reports, coverageDataSSR }
   return (
     <>
       <CountryHead countryName={countryName} measurementCount={overviewStats.measurement_count} measuredSince={overviewStats.first_bucket_date} networkCount={overviewStats.network_count} />
-      <StyledStickyNavBar>
-        <NavBar />
-      </StyledStickyNavBar>
       <StyledStickySubMenu>
         <Container>
           <Header countryCode={countryCode} countryName={countryName} />

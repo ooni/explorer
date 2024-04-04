@@ -1,16 +1,15 @@
 /* global process */
-import React, { useCallback, useEffect } from 'react'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { Container, Heading, Flex, Box, Link } from 'ooni-components'
+import { Box, Container, Flex, Heading, Link } from 'ooni-components'
+import React, { useCallback, useEffect } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 
-import NavBar from 'components/NavBar'
-import { Form } from 'components/aggregation/mat/Form'
-import { FaExternalLinkAlt } from 'react-icons/fa'
-import Help from 'components/aggregation/mat/Help'
-import dayjs from 'services/dayjs'
 import MATChart from 'components/MATChart'
+import { Form } from 'components/aggregation/mat/Form'
+import Help from 'components/aggregation/mat/Help'
+import { FaExternalLinkAlt } from 'react-icons/fa'
+import dayjs from 'services/dayjs'
 
 const MeasurementAggregationToolkit = () => {
   const intl = useIntl()
@@ -71,7 +70,6 @@ const MeasurementAggregationToolkit = () => {
       <Head>
         <title>{intl.formatMessage({ id: 'MAT.Title' })}</title>
       </Head>
-      <NavBar />
       <Container>
         <Flex flexDirection="column">
           <Heading h={1} mt={3} mb={0}>

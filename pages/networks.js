@@ -1,8 +1,7 @@
 import { useMemo } from 'react'
 
 import GridLoader from 'components/GridLoader'
-import NavBar from 'components/NavBar'
-import { StyledStickyNavBar, StyledStickySubMenu } from 'components/SharedStyledComponents'
+import { StyledStickySubMenu } from 'components/SharedStyledComponents'
 import VirtualizedGrid from 'components/VirtualizedGrid'
 import useFilterWithSort from 'hooks/useFilterWithSort'
 import Head from 'next/head'
@@ -74,9 +73,6 @@ const Networks = () => {
       <Head>
         <title>{intl.formatMessage({id: 'General.OoniExplorer'})} | {intl.formatMessage({id: 'Networks.Title'})}</title>
       </Head>
-      <StyledStickyNavBar>
-        <NavBar />
-      </StyledStickyNavBar>
       <Container>
         <StyledStickySubMenu>
           <Flex mt={[0, 5]} mb={2} justifyContent='space-between' alignItems='baseline' flexDirection={['column', 'column', 'row']}>

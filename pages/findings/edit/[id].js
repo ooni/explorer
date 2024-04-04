@@ -1,17 +1,16 @@
-import Head from 'next/head'
-import NavBar from 'components/NavBar'
-import { Container, Heading, Button, Flex } from 'ooni-components'
-import { updateIncidentReport, fetcher, apiEndpoints } from '/lib/api'
-import { useIntl } from 'react-intl'
-import NLink from 'next/link'
 import Form from 'components/findings/Form'
+import useUser from 'hooks/useUser'
+import Head from 'next/head'
+import NLink from 'next/link'
 import { useRouter } from 'next/router'
+import { Button, Container, Flex, Heading } from 'ooni-components'
+import { useEffect, useMemo } from 'react'
+import { useIntl } from 'react-intl'
 import useSWR from 'swr'
 import useSWRMutation from 'swr/mutation'
-import { useEffect, useMemo } from 'react'
-import useUser from 'hooks/useUser'
-import { deleteIncidentReport } from '../../../lib/api'
 import ButtonSpinner from '../../../components/ButtonSpinner'
+import { deleteIncidentReport } from '../../../lib/api'
+import { apiEndpoints, fetcher, updateIncidentReport } from '/lib/api'
 
 const EditReport = () => {
   const intl = useIntl()
@@ -63,7 +62,6 @@ const EditReport = () => {
       <Head>
         <title></title>
       </Head>
-      <NavBar />
       <Container>
         <Flex justifyContent="space-between" alignItems="center">
           <Heading h={1}>{intl.formatMessage({id: 'Findings.Edit.Title'})}</Heading>
