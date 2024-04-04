@@ -13,43 +13,22 @@ import CountryList from 'components/CountryBox'
 import { StyledStickySubMenu } from 'components/SharedStyledComponents'
 import countryUtil from 'country-util'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
-
-const CountryLink = styled(Link)`
-  color: ${props => props.theme.colors.black};
-  text-decoration: none;
-  &:hover {
-    color: ${props => props.theme.colors.blue5};
-  }
-`
-
-const StyledCountryCard = styled(Box)`
-  border: 1px solid ${props => props.theme.colors.gray3};
-`
-
-const Divider = styled.div`
-  border: 1px solid ${props => props.theme.colors.gray3};
-  margin-bottom: 12px;
-`
+import { StickySubMenu } from '../components/SharedStyledComponents'
 
 // To compenstate for the sticky navigation bar
 // :target selector applies only the element with id that matches
 // the current URL fragment (e.g '/#Africa')
 const RegionHeaderAnchor = styled.div`
-  :target::before {
-    content: ' ';
-    display: block;
-    width: 0;
-    /* Height of the combined header (NavBar and Regions) */
-    /* This is needed to compensate the for the sticky navbar and region
-       links bar when scrolling to the selected region. And the height of these
-       bars changes in the mobile layout. This has evolved to be a bad design
-       that needs to be replaced. */
-    height: 145px;
-    margin-top: -145px;
-    @media(max-width: 768px) {
-      height: 375px;
-      margin-top: -375px;
-    }
+  /* Height of the combined header (NavBar and Regions) */
+  /* This is needed to compensate the for the sticky navbar and region
+      links bar when scrolling to the selected region. And the height of these
+      bars changes in the mobile layout. This has evolved to be a bad design
+      that needs to be replaced. */
+  height: 172px;
+  margin-top: -172px;
+  @media(max-width: 768px) {
+    height: 375px;
+    margin-top: -375px;
   }
 `
 
@@ -74,7 +53,7 @@ const RegionBlock = ({regionCode, countries}) => {
   return (
     <Box my={3}>
       <RegionHeaderAnchor id={regionName} />
-      <Heading h={1} center py={2}>{regionName}</Heading>
+      <Heading h={2} py={2}>{regionName}</Heading>
       <CountryList 
         countries={countries.filter((c => ( measuredCountriesInRegion.indexOf(c.alpha_2) > -1 ))).map((c) => ({country: c.alpha_2, measurements: c.count}))}
         itemsPerRow={4}
@@ -86,18 +65,13 @@ const RegionBlock = ({regionCode, countries}) => {
 const StyledRegionLink = styled.a`
   display: block;
   color: ${(props) => props.theme.colors.blue5};
-  text-decoration: none;
-  border-bottom: 2px solid transparent;
-  :hover {
-    border-bottom: 2px solid ${(props) => props.theme.colors.blue5};
-    width: 100%;
-  }
+  text-decoration: underline;
 `
 
 const RegionLink = ({ href, label }) => (
-  <Box px={[2,3]} py={[2,2,4]}>
+  <Box px={[2,3]}>
     <StyledRegionLink href={href}>
-      <Text fontSize={[16, 20]}>{label}</Text>
+      <Text fontSize={1}>{label}</Text>
     </StyledRegionLink>
   </Box>
 )
@@ -154,8 +128,8 @@ const Countries = ({countries}) => {
       <Head>
         <title>{intl.formatMessage({id: 'Countries.PageTitle'})}</title>
       </Head>
-      <StyledStickySubMenu>
-        <Container>
+      <Container>
+        <StickySubMenu title="Countries">
           <Flex
             flexDirection={['column', 'column', 'row']}
             justifyContent={['flex-start', 'flex-end']}
@@ -180,10 +154,8 @@ const Countries = ({countries}) => {
               <RegionLink href={`#${getLocalisedRegionName('AQ', intl.locale)}`} label={getLocalisedRegionName('AQ', intl.locale)} />
             </Flex>
           </Flex>
-        </Container>
-      </StyledStickySubMenu>
-
-      <Container>
+        </StickySubMenu>
+      
         {
           // Show a message when there are no countries to show, when search is empty
           (filteredCountries.length === 0)

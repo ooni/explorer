@@ -1,10 +1,10 @@
 import { CategoryBadge } from 'components/Badge'
 import GridLoader from 'components/GridLoader'
-import { StyledStickySubMenu } from 'components/SharedStyledComponents'
+import { StickySubMenu } from 'components/SharedStyledComponents'
 import { getCategoryCodesMap } from 'components/utils/categoryCodes'
 import useFilterWithSort from 'hooks/useFilterWithSort'
 import Head from 'next/head'
-import { Box, Container, Flex, Heading, Input, Select, Text } from 'ooni-components'
+import { Box, Container, Flex, Input, Select, Text } from 'ooni-components'
 import { useMemo } from 'react'
 import { useIntl } from 'react-intl'
 import { simpleFetcher } from 'services/fetchers'
@@ -92,48 +92,47 @@ const Domains = () => {
         <title>{intl.formatMessage({id: 'General.OoniExplorer'})} | {intl.formatMessage({id: 'Domains.Title'})}</title>
       </Head>
       <Container>
-        <StyledStickySubMenu>
-          <Flex mt={[0, 5]} mb={2} justifyContent='space-between' alignItems='baseline' flexDirection={['column', 'column', 'row']}>
-            <Heading h={1} mt={1} mb={0} fontSize={[4, 5]}>
-              {
-                intl.formatMessage({id: 'Domains.Title'})
-              } {!!sortedAndFilteredData.length && 
+        <StickySubMenu
+          title={
+            <>
+              { intl.formatMessage({id: 'Domains.Title'})}{' '}{!!sortedAndFilteredData.length && 
                 <>({new Intl.NumberFormat().format(sortedAndFilteredData.length)})</>
               }
-            </Heading>
-            <Flex sx={{gap: 3}} flexDirection={['column', 'column', 'row']} width={[1, 'auto']}>
-              <Box>
-                <Input
-                  onChange={(e) => debouncedSearchHandler(e.target.value)}
-                  placeholder={intl.formatMessage({id: 'Domains.SearchPlaceholder'})}
-                  error={
-                    (searchValue && sortedAndFilteredData?.length === 0) && 
-                    <>{intl.formatMessage({id: 'Domains.SearchError'})}</>
-                  }
-                />
-              </Box>
-              <Box>
-                <Select onChange={e => setCategoryValue(e.target.value)}>
-                  <option value=''>{intl.formatMessage({id: 'Domains.AllCategories'})}</option>
-                  {
-                    categoryCodes.map((key) => (
-                      <option key={key} value={key}>
-                        {intl.formatMessage({id: `CategoryCode.${key}.Name`})}
-                      </option>
-                    ))
-                  }
-                </Select>
-              </Box>
-              <Box>
-                <Select value={sortValue} onChange={e => setSortValue(e.target.value)}>
-                  {sortOptions.map(({key, intlKey}) => (
-                    <option key={key} value={key}>{intl.formatMessage({id: intlKey})}</option>
-                  ))}
-                </Select>
-              </Box>
-            </Flex>
+            </>
+          }
+        >
+          <Flex sx={{gap: 3}} flexDirection={['column', 'column', 'row']} width={[1, 'auto']}>
+            <Box>
+              <Input
+                onChange={(e) => debouncedSearchHandler(e.target.value)}
+                placeholder={intl.formatMessage({id: 'Domains.SearchPlaceholder'})}
+                error={
+                  (searchValue && sortedAndFilteredData?.length === 0) && 
+                  <>{intl.formatMessage({id: 'Domains.SearchError'})}</>
+                }
+              />
+            </Box>
+            <Box>
+              <Select onChange={e => setCategoryValue(e.target.value)}>
+                <option value=''>{intl.formatMessage({id: 'Domains.AllCategories'})}</option>
+                {
+                  categoryCodes.map((key) => (
+                    <option key={key} value={key}>
+                      {intl.formatMessage({id: `CategoryCode.${key}.Name`})}
+                    </option>
+                  ))
+                }
+              </Select>
+            </Box>
+            <Box>
+              <Select value={sortValue} onChange={e => setSortValue(e.target.value)}>
+                {sortOptions.map(({key, intlKey}) => (
+                  <option key={key} value={key}>{intl.formatMessage({id: intlKey})}</option>
+                ))}
+              </Select>
+            </Box>
           </Flex>
-        </StyledStickySubMenu>
+        </StickySubMenu>
         <Box mt={4}>
           {!!displayData.length ? 
             <Box mt={4}><VirtualizedGrid data={sortedAndFilteredData} /></Box>:

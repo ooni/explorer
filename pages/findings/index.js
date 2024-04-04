@@ -1,4 +1,4 @@
-import { StyledStickySubMenu } from 'components/SharedStyledComponents'
+import { StickySubMenu } from 'components/SharedStyledComponents'
 import HighlightBox from 'components/landing/HighlightBox'
 import SpinLoader from 'components/vendor/SpinLoader'
 import useFilterWithSort from 'hooks/useFilterWithSort'
@@ -93,32 +93,29 @@ const Index = () => {
         {user?.role === 'admin' && (
           <Flex justifyContent="end" mt={3}><NLink href="/findings/dashboard"><Button hollow>{intl.formatMessage({id: 'Findings.Dashboard.ShortTitle'})}</Button></NLink></Flex>
         )}
-        <StyledStickySubMenu>
-          <Flex mt={user?.role === 'admin' ? 0 : [0, 5]} mb={2} justifyContent='space-between' alignItems='baseline' flexDirection={['column', 'column', 'row']}>
-            <Heading h={1} mt={1} mb={0} fontSize={[4, 5]}>
-              {intl.formatMessage({id: 'Findings.Index.Title'}, {amount: sortedAndFilteredData.length})}
-            </Heading>
-            <Flex sx={{gap: 3}} flexDirection={['column', 'column', 'row']} width={[1, 'auto']}>
-              <Box>
-                <Input
-                  onChange={(e) => debouncedSearchHandler(e.target.value)}
-                  placeholder={intl.formatMessage({id: 'Findings.Index.SearchPlaceholder'})}
-                  error={
-                    (searchValue && sortedAndFilteredData?.length === 0) && 
-                    <>{intl.formatMessage({id: 'Findings.Index.SearchError'})}</>
-                  }
-                />
-              </Box>
-              <Box>
-                <Select value={sortValue} onChange={e => setSortValue(e.target.value)}>
-                  {sortOptions.map(({key, intlKey}) => (
-                    <option key={key} value={key}>{intl.formatMessage({id: intlKey})}</option>
-                  ))}
-                </Select>
-              </Box>
-            </Flex>
+        <StickySubMenu
+          title={<>{intl.formatMessage({id: 'Findings.Index.Title'}, {amount: sortedAndFilteredData.length})}</>}
+        >
+          <Flex sx={{gap: 3}} flexDirection={['column', 'column', 'row']} width={[1, 'auto']}>
+            <Box>
+              <Input
+                onChange={(e) => debouncedSearchHandler(e.target.value)}
+                placeholder={intl.formatMessage({id: 'Findings.Index.SearchPlaceholder'})}
+                error={
+                  (searchValue && sortedAndFilteredData?.length === 0) && 
+                  <>{intl.formatMessage({id: 'Findings.Index.SearchError'})}</>
+                }
+              />
+            </Box>
+            <Box>
+              <Select value={sortValue} onChange={e => setSortValue(e.target.value)}>
+                {sortOptions.map(({key, intlKey}) => (
+                  <option key={key} value={key}>{intl.formatMessage({id: intlKey})}</option>
+                ))}
+              </Select>
+            </Box>
           </Flex>
-        </StyledStickySubMenu>
+        </StickySubMenu>
         {isLoading && 
           <Container pt={6}><SpinLoader /></Container>
         }
