@@ -3,7 +3,7 @@ import debounce from 'lodash.debounce'
 import Head from 'next/head'
 import {
   Box,
-  Container, Flex, Heading, Input, Link, Text
+  Container, Flex, Heading, Input, Text
 } from 'ooni-components'
 import React, { useMemo, useState } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
@@ -13,23 +13,6 @@ import CountryList from 'components/CountryBox'
 import { StyledStickySubMenu } from 'components/SharedStyledComponents'
 import countryUtil from 'country-util'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
-
-const CountryLink = styled(Link)`
-  color: ${props => props.theme.colors.black};
-  text-decoration: none;
-  &:hover {
-    color: ${props => props.theme.colors.blue5};
-  }
-`
-
-const StyledCountryCard = styled(Box)`
-  border: 1px solid ${props => props.theme.colors.gray3};
-`
-
-const Divider = styled.div`
-  border: 1px solid ${props => props.theme.colors.gray3};
-  margin-bottom: 12px;
-`
 
 // To compenstate for the sticky navigation bar
 // :target selector applies only the element with id that matches
@@ -56,14 +39,20 @@ const RegionHeaderAnchor = styled.div`
 const RegionBlock = ({regionCode, countries}) => {
   const intl = useIntl()
 
-  countries = countries
-    .map((c) => ({...c, localisedName: getLocalisedRegionName(c.alpha_2, intl.locale)}))
-    .sort((a, b) => (new Intl.Collator(intl.locale).compare(a.localisedName, b.localisedName)))
+  const sortedCountries = useMemo(() => (countries
+      .map((c) => ({...c, localisedName: getLocalisedRegionName(c.alpha_2, intl.locale)}))
+      .sort((a, b) => (new Intl.Collator(intl.locale).compare(a.localisedName, b.localisedName)))
+    ), 
+    [intl, countries]
+  )
 
-  const regionName = getLocalisedRegionName(regionCode, intl.locale)
+  const regionName = useMemo(() => (getLocalisedRegionName(regionCode, intl.locale)), [regionCode, intl])
   // Select countries in the region where we have measuremennts from
-  const measuredCountriesInRegion = countryUtil.regions[regionCode].countries.filter((countryCode) => (
-    countries.find((item) => item.alpha_2 === countryCode)
+  const measuredCountriesInRegion = useMemo(() => (
+    countryUtil.regions[regionCode].countries.filter((countryCode) => (
+      sortedCountries.find((item) => item.alpha_2 === countryCode)
+    ),
+    [sortedCountries])
   ))
 
   // When there are no measurements from the region
@@ -116,16 +105,15 @@ const NoCountriesFound = ({ searchTerm }) => (
   </Flex>
 )
 
-export const getServerSideProps = async () => {
+export const getStaticProps = async () => {
   const client = axios.create({baseURL: process.env.NEXT_PUBLIC_OONI_API}) // eslint-disable-line
-    const result = await client.get('/api/_/countries')
-    const responseUrl = result?.request?.res?.responseUrl
+  const result = await client.get('/api/_/countries')
 
-    return {
-      props: {
-        countries: result.data.countries,
-      }  
-    }
+  return {
+    props: {
+      countries: result.data.countries,
+    }  
+  }
 }
 
 const Countries = ({countries}) => {
