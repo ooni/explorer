@@ -36,27 +36,31 @@ const RegionHeaderAnchor = styled.div`
   }
 `
 
+const Regions = ({ regions, countries}) => {
+  return (
+    regions.map((regionCode, index) => {
+      
+      const measuredCountriesInRegion = countryUtil.regions[regionCode].countries.filter((countryCode) => (
+        countries.find((item) => item.alpha_2 === countryCode)
+      ))
+      
+      return (
+        <RegionBlock 
+          key={index}
+          regionCode={regionCode}
+          countries={countries.filter((c => ( measuredCountriesInRegion.indexOf(c.alpha_2) > -1 )))}
+        />
+      )
+    })
+  )
+}
+
 const RegionBlock = ({regionCode, countries}) => {
   const intl = useIntl()
-
-  const sortedCountries = useMemo(() => (countries
-      .map((c) => ({...c, localisedName: getLocalisedRegionName(c.alpha_2, intl.locale)}))
-      .sort((a, b) => (new Intl.Collator(intl.locale).compare(a.localisedName, b.localisedName)))
-    ), 
-    [intl, countries]
-  )
-
   const regionName = useMemo(() => (getLocalisedRegionName(regionCode, intl.locale)), [regionCode, intl])
-  // Select countries in the region where we have measuremennts from
-  const measuredCountriesInRegion = useMemo(() => (
-    countryUtil.regions[regionCode].countries.filter((countryCode) => (
-      sortedCountries.find((item) => item.alpha_2 === countryCode)
-    ),
-    [sortedCountries])
-  ))
-
+ 
   // When there are no measurements from the region
-  if (measuredCountriesInRegion.length === 0) {
+  if (countries.length === 0) {
     return null
   }
 
@@ -65,7 +69,7 @@ const RegionBlock = ({regionCode, countries}) => {
       <RegionHeaderAnchor id={regionName} />
       <Heading h={1} center py={2}>{regionName}</Heading>
       <CountryList 
-        countries={countries.filter((c => ( measuredCountriesInRegion.indexOf(c.alpha_2) > -1 ))).map((c) => ({country: c.alpha_2, measurements: c.count}))}
+        countries={countries}
         itemsPerRow={4}
       />
     </Box>
@@ -116,17 +120,24 @@ export const getStaticProps = async () => {
   }
 }
 
-const Countries = ({countries}) => {
+const Countries = ({ countries }) => {
   const intl = useIntl()
   const [searchInput, setSearchInput] = useState('')
 
-  let filteredCountries = countries
+  const sortedCountries = useMemo(() => (countries
+      .map((c) => ({...c, localisedName: getLocalisedRegionName(c.alpha_2, intl.locale)}))
+      .sort((a, b) => (new Intl.Collator(intl.locale).compare(a.localisedName, b.localisedName)))
+    ), 
+    [intl, countries]
+  )
 
-  if (searchInput !== '') {
-    filteredCountries = countries.filter((country) => (
-      country.name.toLowerCase().indexOf(searchInput.toLowerCase()) > -1
-    ))
-  }
+  const filteredCountries = useMemo(() => (
+    searchInput !== '' ?
+    sortedCountries.filter((country) => (
+        country.name.toLowerCase().indexOf(searchInput.toLowerCase()) > -1
+      )) :
+      sortedCountries
+  ), [searchInput])
 
   const searchHandler = (searchTerm) => {
     setSearchInput(searchTerm)
@@ -176,9 +187,7 @@ const Countries = ({countries}) => {
           // Show a message when there are no countries to show, when search is empty
           (filteredCountries.length === 0)
             ? <NoCountriesFound searchTerm={searchInput} />
-            : regions.map((regionCode, index) => (
-              <RegionBlock key={index} regionCode={regionCode} countries={filteredCountries} />
-            ))
+            : <Regions regions={regions} countries={filteredCountries} />
         }
       </Container>
     </>

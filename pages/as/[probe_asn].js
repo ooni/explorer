@@ -19,6 +19,7 @@ import dayjs from 'services/dayjs'
 import { fetcherWithPreprocessing, simpleFetcher } from 'services/fetchers'
 import styled from 'styled-components'
 import useSWR from 'swr'
+import { getLocalisedRegionName } from 'utils/i18nCountries'
 import { toCompactNumberUnit } from '../../utils'
 import TestGroupBadge from '/components/Badge'
 
@@ -44,7 +45,6 @@ const messagingTestNames = ['signal', 'telegram', 'whatsapp', 'facebook_messenge
 const circumventionTestNames = ['psiphon', 'tor', 'torsf']
 
 const ChartsContainer = () => {
-  const intl = useIntl()
   const router = useRouter()
   const {
     query: { since, until, probe_asn, probe_cc },
@@ -182,7 +182,14 @@ const Summary = ({ measurementsTotal, firstMeasurement, lastMeasurement }) => {
 }
 
 const CountriesList = ({ countriesData }) => {
-  const sortedCountries = countriesData.sort((a, b) => b.measurements - a.measurements)
+  const { locale } = useIntl()
+
+  const sortedCountries = useMemo(() => (
+    countriesData
+      .sort((a, b) => b.measurements - a.measurements)
+      .map((c) => ({...c, localisedName: getLocalisedRegionName(c.alpha_2, locale)}))
+  ))
+  
   const numberOfCountries = countriesData.length
 
   return (
@@ -327,8 +334,8 @@ export const getServerSideProps = async (context) => {
       })
       .then((response) =>
         response.data.result.map((res) => ({
-          country: res.probe_cc,
-          measurements: res.measurement_count,
+          alpha_2: res.probe_cc,
+          count: res.measurement_count,
         }))
       )
 
