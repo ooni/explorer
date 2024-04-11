@@ -100,18 +100,22 @@ const RequestResponseContainer = ({request}) => {
           </Box>
           <Box width={1} mb={2} p={2} bg='gray2'>
             <WrappedPre fontSize={14}>
-              {Object.keys(request.response.headers).map((header, index) => (
-                <React.Fragment key={index}>
-                  <Flex mb={2}>
-                    <Box mr={1}>
-                      <Text fontWeight='bold'>{header}:</Text>
-                    </Box>
-                    <Box>
-                      {request.response.headers[header]}
-                    </Box>
-                  </Flex>
-                </React.Fragment>
-              ))}
+              {
+                request.response.headers ? 
+                  Object.keys(request.response.headers).map((header, index) => (
+                  <React.Fragment key={index}>
+                    <Flex mb={2}>
+                      <Box mr={1}>
+                        <Text fontWeight='bold'>{header}:</Text>
+                      </Box>
+                      <Box>
+                        {request.response.headers[header]}
+                      </Box>
+                    </Flex>
+                  </React.Fragment>
+                )) :
+                <>Empty headers</>
+              }
             </WrappedPre>
           </Box>
           {/* Response Body (HTML) */}
