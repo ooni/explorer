@@ -23,8 +23,8 @@ const RegionHeaderAnchor = styled.div`
       links bar when scrolling to the selected region. And the height of these
       bars changes in the mobile layout. This has evolved to be a bad design
       that needs to be replaced. */
-  height: 172px;
-  margin-top: -172px;
+  height: 140px;
+  margin-top: -140px;
   @media(max-width: 768px) {
     height: 375px;
     margin-top: -375px;
