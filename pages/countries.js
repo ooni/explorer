@@ -3,7 +3,7 @@ import debounce from 'lodash.debounce'
 import Head from 'next/head'
 import {
   Box,
-  Container, Flex, Heading, Input, Link, Text
+  Container, Flex, Heading, Input, Text
 } from 'ooni-components'
 import React, { useMemo, useState } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
@@ -13,23 +13,6 @@ import CountryList from 'components/CountryBox'
 import { StyledStickySubMenu } from 'components/SharedStyledComponents'
 import countryUtil from 'country-util'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
-
-const CountryLink = styled(Link)`
-  color: ${props => props.theme.colors.black};
-  text-decoration: none;
-  &:hover {
-    color: ${props => props.theme.colors.blue5};
-  }
-`
-
-const StyledCountryCard = styled(Box)`
-  border: 1px solid ${props => props.theme.colors.gray3};
-`
-
-const Divider = styled.div`
-  border: 1px solid ${props => props.theme.colors.gray3};
-  margin-bottom: 12px;
-`
 
 // To compenstate for the sticky navigation bar
 // :target selector applies only the element with id that matches
@@ -53,21 +36,31 @@ const RegionHeaderAnchor = styled.div`
   }
 `
 
+const Regions = ({ regions, countries}) => {
+  return (
+    regions.map((regionCode, index) => {
+      
+      const measuredCountriesInRegion = countryUtil.regions[regionCode].countries.filter((countryCode) => (
+        countries.find((item) => item.alpha_2 === countryCode)
+      ))
+      
+      return (
+        <RegionBlock 
+          key={index}
+          regionCode={regionCode}
+          countries={countries.filter((c => ( measuredCountriesInRegion.indexOf(c.alpha_2) > -1 )))}
+        />
+      )
+    })
+  )
+}
+
 const RegionBlock = ({regionCode, countries}) => {
   const intl = useIntl()
-
-  countries = countries
-    .map((c) => ({...c, localisedName: getLocalisedRegionName(c.alpha_2, intl.locale)}))
-    .sort((a, b) => (new Intl.Collator(intl.locale).compare(a.localisedName, b.localisedName)))
-
-  const regionName = getLocalisedRegionName(regionCode, intl.locale)
-  // Select countries in the region where we have measuremennts from
-  const measuredCountriesInRegion = countryUtil.regions[regionCode].countries.filter((countryCode) => (
-    countries.find((item) => item.alpha_2 === countryCode)
-  ))
-
+  const regionName = useMemo(() => (getLocalisedRegionName(regionCode, intl.locale)), [regionCode, intl])
+ 
   // When there are no measurements from the region
-  if (measuredCountriesInRegion.length === 0) {
+  if (countries.length === 0) {
     return null
   }
 
@@ -76,7 +69,7 @@ const RegionBlock = ({regionCode, countries}) => {
       <RegionHeaderAnchor id={regionName} />
       <Heading h={1} center py={2}>{regionName}</Heading>
       <CountryList 
-        countries={countries.filter((c => ( measuredCountriesInRegion.indexOf(c.alpha_2) > -1 ))).map((c) => ({country: c.alpha_2, measurements: c.count}))}
+        countries={countries}
         itemsPerRow={4}
       />
     </Box>
@@ -116,29 +109,35 @@ const NoCountriesFound = ({ searchTerm }) => (
   </Flex>
 )
 
-export const getServerSideProps = async () => {
+export const getStaticProps = async () => {
   const client = axios.create({baseURL: process.env.NEXT_PUBLIC_OONI_API}) // eslint-disable-line
-    const result = await client.get('/api/_/countries')
-    const responseUrl = result?.request?.res?.responseUrl
+  const result = await client.get('/api/_/countries')
 
-    return {
-      props: {
-        countries: result.data.countries,
-      }  
-    }
+  return {
+    props: {
+      countries: result.data.countries,
+    }  
+  }
 }
 
-const Countries = ({countries}) => {
+const Countries = ({ countries }) => {
   const intl = useIntl()
   const [searchInput, setSearchInput] = useState('')
 
-  let filteredCountries = countries
+  const sortedCountries = useMemo(() => (countries
+      .map((c) => ({...c, localisedName: getLocalisedRegionName(c.alpha_2, intl.locale)}))
+      .sort((a, b) => (new Intl.Collator(intl.locale).compare(a.localisedName, b.localisedName)))
+    ), 
+    [intl, countries]
+  )
 
-  if (searchInput !== '') {
-    filteredCountries = countries.filter((country) => (
-      country.name.toLowerCase().indexOf(searchInput.toLowerCase()) > -1
-    ))
-  }
+  const filteredCountries = useMemo(() => (
+    searchInput !== '' ?
+    sortedCountries.filter((country) => (
+        country.name.toLowerCase().indexOf(searchInput.toLowerCase()) > -1
+      )) :
+      sortedCountries
+  ), [searchInput])
 
   const searchHandler = (searchTerm) => {
     setSearchInput(searchTerm)
@@ -188,9 +187,7 @@ const Countries = ({countries}) => {
           // Show a message when there are no countries to show, when search is empty
           (filteredCountries.length === 0)
             ? <NoCountriesFound searchTerm={searchInput} />
-            : regions.map((regionCode, index) => (
-              <RegionBlock key={index} regionCode={regionCode} countries={filteredCountries} />
-            ))
+            : <Regions regions={regions} countries={filteredCountries} />
         }
       </Container>
     </>
