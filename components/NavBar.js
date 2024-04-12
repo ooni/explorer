@@ -137,8 +137,13 @@ export const NavBar = ({ color }) => {
 
   const logoutUser = (e) => {
     e.preventDefault()
+    setShowMenu(false)
     logout()
   }
+
+  useEffect(() => {
+    setShowMenu(false)
+  }, [pathname])
 
   return (
     <StyledNavBar $bgColor={color}>
