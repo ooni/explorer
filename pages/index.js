@@ -71,7 +71,7 @@ const StyledStatsItem = styled(Box)`
 
 const StatsItem = ({label, unit, value }) => (
   <StyledStatsItem color='blue9' width={[1/3]} p={3}>
-    <Text fontSize={[42, 48]} fontWeight={300}>
+    <Text fontSize={[4, 48]} fontWeight={300}>
       {value}
       <Text as='span' fontSize={32}>{unit}</Text>
     </Text>
@@ -154,7 +154,7 @@ const LandingPage = ({ measurementCount, asnCount, countryCount}) => {
         <title>{intl.formatMessage({id: 'General.OoniExplorer'})}</title>
       </Head>
       <HeroUnit>
-        <StyledContainer py={[0, 120]} my={[0, 90]}>
+        <StyledContainer py={[0, 120]} my={[0, 90]} pt={[5, 0]}>
           <Text textAlign='center'>
             <Heading h={1}>
               <Text fontSize={[32, 64]} color='#ffffff'><FormattedMessage id='Home.Banner.Title.UncoverEvidence' /></Text>
@@ -169,7 +169,7 @@ const LandingPage = ({ measurementCount, asnCount, countryCount}) => {
         </StyledContainer>
       </HeroUnit>
       <Container>
-        <StatsContainer px={[0, 32]} py={16} mx={[0, '25%']} mt={[0, -120]} mb={48} flexWrap='wrap'>
+        <StatsContainer px={[0, 32]} py={16} mx={[0, '25%']} mt={[0, -120]} mb={[0, 48]} flexWrap='wrap'>
           <StatsItem
             label={<FormattedMessage id='Home.Banner.Stats.Measurements' />}
             unit={measurementCount.unit}

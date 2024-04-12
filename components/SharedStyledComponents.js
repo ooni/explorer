@@ -23,13 +23,10 @@ z-index: 99;
 border-bottom: 1px solid ${props => props.theme.colors.gray3};
 `
 
-const StyledContainer = styled(Container)`
-border-bottom: 1px solid ${props => props.theme.colors.gray3};
-`
 export const StickySubMenu = ({ title, children }) => {
   return (
-    <StyledStickySubMenu mt={[0, 4]} mb={2}>
-      <Flex justifyContent='space-between' alignItems='center' flexDirection={['column', 'column', 'row']}>
+    <StyledStickySubMenu mt={[0, 4]} mb={2} pb={[2, 0]}>
+      <Flex justifyContent='space-between' alignItems={['flex-start', 'center']} flexDirection={['column', 'column', 'row']}>
         <Heading h={1} mt={1} mb={0} fontSize={[4, 5]}>
           {title}
         </Heading>
