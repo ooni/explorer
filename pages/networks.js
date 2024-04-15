@@ -1,7 +1,7 @@
 import { useMemo } from 'react'
 
 import GridLoader from 'components/GridLoader'
-import { StyledStickySubMenu } from 'components/SharedStyledComponents'
+import { StickySubMenu } from 'components/SharedStyledComponents'
 import VirtualizedGrid from 'components/VirtualizedGrid'
 import useFilterWithSort from 'hooks/useFilterWithSort'
 import Head from 'next/head'
@@ -74,36 +74,35 @@ const Networks = () => {
         <title>{intl.formatMessage({id: 'General.OoniExplorer'})} | {intl.formatMessage({id: 'Networks.Title'})}</title>
       </Head>
       <Container>
-        <StyledStickySubMenu>
-          <Flex mt={[0, 5]} mb={2} justifyContent='space-between' alignItems='baseline' flexDirection={['column', 'column', 'row']}>
-            <Heading h={1} mt={1} mb={0} fontSize={[4, 5]}>
-              {
-                intl.formatMessage({id: 'Networks.Title'})
-              } {!!sortedAndFilteredData.length && 
-                <>({new Intl.NumberFormat().format(sortedAndFilteredData.length)})</>
-              }
-            </Heading>
-            <Flex sx={{gap: 3}} flexDirection={['column', 'column', 'row']} width={[1, 'auto']}>
-              <Box>
-                <Input
-                  onChange={(e) => debouncedSearchHandler(e.target.value)}
-                  placeholder={intl.formatMessage({id: 'Networks.SearchPlaceholder'})}
-                  error={
-                    (searchValue && !sortedAndFilteredData.length) && 
-                    <>{intl.formatMessage({id: 'Networks.SearchError'})} </>
-                  }
-                />
-              </Box>
-              <Box>
-                <Select value={sortValue} onChange={e => setSortValue(e.target.value)}>
-                  {sortOptions.map(({key, intlKey}) => (
-                    <option key={key} value={key}>{intl.formatMessage({id: intlKey})}</option>
-                  ))}
-                </Select>
-              </Box>
-            </Flex>
+        <StickySubMenu 
+          title={<>
+            {
+              intl.formatMessage({id: 'Networks.Title'})
+            } {!!sortedAndFilteredData.length && 
+              <>({new Intl.NumberFormat().format(sortedAndFilteredData.length)})</>
+            }
+          </>}
+        >
+          <Flex sx={{gap: 3}} flexDirection={['column', 'column', 'row']} width={[1, 'auto']}>
+            <Box>
+              <Input
+                onChange={(e) => debouncedSearchHandler(e.target.value)}
+                placeholder={intl.formatMessage({id: 'Networks.SearchPlaceholder'})}
+                error={
+                  (searchValue && !sortedAndFilteredData.length) && 
+                  <>{intl.formatMessage({id: 'Networks.SearchError'})} </>
+                }
+              />
+            </Box>
+            <Box>
+              <Select value={sortValue} onChange={e => setSortValue(e.target.value)}>
+                {sortOptions.map(({key, intlKey}) => (
+                  <option key={key} value={key}>{intl.formatMessage({id: intlKey})}</option>
+                ))}
+              </Select>
+            </Box>
           </Flex>
-        </StyledStickySubMenu>
+        </StickySubMenu>
         <Box mt={4}>
           {!!displayData.length ?
             <VirtualizedGrid data={sortedAndFilteredData} />:
