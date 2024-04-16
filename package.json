@@ -58,6 +58,7 @@
     "jackspeak": "2.1.1"
   },
   "devDependencies": {
+    "@next/bundle-analyzer": "^14.2.1",
     "@svgr/webpack": "^8.1.0",
     "@testing-library/cypress": "^10.0.1",
     "@welldone-software/why-did-you-render": "^8.0.1",
