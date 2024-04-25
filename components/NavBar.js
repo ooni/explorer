@@ -27,25 +27,30 @@ const StyledNavItem = styled(NLink)`
 `
 
 const LanguageSelect = styled.select`
-  color: ${(props) => props.theme.colors.white};
-  background: none;
-  opacity: 0.6;
-  border: none;
-  text-transform: capitalize;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: inherit;
-  padding: 0;
-  padding-bottom: 6px;
-  outline: none;
-  appearance: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  -ms-appearance: none;
-  -o-appearance: none;
-  &:hover {
-    opacity: 1;
-  }
+color: ${(props) => props.theme.colors.white};
+background: none;
+opacity: 0.6;
+border: none;
+text-transform: capitalize;
+cursor: pointer;
+font-family: inherit;
+font-size: inherit;
+padding: 0;
+padding-bottom: 6px;
+outline: none;
+appearance: none;
+-webkit-appearance: none;
+-moz-appearance: none;
+-ms-appearance: none;
+-o-appearance: none;
+&:hover {
+  opacity: 1;
+}
+// reset option styling for browsers that apply it to its native styling (Brave)
+> option {
+  color: initial;
+  opacity: initial;
+}
 `
 
 const NavItem = ({ label, href }) => {
