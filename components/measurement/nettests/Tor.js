@@ -1,12 +1,12 @@
-import React, { useMemo, useCallback } from 'react'
-import PropTypes from 'prop-types'
-import { FormattedMessage, defineMessages } from 'react-intl'
-import { Flex, Text, Container, theme } from 'ooni-components'
-import styled from 'styled-components'
-import { useTable, useSortBy } from 'react-table'
+import { Flex, Text, theme } from 'ooni-components'
 import { Cross, Tick } from 'ooni-components/icons'
-import { useClipboard } from 'use-clipboard-copy'
+import PropTypes from 'prop-types'
+import React, { useMemo } from 'react'
 import { FaClipboard } from 'react-icons/fa'
+import { FormattedMessage, defineMessages } from 'react-intl'
+import { useSortBy, useTable } from 'react-table'
+import styled from 'styled-components'
+import { useClipboard } from 'use-clipboard-copy'
 
 import AccessPointStatus from '../AccessPointStatus'
 
@@ -170,17 +170,14 @@ const TorDetails = ({
     summaryText = 'Measurement.Details.SummaryText.Tor.OK'
   }
 
+  const testKeys = measurement?.test_keys || {}
   const {
-    or_port_accessible,
-    or_port_total,
     or_port_dirauth_accessible,
     or_port_dirauth_total,
     obfs4_accessible,
     obfs4_total,
-    dir_port_accessible,
-    dir_port_total,
     targets = {}
-  } = measurement.test_keys
+  } = testKeys
 
   const columns = useMemo(() => [
     {
@@ -236,46 +233,50 @@ const TorDetails = ({
         },
         details: (
           <>
-            <Flex my={4}>
-              <AccessPointStatus
-                width={1/2}
-                label={<FormattedMessage id='Measurement.Details.Tor.Bridges.Label.Title' />}
-                content={
-                  <FormattedMessage
-                    id='Measurement.Details.Tor.Bridges.Label.OK'
-                    defaultMessage='{bridgesAccessible}/{bridgesTotal} OK'
-                    values={{
-                      bridgesAccessible: obfs4_accessible,
-                      bridgesTotal: obfs4_total
-                    }}
+            {!!Object.keys(testKeys).length &&
+              <>
+                <Flex my={4}>
+                  <AccessPointStatus
+                    width={1/2}
+                    label={<FormattedMessage id='Measurement.Details.Tor.Bridges.Label.Title' />}
+                    content={
+                      <FormattedMessage
+                        id='Measurement.Details.Tor.Bridges.Label.OK'
+                        defaultMessage='{bridgesAccessible}/{bridgesTotal} OK'
+                        values={{
+                          bridgesAccessible: obfs4_accessible,
+                          bridgesTotal: obfs4_total
+                        }}
+                      />
+                    }
+                    ok={true}
+                    color='blue5'
                   />
-                }
-                ok={true}
-                color='blue5'
-              />
-              <AccessPointStatus
-                width={1/2}
-                label={<FormattedMessage id='Measurement.Details.Tor.DirAuth.Label.Title' />}
-                content={
-                  <FormattedMessage
-                    id='Measurement.Details.Tor.DirAuth.Label.OK'
-                    defaultMessage='{dirAuthAccessible}/{dirAuthTotal} OK'
-                    values={{
-                      dirAuthAccessible: or_port_dirauth_accessible,
-                      dirAuthTotal: or_port_dirauth_total
-                    }}
+                  <AccessPointStatus
+                    width={1/2}
+                    label={<FormattedMessage id='Measurement.Details.Tor.DirAuth.Label.Title' />}
+                    content={
+                      <FormattedMessage
+                        id='Measurement.Details.Tor.DirAuth.Label.OK'
+                        defaultMessage='{dirAuthAccessible}/{dirAuthTotal} OK'
+                        values={{
+                          dirAuthAccessible: or_port_dirauth_accessible,
+                          dirAuthTotal: or_port_dirauth_total
+                        }}
+                      />
+                    }
+                    ok={true}
+                    color='blue5'
                   />
-                }
-                ok={true}
-                color='blue5'
-              />
-            </Flex>
-            <TableStyles>
-              <Table
-                columns={columns}
-                data={data}
-              />
-            </TableStyles>
+                </Flex>
+                <TableStyles>
+                  <Table
+                    columns={columns}
+                    data={data}
+                  />
+                </TableStyles>
+              </>
+            }
           </>
         )
       })}
