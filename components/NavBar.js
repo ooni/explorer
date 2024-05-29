@@ -53,7 +53,7 @@ appearance: none;
 }
 `
 
-const NavItem = ({ label, href }) => {
+const NavItem = ({ label, href, ...rest }) => {
   const { pathname } = useRouter()
   const [isActive, setIsActive] = useState(false)
  
@@ -62,7 +62,7 @@ const NavItem = ({ label, href }) => {
   }, [pathname, href])
 
   return (
-    <StyledNavItem href={href} $active={isActive}>{label}</StyledNavItem>
+    <StyledNavItem href={href} $active={isActive} {...rest}>{label}</StyledNavItem>
   )
 }
 
@@ -168,13 +168,13 @@ export const NavBar = ({ color }) => {
                 </Flex>
               )}
               <Flex className='menuItems' alignItems='center' sx={{gap: [3, 3, 3, 4]}}>
-                <NavItem label={<FormattedMessage id="Navbar.Search" />} href="/search" />
-                <NavItem label={<FormattedMessage id="Navbar.Charts.MAT" />} href="/chart/mat" />
-                <NavItem label={<FormattedMessage id="Navbar.Charts.Circumvention" />} href="/chart/circumvention" />
-                <NavItem label={<FormattedMessage id="Navbar.Countries" />} href="/countries" />
-                <NavItem label={<FormattedMessage id="Navbar.Networks" />} href="/networks" />
-                <NavItem label={<FormattedMessage id="Navbar.Domains" />} href="/domains" />
-                <NavItem label={<FormattedMessage id="Navbar.Findings" />} href="/findings" />
+                <NavItem label={<FormattedMessage id="Navbar.Search" />} href="/search" data-umami-event="navigation-search" />
+                <NavItem label={<FormattedMessage id="Navbar.Charts.MAT" />} href="/chart/mat" data-umami-event="navigation-mat" />
+                <NavItem label={<FormattedMessage id="Navbar.Charts.Circumvention" />} href="/chart/circumvention" data-umami-event="navigation-circumvention" />
+                <NavItem label={<FormattedMessage id="Navbar.Countries" />} href="/countries" data-umami-event="navigation-countries" />
+                <NavItem label={<FormattedMessage id="Navbar.Networks" />} href="/networks" data-umami-event="navigation-networks" />
+                <NavItem label={<FormattedMessage id="Navbar.Domains" />} href="/domains" data-umami-event="navigation-domains" />
+                <NavItem label={<FormattedMessage id="Navbar.Findings" />} href="/findings" data-umami-event="navigation-findings" />
                 {user?.logged_in && (
                   <StyledNavItem href="" onClick={logoutUser}><FormattedMessage id="General.Logout" /></StyledNavItem>
                 )}
