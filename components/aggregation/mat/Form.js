@@ -104,6 +104,7 @@ const defaultDefaultValues = {
   axis_x: 'measurement_start_day',
   axis_y: '',
   time_grain: 'day',
+  ooni_run_link_id: '',
 }
 
 export const Form = ({ onSubmit, query }) => {
@@ -427,6 +428,18 @@ export const Form = ({ onSubmit, query }) => {
             </Box>
           </>
         )}
+        <Box width={[1, 1 / 5]}>
+          <Controller
+            name='ooni_run_link_id'
+            control={control}
+            render={({ field }) => (
+              <Input
+                label={intl.formatMessage({ id: 'Search.Sidebar.OoniRunLinkId' })}
+                {...field}
+              />
+            )}
+          />
+        </Box>
       </Flex>
       <Flex my={4}>
         <Button data-test-id='mat-form-submit' width={[1, 'unset']} onClick={maybeWarnBeforeSubmit}>
