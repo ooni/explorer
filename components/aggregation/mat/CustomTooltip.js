@@ -64,7 +64,15 @@ export const generateSearchQuery = (data, query) => {
     }
   }
 
-  const queryObj = ['probe_cc', 'test_name', 'category_code', 'probe_asn', 'input', 'domain'].reduce((q, k) => {
+  const queryObj = [
+    'probe_cc',
+    'test_name',
+    'category_code',
+    'probe_asn',
+    'input',
+    'domain',
+    'only',
+    'failure'].reduce((q, k) => {
     if (k in data)
       q[k] = data[k]
     else if (query[k])
@@ -86,11 +94,29 @@ export const generateSearchQuery = (data, query) => {
   }
 }
 
+const getDataKeyLink = (data, matQuery, keyQuery) => {
+  const mergeQuery = {...matQuery, ...keyQuery}
+  const query = generateSearchQuery(data, mergeQuery)
+
+  return {
+    pathname: '/search',
+    query
+  }
+}
+
 const CustomToolTip = React.memo(({ data, onClose, title, link = true }) => {
   const theme = useTheme()
   const intl = useIntl()
   const [query] = useMATContext()
-  const dataKeysToShow = ['anomaly_count', 'confirmed_count', 'failure_count', 'ok_count']
+
+  const dataKeysToShow = useMemo(() => {
+    return {
+      'anomaly_count': getDataKeyLink(data, query, {only: 'anomalies'}),
+      'confirmed_count': getDataKeyLink(data, query, {only: 'confirmed'}),
+      'failure_count': getDataKeyLink(data, query, {failure: true}),
+      'ok_count': getDataKeyLink(data, query)
+    }
+  }, [data, query])
 
   const [linkToMeasurements, derivedTitle] = useMemo(() => {
     const searchQuery = generateSearchQuery(data, query)
@@ -115,12 +141,16 @@ const CustomToolTip = React.memo(({ data, onClose, title, link = true }) => {
         <MdClear title='Close' strokeWidth={2} onClick={onClose} />
       </Flex>
       <Flex flexDirection='column' pr={3} my={1}>
-        {dataKeysToShow.map(k => (
+        {Object.entries(dataKeysToShow).map(([k, v]) => (
           <Box key={k} my={1} fontSize={16}>
             <Flex alignItems='center'>
               <Box mr={3}><Chip color={colorMap[k]} /></Box>
-              <Text mr={4}>{intl.formatMessage({id: `MAT.Table.Header.${k}`})}</Text>
-              <Text ml='auto'>{intl.formatNumber(Number(data[k] ?? 0))}</Text>
+              <NLink passHref href={v}>
+                <Link target='_blank'>
+                  <Text mr={4}>{intl.formatMessage({id: `MAT.Table.Header.${k}`})}</Text>
+                </Link>
+              </NLink>
+                <Text ml='auto'>{intl.formatNumber(Number(data[k] ?? 0))}</Text>
             </Flex>
           </Box>
         ))}
