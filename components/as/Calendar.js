@@ -59,7 +59,9 @@ const Calendar = React.memo(function Calendar({data}) {
       <StyledCalendar>
         <ResponsiveCalendar
           data={calendarData}
-          from={`${selectedYear}-01-01`}
+          // setting from field to Jan 2nd is a weird fix in order
+          // for the calendar to appear correctly as a single year
+          from={`${selectedYear}-01-02`}
           to={`${selectedYear}-12-31`}
           emptyColor={colors.gray1}
           colorScale={(value) => findColor(value)}
