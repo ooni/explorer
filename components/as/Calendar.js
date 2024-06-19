@@ -1,7 +1,8 @@
-import React, { useState } from 'react'
 import { ResponsiveCalendar } from '@nivo/calendar'
+import { add, compareDesc, startOfToday, startOfYear } from 'date-fns'
+import { Flex, theme } from 'ooni-components'
+import React, { useState } from 'react'
 import styled from 'styled-components'
-import { Flex, Box, theme } from 'ooni-components'
 import { getRange } from 'utils'
 
 const StyledCalendar = styled.div`
@@ -27,14 +28,14 @@ const colorLegend = [
 
 const dateRange = (startDate, endDate) => {
   if (!startDate || !endDate) return
-  const start = new Date(new Date(startDate.getFullYear(), 0, 0, 0).setUTCHours(0, 0, 0, 0))
-  const end = new Date(new Date(endDate).setUTCHours(0, 0, 0, 0))  
-  const date = new Date(start.getTime())
+  const start = startOfYear(startDate)
+  const end = startOfToday()
+  let date = start
   const dates = []
 
-  while (date <= end) {
+  while (compareDesc(date, end) >= 0) {
     dates.push(new Date(date).toISOString().split('T')[0])
-    date.setUTCDate(date.getDate() + 1)
+    date = add(date, { days: 1 })
   }
   return dates
 }
@@ -58,7 +59,9 @@ const Calendar = React.memo(function Calendar({data}) {
       <StyledCalendar>
         <ResponsiveCalendar
           data={calendarData}
-          from={`${selectedYear}-01-01`}
+          // setting from field to Jan 2nd is a weird fix in order
+          // for the calendar to appear correctly as a single year
+          from={`${selectedYear}-01-02`}
           to={`${selectedYear}-12-31`}
           emptyColor={colors.gray1}
           colorScale={(value) => findColor(value)}
@@ -68,7 +71,7 @@ const Calendar = React.memo(function Calendar({data}) {
           dayBorderColor="#ffffff"
         />
       </StyledCalendar>
-      <Flex justifyContent='space-between'alignItems='center' mb={60} mt={2}>
+      <Flex justifyContent='space-between' alignItems='center' mb={60} mt={2}>
         <Flex>
           {colorLegend.map(item => (
             <span
