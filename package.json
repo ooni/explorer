@@ -59,21 +59,16 @@
   },
   "devDependencies": {
     "@next/bundle-analyzer": "^14.2.1",
+    "@biomejs/biome": "^1.7.0",
     "@svgr/webpack": "^8.1.0",
     "@testing-library/cypress": "^10.0.1",
     "@welldone-software/why-did-you-render": "^8.0.1",
     "cypress": "^13.6.2",
-    "eslint": "^8.56.0",
-    "eslint-config-next": "^14.0.4",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-cypress": "^2.15.1",
-    "eslint-plugin-import": "^2.29.1",
     "glob": "^10.3.10",
     "imap-simple": "^5.1.0",
     "jsdom": "^23.2.0",
     "msw": "^2.1.0",
     "mustache": "^4.2.0",
-    "prettier": "^3.2.2",
     "start-server-and-test": "^2.0.3"
   },
   "scripts": {
