@@ -1,20 +1,22 @@
-import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
+import { createContext, useContext } from 'react'
 
 // TODO: Maybe add period information to update data in all sections when
 // period filter is updated in one of the sections
 
-export const CountryContext = React.createContext()
+export const CountryContext = createContext()
 
 export const CountryContextProvider = ({
   countryCode,
   countryName,
-  children
+  children,
 }) => (
-  <CountryContext.Provider value={{
-    countryCode,
-    countryName
-  }}>
+  <CountryContext.Provider
+    value={{
+      countryCode,
+      countryName,
+    }}
+  >
     {children}
   </CountryContext.Provider>
 )
@@ -22,7 +24,7 @@ export const CountryContextProvider = ({
 CountryContextProvider.propTypes = {
   countryCode: PropTypes.string.isRequired,
   countryName: PropTypes.string.isRequired,
-  children: PropTypes.any
+  children: PropTypes.any,
 }
 
 /* Custom Hook to use CountryContext */

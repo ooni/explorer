@@ -1,9 +1,9 @@
 /* global require */
-import React, { useMemo } from 'react'
-import { IntlProvider } from 'react-intl'
 import { useRouter } from 'next/router'
+import { useMemo } from 'react'
+import { IntlProvider } from 'react-intl'
 
-export const getDirection = locale => {
+export const getDirection = (locale) => {
   switch (locale) {
     case 'fa':
     case 'ar':
@@ -19,19 +19,23 @@ export const LocaleProvider = ({ children }) => {
   const messages = useMemo(() => {
     try {
       const messages = require(`../public/static/lang/${locale}.json`)
-      const defaultMessages = require(`../public/static/lang/${defaultLocale}.json`)
+      const defaultMessages = require(
+        `../public/static/lang/${defaultLocale}.json`,
+      )
 
       const mergedMessages = Object.assign({}, defaultMessages, messages)
       return mergedMessages
     } catch (e) {
       console.error(`Failed to load messages for ${locale}: ${e.message}`)
-      const defaultMessages = require(`../public/static/lang/${defaultLocale}.json`)
+      const defaultMessages = require(
+        `../public/static/lang/${defaultLocale}.json`,
+      )
       return defaultMessages
     }
   }, [locale, defaultLocale])
 
   return (
-    <IntlProvider 
+    <IntlProvider
       defaultLocale={defaultLocale}
       locale={locale}
       messages={messages}

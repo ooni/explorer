@@ -1,24 +1,18 @@
 import PropTypes from 'prop-types'
-import {
-  Flex,
-  Box,
-  Text
-} from 'ooni-components'
 
-const StatusInfo = ({ title, message}) => (
-  <Flex flexDirection='column'>
-    <Box mb={12}>
-      <Text textAlign='center' fontSize={28}> {title} </Text>
-    </Box>
-    <Box>
-      <Text textAlign='center' fontSize={18} fontWeight='bold' style={{whiteSpace:'pre'}}> {message} </Text>
-    </Box>
-  </Flex>
+const StatusInfo = ({ title, message }) => (
+  <div className="flex flex-col">
+    <div className="text-center text-3xl mb-3"> {title} </div>
+    <div className="text-center text-lg font-bold whitespace-pre">
+      {' '}
+      {message}{' '}
+    </div>
+  </div>
 )
 
 StatusInfo.propTypes = {
   title: PropTypes.string,
-  message: PropTypes.string
+  message: PropTypes.string,
 }
 
 export default StatusInfo

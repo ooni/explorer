@@ -1,8 +1,8 @@
-import { Modal, Container, Flex, Button, Heading } from 'ooni-components'
+import { useRouter } from 'next/router'
+import { Button, Modal } from 'ooni-components'
 import { useIntl } from 'react-intl'
 import styled from 'styled-components'
 import useUser from '../../hooks/useUser'
-import { useRouter } from 'next/router'
 
 const StyledModal = styled(Modal)`
   border-radius: 8px;
@@ -23,17 +23,18 @@ const LoginRequiredModal = ({ show }) => {
   }
 
   return (
-    <StyledModal show={show} color='black' bg='white'>
-      <Container px={[1,3]} py={4} textAlign='center'>
-        <Flex>
-          <Heading h={4}>
+    <StyledModal show={show} color="black" bg="white">
+      {/* px={[1,3]} py={4} */}
+      <div className="container mx-auto text-center">
+        <div className="flex">
+          <h4>
             {intl.formatMessage({ id: 'Findings.LoginRequiredModal.Title' })}
-          </Heading>
-        </Flex>
+          </h4>
+        </div>
         <Button m={3} onClick={handleClick}>
           {intl.formatMessage({ id: 'General.Login' })}
         </Button>
-      </Container>
+      </div>
     </StyledModal>
   )
 }
