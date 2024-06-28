@@ -1,5 +1,11 @@
-import { createContext, useContext, useCallback, useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react'
 
 export const MATStateContext = createContext()
 
@@ -17,7 +23,11 @@ export const defaultMATContext = {
   tooltipIndex: [-1, ''],
 }
 
-export const MATContextProvider = ({ children, queryParams, ...initialContext }) => {
+export const MATContextProvider = ({
+  children,
+  queryParams,
+  ...initialContext
+}) => {
   const [state, setState] = useState({
     ...defaultMATContext,
     ...initialContext,
@@ -32,10 +42,16 @@ export const MATContextProvider = ({ children, queryParams, ...initialContext })
       setState((state) =>
         partial
           ? Object.assign({}, state, updates)
-          : Object.assign({}, state, defaultMATContext, initialContext, updates)
+          : Object.assign(
+              {},
+              state,
+              defaultMATContext,
+              initialContext,
+              updates,
+            ),
       )
     },
-    [initialContext]
+    [initialContext],
   )
 
   useEffect(() => {
@@ -43,7 +59,9 @@ export const MATContextProvider = ({ children, queryParams, ...initialContext })
   }, [MATquery])
 
   return (
-    <MATStateContext.Provider value={{ ...state, updateMATContext: stateReducer }}>
+    <MATStateContext.Provider
+      value={{ ...state, updateMATContext: stateReducer }}
+    >
       {children}
     </MATStateContext.Provider>
   )

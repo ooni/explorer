@@ -1,12 +1,10 @@
+import Chart from 'components/Chart'
+import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
-import { Text, Box } from 'ooni-components'
-
+import FormattedMarkdown from '../FormattedMarkdown'
 import SectionHeader from './SectionHeader'
 import { SimpleBox } from './boxes'
-import Chart from 'components/Chart'
-import FormattedMarkdown from '../FormattedMarkdown'
-import { useRouter } from 'next/router'
 
 const messagingTestNames = ['signal', 'telegram', 'whatsapp', 'facebook_messenger']
 const circumventionTestNames = ['psiphon', 'tor', 'torsf']
@@ -38,18 +36,18 @@ const ChartsContainer = () => {
 
   return (
     <>
-      <Box mt={3}>
+      <div className='mt-4'>
         <Chart
           title={intl.formatMessage({id: 'Tests.Groups.Instant Messagging.Name'})}
           queryParams={queryMessagingApps}
         />
-      </Box>
-      <Box mt={3}>
+      </div>
+      <div className='mt-4'>
         <Chart
           title={intl.formatMessage({id: 'Tests.Groups.Circumvention.Name'})}
           queryParams={queryCircumventionTools}
         />
-      </Box>
+      </div>
     </>
   )
 }
@@ -62,9 +60,9 @@ const AppsSection = () => (
       </SectionHeader.Title>
     </SectionHeader>
     <SimpleBox>
-      <Text fontSize={16}>
+      <div className='text-base'>
         <FormattedMarkdown id='Country.Apps.Description' />
-      </Text>
+      </div>
     </SimpleBox>
     <ChartsContainer />
   </>

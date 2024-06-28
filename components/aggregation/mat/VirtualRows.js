@@ -1,33 +1,20 @@
 import PropTypes from 'prop-types'
-import React, { useCallback } from 'react'
-import { Flex } from 'ooni-components'
-import styled from 'styled-components'
+import { useCallback, useRef } from 'react'
 
-import RowChart from './RowChart'
 import { defaultRangeExtractor, useVirtual } from 'react-virtual'
+import RowChart from './RowChart'
 
 const GRID_ROW_CSS_SELECTOR = 'outerListElement'
 const ROW_HEIGHT = 70
 const retainMountedRows = false
 
-const FlexWithNoScrollbar = styled(Flex)`
-  width: 100%;
-  overflow-y: auto;
-`
-const StickyRow = styled.div`
-  position: sticky;
-  top: 0px;
-  background: white;
-  z-index: 1;
-`
-
 const useKeepMountedRangeExtractor = () => {
-  const renderedRef = React.useRef(new Set())
+  const renderedRef = useRef(new Set())
 
-  const rangeExtractor = React.useCallback(range => {
+  const rangeExtractor = useCallback((range) => {
     renderedRef.current = new Set([
       ...renderedRef.current,
-      ...defaultRangeExtractor(range)
+      ...defaultRangeExtractor(range),
     ])
     return Array.from(renderedRef.current)
   }, [])
@@ -35,9 +22,16 @@ const useKeepMountedRangeExtractor = () => {
   return rangeExtractor
 }
 
-export const VirtualRows = ({ data, rows, rowLabels, gridHeight, indexBy, tooltipIndex, xAxis = null }) => {
-
-  const parentRef = React.useRef()
+export const VirtualRows = ({
+  data,
+  rows,
+  rowLabels,
+  gridHeight,
+  indexBy,
+  tooltipIndex,
+  xAxis = null,
+}) => {
+  const parentRef = useRef()
   const keepMountedRangeExtractor = useKeepMountedRangeExtractor()
 
   const keyExtractor = useCallback((index) => rows[index], [rows])
@@ -49,13 +43,15 @@ export const VirtualRows = ({ data, rows, rowLabels, gridHeight, indexBy, toolti
     paddingStart: 62, // for the sticky x-axis
     overscan: 0,
     keyExtractor,
-    rangeExtractor: retainMountedRows ? keepMountedRangeExtractor : defaultRangeExtractor
+    rangeExtractor: retainMountedRows
+      ? keepMountedRangeExtractor
+      : defaultRangeExtractor,
   })
 
   return (
-    <FlexWithNoScrollbar
+    <div
       ref={parentRef}
-      className={GRID_ROW_CSS_SELECTOR}
+      className={`flex w-full overflow-y-auto ${GRID_ROW_CSS_SELECTOR}`}
       style={{
         height: gridHeight,
       }}
@@ -64,14 +60,10 @@ export const VirtualRows = ({ data, rows, rowLabels, gridHeight, indexBy, toolti
         style={{
           height: `${rowVirtualizer.totalSize}px`,
           width: '100%',
-          position: 'relative'
+          position: 'relative',
         }}
       >
-        {xAxis &&
-          <StickyRow>
-            {xAxis}
-          </StickyRow>
-        }
+        {xAxis && <div className="bg-white sticky z-[1] top-0">{xAxis}</div>}
         {rowVirtualizer.virtualItems.map((virtualRow) => (
           <div
             key={virtualRow.index}
@@ -82,7 +74,7 @@ export const VirtualRows = ({ data, rows, rowLabels, gridHeight, indexBy, toolti
               width: '100%',
               height: `${virtualRow.size}px`,
               transform: `translateY(${virtualRow.start}px)`,
-              zIndex: tooltipIndex[0] === virtualRow.index ? 1 : 0
+              zIndex: tooltipIndex[0] === virtualRow.index ? 1 : 0,
             }}
           >
             <RowChart
@@ -96,7 +88,7 @@ export const VirtualRows = ({ data, rows, rowLabels, gridHeight, indexBy, toolti
           </div>
         ))}
       </div>
-    </FlexWithNoScrollbar>
+    </div>
   )
 }
 VirtualRows.propTypes = {

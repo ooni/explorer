@@ -1,7 +1,13 @@
 // updated based on documentation: https://github.com/vercel/next.js/blob/canary/examples/with-styled-components/pages/_document.tsx
-import Document, { DocumentContext, Html, Head, Main, NextScript } from 'next/document'
-import { ServerStyleSheet } from 'styled-components'
 import { getDirection } from 'components/withIntl'
+import Document, {
+  DocumentContext,
+  Head,
+  Html,
+  Main,
+  NextScript,
+} from 'next/document'
+import { ServerStyleSheet } from 'styled-components'
 export default class MyDocument extends Document {
   static async getInitialProps(ctx) {
     const sheet = new ServerStyleSheet()
@@ -10,7 +16,8 @@ export default class MyDocument extends Document {
     try {
       ctx.renderPage = () =>
         originalRenderPage({
-          enhanceApp: (App) => (props) => sheet.collectStyles(<App {...props} />),
+          enhanceApp: (App) => (props) =>
+            sheet.collectStyles(<App {...props} />),
         })
 
       const initialProps = await Document.getInitialProps(ctx)
@@ -26,12 +33,12 @@ export default class MyDocument extends Document {
   render = () => (
     <Html dir={getDirection(this.props.locale)} lang={this.props.locale}>
       <Head>
-        <script 
+        <script
           defer
           src="https://eu.umami.is/script.js"
           data-website-id="6c9769aa-4b46-4d8d-82a9-a5a6d77206c4"
           data-domains="explorer.ooni.org"
-        ></script>
+        />
       </Head>
       <body>
         <Main />

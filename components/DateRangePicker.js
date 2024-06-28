@@ -1,6 +1,6 @@
 import { addDays, parse, sub } from 'date-fns'
 import { Button } from 'ooni-components'
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { DayPicker } from 'react-day-picker'
 import 'react-day-picker/dist/style.css'
 import { useIntl } from 'react-intl'
@@ -29,7 +29,7 @@ z-index: 99999;
 position: absolute;
 max-width: 300px;
 background-color: #ffffff;
-border: 1px solid ${props => props.theme.colors.gray2};
+border: 1px solid ${(props) => props.theme.colors.gray2};
 
 .rdp-cell {
   padding: 2px 0;
@@ -39,7 +39,7 @@ border: 1px solid ${props => props.theme.colors.gray2};
 .rdp-day_selected:focus:not([disabled]),
 .rdp-day_selected:active:not([disabled]),
 .rdp-day_selected:hover:not([disabled]) {
-  background-color: ${props => props.theme.colors.blue5};
+  background-color: ${(props) => props.theme.colors.blue5};
 }
 `
 
@@ -61,21 +61,34 @@ const Footer = ({ handleRangeSelect, range, close }) => {
 
   return (
     <StyledFooter>
-      <Button id='apply-range' onClick={(e) => {
-        e.preventDefault()
-        handleRangeSelect(range)}
-        }>{intl.formatMessage({id: 'DateRange.Apply'})}</Button>
+      <Button
+        id="apply-range"
+        onClick={(e) => {
+          e.preventDefault()
+          handleRangeSelect(range)
+        }}
+      >
+        {intl.formatMessage({ id: 'DateRange.Apply' })}
+      </Button>
       <Button
         hollow
         onClick={(e) => {
           e.preventDefault()
-          close()}
-        }>{intl.formatMessage({id: 'DateRange.Cancel'})}</Button>
+          close()
+        }}
+      >
+        {intl.formatMessage({ id: 'DateRange.Cancel' })}
+      </Button>
     </StyledFooter>
   )
 }
 
-const DateRangePicker = ({handleRangeSelect, initialRange, close, ...props}) => {
+const DateRangePicker = ({
+  handleRangeSelect,
+  initialRange,
+  close,
+  ...props
+}) => {
   const intl = useIntl()
   const tomorrow = addDays(new Date(), 1)
   const ranges = ['Today', 'LastWeek', 'LastMonth', 'LastYear']
@@ -112,25 +125,28 @@ const DateRangePicker = ({handleRangeSelect, initialRange, close, ...props}) => 
         return en
     }
   }, [intl.locale])
-  
+
   const selectRange = (range) => {
     switch (range) {
       case 'Today':
-        handleRangeSelect({from: new Date(), to: tomorrow})
+        handleRangeSelect({ from: new Date(), to: tomorrow })
         break
       case 'LastWeek':
-        handleRangeSelect({from: sub(new Date(), {weeks: 1}) , to: tomorrow})
+        handleRangeSelect({ from: sub(new Date(), { weeks: 1 }), to: tomorrow })
         break
       case 'LastMonth':
-        handleRangeSelect({from: sub(new Date(), {months: 1}) , to: tomorrow})
+        handleRangeSelect({
+          from: sub(new Date(), { months: 1 }),
+          to: tomorrow,
+        })
         break
       case 'LastYear':
-        handleRangeSelect({from: sub(new Date(), {years: 1}) , to: tomorrow})
+        handleRangeSelect({ from: sub(new Date(), { years: 1 }), to: tomorrow })
         break
     }
   }
 
-  const rangesList = ranges.map((range) => 
+  const rangesList = ranges.map((range) => (
     <Button
       hollow
       size="small"
@@ -139,10 +155,16 @@ const DateRangePicker = ({handleRangeSelect, initialRange, close, ...props}) => 
       onClick={(e) => {
         e.preventDefault()
         selectRange(range)
-      }}>{intl.formatMessage({id: `DateRange.${range}`})}</Button>
-  )
-  const [range, setRange] = useState({from: parse(initialRange.from, 'yyyy-MM-dd', new Date()), to: parse(initialRange.to, 'yyyy-MM-dd', new Date())})
-  
+      }}
+    >
+      {intl.formatMessage({ id: `DateRange.${range}` })}
+    </Button>
+  ))
+  const [range, setRange] = useState({
+    from: parse(initialRange.from, 'yyyy-MM-dd', new Date()),
+    to: parse(initialRange.to, 'yyyy-MM-dd', new Date()),
+  })
+
   const onSelect = (range) => {
     setRange(range)
   }
@@ -151,7 +173,7 @@ const DateRangePicker = ({handleRangeSelect, initialRange, close, ...props}) => 
     <StyledDatetime>
       <OutsideClickHandler onOutsideClick={() => close()}>
         <StyledRangeButtons>{rangesList}</StyledRangeButtons>
-        <DayPicker 
+        <DayPicker
           {...props}
           dir={getDirection(intl.locale)}
           locale={dateFnsLocale}
@@ -159,7 +181,14 @@ const DateRangePicker = ({handleRangeSelect, initialRange, close, ...props}) => 
           toDate={tomorrow}
           selected={range}
           onSelect={onSelect}
-          footer={<Footer handleRangeSelect={handleRangeSelect} close={close} range={range} />} />
+          footer={
+            <Footer
+              handleRangeSelect={handleRangeSelect}
+              close={close}
+              range={range}
+            />
+          }
+        />
       </OutsideClickHandler>
     </StyledDatetime>
   )

@@ -1,9 +1,9 @@
 import { Box, theme } from 'ooni-components'
 import PropTypes from 'prop-types'
-import React, { useMemo } from 'react'
+import { useMemo } from 'react'
 import { ThemeProvider, createGlobalStyle } from 'styled-components'
 
-import { StyledStickyNavBar, StyledStickySubMenu } from 'components/SharedStyledComponents'
+import { StyledStickyNavBar } from 'components/SharedStyledComponents'
 import { getDirection } from 'components/withIntl'
 import { UserProvider } from 'hooks/useUser'
 import { useRouter } from 'next/router'
@@ -20,10 +20,10 @@ const GlobalStyle = createGlobalStyle`
     box-sizing: border-box;
   }
   body, html {
-    // direction: ${props => props.direction};
+    // direction: ${(props) => props.direction};
     margin: 0;
     padding: 0;
-    font-size: 14px;
+    // font-size: 14px;
     height: 100%;
     background-color: #ffffff;
   }
@@ -53,32 +53,37 @@ const Layout = ({ children }) => {
   const { pathname } = useRouter()
 
   const navbarColor = useMemo(() => {
-    return pathname === '/' || pathname.match(/^\/m\/\S+/) || pathname.match(/^\/measurement\/\S+/) ? 
-    'transparent'
-    : null
+    return pathname === '/' ||
+      pathname.match(/^\/m\/\S+/) ||
+      pathname.match(/^\/measurement\/\S+/)
+      ? 'transparent'
+      : null
   }, [pathname])
   const navbarSticky = useMemo(() => {
-    return pathname === '/countries' ||
-    pathname === '/domains' ||
-    pathname === '/networks' ||
-    pathname === '/findings' ||
-    pathname.match(/^\/country\/\S+/)
+    return (
+      pathname === '/countries' ||
+      pathname === '/domains' ||
+      pathname === '/networks' ||
+      pathname === '/findings' ||
+      pathname.match(/^\/country\/\S+/)
+    )
   }, [pathname])
 
   return (
     <ThemeProvider theme={theme}>
       <UserProvider>
         <GlobalStyle direction={getDirection(locale)} />
-        <div className="site">
+        <div className="site text-sm">
           <Header />
-          {navbarSticky ?
+          {navbarSticky ? (
             <StyledStickyNavBar>
               <NavBar color={navbarColor} />
-            </StyledStickyNavBar> :
+            </StyledStickyNavBar>
+          ) : (
             <NavBar color={navbarColor} />
-          }
-          <Box className="content" mt={navbarColor ? '-66px': 0}>
-            { children }
+          )}
+          <Box className="content" mt={navbarColor ? '-66px' : 0}>
+            {children}
           </Box>
           <Footer />
         </div>
@@ -88,7 +93,7 @@ const Layout = ({ children }) => {
 }
 
 Layout.propTypes = {
-  children: PropTypes.object.isRequired
+  children: PropTypes.object.isRequired,
 }
 
 export default Layout

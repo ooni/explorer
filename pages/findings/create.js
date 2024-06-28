@@ -1,8 +1,7 @@
 import { createIncidentReport, getUserEmail } from 'lib/api'
-import Head from 'next/head'
 import NLink from 'next/link'
 import { useRouter } from 'next/router'
-import { Button, Container, Flex, Heading } from 'ooni-components'
+import { Button } from 'ooni-components'
 import { useEffect, useState } from 'react'
 import { useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
@@ -45,25 +44,34 @@ const Create = () => {
   }, [])
 
   const onSubmit = (report) => {
-    return createIncidentReport(report).then((data) => router.push(`/findings/${data.id}`))
+    return createIncidentReport(report).then((data) =>
+      router.push(`/findings/${data.id}`),
+    )
   }
 
   return (
     <>
-      <Head>
+      {/* <Head>
         <title></title>
-      </Head>
-      {user ?
-        <Container>
+      </Head> */}
+      {user ? (
+        <div className="container mx-auto">
           <LoginRequiredModal show={showModal} />
-          <Flex justifyContent="space-between" alignItems="center">
-            <Heading h={1}>{intl.formatMessage({id: 'Findings.Create.Title'})}</Heading>
-            <NLink href='/findings/dashboard'><Button hollow>{intl.formatMessage({id: 'Findings.Dashboard.ShortTitle'})}</Button></NLink>
-          </Flex>
+          <div className="flex justify-between items-center">
+            <h1>{intl.formatMessage({ id: 'Findings.Create.Title' })}</h1>
+            <NLink href="/findings/dashboard">
+              <Button hollow>
+                {intl.formatMessage({ id: 'Findings.Dashboard.ShortTitle' })}
+              </Button>
+            </NLink>
+          </div>
           <Form onSubmit={onSubmit} defaultValues={defaultValues} />
-        </Container> :
-        <Container pt={6}><SpinLoader /></Container>
-      }
+        </div>
+      ) : (
+        <div className="container mx-auto pt-32">
+          <SpinLoader />
+        </div>
+      )}
     </>
   )
 }

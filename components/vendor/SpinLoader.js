@@ -1,8 +1,7 @@
 // From: https://github.com/LucasBassetti/react-css-loaders/tree/master/lib/spin
-import React from 'react'
+import { theme } from 'ooni-components'
 import PropTypes from 'prop-types'
 import styled, { css, keyframes } from 'styled-components'
-import { theme } from 'ooni-components'
 
 const loading = keyframes`
   0% {
@@ -13,26 +12,26 @@ const loading = keyframes`
   }
 `
 
-const spinnerAnimation = props =>
+const spinnerAnimation = (props) =>
   css`
     ${loading} ${props.$duration}s infinite linear;
   `
 
 const Spin = styled.div`
   animation: ${spinnerAnimation};
-  background: ${props => props.$color};
-  background: ${props => `linear-gradient(to right, ${props.$color} 10%, rgba(255, 255, 255, 0) 42%);`};
+  background: ${(props) => props.$color};
+  background: ${(props) => `linear-gradient(to right, ${props.$color} 10%, rgba(255, 255, 255, 0) 42%);`};
   border-radius: 50%;
-  font-size: ${props => `${props.$size}px`};
+  font-size: ${(props) => `${props.$size}px`};
   height: 11em;
-  margin: ${props => props.$margin};
+  margin: ${(props) => props.$margin};
   position: relative;
   text-indent: -9999em;
   transform: translateZ(0);
   width: 11em;
 
   &:before {
-    background: ${props => props.$color};
+    background: ${(props) => props.$color};
     border-radius: 100% 0 0 0;
     content: '';
     height: 50%;
@@ -43,7 +42,7 @@ const Spin = styled.div`
   }
 
   &:after {
-    background: ${props => props.$background};
+    background: ${(props) => props.$background};
     border-radius: 50%;
     bottom: 0;
     content: '';
@@ -57,9 +56,7 @@ const Spin = styled.div`
   }
 `
 
-const SpinLoader = props => (
-  <Spin {...props} />
-)
+const SpinLoader = (props) => <Spin {...props} />
 
 SpinLoader.propTypes = {
   $background: PropTypes.string,
