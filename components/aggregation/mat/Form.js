@@ -13,6 +13,8 @@ import { TestNameOptions } from '../../TestNameOptions'
 import { categoryCodes } from '../../utils/categoryCodes'
 import { ConfirmationModal } from './ConfirmationModal'
 
+import {asnRegEx, domainRegEx, inputRegEx} from '../../search/FilterSidebar'
+
 const DAY_GRAIN_THRESHOLD_IN_MONTHS = 12
 const WEEK_GRAIN_THRESHOLD_IN_MONTHS = 36
 
@@ -113,7 +115,7 @@ export const Form = ({ onSubmit, query }) => {
 
   const defaultValues = useMemo(() => Object.assign({}, defaultDefaultValues, query), [query])
 
-  const { handleSubmit, control, getValues, watch, reset, setValue } = useForm({
+  const { handleSubmit, control, getValues, watch, reset, setValue, formState: {errors} } = useForm({
     defaultValues,
     shouldUnregister: true,
   })
@@ -268,8 +270,15 @@ export const Form = ({ onSubmit, query }) => {
             name='probe_asn'
             control={control}
             render={({ field }) => (
-              <Input placeholder='AS1234' label={intl.formatMessage({ id: 'Search.Sidebar.ASN' })} {...field} />
+              <Input placeholder='AS1234' label={intl.formatMessage({ id: 'Search.Sidebar.ASN' })} {...field}
+              error={errors?.probe_asn?.message} />
             )}
+            rules={{
+              pattern: {
+                value: asnRegEx,
+                message: intl.formatMessage({ id: 'Search.Sidebar.ASN.Error' }),
+              }
+            }}
           />
         </Box>
         <Box width={[1, 3 / 12]}>
@@ -382,9 +391,16 @@ export const Form = ({ onSubmit, query }) => {
                   <Input
                     label={intl.formatMessage({ id: 'Search.Sidebar.Domain' })}
                     placeholder='twitter.com'
+                    error={errors?.domain?.message}
                     {...field}
                   />
                 )}
+                rules={{
+                  validate: (value = '') =>
+                    String(value).length === 0 ||
+                    domainRegEx.test(value) ||
+                    intl.formatMessage({ id: 'Search.Sidebar.Domain.Error' }),
+                }}
               />
             </Box>
             <Box width={[1, 1 / 5]}>
@@ -394,10 +410,17 @@ export const Form = ({ onSubmit, query }) => {
                 render={({ field }) => (
                   <Input
                     label={intl.formatMessage({ id: 'Search.Sidebar.Input' })}
+                    error={errors?.input?.message}
                     placeholder='https://fbcdn.net/robots.txt'
                     {...field}
                   />
                 )}
+                rules={{
+                  pattern: {
+                    value: inputRegEx,
+                    message: intl.formatMessage({ id: 'Search.Sidebar.Input.Error' })
+                  }
+                }}
               />
             </Box>
             <Box width={[1, 1 / 5]}>

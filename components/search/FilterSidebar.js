@@ -72,9 +72,9 @@ function isValidFilterForTestname(testName = 'XX', arrayWithMapping) {
 // to include the measurements of `${today}` as well.
 const tomorrowUTC = dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
 
-const asnRegEx = /^(AS)?([1-9][0-9]*)$/
-const domainRegEx = /(^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,}(:[0-9]{1,5})?$)|(^(([0-9]{1,3})\.){3}([0-9]{1,3}))/
-const inputRegEx =
+export const asnRegEx = /^(AS)?([1-9][0-9]*)$/
+export const domainRegEx = /(^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,}(:[0-9]{1,5})?$)|(^(([0-9]{1,3})\.){3}([0-9]{1,3}))/
+export const inputRegEx =
   /(^https?:\/\/(?:www\.)?[-a-zA-Z0-9@:%._\+~#=]{1,}\.[a-zA-Z0-9()]{2,}\b(?:[-a-zA-Z0-9()@:%_\+.~#?&\/=]*)$)|(^(([0-9]{1,3})\.){3}([0-9]{1,3}))/
 
 export const queryToFilterMap = {

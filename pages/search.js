@@ -254,6 +254,15 @@ const Search = ({ countries, query: queryProp }) => {
         query[queryParam] = state[key]
       }
     }
+    // Try to make input's hostname case-insensitive
+    // domainRegEx doesn't allow uppercase, inputRegEx doesn't allow uppercase scheme
+    if ('input' in query){
+      try{
+        let u = new URL(query['input'])
+        query['input'] = u.href
+      }catch{}
+    }
+
     return query
   }
 
