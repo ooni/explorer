@@ -1,3 +1,5 @@
+import "@formatjs/intl-displaynames/polyfill"
+
 import "@formatjs/intl-displaynames/locale-data/ar"
 import "@formatjs/intl-displaynames/locale-data/de"
 import "@formatjs/intl-displaynames/locale-data/en"
@@ -13,7 +15,7 @@ import "@formatjs/intl-displaynames/locale-data/tr"
 import "@formatjs/intl-displaynames/locale-data/vi"
 import "@formatjs/intl-displaynames/locale-data/zh-Hans"
 import "@formatjs/intl-displaynames/locale-data/zh-Hant"
-import "@formatjs/intl-displaynames/polyfill"
+
 import { countryList } from "country-util"
 
 const getLocale = (locale) => {
@@ -21,13 +23,6 @@ const getLocale = (locale) => {
 	if (locale === "pt-BR") return "pt"
 	return locale;
 };
-
-// // eventually we can remove this, but currently Chrome doesn't have the translations for UN M.49 area codes implemented so we need to polyfill
-// process.env.LOCALES.forEach((locale) => {
-// 	locale = getLocale(locale);
-
-// 	require(`@formatjs/intl-displaynames/locale-data/${locale}`);
-// });
 
 export const getLocalisedRegionName = (regionCode, locale) => {
 	try {
