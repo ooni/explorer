@@ -22,6 +22,13 @@ const MeasurementAggregationToolkit = () => {
       for (const p of Object.keys(data)) {
         if (data[p] !== '') {
           params[p] = data[p]
+          // Try to make input's hostname case-insensitive
+          if (p === 'input') {
+            try{
+              let u = new URL(params['input'])
+              params[p] = u.href
+            }catch{}
+          }
         }
       }
       const href = {
