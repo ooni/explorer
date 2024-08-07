@@ -1,10 +1,10 @@
 // Based on BarItem.tsx in @nivo/bar @v0.79.1
 // https://github.com/plouc/nivo/blob/f0a673005e918b2e2d3e635c6f214aa088bac5e1/packages/bar/src/BarItem.tsx
 
-import { createElement, useCallback, useState, useEffect } from 'react'
-import { animated, to } from '@react-spring/web'
 import { useTheme } from '@nivo/core'
 import { useTooltip } from '@nivo/tooltip'
+import { animated, to } from '@react-spring/web'
+import { createElement, useCallback, useEffect, useState } from 'react'
 
 export const CustomBarItem = ({
   bar: { data, ...bar },
@@ -53,7 +53,7 @@ export const CustomBarItem = ({
   }, [hideTooltip, onClick])
 
   useEffect(() => {
-    // We receive tooltip coordinates in `enableLabel` 
+    // We receive tooltip coordinates in `enableLabel`
     // to determine if a tooltip is enabled and if the column should be highlighted.
     if (enableLabel === false) {
       hideTooltip()
@@ -63,15 +63,16 @@ export const CustomBarItem = ({
     }
   }, [data.indexValue, enableLabel, hideTooltip])
 
-  const renderTooltip = useCallback(() =>
-    createElement(tooltip, { ...bar, ...data, onClose }),
-  [tooltip, bar, data, onClose])
+  const renderTooltip = useCallback(
+    () => createElement(tooltip, { ...bar, ...data, onClose }),
+    [tooltip, bar, data, onClose],
+  )
 
   const handleClick = useCallback(
     (event) => {
       onClick?.({ color: bar.color, ...data }, event)
     },
-    [bar, data, onClick]
+    [bar, data, onClick],
   )
   // Disable events upon mouse movement events
   // const handleTooltip = useCallback(
@@ -83,7 +84,7 @@ export const CustomBarItem = ({
       onMouseEnter?.(data, event)
       setIsHovering(true)
     },
-    [data, onMouseEnter]
+    [data, onMouseEnter],
   )
   const handleMouseLeave = useCallback(
     (event) => {
@@ -91,22 +92,22 @@ export const CustomBarItem = ({
       setIsHovering(false)
       // hideTooltip()
     },
-    [data, onMouseLeave]
+    [data, onMouseLeave],
   )
 
   // extra handlers to allow keyboard navigation
   const handleFocus = useCallback(() => {
-      showTooltipAt(renderTooltip(), [bar.absX + bar.width / 2, bar.absY])
+    showTooltipAt(renderTooltip(), [bar.absX + bar.width / 2, bar.absY])
   }, [showTooltipAt, renderTooltip, bar])
   const handleBlur = useCallback(() => {
-      hideTooltip()
+    hideTooltip()
   }, [hideTooltip])
 
   return (
     <animated.g transform={transform}>
       <animated.rect
-        width={to(width, value => Math.max(value, 0))}
-        height={to(height, value => Math.max(value, 0))}
+        width={to(width, (value) => Math.max(value, 0))}
+        height={to(height, (value) => Math.max(value, 0))}
         rx={borderRadius}
         ry={borderRadius}
         fill={data.fill ?? color}

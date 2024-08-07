@@ -1,29 +1,8 @@
-import NLink from 'next/link'
-import {
-  Box,
-  Container,
-  Flex,
-  Text
-} from 'ooni-components'
+import Link from 'next/link'
 import PropTypes from 'prop-types'
-import React from 'react'
 import { MdOutlineFactCheck } from 'react-icons/md'
 import { useIntl } from 'react-intl'
-import styled from 'styled-components'
-
 import Flag from '../Flag'
-
-const SummaryContainer = styled(Box)`
-  background-color: ${props => props.color};
-  color: white;
-`
-
-const StyledLink = styled(NLink)`
-  color: white;
-  &:hover {
-    color: white;
-  }
-`
 
 const CommonSummary = ({
   color,
@@ -33,58 +12,65 @@ const CommonSummary = ({
   networkName,
   country,
   hero,
-  onVerifyClick
+  onVerifyClick,
 }) => {
   const intl = useIntl()
   const startTime = measurement_start_time
   const network = probe_asn
   const countryCode = probe_cc
-  const formattedDate = new Intl.DateTimeFormat(intl.locale, { dateStyle: 'long', timeStyle: 'long', timeZone: 'UTC' }).format(new Date(startTime))
-  
+  const formattedDate = new Intl.DateTimeFormat(intl.locale, {
+    dateStyle: 'long',
+    timeStyle: 'long',
+    timeZone: 'UTC',
+  }).format(new Date(startTime))
+
   return (
-    <>
-      <SummaryContainer pb={4} pt={'100px'} color={color} data-test-id='common-summary'>
-        <Container>
-          <Flex justifyContent='space-between'>
-            <Box fontSize={1}>
-              {formattedDate}
-            </Box>
-            <Box>
-              <Flex sx={{gap: 14}}>
-              {/* <Box>
-                <Box fontSize={18} textAlign='center'><BiShareAlt /></Box>
-                <Box fontSize={0} fontWeigh={600} textAlign='center'>{'Share'.toUpperCase()}</Box>
-              </Box> */}
-              <Box sx={{cursor: 'pointer'}} onClick={onVerifyClick}>
-                <Box fontSize={18} textAlign='center'><MdOutlineFactCheck /></Box>
-                <Box fontSize={0} fontWeigh={600} textAlign='center'>{intl.formatMessage({id: 'Measurement.CommonSummary.Verify'}).toUpperCase()}</Box>
-              </Box>
-              </Flex>
-            </Box>
-          </Flex>
-          {hero}
-          <Flex mt={2} sx={{textDecoration:'underline'}}>
-            <Box width={[1, 1, 1/2]}>
-              <StyledLink href={`/country/${countryCode}`}>
-                <Flex alignItems='center'>
-                  <Box mr={2}>
-                    <Flag countryCode={countryCode} size={33} />
-                  </Box>
-                  <Box fontSize={2}>
-                    {country}
-                  </Box>
-                </Flex>
-              </StyledLink>
-              <Text fontSize={1}>
-                <StyledLink href={`/as/${network}`}>
-                  <Text mb={2} mt={2}>{network} {networkName}</Text>
-                </StyledLink>
-              </Text>
-            </Box>
-          </Flex>
-        </Container>
-      </SummaryContainer>
-    </>
+    <div
+      className="pb-8 pt-24 text-white"
+      style={{ backgroundColor: color }}
+      data-test-id="common-summary"
+    >
+      <div className="container">
+        <div className="flex justify-between">
+          <div className="text-base">{formattedDate}</div>
+          <div
+            className="flex flex-col items-center cursor-pointer"
+            onClick={onVerifyClick}
+          >
+            <div className="text-lg text-center">
+              <MdOutlineFactCheck />
+            </div>
+            <div className="text-xs font-bold text-center">
+              {intl
+                .formatMessage({ id: 'Measurement.CommonSummary.Verify' })
+                .toUpperCase()}
+            </div>
+          </div>
+        </div>
+        {hero}
+        <div className="flex mt-2 underline">
+          <div className="lg:w-1/2">
+            <Link
+              className="text-white hover:text-white block"
+              href={`/country/${countryCode}`}
+            >
+              <div className="flex items-center text-xl">
+                <div className="mr-2">
+                  <Flag countryCode={countryCode} size={33} />
+                </div>
+                {country}
+              </div>
+            </Link>
+            <Link
+              className="text-base my-2 text-white hover:text-white block"
+              href={`/as/${network}`}
+            >
+              {network} {networkName}
+            </Link>
+          </div>
+        </div>
+      </div>
+    </div>
   )
 }
 
@@ -94,7 +80,7 @@ CommonSummary.propTypes = {
   probe_cc: PropTypes.string.isRequired,
   networkName: PropTypes.string,
   country: PropTypes.string.isRequired,
-  color: PropTypes.string.isRequired
+  color: PropTypes.string.isRequired,
 }
 
 export default CommonSummary

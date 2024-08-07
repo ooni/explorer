@@ -1,39 +1,20 @@
-import React, { useState } from 'react'
 import PropTypes from 'prop-types'
-import { Flex, Box, Link } from 'ooni-components'
-import styled from 'styled-components'
-import { FormattedMessage } from 'react-intl'
+import { useState } from 'react'
 import { MdExpandLess } from 'react-icons/md'
+import { FormattedMessage } from 'react-intl'
 import SocialButtons from '../SocialButtons'
 
 const HideInLargeScreens = ({ children }) => (
-  <Box
-    sx={{
-      display: 'none',
-      '@media screen and (max-width: 64em)': {
-        display: 'block',
-      }
-    }}
-  >
-    {children}
-  </Box>
+  <div className="md:hidden">{children}</div>
 )
 
 const PageNavItem = ({ link, children }) => (
-  <Box mx={3} my={1}>
-    <Link p={2} fontSize={16} color='blue5' href={link}>{children}</Link>
-  </Box>
+  <div className="mx-4 my-1">
+    <a className="p-2 text-base text-blue-500" href={link}>
+      {children}
+    </a>
+  </div>
 )
-
-const ToggleIcon = styled(MdExpandLess).attrs({
-
-})`
-  cursor: pointer;
-  background-color: ${props => props.theme.colors.gray3};
-  border-radius: 50%;
-  transform: ${props => props.open ? 'rotate(0deg)': 'rotate(180deg)'};
-  transition: transform 0.1s linear;
-`
 
 const PageNavMenu = ({ countryCode }) => {
   const [isOpen, setOpen] = useState(true)
@@ -42,33 +23,41 @@ const PageNavMenu = ({ countryCode }) => {
     <>
       {/* Show a trigger to open and close the nav menu, but hide it on desktops */}
       <HideInLargeScreens large xlarge>
-        <ToggleIcon size={36} open={isOpen} onClick={() => setOpen(!isOpen)} />
+        <MdExpandLess
+          className={`cursor-pointer bg-gray-300 rounded-[50%] transition-transform ease-linear ${isOpen ? 'rotate-0' : 'rotate-180'}`}
+          size={36}
+          open={isOpen}
+          onClick={() => setOpen(!isOpen)}
+        />
       </HideInLargeScreens>
-      <Box width={[1, 'unset']} py={2}>
-        {isOpen && <Flex flexDirection={['column', 'row']} justifyContent='center' py={1}>
-          <PageNavItem link='#overview'>
-            <FormattedMessage id='Country.Heading.Overview'/>
-          </PageNavItem>
-          <PageNavItem link='#websites'>
-            <FormattedMessage id='Country.Heading.Websites' />
-          </PageNavItem>
-          <PageNavItem link='#apps'>
-            <FormattedMessage id='Country.Heading.Apps' />
-          </PageNavItem>
-          <PageNavItem link='#outages'>
-            <FormattedMessage id='Country.Heading.Outages' />
-          </PageNavItem>
-        </Flex>}
-        <Flex justifyContent={['flex-start', 'flex-end']} px={[0, 3]} py={1}>
-          <SocialButtons url={`country/${countryCode}`}/>
-        </Flex>
-      </Box>
+      {/* width={[1, 'unset']} */}
+      <div className="w-100 py-2">
+        {isOpen && (
+          <div className="flex flex-col md:flex-row justify-center py-1">
+            <PageNavItem link="#overview">
+              <FormattedMessage id="Country.Heading.Overview" />
+            </PageNavItem>
+            <PageNavItem link="#websites">
+              <FormattedMessage id="Country.Heading.Websites" />
+            </PageNavItem>
+            <PageNavItem link="#apps">
+              <FormattedMessage id="Country.Heading.Apps" />
+            </PageNavItem>
+            <PageNavItem link="#outages">
+              <FormattedMessage id="Country.Heading.Outages" />
+            </PageNavItem>
+          </div>
+        )}
+        <div className="flex justify-start md:justify-end md:px-4 py-1">
+          <SocialButtons url={`country/${countryCode}`} />
+        </div>
+      </div>
     </>
   )
 }
 
 PageNavMenu.propTypes = {
-  countryCode: PropTypes.string
+  countryCode: PropTypes.string,
 }
 
 export default PageNavMenu

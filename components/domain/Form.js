@@ -1,13 +1,13 @@
-import { useEffect, useState, useMemo } from 'react'
-import { useForm, Controller } from 'react-hook-form'
-import { Box, Flex, Input, Select } from 'ooni-components'
+import { format } from 'date-fns'
+import { Input, Select } from 'ooni-components'
+import { useEffect, useMemo, useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
-import { format } from 'date-fns'
 
+import { useRouter } from 'next/router'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
 import DateRangePicker from '../DateRangePicker'
-import { useRouter } from 'next/router'
 
 const tomorrow = dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
 const lastMonthToday = dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD')
@@ -61,13 +61,13 @@ const Form = ({ onSubmit, availableCountries = [] }) => {
     const subscription = watch((value, { name, type }) => {
       if (
         value[name] !== query[name] &&
-        dayjs(value['since'], 'YYYY-MM-DD', true).isValid() &&
-        dayjs(value['until'], 'YYYY-MM-DD', true).isValid()
+        dayjs(value.since, 'YYYY-MM-DD', true).isValid() &&
+        dayjs(value.until, 'YYYY-MM-DD', true).isValid()
       ) {
         onSubmit({
-          since: value['since'],
-          until: value['until'],
-          probe_cc: value['probe_cc'],
+          since: value.since,
+          until: value.until,
+          probe_cc: value.probe_cc,
         })
       }
     })
@@ -92,10 +92,10 @@ const Form = ({ onSubmit, availableCountries = [] }) => {
 
   return (
     <form>
-      <Flex alignItems={['center']}>
-        <Box width={[1, 1 / 5]}>
-          <Flex>
-            <Box width={2 / 3} mr={3}>
+      <div className="flex items-center flex-wrap">
+        <div className="w-full md:w-1/2 lg:w-1/3">
+          <div className="flex">
+            <div className="w-2/3 mr-4">
               <Controller
                 name="since"
                 control={control}
@@ -108,8 +108,8 @@ const Form = ({ onSubmit, availableCountries = [] }) => {
                   />
                 )}
               />
-            </Box>
-            <Box width={2 / 3} mr={3}>
+            </div>
+            <div className="w-2/3 mr-3">
               <Controller
                 name="until"
                 control={control}
@@ -122,8 +122,8 @@ const Form = ({ onSubmit, availableCountries = [] }) => {
                   />
                 )}
               />
-            </Box>
-          </Flex>
+            </div>
+          </div>
           {showDatePicker && (
             <DateRangePicker
               handleRangeSelect={handleRangeSelect}
@@ -134,8 +134,8 @@ const Form = ({ onSubmit, availableCountries = [] }) => {
               close={() => setShowDatePicker(false)}
             />
           )}
-        </Box>
-        <Box width={[1, 1 / 4]} mr={3} sx={{ zIndex: 2 }}>
+        </div>
+        <div className="w-full md:w-1/3 lg:1/3 z-[2]">
           <Controller
             control={control}
             name="probe_cc"
@@ -159,8 +159,8 @@ const Form = ({ onSubmit, availableCountries = [] }) => {
               </Select>
             )}
           />
-        </Box>
-      </Flex>
+        </div>
+      </div>
     </form>
   )
 }

@@ -1,15 +1,14 @@
-import { Box, Text } from 'ooni-components'
-import { StackedBarChart } from 'components/aggregation/mat/StackedBarChart'
-import { FunnelChart } from 'components/aggregation/mat/FunnelChart'
-import { NoCharts } from 'components/aggregation/mat/NoCharts'
-import TableView from 'components/aggregation/mat/TableView'
-import { useMemo } from 'react'
-import useSWR from 'swr'
-import dayjs from 'services/dayjs'
-import { axiosResponseTime } from 'components/axios-plugins'
 import axios from 'axios'
+import { FunnelChart } from 'components/aggregation/mat/FunnelChart'
 import { MATContextProvider } from 'components/aggregation/mat/MATContext'
+import { NoCharts } from 'components/aggregation/mat/NoCharts'
+import { StackedBarChart } from 'components/aggregation/mat/StackedBarChart'
+import TableView from 'components/aggregation/mat/TableView'
+import { axiosResponseTime } from 'components/axios-plugins'
+import { useMemo } from 'react'
 import { useIntl } from 'react-intl'
+import dayjs from 'services/dayjs'
+import useSWR from 'swr'
 import { FormattedMarkdownBase } from './FormattedMarkdown'
 
 axiosResponseTime(axios)
@@ -65,47 +64,62 @@ export const MATChartWrapper = ({ link, caption }) => {
     ...searchParams,
   }
 
-  return !!searchParams && 
-    <Box my={4}>
-      <MATChart query={query} showFilters={false} />
-      {caption && (
-        <Text fontSize={1} mt={2}>
-          <FormattedMarkdownBase>{captionText}</FormattedMarkdownBase>
-        </Text>
-      )}
-    </Box>
+  return (
+    !!searchParams && (
+      <div className="my-8">
+        <MATChart query={query} showFilters={false} />
+        {caption && (
+          <div className="mt-2">
+            <FormattedMarkdownBase>{captionText}</FormattedMarkdownBase>
+          </div>
+        )}
+      </div>
+    )
+  )
 }
 
 const MATChart = ({ query, showFilters = true }) => {
   const intl = useIntl()
-  const { data, error, isValidating } = useSWR(query ? query : null, fetcher, swrOptions)
+  const { data, error, isValidating } = useSWR(
+    query ? query : null,
+    fetcher,
+    swrOptions,
+  )
 
   const showLoadingIndicator = useMemo(() => isValidating, [isValidating])
   return (
-    <Box>  
+    <>
       <MATContextProvider queryParams={query}>
         {error && <NoCharts message={error?.info ?? JSON.stringify(error)} />}
-        <Box>
+        <>
           {showLoadingIndicator ? (
-            <Box>
-              <h2>{intl.formatMessage({ id: 'General.Loading' })}</h2>
-            </Box>
+            <h2>{intl.formatMessage({ id: 'General.Loading' })}</h2>
           ) : (
             <>
-              {data?.data?.result?.length > 0 ? 
-                <Box>
-                  {data && data.data.dimension_count == 0 && <FunnelChart data={data.data.result} />}
-                  {data && data.data.dimension_count == 1 && <StackedBarChart data={data.data.result} query={query} />}
-                  {data && data.data.dimension_count > 1 && (
-                    <TableView data={data.data.result} query={query} showFilters={showFilters} />
+              {data?.data?.result?.length > 0 ? (
+                <>
+                  {data && data.data.dimension_count === 0 && (
+                    <FunnelChart data={data.data.result} />
                   )}
-                </Box> : <NoCharts />
-              }
+                  {data && data.data.dimension_count === 1 && (
+                    <StackedBarChart data={data.data.result} query={query} />
+                  )}
+                  {data && data.data.dimension_count > 1 && (
+                    <TableView
+                      data={data.data.result}
+                      query={query}
+                      showFilters={showFilters}
+                    />
+                  )}
+                </>
+              ) : (
+                <NoCharts />
+              )}
             </>
           )}
-        </Box>
+        </>
       </MATContextProvider>
-    </Box>
+    </>
   )
 }
 

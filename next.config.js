@@ -17,9 +17,9 @@ const DEFAULT_LOCALE = 'en'
 function getSupportedLanguages() {
   const supportedLanguages = new Set()
   supportedLanguages.add(DEFAULT_LOCALE) // at least 1 supported language
-  glob.sync(`${LANG_DIR}/**/*.json`).forEach((f) =>
-    supportedLanguages.add(basename(f, '.json'))
-  )
+  glob
+    .sync(`${LANG_DIR}/**/*.json`)
+    .forEach((f) => supportedLanguages.add(basename(f, '.json')))
   return [...supportedLanguages]
 }
 
@@ -35,12 +35,6 @@ module.exports = withBundleAnalyzer(
             permanent: true,
           },
         ]
-      },
-      compiler: {
-        // see https://styled-components.com/docs/tooling#babel-plugin for more info on the options.
-        styledComponents: {
-          ssr: true,
-        },
       },
       i18n: {
         locales: getSupportedLanguages(),

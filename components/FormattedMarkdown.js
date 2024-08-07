@@ -1,23 +1,37 @@
 // Documentation for markdown-to-jsx
 // https://github.com/probablyup/markdown-to-jsx
-import React from 'react'
+import Markdown from 'markdown-to-jsx'
 import PropTypes from 'prop-types'
 import { useIntl } from 'react-intl'
-import Markdown from 'markdown-to-jsx'
-import { Link, theme } from 'ooni-components'
+import { twMerge } from 'tailwind-merge'
+
+const MdH1 = ({ children, className, ...props }) => (
+  <h3 className={twMerge('my-2', className)} {...props}>
+    {children}
+  </h3>
+)
+
+const MdUL = ({ children, className, ...props }) => (
+  <ul className={twMerge('list-disc ps-10', className)} {...props}>
+    {children}
+  </ul>
+)
+
+const MdP = ({ children, className, ...props }) => (
+  <p className={twMerge('my-3', className)} {...props}>
+    {children}
+  </p>
+)
 
 export const FormattedMarkdownBase = ({ children }) => {
   return (
     <Markdown
       options={{
         overrides: {
-          a: {
-            component: Link,
-            props: {
-              color: theme.colors.blue7
-            }
-          },
-        }
+          h1: { component: MdH1 },
+          ul: { component: MdUL },
+          p: { component: MdP },
+        },
       }}
     >
       {children}
@@ -30,7 +44,7 @@ const FormattedMarkdown = ({ id, defaultMessage, values }) => {
 
   return (
     <FormattedMarkdownBase>
-      {intl.formatMessage({id, defaultMessage}, values )}
+      {intl.formatMessage({ id, defaultMessage }, values)}
     </FormattedMarkdownBase>
   )
 }
@@ -38,7 +52,7 @@ const FormattedMarkdown = ({ id, defaultMessage, values }) => {
 FormattedMarkdown.propTypes = {
   id: PropTypes.string.isRequired,
   defaultMessage: PropTypes.string,
-  values: PropTypes.object
+  values: PropTypes.object,
 }
 
 export default FormattedMarkdown

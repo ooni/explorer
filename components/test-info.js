@@ -1,235 +1,230 @@
-import React from 'react'
+import { colors } from 'ooni-components'
 
 import {
-  theme
-} from 'ooni-components'
-
-import { FaBeer } from 'react-icons/fa'
-import {
-  NettestGroupWebsites,
+  NettestGroupCircumvention,
+  NettestGroupExperimental,
   NettestGroupInstantMessaging,
   NettestGroupMiddleBoxes,
   NettestGroupPerformance,
-  NettestGroupCircumvention,
-  NettestGroupExperimental
+  NettestGroupWebsites,
 } from 'ooni-components/icons'
+import { FaBeer } from 'react-icons/fa'
 import { FormattedMessage } from 'react-intl'
 
-
 export const testGroups = {
-  'websites': {
-    'color': theme.colors.indigo7,
-    'id': 'Tests.Groups.Websites.Name',
-    'name': <FormattedMessage id='Tests.Groups.Websites.Name' />,
-    'icon': <NettestGroupWebsites />
+  websites: {
+    color: colors.indigo['700'],
+    id: 'Tests.Groups.Websites.Name',
+    name: <FormattedMessage id="Tests.Groups.Websites.Name" />,
+    icon: <NettestGroupWebsites />,
   },
-  'im': {
-    'color': theme.colors.cyan7,
-    'id': 'Tests.Groups.Instant Messagging.Name',
-    'name': <FormattedMessage id='Tests.Groups.Instant Messagging.Name' />,
-    'icon': <NettestGroupInstantMessaging />
+  im: {
+    color: colors.cyan['700'],
+    id: 'Tests.Groups.Instant Messagging.Name',
+    name: <FormattedMessage id="Tests.Groups.Instant Messagging.Name" />,
+    icon: <NettestGroupInstantMessaging />,
   },
-  'middlebox': {
-    'color': theme.colors.violet9,
-    'id': 'Tests.Groups.Middlebox.Name',
-    'name': <FormattedMessage id='Tests.Groups.Middlebox.Name' />,
-    'icon': <NettestGroupMiddleBoxes />
+  middlebox: {
+    color: colors.violet['900'],
+    id: 'Tests.Groups.Middlebox.Name',
+    name: <FormattedMessage id="Tests.Groups.Middlebox.Name" />,
+    icon: <NettestGroupMiddleBoxes />,
   },
-  'performance': {
-    'color': theme.colors.fuchsia6,
-    'id': 'Tests.Groups.Performance.Name',
-    'name': <FormattedMessage id='Tests.Groups.Performance.Name' />,
-    'icon': <NettestGroupPerformance />
+  performance: {
+    color: colors.fuchsia['600'],
+    id: 'Tests.Groups.Performance.Name',
+    name: <FormattedMessage id="Tests.Groups.Performance.Name" />,
+    icon: <NettestGroupPerformance />,
   },
-  'circumvention': {
-    'color': theme.colors.pink6,
-    'id': 'Tests.Groups.Circumvention.Name',
-    'name': <FormattedMessage id='Tests.Groups.Circumvention.Name' />,
-    'icon': <NettestGroupCircumvention />
+  circumvention: {
+    color: colors.pink['600'],
+    id: 'Tests.Groups.Circumvention.Name',
+    name: <FormattedMessage id="Tests.Groups.Circumvention.Name" />,
+    icon: <NettestGroupCircumvention />,
   },
-  'experimental': {
-    'color': theme.colors.gray5,
-    'id': 'Tests.Groups.Experimental.Name',
-    'name': <FormattedMessage id='Tests.Groups.Experimental.Name' />,
-    'icon': <NettestGroupExperimental />
+  experimental: {
+    color: colors.gray['500'],
+    id: 'Tests.Groups.Experimental.Name',
+    name: <FormattedMessage id="Tests.Groups.Experimental.Name" />,
+    icon: <NettestGroupExperimental />,
   },
-  'legacy': {
-    'color': theme.colors.gray5,
-    'id': 'Tests.Groups.Legacy.Name',
-    'name': <FormattedMessage id='Tests.Groups.Legacy.Name' />,
-    'icon': <FaBeer />
+  legacy: {
+    color: colors.gray['500'],
+    id: 'Tests.Groups.Legacy.Name',
+    name: <FormattedMessage id="Tests.Groups.Legacy.Name" />,
+    icon: <FaBeer />,
   },
-  'default': {
-    'color': theme.colors.gray5,
-    'id': 'DefaultTestGroupName',
-    'name': null,
-    'icon': <FaBeer />
+  default: {
+    color: colors.gray['500'],
+    id: 'DefaultTestGroupName',
+    name: null,
+    icon: <FaBeer />,
   },
 }
 
 export const testNames = {
   /* Websites */
-  'web_connectivity': {
+  web_connectivity: {
     group: 'websites',
-    name: <FormattedMessage id='Tests.WebConnectivity.Name' />,
+    name: <FormattedMessage id="Tests.WebConnectivity.Name" />,
     id: 'Tests.WebConnectivity.Name',
-    info: 'https://ooni.org/nettest/web-connectivity/'
+    info: 'https://ooni.org/nettest/web-connectivity/',
   },
 
   /* Middlebox tests */
-  'http_invalid_request_line': {
+  http_invalid_request_line: {
     group: 'middlebox',
-    name: <FormattedMessage id='Tests.HTTPInvalidReqLine.Name' />,
+    name: <FormattedMessage id="Tests.HTTPInvalidReqLine.Name" />,
     id: 'Tests.HTTPInvalidReqLine.Name',
-    info: 'https://ooni.org/nettest/http-invalid-request-line/'
+    info: 'https://ooni.org/nettest/http-invalid-request-line/',
   },
-  'http_header_field_manipulation': {
+  http_header_field_manipulation: {
     group: 'middlebox',
-    name: <FormattedMessage id='Tests.HTTPHeaderManipulation.Name' />,
+    name: <FormattedMessage id="Tests.HTTPHeaderManipulation.Name" />,
     id: 'Tests.HTTPHeaderManipulation.Name',
-    info: 'https://ooni.org/nettest/http-header-field-manipulation/'
+    info: 'https://ooni.org/nettest/http-header-field-manipulation/',
   },
 
   /* IM Tests */
-  'facebook_messenger': {
+  facebook_messenger: {
     group: 'im',
-    name: <FormattedMessage id='Tests.Facebook.Name' />,
+    name: <FormattedMessage id="Tests.Facebook.Name" />,
     id: 'Tests.Facebook.Name',
-    info: 'https://ooni.org/nettest/facebook-messenger/'
+    info: 'https://ooni.org/nettest/facebook-messenger/',
   },
-  'telegram': {
+  telegram: {
     group: 'im',
-    name: <FormattedMessage id='Tests.Telegram.Name' />,
+    name: <FormattedMessage id="Tests.Telegram.Name" />,
     id: 'Tests.Telegram.Name',
-    info: 'https://ooni.org/nettest/telegram/'
+    info: 'https://ooni.org/nettest/telegram/',
   },
-  'whatsapp': {
+  whatsapp: {
     group: 'im',
-    name: <FormattedMessage id='Tests.WhatsApp.Name' />,
+    name: <FormattedMessage id="Tests.WhatsApp.Name" />,
     id: 'Tests.WhatsApp.Name',
-    info: 'https://ooni.org/nettest/whatsapp/'
+    info: 'https://ooni.org/nettest/whatsapp/',
   },
-  'signal': {
+  signal: {
     group: 'im',
-    name: <FormattedMessage id='Tests.Signal.Name' />,
+    name: <FormattedMessage id="Tests.Signal.Name" />,
     id: 'Tests.Signal.Name',
-    info: 'https://ooni.org/nettest/signal/'
+    info: 'https://ooni.org/nettest/signal/',
   },
 
   /* Performance */
-  'ndt': {
+  ndt: {
     group: 'performance',
-    name: <FormattedMessage id='Tests.NDT.Name' />,
+    name: <FormattedMessage id="Tests.NDT.Name" />,
     id: 'Tests.NDT.Name',
-    info: 'https://ooni.org/nettest/ndt/'
+    info: 'https://ooni.org/nettest/ndt/',
   },
-  'dash': {
+  dash: {
     group: 'performance',
-    name: <FormattedMessage id='Tests.Dash.Name' />,
+    name: <FormattedMessage id="Tests.Dash.Name" />,
     id: 'Tests.Dash.Name',
-    info: 'https://ooni.org/nettest/dash/'
+    info: 'https://ooni.org/nettest/dash/',
   },
 
   /* Censorship circumvention */
-  'bridge_reachability': {
+  bridge_reachability: {
     group: 'legacy',
-    name: <FormattedMessage id='Tests.BridgeReachability.Name' />,
+    name: <FormattedMessage id="Tests.BridgeReachability.Name" />,
     id: 'Tests.BridgeReachability.Name',
-    info: 'https://ooni.org/nettest/tor-bridge-reachability/'
+    info: 'https://ooni.org/nettest/tor-bridge-reachability/',
   },
-  'psiphon': {
+  psiphon: {
     group: 'circumvention',
-    name: <FormattedMessage id='Tests.Psiphon.Name' />,
+    name: <FormattedMessage id="Tests.Psiphon.Name" />,
     id: 'Tests.Psiphon.Name',
-    info: 'https://ooni.org/nettest/psiphon/'
+    info: 'https://ooni.org/nettest/psiphon/',
   },
-  'tor': {
+  tor: {
     group: 'circumvention',
-    name: <FormattedMessage id='Tests.Tor.Name' />,
+    name: <FormattedMessage id="Tests.Tor.Name" />,
     id: 'Tests.Tor.Name',
-    info: 'https://ooni.org/nettest/tor/'
+    info: 'https://ooni.org/nettest/tor/',
   },
-  'torsf': {
+  torsf: {
     group: 'circumvention',
-    name: <FormattedMessage id='Tests.TorSnowflake.Name' />,
+    name: <FormattedMessage id="Tests.TorSnowflake.Name" />,
     id: 'Tests.TorSnowflake.Name',
-    info: 'https://ooni.org/nettest/torsf/'
+    info: 'https://ooni.org/nettest/torsf/',
   },
-  'riseupvpn': {
+  riseupvpn: {
     group: 'experimental',
-    name: <FormattedMessage id='Tests.RiseupVPN.Name' />,
+    name: <FormattedMessage id="Tests.RiseupVPN.Name" />,
     id: 'Tests.RiseupVPN.Name',
-    info: 'https://ooni.org/nettest/'
+    info: 'https://ooni.org/nettest/',
   },
 
   /* Legacy tests */
-  'tcp_connect': {
+  tcp_connect: {
     group: 'legacy',
-    name: <FormattedMessage id='Tests.TCPConnect.Name' />,
+    name: <FormattedMessage id="Tests.TCPConnect.Name" />,
     id: 'Tests.TCPConnect.Name',
     // FIXME: Use a more relevant link
-    info: 'https://ooni.org/nettest/'
+    info: 'https://ooni.org/nettest/',
   },
-  'dns_consistency': {
+  dns_consistency: {
     group: 'legacy',
-    name: <FormattedMessage id='Tests.DNSConsistency.Name' />,
+    name: <FormattedMessage id="Tests.DNSConsistency.Name" />,
     id: 'Tests.DNSConsistency.Name',
-    info: 'https://ooni.org/nettest/dns-consistency/'
+    info: 'https://ooni.org/nettest/dns-consistency/',
   },
-  'http_requests': {
+  http_requests: {
     group: 'legacy',
-    name: <FormattedMessage id='Tests.HTTPRequests.Name' />,
+    name: <FormattedMessage id="Tests.HTTPRequests.Name" />,
     id: 'Tests.HTTPRequests.Name',
-    info: 'https://ooni.org/nettest/http-requests/'
+    info: 'https://ooni.org/nettest/http-requests/',
   },
-  'http_host': {
+  http_host: {
     group: 'legacy',
-    name: <FormattedMessage id='Tests.HTTPHost.Name' />,
+    name: <FormattedMessage id="Tests.HTTPHost.Name" />,
     id: 'Tests.HTTPHost.Name',
-    info: 'https://ooni.org/nettest/http-host/'
+    info: 'https://ooni.org/nettest/http-host/',
   },
-  'meek_fronted_requests_test': {
+  meek_fronted_requests_test: {
     group: 'legacy',
-    name: <FormattedMessage id='Tests.MeekFrontendRequests.Name' />,
+    name: <FormattedMessage id="Tests.MeekFrontendRequests.Name" />,
     id: 'Tests.MeekFrontendRequests.Name',
-    info: 'https://ooni.org/nettest/meek-fronted-requests/'
+    info: 'https://ooni.org/nettest/meek-fronted-requests/',
   },
-  'multi_protocol_traceroute': {
+  multi_protocol_traceroute: {
     group: 'legacy',
-    name: <FormattedMessage id='Tests.MultiProtocolTraceroute.Name' />,
+    name: <FormattedMessage id="Tests.MultiProtocolTraceroute.Name" />,
     id: 'Tests.MultiProtocolTraceroute.Name',
-    info: 'https://ooni.org/nettest/'
+    info: 'https://ooni.org/nettest/',
   },
 
   /* Experimental tests */
-  'vanilla_tor': {
+  vanilla_tor: {
     group: 'experimental',
-    name: <FormattedMessage id='Tests.TorVanilla.Name' />,
+    name: <FormattedMessage id="Tests.TorVanilla.Name" />,
     id: 'Tests.TorVanilla.Name',
-    info: 'https://ooni.org/nettest/vanilla-tor/'
+    info: 'https://ooni.org/nettest/vanilla-tor/',
   },
-  'dnscheck': {
+  dnscheck: {
     group: 'experimental',
-    name: <FormattedMessage id='Tests.DNSCheck.Name' />,
+    name: <FormattedMessage id="Tests.DNSCheck.Name" />,
     id: 'Tests.DNSCheck.Name',
-    info: 'https://ooni.org/nettest/http-requests/'
+    info: 'https://ooni.org/nettest/http-requests/',
   },
-  'stunreachability': {
+  stunreachability: {
     group: 'experimental',
-    name: <FormattedMessage id='Tests.StunReachability.Name' />,
+    name: <FormattedMessage id="Tests.StunReachability.Name" />,
     id: 'Tests.StunReachability.Name',
-    info: 'https://ooni.org/nettest/http-requests/'
+    info: 'https://ooni.org/nettest/http-requests/',
   },
-  'urlgetter': {
+  urlgetter: {
     group: 'experimental',
-    name: <FormattedMessage id='Tests.URLGetter.Name' />,
+    name: <FormattedMessage id="Tests.URLGetter.Name" />,
     id: 'Tests.URLGetter.Name',
-    info: 'https://ooni.org/nettest/http-requests/'
+    info: 'https://ooni.org/nettest/http-requests/',
   },
-  'browser_web': {
+  browser_web: {
     group: 'experimental',
-    name: <FormattedMessage id='Tests.ProbeWeb.Name' />,
+    name: <FormattedMessage id="Tests.ProbeWeb.Name" />,
     id: 'Tests.ProbeWeb.Name',
-    info: 'https://github.com/ooni/spec/blob/master/nettests/ts-036-browser_web.md'
-  }
+    info: 'https://github.com/ooni/spec/blob/master/nettests/ts-036-browser_web.md',
+  },
 }

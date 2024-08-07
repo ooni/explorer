@@ -1,19 +1,18 @@
-import { theme } from 'ooni-components'
+import { colors } from 'ooni-components'
 import { firaSans } from '../pages/_app'
 
-const colors = theme.colors
 // Color scale
 const colorScale = [
-  colors.yellow2,
-  colors.lime3,
-  colors.fuschia4,
-  colors.blue5,
-  colors.grey6,
-  colors.grey7,
-  colors.green8
+  colors.yellow['200'],
+  colors.lime['300'],
+  colors.fuchsia['400'],
+  colors.blue['500'],
+  colors.gray['600'],
+  colors.gray['700'],
+  colors.green['800'],
 ]
 
-const primaryColor = colors.base
+const primaryColor = colors.blue['500']
 
 // Typography
 export const sansSerif = `${firaSans.style.fontFamily}, sans-serif`
@@ -23,7 +22,7 @@ const fontSize = 8
 // Layout
 const baseProps = {
   colorScale: colorScale,
-  overflow: 'visible'
+  overflow: 'visible',
 }
 
 // Labels
@@ -36,7 +35,10 @@ export const baseLabelStyles = {
   stroke: 'transparent',
 }
 
-const centeredLabelStyles = Object.assign({ textAnchor: 'middle' }, baseLabelStyles)
+const centeredLabelStyles = Object.assign(
+  { textAnchor: 'middle' },
+  baseLabelStyles,
+)
 
 // Strokes
 const strokeDasharray = '1, 3'
@@ -49,28 +51,31 @@ export const axisYStyle = {
     strokeOpacity: '0.5',
     strokeDasharray,
     strokeLinecap,
-    strokeLinejoin
+    strokeLinejoin,
   },
   axis: {
     fill: 'transparent',
-    stroke: 'transparent'
+    stroke: 'transparent',
   },
-  axisLabel: Object.assign({}, centeredLabelStyles, {padding: 25}),
+  axisLabel: Object.assign({}, centeredLabelStyles, { padding: 25 }),
   ticks: {
     fill: 'transparent',
-    stroke: 'transparent'
+    stroke: 'transparent',
   },
 }
 
 const victoryTheme = {
-  area: Object.assign({
-    style: {
-      data: {
-        fill: primaryColor
+  area: Object.assign(
+    {
+      style: {
+        data: {
+          fill: primaryColor,
+        },
+        labels: centeredLabelStyles,
       },
-      labels: centeredLabelStyles
-    }
-  }, baseProps),
+    },
+    baseProps,
+  ),
 
   axis: Object.assign({}, baseProps, {
     style: {
@@ -79,136 +84,158 @@ const victoryTheme = {
         stroke: colors.black,
         strokeWidth: 1,
         strokeLinecap,
-        strokeLinejoin
+        strokeLinejoin,
       },
-      axisLabel: Object.assign({}, centeredLabelStyles, {padding: 25}),
+      axisLabel: Object.assign({}, centeredLabelStyles, { padding: 25 }),
       grid: {
         fill: 'transparent',
         stroke: 'transparent',
-        pointerEvents: 'none'
+        pointerEvents: 'none',
       },
       ticks: {
         fill: 'transparent',
         size: 5,
-        stroke: colors.black
+        stroke: colors.black,
       },
-      tickLabels: baseLabelStyles
-    }
+      tickLabels: baseLabelStyles,
+    },
   }),
 
-  bar: Object.assign({
-    style: {
-      data: {
-        fill: primaryColor,
-        padding: 8,
-        strokeWidth: 0
+  bar: Object.assign(
+    {
+      style: {
+        data: {
+          fill: primaryColor,
+          padding: 8,
+          strokeWidth: 0,
+        },
+        labels: baseLabelStyles,
       },
-      labels: baseLabelStyles,
-    }
-  }, baseProps),
+    },
+    baseProps,
+  ),
 
-  candlestick: Object.assign({
-    style: {
-      data: {
-        stroke: primaryColor,
-        strokeWidth: 1
+  candlestick: Object.assign(
+    {
+      style: {
+        data: {
+          stroke: primaryColor,
+          strokeWidth: 1,
+        },
+        labels: centeredLabelStyles,
       },
-      labels: centeredLabelStyles
+      candleColors: {
+        positive: '#ffffff',
+        negative: primaryColor,
+      },
     },
-    candleColors: {
-      positive: '#ffffff',
-      negative: primaryColor
-    },
-  }, baseProps),
+    baseProps,
+  ),
 
   chart: baseProps,
 
-  errorbar: Object.assign({
-    style: {
-      data: {
-        fill: 'transparent',
-        stroke: primaryColor,
-        strokeWidth: 2
+  errorbar: Object.assign(
+    {
+      style: {
+        data: {
+          fill: 'transparent',
+          stroke: primaryColor,
+          strokeWidth: 2,
+        },
+        labels: centeredLabelStyles,
       },
-      labels: centeredLabelStyles
     },
-  }, baseProps),
+    baseProps,
+  ),
 
-  group: Object.assign({
-    colorScale: colorScale,
-  }, baseProps),
+  group: Object.assign(
+    {
+      colorScale: colorScale,
+    },
+    baseProps,
+  ),
 
-  line: Object.assign({
-    style: {
-      data: {
-        fill: 'transparent',
-        stroke: primaryColor,
-        strokeWidth: 2
+  line: Object.assign(
+    {
+      style: {
+        data: {
+          fill: 'transparent',
+          stroke: primaryColor,
+          strokeWidth: 2,
+        },
+        labels: centeredLabelStyles,
       },
-      labels: centeredLabelStyles}
-  }, baseProps),
+    },
+    baseProps,
+  ),
 
   pie: {
     style: {
       data: {
         padding: 10,
         stroke: 'transparent',
-        strokeWidth: 1
+        strokeWidth: 1,
       },
-      labels: Object.assign({padding: 20}, baseLabelStyles)
+      labels: Object.assign({ padding: 20 }, baseLabelStyles),
     },
     colorScale: colorScale,
     width: 400,
     height: 400,
-    padding: 50
+    padding: 50,
   },
 
-  scatter: Object.assign({
-    style: {
-      data: {
-        fill: primaryColor,
-        stroke: 'transparent',
-        strokeWidth: 0
+  scatter: Object.assign(
+    {
+      style: {
+        data: {
+          fill: primaryColor,
+          stroke: 'transparent',
+          strokeWidth: 0,
+        },
+        labels: centeredLabelStyles,
       },
-      labels: centeredLabelStyles
     },
-  }, baseProps),
+    baseProps,
+  ),
 
-  stack: Object.assign({colorScale: colorScale}, baseProps),
+  stack: Object.assign({ colorScale: colorScale }, baseProps),
 
   tooltip: {
     style: Object.assign({}, centeredLabelStyles, {
       padding: 5,
-      pointerEvents: 'none'
+      pointerEvents: 'none',
     }),
     flyoutStyle: {
       stroke: primaryColor,
       strokeWidth: 1,
-      pointerEvents: 'none'
+      pointerEvents: 'none',
     },
     cornerRadius: 5,
-    pointerLength: 10
+    pointerLength: 10,
   },
 
-  voronoi: Object.assign({
-    style: {
-      data: {
-        fill: 'transparent',
-        stroke: 'transparent',
-        strokeWidth: 0
+  voronoi: Object.assign(
+    {
+      style: {
+        data: {
+          fill: 'transparent',
+          stroke: 'transparent',
+          strokeWidth: 0,
+        },
+        labels: Object.assign({}, centeredLabelStyles, {
+          padding: 5,
+          pointerEvents: 'none',
+        }),
+        flyout: {
+          stroke: primaryColor,
+          strokeWidth: 1,
+          fill: '#f0f0f0',
+          pointerEvents: 'none',
+        },
       },
-      labels: Object.assign({}, centeredLabelStyles, {
-        padding: 5,
-        pointerEvents: 'none'
-      }),
-      flyout: {
-        stroke: primaryColor,
-        strokeWidth: 1,
-        fill: '#f0f0f0',
-        pointerEvents: 'none'
-      }
-    }
-  }, baseProps),
+    },
+    baseProps,
+  ),
 
   legend: {
     colorScale: colorScale,
@@ -216,11 +243,11 @@ const victoryTheme = {
     orientation: 'vertical',
     style: {
       data: {
-        type: 'circle'
+        type: 'circle',
       },
-      labels: baseLabelStyles
+      labels: baseLabelStyles,
     },
-    symbolSpacer: 8
-  }
+    symbolSpacer: 8,
+  },
 }
 export default victoryTheme

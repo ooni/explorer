@@ -1,35 +1,19 @@
-import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import { Box, Container, Text } from 'ooni-components'
-
-const StyledBox = styled(Box)`
-  border: 1px solid ${props => props.theme.colors.gray4};
-`
 
 export const SimpleBox = ({ children }) => (
-  <StyledBox px={3} py={2}>
-    {children}
-  </StyledBox>
+  <div className="border border-gray-400 px-4 py-2">{children}</div>
 )
 
-SimpleBox.propTypes = {
-  children: PropTypes.node
-}
-
 export const BoxWithTitle = ({ title, children }) => (
-  <StyledBox my={4} py={3}>
-    <Container>
-      <Text mb={3} fontSize={2} fontWeight={600}>{title}</Text>
+  <div className="border border-gray-400 my-8 p-4">
+    <div className="container">
+      <div className="mb-4 text-xl font-semibold">{title}</div>
       {children}
-    </Container>
-  </StyledBox>
+    </div>
+  </div>
 )
 
 BoxWithTitle.propTypes = {
-  title: PropTypes.oneOfType([
-    PropTypes.string,
-    PropTypes.element
-  ]).isRequired,
-  children: PropTypes.node
+  title: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
+  children: PropTypes.node,
 }

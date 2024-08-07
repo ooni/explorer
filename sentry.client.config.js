@@ -11,7 +11,7 @@ Sentry.init({
   ignoreErrors: [
     /^ResizeObserver loop limit exceeded$/,
     /^ResizeObserver loop completed with undelivered notifications.$/,
-    "__gCrWeb"
+    '__gCrWeb',
   ],
   // Adjust this value in production, or use tracesSampler for greater control
   tracesSampleRate: 1,

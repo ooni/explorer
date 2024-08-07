@@ -1,16 +1,7 @@
-import { Modal, Container, Flex, Button, Heading } from 'ooni-components'
-import { useIntl } from 'react-intl'
-import styled from 'styled-components'
-import useUser from '../../hooks/useUser'
 import { useRouter } from 'next/router'
-
-const StyledModal = styled(Modal)`
-  border-radius: 8px;
-  box-shadow: 4px 4px 10px black;
-  svg {
-    display: none;
-  }
-`
+import { Modal } from 'ooni-components'
+import { useIntl } from 'react-intl'
+import useUser from '../../hooks/useUser'
 
 const LoginRequiredModal = ({ show }) => {
   const intl = useIntl()
@@ -23,18 +14,22 @@ const LoginRequiredModal = ({ show }) => {
   }
 
   return (
-    <StyledModal show={show} color='black' bg='white'>
-      <Container px={[1,3]} py={4} textAlign='center'>
-        <Flex>
-          <Heading h={4}>
+    <Modal className="rounded-lg shadow-md text-black bg-white " show={show}>
+      <div className="container text-center p-1 md:p-4 py-8">
+        <div className="flex">
+          <h4>
             {intl.formatMessage({ id: 'Findings.LoginRequiredModal.Title' })}
-          </Heading>
-        </Flex>
-        <Button m={3} onClick={handleClick}>
+          </h4>
+        </div>
+        <button
+          type="button"
+          className="btn btn-primary m-4"
+          onClick={handleClick}
+        >
           {intl.formatMessage({ id: 'General.Login' })}
-        </Button>
-      </Container>
-    </StyledModal>
+        </button>
+      </div>
+    </Modal>
   )
 }
 

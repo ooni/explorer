@@ -1,11 +1,8 @@
 import { addDays, parse, sub } from 'date-fns'
-import { Button } from 'ooni-components'
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { DayPicker } from 'react-day-picker'
-import 'react-day-picker/dist/style.css'
 import { useIntl } from 'react-intl'
 import OutsideClickHandler from 'react-outside-click-handler'
-import styled from 'styled-components'
 
 import ar from 'date-fns/locale/ar'
 import de from 'date-fns/locale/de'
@@ -24,58 +21,42 @@ import zhHant from 'date-fns/locale/zh-HK'
 
 import { getDirection } from 'components/withIntl'
 
-const StyledDatetime = styled.div`
-z-index: 99999;
-position: absolute;
-max-width: 300px;
-background-color: #ffffff;
-border: 1px solid ${props => props.theme.colors.gray2};
-
-.rdp-cell {
-  padding: 2px 0;
-}
-
-.rdp-day_selected:not([disabled]),
-.rdp-day_selected:focus:not([disabled]),
-.rdp-day_selected:active:not([disabled]),
-.rdp-day_selected:hover:not([disabled]) {
-  background-color: ${props => props.theme.colors.blue5};
-}
-`
-
-const StyledRangeButtons = styled.div`
-margin: 1em 1em 0;
-display: flex;
-gap: 6px;
-flex-wrap: wrap;
-`
-
-const StyledFooter = styled.div`
-display: flex;
-justify-content: right;
-gap: 6px;
-`
-
 const Footer = ({ handleRangeSelect, range, close }) => {
   const intl = useIntl()
 
   return (
-    <StyledFooter>
-      <Button id='apply-range' onClick={(e) => {
-        e.preventDefault()
-        handleRangeSelect(range)}
-        }>{intl.formatMessage({id: 'DateRange.Apply'})}</Button>
-      <Button
-        hollow
+    <div className="flex justify-end gap-1">
+      <button
+        className="btn btn-primary"
+        type="button"
+        id="apply-range"
         onClick={(e) => {
           e.preventDefault()
-          close()}
-        }>{intl.formatMessage({id: 'DateRange.Cancel'})}</Button>
-    </StyledFooter>
+          handleRangeSelect(range)
+        }}
+      >
+        {intl.formatMessage({ id: 'DateRange.Apply' })}
+      </button>
+      <button
+        className="btn btn-primary-hollow"
+        type="button"
+        onClick={(e) => {
+          e.preventDefault()
+          close()
+        }}
+      >
+        {intl.formatMessage({ id: 'DateRange.Cancel' })}
+      </button>
+    </div>
   )
 }
 
-const DateRangePicker = ({handleRangeSelect, initialRange, close, ...props}) => {
+const DateRangePicker = ({
+  handleRangeSelect,
+  initialRange,
+  close,
+  ...props
+}) => {
   const intl = useIntl()
   const tomorrow = addDays(new Date(), 1)
   const ranges = ['Today', 'LastWeek', 'LastMonth', 'LastYear']
@@ -112,46 +93,54 @@ const DateRangePicker = ({handleRangeSelect, initialRange, close, ...props}) => 
         return en
     }
   }, [intl.locale])
-  
+
   const selectRange = (range) => {
     switch (range) {
       case 'Today':
-        handleRangeSelect({from: new Date(), to: tomorrow})
+        handleRangeSelect({ from: new Date(), to: tomorrow })
         break
       case 'LastWeek':
-        handleRangeSelect({from: sub(new Date(), {weeks: 1}) , to: tomorrow})
+        handleRangeSelect({ from: sub(new Date(), { weeks: 1 }), to: tomorrow })
         break
       case 'LastMonth':
-        handleRangeSelect({from: sub(new Date(), {months: 1}) , to: tomorrow})
+        handleRangeSelect({
+          from: sub(new Date(), { months: 1 }),
+          to: tomorrow,
+        })
         break
       case 'LastYear':
-        handleRangeSelect({from: sub(new Date(), {years: 1}) , to: tomorrow})
+        handleRangeSelect({ from: sub(new Date(), { years: 1 }), to: tomorrow })
         break
     }
   }
 
-  const rangesList = ranges.map((range) => 
-    <Button
-      hollow
-      size="small"
+  const rangesList = ranges.map((range) => (
+    <button
+      className="btn btn-primary-hollow btn-sm px-2"
+      type="button"
       key={range}
-      px={2}
       onClick={(e) => {
         e.preventDefault()
         selectRange(range)
-      }}>{intl.formatMessage({id: `DateRange.${range}`})}</Button>
-  )
-  const [range, setRange] = useState({from: parse(initialRange.from, 'yyyy-MM-dd', new Date()), to: parse(initialRange.to, 'yyyy-MM-dd', new Date())})
-  
+      }}
+    >
+      {intl.formatMessage({ id: `DateRange.${range}` })}
+    </button>
+  ))
+  const [range, setRange] = useState({
+    from: parse(initialRange.from, 'yyyy-MM-dd', new Date()),
+    to: parse(initialRange.to, 'yyyy-MM-dd', new Date()),
+  })
+
   const onSelect = (range) => {
     setRange(range)
   }
 
   return (
-    <StyledDatetime>
+    <div className="z-[6666] absolute max-w-[300px] bg-white border border-gray-200">
       <OutsideClickHandler onOutsideClick={() => close()}>
-        <StyledRangeButtons>{rangesList}</StyledRangeButtons>
-        <DayPicker 
+        <div className="flex gap-1 mt-2 mx-2 mb-0 flex-wrap">{rangesList}</div>
+        <DayPicker
           {...props}
           dir={getDirection(intl.locale)}
           locale={dateFnsLocale}
@@ -159,9 +148,40 @@ const DateRangePicker = ({handleRangeSelect, initialRange, close, ...props}) => 
           toDate={tomorrow}
           selected={range}
           onSelect={onSelect}
-          footer={<Footer handleRangeSelect={handleRangeSelect} close={close} range={range} />} />
+          classNames={{
+            vhidden: 'sr-only',
+            caption: 'flex justify-center items-center h-10',
+            root: 'text-gray-800',
+            months: 'flex gap-4 relative px-4',
+            caption_label: 'text-xl px-1',
+            nav_button:
+              'inline-flex justify-center items-center absolute top-0 w-10 h-10 rounded-full text-gray-600 hover:bg-gray-100',
+            nav_button_next: 'right-0',
+            nav_button_previous: 'left-0',
+            table: 'border-collapse border-spacing-0',
+            head_cell: 'w-10 h-10 uppercase align-middle text-center',
+            cell: 'w-10 h-10 align-middle text-center border-0 px-0',
+            day: 'rounded-full w-10 h-10 transition-colors hover:bg-blue-100 focus:outline-none focus-visible:ring focus-visible:ring-blue-300 focus-visible:ring-opacity-50 active:bg-blue-600 active:text-white',
+            day_selected: 'text-white bg-blue-500 hover:bg-blue-500',
+            day_today: 'font-bold',
+            day_disabled:
+              'opacity-25 hover:bg-white active:bg-white active:text-gray-800',
+            day_outside: 'enabled:opacity-50',
+            day_range_middle: 'rounded-none',
+            day_range_end: 'rounded-l-none rounded-r-full',
+            day_range_start: 'rounded-r-none rounded-l-full',
+            day_hidden: 'hidden',
+          }}
+          footer={
+            <Footer
+              handleRangeSelect={handleRangeSelect}
+              close={close}
+              range={range}
+            />
+          }
+        />
       </OutsideClickHandler>
-    </StyledDatetime>
+    </div>
   )
 }
 

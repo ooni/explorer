@@ -1,58 +1,24 @@
-import { Box, Container, Flex, Link } from 'ooni-components'
 import ExplorerLogo from 'ooni-components/svgs/logos/OONI-HorizontalMonochromeInverted.svg'
 import PropTypes from 'prop-types'
-import React from 'react'
 import { useIntl } from 'react-intl'
-import styled from 'styled-components'
 
-const StyledFooter = styled.footer`
-  background-color: ${(props) => props.theme.colors.blue9};
-  color: #ffffff;
-  font-size: 16px;
-  margin-top: 32px;
-`
+const FooterHead = ({ ...props }) => (
+  <div className="font-semibold mb-2.5" {...props} />
+)
 
-const FooterBox = styled(Box)`
-  padding-top: 25px;
-  padding-bottom: 25px;
-`
-
-const FooterHead = styled.div`
-  font-weight: bolder;
-  margin-bottom: 10px;
-`
-
-const StyledFooterItem = styled(Link)`
-  && {
-    text-decoration: none;
-    color: #ffffff;
-    cursor: pointer;
-    opacity: 0.5;
-    display: ${(props) => (props.$horizontal === 'true' ? 'inline' : 'block')};
-    margin-left: ${(props) => (props.$horizontal === 'true' ? '1rem' : 0)};
-    &:hover {
-      opacity: 1;
-    }
-  }
-`
-
-const FooterLink = ({ label, href, horizontal = false }) => (
-  // Use non-boolean value for props sent to non-DOM styled components
-  // https://www.styled-components.com/docs/faqs#why-am-i-getting-html-attribute-warnings
-  <StyledFooterItem mb={2} $horizontal={horizontal.toString()} href={href}>
+const FooterLink = ({ label, ...props }) => (
+  <a
+    className="block mb-1 opacity-50 text-white hover:opacity-100 hover:text-white"
+    {...props}
+  >
     {label}
-  </StyledFooterItem>
+  </a>
 )
 
 FooterLink.propTypes = {
   label: PropTypes.node,
   href: PropTypes.string.isRequired,
-  horizontal: PropTypes.bool,
 }
-
-const FooterText = styled.div`
-  margin-top: 0px;
-`
 
 const Footer = () => {
   const intl = useIntl()
@@ -60,80 +26,112 @@ const Footer = () => {
     year: 'numeric',
   }).format(new Date())
   return (
-    <StyledFooter>
-      <Container>
-        <Flex flexWrap='wrap'>
-          <FooterBox width={[1, 2 / 5]}>
-            <Flex flexWrap='wrap' alignItems='center'>
-              <Box p={[1, 0]} mb={[0, 3]} width={[1 / 2, 1]}>
-                <ExplorerLogo height='32px' />
-              </Box>
-              <Box width={[1 / 2, 2 / 3]}>
+    <footer className="text-white mt-8 bg-blue-900">
+      <div className="container">
+        <div className="flex flex-wrap">
+          <div className="py-6 w-full md:w-2/5">
+            <div className="flex flex-wrap items-center">
+              <div className="p-1 md:mb-4 md:p-0 w-1/2 md:w-full">
+                <ExplorerLogo height="32px" />
+              </div>
+              <div className="w-1/2 md:w-2/3">
                 {' '}
-                <FooterText>{intl.formatMessage({ id: 'Footer.Text.Slogan' })}</FooterText>{' '}
-              </Box>
-            </Flex>
-          </FooterBox>
-          <FooterBox width={[1 / 2, 1 / 5]}>
-            <FooterHead>{intl.formatMessage({ id: 'Footer.Heading.About' })}</FooterHead>
-            <FooterLink href='https://ooni.org/about/' label={intl.formatMessage({ id: 'Footer.Link.About' })} />
+                <div className="mt-0">
+                  {intl.formatMessage({ id: 'Footer.Text.Slogan' })}
+                </div>{' '}
+              </div>
+            </div>
+          </div>
+          <div className="py-6 w-1/2 md:w-1/5">
+            <FooterHead>
+              {intl.formatMessage({ id: 'Footer.Heading.About' })}
+            </FooterHead>
             <FooterLink
-              href='https://ooni.org/about/data-policy/'
+              href="https://ooni.org/about/"
+              label={intl.formatMessage({ id: 'Footer.Link.About' })}
+            />
+            <FooterLink
+              href="https://ooni.org/about/data-policy/"
               label={intl.formatMessage({ id: 'Footer.Link.DataPolicy' })}
             />
             <FooterLink
-              href='https://github.com/ooni/license/tree/master/data'
+              href="https://github.com/ooni/license/tree/master/data"
               label={intl.formatMessage({ id: 'Footer.Link.DataLicense' })}
             />
             <FooterLink
-              href='https://github.com/ooni/explorer'
+              href="https://github.com/ooni/explorer"
               label={intl.formatMessage({ id: 'Footer.Link.Code' })}
             />
             <FooterLink
-              href='https://ooni.org/about/#contact'
+              href="https://ooni.org/about/#contact"
               label={intl.formatMessage({ id: 'Footer.Link.Contact' })}
             />
-          </FooterBox>
-          <FooterBox width={[1 / 2, 1 / 5]}>
-            <FooterHead>{intl.formatMessage({ id: 'Footer.Heading.OONIProbe' })}</FooterHead>
-            <FooterLink href='https://ooni.org/install/' label={intl.formatMessage({ id: 'Footer.Link.Probe' })} />
-            <FooterLink href='https://ooni.org/nettest/' label={intl.formatMessage({ id: 'Footer.Link.Tests' })} />
-            <FooterLink href='https://github.com/ooni' label={intl.formatMessage({ id: 'Footer.Link.Code' })} />
-            <FooterLink href='https://api.ooni.io/' label={intl.formatMessage({ id: 'Footer.Link.API' })} />
-          </FooterBox>
-          <FooterBox width={[1 / 2, 1 / 5]}>
-            <FooterHead>{intl.formatMessage({ id: 'Footer.Heading.Updates' })}</FooterHead>
-            <FooterLink href='https://ooni.org/post/' label={intl.formatMessage({ id: 'Footer.Link.Blog' })} />
+          </div>
+          <div className="py-6 w-1/2 md:w-1/5">
+            <FooterHead>
+              {intl.formatMessage({ id: 'Footer.Heading.OONIProbe' })}
+            </FooterHead>
             <FooterLink
-              href='https://twitter.com/OpenObservatory'
+              href="https://ooni.org/install/"
+              label={intl.formatMessage({ id: 'Footer.Link.Probe' })}
+            />
+            <FooterLink
+              href="https://ooni.org/nettest/"
+              label={intl.formatMessage({ id: 'Footer.Link.Tests' })}
+            />
+            <FooterLink
+              href="https://github.com/ooni"
+              label={intl.formatMessage({ id: 'Footer.Link.Code' })}
+            />
+            <FooterLink
+              href="https://api.ooni.io/"
+              label={intl.formatMessage({ id: 'Footer.Link.API' })}
+            />
+          </div>
+          <div className="py-6 w-1/2 md:w-1/5">
+            <FooterHead>
+              {intl.formatMessage({ id: 'Footer.Heading.Updates' })}
+            </FooterHead>
+            <FooterLink
+              href="https://ooni.org/post/"
+              label={intl.formatMessage({ id: 'Footer.Link.Blog' })}
+            />
+            <FooterLink
+              href="https://twitter.com/OpenObservatory"
               label={intl.formatMessage({ id: 'Footer.Link.Twitter' })}
             />
             <FooterLink
-              href='https://lists.torproject.org/cgi-bin/mailman/listinfo/ooni-talk'
+              href="https://lists.torproject.org/cgi-bin/mailman/listinfo/ooni-talk"
               label={intl.formatMessage({ id: 'Footer.Link.MailingList' })}
             />
             <FooterLink
-              href='https://openobservatory.slack.com/'
+              href="https://openobservatory.slack.com/"
               label={intl.formatMessage({ id: 'Footer.Link.Slack' })}
             />
-          </FooterBox>
-        </Flex>
-        <Flex flexWrap='wrap'>
-          <FooterBox>
+          </div>
+        </div>
+        <div className="flex flex-wrap">
+          <div className="py-6">
             <small>
-              <Box mb={1}>{intl.formatMessage({ id: 'Footer.Text.Copyright' }, { currentYear })}</Box>
+              <div className="mb-1">
+                {intl.formatMessage(
+                  { id: 'Footer.Text.Copyright' },
+                  { currentYear },
+                )}
+              </div>
               <FooterLink
-                href='https://github.com/ooni/license'
+                href="https://github.com/ooni/license"
                 label={intl.formatMessage({ id: 'Footer.Text.CCommons' })}
               />
-              <FooterText>
-                {intl.formatMessage({ id: 'Footer.Text.Version' })}: {process.env.GIT_COMMIT_SHA_SHORT}
-              </FooterText>
+              <div className="mt-0">
+                {intl.formatMessage({ id: 'Footer.Text.Version' })}:{' '}
+                {process.env.GIT_COMMIT_SHA_SHORT}
+              </div>
             </small>
-          </FooterBox>
-        </Flex>
-      </Container>
-    </StyledFooter>
+          </div>
+        </div>
+      </div>
+    </footer>
   )
 }
 

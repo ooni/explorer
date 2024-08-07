@@ -1,14 +1,14 @@
-import GridChart, { prepareDataForGridChart } from 'components/aggregation/mat/GridChart'
+import GridChart, {
+  prepareDataForGridChart,
+} from 'components/aggregation/mat/GridChart'
 import { MATContextProvider } from 'components/aggregation/mat/MATContext'
 import { DetailsBox } from 'components/measurement/DetailsBox'
-import NLink from 'next/link'
-import { Box, Flex } from 'ooni-components'
-import React, { useEffect, useMemo } from 'react'
+import Link from 'next/link'
+import { memo, useEffect, useMemo } from 'react'
 import { MdBarChart, MdOutlineFileDownload } from 'react-icons/md'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { MATFetcher } from 'services/fetchers'
 import useSWR from 'swr'
-import { StyledHollowButton } from './SharedStyledComponents'
 
 const swrOptions = {
   revalidateOnFocus: false,
@@ -23,51 +23,55 @@ export const MATLink = ({ query }) => {
   const showMATButton = !Array.isArray(query.test_name)
 
   return (
-    <Flex mt={3} justifyContent='space-between' alignItems='center' flexWrap="wrap" sx={{gap: 3}}>
-      <Box>
-        {showMATButton &&
-          <NLink href={`/chart/mat?${queryToSearchParams}`}>
-            <StyledHollowButton>
-              {intl.formatMessage({id: 'MAT.Charts.SeeOnMAT'})} <MdBarChart size={20} style={{verticalAlign: 'bottom'}} />
-            </StyledHollowButton>
-          </NLink>
-        }
-      </Box>
-      <Flex sx={{gap: 3}} flexWrap="wrap">
-        <NLink href={apiUrl}>
-          {intl.formatMessage({id: 'MAT.Charts.DownloadJSONData'})} <MdOutlineFileDownload style={{verticalAlign: 'bottom'}} size={20} />
-        </NLink>
-        <NLink href={`${apiUrl}&format=CSV`}>
-          {intl.formatMessage({id: 'MAT.Charts.DownloadCSVData'})} <MdOutlineFileDownload style={{verticalAlign: 'bottom'}} size={20} />
-        </NLink>
-      </Flex>
-    </Flex>
+    <div className="flex mt-4 justify-between items-center flex-wrap gap-4">
+      {showMATButton && (
+        <Link href={`/chart/mat?${queryToSearchParams}`}>
+          <button type="button" className="btn btn-primary-hollow">
+            {intl.formatMessage({ id: 'MAT.Charts.SeeOnMAT' })}{' '}
+            <MdBarChart size={20} style={{ verticalAlign: 'bottom' }} />
+          </button>
+        </Link>
+      )}
+      <div className="flex gap-4">
+        <Link className="inline-flex" href={apiUrl}>
+          {intl.formatMessage({ id: 'MAT.Charts.DownloadJSONData' })}{' '}
+          <MdOutlineFileDownload size={20} />
+        </Link>
+        <Link className="inline-flex" href={`${apiUrl}&format=CSV`}>
+          {intl.formatMessage({ id: 'MAT.Charts.DownloadCSVData' })}{' '}
+          <MdOutlineFileDownload size={20} />
+        </Link>
+      </div>
+    </div>
   )
 }
 
-const Chart = React.memo(function Chart({testGroup = null, queryParams = {}, setState}) {
+const Chart = memo(function Chart({
+  testGroup = null,
+  queryParams = {},
+  setState,
+}) {
   const apiQuery = useMemo(() => {
     const qs = new URLSearchParams(queryParams).toString()
     return qs
   }, [queryParams])
 
-  const { data, error } = useSWR(
-    apiQuery,
-    MATFetcher,
-    swrOptions
-  )
+  const { data, error } = useSWR(apiQuery, MATFetcher, swrOptions)
 
   const [chartData, rowKeys, rowLabels] = useMemo(() => {
     if (!data) {
       return [null, 0]
     }
-    let chartData = data.data
+    const chartData = data.data
     const graphQuery = queryParams
-    const [reshapedData, rowKeys, rowLabels] = prepareDataForGridChart(chartData, graphQuery)
+    const [reshapedData, rowKeys, rowLabels] = prepareDataForGridChart(
+      chartData,
+      graphQuery,
+    )
     return [reshapedData, rowKeys, rowLabels]
   }, [data, queryParams])
 
-  useEffect(()=> {
+  useEffect(() => {
     if (setState && data?.data) setState(data.data)
   }, [data, setState])
 
@@ -76,32 +80,35 @@ const Chart = React.memo(function Chart({testGroup = null, queryParams = {}, set
   return (
     // <MATContextProvider key={name} test_name={name} {...queryParams}>
     <MATContextProvider {...queryParams}>
-      <Flex flexDirection='column'>
-        <Box>
-          {(!chartData && !error) ? (
-            <FormattedMessage id="General.Loading" />
-          ) : (
-            <>
-              <GridChart
-                data={chartData}
-                rowKeys={rowKeys}
-                rowLabels={rowLabels}
-              />
-              {!!chartData?.size && <MATLink query={queryParams} />}
-            </>
-          )}
-        </Box>
-        {error &&
-          <DetailsBox collapsed={false} content={<>
-            <details>
-              <summary><span>Error: {error.message}</span></summary>
-              <Box as='pre'>
-                {JSON.stringify(error, null, 2)}
-              </Box>
-            </details>
-          </>}/>
-        }
-      </Flex>
+      <div className="flex flex-col">
+        {!chartData && !error ? (
+          <FormattedMessage id="General.Loading" />
+        ) : (
+          <>
+            <GridChart
+              data={chartData}
+              rowKeys={rowKeys}
+              rowLabels={rowLabels}
+            />
+            {!!chartData?.size && <MATLink query={queryParams} />}
+          </>
+        )}
+        {error && (
+          <DetailsBox
+            collapsed={false}
+            content={
+              <>
+                <details>
+                  <summary>
+                    <span>Error: {error.message}</span>
+                  </summary>
+                  <pre>{JSON.stringify(error, null, 2)}</pre>
+                </details>
+              </>
+            }
+          />
+        )}
+      </div>
     </MATContextProvider>
   )
 })

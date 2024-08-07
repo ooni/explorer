@@ -1,14 +1,7 @@
-import NLink from 'next/link'
-import {
-  Box,
-  Flex,
-  Text
-} from 'ooni-components'
+import Link from 'next/link'
 import PropTypes from 'prop-types'
-import React from 'react'
 import { defineMessages, useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
-import styled from 'styled-components'
 import url from 'url'
 
 import Flag from '../Flag'
@@ -16,26 +9,9 @@ import {
   colorAnomaly,
   colorConfirmed,
   colorError,
-  colorNormal
+  colorNormal,
 } from '../colors'
 import { testNames } from '/components/test-info'
-
-const StyledResultTag = styled.div`
-  border-radius: 16px;
-  padding: 4px 8px;
-  font-size: 12px;
-`
-
-const ResultTagFilled = styled(StyledResultTag)`
-  background-color: ${props => props.theme.colors.gray7};
-  color: ${props => props.theme.colors.white};
-`
-
-const ResultTagHollow = styled(StyledResultTag)`
-  background-color: transparent;
-  border: 1px solid ${props => props.theme.colors.gray7};
-  color: ${props => props.theme.colors.gray7};
-`
 
 const testsWithStates = [
   'web_connectivity',
@@ -50,267 +26,223 @@ const testsWithStates = [
   'http_invalid_request_line',
 ]
 
-const imTests = [
-  'telegram',
-  'whatsapp',
-  'facebook_messenger'
-]
+const imTests = ['telegram', 'whatsapp', 'facebook_messenger']
 
 const messages = defineMessages({
   'Search.web_connectivity.Results.Reachable': {
     id: 'General.Accessible',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.web_connectivity.Results.Anomaly': {
     id: 'General.Anomaly',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.web_connectivity.Results.Blocked': {
     id: 'Search.WebConnectivity.Results.Blocked',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.web_connectivity.Results.Error': {
     id: 'General.Error',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.whatsapp.Results.Reachable': {
     id: 'General.Accessible',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.whatsapp.Results.Anomaly': {
     id: 'General.Anomaly',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.whatsapp.Results.Error': {
     id: 'General.Error',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.facebook_messenger.Results.Reachable': {
     id: 'General.Accessible',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.facebook_messenger.Results.Anomaly': {
     id: 'General.Anomaly',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.facebook_messenger.Results.Error': {
     id: 'General.Error',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.telegram.Results.Reachable': {
     id: 'General.Accessible',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.telegram.Results.Anomaly': {
     id: 'General.Anomaly',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.telegram.Results.Error': {
     id: 'General.Error',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.signal.Results.Reachable': {
     id: 'General.Accessible',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.signal.Results.Anomaly': {
     id: 'General.Anomaly',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.signal.Results.Error': {
     id: 'General.Error',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.http_invalid_request_line.Results.Anomaly': {
     id: 'General.Anomaly',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.http_invalid_request_line.Results.Reachable': {
     id: 'General.OK',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.http_invalid_request_line.Results.Error': {
     id: 'General.Error',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.http_header_field_manipulation.Results.Anomaly': {
     id: 'General.Anomaly',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.http_header_field_manipulation.Results.Reachable': {
     id: 'General.OK',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.http_header_field_manipulation.Results.Error': {
     id: 'General.Error',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.http_requests.Results.Reachable': {
     id: 'Search.HTTPRequests.Results.Reachable',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.http_requests.Results.Error': {
     id: 'Search.HTTPRequests.Results.Error',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.http_requests.Results.Blocked': {
     id: 'Search.HTTPRequests.Results.Blocked',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.http_requests.Results.Anomaly': {
     id: 'Search.HTTPRequests.Results.Anomaly',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.tor.Results.Reachable': {
     id: 'General.OK',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.tor.Results.Anomaly': {
     id: 'General.Anomaly',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.tor.Results.Error': {
     id: 'General.Error',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.torsf.Results.Reachable': {
     id: 'General.OK',
-    defaultMessage: 'Reachable'
+    defaultMessage: 'Reachable',
   },
   'Search.torsf.Results.Anomaly': {
     id: 'General.Anomaly',
-    defaultMessage: 'Anomaly'
+    defaultMessage: 'Anomaly',
   },
   'Search.torsf.Results.Error': {
     id: 'General.Error',
-    defaultMessage: 'Anomaly'
+    defaultMessage: 'Anomaly',
   },
   'Search.psiphon.Results.Reachable': {
     id: 'General.OK',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.psiphon.Results.Anomaly': {
     id: 'General.Anomaly',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.psiphon.Results.Error': {
     id: 'General.Error',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.riseupvpn.Results.Reachable': {
     id: 'General.Accessible',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.riseupvpn.Results.Anomaly': {
     id: 'General.Anomaly',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'Search.riseupvpn.Results.Error': {
     id: 'General.Error',
-    defaultMessage: ''
+    defaultMessage: '',
   },
 })
 
-const ASNBox = ({asn}) => {
+const ASNBox = ({ asn }) => {
   const justNumber = asn.split('AS')[1]
-  return <Text bold color='gray7'>AS {justNumber}</Text>
+  return <div className="text-gray-700">AS {justNumber}</div>
 }
 
 ASNBox.propTypes = {
-  asn: PropTypes.string
+  asn: PropTypes.string,
 }
 
-const StyledViewDetailsLink = styled(NLink)`
-  cursor: pointer;
-  text-decoration: none;
-  color: ${props => props.theme.colors.blue5};
-  &:hover {
-    color: ${props => props.theme.colors.blue9};
-  }
-`
+const tagClassNames = 'rounded-2xl py-1 px-2 text-xs'
+const hollowTagClasNames = `${tagClassNames} bg-transparent border border-gray-700`
 
-const ViewDetailsLink = ({measurementUid, children}) => {
-  let href = `/m/${measurementUid}`
-
-  return (
-    <StyledViewDetailsLink href={href}>{children}</StyledViewDetailsLink>
-  )
-}
-
-ViewDetailsLink.propTypes = {
-  measurementUid: PropTypes.string,
-  children: PropTypes.element.isRequired
-}
-
-const ColoredIndicator = styled.div`
-  height: 100%;
-  width: 5px;
-  margin-right: 10px;
-  background-color: ${props => props.color || 'unset'}
-`
-
-const ResultRow = styled(Flex)`
-  color: ${props => props.theme.colors.gray7};
-  background-color: #ffffff;
-  &:hover {
-    background-color: ${props => props.theme.colors.gray0};
-  }
-  border-bottom: 1px solid ${props => props.theme.colors.gray4};
-  cursor: pointer;
-`
-
-const Hostname = styled.span`
-  color: ${props => props.theme.colors.black};
-`
-
-const ResultInput = styled.div`
-  color: ${props => props.theme.colors.gray5};
-`
-
-const getIndicators = ({ test_name, scores = {}, confirmed, anomaly, failure, intl }) => {
-  let color = '', tag = null
+const getIndicators = ({
+  test_name,
+  scores = {},
+  confirmed,
+  anomaly,
+  failure,
+  intl,
+}) => {
+  let color = ''
+  let tag = null
   if (testsWithStates.includes(test_name)) {
     if (imTests.includes(test_name) && Object.entries(scores).length === 0) {
       return [color, tag]
     }
 
     const computedMessageIdPrefix = `Search.${test_name}.Results`
-    const blockingType = scores.analysis && scores.analysis.blocking_type
+    const blockingType = scores.analysis?.blocking_type
 
     if (failure === true) {
       color = colorError
       tag = (
-        <ResultTagHollow>
+        <div className={hollowTagClasNames}>
           {intl.formatMessage(messages[`${computedMessageIdPrefix}.Error`])}
-        </ResultTagHollow>
+        </div>
       )
     } else if (confirmed === true) {
       color = colorConfirmed
       tag = (
-        <ResultTagFilled>
+        <div className={`${tagClassNames} bg-gray-700 text-white`}>
           {intl.formatMessage(messages[`${computedMessageIdPrefix}.Blocked`])}
-        </ResultTagFilled>
+        </div>
       )
     } else if (blockingType !== undefined) {
       color = colorAnomaly
-      tag = (
-        <ResultTagHollow>
-          {blockingType}
-        </ResultTagHollow>
-      )
+      tag = <div className={hollowTagClasNames}>{blockingType}</div>
     } else if (anomaly === true) {
       color = colorAnomaly
       tag = (
-        <ResultTagHollow>
+        <div className={hollowTagClasNames}>
           {intl.formatMessage(messages[`${computedMessageIdPrefix}.Anomaly`])}
-        </ResultTagHollow>
+        </div>
       )
     } else {
       color = colorNormal
       tag = (
-        <StyledResultTag>
+        <div className={tagClassNames}>
           {intl.formatMessage(messages[`${computedMessageIdPrefix}.Reachable`])}
-        </StyledResultTag>
+        </div>
       )
     }
   }
@@ -327,7 +259,7 @@ const ResultItem = ({
   scores,
   confirmed,
   anomaly,
-  failure
+  failure,
 }) => {
   const intl = useIntl()
   const pathMaxLen = 10
@@ -348,60 +280,72 @@ const ResultItem = ({
         p.host = `${p.host.substr(0, domainMaxLen)}…`
       }
 
-      inputLabel = <span><Hostname>{`${p.protocol}//${p.host}`}</Hostname>{path}</span>
+      inputLabel = (
+        <span>
+          <span className="text-black">{`${p.protocol}//${p.host}`}</span>
+          {path}
+        </span>
+      )
     } else {
-      inputLabel = <Hostname>{p.path}</Hostname>
+      inputLabel = <span className="text-black">{p.path}</span>
     }
   }
 
-  const [indicatorColor, tag] = getIndicators({test_name, scores, confirmed, anomaly, failure, intl})
+  const [indicatorColor, tag] = getIndicators({
+    test_name,
+    scores,
+    confirmed,
+    anomaly,
+    failure,
+    intl,
+  })
   const testName = testNames[test_name]?.name || test_name
 
   return (
-    <ViewDetailsLink measurementUid={measurement_uid}>
-      <ResultRow flexWrap='wrap' alignItems='stretch'>
-        <Box width={1/32}>
-          <ColoredIndicator color={indicatorColor} />
-        </Box>
-        <Box width={31/32} py={3}>
-          <Flex flexDirection={['column', 'row']} alignItems='center'>
-            <Box width={[1, 3/5]}>
-              <Flex alignItems='center'>
-                <Box width={1/16}>
-                  <Text bold color='gray8'>{probe_cc}</Text>
-                </Box>
-                <Box width={2/16}>
+    <Link href={`/m/${measurement_uid}`}>
+      <div className="flex flex-wrap items-stretch text-gray-700 bg-white hover:bg-gray-50 border-b border-gray-400">
+        <div className="w-1 mr-4">
+          <div
+            className="w-[5px] h-full "
+            style={{ backgroundColor: indicatorColor }}
+          />
+        </div>
+        <div className=" flex-1 py-4">
+          <div className="flex flex-col md:flex-row items-center">
+            <div className=" w-full md:w-3/5">
+              <div className="flex items-center">
+                <div className="w-1/12">
+                  <div className="text-gray-800">{probe_cc}</div>
+                </div>
+                <div className="w-1/12">
                   <Flag countryCode={probe_cc} size={32} />
-                </Box>
-                <Box width={3/16}>
+                </div>
+                <div className="w-2/12">
                   <ASNBox asn={probe_asn} />
-                </Box>
-                <Box width={5/16}>
-                  {dayjs.utc(measurement_start_time).format('YYYY-MM-DD HH:mm [UTC]')}
-                </Box>
-                <Box width={5/16}>
-                  {testName}
-                </Box>
-              </Flex>
-            </Box>
+                </div>
+                <div className="w-4/12">
+                  {dayjs
+                    .utc(measurement_start_time)
+                    .format('YYYY-MM-DD HH:mm [UTC]')}
+                </div>
+                <div className="w-4/12 bbbbb">{testName}</div>
+              </div>
+            </div>
 
-            <Box width={[1, 2/5]}>
-              <Flex justifyContent='space-between' alignItems='center'>
-                <Box>
-                  {input &&
-                    <ResultInput title={input}>
-                      {inputLabel}
-                    </ResultInput>}
-                </Box>
-                <Box mr={3}>
-                  {tag}
-                </Box>
-              </Flex>
-            </Box>
-          </Flex>
-        </Box>
-      </ResultRow>
-    </ViewDetailsLink>
+            <div className="md:w-2/5">
+              <div className="flex justify-between items-center">
+                {input && (
+                  <div className="text-gray-500" title={input}>
+                    {inputLabel}
+                  </div>
+                )}
+                <div className="mr-4">{tag}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Link>
   )
 }
 
@@ -418,21 +362,18 @@ ResultItem.propTypes = {
   failure: PropTypes.bool,
 }
 
-const ResultContainer = styled(Box)`
-  border: 1px solid ${props => props.theme.colors.gray4};
-  border-radius: 5px;
-  overflow: hidden;
-`
-
 const ResultsList = ({ results }) => {
   return (
-    <Flex>
-      <ResultContainer width={1} data-test-id='results-list'>
+    <div className="flex">
+      <div
+        className="border overflow-hidden rounded w-full"
+        data-test-id="results-list"
+      >
         {results.map((msmt, idx) => {
           return <ResultItem key={idx} {...msmt} />
         })}
-      </ResultContainer>
-    </Flex>
+      </div>
+    </div>
   )
 }
 

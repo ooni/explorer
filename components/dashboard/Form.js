@@ -1,8 +1,8 @@
-import { useEffect, useMemo, useState } from 'react'
-import { useForm, Controller } from 'react-hook-form'
-import { Box, Flex, Input, MultiSelect } from 'ooni-components'
-import { useIntl } from 'react-intl'
 import { format } from 'date-fns'
+import { Input, MultiSelect } from 'ooni-components'
+import { useEffect, useMemo, useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
+import { useIntl } from 'react-intl'
 import { getLocalisedRegionName } from '../../utils/i18nCountries'
 
 import DateRangePicker from '../DateRangePicker'
@@ -17,8 +17,10 @@ export const Form = ({ onChange, query, availableCountries }) => {
           label: getLocalisedRegionName(cc, intl.locale),
           value: cc,
         }))
-        .sort((a, b) => new Intl.Collator(intl.locale).compare(a.label, b.label)),
-    [availableCountries, intl]
+        .sort((a, b) =>
+          new Intl.Collator(intl.locale).compare(a.label, b.label),
+        ),
+    [availableCountries, intl],
   )
 
   const query2formValues = useMemo(() => {
@@ -26,7 +28,9 @@ export const Form = ({ onChange, query, availableCountries }) => {
     return {
       since: query?.since,
       until: query?.until,
-      probe_cc: countryOptions.filter(country => countriesInQuery.includes(country.value)),
+      probe_cc: countryOptions.filter((country) =>
+        countriesInQuery.includes(country.value),
+      ),
     }
   }, [countryOptions, query])
 
@@ -41,7 +45,9 @@ export const Form = ({ onChange, query, availableCountries }) => {
       search: intl.formatMessage({
         id: 'ReachabilityDash.Form.Label.CountrySelect.SearchPlaceholder',
       }),
-      selectAll: intl.formatMessage({ id: 'ReachabilityDash.Form.Label.CountrySelect.SelectAll' }),
+      selectAll: intl.formatMessage({
+        id: 'ReachabilityDash.Form.Label.CountrySelect.SelectAll',
+      }),
       selectAllFiltered: intl.formatMessage({
         id: 'ReachabilityDash.Form.Label.CountrySelect.SelectAllFiltered',
       }),
@@ -50,7 +56,7 @@ export const Form = ({ onChange, query, availableCountries }) => {
       }),
       // 'create': 'Create',
     }),
-    [intl]
+    [intl],
   )
 
   const { control, getValues, watch, setValue, reset } = useForm({
@@ -66,7 +72,10 @@ export const Form = ({ onChange, query, availableCountries }) => {
     return {
       since,
       until,
-      probe_cc: probe_cc.length > 0 ? probe_cc.map((d) => d.value).join(',') : undefined,
+      probe_cc:
+        probe_cc.length > 0
+          ? probe_cc.map((d) => d.value).join(',')
+          : undefined,
     }
   }
 
@@ -88,31 +97,32 @@ export const Form = ({ onChange, query, availableCountries }) => {
 
   useEffect(() => {
     const subscription = watch((value, { name, type }) => {
-      if (name === 'probe_cc' && type === 'change') onChange(cleanedUpData(getValues()))
+      if (name === 'probe_cc' && type === 'change')
+        onChange(cleanedUpData(getValues()))
     })
     return () => subscription.unsubscribe()
   }, [watch, getValues])
 
   return (
     <form>
-      <Flex alignItems={['center']} flexDirection={['column', 'row']}>
-        <Box width={[1, 1/4]} mr={3} sx={{ zIndex: 2 }}>
+      <div className="flex flex-col md:flex-row">
+        <div className="xl:w-1/4 md:w-1/2 mr-4">
           <Controller
-            render={({field}) => (
+            render={({ field }) => (
               <MultiSelect
-                label={intl.formatMessage({id: 'Search.Sidebar.Country'})}
+                label={intl.formatMessage({ id: 'Search.Sidebar.Country' })}
                 options={countryOptions}
                 overrideStrings={multiSelectStrings}
                 {...field}
               />
             )}
-            name='probe_cc'
+            name="probe_cc"
             control={control}
           />
-        </Box>
-        <Box width={[1, 1 / 5]}>
-          <Flex>
-            <Box width={1 / 2} mr={3}>
+        </div>
+        <div className="xl:w-1/4 md:w-1/2">
+          <div className="flex">
+            <div className="w-1/2 mr-4">
               <Controller
                 name="since"
                 control={control}
@@ -128,8 +138,8 @@ export const Form = ({ onChange, query, availableCountries }) => {
                   />
                 )}
               />
-            </Box>
-            <Box width={1 / 2} mr={3}>
+            </div>
+            <div className="w-1/2 mr-4">
               <Controller
                 name="until"
                 control={control}
@@ -145,17 +155,20 @@ export const Form = ({ onChange, query, availableCountries }) => {
                   />
                 )}
               />
-            </Box>
-          </Flex>
+            </div>
+          </div>
           {showDatePicker && (
             <DateRangePicker
               handleRangeSelect={handleRangeSelect}
-              initialRange={{ from: getValues('since'), to: getValues('until') }}
+              initialRange={{
+                from: getValues('since'),
+                to: getValues('until'),
+              }}
               close={() => setShowDatePicker(false)}
             />
           )}
-        </Box>
-      </Flex>
+        </div>
+      </div>
     </form>
   )
 }

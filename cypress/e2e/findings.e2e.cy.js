@@ -10,19 +10,23 @@ const incident = {
     mine: 0,
     published: true,
     reported_by: 'ooni',
-    short_description: 'China recently started blocking access to our website (ooni.org) and censorship measurement app (OONI Probe).',
+    short_description:
+      'China recently started blocking access to our website (ooni.org) and censorship measurement app (OONI Probe).',
     start_time: '2023-07-07T00:00:00Z',
     tags: [],
     test_names: [],
     text: 'China recently started blocking access to our website (ooni.org) and censorship measurement app (OONI Probe).',
     title: 'China is blocking OONI',
-    update_time: '2023-09-14T10:59:31Z'
-  }
+    update_time: '2023-09-14T10:59:31Z',
+  },
 }
 
 describe('Findings Dashboard', () => {
   it.skip('admin can see the dashboard', () => {
-    cy.intercept('/api/_/account_metadata', {logged_in: true, role: 'admin'}).as('accountMetadata')
+    cy.intercept('/api/_/account_metadata', {
+      logged_in: true,
+      role: 'admin',
+    }).as('accountMetadata')
     const dashboardUrl = '/findings/dashboard'
     cy.visit(dashboardUrl)
     cy.wait('@accountMetadata')
@@ -30,29 +34,37 @@ describe('Findings Dashboard', () => {
   })
 
   it.skip('redirects user if not logged in', () => {
-    cy.intercept('/api/_/account_metadata', {statusCode: 401}).as('accountMetadata')
+    cy.intercept('/api/_/account_metadata', { statusCode: 401 }).as(
+      'accountMetadata',
+    )
     const dashboardUrl = '/findings/dashboard'
     cy.visit(dashboardUrl)
     cy.wait('@accountMetadata')
     cy.findByText('Findings Dashboard').should('not.exist')
-    cy.url({timeout: 6000}).should('eq', 'http://localhost:3100/findings')
+    cy.url({ timeout: 6000 }).should('eq', 'http://localhost:3100/findings')
   })
 
   it.skip('redirects user if not admin', () => {
-    cy.intercept('/api/_/account_metadata', {logged_in: true, role: 'user'}).as('accountMetadata')
+    cy.intercept('/api/_/account_metadata', {
+      logged_in: true,
+      role: 'user',
+    }).as('accountMetadata')
     const dashboardUrl = '/findings/dashboard'
     cy.visit(dashboardUrl)
     cy.wait('@accountMetadata')
     cy.findByText('Findings Dashboard').should('not.exist')
-    cy.url({timeout: 6000}).should('eq', 'http://localhost:3100/findings')
+    cy.url({ timeout: 6000 }).should('eq', 'http://localhost:3100/findings')
   })
 })
 
 describe('Findings Edit', () => {
   it.skip('admin can see edit incident page', () => {
-    cy.intercept('/api/_/account_metadata', {logged_in: true, role: 'admin'}).as('accountMetadata')
+    cy.intercept('/api/_/account_metadata', {
+      logged_in: true,
+      role: 'admin',
+    }).as('accountMetadata')
     cy.intercept('/api/v1/incidents/show/1234', incident).as('showIncident')
-    
+
     const dashboardUrl = '/findings/edit/1234'
     cy.visit(dashboardUrl)
     cy.wait('@accountMetadata')
@@ -61,9 +73,12 @@ describe('Findings Edit', () => {
   })
 
   it.skip('report creator can see edit incident page', () => {
-    cy.intercept('/api/_/account_metadata', {logged_in: true, role: 'user'}).as('accountMetadata')
+    cy.intercept('/api/_/account_metadata', {
+      logged_in: true,
+      role: 'user',
+    }).as('accountMetadata')
     cy.intercept('/api/v1/incidents/show/1234', incident).as('showIncident')
-    
+
     const dashboardUrl = '/findings/edit/1234'
     cy.visit(dashboardUrl)
     cy.wait('@accountMetadata')
@@ -72,16 +87,21 @@ describe('Findings Edit', () => {
   })
 
   it.skip('redirects user if not logged in', () => {
-    cy.intercept('/api/_/account_metadata', {statusCode: 401}).as('accountMetadata')
+    cy.intercept('/api/_/account_metadata', { statusCode: 401 }).as(
+      'accountMetadata',
+    )
     const dashboardUrl = '/findings/edit/1234'
     cy.visit(dashboardUrl)
     cy.wait('@accountMetadata')
     cy.findByText('Edit Incident Report').should('not.exist')
-    cy.url({timeout: 6000}).should('eq', 'http://localhost:3100/findings')
+    cy.url({ timeout: 6000 }).should('eq', 'http://localhost:3100/findings')
   })
 
   it.skip('redirects user if not admin', () => {
-    cy.intercept('/api/_/account_metadata', {logged_in: true, role: 'user'}).as('accountMetadata')
+    cy.intercept('/api/_/account_metadata', {
+      logged_in: true,
+      role: 'user',
+    }).as('accountMetadata')
     cy.intercept('/api/v1/incidents/show/1234', incident).as('showIncident')
 
     const dashboardUrl = '/findings/edit/1234'
@@ -89,6 +109,6 @@ describe('Findings Edit', () => {
     cy.wait('@accountMetadata')
     cy.wait('@showIncident')
     cy.findByText('Edit Incident Report').should('not.exist')
-    cy.url({timeout: 6000}).should('eq', 'http://localhost:3100/findings')
+    cy.url({ timeout: 6000 }).should('eq', 'http://localhost:3100/findings')
   })
 })

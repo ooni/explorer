@@ -6,28 +6,22 @@ import {
 } from '@tanstack/react-table'
 import SpinLoader from 'components/vendor/SpinLoader'
 import useUser from 'hooks/useUser'
-import { apiEndpoints, fetcher, publishIncidentReport, unpublishIncidentReport } from 'lib/api'
-import Head from 'next/head'
-import NLink from 'next/link'
+import {
+  apiEndpoints,
+  fetcher,
+  publishIncidentReport,
+  unpublishIncidentReport,
+} from 'lib/api'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { Button, Container, Flex, Heading } from 'ooni-components'
 import { useEffect, useMemo, useState } from 'react'
 import { FaSort, FaSortDown, FaSortUp } from 'react-icons/fa'
 import { useIntl } from 'react-intl'
 import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
-import { styled } from 'styled-components'
 import useSWR from 'swr'
 import useSWRMutation from 'swr/mutation'
 import { formatMediumDate } from 'utils'
-
-const StyledTable = styled.table`
-border-collapse: collapse;
-width: 100%;
-th, td {
-  border: 1px solid gray;
-}
-`
 
 const Dashboard = () => {
   const intl = useIntl()
@@ -36,34 +30,40 @@ const Dashboard = () => {
 
   const { data, error, mutate } = useSWR(apiEndpoints.SEARCH_INCIDENTS, fetcher)
 
-  const tableData = useMemo(() => (data?.incidents ? data.incidents : []), [data])
+  const tableData = useMemo(
+    () => (data?.incidents ? data.incidents : []),
+    [data],
+  )
 
   const [sorting, setSorting] = useState([])
 
   const onError = (error) => {
     toast.error(`Error: ${error?.message}`, {
       position: toast.POSITION.BOTTOM_RIGHT,
-      toastId: 'error'
+      toastId: 'error',
     })
   }
 
   const { trigger: publish, isMutating: isPublishMutating } = useSWRMutation(
     'publish',
     (_, { arg }) => publishIncidentReport(arg),
-    { onSuccess: () => { mutate() },
+    {
+      onSuccess: () => {
+        mutate()
+      },
       throwOnError: false,
-      onError
-    }
+      onError,
+    },
   )
 
-  const { trigger: unpublish, isMutating: isUnpublishMutating } = useSWRMutation(
-    'unpublish',
-    (_, { arg }) => unpublishIncidentReport(arg),
-    { onSuccess: () => { mutate() },
+  const { trigger: unpublish, isMutating: isUnpublishMutating } =
+    useSWRMutation('unpublish', (_, { arg }) => unpublishIncidentReport(arg), {
+      onSuccess: () => {
+        mutate()
+      },
       throwOnError: false,
-      onError
-    }
-  )
+      onError,
+    })
 
   // redirect non-admin users
   useEffect(() => {
@@ -75,14 +75,16 @@ const Dashboard = () => {
       {
         header: 'Title',
         accessorKey: 'title',
-        cell: info => (
-          <NLink href={`/findings/${info.row.original.id}`}>{info.getValue()}</NLink>
-        )
+        cell: (info) => (
+          <Link href={`/findings/${info.row.original.id}`}>
+            {info.getValue()}
+          </Link>
+        ),
       },
       {
         header: 'Last Update',
         accessorKey: 'update_time',
-        cell: (info) => (formatMediumDate(info.getValue()))
+        cell: (info) => formatMediumDate(info.getValue()),
       },
       {
         header: 'Reported by',
@@ -95,41 +97,55 @@ const Dashboard = () => {
       {
         header: 'Start Date',
         accessorKey: 'start_time',
-        cell: (info) => (formatMediumDate(info.getValue()))
+        cell: (info) => formatMediumDate(info.getValue()),
       },
       {
         header: 'End Date',
         accessorKey: 'end_time',
-        cell: (info) => (info.getValue() && formatMediumDate(info.getValue()))
+        cell: (info) => info.getValue() && formatMediumDate(info.getValue()),
       },
       {
         header: 'Published',
         accessorKey: 'published',
-        cell: (info) => (info.getValue() ? '✅' : '❌')
+        cell: (info) => (info.getValue() ? '✅' : '❌'),
       },
       {
         header: '',
         accessorKey: 'id',
-        cell: info => (
+        cell: (info) => (
           <>
-            <NLink href={`/findings/edit/${info.getValue()}`}>
-              <Button mr={1} type="button" size="small" hollow>
-                {intl.formatMessage({id: 'Findings.Dashboard.Edit'})}
-              </Button>
-            </NLink>
-            {info.row.original.published ? 
-              <Button onClick={() => unpublish({id: info.getValue()})} disabled={isPublishMutating} p={1} type="button" size="small" hollow>
-                {intl.formatMessage({id: 'Findings.Dashboard.Unpublish'})}
-              </Button> :
-              <Button onClick={() => publish({id: info.getValue()})} disabled={isUnpublishMutating} mr={1} type="button" size="small" hollow>
-                {intl.formatMessage({id: 'Findings.Dashboard.Publish'})}
-              </Button>
-            }
+            <Link href={`/findings/edit/${info.getValue()}`}>
+              <button
+                className="mr-1 btn btn-primary-hollow btn-sm"
+                type="button"
+              >
+                {intl.formatMessage({ id: 'Findings.Dashboard.Edit' })}
+              </button>
+            </Link>
+            {info.row.original.published ? (
+              <button
+                className="btn btn-primary-hollow btn-sm p-1"
+                onClick={() => unpublish({ id: info.getValue() })}
+                disabled={isPublishMutating}
+                type="button"
+              >
+                {intl.formatMessage({ id: 'Findings.Dashboard.Unpublish' })}
+              </button>
+            ) : (
+              <button
+                className="btn btn-primary-hollow btn-sm mr-1"
+                onClick={() => publish({ id: info.getValue() })}
+                disabled={isUnpublishMutating}
+                type="button"
+              >
+                {intl.formatMessage({ id: 'Findings.Dashboard.Publish' })}
+              </button>
+            )}
           </>
-        )
-      }
+        ),
+      },
     ],
-    []
+    [],
   )
 
   const table = useReactTable({
@@ -145,20 +161,31 @@ const Dashboard = () => {
 
   return (
     <>
-      <Head>
+      {/* <Head>
         <title></title>
-      </Head>
+      </Head> */}
       {user?.role === 'admin' ? (
-        <Container>
+        <div className="container">
           <ToastContainer />
-          <Heading h={1} mt={4}>{intl.formatMessage({id: 'Findings.Dashboard.Title'})}</Heading>
-          <StyledTable>
+          <h1 className="mt-8">
+            {intl.formatMessage({ id: 'Findings.Dashboard.Title' })}
+          </h1>
+
+          {/* 
+th, td {
+  border: 1px solid gray;
+} */}
+          <table className="w-full border-collapse">
             <thead>
-              {table.getHeaderGroups().map(headerGroup => (
+              {table.getHeaderGroups().map((headerGroup) => (
                 <tr key={headerGroup.id}>
                   {headerGroup.headers.map((header, i) => {
                     return (
-                      <th key={header.id} colSpan={header.colSpan} style={i === 0 ? {width: '328px'} : {}}>
+                      <th
+                        key={header.id}
+                        colSpan={header.colSpan}
+                        style={i === 0 ? { width: '328px' } : {}}
+                      >
                         {header.isPlaceholder ? null : (
                           <div
                             {...{
@@ -167,16 +194,31 @@ const Dashboard = () => {
                                 : '',
                               onClick: header.column.getToggleSortingHandler(),
                             }}
-                            style={{display: 'ruby', cursor: 'pointer'}}
+                            style={{ display: 'ruby', cursor: 'pointer' }}
                           >
                             {flexRender(
                               header.column.columnDef.header,
-                              header.getContext()
+                              header.getContext(),
                             )}
                             {{
-                              asc: <> <FaSortUp /></>,
-                              desc: <> <FaSortDown /></>,
-                            }[header.column.getIsSorted()] ?? <> <FaSort /></>}
+                              asc: (
+                                <>
+                                  {' '}
+                                  <FaSortUp />
+                                </>
+                              ),
+                              desc: (
+                                <>
+                                  {' '}
+                                  <FaSortDown />
+                                </>
+                              ),
+                            }[header.column.getIsSorted()] ?? (
+                              <>
+                                {' '}
+                                <FaSort />
+                              </>
+                            )}
                           </div>
                         )}
                       </th>
@@ -186,38 +228,41 @@ const Dashboard = () => {
               ))}
             </thead>
             <tbody>
-              {table
-                .getRowModel()
-                .rows
-                .map(row => {
-                  return (
-                    <tr key={row.id}>
-                      {row.getVisibleCells().map(cell => {
-                        return (
-                          <td key={cell.id}>
-                            {flexRender(
-                              cell.column.columnDef.cell,
-                              cell.getContext()
-                            )}
-                          </td>
-                        )
-                      })}
-                    </tr>
-                  )
-                })}
+              {table.getRowModel().rows.map((row) => {
+                return (
+                  <tr key={row.id}>
+                    {row.getVisibleCells().map((cell) => {
+                      return (
+                        <td key={cell.id}>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
+                        </td>
+                      )
+                    })}
+                  </tr>
+                )
+              })}
             </tbody>
-          </StyledTable>
-          <Flex mt={4}>
-            <NLink href="/findings/create">
-              <Button type="button" mr={3}>{intl.formatMessage({id: 'Findings.Create.Title'})}</Button>
-            </NLink>
-            <NLink href="/findings">
-              <Button type="button" hollow>{intl.formatMessage({id: 'Findings.Dashboard.ViewPublished'})}</Button>
-            </NLink>
-          </Flex>
-        </Container>
+          </table>
+          <div className="flex mt-8">
+            <Link href="/findings/create">
+              <button className="btn btn-primary mr-4" type="button">
+                {intl.formatMessage({ id: 'Findings.Create.Title' })}
+              </button>
+            </Link>
+            <Link href="/findings">
+              <button className="btn btn-primary-hollow" type="button">
+                {intl.formatMessage({ id: 'Findings.Dashboard.ViewPublished' })}
+              </button>
+            </Link>
+          </div>
+        </div>
       ) : (
-        <Container pt={6}><SpinLoader /></Container>
+        <div className="container pt-32">
+          <SpinLoader />
+        </div>
       )}
     </>
   )

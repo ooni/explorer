@@ -1,9 +1,8 @@
 import Form from 'components/findings/Form'
 import useUser from 'hooks/useUser'
 import Head from 'next/head'
-import NLink from 'next/link'
+import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { Button, Container, Flex, Heading } from 'ooni-components'
 import { useEffect, useMemo } from 'react'
 import { useIntl } from 'react-intl'
 import useSWR from 'swr'
@@ -23,13 +22,14 @@ const EditReport = () => {
     query.id && user
       ? apiEndpoints.SHOW_INCIDENT.replace(':id', query.id)
       : null,
-    fetcher
+    fetcher,
   )
 
   // redirect if user not logged in or not admin/report creator
   useEffect(() => {
     if (!user && !loading) router.replace('/findings')
-    if ((data && !data.incident.mine) && user?.role !== 'admin') router.replace('/findings')
+    if (data && !data.incident.mine && user?.role !== 'admin')
+      router.replace('/findings')
   }, [user, loading, router, data])
 
   const defaultValues = useMemo(() => {
@@ -38,50 +38,56 @@ const EditReport = () => {
       rest.start_time = rest.start_time.split('T')[0]
       rest.end_time = rest?.end_time ? rest.end_time.split('T')[0] : null
       return rest
-    } else {
-      return null
     }
+    return null
   }, [data])
 
   const onSubmit = (report) => {
-    return updateIncidentReport(report).then((data) => router.push(`/findings/${data.id}`))
+    return updateIncidentReport(report).then((data) =>
+      router.push(`/findings/${data.id}`),
+    )
   }
 
   const { trigger, isMutating } = useSWRMutation(
     `DELETE${query.id}`,
-    () => deleteIncidentReport({id: query.id}),
+    () => deleteIncidentReport({ id: query.id }),
     {
       onSuccess: () => {
         router.push('/findings/dashboard')
       },
-    }
+    },
   )
 
   return (
     <>
-      <Head>
+      {/* <Head>
         <title></title>
-      </Head>
-      <Container>
-        <Flex justifyContent="space-between" alignItems="center">
-          <Heading h={1}>{intl.formatMessage({id: 'Findings.Edit.Title'})}</Heading>
-          <NLink href='/findings/dashboard'><Button hollow>{intl.formatMessage({id: 'Findings.Dashboard.ShortTitle'})}</Button></NLink>
-        </Flex>
+      </Head> */}
+      <div className="container">
+        <div className="flex justify-between items-center">
+          <h1>{intl.formatMessage({ id: 'Findings.Edit.Title' })}</h1>
+          <Link href="/findings/dashboard">
+            <button className="btn btn-pimary-hollow">
+              {intl.formatMessage({ id: 'Findings.Dashboard.ShortTitle' })}
+            </button>
+          </Link>
+        </div>
         {defaultValues && (
           <>
             <Form onSubmit={onSubmit} defaultValues={defaultValues} />
-            <Button 
-              hollow
-              mt={4}
-              sx={{ color: 'red7', borderColor: 'red7', '&:hover&:enabled': {color: 'red9', borderColor: 'red9'} }}
+            <button
+              className="btn btn-primary-hollow mt-8 text-red-700 border-red-700 :hover:enabled:text-red-900 :hover:enabled:border-red-900"
+              type="button"
               onClick={() => trigger()}
               loading={isMutating}
               disabled={isMutating}
               spinner={<ButtonSpinner />}
-            >{intl.formatMessage({id: 'Findings.Edit.Delete'})}</Button>
+            >
+              {intl.formatMessage({ id: 'Findings.Edit.Delete' })}
+            </button>
           </>
         )}
-      </Container>
+      </div>
     </>
   )
 }

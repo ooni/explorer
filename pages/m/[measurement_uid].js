@@ -1,8 +1,8 @@
 import axios from 'axios'
 import Head from 'next/head'
-import { Container, theme } from 'ooni-components'
+import { colors } from 'ooni-components'
 import PropTypes from 'prop-types'
-import React, { useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import useSWR from 'swr'
 import { getLocalisedRegionName } from '/utils/i18nCountries'
 
@@ -22,18 +22,18 @@ import NotFound from '../../components/NotFound'
 import { fetcher } from '/lib/api'
 
 const pageColors = {
-  default: theme.colors.base,
-  anomaly: theme.colors.yellow9,
-  reachable: theme.colors.green8,
-  error: theme.colors.gray6,
-  down: theme.colors.gray6,
-  confirmed: theme.colors.red7
+  default: colors.blue['500'],
+  anomaly: colors.yellow['900'],
+  reachable: colors.green['800'],
+  error: colors.gray['600'],
+  down: colors.gray['600'],
+  confirmed: colors.red['700'],
 }
 
 export async function getServerSideProps({ query }) {
   let initialProps = {
     error: null,
-    userFeedback: null
+    userFeedback: null,
   }
 
   const measurement_uid = query?.measurement_uid
@@ -41,46 +41,55 @@ export async function getServerSideProps({ query }) {
   if (typeof measurement_uid !== 'string' || measurement_uid.length < 10) {
     initialProps.notFound = true
     return {
-      props: initialProps
+      props: initialProps,
     }
   }
 
   let response
   let client
   try {
-    client = axios.create({baseURL: process.env.NEXT_PUBLIC_OONI_API}) // eslint-disable-line
-    let params = {
+    client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API }) // eslint-disable-line
+    const params = {
       measurement_uid,
-      full: true
+      full: true,
     }
     if (query.input) {
-      params['input'] = query.input
+      params.input = query.input
     }
 
     try {
       response = await client.get('/api/v1/measurement_meta', {
-        params
+        params,
       })
     } catch (e) {
-      throw new Error(`Failed to fetch measurement data. Server message: ${e.response.status}, ${e.response.statusText}`)
+      throw new Error(
+        `Failed to fetch measurement data. Server message: ${e.response.status}, ${e.response.statusText}`,
+      )
     }
 
     // If response `data` is an empty object, the measurement was
     // probably not found
-    if (Object.prototype.hasOwnProperty.call(response, 'data') && Object.keys(response.data).length !== 0) {
-      initialProps = {...initialProps, ...response.data}
+    if (
+      Object.prototype.hasOwnProperty.call(response, 'data') &&
+      Object.keys(response.data).length !== 0
+    ) {
+      initialProps = { ...initialProps, ...response.data }
 
-      if (typeof initialProps['scores'] === 'string') {
+      if (typeof initialProps.scores === 'string') {
         try {
-          initialProps['scores'] = JSON.parse(initialProps['scores'])
+          initialProps.scores = JSON.parse(initialProps.scores)
         } catch (e) {
           throw new Error(`Failed to parse JSON in scores: ${e.toString()}`)
         }
       }
 
-      initialProps['raw_measurement'] ? 
-        initialProps['raw_measurement'] = JSON.parse(initialProps['raw_measurement']) : 
-        initialProps.notFound = true
+      initialProps.raw_measurement
+        ? // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
+          (initialProps.raw_measurement = JSON.parse(
+            initialProps.raw_measurement,
+          ))
+        : // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
+          (initialProps.notFound = true)
     } else {
       // Measurement not found
       initialProps.notFound = true
@@ -89,7 +98,7 @@ export async function getServerSideProps({ query }) {
     initialProps.error = e.message
   }
   return {
-    props: initialProps
+    props: initialProps,
   }
 }
 
@@ -116,34 +125,39 @@ const Measurement = ({
   const { user, setSubmitted } = useUser()
   const [showModal, setShowModal] = useState(false)
 
-  const {data: userFeedback, error: userFeedbackError, mutate: mutateUserFeedback} = useSWR(`/api/_/measurement_feedback/${measurement_uid}`, fetcher)
+  const {
+    data: userFeedback,
+    error: userFeedbackError,
+    mutate: mutateUserFeedback,
+  } = useSWR(`/api/_/measurement_feedback/${measurement_uid}`, fetcher)
 
   const userFeedbackItems = useMemo(() => {
-    return userFeedback ? 
-      Object.entries(userFeedback.summary).map(([key, value]) => (
-        {label: intl.formatMessage({id: `Measurement.Feedback.${key}`}), value}
-      )) : 
-      []
+    return userFeedback
+      ? Object.entries(userFeedback.summary).map(([key, value]) => ({
+          label: intl.formatMessage({ id: `Measurement.Feedback.${key}` }),
+          value,
+        }))
+      : []
   }, [userFeedback])
 
   // Add the 'AS' prefix to probe_asn when API chooses to send just the number
   probe_asn = typeof probe_asn === 'number' ? `AS${probe_asn}` : probe_asn
   if (error) {
-    return (
-      <ErrorPage statusCode={501} error={error} />
-    )
+    return <ErrorPage statusCode={501} error={error} />
   }
 
   return (
     <>
       <Head>
-        <title>{intl.formatMessage({id: 'General.OoniExplorer'})}</title>
+        <title>{intl.formatMessage({ id: 'General.OoniExplorer' })}</title>
       </Head>
       {notFound ? (
         <>
-          <NotFound title={intl.formatMessage({id: 'Measurement.NotFound' })} />
+          <NotFound
+            title={intl.formatMessage({ id: 'Measurement.NotFound' })}
+          />
         </>
-      ): (
+      ) : (
         <>
           <MeasurementContainer
             isConfirmed={confirmed}
@@ -157,7 +171,6 @@ const Measurement = ({
             probe_asn={probe_asn}
             scores={scores}
             {...rest}
-
             render={({
               status = 'default',
               statusIcon,
@@ -166,13 +179,14 @@ const Measurement = ({
               legacy = false,
               summaryText,
               headMetadata,
-              details
+              details,
             }) => {
-              const color = failure === true ? pageColors['error'] : pageColors[status]
+              const color =
+                failure === true ? pageColors.error : pageColors[status]
               const info = scores?.msg ?? statusInfo
               return (
                 <>
-                  {headMetadata &&
+                  {headMetadata && (
                     <HeadMetadata
                       content={headMetadata}
                       testName={test_name}
@@ -180,8 +194,8 @@ const Measurement = ({
                       country={country}
                       date={measurement_start_time}
                     />
-                  }
-                  {showModal &&
+                  )}
+                  {showModal && (
                     <FeedbackBox
                       user={user}
                       measurement_uid={measurement_uid}
@@ -189,7 +203,7 @@ const Measurement = ({
                       previousFeedback={userFeedback?.user_feedback}
                       mutateUserFeedback={mutateUserFeedback}
                     />
-                  }
+                  )}
                   <CommonSummary
                     measurement_start_time={measurement_start_time}
                     probe_asn={probe_asn}
@@ -197,17 +211,24 @@ const Measurement = ({
                     networkName={raw_measurement?.probe_network_name}
                     color={color}
                     country={country}
-                    hero={<Hero status={status} icon={statusIcon} label={statusLabel} info={info} />}
+                    hero={
+                      <Hero
+                        status={status}
+                        icon={statusIcon}
+                        label={statusLabel}
+                        info={info}
+                      />
+                    }
                     onVerifyClick={() => setShowModal(true)}
                   />
-                  <Container>
+                  <div className="container">
                     <DetailsHeader
                       testName={test_name}
                       runtime={raw_measurement?.test_runtime}
                       notice={legacy}
                       url={`measurement/${measurement_uid}`}
                     />
-                    {summaryText &&
+                    {summaryText && (
                       <SummaryText
                         testName={test_name}
                         testUrl={input}
@@ -216,7 +237,7 @@ const Measurement = ({
                         date={measurement_start_time}
                         content={summaryText}
                       />
-                    }
+                    )}
                     {details}
                     <CommonDetails
                       measurement={raw_measurement}
@@ -224,11 +245,11 @@ const Measurement = ({
                       measurementUid={measurement_uid}
                       userFeedbackItems={userFeedbackItems}
                     />
-                  </Container>
+                  </div>
                 </>
               )
-            }
-          } />
+            }}
+          />
         </>
       )}
     </>
@@ -248,7 +269,7 @@ Measurement.propTypes = {
   report_id: PropTypes.string,
   measurement_uid: PropTypes.string,
   test_name: PropTypes.string,
-  measurement_start_time: PropTypes.string
+  measurement_start_time: PropTypes.string,
 }
 
 export default Measurement

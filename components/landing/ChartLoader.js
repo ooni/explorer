@@ -1,14 +1,13 @@
-import React from 'react'
+import { colors } from 'ooni-components'
 import ContentLoader from 'react-content-loader'
-import { theme } from 'ooni-components'
 
 export const ChartLoader = () => (
   <ContentLoader
     height={200}
     width={450}
     speed={1}
-    primarycolor={theme.colors.gray3}
-    secondarycolor={theme.colors.gray5}
+    primarycolor={colors.gray['300']}
+    secondarycolor={colors.gray['500']}
   >
     <rect x="20" y="17" rx="0" ry="0" width="1" height="129" />
     <rect x="20" y="146" rx="0" ry="0" width="360" height="1" />
@@ -23,6 +22,5 @@ export const ChartLoader = () => (
 
     <rect x="254" y="155" rx="3" ry="3" width="16" height="4" />
     <rect x="278" y="155" rx="3" ry="3" width="66" height="4" />
-
   </ContentLoader>
 )
