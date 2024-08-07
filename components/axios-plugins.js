@@ -11,7 +11,6 @@ export const axiosResponseTime = (instance) => {
   })
 }
 
-
 /*
 https://stackoverflow.com/questions/62186171/measure-network-latency-in-react-native/62257712#62257712
 const axiosTiming = (instance) => {

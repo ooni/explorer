@@ -2,9 +2,6 @@
   "compilerOptions": {
     "baseUrl": "."
   },
-  "exclude": [
-    "node_modules",
-    ".next"
-  ],
+  "exclude": ["node_modules", ".next"],
   "include": ["node_modules/cypress", "./cypress/**/*.js"]
 }

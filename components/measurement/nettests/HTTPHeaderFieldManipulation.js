@@ -1,8 +1,4 @@
-import React from 'react'
 import PropTypes from 'prop-types'
-import {
-  Text
-} from 'ooni-components'
 import { FormattedMessage, defineMessages } from 'react-intl'
 
 export const HttpHeaderFieldManipulationDetails = ({ measurement, render }) => {
@@ -22,33 +18,33 @@ export const HttpHeaderFieldManipulationDetails = ({ measurement, render }) => {
   const messages = defineMessages({
     middleboxes: {
       id: 'Measurement.Metadata.HTTPHeaderManipulation.MiddleboxesDetected',
-      defaultMessage:  'HTTP header manipulation was detected in {country}'
+      defaultMessage: 'HTTP header manipulation was detected in {country}',
     },
     noMiddleboxes: {
       id: 'Measurement.Metadata.HTTPHeaderManipulation.NoMiddleboxesDetected',
-      defaultMessage:  'HTTP header manipulation was not detected in {country}'
-    }
+      defaultMessage: 'HTTP header manipulation was not detected in {country}',
+    },
   })
 
-  return (
-    render({
-      status: isAnomaly ? 'anomaly' : 'reachable',
-      statusLabel: isAnomaly
-        ? <FormattedMessage id='Measurement.Hero.Status.HTTPHeaderManipulation.MiddleboxesDetected' />
-        : <FormattedMessage id='Measurement.Hero.Status.HTTPHeaderManipulation.NoMiddleBoxes' />,
-      summaryText: isAnomaly
-        ? 'Measurement.HTTPHeaderManipulation.MiddleBoxesDetected.SummaryText'
-        : 'Measurement.HTTPHeaderManipulation.NoMiddleBoxes.SummaryText',
-      headMetadata: {
-        message: isAnomaly ? messages.middleboxes : messages.noMiddleboxes,
-        formatted: false
-      }
-    })
-  )
+  return render({
+    status: isAnomaly ? 'anomaly' : 'reachable',
+    statusLabel: isAnomaly ? (
+      <FormattedMessage id="Measurement.Hero.Status.HTTPHeaderManipulation.MiddleboxesDetected" />
+    ) : (
+      <FormattedMessage id="Measurement.Hero.Status.HTTPHeaderManipulation.NoMiddleBoxes" />
+    ),
+    summaryText: isAnomaly
+      ? 'Measurement.HTTPHeaderManipulation.MiddleBoxesDetected.SummaryText'
+      : 'Measurement.HTTPHeaderManipulation.NoMiddleBoxes.SummaryText',
+    headMetadata: {
+      message: isAnomaly ? messages.middleboxes : messages.noMiddleboxes,
+      formatted: false,
+    },
+  })
 }
 
 HttpHeaderFieldManipulationDetails.propTypes = {
-  testKeys: PropTypes.object
+  testKeys: PropTypes.object,
 }
 
 export default HttpHeaderFieldManipulationDetails

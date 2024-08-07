@@ -1,5 +1,12 @@
 import { useRouter } from 'next/router'
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+} from 'react'
 
 import { apiEndpoints, getAPI, loginUser, refreshToken } from '/lib/api'
 
@@ -29,7 +36,7 @@ export const UserProvider = ({ children }) => {
         router.push({ pathname, query: Object.fromEntries([...searchParams]) })
       }, 3000)
     },
-    [router]
+    [router],
   )
 
   useEffect(() => {
@@ -52,7 +59,9 @@ export const UserProvider = ({ children }) => {
   // new one if needed
   useEffect(() => {
     const interval = setInterval(() => {
-      const tokenCreatedAt = JSON.parse(localStorage.getItem('bearer'))?.created_at
+      const tokenCreatedAt = JSON.parse(
+        localStorage.getItem('bearer'),
+      )?.created_at
       if (tokenCreatedAt) {
         const tokenExpiry = tokenCreatedAt + TWELVE_HOURS
         const now = Date.now()
@@ -101,10 +110,12 @@ export const UserProvider = ({ children }) => {
       login,
       logout,
     }),
-    [user, loading, error]
+    [user, loading, error],
   )
 
-  return <UserContext.Provider value={memoedValue}>{children}</UserContext.Provider>
+  return (
+    <UserContext.Provider value={memoedValue}>{children}</UserContext.Provider>
+  )
 }
 
 const useUser = () => {

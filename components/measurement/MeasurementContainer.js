@@ -1,18 +1,17 @@
-import React from 'react'
 import PropTypes from 'prop-types'
-import WebConnectivityDetails from './nettests/WebConnectivity'
-import TelegramDetails from './nettests/Telegram'
-import WhatsAppDetails from './nettests/WhatsApp'
 import DashDetails from './nettests/Dash'
-import NdtDetails from './nettests/Ndt'
-import SignalDetails from './nettests/Signal'
 import FacebookMessengerDetails from './nettests/FacebookMessenger'
 import HttpHeaderFieldManipulationDetails from './nettests/HTTPHeaderFieldManipulation'
 import HttpInvalidRequestLine from './nettests/HTTPInvalidRequestLine'
+import NdtDetails from './nettests/Ndt'
+import SignalDetails from './nettests/Signal'
+import TelegramDetails from './nettests/Telegram'
+import WebConnectivityDetails from './nettests/WebConnectivity'
+import WhatsAppDetails from './nettests/WhatsApp'
 
-import VanillaTorDetails from './nettests/VanillaTor'
 import PsiphonDetails from './nettests/Psiphon'
 import TorDetails from './nettests/Tor'
+import VanillaTorDetails from './nettests/VanillaTor'
 
 import DefaultTestDetails from './nettests/Default'
 import TorSnowflakeDetails from './nettests/TorSnowflake'
@@ -30,12 +29,12 @@ const mapTestDetails = {
   vanilla_tor: VanillaTorDetails,
   psiphon: PsiphonDetails,
   tor: TorDetails,
-  torsf: TorSnowflakeDetails
+  torsf: TorSnowflakeDetails,
 }
 
-
 const MeasurementContainer = ({ testName, measurement, ...props }) => {
-  const TestDetails = testName in mapTestDetails ? mapTestDetails[testName] : DefaultTestDetails
+  const TestDetails =
+    testName in mapTestDetails ? mapTestDetails[testName] : DefaultTestDetails
   return (
     <>
       <TestDetails measurement={measurement} {...props} />
@@ -45,7 +44,7 @@ const MeasurementContainer = ({ testName, measurement, ...props }) => {
 
 MeasurementContainer.propTypes = {
   measurement: PropTypes.any,
-  testName: PropTypes.any
+  testName: PropTypes.any,
 }
 
 export default MeasurementContainer

@@ -1,7 +1,7 @@
 const isGreater = (key, a, b) => {
   a = a[key]
   b = b[key]
-  return (a < b) ? -1 : (a > b) ? 1 : 0
+  return a < b ? -1 : a > b ? 1 : 0
 }
 
 export const sortByKey = (key, secondaryKey) => {
@@ -18,18 +18,17 @@ export const sortByKey = (key, secondaryKey) => {
   }
 }
 
-
 export const toCompactNumberUnit = (n) => {
   let unit = ''
   let value = n
-  if (n >= 1000*1000) {
-    value = Math.round((n / (1000 * 1000) * 10)) / 10
+  if (n >= 1000 * 1000) {
+    value = Math.round((n / (1000 * 1000)) * 10) / 10
     unit = 'M'
   } else if (value > 100) {
-    value = Math.round((n / (1000) * 10)) / 10
+    value = Math.round((n / 1000) * 10) / 10
     unit = 'k'
   }
-  return {unit, value}
+  return { unit, value }
 }
 
 export const truncateString = (s, maxStart, maxEnd) => {
@@ -37,7 +36,7 @@ export const truncateString = (s, maxStart, maxEnd) => {
   if (maxEnd === undefined) {
     maxEnd = 0
   }
-  if ((maxStart + maxEnd) > s.length) {
+  if (maxStart + maxEnd > s.length) {
     return s
   }
   truncatedString += s.substr(0, maxStart - maxEnd)
@@ -47,18 +46,21 @@ export const truncateString = (s, maxStart, maxEnd) => {
 }
 
 export const getRange = (start, end) => {
-  if ((start === end) || (start > end)) return [start]
-  return [...Array(end - start + 1).keys()].map(idx => idx + start)
+  if (start === end || start > end) return [start]
+  return [...Array(end - start + 1).keys()].map((idx) => idx + start)
 }
 
-export const formatLongDate = (date, locale) => (
+export const formatLongDate = (date, locale) =>
   new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(new Date(date))
-)
 
-export const formatMediumDateTime = (date, locale) => (
-  new Intl.DateTimeFormat(locale, { dateStyle: 'medium', timeStyle: 'medium', timeZone: 'UTC' }).format(new Date(date))
-)
+export const formatMediumDateTime = (date, locale) =>
+  new Intl.DateTimeFormat(locale, {
+    dateStyle: 'medium',
+    timeStyle: 'medium',
+    timeZone: 'UTC',
+  }).format(new Date(date))
 
-export const formatMediumDate = (date, locale) => (
-  new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(new Date(date))
-)
+export const formatMediumDate = (date, locale) =>
+  new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(
+    new Date(date),
+  )

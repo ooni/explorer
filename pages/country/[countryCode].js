@@ -3,15 +3,17 @@ import CountryDetails from 'components/country/CountryDetails'
 import ErrorPage from 'pages/_error'
 
 const getCountryReports = (countryCode, data) => {
-  const reports = data.filter((article) => (
-    article.tags && article.tags.indexOf(`country-${countryCode.toLowerCase()}`) > -1
-  )).map((article) => (
-    article
-  ))
+  const reports = data
+    .filter(
+      (article) =>
+        article.tags &&
+        article.tags.indexOf(`country-${countryCode.toLowerCase()}`) > -1,
+    )
+    .map((article) => article)
   return reports
 }
 
-export async function getServerSideProps ({ res, query }) {
+export async function getServerSideProps({ res, query }) {
   const { countryCode } = query
   if (countryCode.length > 2) {
     return {
@@ -22,21 +24,23 @@ export async function getServerSideProps ({ res, query }) {
     }
   }
 
-  if (res && (countryCode !== countryCode.toUpperCase())) {
+  if (res && countryCode !== countryCode.toUpperCase()) {
     res.writeHead(301, {
-      Location: `/country/${countryCode.toUpperCase()}`
+      Location: `/country/${countryCode.toUpperCase()}`,
     })
 
     res.end()
   }
 
   try {
-    let client = axios.create({baseURL: process.env.NEXT_PUBLIC_OONI_API}) // eslint-disable-line
-    let results = await Promise.all([
+    const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API }) // eslint-disable-line
+    const results = await Promise.all([
       // XXX cc @darkk we should ideally have better dedicated daily dumps for this view
-      client.get('/api/_/test_coverage', {params: {'probe_cc': countryCode}}),
-      client.get('/api/_/country_overview', { params: {'probe_cc': countryCode}}),
-      client.get('https://ooni.org/pageindex.json')
+      client.get('/api/_/test_coverage', { params: { probe_cc: countryCode } }),
+      client.get('/api/_/country_overview', {
+        params: { probe_cc: countryCode },
+      }),
+      client.get('https://ooni.org/pageindex.json'),
     ])
     const testCoverage = results[0].data.test_coverage
     const networkCoverage = results[0].data.network_coverage
@@ -50,29 +54,36 @@ export async function getServerSideProps ({ res, query }) {
         overviewStats,
         reports,
         countryCode,
-      }
+      },
     }
   } catch (error) {
     return {
       props: {
-        error: JSON.stringify(error?.message)
-      }
+        error: JSON.stringify(error?.message),
+      },
     }
   }
 }
 
-const Country = ({ countryCode, overviewStats, reports, error, ...coverageDataSSR }) => {
+const Country = ({
+  countryCode,
+  overviewStats,
+  reports,
+  error,
+  ...coverageDataSSR
+}) => {
   return (
     <>
-      {!!error ?
-        <ErrorPage statusCode={501} error={error} /> :
+      {error ? (
+        <ErrorPage statusCode={501} error={error} />
+      ) : (
         <CountryDetails
           countryCode={countryCode}
           overviewStats={overviewStats}
           reports={reports}
           coverageDataSSR={coverageDataSSR}
         />
-      }
+      )}
     </>
   )
 }

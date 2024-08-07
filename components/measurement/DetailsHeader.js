@@ -1,48 +1,44 @@
-import React from 'react'
-import PropTypes from 'prop-types'
 import prettyMs from 'pretty-ms'
-import { Flex, Box, Link, Text } from 'ooni-components'
-import { FormattedMessage } from 'react-intl'
+import PropTypes from 'prop-types'
 import { MdOpenInNew } from 'react-icons/md'
+import { FormattedMessage } from 'react-intl'
 import { getTestMetadata } from '../utils'
 
 import TestGroupBadge from '../Badge'
 import SocialButtons from '../SocialButtons'
 
-const DetailsHeader = ({testName, runtime, notice, url}) => {
+const DetailsHeader = ({ testName, runtime, notice, url }) => {
   const metadata = getTestMetadata(testName)
 
   return (
     <>
-      <Flex pt={4} pb={2} alignItems={['flex-end', 'center']} flexDirection={['column', 'row']}>
-        <Flex mb={[3, 0]} alignItems='center'>
-          <Box>
-            <TestGroupBadge testName={testName} />
-          </Box>
-          <Box ml={2}>
-            <Link color='blue7' href={metadata.info}>
-              <Text fontSize={20}>
-                {metadata.name}
-                &nbsp;
-                <small><MdOpenInNew /></small>
-              </Text>
-            </Link>
-          </Box>
-        </Flex>
-        <Box mx='auto'>
-          {notice}
-        </Box>
-        <Box>
-          {runtime &&
-            <Text fontSize={20}>
-              <FormattedMessage id='Measurement.DetailsHeader.Runtime' />: <Text as='span' fontWeight='bold'>{prettyMs(runtime * 1000)}</Text>
-            </Text>
-          }
-        </Box>
-      </Flex>
-      <Flex pb={4} pt={2} alignItems={['flex-start', 'flex-end']}>
-        <SocialButtons url={url}/>
-      </Flex>
+      <div className="flex pt-8 pb-2 items-end md:items-center flex-col md:flex-row">
+        <div className="flex mb-4 md:mb-0 items-center">
+          <TestGroupBadge testName={testName} />
+          <div className="ml-2">
+            <a
+              className="text-blue-700 text-xl flex items-center"
+              href={metadata.info}
+            >
+              {metadata.name}
+              &nbsp;
+              <small>
+                <MdOpenInNew />
+              </small>
+            </a>
+          </div>
+        </div>
+        <div className="mx-auto">{notice}</div>
+        {runtime && (
+          <div className="text-xl">
+            <FormattedMessage id="Measurement.DetailsHeader.Runtime" />:{' '}
+            <span className="font-bold">{prettyMs(runtime * 1000)}</span>
+          </div>
+        )}
+      </div>
+      <div className="flex pb-8 pt-2 items-start md:items-end">
+        <SocialButtons url={url} />
+      </div>
     </>
   )
 }
@@ -50,7 +46,7 @@ const DetailsHeader = ({testName, runtime, notice, url}) => {
 DetailsHeader.propTypes = {
   testName: PropTypes.string.isRequired,
   runtime: PropTypes.number.isRequired,
-  notice: PropTypes.any
+  notice: PropTypes.any,
 }
 
 export default DetailsHeader

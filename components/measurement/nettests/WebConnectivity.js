@@ -1,148 +1,129 @@
 import bufferFrom from 'buffer-from'
-import NLink from 'next/link'
-import {
-  Box,
-  Flex,
-  Heading,
-  Text
-} from 'ooni-components'
-import PropTypes from 'prop-types'
-import React from 'react'
-import url from 'url'
-
 import deepmerge from 'deepmerge'
+import Link from 'next/link'
 import { Cross, Tick } from 'ooni-components/icons'
-import styled from 'styled-components'
+import PropTypes from 'prop-types'
+import url from 'url'
 
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 
+import { Fragment } from 'react'
 import { DetailsBox } from '../DetailsBox'
 import StatusInfo from '../StatusInfo'
 
 const messages = defineMessages({
   'blockingReason.http-diff': {
     id: 'Measurement.SummaryText.Websites.Anomaly.BlockingReason.HTTP-diff',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'blockingReason.http-failure': {
     id: 'Measurement.SummaryText.Websites.Anomaly.BlockingReason.HTTP-failure',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'blockingReason.dns': {
     id: 'Measurement.SummaryText.Websites.Anomaly.BlockingReason.DNS',
-    defaultMessage: ''
+    defaultMessage: '',
   },
   'blockingReason.tcp_ip': {
     id: 'Measurement.SummaryText.Websites.Anomaly.BlockingReason.TCP',
-    defaultMessage: ''
+    defaultMessage: '',
   },
 })
 
-// From https://css-tricks.com/snippets/css/make-pre-text-wrap/
-const WrappedPre = styled.pre`
-  white-space: pre-wrap;       /* css-3 */
-  white-space: -moz-pre-wrap;  /* Mozilla, since 1999 */
-  white-space: -pre-wrap;      /* Opera 4-6 */
-  white-space: -o-pre-wrap;    /* Opera 7 */
-  word-wrap: break-word;       /* Internet Explorer 5.5+ */
-`
-
-const HttpResponseBodyContainer = styled(WrappedPre)`
-  max-height: 500px;
-  overflow: auto;
-`
-
-const HttpResponseBody = ({request}) => {
+const HttpResponseBody = ({ request }) => {
   let body
 
   if (!request || !request.response || !request.response.body) {
     return <p>Empty body</p>
   }
   body = request.response.body
-  if (typeof body == 'object' && body.format === 'base64') {
+  if (typeof body === 'object' && body.format === 'base64') {
     body = bufferFrom(body.data, 'base64').toString('binary')
   }
 
-  return (
-    <HttpResponseBodyContainer fontSize={14}>
-      {body}
-    </HttpResponseBodyContainer>
-  )
+  return <div className="whitespace-pre-wrap break-words text-sm">{body}</div>
 }
 
 HttpResponseBody.propTypes = {
-  request: PropTypes.object.isRequired
+  request: PropTypes.object.isRequired,
 }
 
-const RequestResponseContainer = ({request}) => {
+const RequestResponseContainer = ({ request }) => {
   return (
     // FIXME: This sometime ends up creating empty sections with just a title
     // when request data contains states like 'generic_timeout_error'
     // e.g ?report_id=20180709T222326Z_AS37594_FFQFSoqLJWYMgU0EnSbIK7PxicwJTFenIz9PupZYZWoXwtpCTy
     request.failure ? (
-      <Box>
-        <FormattedMessage id='General.NoData' />
-      </Box>
+      <div>
+        <FormattedMessage id="General.NoData" />
+      </div>
     ) : (
-    // !request.failure &&
-      <Box>
-        <Flex flexWrap='wrap'>
+      // !request.failure &&
+      <>
+        <div className="flex flex-wrap">
           {/* Request URL */}
-          <Box width={1} mb={1} >
-            <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Request.URL' /></Heading>
-          </Box>
-          <Box width={1} mb={2} p={2} bg='gray2'>
-            <pre fontSize={14}>{request.request.method} {request.request.url}</pre>
-          </Box>
+          <div className="w-full mb-1">
+            <h5>
+              <FormattedMessage id="Measurement.Details.Websites.HTTP.Request.URL" />
+            </h5>
+          </div>
+          <div className="w-full mb-2 p-4 bg-gray-200 text-sm">
+            <pre>
+              {request.request.method} {request.request.url}
+            </pre>
+          </div>
           {/* Response Headers */}
-          <Box width={1} mb={1} >
-            <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Response.Headers' /></Heading>
-          </Box>
-          <Box width={1} mb={2} p={2} bg='gray2'>
-            <WrappedPre fontSize={14}>
-              {
-                request.response.headers ? 
-                  Object.keys(request.response.headers).map((header, index) => (
-                  <React.Fragment key={index}>
-                    <Flex mb={2}>
-                      <Box mr={1}>
-                        <Text fontWeight='bold'>{header}:</Text>
-                      </Box>
-                      <Box>
-                        {request.response.headers[header]}
-                      </Box>
-                    </Flex>
-                  </React.Fragment>
-                )) :
+          <div className="w-full mb-1">
+            <h5>
+              <FormattedMessage id="Measurement.Details.Websites.HTTP.Response.Headers" />
+            </h5>
+          </div>
+          <div className="w-full mb-2 p-4 bg-gray-200 text-sm">
+            <pre className="whitespace-pre-wrap break-words text-sm">
+              {request.response.headers ? (
+                Object.keys(request.response.headers).map((header, index) => (
+                  <Fragment key={index}>
+                    <div className="flex mb-2">
+                      <div className="mr-1 font-bold">{header}:</div>
+                      <div>{request.response.headers[header]}</div>
+                    </div>
+                  </Fragment>
+                ))
+              ) : (
                 <>Empty headers</>
-              }
-            </WrappedPre>
-          </Box>
+              )}
+            </pre>
+          </div>
           {/* Response Body (HTML) */}
-          <Box width={1} mb={1} >
-            <Heading h={5}><FormattedMessage id='Measurement.Details.Websites.HTTP.Response.Body' /></Heading>
-          </Box>
-          <Box width={1} p={2} bg='gray2'>
-            <HttpResponseBody request={request} />
-          </Box>
-        </Flex>
-      </Box>
+          <div className="w-full mb-1">
+            <h5>
+              <FormattedMessage id="Measurement.Details.Websites.HTTP.Response.Body" />
+            </h5>
+          </div>
+          <div className="w-full p-4 bg-gray-200 text-sm">
+            <pre className="max-h-[500px] overflow-auto whitespace-pre-wrap break-words">
+              <HttpResponseBody request={request} />
+            </pre>
+          </div>
+        </div>
+      </>
     )
   )
 }
 
 RequestResponseContainer.propTypes = {
-  request: PropTypes.object.isRequired
+  request: PropTypes.object.isRequired,
 }
 
-const FailureString = ({failure}) => {
+const FailureString = ({ failure }) => {
   if (typeof failure === 'undefined') {
-    return (<FormattedMessage id='General.NoData' />)
+    return <FormattedMessage id="General.NoData" />
   }
   if (!failure) {
     return (
-      <div>
-        <Tick size={20} /> <FormattedMessage id='Measurement.Details.Websites.Failures.Values.Null' />
+      <div className="flex">
+        <Tick size={20} />{' '}
+        <FormattedMessage id="Measurement.Details.Websites.Failures.Values.Null" />
       </div>
     )
   }
@@ -155,39 +136,43 @@ const FailureString = ({failure}) => {
 }
 
 FailureString.propTypes = {
-  failure: PropTypes.string
+  failure: PropTypes.string,
 }
 
 const DnsNarrowAnswerCell = (props) => (
-  <Box width={1/12}>{props.children}</Box>
+  <div className="w-1/12">{props.children}</div>
 )
 
-const DnsAnswerCell = (props) => (
-  <Box width={1/4}>{props.children}</Box>
-)
+const DnsAnswerCell = (props) => <div className="w-1/4">{props.children}</div>
 
 DnsAnswerCell.propTypes = {
-  children: PropTypes.any
+  children: PropTypes.any,
 }
 
 const dnsAnswerIpInfo = (dnsAnswer) => {
-    const asn = dnsAnswer.asn ? `AS${dnsAnswer.asn}` : 'Unknown AS'
-    const asOrgName = dnsAnswer.as_org_name ? `(${dnsAnswer.as_org_name})` : ''
+  const asn = dnsAnswer.asn ? `AS${dnsAnswer.asn}` : 'Unknown AS'
+  const asOrgName = dnsAnswer.as_org_name ? `(${dnsAnswer.as_org_name})` : ''
 
-    return `${asn} ${asOrgName}`.trim()
+  return `${asn} ${asOrgName}`.trim()
 }
 
-const DnsAnswerRow = ({ name = 'Name', netClass = 'Class', ttl = 'TTL', type = 'Type', data = 'DATA', answer_ip_info = 'Answer IP Info', header = false}) => (
-  <Text fontWeight={header ? 'bold' : undefined}>
-    <Flex flexWrap='wrap' mb={2}>
-      <DnsAnswerCell>{name}</DnsAnswerCell>
-      <DnsNarrowAnswerCell>{netClass}</DnsNarrowAnswerCell>
-      <DnsNarrowAnswerCell>{ttl}</DnsNarrowAnswerCell>
-      <DnsNarrowAnswerCell>{type}</DnsNarrowAnswerCell>
-      <DnsAnswerCell>{data}</DnsAnswerCell>
-      <DnsAnswerCell>{answer_ip_info}</DnsAnswerCell>
-    </Flex>
-  </Text>
+const DnsAnswerRow = ({
+  name = 'Name',
+  netClass = 'Class',
+  ttl = 'TTL',
+  type = 'Type',
+  data = 'DATA',
+  answer_ip_info = 'Answer IP Info',
+  header = false,
+}) => (
+  <div className={`flex flex-wrap mb-2 ${header && 'font-bold'}`}>
+    <DnsAnswerCell>{name}</DnsAnswerCell>
+    <DnsNarrowAnswerCell>{netClass}</DnsNarrowAnswerCell>
+    <DnsNarrowAnswerCell>{ttl}</DnsNarrowAnswerCell>
+    <DnsNarrowAnswerCell>{type}</DnsNarrowAnswerCell>
+    <DnsAnswerCell>{data}</DnsAnswerCell>
+    <DnsAnswerCell>{answer_ip_info}</DnsAnswerCell>
+  </div>
 )
 
 DnsAnswerRow.propTypes = {
@@ -197,69 +182,66 @@ DnsAnswerRow.propTypes = {
   type: PropTypes.string,
   data: PropTypes.string,
   answer_ip_info: PropTypes.string,
-  header: PropTypes.bool
+  header: PropTypes.bool,
 }
 
-const QueryContainer = ({query}) => {
-  const {
-    query_type,
-    answers,
-    hostname,
-    engine,
-    failure
-  } = query
+const QueryContainer = ({ query }) => {
+  const { query_type, answers, hostname, engine, failure } = query
   return (
-    <Flex flexWrap='wrap' my={2}>
-      <Box width={1} mb={2}>
+    <div className="flex flex-wrap my-2">
+      <div className="w-full mb-2">
         {/* Metadata */}
-        <Flex>
-          <Box mr={2}>
+        <div className="flex">
+          <div className="mr-2">
             <strong>Query:</strong>
-          </Box>
-          <Box mr={2}>
+          </div>
+          <div className="mr-2">
             IN {query_type} {hostname}
-          </Box>
-        </Flex>
-        <Flex>
-          <Box mr={2}>
+          </div>
+        </div>
+        <div className="flex">
+          <div className="mr-2">
             <strong>Engine: </strong>
-          </Box>
-          <Box mr={2}>
-            {engine}
-          </Box>
-        </Flex>
-      </Box>
-      {failure && <Box width={1}><FailureString failure={failure} /></Box>}
-      {!failure &&
-        <Box width={1}>
+          </div>
+          <div className="mr-2">{engine}</div>
+        </div>
+      </div>
+      {failure && (
+        <div className="w-full">
+          <FailureString failure={failure} />
+        </div>
+      )}
+      {!failure && (
+        <div className="w-full">
           <DnsAnswerRow header />
-          {Array.isArray(answers) && answers.map((dnsAnswer, index) => (
-            <DnsAnswerRow
-              key={index}
-              name='@'
-              netClass='IN'
-              ttl={dnsAnswer.ttl}
-              type={dnsAnswer.answer_type}
-              data={dnsAnswer.answer_type === 'A'
-                ? dnsAnswer.ipv4
-                : dnsAnswer.answer_type === 'AAAA'
-                  ? dnsAnswer.ipv6
-                  : dnsAnswer.answer_type === 'CNAME'
-                    ? dnsAnswer.hostname
-                    : null // for any other answer_type, DATA column will be empty
-              }
-              answer_ip_info={dnsAnswerIpInfo(dnsAnswer)}
-            />
-          ))}
-        </Box>
-      }
-    </Flex>
-
+          {Array.isArray(answers) &&
+            answers.map((dnsAnswer, index) => (
+              <DnsAnswerRow
+                key={index}
+                name="@"
+                netClass="IN"
+                ttl={dnsAnswer.ttl}
+                type={dnsAnswer.answer_type}
+                data={
+                  dnsAnswer.answer_type === 'A'
+                    ? dnsAnswer.ipv4
+                    : dnsAnswer.answer_type === 'AAAA'
+                      ? dnsAnswer.ipv6
+                      : dnsAnswer.answer_type === 'CNAME'
+                        ? dnsAnswer.hostname
+                        : null // for any other answer_type, DATA column will be empty
+                }
+                answer_ip_info={dnsAnswerIpInfo(dnsAnswer)}
+              />
+            ))}
+        </div>
+      )}
+    </div>
   )
 }
 
 QueryContainer.propTypes = {
-  query: PropTypes.object
+  query: PropTypes.object,
 }
 
 /*
@@ -277,8 +259,8 @@ const validateMeasurement = (measurement) => {
     probe_asn: undefined,
     scores: {
       analysis: {
-        blocking_type: undefined
-      }
+        blocking_type: undefined,
+      },
     },
     test_keys: {
       accessible: undefined,
@@ -289,26 +271,20 @@ const validateMeasurement = (measurement) => {
       client_resolver: undefined,
       http_experiment_failure: undefined,
       dns_experiment_failure: undefined,
-      control_failure: undefined
-    }
+      control_failure: undefined,
+    },
   }
   return deepmerge(validDefaults, measurement)
 }
 
-const getSearchHref = (input) => (`${process.env.NEXT_PUBLIC_EXPLORER_URL}/search?input=${input}`)
+const getSearchHref = (input) =>
+  `${process.env.NEXT_PUBLIC_EXPLORER_URL}/search?input=${input}`
 
-const StyledLink = styled(NLink)`
-  direction: ltr;
-  display: inline;
-`
-
-const StyledStatusInfoLink = styled(NLink)`
-  color: white;
-  text-decoration: underline;
-  &:hover {
-    color: white;
-  }
-`
+const StyledLink = ({ children, href }) => (
+  <Link href={href} className="inline" style={{ direction: 'ltr' }}>
+    {children}
+  </Link>
+)
 
 const WebConnectivityDetails = ({
   isConfirmed,
@@ -320,7 +296,7 @@ const WebConnectivityDetails = ({
   measurement_start_time,
   probe_asn,
   input,
-  render
+  render,
 }) => {
   const {
     test_keys: {
@@ -332,277 +308,332 @@ const WebConnectivityDetails = ({
       client_resolver,
       http_experiment_failure,
       dns_experiment_failure,
-      control_failure
-    }
+      control_failure,
+    },
   } = validateMeasurement(measurement ?? {})
 
   const intl = useIntl()
-  const date = new Intl.DateTimeFormat(intl.locale, { dateStyle: 'long', timeStyle: 'long', timeZone: 'UTC' }).format(new Date(measurement_start_time))
-  
+  const date = new Intl.DateTimeFormat(intl.locale, {
+    dateStyle: 'long',
+    timeStyle: 'long',
+    timeZone: 'UTC',
+  }).format(new Date(measurement_start_time))
+
   const p = url.parse(input)
   const hostname = p.host
 
   let status = 'default'
   let reason = null
   let summaryText = ''
-  let headMetadata = { message: '', formatted: true }
+  const headMetadata = { message: '', formatted: true }
 
   if (isFailure) {
     status = 'error'
     reason = null
-    summaryText = <FormattedMessage
-      id='Measurement.SummaryText.Websites.Failed'
-      values={{
-        date,
-        WebsiteURL: <StyledLink href={getSearchHref(input)}>{input}</StyledLink>,
-        network: probe_asn,
-        country
-      }}
-    />
-  } else if(isConfirmed) {
+    summaryText = (
+      <FormattedMessage
+        id="Measurement.SummaryText.Websites.Failed"
+        values={{
+          date,
+          WebsiteURL: (
+            <StyledLink href={getSearchHref(input)}>{input}</StyledLink>
+          ),
+          network: probe_asn,
+          country,
+        }}
+      />
+    )
+  } else if (isConfirmed) {
     status = 'confirmed'
-    summaryText = <FormattedMessage
-      id='Measurement.SummaryText.Websites.ConfirmedBlocked'
-      values={{
-        date,
-        WebsiteURL: <StyledLink href={getSearchHref(input)}>{input}</StyledLink>,
-        network: probe_asn,
-        country
-      }}
-    />
+    summaryText = (
+      <FormattedMessage
+        id="Measurement.SummaryText.Websites.ConfirmedBlocked"
+        values={{
+          date,
+          WebsiteURL: (
+            <StyledLink href={getSearchHref(input)}>{input}</StyledLink>
+          ),
+          network: probe_asn,
+          country,
+        }}
+      />
+    )
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.ConfirmedBlocked',
-        defaultMessage: '{hostname} was blocked in {country}'
+        defaultMessage: '{hostname} was blocked in {country}',
       },
       {
         date,
         hostname,
         country,
-      }
+      },
     )
   } else if (isAnomaly) {
     status = 'anomaly'
     const blockingReason = blocking ?? scores?.analysis?.blocking_type ?? null
-    reason = messages[`blockingReason.${blockingReason}`] && intl.formatMessage(messages[`blockingReason.${blockingReason}`])
-    summaryText = <FormattedMessage
-      id='Measurement.SummaryText.Websites.Anomaly'
-      values={{
-        date,
-        WebsiteURL: <StyledLink href={getSearchHref(input)}>{input}</StyledLink>,
-        'link-to-docs': (string) => (<a href="https://ooni.org/support/faq/#why-do-false-positives-occur">{string}</a>),
-        network: probe_asn,
-        country,
-        reason
-      }}
-    />
+    reason =
+      messages[`blockingReason.${blockingReason}`] &&
+      intl.formatMessage(messages[`blockingReason.${blockingReason}`])
+    summaryText = (
+      <FormattedMessage
+        id="Measurement.SummaryText.Websites.Anomaly"
+        values={{
+          date,
+          WebsiteURL: (
+            <StyledLink href={getSearchHref(input)}>{input}</StyledLink>
+          ),
+          'link-to-docs': (string) => (
+            <a href="https://ooni.org/support/faq/#why-do-false-positives-occur">
+              {string}
+            </a>
+          ),
+          network: probe_asn,
+          country,
+          reason,
+        }}
+      />
+    )
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Anomaly',
-        defaultMessage: '{hostname} showed signs of {reason} in {country}'
+        defaultMessage: '{hostname} showed signs of {reason} in {country}',
       },
       {
         date,
         hostname,
         country,
-        reason
-      }
+        reason,
+      },
     )
   } else if (accessible) {
     status = 'reachable'
-    summaryText = <FormattedMessage
-      id='Measurement.SummaryText.Websites.Accessible'
-      values={{
-        date,
-        WebsiteURL: <StyledLink href={getSearchHref(input)}>{input}</StyledLink>,
-        network: probe_asn,
-        country
-      }}
-    />
+    summaryText = (
+      <FormattedMessage
+        id="Measurement.SummaryText.Websites.Accessible"
+        values={{
+          date,
+          WebsiteURL: (
+            <StyledLink href={getSearchHref(input)}>{input}</StyledLink>
+          ),
+          network: probe_asn,
+          country,
+        }}
+      />
+    )
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Accessible',
-        defaultMessage: '{hostname} was accessible in {country}'
+        defaultMessage: '{hostname} was accessible in {country}',
       },
       {
         date,
         hostname,
         country,
-      }
+      },
     )
   } else if (blocking === false) {
     // When not accessible, but also not blocking, it must be down
     status = 'down'
-    summaryText = <FormattedMessage
-      id='Measurement.SummaryText.Websites.Down'
-      values={{
-        date,
-        WebsiteURL: <StyledLink href={getSearchHref(input)}>{input}</StyledLink>,
-        network: probe_asn,
-        country
-      }}
-    />
+    summaryText = (
+      <FormattedMessage
+        id="Measurement.SummaryText.Websites.Down"
+        values={{
+          date,
+          WebsiteURL: (
+            <StyledLink href={getSearchHref(input)}>{input}</StyledLink>
+          ),
+          network: probe_asn,
+          country,
+        }}
+      />
+    )
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Down',
-        defaultMessage: '{hostname} was down in {country}'
+        defaultMessage: '{hostname} was down in {country}',
       },
       {
         date,
         hostname,
         country,
-      }
+      },
     )
   } else {
     // Fallback condition to handle older measurements not present in fastpath
     // See: https://github.com/ooni/explorer/issues/426#issuecomment-612094244
     status = 'error'
-    summaryText = <FormattedMessage
-      id='Measurement.SummaryText.Websites.Failed'
-      values={{
-        date,
-        WebsiteURL: <StyledLink href={getSearchHref(input)}>{input}</StyledLink>,
-        network: probe_asn,
-        country
-      }}
-    />
+    summaryText = (
+      <FormattedMessage
+        id="Measurement.SummaryText.Websites.Failed"
+        values={{
+          date,
+          WebsiteURL: (
+            <StyledLink href={getSearchHref(input)}>{input}</StyledLink>
+          ),
+          network: probe_asn,
+          country,
+        }}
+      />
+    )
     headMetadata.message = intl.formatMessage(
       {
         id: 'Measurement.Metadata.WebConnectivity.Failed',
-        defaultMessage: '{hostname} failed to be measured in {country}'
+        defaultMessage: '{hostname} failed to be measured in {country}',
       },
       {
         date,
         hostname,
         country,
-      }
+      },
     )
   }
 
-  const tcpConnections = Array.isArray(tcp_connect) ? tcp_connect.map((connection) => {
-    return {
-      destination: connection.ip + ':' + connection.port,
-      failure: connection.status?.failure
-    }
-  }) : []
+  const tcpConnections = Array.isArray(tcp_connect)
+    ? tcp_connect.map((connection) => {
+        return {
+          destination: `${connection.ip}:${connection.port}`,
+          failure: connection.status?.failure,
+        }
+      })
+    : []
 
   return (
     <>
       {render({
         status: status,
-        statusInfo: <StatusInfo 
-          title={
-            <StyledStatusInfoLink href={`/domain/${hostname}`}>
-              {input}
-            </StyledStatusInfoLink>
-          }
-          message={reason} 
-        />,
+        statusInfo: (
+          <StatusInfo
+            title={
+              <Link
+                className="text-white underline hover:text-white"
+                href={`/domain/${hostname}`}
+              >
+                {input}
+              </Link>
+            }
+            message={reason}
+          />
+        ),
         summaryText: summaryText,
         headMetadata: headMetadata,
         details: (
           <>
             {/* Failures */}
-            <Flex>
+            <div className="flex">
               <DetailsBox
-                title={<FormattedMessage id='Measurement.Details.Websites.Failures.Heading' />}
+                title={
+                  <FormattedMessage id="Measurement.Details.Websites.Failures.Heading" />
+                }
                 content={
-                  <Flex mb={2} flexWrap='wrap'>
-                    <Box width={1/3}>
-                      <FormattedMessage id='Measurement.Details.Websites.Failures.Label.HTTP' />
-                    </Box>
-                    <Box width={2/3}>
+                  <div className="flex mb-2 flex-wrap">
+                    <div className="w-1/3">
+                      <FormattedMessage id="Measurement.Details.Websites.Failures.Label.HTTP" />
+                    </div>
+                    <div className="w-2/3">
                       <FailureString failure={http_experiment_failure} />
-                    </Box>
-                    <Box width={1/3}>
-                      <FormattedMessage id='Measurement.Details.Websites.Failures.Label.DNS' />
-                    </Box>
-                    <Box width={2/3}>
+                    </div>
+                    <div className="w-1/3">
+                      <FormattedMessage id="Measurement.Details.Websites.Failures.Label.DNS" />
+                    </div>
+                    <div className="w-2/3">
                       <FailureString failure={dns_experiment_failure} />
-                    </Box>
-                    <Box width={1/3}>
-                      <FormattedMessage id='Measurement.Details.Websites.Failures.Label.Control' />
-                    </Box>
-                    <Box width={2/3}>
+                    </div>
+                    <div className="w-1/3">
+                      <FormattedMessage id="Measurement.Details.Websites.Failures.Label.Control" />
+                    </div>
+                    <div className="w-2/3">
                       <FailureString failure={control_failure} />
-                    </Box>
-                  </Flex>
+                    </div>
+                  </div>
                 }
               />
-            </Flex>
+            </div>
             {/* DNS Queries */}
-            <Flex>
+            <div className="flex">
               <DetailsBox
-                title={<FormattedMessage id='Measurement.Details.Websites.DNSQueries.Heading' />}
+                title={
+                  <FormattedMessage id="Measurement.Details.Websites.DNSQueries.Heading" />
+                }
                 content={
                   Array.isArray(queries) ? (
                     <>
-                      <Flex flexWrap='wrap' mb={2}>
-                        <Box mr={1}>
-                          <strong><FormattedMessage id='Measurement.Details.Websites.DNSQueries.Label.Resolver' />:</strong>
-                        </Box>
-                        <Box>
-                          {client_resolver || '(unknown)'}
-                        </Box>
-                      </Flex>
-                      <Box width={1}>
-                        {queries.map((query, index) => <QueryContainer key={index} query={query} />)}
-                      </Box>
+                      <div className="flex flex-wrap mb-2">
+                        <div className="mr-1">
+                          <strong>
+                            <FormattedMessage id="Measurement.Details.Websites.DNSQueries.Label.Resolver" />
+                            :
+                          </strong>
+                        </div>
+                        <div>{client_resolver || '(unknown)'}</div>
+                      </div>
+                      <div className="w-full">
+                        {queries.map((query, index) => (
+                          <QueryContainer key={index} query={query} />
+                        ))}
+                      </div>
                     </>
                   ) : (
-                    <FormattedMessage id='General.NoData' />
+                    <FormattedMessage id="General.NoData" />
                   )
                 }
               />
-            </Flex>
+            </div>
             {/* TCP COnnections */}
-            <Flex>
+            <div className="flex">
               <DetailsBox
-                title={<FormattedMessage id='Measurement.Details.Websites.TCP.Heading' />}
+                title={
+                  <FormattedMessage id="Measurement.Details.Websites.TCP.Heading" />
+                }
                 content={
                   tcpConnections.length > 0 ? (
                     tcpConnections.map((connection, index) => (
-                      <Flex key={index}>
-                        <Box>
-                          <Text>
-                            <strong>{connection.destination}</strong>: {
-                              connection.failure ?
-                              `${intl.formatMessage({id: 'Measurement.Details.Websites.TCP.ConnectionTo.Failed'})} (${connection.failure})` :
-                              intl.formatMessage({id: 'Measurement.Details.Websites.TCP.ConnectionTo.Success'})
-                            }
-                          </Text>
-                        </Box>
-                      </Flex>
+                      <div className="flex" key={index}>
+                        <div>
+                          <strong>{connection.destination}</strong>:{' '}
+                          {connection.failure
+                            ? `${intl.formatMessage({ id: 'Measurement.Details.Websites.TCP.ConnectionTo.Failed' })} (${connection.failure})`
+                            : intl.formatMessage({
+                                id: 'Measurement.Details.Websites.TCP.ConnectionTo.Success',
+                              })}
+                        </div>
+                      </div>
                     ))
                   ) : (
-                    <FormattedMessage id='General.NoData' />
+                    <FormattedMessage id="General.NoData" />
                   )
                 }
               />
-            </Flex>
+            </div>
             {/* I would like us to enrich the HTTP response body section with
               information about every request and response as this is a very common
             thing we look at when investigating a case. */}
-            <Flex>
+            <div className="flex">
               <DetailsBox
-                title={<FormattedMessage id='Measurement.Details.Websites.HTTP.Heading' />}
+                title={
+                  <FormattedMessage id="Measurement.Details.Websites.HTTP.Heading" />
+                }
                 content={
                   Array.isArray(requests) ? (
-                    <Box width={1}>
-                      {requests.map((request, index) => <RequestResponseContainer key={index} request={request} />)}
-                    </Box>
+                    <div className="w-full">
+                      {requests.map((request, index) => (
+                        <RequestResponseContainer
+                          key={index}
+                          request={request}
+                        />
+                      ))}
+                    </div>
                   ) : (
-                    <FormattedMessage id='General.NoData' />
+                    <FormattedMessage id="General.NoData" />
                   )
                 }
               />
-            </Flex>
+            </div>
           </>
-        )
+        ),
       })}
     </>
   )
 }
-
 
 export default WebConnectivityDetails

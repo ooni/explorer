@@ -1,35 +1,31 @@
-import { Box, Flex, Text, theme } from 'ooni-components'
+import * as icons from 'ooni-components/icons'
 import PropTypes from 'prop-types'
 import { cloneElement } from 'react'
 import { FormattedMessage } from 'react-intl'
-import styled from 'styled-components'
+import { twMerge } from 'tailwind-merge'
 import { getTestMetadata } from './utils'
-import * as icons from 'ooni-components/icons'
 
-// XXX replace what is inside of search/results-list.StyledResultTag
-export const Badge = styled(Box)`
-  display: inline-block;
-  border-radius: 4px;
-  padding: 4px 8px;
-  line-height: 16px;
-  font-size: 12px;
-  text-transform: uppercase;
-  background-color: ${(props) => props.bg || props.theme.colors.gray8};
-  border: ${(props) => (props.borderColor ? `1px solid ${props.borderColor}` : 'none')};
-  color: ${(props) => props.color || props.theme.colors.white};
-  letter-spacing: 1.25px;
-  font-weight: 600;
-`
+export const Badge = ({ className, ...props }) => {
+  return (
+    <div
+      className={twMerge(
+        'inline-block rounded py-1 px-2 leading-4 text-xs uppercase bg-gray-800 text-white font-semibold tracking-wide',
+        className,
+      )}
+      {...props}
+    />
+  )
+}
 
 const TestGroupBadge = ({ testName, ...props }) => {
   const { icon, groupName, color } = getTestMetadata(testName)
 
   return (
-    <Badge bg={color} color="white" {...props}>
-      <Flex sx={{ gap: 1 }} alignItems="center">
-        <Text>{groupName}</Text>
+    <Badge style={{ backgroundColor: color }} {...props}>
+      <div className="flex gap-1 items-center">
+        <div>{groupName}</div>
         {cloneElement(icon, { size: 12 })}
-      </Flex>
+      </div>
     </Badge>
   )
 }
@@ -43,13 +39,13 @@ export const CategoryBadge = ({ categoryCode }) => {
   }
 
   return (
-    <Badge bg="#ffffff" borderColor={theme.colors.gray5} color={theme.colors.gray7}>
-      <Flex sx={{ gap: 1 }} alignItems="center">
-        <Box>
+    <Badge className="bg-white border border-gray-500 text-gray-700">
+      <div className="flex gap-1 items-center">
+        <div>
           <FormattedMessage id={`CategoryCode.${categoryCode}.Name`} />
-        </Box>
+        </div>
         {IconComponent && <IconComponent size={15} />}
-      </Flex>
+      </div>
     </Badge>
   )
 }

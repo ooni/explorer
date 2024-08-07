@@ -1,9 +1,9 @@
-import { theme } from 'ooni-components'
+import { colors } from 'ooni-components'
 
 export const colorMap = {
-  'confirmed_count': theme.colors.red7,
-  'anomaly_count': theme.colors.yellow5,
-  'failure_count': theme.colors.gray4,
-  'ok_count': theme.colors.green5,
-  'measurement_count': theme.colors.blue5,
+  confirmed_count: colors.red['700'],
+  anomaly_count: colors.yellow['500'],
+  failure_count: colors.gray['400'],
+  ok_count: colors.green['500'],
+  measurement_count: colors.blue['500'],
 }

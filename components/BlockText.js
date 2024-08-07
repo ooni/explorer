@@ -1,14 +1,8 @@
-import styled from 'styled-components'
-import { Box } from 'ooni-components'
-
-const BlockText = styled(Box)`
-  background-color: ${props => props.theme.colors.gray0};
-  border-left: 10px solid ${props => props.theme.colors.blue5};
-`
-
-BlockText.defaultProps = {
-  p: 3,
-  fontSize: 1,
-}
+const BlockText = ({ className, ...props }) => (
+  <div
+    className={`bg-gray-50 border-s-[10px] text-base border-blue-500 p-3 font-base ${className}`}
+    {...props}
+  />
+)
 
 export default BlockText

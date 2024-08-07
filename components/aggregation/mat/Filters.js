@@ -1,75 +1,41 @@
-import { Box, Button, Flex, Text } from 'ooni-components'
-import { forwardRef, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import {
+  forwardRef,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
-import { useAsyncDebounce, useFlexLayout, useGlobalFilter, useRowSelect, useSortBy, useTable } from 'react-table'
+import {
+  useAsyncDebounce,
+  useFlexLayout,
+  useGlobalFilter,
+  useRowSelect,
+  useSortBy,
+  useTable,
+} from 'react-table'
 import { useVirtual } from 'react-virtual'
 import 'regenerator-runtime'
-import styled from 'styled-components'
 
+import { FaSort, FaSortDown, FaSortUp } from 'react-icons/fa'
 import { DetailsBox } from '../../measurement/DetailsBox'
 import { sortRows } from './computations'
 
-const TableContainer = styled.div`
-  ${'' /* These styles are suggested for the table fill all available space in its containing element */}
-  flex: 1;
-`
+const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
+  const defaultRef = useRef()
+  const resolvedRef = ref || defaultRef
 
-const Table = styled.div`
-  border-spacing: 0;
-  border: 1px solid black;
-`
+  useEffect(() => {
+    resolvedRef.current.indeterminate = indeterminate
+  }, [resolvedRef, indeterminate])
 
-const Cell = styled.div`
-  padding: 8px;
-`
-
-const TableRow = styled(Flex)`
-  height: 35px;
-  border-bottom: 1px solid black;
-  &:last-child {
-    border-bottom: 0;
-  }
-`
-
-const TableHeader = styled.div`
-  ${TableRow} {
-    height: auto;
-    margin-bottom: 8px;
-    border-bottom: 1px solid black;
-  }
-  &:last-child {
-    border-bottom: 2px solid black;
-  }
-  & ${Cell} {
-    border-right: 1px solid black;
-    font-weight: bold;
-    &:last-child {
-      border-right: 0;
-    }
-  }
-`
-
-const TableBody = styled.div`
-  height: 250px;
-  overflow: auto;
-`
-
-const IndeterminateCheckbox = forwardRef(
-  ({ indeterminate, ...rest }, ref) => {
-    const defaultRef = useRef()
-    const resolvedRef = ref || defaultRef
-
-    useEffect(() => {
-      resolvedRef.current.indeterminate = indeterminate
-    }, [resolvedRef, indeterminate])
-
-    return (
-      <>
-        <input type="checkbox" ref={resolvedRef} {...rest} />
-      </>
-    )
-  }
-)
+  return (
+    <>
+      <input type="checkbox" ref={resolvedRef} {...rest} />
+    </>
+  )
+})
 IndeterminateCheckbox.displayName = 'IndeterminateCheckbox'
 
 const SearchFilter = ({
@@ -81,22 +47,16 @@ const SearchFilter = ({
   return (
     <input
       value={filterValue || ''}
-      onChange={e => {
+      onChange={(e) => {
         setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
       }}
-      placeholder={intl.formatMessage({id: 'MAT.Table.FilterPlaceholder'}, {count})}
+      placeholder={intl.formatMessage(
+        { id: 'MAT.Table.FilterPlaceholder' },
+        { count },
+      )}
     />
   )
 }
-
-const StyledGlobalFilter = styled(Box)`
-  margin: 16px;
-  margin-top: 10px;
-  input {
-    border: 0;
-    outline: 0;
-  }
-`
 
 function GlobalFilter({
   preGlobalFilteredRows,
@@ -106,7 +66,7 @@ function GlobalFilter({
   const intl = useIntl()
   const count = preGlobalFilteredRows.length
   const [value, setValue] = useState(globalFilter)
-  const onChange = useAsyncDebounce(value => {
+  const onChange = useAsyncDebounce((value) => {
     setGlobalFilter(value || '')
   }, 200)
 
@@ -117,28 +77,27 @@ function GlobalFilter({
   }, [globalFilter])
 
   return (
-    <StyledGlobalFilter>
-      {intl.formatMessage({id: 'MAT.Table.Search'})}{' '}
+    <div className="m-4">
+      {intl.formatMessage({ id: 'MAT.Table.Search' })}{' '}
       <input
+        className="border-0 outline-0"
         value={value || ''}
-        onChange={e => {
+        onChange={(e) => {
           setValue(e.target.value)
           onChange(e.target.value)
         }}
-        placeholder={intl.formatMessage({id: 'MAT.Table.FilterPlaceholder'}, {count})}
+        placeholder={intl.formatMessage(
+          { id: 'MAT.Table.FilterPlaceholder' },
+          { count },
+        )}
       />
-    </StyledGlobalFilter>
+    </div>
   )
 }
 
 const SortHandle = ({ isSorted, isSortedDesc }) => {
   return (
-    <Box as='code' ml={1}>
-      {isSorted ? (
-        isSortedDesc ? '▼' : '▲'
-      ) : (
-        <Box as='code'>&nbsp;</Box>
-    )}</Box>
+    <>{isSorted ? isSortedDesc ? <FaSortDown /> : <FaSortUp /> : <FaSort />}</>
   )
 }
 
@@ -158,81 +117,87 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
       Filter: SearchFilter,
       Cell: ({ value }) => {
         const intl = useIntl()
-        return typeof value === 'number' ? intl.formatNumber(value, {}) : String(value)
-      }
+        return typeof value === 'number'
+          ? intl.formatNumber(value, {})
+          : String(value)
+      },
     }),
-    []
+    [],
   )
 
   // Aggregate by the first column
-  const initialState = useMemo(() => ({
-    hiddenColumns: ['yAxisCode'],
-    sortBy: [{ id: 'yAxisLabel', desc: false }]
-  }),[])
+  const initialState = useMemo(
+    () => ({
+      hiddenColumns: ['yAxisCode'],
+      sortBy: [{ id: 'yAxisLabel', desc: false }],
+    }),
+    [],
+  )
 
-  const getRowId = useCallback(row => row[query.axis_y], [query.axis_y])
+  const getRowId = useCallback((row) => row[query.axis_y], [query.axis_y])
 
-  const columns = useMemo(() => [
-    {
-      Header: intl.formatMessage({ id: `MAT.Table.Header.${yAxis}`}),
-      Cell: ({ value, row }) => (
-        <Text fontWeight={row.isSelected ? 'bold' : 'initial'}>
-          {value}
-        </Text>
-      ),
-      id: 'yAxisLabel',
-      accessor: 'rowLabel',
-      filter: 'text',
-      style: {
-        width: '35%'
-      }
-    },
-    {
-      id: 'yAxisCode',
-      accessor: yAxis,
-      disableFilters: true,
-    },
-    {
-      Header: <FormattedMessage id='MAT.Table.Header.anomaly_count' />,
-      accessor: 'anomaly_count',
-      width: 150,
-      sortDescFirst: true,
-      disableFilters: true,
-      style: {
-        textAlign: 'end'
-      }
-    },
-    {
-      Header: <FormattedMessage id='MAT.Table.Header.confirmed_count' />,
-      accessor: 'confirmed_count',
-      width: 150,
-      sortDescFirst: true,
-      disableFilters: true,
-      style: {
-        textAlign: 'end'
-      }
-    },
-    {
-      Header: <FormattedMessage id='MAT.Table.Header.failure_count' />,
-      accessor: 'failure_count',
-      width: 150,
-      sortDescFirst: true,
-      disableFilters: true,
-      style: {
-        textAlign: 'end'
-      }
-    },
-    {
-      Header: <FormattedMessage id='MAT.Table.Header.measurement_count' />,
-      accessor: 'measurement_count',
-      width: 150,
-      sortDescFirst: true,
-      disableFilters: true,
-      style: {
-        textAlign: 'end'
-      }
-    }
-  ], [intl, yAxis])
+  const columns = useMemo(
+    () => [
+      {
+        Header: intl.formatMessage({ id: `MAT.Table.Header.${yAxis}` }),
+        Cell: ({ value, row }) => (
+          <div className={row.isSelected && 'font-bold'}>{value}</div>
+        ),
+        id: 'yAxisLabel',
+        accessor: 'rowLabel',
+        filter: 'text',
+        style: {
+          width: '35%',
+        },
+      },
+      {
+        id: 'yAxisCode',
+        accessor: yAxis,
+        disableFilters: true,
+      },
+      {
+        Header: <FormattedMessage id="MAT.Table.Header.anomaly_count" />,
+        accessor: 'anomaly_count',
+        width: 150,
+        sortDescFirst: true,
+        disableFilters: true,
+        style: {
+          textAlign: 'end',
+        },
+      },
+      {
+        Header: <FormattedMessage id="MAT.Table.Header.confirmed_count" />,
+        accessor: 'confirmed_count',
+        width: 150,
+        sortDescFirst: true,
+        disableFilters: true,
+        style: {
+          textAlign: 'end',
+        },
+      },
+      {
+        Header: <FormattedMessage id="MAT.Table.Header.failure_count" />,
+        accessor: 'failure_count',
+        width: 150,
+        sortDescFirst: true,
+        disableFilters: true,
+        style: {
+          textAlign: 'end',
+        },
+      },
+      {
+        Header: <FormattedMessage id="MAT.Table.Header.measurement_count" />,
+        accessor: 'measurement_count',
+        width: 150,
+        sortDescFirst: true,
+        disableFilters: true,
+        style: {
+          textAlign: 'end',
+        },
+      },
+    ],
+    [intl, yAxis],
+  )
 
   const {
     getTableProps,
@@ -279,22 +244,33 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
             <div>
               <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
             </div>
-          )
+          ),
         },
-        ...columns
+        ...columns,
       ])
-    }
+    },
   )
-  
-  const updateCharts = useCallback(() => {
-    const selectedRows = Object.keys(state.selectedRowIds).sort((a,b) => sortRows(a, b, query.axis_y, intl.locale))
 
-    if (selectedRows.length > 0 && selectedRows.length !== preGlobalFilteredRows.length) {
+  const updateCharts = useCallback(() => {
+    const selectedRows = Object.keys(state.selectedRowIds).sort((a, b) =>
+      sortRows(a, b, query.axis_y, intl.locale),
+    )
+
+    if (
+      selectedRows.length > 0 &&
+      selectedRows.length !== preGlobalFilteredRows.length
+    ) {
       setDataForCharts(selectedRows)
     } else {
       setDataForCharts(noRowsSelected)
     }
-  }, [preGlobalFilteredRows.length, query.axis_y, state.selectedRowIds, setDataForCharts, intl.locale])
+  }, [
+    preGlobalFilteredRows.length,
+    query.axis_y,
+    state.selectedRowIds,
+    setDataForCharts,
+    intl.locale,
+  ])
 
   /**
    * Reset the table filter
@@ -312,10 +288,15 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
       setGlobalFilter('')
     }
     setDataForCharts(noRowsSelected)
-  }, [setGlobalFilter, state.globalFilter, toggleAllRowsSelected, setDataForCharts])
+  }, [
+    setGlobalFilter,
+    state.globalFilter,
+    toggleAllRowsSelected,
+    setDataForCharts,
+  ])
 
   useEffect(() => {
-    if (state.globalFilter == undefined && resetTableRef.current === true) {
+    if (state.globalFilter === undefined && resetTableRef.current === true) {
       resetTableRef.current = false
       toggleAllRowsSelected(false)
     }
@@ -331,64 +312,91 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
   })
 
   return (
-    <DetailsBox title={intl.formatMessage({id: 'MAT.Table.Filters'})} collapsed={false}>
-      <Flex flexDirection='column'>
-        <Flex mb={3} alignItems='center'>
-          <Button hollow onClick={updateCharts}>{intl.formatMessage({id: 'General.Apply'})}</Button>
-          <Button inverted onClick={resetFilter} mx={3}>{intl.formatMessage({id: 'General.Reset'})}</Button>
-        </Flex>
-        <TableContainer>
-          <Table {...getTableProps()}>
-            <TableHeader>
+    <DetailsBox
+      title={intl.formatMessage({ id: 'MAT.Table.Filters' })}
+      collapsed={false}
+    >
+      <div className="flex flex-col">
+        <div className="flex mb-4 items-center">
+          <button
+            type="button"
+            className="btn btn-primary-hollow"
+            onClick={updateCharts}
+          >
+            {intl.formatMessage({ id: 'General.Apply' })}
+          </button>
+          <button
+            type="button"
+            className="btn btn-primary mx-3"
+            onClick={resetFilter}
+          >
+            {intl.formatMessage({ id: 'General.Reset' })}
+          </button>
+        </div>
+        <div className="flex-1">
+          <div
+            className="Table border border-black border-spacing-0"
+            {...getTableProps()}
+          >
+            <div className="TableHeader last:border-b-2 last:border-black">
               {headerGroups.map((headerGroup, i) => (
-                <TableRow key={i} {...headerGroup.getHeaderGroupProps()}>
+                <div
+                  className="TableRow flex h-auto mb-2 border-b border-black"
+                  key={i}
+                  {...headerGroup.getHeaderGroupProps()}
+                >
                   {headerGroup.headers.map((column, i) => {
                     return (
-                      <Cell key={i} {...column.getHeaderProps([
-                        {
-                          style: column.style
-                        }
-                      ])}>
-                        <span {...column.getSortByToggleProps()}>
+                      <div
+                        className="Cell p-2 border-r border-black font-bold last:border-r-0"
+                        key={i}
+                        {...column.getHeaderProps([
+                          {
+                            style: column.style,
+                          },
+                        ])}
+                      >
+                        <span
+                          className="flex items-center"
+                          {...column.getSortByToggleProps()}
+                        >
                           {column.render('Header')}
-                          {column.canSort &&
-                            <SortHandle isSorted={column.isSorted} isSortedDesc={column.isSortedDesc} />
-                          }
+                          {column.canSort && (
+                            <SortHandle
+                              isSorted={column.isSorted}
+                              isSortedDesc={column.isSortedDesc}
+                            />
+                          )}
                         </span>
-                      </Cell>
-                    )}
-                  )}
-                </TableRow>
+                      </div>
+                    )
+                  })}
+                </div>
               ))}
-              <TableRow>
+              <div className="TableRow h-auto mb-2 border-b border-black">
                 <GlobalFilter
                   preGlobalFilteredRows={preGlobalFilteredRows}
                   globalFilter={state.globalFilter}
                   setGlobalFilter={setGlobalFilter}
                 />
-              </TableRow>
-            </TableHeader>
+              </div>
+            </div>
             <div
               ref={parentRef}
-              style={{
-                display: 'block',
-                height: '200px',
-                overflow: 'auto',
-                width: '100%'
-              }}
+              className="block h-[200px] overflow-auto w-full"
             >
-              <TableBody
+              <div
+                className="TableBody h-[250px] overflow-auto block relative"
                 style={{
-                  display: 'block',
                   height: `${totalSize}px`,
-                  position: 'relative'
                 }}
               >
-                {virtualRows.map(virtualRow => {
+                {virtualRows.map((virtualRow) => {
                   const row = rows[virtualRow.index]
                   prepareRow(row)
                   return (
-                    <TableRow
+                    <div
+                      className="flex h-[35px] border-b border-black last:border-b-0"
                       key={virtualRow.index}
                       ref={virtualRow.measureRef}
                       {...row.getRowProps({
@@ -398,30 +406,33 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
                           left: 0,
                           width: '100%',
                           height: `${virtualRow.size}px`,
-                          transform: `translateY(${virtualRow.start}px)`
-                        }
-                      })}>
+                          transform: `translateY(${virtualRow.start}px)`,
+                        },
+                      })}
+                    >
                       {row.cells.map((cell, i) => {
                         return (
-                          <Cell
+                          <div
+                            className="Cell p-3"
                             key={i}
                             {...cell.getCellProps([
                               {
-                                style: cell.column.style
-                              }
-                            ])}>
+                                style: cell.column.style,
+                              },
+                            ])}
+                          >
                             {cell.render('Cell')}
-                          </Cell>
+                          </div>
                         )
                       })}
-                    </TableRow>
+                    </div>
                   )
                 })}
-              </TableBody>
+              </div>
             </div>
-          </Table>
-        </TableContainer>
-      </Flex>
+          </div>
+        </div>
+      </div>
     </DetailsBox>
   )
 }

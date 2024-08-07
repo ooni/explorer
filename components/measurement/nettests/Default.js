@@ -1,11 +1,9 @@
 import PropTypes from 'prop-types'
 
-const DefaultTestDetails = ({ render }) => (
-  render({})
-)
+const DefaultTestDetails = ({ render }) => render({})
 
 DefaultTestDetails.propTypes = {
-  render: PropTypes.func
+  render: PropTypes.func,
 }
 
 export default DefaultTestDetails

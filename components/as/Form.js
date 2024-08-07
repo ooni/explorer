@@ -1,9 +1,9 @@
-import { useEffect, useRef, useState, useMemo } from 'react'
-import { useForm, Controller } from 'react-hook-form'
-import { Box, Flex, Input } from 'ooni-components'
+import { format } from 'date-fns'
+import { Input } from 'ooni-components'
+import { useEffect, useRef, useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
-import { format } from 'date-fns'
 
 import DateRangePicker from '../DateRangePicker'
 
@@ -47,12 +47,12 @@ const Form = ({ onSubmit, since, until }) => {
 
   return (
     <form>
-      <Flex alignItems={['center']}>
-        <Box width={[1, 1 / 5]}>
-          <Flex>
-            <Box width={2 / 3} mr={3}>
+      <div className="flex items-center">
+        <div className="w-full md:w-1/2 xl:w-1/5">
+          <div className="flex">
+            <div className="w-2/3 mr-4">
               <Controller
-                name='since'
+                name="since"
                 control={control}
                 render={({ field }) => (
                   <Input
@@ -63,10 +63,10 @@ const Form = ({ onSubmit, since, until }) => {
                   />
                 )}
               />
-            </Box>
-            <Box width={2 / 3} mr={3}>
+            </div>
+            <div className="w-2/3 mr-4">
               <Controller
-                name='until'
+                name="until"
                 control={control}
                 render={({ field }) => (
                   <Input
@@ -77,8 +77,8 @@ const Form = ({ onSubmit, since, until }) => {
                   />
                 )}
               />
-            </Box>
-          </Flex>
+            </div>
+          </div>
           {showDatePicker && (
             <DateRangePicker
               handleRangeSelect={handleRangeSelect}
@@ -89,8 +89,8 @@ const Form = ({ onSubmit, since, until }) => {
               close={() => setShowDatePicker(false)}
             />
           )}
-        </Box>
-      </Flex>
+        </div>
+      </div>
     </form>
   )
 }

@@ -1,8 +1,6 @@
-/* global process */
 import Head from 'next/head'
 import { useRouter } from 'next/router'
-import { Box, Container, Flex, Heading, Link } from 'ooni-components'
-import React, { useCallback, useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 
 import MATChart from 'components/MATChart'
@@ -18,7 +16,7 @@ const MeasurementAggregationToolkit = () => {
 
   const onSubmit = useCallback(
     (data) => {
-      let params = {}
+      const params = {}
       for (const p of Object.keys(data)) {
         if (data[p] !== '') {
           params[p] = data[p]
@@ -30,7 +28,7 @@ const MeasurementAggregationToolkit = () => {
       }
       return router.push(href, href, { shallow: true })
     },
-    [router]
+    [router],
   )
 
   // Upon mount, check if the page was accessed without query params
@@ -59,7 +57,7 @@ const MeasurementAggregationToolkit = () => {
   let linkToAPIQuery = null
   try {
     linkToAPIQuery = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation?${new URLSearchParams(
-      query
+      query,
     ).toString()}`
   } catch (e) {
     console.error(`Failed to construct API query link: ${e.message}`)
@@ -70,43 +68,45 @@ const MeasurementAggregationToolkit = () => {
       <Head>
         <title>{intl.formatMessage({ id: 'MAT.Title' })}</title>
       </Head>
-      <Container>
-        <Flex flexDirection="column">
-          <Heading h={1} mt={3} mb={0}>
+      <div className="container">
+        <div className="flex flex-col">
+          <h1 className="mt-4">
             <FormattedMessage id="MAT.Title" />
-          </Heading>
-          <Heading h={5} mt={0} mb={2} color="gray9">
+          </h1>
+          <h5 className="mb-2">
             <FormattedMessage id="MAT.SubTitle" />
-          </Heading>
+          </h5>
           <Form onSubmit={onSubmit} query={router.query} />
           <MATChart query={query} />
           {linkToAPIQuery && (
-            <Box mt={[3]} ml={['unset', 'auto']}>
-              <Flex>
-                <Box>
-                  <Link as="a" href={linkToAPIQuery} target="_blank" title="opens in new tab">
-                    {intl.formatMessage({ id: 'MAT.JSONData' })}
-                    <FaExternalLinkAlt />
-                  </Link>
-                </Box>
-                <Box ml={2}>
-                  <Link
-                    href={`${linkToAPIQuery}&format=CSV`}
-                    target="_blank"
-                    title="opens in new tab"
-                  >
-                    {intl.formatMessage({ id: 'MAT.CSVData' })}
-                    <FaExternalLinkAlt />
-                  </Link>
-                </Box>
-              </Flex>
-            </Box>
+            <div className="flex mt-4 justify-start md:justify-end">
+              <a
+                className="flex items-center"
+                href={linkToAPIQuery}
+                target="_blank"
+                title="opens in new tab"
+                rel="noreferrer"
+              >
+                {intl.formatMessage({ id: 'MAT.JSONData' })}
+                <FaExternalLinkAlt className="ml-1" />
+              </a>
+              <a
+                className="flex items-center ml-3"
+                href={`${linkToAPIQuery}&format=CSV`}
+                target="_blank"
+                title="opens in new tab"
+                rel="noreferrer"
+              >
+                {intl.formatMessage({ id: 'MAT.CSVData' })}
+                <FaExternalLinkAlt className="ml-1" />
+              </a>
+            </div>
           )}
-          <Box my={4}>
+          <div className="my-8">
             <Help />
-          </Box>
-        </Flex>
-      </Container>
+          </div>
+        </div>
+      </div>
     </>
   )
 }

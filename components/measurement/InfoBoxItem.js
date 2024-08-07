@@ -1,31 +1,23 @@
-import React from 'react'
 import PropTypes from 'prop-types'
-import { Box, Text } from 'ooni-components'
 import { FormattedMessage } from 'react-intl'
 
-export const InfoBoxItem = ({
-  label,
-  content,
-  unit
-}) => (
-  <Box>
-    <Text fontSize={24}>
-      {content} {unit && <Text as='small'>{unit}</Text>}
-    </Text>
-    <Text fontWeight='bold' fontSize={16} >
-      {label}
-    </Text>
-  </Box>
+export const InfoBoxItem = ({ label, content, unit }) => (
+  <div>
+    <div className="text-2xl">
+      {content} {unit && <small>{unit}</small>}
+    </div>
+    <div className="font-bold text-base">{label}</div>
+  </div>
 )
 
 InfoBoxItem.propTypes = {
   label: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.instanceOf(FormattedMessage)
+    PropTypes.instanceOf(FormattedMessage),
   ]),
   content: PropTypes.any,
   unit: PropTypes.oneOfType([
     PropTypes.string,
-    PropTypes.instanceOf(FormattedMessage)
-  ])
+    PropTypes.instanceOf(FormattedMessage),
+  ]),
 }

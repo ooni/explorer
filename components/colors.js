@@ -1,7 +1,7 @@
-import { theme } from 'ooni-components'
+import { colors } from 'ooni-components'
 
-export const colorNormal = theme.colors.green7
-export const colorError = theme.colors.gray4
-export const colorConfirmed = theme.colors.red8
-export const colorAnomaly = theme.colors.yellow8
-export const colorEmpty = theme.colors.gray3
+export const colorNormal = colors.green['700']
+export const colorError = colors.gray['400']
+export const colorConfirmed = colors.red['800']
+export const colorAnomaly = colors.yellow['800']
+export const colorEmpty = colors.gray['300']

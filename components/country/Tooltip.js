@@ -1,11 +1,6 @@
-import React from 'react'
+import { VictoryLabel, VictoryTooltip } from 'victory'
 
-import {
-  VictoryLabel,
-  VictoryTooltip
-} from 'victory'
-
-import { theme } from 'ooni-components'
+import { colors } from 'ooni-components'
 import { firaSans } from '../../pages/_app'
 
 const Tooltip = (props) => (
@@ -14,17 +9,17 @@ const Tooltip = (props) => (
     labelComponent={
       <VictoryLabel
         style={{
-          fill: theme.colors.white,
+          fill: colors.gray['50'],
           fontFamily: `${firaSans.style.fontFamily}, sans-serif`,
-          fontSize: props.fontSize || 8
+          fontSize: props.fontSize || 8,
         }}
       />
     }
     flyoutStyle={{
       strokeWidth: 0,
-      fill: theme.colors.gray8,
+      fill: colors.gray['800'],
       padding: 2,
-      pointerEvents: 'none'
+      pointerEvents: 'none',
     }}
   />
 )

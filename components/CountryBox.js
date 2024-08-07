@@ -1,31 +1,28 @@
 import Flag from 'components/Flag'
 import { GridBox } from 'components/VirtualizedGrid'
-import { Box, Flex, Text } from 'ooni-components'
 
-const CountryList = ({ countries, itemsPerRow = 6, gridGap = 3 }) => {
-  const gridTemplateColumns = ['1fr 1fr', '1fr 1fr', '1fr 1fr 1fr 1fr', [...Array(itemsPerRow)].map((i) => ('1fr')).join(' ')]
-
+const CountryList = ({ countries, itemsPerRow = 6 }) => {
   return (
-    <Box sx={{
-      display: 'grid',
-      gridGap,
-      gridTemplateColumns 
-    }}>
+    // lg:grid-cols-${itemsPerRow} is added to the safelist in tailwindConfig.config.js
+    <div
+      className={`grid gap-2 grid-cols-2 md:grid-cols-4 lg:grid-cols-${itemsPerRow}`}
+    >
       {countries.map((c) => (
         <GridBox
           key={c.alpha_2}
           href={`/country/${c.alpha_2}`}
           title={
-            <Flex mb={2} alignItems='center'>
-              <Box alignSelf='start'><Flag countryCode={c.alpha_2} size={22} border /></Box>
-              <Text fontSize={1} fontWeight='bold' ml={2} lineHeight='24px'>{c.localisedName}</Text>
-            </Flex>
+            <div className="flex mb-2 items-center">
+              <div className="self-start">
+                <Flag countryCode={c.alpha_2} size={22} border />
+              </div>
+              <div className="font-bold ml-2">{c.localisedName}</div>
+            </div>
           }
           count={c.count}
         />
-        ))
-      }
-    </Box>
+      ))}
+    </div>
   )
 }
 

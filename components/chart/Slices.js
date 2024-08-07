@@ -5,23 +5,31 @@ const SlicesItem = ({ slice, axis, debug, tooltip, isCurrent, setCurrent }) => {
   const { showTooltipFromEvent, hideTooltip } = useTooltip()
 
   const handleMouseEnter = useCallback(
-    event => {
-      showTooltipFromEvent(createElement(tooltip, { slice, axis }), event, 'right')
+    (event) => {
+      showTooltipFromEvent(
+        createElement(tooltip, { slice, axis }),
+        event,
+        'right',
+      )
       setCurrent(slice)
     },
-    [showTooltipFromEvent, tooltip, slice]
+    [showTooltipFromEvent, tooltip, slice],
   )
 
   const handleMouseMove = useCallback(
-    event => {
-      showTooltipFromEvent(createElement(tooltip, { slice, axis }), event, 'right')
+    (event) => {
+      showTooltipFromEvent(
+        createElement(tooltip, { slice, axis }),
+        event,
+        'right',
+      )
     },
-    [showTooltipFromEvent, tooltip, slice]
+    [showTooltipFromEvent, tooltip, slice],
   )
 
   const handleMouseLeave = useCallback(() => {
-      hideTooltip()
-      setCurrent(null)
+    hideTooltip()
+    setCurrent(null)
   }, [hideTooltip])
 
   return (
@@ -43,11 +51,23 @@ const SlicesItem = ({ slice, axis, debug, tooltip, isCurrent, setCurrent }) => {
 }
 
 const Slices = (props) => {
-  const { width, axis, debug, height, tooltip, sliceTooltip, currentSlice, setCurrentSlice, points, enableSlices, debugSlices } = props
+  const {
+    width,
+    axis,
+    debug,
+    height,
+    tooltip,
+    sliceTooltip,
+    currentSlice,
+    setCurrentSlice,
+    points,
+    enableSlices,
+    debugSlices,
+  } = props
 
   const map = new Map()
 
-  points.forEach(point => {
+  points.forEach((point) => {
     if (point.data.x === null || point.data.y === null) return
     if (new Date(point.data.x).getMinutes() !== 0) return
     if (!map.has(point.x)) map.set(point.x, [point])
@@ -80,7 +100,7 @@ const Slices = (props) => {
       }
     })
 
-  return slices.map(slice => (
+  return slices.map((slice) => (
     <SlicesItem
       key={slice.id}
       slice={slice}
