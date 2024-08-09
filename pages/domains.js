@@ -112,6 +112,7 @@ const Domains = () => {
       </Head>
       <div className="container">
         <StickySubMenu
+          topClass="top-[116px]"
           title={
             <>
               {intl.formatMessage({ id: 'Domains.Title' })}{' '}
