@@ -188,7 +188,7 @@ const Form = ({ defaultValues, onSubmit }) => {
   return (
     <>
       <Modal
-        // className='px-8'
+        className="w-full max-w-[1000px] -translate-x-1/2 -translate-y-1/2"
         show={showPreview}
         onHideClick={() => setShowPreview(!showPreview)}
       >
