@@ -10,6 +10,7 @@ import { getLocalisedRegionName } from 'utils/i18nCountries'
 const FormattedMarkdown = ({ children }) => {
   return (
     <Markdown
+      className="[&>p]:my-5"
       options={{
         overrides: {
           MAT: {
