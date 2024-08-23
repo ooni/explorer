@@ -94,7 +94,7 @@ const LandingPage = ({ measurementCount, asnCount, countryCount }) => {
             <div className="inline-block">
               <Link href="/chart/mat">
                 <button
-                  className="btn btn-white-hollow btn-xl mt-12 mx-auto"
+                  className="btn btn-white-hollow hover:!text-white btn-xl mt-12 mx-auto"
                   type="button"
                 >
                   <FormattedMessage id="Home.Banner.Button.Explore" />

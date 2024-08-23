@@ -65,7 +65,7 @@ const Overview = ({
         {featuredArticles.length === 0 ? (
           <FormattedMessage id="Country.Overview.FeaturedResearch.None" />
         ) : (
-          <ul className="ps-10 list-disc">
+          <ul>
             {featuredArticles.map((article, index) => (
               <li key={index}>
                 <FeaturedArticle link={article.href} title={article.title} />

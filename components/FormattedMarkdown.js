@@ -11,26 +11,12 @@ const MdH1 = ({ children, className, ...props }) => (
   </h3>
 )
 
-const MdUL = ({ children, className, ...props }) => (
-  <ul className={twMerge('list-disc ps-10', className)} {...props}>
-    {children}
-  </ul>
-)
-
-const MdP = ({ children, className, ...props }) => (
-  <p className={twMerge('my-3', className)} {...props}>
-    {children}
-  </p>
-)
-
 export const FormattedMarkdownBase = ({ children }) => {
   return (
     <Markdown
       options={{
         overrides: {
           h1: { component: MdH1 },
-          ul: { component: MdUL },
-          p: { component: MdP },
         },
       }}
     >
