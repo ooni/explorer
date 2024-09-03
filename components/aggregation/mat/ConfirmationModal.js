@@ -6,6 +6,7 @@ export const ConfirmationModal = ({ show, onConfirm, onCancel }) => {
     <Modal
       className="rounded-lg shadow-md shadow-black bg-white text-black"
       show={show}
+      onHideClick={onCancel}
     >
       <div className="container">
         <div className="flex flex-col">
