@@ -17,11 +17,19 @@ export const ConfirmationModal = ({ show, onConfirm, onCancel }) => {
           </div>
         </div>
       </div>
-      <div className="flex justify-end my-4">
-        <button className="btn btn-primary mx-4 w-1/3" onClick={onCancel}>
+      <div className="flex justify-center my-4">
+        <button
+          type="button"
+          className="btn btn-primary mx-4 w-1/3"
+          onClick={onCancel}
+        >
           <FormattedMessage id="MAT.Form.ConfirmationModal.No" />
         </button>
-        <button className="btn btn-primary mx-4 w-1/3" onClick={onConfirm}>
+        <button
+          type="button"
+          className="btn btn-primary mx-4 w-1/3"
+          onClick={onConfirm}
+        >
           <FormattedMessage id="MAT.Form.ConfirmationModal.Button.Yes" />
         </button>
       </div>

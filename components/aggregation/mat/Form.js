@@ -496,7 +496,6 @@ export const Form = ({ onSubmit, query }) => {
           type="button"
           className="btn btn-primary"
           data-test-id="mat-form-submit"
-          width={[1, 'unset']}
           onClick={maybeWarnBeforeSubmit}
         >
           <FormattedMessage id="MAT.Form.Submit" />

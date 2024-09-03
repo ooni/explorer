@@ -67,7 +67,7 @@ const EditReport = () => {
         <div className="flex justify-between items-center">
           <h1>{intl.formatMessage({ id: 'Findings.Edit.Title' })}</h1>
           <Link href="/findings/dashboard">
-            <button className="btn btn-pimary-hollow">
+            <button type="button" className="btn btn-pimary-hollow">
               {intl.formatMessage({ id: 'Findings.Dashboard.ShortTitle' })}
             </button>
           </Link>

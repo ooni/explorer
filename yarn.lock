@@ -4924,10 +4924,10 @@ onetime@^5.1.0, onetime@^5.1.2:
   dependencies:
     mimic-fn "^2.1.0"
 
-ooni-components@0.7.0-alpha.8:
-  version "0.7.0-alpha.8"
-  resolved "https://registry.yarnpkg.com/ooni-components/-/ooni-components-0.7.0-alpha.8.tgz#8e370075424eb6af4b9f5e797ddf30b0b3522df1"
-  integrity sha512-d6fURpQ/VoaQUi5AiAe7eT/LFiDkMPuDpgixGPDEM0D7sMv38RMgSIZuHhlNl/Ol/TUPLdxS5Ta3XW6DkuUKcg==
+ooni-components@0.7.0-alpha.10:
+  version "0.7.0-alpha.10"
+  resolved "https://registry.yarnpkg.com/ooni-components/-/ooni-components-0.7.0-alpha.10.tgz#0a5106d90d2fa9ae458f6febf13af8c3c8be81d5"
+  integrity sha512-KrD1AkcMKFhAPRLuhyarG2rnVmeVY5I+x2zOClAie2dzttsvdTdoHxcOtn3HgKMDSWSpnSSNFd9/P5eVVKhzcQ==
   dependencies:
     class-variance-authority "^0.7.0"
     clsx "^2.1.1"
