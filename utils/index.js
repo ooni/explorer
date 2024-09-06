@@ -1,20 +1,19 @@
-const isGreater = (key, a, b) => {
-  a = a[key]
-  b = b[key]
+const isGreater = (key, x, y) => {
+  const a = x[key]
+  const b = y[key]
   return a < b ? -1 : a > b ? 1 : 0
 }
 
 export const sortByKey = (key, secondaryKey) => {
   return (a, b) => {
-    let r = isGreater(key, a, b)
+    const r = isGreater(key, a, b)
     if (secondaryKey === undefined) {
       return r
     }
     if (r === 0) {
       return isGreater(secondaryKey, a, b)
-    } else {
-      return r
     }
+    return r
   }
 }
 
@@ -31,11 +30,8 @@ export const toCompactNumberUnit = (n) => {
   return { unit, value }
 }
 
-export const truncateString = (s, maxStart, maxEnd) => {
+export const truncateString = (s, maxStart, maxEnd = 0) => {
   let truncatedString = ''
-  if (maxEnd === undefined) {
-    maxEnd = 0
-  }
   if (maxStart + maxEnd > s.length) {
     return s
   }
@@ -51,16 +47,13 @@ export const getRange = (start, end) => {
 }
 
 export const formatLongDate = (date, locale) =>
-  new Intl.DateTimeFormat(locale, { dateStyle: 'long' }).format(new Date(date))
-
-export const formatMediumDateTime = (date, locale) =>
-  new Intl.DateTimeFormat(locale, {
-    dateStyle: 'medium',
-    timeStyle: 'medium',
+  `${new Intl.DateTimeFormat(locale, {
+    dateStyle: 'long',
     timeZone: 'UTC',
-  }).format(new Date(date))
+  }).format(new Date(date))} UTC`
 
 export const formatMediumDate = (date, locale) =>
-  new Intl.DateTimeFormat(locale, { dateStyle: 'medium' }).format(
-    new Date(date),
-  )
+  `${new Intl.DateTimeFormat(locale, {
+    dateStyle: 'medium',
+    timeZone: 'UTC',
+  }).format(new Date(date))} UTC`

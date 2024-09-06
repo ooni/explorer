@@ -91,10 +91,6 @@ const Dashboard = () => {
         accessorKey: 'reported_by',
       },
       {
-        header: 'Email Address',
-        accessorKey: 'email_address',
-      },
-      {
         header: 'Start Date',
         accessorKey: 'start_time',
         cell: (info) => formatMediumDate(info.getValue()),
@@ -115,16 +111,13 @@ const Dashboard = () => {
         cell: (info) => (
           <>
             <Link href={`/findings/edit/${info.getValue()}`}>
-              <button
-                className="mr-1 btn btn-primary-hollow btn-sm"
-                type="button"
-              >
+              <button className="btn btn-primary-hollow btn-sm" type="button">
                 {intl.formatMessage({ id: 'Findings.Dashboard.Edit' })}
               </button>
             </Link>
             {info.row.original.published ? (
               <button
-                className="btn btn-primary-hollow btn-sm p-1"
+                className="btn btn-primary-hollow btn-sm"
                 onClick={() => unpublish({ id: info.getValue() })}
                 disabled={isPublishMutating}
                 type="button"
@@ -133,7 +126,7 @@ const Dashboard = () => {
               </button>
             ) : (
               <button
-                className="btn btn-primary-hollow btn-sm mr-1"
+                className="btn btn-primary-hollow btn-sm"
                 onClick={() => publish({ id: info.getValue() })}
                 disabled={isUnpublishMutating}
                 type="button"
@@ -161,20 +154,12 @@ const Dashboard = () => {
 
   return (
     <>
-      {/* <Head>
-        <title></title>
-      </Head> */}
       {user?.role === 'admin' ? (
         <div className="container">
           <ToastContainer />
           <h1 className="mt-8">
             {intl.formatMessage({ id: 'Findings.Dashboard.Title' })}
           </h1>
-
-          {/* 
-th, td {
-  border: 1px solid gray;
-} */}
           <table className="w-full border-collapse">
             <thead>
               {table.getHeaderGroups().map((headerGroup) => (
@@ -228,9 +213,9 @@ th, td {
               ))}
             </thead>
             <tbody>
-              {table.getRowModel().rows.map((row) => {
+              {table.getRowModel().rows.map((row, i) => {
                 return (
-                  <tr key={row.id}>
+                  <tr key={row.id} className={i % 2 && 'bg-gray-100'}>
                     {row.getVisibleCells().map((cell) => {
                       return (
                         <td key={cell.id}>
