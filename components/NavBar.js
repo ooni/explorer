@@ -58,6 +58,75 @@ const NavItem = ({ label, href, ...props }) => {
   )
 }
 
+const SubNavItem = ({ label, href, ...props }) => {
+  const { pathname } = useRouter()
+  const [isActive, setIsActive] = useState(false)
+
+  useEffect(() => {
+    setIsActive(pathname === href)
+  }, [pathname, href])
+
+  return (
+    <Link
+      href={href}
+      className={`${isActive && 'border-black'} text-black hover:border-black hover:text-gray7 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium`}
+      {...props}
+    >
+      {label}
+    </Link>
+  )
+}
+
+const SubMenu = () => {
+  const { pathname } = useRouter()
+  const [showSubMenu, setshowSubMenu] = useState(false)
+
+  const menuItem = [
+    {
+      label: <FormattedMessage id="Navbar.Charts.Circumvention" />,
+      href: '/chart/circumvention',
+      umami: 'navigation-circumvention',
+    },
+    {
+      label: <FormattedMessage id="Navbar.Domains" />,
+      href: '/domains',
+      umami: 'navigation-domains"',
+    },
+    {
+      label: <FormattedMessage id="Navbar.Networks" />,
+      href: '/networks',
+      umami: 'navigation-networks',
+    },
+  ]
+
+  useEffect(() => {
+    setshowSubMenu(menuItem.map((i) => i.href).includes(pathname))
+  }, [pathname])
+
+  return (
+    <>
+      {showSubMenu && (
+        <div className="bg-gray-50">
+          <div className="border-b border-gray-200">
+            <div className="container">
+              <nav className="-mb-px flex space-x-8">
+                {menuItem.map((item) => (
+                  <SubNavItem
+                    key={item.href}
+                    href={item.href}
+                    label={item.label}
+                    data-umami-event={item.umami}
+                  />
+                ))}
+              </nav>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  )
+}
+
 const languages = process.env.LOCALES
 
 export const NavBar = ({ color }) => {
@@ -84,93 +153,85 @@ export const NavBar = ({ color }) => {
   useEffect(() => {
     setShowMenu(false)
   }, [pathname])
-
   return (
-    <div className={`${color} z-[8888] py-4`}>
-      <div className="container">
-        <div className="flex flex-row justify-between items-end">
-          <div className="z-[1] mb-1">
-            <Link href="/">
-              <ExplorerLogo height="26px" />
-            </Link>
-          </div>
-          <div className="StyledResponsiveMenu">
-            <MdMenu
-              size="28px"
-              className="lg:hidden cursor-pointer text-white"
-              onClick={() => setShowMenu(!showMenu)}
-            />
-            <div
-              className={`z-[9999] lg:block ${showMenu ? 'block overflow-y-scroll max-h-full p-8 text-base fixed top-0 right-0 bg-gray-50' : 'hidden'}`}
-            >
-              {showMenu && (
-                <div className="flex justify-end">
-                  <MdClose
-                    size="28px"
-                    className="cursor-pointer"
-                    onClick={() => setShowMenu(!showMenu)}
-                  />
-                </div>
-              )}
+    <div className="z-[8888]">
+      <div className={`${color} py-4`}>
+        <div className="container">
+          <div className="flex flex-row justify-between items-end">
+            <div className="z-[1] mb-1">
+              <Link href="/">
+                <ExplorerLogo height="26px" />
+              </Link>
+            </div>
+            <div className="StyledResponsiveMenu">
+              <MdMenu
+                size="28px"
+                className="lg:hidden cursor-pointer text-white"
+                onClick={() => setShowMenu(!showMenu)}
+              />
               <div
-                className={`flex gap-4 lg:gap-8 ${showMenu && 'pt-2 flex-col items-start [&>a]:border-black [&>a]:hover:border-black [&>*]:opacity-100 [&>*]:text-black [&>*]:hover:text-black'}`}
+                className={`z-[9999] lg:block ${showMenu ? 'block overflow-y-scroll max-h-full p-8 text-base fixed top-0 right-0 bg-gray-50' : 'hidden'}`}
               >
-                <NavItem
-                  label={<FormattedMessage id="Navbar.Search" />}
-                  href="/search"
-                  data-umami-event="navigation-search"
-                />
-                <NavItem
-                  label={<FormattedMessage id="Navbar.Charts.MAT" />}
-                  href="/chart/mat"
-                  data-umami-event="navigation-mat"
-                />
-                <NavItem
-                  label={<FormattedMessage id="Navbar.Charts.Circumvention" />}
-                  href="/chart/circumvention"
-                  data-umami-event="navigation-circumvention"
-                />
-                <NavItem
-                  label={<FormattedMessage id="Navbar.Countries" />}
-                  href="/countries"
-                  data-umami-event="navigation-countries"
-                />
-                <NavItem
-                  label={<FormattedMessage id="Navbar.Networks" />}
-                  href="/networks"
-                  data-umami-event="navigation-networks"
-                />
-                <NavItem
-                  label={<FormattedMessage id="Navbar.Domains" />}
-                  href="/domains"
-                  data-umami-event="navigation-domains"
-                />
-                <NavItem
-                  label={<FormattedMessage id="Navbar.Findings" />}
-                  href="/findings"
-                  data-umami-event="navigation-findings"
-                />
-                {user?.logged_in && (
-                  <StyledNavItem href="" onClick={logoutUser}>
-                    <FormattedMessage id="General.Logout" />
-                  </StyledNavItem>
+                {showMenu && (
+                  <div className="flex justify-end">
+                    <MdClose
+                      size="28px"
+                      className="cursor-pointer"
+                      onClick={() => setShowMenu(!showMenu)}
+                    />
+                  </div>
                 )}
-                <LanguageSelect onChange={handleLocaleChange} value={locale}>
-                  {languages.map((c) => (
-                    <option
-                      className="text-inherit opacity-100"
-                      key={c}
-                      value={c}
-                    >
-                      {getLocalisedLanguageName(c, c)}
-                    </option>
-                  ))}
-                </LanguageSelect>
+                <div
+                  className={`flex gap-4 lg:gap-8 ${showMenu && 'pt-2 flex-col items-start [&>a]:border-black [&>a]:hover:border-black [&>*]:opacity-100 [&>*]:text-black [&>*]:hover:text-black'}`}
+                >
+                  <NavItem
+                    label={<FormattedMessage id="Navbar.Findings" />}
+                    href="/findings"
+                    data-umami-event="navigation-findings"
+                  />
+                  <NavItem
+                    label={<FormattedMessage id="Navbar.Censorship" />}
+                    href="/chart/circumvention"
+                    data-umami-event="navigation-censorship"
+                  />
+                  <NavItem
+                    label={<FormattedMessage id="Navbar.Countries" />}
+                    href="/countries"
+                    data-umami-event="navigation-countries"
+                  />
+                  <NavItem
+                    label={<FormattedMessage id="Navbar.Charts" />}
+                    href="/chart/mat"
+                    data-umami-event="navigation-mat"
+                  />
+                  <NavItem
+                    label={<FormattedMessage id="Navbar.Search" />}
+                    href="/search"
+                    data-umami-event="navigation-search"
+                  />
+                  {user?.logged_in && (
+                    <StyledNavItem href="" onClick={logoutUser}>
+                      <FormattedMessage id="General.Logout" />
+                    </StyledNavItem>
+                  )}
+                  <LanguageSelect onChange={handleLocaleChange} value={locale}>
+                    {languages.map((c) => (
+                      <option
+                        className="text-inherit opacity-100"
+                        key={c}
+                        value={c}
+                      >
+                        {getLocalisedLanguageName(c, c)}
+                      </option>
+                    ))}
+                  </LanguageSelect>
+                </div>
               </div>
             </div>
           </div>
         </div>
       </div>
+      <SubMenu />
     </div>
   )
 }
