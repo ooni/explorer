@@ -85,17 +85,17 @@ const SubMenu = () => {
     {
       label: <FormattedMessage id="Navbar.Charts.Circumvention" />,
       href: '/chart/circumvention',
-      umami: 'navigation-circumvention-new',
+      umami: 'navigation-circumvention',
     },
     {
       label: <FormattedMessage id="Navbar.Domains" />,
       href: '/domains',
-      umami: 'navigation-domains-new"',
+      umami: 'navigation-domains"',
     },
     {
       label: <FormattedMessage id="Navbar.Networks" />,
       href: '/networks',
-      umami: 'navigation-networks-new',
+      umami: 'navigation-networks',
     },
   ]
 
@@ -187,27 +187,27 @@ export const NavBar = ({ color }) => {
                   <NavItem
                     label={<FormattedMessage id="Navbar.Findings" />}
                     href="/findings"
-                    data-umami-event="navigation-findings-new"
+                    data-umami-event="navigation-findings"
                   />
                   <NavItem
                     label={<FormattedMessage id="Navbar.Censorship" />}
                     href="/chart/circumvention"
-                    data-umami-event="navigation-censorship-new"
+                    data-umami-event="navigation-censorship"
                   />
                   <NavItem
                     label={<FormattedMessage id="Navbar.Countries" />}
                     href="/countries"
-                    data-umami-event="navigation-countries-new"
+                    data-umami-event="navigation-countries"
                   />
                   <NavItem
                     label={<FormattedMessage id="Navbar.Charts" />}
                     href="/chart/mat"
-                    data-umami-event="navigation-mat-new"
+                    data-umami-event="navigation-mat"
                   />
                   <NavItem
                     label={<FormattedMessage id="Navbar.Search" />}
                     href="/search"
-                    data-umami-event="navigation-search-new"
+                    data-umami-event="navigation-search"
                   />
                   {user?.logged_in && (
                     <StyledNavItem href="" onClick={logoutUser}>
