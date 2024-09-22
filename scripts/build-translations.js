@@ -21,16 +21,16 @@ supportedLanguages.forEach((lang) => {
 })
 
 // Build the locale files to be sent to the browser
-const translationsMap = supportedLanguages.reduce((t, lang) => {
-  const formattedLang = lang.replace('_', '-')
-  t[formattedLang] = JSON.parse(
-    readFileSync(`${LANG_DIR}/${formattedLang}.json`)
-  )
-  return t
-}, {})
+// const translationsMap = supportedLanguages.reduce((t, lang) => {
+//   const formattedLang = lang.replace('_', '-')
+//   t[formattedLang] = JSON.parse(
+//     readFileSync(`${LANG_DIR}/${formattedLang}.json`)
+//   )
+//   return t
+// }, {})
 
-const translationsContent = `window.OONITranslations = ${JSON.stringify(
-  translationsMap
-)}`
-writeFileSync(`${LANG_DIR}/translations.js`, translationsContent)
-console.log(`> Wrote translations to: ${LANG_DIR}/translations.js`)
+// const translationsContent = `window.OONITranslations = ${JSON.stringify(
+//   translationsMap
+// )}`
+// writeFileSync(`${LANG_DIR}/translations.js`, translationsContent)
+// console.log(`> Wrote translations to: ${LANG_DIR}/translations.js`)
