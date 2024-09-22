@@ -86,7 +86,7 @@ const Index = () => {
       </Head> */}
       <div className="container">
         {user?.role === 'admin' && (
-          <div className="mt-4 justify-end">
+          <div className="mt-4 flex justify-end">
             <Link href="/findings/dashboard">
               <button className="btn btn-primary-hollow" type="button">
                 {intl.formatMessage({ id: 'Findings.Dashboard.ShortTitle' })}

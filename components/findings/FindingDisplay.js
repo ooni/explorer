@@ -54,11 +54,13 @@ const FindingDisplay = ({ incident }) => {
       </div>
       {!!incident?.tags?.length && (
         <div className="flex mb-4 flex-wrap gap-2">
-          {incident.tags.map((tag) => (
-            <div key={tag}>
-              <Badge>{tag}</Badge>
-            </div>
-          ))}
+          {incident.tags
+            .filter((t) => !t.includes('theme-'))
+            .map((tag) => (
+              <div key={tag}>
+                <Badge>{tag}</Badge>
+              </div>
+            ))}
         </div>
       )}
       <div className="text-gray-600 mb-4">

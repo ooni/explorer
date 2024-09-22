@@ -20,6 +20,7 @@ const defaultValues = {
   start_time: dayjs().startOf('date').format('YYYY-MM-DDTHH:mm'),
   end_time: '',
   tags: [],
+  themes: [],
   CCs: [],
   ASNs: [],
   test_names: [],

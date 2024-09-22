@@ -12,7 +12,7 @@ import {
   MultiSelectCreatable,
   Textarea,
 } from 'ooni-components'
-import { useCallback, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 import { localisedCountries } from 'utils/i18nCountries'
@@ -66,7 +66,7 @@ const schema = yup.object({
   ASNs: yup.array().test({
     name: 'ASNsError',
     message: 'Only numeric values allowed',
-    test: (val) => val.every((v) => !isNaN(v.value)),
+    test: (val) => val.every((v) => !Number.isNaN(v.value)),
   }),
   start_time: yup.string().required(),
   end_time: yup
@@ -95,9 +95,8 @@ const schema = yup.object({
             .map((obj) => obj.messages.map((m) => m.message).join(', '))
             .join(', ')
           return context.createError({ message, path: 'text' })
-        } else {
-          return true
         }
+        return true
       },
     }),
 })
@@ -105,6 +104,25 @@ const schema = yup.object({
 const Form = ({ defaultValues, onSubmit }) => {
   const intl = useIntl()
   const { user } = useUser()
+
+  const themeOptions = useMemo(() => [
+    {
+      value: 'theme-human_rights',
+      label: intl.formatMessage({ id: 'Findings.Themes.Options.HumanRights' }),
+    },
+    {
+      value: 'theme-social_media',
+      label: intl.formatMessage({ id: 'Findings.Themes.Options.SocialMedia' }),
+    },
+    {
+      value: 'theme-im',
+      label: intl.formatMessage({ id: 'Findings.Themes.Options.IM' }),
+    },
+    {
+      value: 'theme-news_media',
+      label: intl.formatMessage({ id: 'Findings.Themes.Options.NewsMedia' }),
+    },
+  ])
 
   defaultValues = {
     ...defaultValues,
@@ -121,7 +139,15 @@ const Form = ({ defaultValues, onSubmit }) => {
       label: testNames[tn] ? intl.formatMessage({ id: testNames[tn].id }) : tn,
       value: tn,
     })),
-    tags: defaultValues.tags.map((t) => ({ label: t, value: t })),
+    tags: defaultValues.tags
+      .filter((t) => !t.includes('theme-'))
+      .map((t) => ({ label: t, value: t })),
+    themes: defaultValues.tags
+      .filter((t) => t.includes('theme-'))
+      .map((tn) => ({
+        label: themeOptions.find((t) => t.value === tn)?.label || tn,
+        value: tn,
+      })),
     ASNs: defaultValues.ASNs.map((as) => ({ label: as, value: as })),
     domains: defaultValues.domains.map((d) => ({ label: d, value: d })),
   }
@@ -165,6 +191,7 @@ const Form = ({ defaultValues, onSubmit }) => {
 
   const submit = (incident) => {
     console.log(incident)
+    const tags = [...incident.tags, ...incident.themes]
     return onSubmit({
       ...incident,
       start_time: `${incident.start_time}T00:00:00Z`,
@@ -175,7 +202,7 @@ const Form = ({ defaultValues, onSubmit }) => {
         ? incident.test_names.map((test_name) => test_name.value)
         : [],
       CCs: incident.CCs.length ? incident.CCs.map((cc) => cc.value) : [],
-      tags: incident.tags.length ? incident.tags.map((t) => t.value) : [],
+      tags: tags.length ? tags.map((t) => t.value) : [],
       ASNs: incident.ASNs.length
         ? incident.ASNs.map((as) => Number(as.value))
         : [],
@@ -306,6 +333,18 @@ const Form = ({ defaultValues, onSubmit }) => {
               placeholder={intl.formatMessage({
                 id: 'Findings.Form.Tags.Placeholder',
               })}
+            />
+          )}
+        />
+        <Controller
+          control={control}
+          name="themes"
+          render={({ field }) => (
+            <MultiSelect
+              className="mb-4"
+              {...field}
+              label={intl.formatMessage({ id: 'Findings.Form.Themes.Label' })}
+              options={themeOptions}
             />
           )}
         />
