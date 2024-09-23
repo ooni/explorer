@@ -119,6 +119,12 @@ const Form = ({ defaultValues, onSubmit }) => {
       label: intl.formatMessage({ id: 'Findings.Themes.Options.IM' }),
     },
     {
+      value: 'theme-circumvention',
+      label: intl.formatMessage({
+        id: 'Findings.Themes.Options.Circumvention',
+      }),
+    },
+    {
       value: 'theme-news_media',
       label: intl.formatMessage({ id: 'Findings.Themes.Options.NewsMedia' }),
     },
