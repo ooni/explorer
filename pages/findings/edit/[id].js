@@ -1,6 +1,5 @@
 import Form from 'components/findings/Form'
 import useUser from 'hooks/useUser'
-import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useEffect, useMemo } from 'react'
@@ -60,14 +59,11 @@ const EditReport = () => {
 
   return (
     <>
-      {/* <Head>
-        <title></title>
-      </Head> */}
       <div className="container">
         <div className="flex justify-between items-center">
           <h1>{intl.formatMessage({ id: 'Findings.Edit.Title' })}</h1>
           <Link href="/findings/dashboard">
-            <button type="button" className="btn btn-pimary-hollow">
+            <button type="button" className="btn btn-primary-hollow">
               {intl.formatMessage({ id: 'Findings.Dashboard.ShortTitle' })}
             </button>
           </Link>

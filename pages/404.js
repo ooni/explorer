@@ -25,7 +25,7 @@ const Custom404 = () => {
                 defaultMessage="We could not find the content you were looking for. Maybe try {measurementLink} or look at {homePageLink}."
                 values={{
                   measurementLink: (
-                    <FormattedMessage id="Error.404.MeasurmentLinkText">
+                    <FormattedMessage id="Error.404.MeasurementLinkText">
                       {(message) => <Link href="/countries">{message}</Link>}
                     </FormattedMessage>
                   ),
