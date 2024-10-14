@@ -114,6 +114,7 @@ const defaultDefaultValues = {
   axis_x: 'measurement_start_day',
   axis_y: '',
   time_grain: 'day',
+  ooni_run_link_id: '',
 }
 
 export const Form = ({ onSubmit, query }) => {
@@ -490,6 +491,20 @@ export const Form = ({ onSubmit, query }) => {
             </div>
           </>
         )}
+        <div className="w-full sm:w-5/12 md:w-4/12 lg:w-2/12">
+          <Controller
+            name="ooni_run_link_id"
+            control={control}
+            render={({ field }) => (
+              <Input
+                label={intl.formatMessage({
+                  id: 'Search.Sidebar.OoniRunLinkId',
+                })}
+                {...field}
+              />
+            )}
+          />
+        </div>
       </div>
       <div className="flex my-8">
         <button

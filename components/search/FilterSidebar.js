@@ -76,6 +76,7 @@ const inputRegEx =
 export const queryToFilterMap = {
   domain: ['domainFilter', ''],
   input: ['inputFilter', ''],
+  ooni_run_link_id: ['ooniRunLinkId', ''],
   category_code: ['categoryFilter', ''],
   probe_cc: ['countryFilter', ''],
   probe_asn: ['asnFilter', ''],
@@ -91,6 +92,7 @@ const FilterSidebar = ({
   countries,
   domainFilter,
   inputFilter,
+  ooniRunLinkId,
   categoryFilter,
   onlyFilter = 'all',
   testNameFilter = 'XX',
@@ -105,6 +107,7 @@ const FilterSidebar = ({
   const defaultValues = {
     domainFilter,
     inputFilter,
+    ooniRunLinkId,
     categoryFilter,
     onlyFilter,
     testNameFilter,
@@ -371,6 +374,7 @@ const FilterSidebar = ({
                   id: 'Search.Sidebar.Input.Placeholder',
                 })}
                 type="text"
+                className="mb-4"
               />
             )}
             rules={{
@@ -384,6 +388,20 @@ const FilterSidebar = ({
           />
         </>
       )}
+
+      <Controller
+        control={control}
+        name="ooniRunLinkId"
+        render={({ field }) => (
+          <Input
+            {...field}
+            label={intl.formatMessage({
+              id: 'Search.Sidebar.OoniRunLinkId',
+            })}
+            type="text"
+          />
+        )}
+      />
 
       {(showConfirmedFilter || showAnomalyFilter) && (
         <>
