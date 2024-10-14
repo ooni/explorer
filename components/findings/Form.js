@@ -107,25 +107,25 @@ const Form = ({ defaultValues, onSubmit }) => {
 
   const themeOptions = useMemo(() => [
     {
-      value: 'theme-human_rights',
+      value: 'human_rights',
       label: intl.formatMessage({ id: 'Findings.Themes.Options.HumanRights' }),
     },
     {
-      value: 'theme-social_media',
+      value: 'social_media',
       label: intl.formatMessage({ id: 'Findings.Themes.Options.SocialMedia' }),
     },
     {
-      value: 'theme-im',
+      value: 'im',
       label: intl.formatMessage({ id: 'Findings.Themes.Options.IM' }),
     },
     {
-      value: 'theme-circumvention',
+      value: 'circumvention',
       label: intl.formatMessage({
         id: 'Findings.Themes.Options.Circumvention',
       }),
     },
     {
-      value: 'theme-news_media',
+      value: 'news_media',
       label: intl.formatMessage({ id: 'Findings.Themes.Options.NewsMedia' }),
     },
   ])
@@ -145,15 +145,11 @@ const Form = ({ defaultValues, onSubmit }) => {
       label: testNames[tn] ? intl.formatMessage({ id: testNames[tn].id }) : tn,
       value: tn,
     })),
-    tags: defaultValues.tags
-      .filter((t) => !t.includes('theme-'))
-      .map((t) => ({ label: t, value: t })),
-    themes: defaultValues.tags
-      .filter((t) => t.includes('theme-'))
-      .map((tn) => ({
-        label: themeOptions.find((t) => t.value === tn)?.label || tn,
-        value: tn,
-      })),
+    tags: defaultValues.tags.map((t) => ({ label: t, value: t })),
+    themes: defaultValues.themes.map((tn) => ({
+      label: themeOptions.find((t) => t.value === tn)?.label || tn,
+      value: tn,
+    })),
     ASNs: defaultValues.ASNs.map((as) => ({ label: as, value: as })),
     domains: defaultValues.domains.map((d) => ({ label: d, value: d })),
   }
@@ -196,8 +192,6 @@ const Form = ({ defaultValues, onSubmit }) => {
   }, [getValues])
 
   const submit = (incident) => {
-    console.log(incident)
-    const tags = [...incident.tags, ...incident.themes]
     return onSubmit({
       ...incident,
       start_time: `${incident.start_time}T00:00:00Z`,
@@ -208,7 +202,8 @@ const Form = ({ defaultValues, onSubmit }) => {
         ? incident.test_names.map((test_name) => test_name.value)
         : [],
       CCs: incident.CCs.length ? incident.CCs.map((cc) => cc.value) : [],
-      tags: tags.length ? tags.map((t) => t.value) : [],
+      tags: incident.tags.length ? incident.tags.map((t) => t.value) : [],
+      themes: incident.themes.length ? incident.themes.map((t) => t.value) : [],
       ASNs: incident.ASNs.length
         ? incident.ASNs.map((as) => Number(as.value))
         : [],
