@@ -75,9 +75,7 @@ const AppsSection = () => (
       </SectionHeader.Title>
     </SectionHeader>
     <SimpleBox>
-      <div className="text-base">
-        <FormattedMarkdown id="Country.Apps.Description" />
-      </div>
+      <FormattedMarkdown id="Country.Apps.Description" />
     </SimpleBox>
     <ChartsContainer />
   </>

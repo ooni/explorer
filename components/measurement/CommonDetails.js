@@ -8,11 +8,7 @@ import { EmbeddedViewContext } from '../../pages/m/[measurement_uid]'
 import { DetailsBox, DetailsBoxTable } from './DetailsBox'
 
 const LoadingRawData = () => {
-  return (
-    <div className="text-base">
-      <FormattedMessage id="General.Loading" />
-    </div>
-  )
+  return <FormattedMessage id="General.Loading" />
 }
 
 const ReactJson = dynamic(() => import('react-json-view'), {

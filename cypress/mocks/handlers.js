@@ -38,14 +38,14 @@ export const handlers = [
 ]
 
 export const failedAccountMetadata = http.get(
-  'https://backend-hel.ooni.org/api/_/account_metadata',
+  'https://api.dev.ooni.io/api/_/account_metadata',
   (req, res, ctx) => {
     return res(ctx.status(401))
   },
 )
 
 export const userAccountMetadata = http.get(
-  'https://backend-hel.ooni.org/api/_/account_metadata',
+  'https://api.dev.ooni.io/api/_/account_metadata',
   (req, res, ctx) => {
     return res(
       ctx.status(200),

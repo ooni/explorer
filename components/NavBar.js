@@ -83,8 +83,23 @@ const SubMenu = () => {
 
   const menuItem = [
     {
-      label: <FormattedMessage id="Navbar.Charts.Circumvention" />,
-      href: '/chart/circumvention',
+      label: <FormattedMessage id="Navbar.SocialMedia" />,
+      href: '/social-media',
+      umami: 'navigation-social-media',
+    },
+    {
+      label: <FormattedMessage id="Navbar.NewsMedia" />,
+      href: '/news-media',
+      umami: 'navigation-news-media',
+    },
+    // {
+    //   label: <FormattedMessage id="Navbar.HumanRights" />,
+    //   href: '/human-rights',
+    //   umami: 'navigation-human-rights',
+    // },
+    {
+      label: <FormattedMessage id="Navbar.Circumvention" />,
+      href: '/circumvention',
       umami: 'navigation-circumvention',
     },
     {
@@ -170,7 +185,7 @@ export const NavBar = ({ color }) => {
                 onClick={() => setShowMenu(!showMenu)}
               />
               <div
-                className={`z-[9999] lg:block ${showMenu ? 'block overflow-y-scroll max-h-full p-8 text-base fixed top-0 right-0 bg-gray-50' : 'hidden'}`}
+                className={`z-[9999] lg:block ${showMenu ? 'block overflow-y-scroll max-h-full p-8 fixed top-0 right-0 bg-gray-50' : 'hidden'}`}
               >
                 {showMenu && (
                   <div className="flex justify-end">
@@ -191,7 +206,7 @@ export const NavBar = ({ color }) => {
                   />
                   <NavItem
                     label={<FormattedMessage id="Navbar.Censorship" />}
-                    href="/chart/circumvention"
+                    href="/social-media"
                     data-umami-event="navigation-censorship"
                   />
                   <NavItem

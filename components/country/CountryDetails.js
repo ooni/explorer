@@ -59,6 +59,7 @@ const CountryDetails = ({ countryCode, overviewStats, reports }) => {
     }
   }, [query])
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (query.since !== since || query.until !== until) {
       const href = {

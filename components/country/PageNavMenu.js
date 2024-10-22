@@ -10,7 +10,7 @@ const HideInLargeScreens = ({ children }) => (
 
 const PageNavItem = ({ link, children }) => (
   <div className="mx-4 my-1">
-    <a className="p-2 text-base text-blue-500" href={link}>
+    <a className="p-2 text-blue-500" href={link}>
       {children}
     </a>
   </div>

@@ -52,11 +52,9 @@ const Chart = memo(function Chart({ queryParams = {}, setState }) {
     if (setState && data?.data) setState(data.data)
   }, [data, setState])
 
-  const headerOptions = { probe_cc: false, subtitle: false }
   const linkParams = { ...queryParams, ...(probe_cc && { probe_cc }) }
 
   return (
-    // <MATContextProvider key={name} test_name={name} {...queryParams}>
     <MATContextProvider {...queryParams}>
       <div className="flex flex-col">
         <div>

@@ -40,7 +40,7 @@ const Login = () => {
           {/* Before logging In */}
           {!token && !submitted && (
             <>
-              <div className="text-base mb-2 text-center">
+              <div className="mb-2 text-center">
                 <FormattedMessage id="Login.EnterEmail" />
               </div>
               <div className="w-[300px] self-center">

@@ -3,6 +3,8 @@ import PropTypes from 'prop-types'
 import { useIntl } from 'react-intl'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
 
+import Link from 'next/link'
+import { formatLongDate } from '../../utils'
 import Flag from '../Flag'
 
 const HighlightBox = ({ countryCode, title, text, dates, footer }) => {
@@ -40,3 +42,49 @@ HighlightBox.propTypes = {
 }
 
 export default HighlightBox
+
+export const FindingBox = ({ incident }) => {
+  const intl = useIntl()
+
+  return (
+    <HighlightBox
+      key={incident.id}
+      countryCode={incident.CCs[0]}
+      title={incident.title}
+      text={incident.short_description}
+      dates={
+        <div className="text-gray-600">
+          <div className=" mb-2">
+            {incident.start_time &&
+              formatLongDate(incident.start_time, intl.locale)}{' '}
+            -{' '}
+            {incident.end_time
+              ? formatLongDate(incident.end_time, intl.locale)
+              : 'ongoing'}
+          </div>
+          <div>
+            {intl.formatMessage(
+              { id: 'Findings.Index.HighLightBox.CreatedOn' },
+              {
+                date:
+                  incident?.create_time &&
+                  formatLongDate(incident?.create_time, intl.locale),
+              },
+            )}
+          </div>
+        </div>
+      }
+      footer={
+        <div className="mx-auto mt-4">
+          <Link href={`/findings/${incident.id}`}>
+            <button className="btn btn-primary-hollow btn-sm" type="button">
+              {intl.formatMessage({
+                id: 'Findings.Index.HighLightBox.ReadMore',
+              })}
+            </button>
+          </Link>
+        </div>
+      }
+    />
+  )
+}
