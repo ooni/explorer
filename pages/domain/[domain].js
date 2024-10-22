@@ -32,7 +32,7 @@ const CountryList = ({ countries }) => {
                 <div className="self-start">
                   <Flag countryCode={key} size={22} border />
                 </div>
-                <div className="text-base font-bold ml-2">
+                <div className="font-bold ml-2">
                   {getLocalisedRegionName(key, intl.locale)}
                 </div>
               </div>
@@ -51,7 +51,6 @@ const swrOptions = {
 }
 
 const ChartContainer = ({ domain, ...props }) => {
-  const intl = useIntl()
   const {
     query: { since, until, probe_cc },
   } = useRouter()

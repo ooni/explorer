@@ -63,11 +63,12 @@ const Chart = memo(function Chart({ testName }) {
     () => ({
       ...fixedQuery,
       test_name: testName,
-      since: since,
-      until: until,
+      since,
+      until,
+      ...(probe_cc && { probe_cc }),
       time_grain: 'day',
     }),
-    [since, testName, until],
+    [since, testName, until, probe_cc],
   )
 
   const apiQuery = useMemo(() => {
@@ -86,16 +87,9 @@ const Chart = memo(function Chart({ testName }) {
       return [null, 0]
     }
 
-    let chartData = data.data.sort((a, b) =>
+    const chartData = data.data.sort((a, b) =>
       new Intl.Collator(intl.locale).compare(a.probe_cc, b.probe_cc),
     )
-
-    const selectedCountries = probe_cc?.length > 1 ? probe_cc.split(',') : []
-    if (selectedCountries.length > 0) {
-      chartData = chartData.filter((d) =>
-        selectedCountries.includes(d.probe_cc),
-      )
-    }
 
     const [reshapedData, rowKeys, rowLabels] = prepareDataForGridChart(
       chartData,

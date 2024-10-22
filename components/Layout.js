@@ -23,6 +23,10 @@ const Layout = ({ children }) => {
     return (
       pathname === '/countries' ||
       pathname === '/domains' ||
+      pathname === '/human-rights' ||
+      pathname === '/social-media' ||
+      pathname === '/news-media' ||
+      pathname === '/circumvention' ||
       pathname === '/networks' ||
       pathname === '/findings' ||
       pathname.match(/^\/country\/\S+/)
@@ -31,7 +35,7 @@ const Layout = ({ children }) => {
 
   return (
     <UserProvider>
-      <div className="site text-sm flex flex-col min-h-[100vh]">
+      <div className="site flex flex-col min-h-[100vh]">
         <div className="flex-[1_0_auto]">
           <Header />
           {navbarSticky ? (

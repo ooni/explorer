@@ -1,17 +1,7 @@
 import axios from 'axios'
 import CountryDetails from 'components/country/CountryDetails'
 import ErrorPage from 'pages/_error'
-
-const getCountryReports = (countryCode, data) => {
-  const reports = data
-    .filter(
-      (article) =>
-        article.tags &&
-        article.tags.indexOf(`country-${countryCode.toLowerCase()}`) > -1,
-    )
-    .map((article) => article)
-  return reports
-}
+import { getReports } from '../../lib/api'
 
 export async function getServerSideProps({ res, query }) {
   const { countryCode } = query
@@ -40,12 +30,13 @@ export async function getServerSideProps({ res, query }) {
       client.get('/api/_/country_overview', {
         params: { probe_cc: countryCode },
       }),
-      client.get('https://ooni.org/pageindex.json'),
     ])
+
     const testCoverage = results[0].data.test_coverage
     const networkCoverage = results[0].data.network_coverage
     const overviewStats = results[1].data
-    const reports = getCountryReports(countryCode, results[2].data)
+
+    const reports = await getReports(`country-${countryCode.toLowerCase()}`)
 
     return {
       props: {

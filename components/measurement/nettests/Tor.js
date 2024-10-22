@@ -96,7 +96,7 @@ const Table = ({ columns, data }) => {
 const ConnectionStatusCell = ({ cell: { value } }) => {
   let statusIcon = null
   if (value === false) {
-    statusIcon = <div className="font-bold text-base text-gray-700">N/A</div>
+    statusIcon = <div className="font-bold text-gray-700">N/A</div>
   } else {
     statusIcon =
       value === null ? (
