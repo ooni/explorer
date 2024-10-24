@@ -75,7 +75,7 @@ const Page = (props) => {
       text={
         <>
           <FormattedMarkdown id="ReachabilityDash.CircumventionTools.Description" />
-          <ul className="columns-4">
+          <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
             {domains.map((d) => (
               <li key={d}>
                 <a href={`#${d}`}>{d}</a>
