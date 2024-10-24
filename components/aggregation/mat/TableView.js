@@ -46,8 +46,6 @@ const noRowsSelected = null
 
 const TableView = ({ data, query, showFilters = true }) => {
   const intl = useIntl()
-  const resetTableRef = useRef(false)
-  const yAxis = query.axis_y
 
   // The incoming data is reshaped to generate:
   // - reshapedData: holds the full set that will be used by GridChart

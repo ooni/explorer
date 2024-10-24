@@ -49,7 +49,6 @@ export const getServerSideProps = async () => {
 }
 
 const Page = (props) => {
-  console.log('props', props)
   const intl = useIntl()
   const domains = SOCIAL_MEDIA_IM_DOMAINS.sort((a, b) => {
     return a.replace('www.', '').localeCompare(b.replace('www.', ''))
@@ -85,7 +84,7 @@ const Page = (props) => {
             viverra ex blandit ullamcorper. Fusce consectetur nunc vel posuere
             vehicula. Quisque vel magna nibh.
           </p>
-          <ul className="columns-4">
+          <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
             {domains.map((d) => (
               <li key={d}>
                 <a href={`#${d}`}>{d}</a>

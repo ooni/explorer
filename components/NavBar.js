@@ -124,7 +124,7 @@ const SubMenu = () => {
         <div className="bg-gray-50">
           <div className="border-b border-gray-200">
             <div className="container">
-              <nav className="-mb-px flex space-x-8">
+              <nav className="-mb-px flex gap-x-8 flex-wrap">
                 {menuItem.map((item) => (
                   <SubNavItem
                     key={item.href}
