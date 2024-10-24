@@ -1,5 +1,3 @@
-/* global module */
-
 // https://nextjs.org/docs/api-reference/next.config.js/introduction
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 const { withSentryConfig } = require('@sentry/nextjs')
@@ -39,6 +37,18 @@ module.exports = withBundleAnalyzer(
       i18n: {
         locales: getSupportedLanguages(),
         defaultLocale: DEFAULT_LOCALE,
+      },
+      async rewrites() {
+        return [
+          {
+            source: '/api/v1/:path*',
+            destination: 'https://api.ooni.org/api/v1/:path*',
+          },
+          {
+            source: '/api/_/:path*',
+            destination: 'https://api.ooni.org/api/_/:path*',
+          },
+        ]
       },
       webpack: (config, options) => {
         const gitCommitSHAShort = process.env.RUN_GIT_COMMIT_SHA_SHORT
