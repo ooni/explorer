@@ -98,19 +98,15 @@ const Chart = ({ queryParams = {}, setState = null, headerOptions = {} }) => {
   return (
     <MATContextProvider {...queryParams}>
       <div className="flex flex-col">
-        {!chartData && !error ? (
-          <ChartSpinLoader />
-        ) : (
-          <>
-            <GridChart
-              data={chartData}
-              rowKeys={rowKeys}
-              rowLabels={rowLabels}
-              header={headerOptions}
-            />
-            {!!chartData?.size && <MATLink query={queryParams} />}
-          </>
-        )}
+        <>
+          <GridChart
+            data={chartData}
+            rowKeys={rowKeys}
+            rowLabels={rowLabels}
+            header={headerOptions}
+          />
+          {!!chartData?.size && <MATLink query={queryParams} />}
+        </>
         {error && (
           <DetailsBox
             content={

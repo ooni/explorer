@@ -1,20 +1,21 @@
 import axios from 'axios'
-import TestGroupBadge, { CategoryBadge } from 'components/Badge'
-import Chart from 'components/DomainChart'
-import Flag from 'components/Flag'
-import { StyledSticky } from 'components/SharedStyledComponents'
-import { GridBox } from 'components/VirtualizedGrid'
-import Form from 'components/domain/Form'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
-import { RecentMeasurements } from 'pages/as/[probe_asn]'
 import { useMemo, useState } from 'react'
 import { useIntl } from 'react-intl'
-import { simpleFetcher } from 'services/fetchers'
 import useSWR from 'swr'
+
+import TestGroupBadge, { CategoryBadge } from 'components/Badge'
+import BlockText from 'components/BlockText'
+import Chart from 'components/Chart'
+import Form from 'components/domain/Form'
+import Flag from 'components/Flag'
+import { StyledSticky } from 'components/SharedStyledComponents'
+import { GridBox } from 'components/VirtualizedGrid'
+import { RecentMeasurements } from 'pages/as/[probe_asn]'
+import { simpleFetcher } from 'services/fetchers'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
-import BlockText from '../../components/BlockText'
 import { sortByKey } from '../../utils'
 
 const CountryList = ({ countries }) => {
@@ -73,7 +74,7 @@ const ChartContainer = ({ domain, ...props }) => {
       <div className="mb-4">
         <TestGroupBadge testName="web_connectivity" />
       </div>
-      <Chart queryParams={queryParams} {...props} />
+      <Chart queryParams={queryParams} />
     </>
   )
 }

@@ -3,17 +3,17 @@ import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { useInView } from 'react-intersection-observer'
 
-type ChartWrapperProps = {
+type ChartIntersectionObserverProps = {
   domain?: string
   testName?: string
   headerOptions?: object
 }
 
-const ChartWrapper = ({
+const ChartIntersectionObserver = ({
   domain,
   testName = 'web_connectivity',
   headerOptions,
-}: ChartWrapperProps) => {
+}: ChartIntersectionObserverProps) => {
   const router = useRouter()
 
   const {
@@ -44,11 +44,7 @@ const ChartWrapper = ({
   return (
     <div ref={ref}>
       {inView ? (
-        <Chart
-          // testName={testName}
-          queryParams={query}
-          headerOptions={headerOptions}
-        />
+        <Chart queryParams={query} headerOptions={headerOptions} />
       ) : (
         <ChartSpinLoader />
       )}
@@ -56,4 +52,4 @@ const ChartWrapper = ({
   )
 }
 
-export default ChartWrapper
+export default ChartIntersectionObserver

@@ -1,7 +1,8 @@
-import Chart from 'components/Chart'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { FormattedMessage } from 'react-intl'
+
+import Chart from 'components/Chart'
 import FormattedMarkdown from '../FormattedMarkdown'
 import ConfirmedBlockedCategory from './ConfirmedBlockedCategory'
 import SectionHeader from './SectionHeader'
