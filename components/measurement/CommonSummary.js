@@ -32,7 +32,7 @@ const CommonSummary = ({
     >
       <div className="container">
         <div className="flex justify-between">
-          <div className="text-base">{formattedDate}</div>
+          <div>{formattedDate}</div>
           <div
             className="flex flex-col items-center cursor-pointer"
             onClick={onVerifyClick}
@@ -62,7 +62,7 @@ const CommonSummary = ({
               </div>
             </Link>
             <Link
-              className="text-base my-2 text-white hover:text-white block"
+              className="my-2 text-white hover:text-white block"
               href={`/as/${network}`}
             >
               {network} {networkName}

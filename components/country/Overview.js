@@ -8,7 +8,7 @@ import { BoxWithTitle } from './boxes'
 
 const ooniBlogBaseURL = 'https://ooni.org'
 
-const FeaturedArticle = ({ link, title }) => (
+export const FeaturedArticle = ({ link, title }) => (
   <div className="py-1">
     <a
       className="text-blue-700"
@@ -55,9 +55,7 @@ const Overview = ({
       <h4 className="my-2">
         <FormattedMessage id="Country.Overview.Heading.TestsByClass" />
       </h4>
-      <div className="text-base">
-        <FormattedMarkdown id="Country.Overview.Heading.TestsByClass.Description" />
-      </div>
+      <FormattedMarkdown id="Country.Overview.Heading.TestsByClass.Description" />
       <Calendar startYear={measuredSince} />
       <BoxWithTitle
         title={<FormattedMessage id="Country.Overview.FeaturedResearch" />}

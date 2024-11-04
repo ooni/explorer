@@ -116,13 +116,13 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
 
   return (
     <div className="flex flex-col" style={{ ...theme.tooltip.container }}>
-      <div className="flex my-1 text-base">
+      <div className="flex my-1">
         <div className="font-bold mr-auto">{derivedTitle}</div>
         <MdClear title="Close" strokeWidth={2} onClick={onClose} />
       </div>
       <div className="flex flex-col pr-4 my-1">
         {dataKeysToShow.map((k) => (
-          <div className="my-1 text-base" key={k}>
+          <div className="my-1" key={k}>
             <div className="flex items-center">
               <div className="mr-4">
                 <Chip color={colorMap[k]} />

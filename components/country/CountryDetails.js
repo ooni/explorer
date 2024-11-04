@@ -63,6 +63,7 @@ const CountryDetails = ({
     }
   }, [query])
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (query.since !== since || query.until !== until) {
       const href = {
@@ -77,6 +78,7 @@ const CountryDetails = ({
     }
   }, [])
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   const fetchTestCoverageData = useCallback(
     (testGroupList) => {
       const fetcher = async (testGroupList) => {

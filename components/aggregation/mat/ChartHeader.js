@@ -25,9 +25,10 @@ const getTestNameGroupName = (testNameArray) => {
     return [testNames[testNameArray[0]]?.id || testNameArray[0]]
 
   const testGroup = new Set()
-  testNameArray.forEach((t) => {
+  for (const t of testNameArray) {
     testNames[t]?.group && testGroup.add(testNames[t]?.group)
-  })
+  }
+
   // if all test names belong to a single group, show group name
   if (testGroup.size === 1) {
     const testGroupName = testGroups[[...testGroup][0]].id
@@ -37,18 +38,18 @@ const getTestNameGroupName = (testNameArray) => {
   return testNameArray.map((t) => testNames[t].id)
 }
 
-export const SubtitleStr = ({ query }) => {
+export const SubtitleStr = ({ query, options }) => {
   const intl = useIntl()
   const params = new Set()
 
-  if (query.test_name) {
+  if (options.test_name && query.test_name) {
     const testNameQuery = Array.isArray(query.test_name)
       ? query.test_name
       : [query.test_name]
     const testNames = getTestNameGroupName(testNameQuery)
-    testNames.forEach((testName) => {
+    for (const testName of testNames) {
       params.add(intl.formatMessage({ id: testName, defaultMessage: '' }))
-    })
+    }
   }
   if (query.domain) {
     params.add(query.domain.split(',').join(', '))
@@ -75,27 +76,35 @@ export const SubtitleStr = ({ query }) => {
  * @param {Object} options - Object with flags for header components eg. { probe_cc: false }
  * @param {boolean} options.probe_cc - Show/hide country name
  */
-export const ChartHeader = ({ options = {} }) => {
+export const ChartHeader = ({ options: opts }) => {
   const intl = useIntl()
   const [query] = useMATContext()
+  const options = {
+    subtitle: true,
+    probe_cc: true,
+    test_name: true,
+    legend: true,
+    logo: true,
+    ...opts,
+  }
 
-  const subTitle = <SubtitleStr query={query} />
+  const subTitle = <SubtitleStr query={query} options={options} />
   return (
     <>
       <div>
-        {options.subtitle !== false && (
+        {options.subtitle && (
           <span className="text-2xl font-bold my-4 leading-normal">
             {subTitle}
           </span>
         )}
-        {options.probe_cc !== false && query.probe_cc && (
-          <span className="text-base font-bold leading-normal">
+        {options.probe_cc && query.probe_cc && (
+          <span className="font-bold leading-normal">
             <CountryNameLabel countryCode={query.probe_cc} />
           </span>
         )}
       </div>
       <div className="flex mb-2 justify-between text-sm">
-        {options.legend !== false && (
+        {options.legend && (
           <div className="flex justify-center my-2 flex-wrap">
             <Legend
               label={intl.formatMessage({ id: 'MAT.Table.Header.ok_count' })}
@@ -121,7 +130,7 @@ export const ChartHeader = ({ options = {} }) => {
             />
           </div>
         )}
-        <OONILogo className="opacity-50" height="32px" />
+        {options.logo && <OONILogo className="opacity-50" height="32px" />}
       </div>
     </>
   )
