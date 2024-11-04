@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router'
 
-import ChartWrapper from 'components/ChartWrapper'
+import ChartIntersectionObserver from 'components/ChartIntersectionObserver'
 import FindingsSection from 'components/FindingsSection'
 import ReportsSection from 'components/ReportsSection'
 import {
@@ -88,7 +88,7 @@ const ThematicPage = ({
                 {filteredApps?.map((testName: string) => (
                   <div key={testName} className="my-6">
                     <AnchorLinkLower id={testName} />
-                    <ChartWrapper
+                    <ChartIntersectionObserver
                       testName={testName}
                       headerOptions={{ probe_cc: false }}
                     />
@@ -102,7 +102,7 @@ const ThematicPage = ({
               {filteredDomains?.map((domain: string) => (
                 <div key={domain} className="my-6">
                   <AnchorLinkLower id={domain} />
-                  <ChartWrapper
+                  <ChartIntersectionObserver
                     domain={domain}
                     testName="web_connectivity"
                     headerOptions={{ probe_cc: false, test_name: false }}

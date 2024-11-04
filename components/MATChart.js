@@ -87,35 +87,26 @@ const MATChart = ({ query, showFilters = true }) => {
     swrOptions,
   )
 
-  const showLoadingIndicator = useMemo(() => isValidating, [isValidating])
-
   return (
     <>
       <MATContextProvider queryParams={query}>
         {error && <NoCharts message={error?.info ?? JSON.stringify(error)} />}
-        {showLoadingIndicator ? (
-          // <h2>{intl.formatMessage({ id: 'General.Loading' })}</h2>
-          <ChartSpinLoader height={580} />
+        {isValidating ? (
+          <ChartSpinLoader height="500px" />
         ) : (
           <>
-            {data?.data?.result?.length > 0 ? (
-              <>
-                {data && data.data.dimension_count === 0 && (
-                  <FunnelChart data={data.data.result} />
-                )}
-                {data && data.data.dimension_count === 1 && (
-                  <StackedBarChart data={data.data.result} query={query} />
-                )}
-                {data && data.data.dimension_count > 1 && (
-                  <TableView
-                    data={data.data.result}
-                    query={query}
-                    showFilters={showFilters}
-                  />
-                )}
-              </>
-            ) : (
-              <NoCharts />
+            {data && data.data.dimension_count === 0 && (
+              <FunnelChart data={data.data.result} />
+            )}
+            {data && data.data.dimension_count === 1 && (
+              <StackedBarChart data={data.data.result} query={query} />
+            )}
+            {data && data.data.dimension_count > 1 && (
+              <TableView
+                data={data.data.result}
+                query={query}
+                showFilters={showFilters}
+              />
             )}
           </>
         )}

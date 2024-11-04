@@ -84,6 +84,7 @@ export const ChartHeader = ({ options: opts }) => {
     probe_cc: true,
     test_name: true,
     legend: true,
+    logo: true,
     ...opts,
   }
 
@@ -129,7 +130,7 @@ export const ChartHeader = ({ options: opts }) => {
             />
           </div>
         )}
-        <OONILogo className="opacity-50" height="32px" />
+        {options.logo && <OONILogo className="opacity-50" height="32px" />}
       </div>
     </>
   )

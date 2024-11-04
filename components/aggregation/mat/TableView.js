@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useIntl } from 'react-intl'
 
 import Filters from './Filters'
@@ -29,11 +29,11 @@ const prepareDataforTable = (data, query, locale) => {
       measurement_count: 0,
     }
 
-    rowData.forEach((d) => {
-      countKeys.forEach((countKey) => {
+    for (const d of rowData) {
+      for (const countKey of countKeys) {
         row[countKey] = row[countKey] + d[countKey]
-      })
-    })
+      }
+    }
 
     table.push(row)
   }
