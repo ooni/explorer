@@ -1,13 +1,14 @@
 import bufferFrom from 'buffer-from'
 import deepmerge from 'deepmerge'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { Cross, Tick } from 'ooni-components/icons'
 import PropTypes from 'prop-types'
+import { Fragment } from 'react'
+import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 import url from 'url'
 
-import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
-
-import { Fragment } from 'react'
+import ConditionalWrapper from '../../ConditionalWrapper'
 import { DetailsBox } from '../DetailsBox'
 import StatusInfo from '../StatusInfo'
 
@@ -286,6 +287,22 @@ const StyledLink = ({ children, href }) => (
   </Link>
 )
 
+const UrlWrapper = ({ href }) => {
+  const {
+    query: { webview },
+  } = useRouter()
+  return (
+    <ConditionalWrapper
+      condition={!webview}
+      wrapper={(children) => (
+        <StyledLink href={getSearchHref(href)}>{children}</StyledLink>
+      )}
+    >
+      {href}
+    </ConditionalWrapper>
+  )
+}
+
 const WebConnectivityDetails = ({
   isConfirmed,
   isAnomaly,
@@ -312,6 +329,10 @@ const WebConnectivityDetails = ({
     },
   } = validateMeasurement(measurement ?? {})
 
+  const {
+    query: { webview },
+  } = useRouter()
+
   const intl = useIntl()
   const date = new Intl.DateTimeFormat(intl.locale, {
     dateStyle: 'long',
@@ -336,7 +357,8 @@ const WebConnectivityDetails = ({
         values={{
           date,
           WebsiteURL: (
-            <StyledLink href={getSearchHref(input)}>{input}</StyledLink>
+            <UrlWrapper href={input} />
+            // <StyledLink href={getSearchHref(input)}>{input}</StyledLink>
           ),
           network: probe_asn,
           country,
@@ -351,7 +373,8 @@ const WebConnectivityDetails = ({
         values={{
           date,
           WebsiteURL: (
-            <StyledLink href={getSearchHref(input)}>{input}</StyledLink>
+            <UrlWrapper href={input} />
+            // <StyledLink href={getSearchHref(input)}>{input}</StyledLink>
           ),
           network: probe_asn,
           country,
@@ -381,7 +404,8 @@ const WebConnectivityDetails = ({
         values={{
           date,
           WebsiteURL: (
-            <StyledLink href={getSearchHref(input)}>{input}</StyledLink>
+            <UrlWrapper href={input} />
+            // <StyledLink href={getSearchHref(input)}>{input}</StyledLink>
           ),
           'link-to-docs': (string) => (
             <a href="https://ooni.org/support/faq/#why-do-false-positives-occur">
@@ -414,7 +438,8 @@ const WebConnectivityDetails = ({
         values={{
           date,
           WebsiteURL: (
-            <StyledLink href={getSearchHref(input)}>{input}</StyledLink>
+            <UrlWrapper href={input} />
+            // <StyledLink href={getSearchHref(input)}>{input}</StyledLink>
           ),
           network: probe_asn,
           country,
@@ -441,7 +466,8 @@ const WebConnectivityDetails = ({
         values={{
           date,
           WebsiteURL: (
-            <StyledLink href={getSearchHref(input)}>{input}</StyledLink>
+            <UrlWrapper href={input} />
+            // <StyledLink href={getSearchHref(input)}>{input}</StyledLink>
           ),
           network: probe_asn,
           country,
@@ -469,7 +495,8 @@ const WebConnectivityDetails = ({
         values={{
           date,
           WebsiteURL: (
-            <StyledLink href={getSearchHref(input)}>{input}</StyledLink>
+            <UrlWrapper href={input} />
+            // <StyledLink href={getSearchHref(input)}>{input}</StyledLink>
           ),
           network: probe_asn,
           country,
@@ -505,12 +532,19 @@ const WebConnectivityDetails = ({
         statusInfo: (
           <StatusInfo
             title={
-              <Link
-                className="text-white underline hover:text-white"
-                href={`/domain/${hostname}`}
+              <ConditionalWrapper
+                condition={!webview}
+                wrapper={(children) => (
+                  <Link
+                    className="text-white underline hover:text-white"
+                    href={`/domain/${hostname}`}
+                  >
+                    {children}
+                  </Link>
+                )}
               >
                 {input}
-              </Link>
+              </ConditionalWrapper>
             }
             message={reason}
           />

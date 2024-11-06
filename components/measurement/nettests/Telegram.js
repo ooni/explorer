@@ -88,7 +88,6 @@ const TelegramDetails = ({ measurement, render }) => {
             title={
               <FormattedMessage id="Measurement.Details.Telegram.Endpoint.Status.Heading" />
             }
-            collapsed={false}
           >
             {tcp_connect.map((connection, index) => (
               <div className="flex" key={index}>

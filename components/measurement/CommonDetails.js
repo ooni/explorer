@@ -48,7 +48,7 @@ const CommonDetails = ({
   const { query } = useRouter()
   const queryString = new URLSearchParams(query)
   const rawMsmtDownloadURL = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/raw_measurement?${queryString}`
-  const [collapsed, setCollapsed] = useState(1)
+  const [collapsed, setCollapsed] = useState(query?.webview ? 50 : 1)
 
   const intl = useIntl()
   const unavailable = intl.formatMessage({
@@ -165,7 +165,6 @@ const CommonDetails = ({
       {/* Raw Measurement */}
       <div className="flex">
         <DetailsBox
-          collapsed={false}
           title={
             <div className="flex flex-1 px-4 justify-between flex-col md:flex-row items-center bg-gray-200">
               <div>
@@ -173,34 +172,36 @@ const CommonDetails = ({
                   id: 'Measurement.CommonDetails.RawMeasurement.Heading',
                 })}
               </div>
-              <div className="flex">
-                <a
-                  className="text-blue-700"
-                  href={rawMsmtDownloadURL}
-                  download={downloadFilename}
-                >
+              {!query.webview && (
+                <div className="flex">
+                  <a
+                    className="text-blue-700"
+                    href={rawMsmtDownloadURL}
+                    download={downloadFilename}
+                  >
+                    <button
+                      type="button"
+                      className="btn btn-primary px-8 mx-4 text-sm"
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      {intl.formatMessage({
+                        id: 'Measurement.CommonDetails.RawMeasurement.Download',
+                      })}
+                    </button>
+                  </a>
                   <button
                     type="button"
                     className="btn btn-primary px-8 mx-4 text-sm"
-                    onClick={(e) => e.stopPropagation()}
+                    onClick={(e) => {
+                      expandAllBtn(e)
+                    }}
                   >
                     {intl.formatMessage({
-                      id: 'Measurement.CommonDetails.RawMeasurement.Download',
+                      id: 'Measurement.CommonDetails.RawMeasurement.Expand',
                     })}
                   </button>
-                </a>
-                <button
-                  type="button"
-                  className="btn btn-primary px-8 mx-4 text-sm"
-                  onClick={(e) => {
-                    expandAllBtn(e)
-                  }}
-                >
-                  {intl.formatMessage({
-                    id: 'Measurement.CommonDetails.RawMeasurement.Expand',
-                  })}
-                </button>
-              </div>
+                </div>
+              )}
             </div>
           }
           content={

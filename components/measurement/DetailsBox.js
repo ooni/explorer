@@ -1,3 +1,4 @@
+import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
 import { useCallback, useState } from 'react'
 import { MdExpandLess } from 'react-icons/md'
@@ -35,29 +36,38 @@ export const DetailsBox = ({
   className,
   ...rest
 }) => {
+  const {
+    query: { webview },
+  } = useRouter()
+
   const [isOpen, setIsOpen] = useState(!collapsed)
 
   const onToggle = useCallback(() => {
     setIsOpen(!isOpen)
-  }, [isOpen, setIsOpen])
+  }, [isOpen])
 
   return (
     <div
       className={twMerge('border-2 border-gray-200 w-full mb-4', className)}
       {...rest}
     >
-      {title && (
-        <div
-          className="flex justify-between font-bold text-lg cursor-pointer px-4 py-2 bg-gray-200 items-center"
-          onClick={onToggle}
-        >
-          {title}
-          <MdExpandLess
-            className={`cursor-pointer bg-white rounded-[50%] transition-transform ${isOpen ? 'rotate-0' : 'rotate-180'}`}
-            size={36}
-          />
-        </div>
-      )}
+      {title &&
+        (webview ? (
+          <div className="flex justify-between font-bold text-lg cursor-pointer px-4 py-2 bg-gray-200 items-center">
+            {title}
+          </div>
+        ) : (
+          <div
+            className="flex justify-between font-bold text-lg cursor-pointer px-4 py-2 bg-gray-200 items-center"
+            onClick={onToggle}
+          >
+            {title}
+            <MdExpandLess
+              className={`cursor-pointer bg-white rounded-[50%] transition-transform ${isOpen ? 'rotate-0' : 'rotate-180'}`}
+              size={36}
+            />
+          </div>
+        ))}
       {isOpen && (
         <div className="p-4 flex-wrap overflow-x-auto">
           {content || children}

@@ -1,10 +1,11 @@
 import axios from 'axios'
 import Head from 'next/head'
+import { useRouter } from 'next/router'
 import { colors } from 'ooni-components'
 import PropTypes from 'prop-types'
 import { useMemo, useState } from 'react'
+import { useIntl } from 'react-intl'
 import useSWR from 'swr'
-import { getLocalisedRegionName } from '/utils/i18nCountries'
 
 import CommonDetails from 'components/measurement/CommonDetails'
 import CommonSummary from 'components/measurement/CommonSummary'
@@ -14,12 +15,11 @@ import HeadMetadata from 'components/measurement/HeadMetadata'
 import Hero from 'components/measurement/Hero'
 import MeasurementContainer from 'components/measurement/MeasurementContainer'
 import SummaryText from 'components/measurement/SummaryText'
-
 import useUser from 'hooks/useUser'
 import ErrorPage from 'pages/_error'
-import { useIntl } from 'react-intl'
 import NotFound from '../../components/NotFound'
 import { fetcher } from '/lib/api'
+import { getLocalisedRegionName } from '/utils/i18nCountries'
 
 const pageColors = {
   default: colors.blue['500'],
@@ -138,7 +138,7 @@ const Measurement = ({
           value,
         }))
       : []
-  }, [userFeedback])
+  }, [userFeedback, intl])
 
   // Add the 'AS' prefix to probe_asn when API chooses to send just the number
   probe_asn = typeof probe_asn === 'number' ? `AS${probe_asn}` : probe_asn
@@ -181,6 +181,10 @@ const Measurement = ({
               headMetadata,
               details,
             }) => {
+              const {
+                query: { webview },
+              } = useRouter()
+
               const color =
                 failure === true ? pageColors.error : pageColors[status]
               const info = scores?.msg ?? statusInfo
@@ -222,12 +226,14 @@ const Measurement = ({
                     onVerifyClick={() => setShowModal(true)}
                   />
                   <div className="container">
-                    <DetailsHeader
-                      testName={test_name}
-                      runtime={raw_measurement?.test_runtime}
-                      notice={legacy}
-                      url={`measurement/${measurement_uid}`}
-                    />
+                    {!webview && (
+                      <DetailsHeader
+                        testName={test_name}
+                        runtime={raw_measurement?.test_runtime}
+                        notice={legacy}
+                        url={`measurement/${measurement_uid}`}
+                      />
+                    )}
                     {summaryText && (
                       <SummaryText
                         testName={test_name}
