@@ -9,11 +9,8 @@ import Footer from './Footer'
 import Header from './Header'
 import NavBar from './NavBar'
 
-const Layout = ({ children }) => {
-  const {
-    pathname,
-    query: { webview },
-  } = useRouter()
+const Layout = ({ children, isEmbeddedView }) => {
+  const { pathname } = useRouter()
 
   const navbarColor = useMemo(() => {
     return pathname === '/' ||
@@ -38,7 +35,7 @@ const Layout = ({ children }) => {
       <div className="site text-sm flex flex-col min-h-[100vh]">
         <div className="flex-[1_0_auto]">
           <Header />
-          {!webview && (
+          {!isEmbeddedView && (
             <ConditionalWrapper
               condition={!!navbarSticky}
               wrapper={(children) => (
@@ -52,7 +49,7 @@ const Layout = ({ children }) => {
             {children}
           </div>
         </div>
-        {!webview && (
+        {!isEmbeddedView && (
           <div className="flex-shrink-0">
             <Footer />
           </div>

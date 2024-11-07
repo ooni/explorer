@@ -30,10 +30,11 @@ const pageColors = {
   confirmed: colors.red['700'],
 }
 
-export async function getServerSideProps({ query }) {
+export async function getServerSideProps({ query, req }) {
   let initialProps = {
     error: null,
     userFeedback: null,
+    isEmbeddedView: !!req.headers['enable-embedded-view'] || !!query?.webview,
   }
 
   const measurement_uid = query?.measurement_uid
