@@ -1,4 +1,3 @@
-import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
 import { useCallback, useContext, useState } from 'react'
 import { MdExpandLess } from 'react-icons/md'
@@ -11,7 +10,7 @@ export const DetailsBoxTable = ({ title, items, className }) => (
     className={className}
     content={items.map((item, index) => (
       <div className="flex flex-wrap" key={index}>
-        <div className="md:w-1/4 font-bold">{item.label}</div>
+        <div className="md:w-1/4 font-bold pe-4">{item.label}</div>
         <div className="md:w-3/4 break-words">{item.value}</div>
       </div>
     ))}
@@ -47,7 +46,7 @@ export const DetailsBox = ({
 
   return (
     <div
-      className={twMerge('border-2 border-gray-200 w-full mb-4', className)}
+      className={twMerge('border-2 border-gray-200 w-full mb-8', className)}
       {...rest}
     >
       {title &&

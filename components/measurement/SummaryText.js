@@ -32,7 +32,7 @@ const SummaryText = ({ testName, network, country, date, content }) => {
   }
   return (
     <div className="flex">
-      <div className="py-8 text-xl">{textToRender}</div>
+      <div className="py-8 text-base md:text-xl">{textToRender}</div>
     </div>
   )
 }

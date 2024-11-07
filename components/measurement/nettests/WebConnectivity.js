@@ -1,7 +1,6 @@
 import bufferFrom from 'buffer-from'
 import deepmerge from 'deepmerge'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import { Cross, Tick } from 'ooni-components/icons'
 import PropTypes from 'prop-types'
 import { Fragment, useContext } from 'react'
@@ -131,7 +130,7 @@ const FailureString = ({ failure }) => {
   }
 
   return (
-    <div>
+    <div className="flex">
       <Cross size={20} /> {failure}
     </div>
   )

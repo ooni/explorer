@@ -139,37 +139,31 @@ const CommonDetails = ({
   return (
     <>
       {showResolverItems && (
-        <div className="flex my-8">
-          {/* Resolver data */}
-          <DetailsBoxTable
-            title={
-              <FormattedMessage id="Measurement.CommonDetails.Label.Resolver" />
-            }
-            items={resolverItems}
-          />
-        </div>
+        // Resolver data
+        <DetailsBoxTable
+          title={
+            <FormattedMessage id="Measurement.CommonDetails.Label.Resolver" />
+          }
+          items={resolverItems}
+        />
       )}
-      <div className="flex my-8">
-        {/* Metadata: platform, probe, MK version etc. */}
-        <DetailsBoxTable items={items} className="bg-gray-200" />
-      </div>
+      {/* Metadata: platform, probe, MK version etc. */}
+      <DetailsBoxTable items={items} className="bg-gray-200" />
       {/* User Feedback */}
       {!!userFeedbackItems.length && (
-        <div className="flex my-8">
-          <DetailsBoxTable
-            title={
-              <FormattedMessage id="Measurement.CommonDetails.Label.UserFeedback" />
-            }
-            items={userFeedbackItems}
-          />
-        </div>
+        <DetailsBoxTable
+          title={
+            <FormattedMessage id="Measurement.CommonDetails.Label.UserFeedback" />
+          }
+          items={userFeedbackItems}
+        />
       )}
       {/* Raw Measurement */}
       <div className="flex">
         <DetailsBox
           title={
-            <div className="flex flex-1 px-4 justify-between flex-col md:flex-row items-center bg-gray-200">
-              <div>
+            <div className="flex flex-1 justify-between flex-col md:flex-row items-center bg-gray-200">
+              <div className="self-start">
                 {intl.formatMessage({
                   id: 'Measurement.CommonDetails.RawMeasurement.Heading',
                 })}

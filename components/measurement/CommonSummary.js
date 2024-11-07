@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
 import { useContext } from 'react'
 import { MdOutlineFactCheck } from 'react-icons/md'
