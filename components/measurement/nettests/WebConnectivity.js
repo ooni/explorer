@@ -4,10 +4,11 @@ import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Cross, Tick } from 'ooni-components/icons'
 import PropTypes from 'prop-types'
-import { Fragment } from 'react'
+import { Fragment, useContext } from 'react'
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 import url from 'url'
 
+import { EmbeddedViewContext } from '../../../pages/m/[measurement_uid]'
 import ConditionalWrapper from '../../ConditionalWrapper'
 import { DetailsBox } from '../DetailsBox'
 import StatusInfo from '../StatusInfo'
@@ -288,12 +289,11 @@ const StyledLink = ({ children, href }) => (
 )
 
 const UrlWrapper = ({ href }) => {
-  const {
-    query: { webview },
-  } = useRouter()
+  const isEmbeddedView = useContext(EmbeddedViewContext)
+
   return (
     <ConditionalWrapper
-      condition={!webview}
+      condition={!isEmbeddedView}
       wrapper={(children) => (
         <StyledLink href={getSearchHref(href)}>{children}</StyledLink>
       )}
@@ -329,9 +329,7 @@ const WebConnectivityDetails = ({
     },
   } = validateMeasurement(measurement ?? {})
 
-  const {
-    query: { webview },
-  } = useRouter()
+  const isEmbeddedView = useContext(EmbeddedViewContext)
 
   const intl = useIntl()
   const date = new Intl.DateTimeFormat(intl.locale, {
@@ -533,7 +531,7 @@ const WebConnectivityDetails = ({
           <StatusInfo
             title={
               <ConditionalWrapper
-                condition={!webview}
+                condition={!isEmbeddedView}
                 wrapper={(children) => (
                   <Link
                     className="text-white underline hover:text-white"

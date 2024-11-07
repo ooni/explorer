@@ -3,7 +3,7 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { colors } from 'ooni-components'
 import PropTypes from 'prop-types'
-import { useMemo, useState } from 'react'
+import { createContext, useMemo, useState } from 'react'
 import { useIntl } from 'react-intl'
 import useSWR from 'swr'
 
@@ -29,6 +29,8 @@ const pageColors = {
   down: colors.gray['600'],
   confirmed: colors.red['700'],
 }
+
+export const EmbeddedViewContext = createContext(false)
 
 export async function getServerSideProps({ query, req }) {
   let initialProps = {
@@ -118,6 +120,7 @@ const Measurement = ({
   measurement_uid,
   report_id,
   scores,
+  isEmbeddedView,
   ...rest
 }) => {
   const intl = useIntl()
@@ -148,7 +151,7 @@ const Measurement = ({
   }
 
   return (
-    <>
+    <EmbeddedViewContext.Provider value={isEmbeddedView}>
       <Head>
         <title>{intl.formatMessage({ id: 'General.OoniExplorer' })}</title>
       </Head>
@@ -182,10 +185,6 @@ const Measurement = ({
               headMetadata,
               details,
             }) => {
-              const {
-                query: { webview },
-              } = useRouter()
-
               const color =
                 failure === true ? pageColors.error : pageColors[status]
               const info = scores?.msg ?? statusInfo
@@ -227,7 +226,7 @@ const Measurement = ({
                     onVerifyClick={() => setShowModal(true)}
                   />
                   <div className="container">
-                    {!webview && (
+                    {!isEmbeddedView && (
                       <DetailsHeader
                         testName={test_name}
                         runtime={raw_measurement?.test_runtime}
@@ -259,7 +258,7 @@ const Measurement = ({
           />
         </>
       )}
-    </>
+    </EmbeddedViewContext.Provider>
   )
 }
 

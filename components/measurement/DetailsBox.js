@@ -1,8 +1,9 @@
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
-import { useCallback, useState } from 'react'
+import { useCallback, useContext, useState } from 'react'
 import { MdExpandLess } from 'react-icons/md'
 import { twMerge } from 'tailwind-merge'
+import { EmbeddedViewContext } from '../../pages/m/[measurement_uid]'
 
 export const DetailsBoxTable = ({ title, items, className }) => (
   <DetailsBox
@@ -36,9 +37,7 @@ export const DetailsBox = ({
   className,
   ...rest
 }) => {
-  const {
-    query: { webview },
-  } = useRouter()
+  const isEmbeddedView = useContext(EmbeddedViewContext)
 
   const [isOpen, setIsOpen] = useState(!collapsed)
 
@@ -52,7 +51,7 @@ export const DetailsBox = ({
       {...rest}
     >
       {title &&
-        (webview ? (
+        (isEmbeddedView ? (
           <div className="flex justify-between font-bold text-lg cursor-pointer px-4 py-2 bg-gray-200 items-center">
             {title}
           </div>

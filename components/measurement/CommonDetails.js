@@ -1,10 +1,10 @@
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
-import { colors } from 'ooni-components'
 import PropTypes from 'prop-types'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 
+import { EmbeddedViewContext } from '../../pages/m/[measurement_uid]'
 import { DetailsBox, DetailsBoxTable } from './DetailsBox'
 
 const LoadingRawData = () => {
@@ -45,10 +45,12 @@ const CommonDetails = ({
     resolver_network_name,
   } = measurement ?? {}
 
+  const isEmbeddedView = useContext(EmbeddedViewContext)
+
   const { query } = useRouter()
   const queryString = new URLSearchParams(query)
   const rawMsmtDownloadURL = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/raw_measurement?${queryString}`
-  const [collapsed, setCollapsed] = useState(query?.webview ? 50 : 1)
+  const [collapsed, setCollapsed] = useState(isEmbeddedView ? 50 : 1)
 
   const intl = useIntl()
   const unavailable = intl.formatMessage({
@@ -172,7 +174,7 @@ const CommonDetails = ({
                   id: 'Measurement.CommonDetails.RawMeasurement.Heading',
                 })}
               </div>
-              {!query.webview && (
+              {!isEmbeddedView && (
                 <div className="flex">
                   <a
                     className="text-blue-700"

@@ -1,8 +1,10 @@
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
+import { useContext } from 'react'
 import { MdOutlineFactCheck } from 'react-icons/md'
 import { useIntl } from 'react-intl'
+import { EmbeddedViewContext } from '../../pages/m/[measurement_uid]'
 import ConditionalWrapper from '../ConditionalWrapper'
 import Flag from '../Flag'
 
@@ -16,9 +18,7 @@ const CommonSummary = ({
   hero,
   onVerifyClick,
 }) => {
-  const {
-    query: { webview },
-  } = useRouter()
+  const isEmbeddedView = useContext(EmbeddedViewContext)
   const intl = useIntl()
   const startTime = measurement_start_time
   const network = probe_asn
@@ -38,7 +38,7 @@ const CommonSummary = ({
       <div className="container">
         <div className="flex justify-between">
           <div className="text-base w-1/2">{formattedDate}</div>
-          {!webview && (
+          {!isEmbeddedView && (
             <div
               className="flex flex-col items-center cursor-pointer"
               onClick={onVerifyClick}
@@ -58,7 +58,7 @@ const CommonSummary = ({
         <div className="flex mt-2">
           <div className="lg:w-1/2">
             <ConditionalWrapper
-              condition={!webview}
+              condition={!isEmbeddedView}
               wrapper={(children) => (
                 <Link
                   className="text-white hover:text-white block underline"
@@ -76,7 +76,7 @@ const CommonSummary = ({
               </div>
             </ConditionalWrapper>
             <ConditionalWrapper
-              condition={!webview}
+              condition={!isEmbeddedView}
               wrapper={(children) => (
                 <Link
                   className="text-white hover:text-white block underline"
