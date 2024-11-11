@@ -32,7 +32,7 @@ const Layout = ({ children, isEmbeddedView }) => {
 
   return (
     <UserProvider>
-      <div className="site text-sm flex flex-col min-h-[100vh]">
+      <div className="site flex flex-col min-h-[100vh]">
         <div className="flex-[1_0_auto]">
           <Header />
           {!isEmbeddedView && (

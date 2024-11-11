@@ -68,7 +68,7 @@ const RequestResponseContainer = ({ request }) => {
               <FormattedMessage id="Measurement.Details.Websites.HTTP.Request.URL" />
             </h5>
           </div>
-          <div className="w-full mb-2 p-4 bg-gray-200 text-sm">
+          <div className="w-full mb-2 p-4 bg-gray-200 text-sm overflow-auto">
             <pre>
               {request.request.method} {request.request.url}
             </pre>
@@ -79,7 +79,7 @@ const RequestResponseContainer = ({ request }) => {
               <FormattedMessage id="Measurement.Details.Websites.HTTP.Response.Headers" />
             </h5>
           </div>
-          <div className="w-full mb-2 p-4 bg-gray-200 text-sm">
+          <div className="w-full mb-2 p-4 bg-gray-200 text-sm overflow-auto">
             <pre className="whitespace-pre-wrap break-words text-sm">
               {request.response.headers ? (
                 Object.keys(request.response.headers).map((header, index) => (
@@ -140,50 +140,11 @@ FailureString.propTypes = {
   failure: PropTypes.string,
 }
 
-const DnsNarrowAnswerCell = (props) => (
-  <div className="w-1/12">{props.children}</div>
-)
-
-const DnsAnswerCell = (props) => <div className="w-1/4">{props.children}</div>
-
-DnsAnswerCell.propTypes = {
-  children: PropTypes.any,
-}
-
 const dnsAnswerIpInfo = (dnsAnswer) => {
   const asn = dnsAnswer.asn ? `AS${dnsAnswer.asn}` : 'Unknown AS'
   const asOrgName = dnsAnswer.as_org_name ? `(${dnsAnswer.as_org_name})` : ''
 
   return `${asn} ${asOrgName}`.trim()
-}
-
-const DnsAnswerRow = ({
-  name = 'Name',
-  netClass = 'Class',
-  ttl = 'TTL',
-  type = 'Type',
-  data = 'DATA',
-  answer_ip_info = 'Answer IP Info',
-  header = false,
-}) => (
-  <div className={`flex flex-wrap mb-2 ${header && 'font-bold'}`}>
-    <DnsAnswerCell>{name}</DnsAnswerCell>
-    <DnsNarrowAnswerCell>{netClass}</DnsNarrowAnswerCell>
-    <DnsNarrowAnswerCell>{ttl}</DnsNarrowAnswerCell>
-    <DnsNarrowAnswerCell>{type}</DnsNarrowAnswerCell>
-    <DnsAnswerCell>{data}</DnsAnswerCell>
-    <DnsAnswerCell>{answer_ip_info}</DnsAnswerCell>
-  </div>
-)
-
-DnsAnswerRow.propTypes = {
-  name: PropTypes.string,
-  netClass: PropTypes.string,
-  ttl: PropTypes.number,
-  type: PropTypes.string,
-  data: PropTypes.string,
-  answer_ip_info: PropTypes.string,
-  header: PropTypes.bool,
 }
 
 const QueryContainer = ({ query }) => {
@@ -213,29 +174,50 @@ const QueryContainer = ({ query }) => {
         </div>
       )}
       {!failure && (
-        <div className="w-full">
-          <DnsAnswerRow header />
-          {Array.isArray(answers) &&
-            answers.map((dnsAnswer, index) => (
-              <DnsAnswerRow
-                key={index}
-                name="@"
-                netClass="IN"
-                ttl={dnsAnswer.ttl}
-                type={dnsAnswer.answer_type}
-                data={
-                  dnsAnswer.answer_type === 'A'
-                    ? dnsAnswer.ipv4
-                    : dnsAnswer.answer_type === 'AAAA'
-                      ? dnsAnswer.ipv6
-                      : dnsAnswer.answer_type === 'CNAME'
-                        ? dnsAnswer.hostname
-                        : null // for any other answer_type, DATA column will be empty
-                }
-                answer_ip_info={dnsAnswerIpInfo(dnsAnswer)}
-              />
-            ))}
-        </div>
+        <table class="w-full flex flex-row flex-no-wrap sm:inline-table table-fixed">
+          <thead>
+            <tr class="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0">
+              <th class="py-1 pe-1 text-left">Name</th>
+              <th class="py-1 pe-1 text-left">Class</th>
+              <th class="py-1 pe-1 text-left">TTL</th>
+              <th class="py-1 pe-1 text-left">Type</th>
+              <th class="py-1 pe-1 text-left">DATA</th>
+              <th class="py-1 pe-1 text-left">Answer IP Info</th>
+            </tr>
+          </thead>
+          <tbody class="flex-1 sm:flex-none">
+            {Array.isArray(answers) &&
+              answers.map((dnsAnswer, index) => (
+                <tr
+                  key={index}
+                  class="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0"
+                >
+                  <td class="py-1 pe-1">@</td>
+                  <td class="py-1 pe-1">IN</td>
+                  <td class="py-1 pe-1">{dnsAnswer.ttl || <>&nbsp;</>}</td>
+                  <td class="py-1 pe-1">
+                    {dnsAnswer.answer_type || <>&nbsp;</>}
+                  </td>
+                  <td class="py-1 pe-1">
+                    {
+                      dnsAnswer.answer_type === 'A' ? (
+                        dnsAnswer.ipv4
+                      ) : dnsAnswer.answer_type === 'AAAA' ? (
+                        dnsAnswer.ipv6
+                      ) : dnsAnswer.answer_type === 'CNAME' ? (
+                        dnsAnswer.hostname
+                      ) : (
+                        <>&nbsp;</>
+                      ) // for any other answer_type, DATA column will be empty
+                    }
+                  </td>
+                  <td class="py-1">
+                    {dnsAnswerIpInfo(dnsAnswer) || <>&nbsp;</>}
+                  </td>
+                </tr>
+              ))}
+          </tbody>
+        </table>
       )}
     </div>
   )

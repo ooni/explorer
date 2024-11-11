@@ -46,7 +46,7 @@ export const DetailsBox = ({
 
   return (
     <div
-      className={twMerge('border-2 border-gray-200 w-full mb-8', className)}
+      className={twMerge('border-2 border-gray-200 w-full my-8', className)}
       {...rest}
     >
       {title &&
@@ -67,7 +67,7 @@ export const DetailsBox = ({
           </div>
         ))}
       {isOpen && (
-        <div className="p-4 flex-wrap overflow-x-auto">
+        <div className="p-4 flex-wrap overflow-x-auto text-sm">
           {content || children}
         </div>
       )}

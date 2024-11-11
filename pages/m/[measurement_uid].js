@@ -226,14 +226,12 @@ const Measurement = ({
                     onVerifyClick={() => setShowModal(true)}
                   />
                   <div className="container">
-                    {!isEmbeddedView && (
-                      <DetailsHeader
-                        testName={test_name}
-                        runtime={raw_measurement?.test_runtime}
-                        notice={legacy}
-                        url={`measurement/${measurement_uid}`}
-                      />
-                    )}
+                    <DetailsHeader
+                      testName={test_name}
+                      runtime={raw_measurement?.test_runtime}
+                      notice={legacy}
+                      url={`measurement/${measurement_uid}`}
+                    />
                     {summaryText && (
                       <SummaryText
                         testName={test_name}

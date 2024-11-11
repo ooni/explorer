@@ -31,8 +31,11 @@ const SummaryText = ({ testName, network, country, date, content }) => {
     textToRender = content
   }
   return (
-    <div className="flex">
-      <div className="py-8 text-base md:text-xl">{textToRender}</div>
+    <div
+      className="my-8 text-base md:text-xl"
+      style={{ overflowWrap: 'anywhere' }}
+    >
+      {textToRender}
     </div>
   )
 }

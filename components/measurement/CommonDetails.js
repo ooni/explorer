@@ -21,7 +21,7 @@ const ReactJson = dynamic(() => import('react-json-view'), {
 })
 
 const JsonViewer = ({ src, collapsed }) => (
-  <div className="[&_.string-value]:overflow-ellipsis [&_.string-value]:max-w-[800px] [&_.string-value]:overflow-hidden [&_.string-value]:inline-block">
+  <div className="text-xs md:text-sm [&_.string-value]:overflow-ellipsis [&_.string-value]:max-w-[800px] [&_.string-value]:overflow-hidden [&_.string-value]:inline-block">
     <ReactJson collapsed={collapsed} src={src} name={null} indentWidth={2} />
   </div>
 )
@@ -159,58 +159,56 @@ const CommonDetails = ({
         />
       )}
       {/* Raw Measurement */}
-      <div className="flex">
-        <DetailsBox
-          title={
-            <div className="flex flex-1 justify-between flex-col md:flex-row items-center bg-gray-200">
-              <div className="self-start">
-                {intl.formatMessage({
-                  id: 'Measurement.CommonDetails.RawMeasurement.Heading',
-                })}
-              </div>
-              {!isEmbeddedView && (
-                <div className="flex">
-                  <a
-                    className="text-blue-700"
-                    href={rawMsmtDownloadURL}
-                    download={downloadFilename}
-                  >
-                    <button
-                      type="button"
-                      className="btn btn-primary px-8 mx-4 text-sm"
-                      onClick={(e) => e.stopPropagation()}
-                    >
-                      {intl.formatMessage({
-                        id: 'Measurement.CommonDetails.RawMeasurement.Download',
-                      })}
-                    </button>
-                  </a>
+      <DetailsBox
+        title={
+          <div className="flex flex-1 justify-between flex-col md:flex-row items-center bg-gray-200">
+            <div className="self-start">
+              {intl.formatMessage({
+                id: 'Measurement.CommonDetails.RawMeasurement.Heading',
+              })}
+            </div>
+            {!isEmbeddedView && (
+              <div className="flex">
+                <a
+                  className="text-blue-700"
+                  href={rawMsmtDownloadURL}
+                  download={downloadFilename}
+                >
                   <button
                     type="button"
                     className="btn btn-primary px-8 mx-4 text-sm"
-                    onClick={(e) => {
-                      expandAllBtn(e)
-                    }}
+                    onClick={(e) => e.stopPropagation()}
                   >
                     {intl.formatMessage({
-                      id: 'Measurement.CommonDetails.RawMeasurement.Expand',
+                      id: 'Measurement.CommonDetails.RawMeasurement.Download',
                     })}
                   </button>
-                </div>
-              )}
-            </div>
-          }
-          content={
-            measurement && typeof measurement === 'object' ? (
-              <div className="flex bg-white p-4" style={{ direction: 'ltr' }}>
-                <JsonViewer src={measurement} collapsed={collapsed} />
+                </a>
+                <button
+                  type="button"
+                  className="btn btn-primary px-8 mx-4 text-sm"
+                  onClick={(e) => {
+                    expandAllBtn(e)
+                  }}
+                >
+                  {intl.formatMessage({
+                    id: 'Measurement.CommonDetails.RawMeasurement.Expand',
+                  })}
+                </button>
               </div>
-            ) : (
-              <FormattedMessage id="Measurement.CommonDetails.RawMeasurement.Unavailable" />
-            )
-          }
-        />
-      </div>
+            )}
+          </div>
+        }
+        content={
+          measurement && typeof measurement === 'object' ? (
+            <div className="flex bg-white" style={{ direction: 'ltr' }}>
+              <JsonViewer src={measurement} collapsed={collapsed} />
+            </div>
+          ) : (
+            <FormattedMessage id="Measurement.CommonDetails.RawMeasurement.Unavailable" />
+          )
+        }
+      />
     </>
   )
 }
