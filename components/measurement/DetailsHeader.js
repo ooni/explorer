@@ -23,18 +23,20 @@ const DetailsHeader = ({ testName, runtime, notice, url }) => {
       <div className="flex mb-8 mt-4 gap-1 flex-col md:flex-row">
         <div className="flex items-center">
           <TestGroupBadge testName={testName} />
-          <div className="ml-2">
-            <a
-              className="text-blue-700 md:text-xl flex items-center"
-              href={metadata.info}
-            >
-              {metadata.name}
-              &nbsp;
-              <small>
-                <MdOpenInNew />
-              </small>
-            </a>
-          </div>
+          {!isEmbeddedView && (
+            <div className="ml-2">
+              <a
+                className="text-blue-700 md:text-xl flex items-center"
+                href={metadata.info}
+              >
+                {metadata.name}
+                &nbsp;
+                <small>
+                  <MdOpenInNew />
+                </small>
+              </a>
+            </div>
+          )}
         </div>
         <div className="mx-auto">{notice}</div>
         {runtime && (

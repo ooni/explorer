@@ -335,10 +335,7 @@ const WebConnectivityDetails = ({
         id="Measurement.SummaryText.Websites.Failed"
         values={{
           date,
-          WebsiteURL: (
-            <UrlWrapper href={input} />
-            // <StyledLink href={getSearchHref(input)}>{input}</StyledLink>
-          ),
+          WebsiteURL: <UrlWrapper href={input} />,
           network: probe_asn,
           country,
         }}
@@ -351,10 +348,7 @@ const WebConnectivityDetails = ({
         id="Measurement.SummaryText.Websites.ConfirmedBlocked"
         values={{
           date,
-          WebsiteURL: (
-            <UrlWrapper href={input} />
-            // <StyledLink href={getSearchHref(input)}>{input}</StyledLink>
-          ),
+          WebsiteURL: <UrlWrapper href={input} />,
           network: probe_asn,
           country,
         }}
@@ -382,15 +376,15 @@ const WebConnectivityDetails = ({
         id="Measurement.SummaryText.Websites.Anomaly"
         values={{
           date,
-          WebsiteURL: (
-            <UrlWrapper href={input} />
-            // <StyledLink href={getSearchHref(input)}>{input}</StyledLink>
-          ),
-          'link-to-docs': (string) => (
-            <a href="https://ooni.org/support/faq/#why-do-false-positives-occur">
-              {string}
-            </a>
-          ),
+          WebsiteURL: <UrlWrapper href={input} />,
+          'link-to-docs': (string) =>
+            isEmbeddedView ? (
+              string
+            ) : (
+              <a href="https://ooni.org/support/faq/#why-do-false-positives-occur">
+                {string}
+              </a>
+            ),
           network: probe_asn,
           country,
           reason,
@@ -416,10 +410,7 @@ const WebConnectivityDetails = ({
         id="Measurement.SummaryText.Websites.Accessible"
         values={{
           date,
-          WebsiteURL: (
-            <UrlWrapper href={input} />
-            // <StyledLink href={getSearchHref(input)}>{input}</StyledLink>
-          ),
+          WebsiteURL: <UrlWrapper href={input} />,
           network: probe_asn,
           country,
         }}
@@ -444,10 +435,7 @@ const WebConnectivityDetails = ({
         id="Measurement.SummaryText.Websites.Down"
         values={{
           date,
-          WebsiteURL: (
-            <UrlWrapper href={input} />
-            // <StyledLink href={getSearchHref(input)}>{input}</StyledLink>
-          ),
+          WebsiteURL: <UrlWrapper href={input} />,
           network: probe_asn,
           country,
         }}
@@ -473,10 +461,7 @@ const WebConnectivityDetails = ({
         id="Measurement.SummaryText.Websites.Failed"
         values={{
           date,
-          WebsiteURL: (
-            <UrlWrapper href={input} />
-            // <StyledLink href={getSearchHref(input)}>{input}</StyledLink>
-          ),
+          WebsiteURL: <UrlWrapper href={input} />,
           network: probe_asn,
           country,
         }}
@@ -533,115 +518,111 @@ const WebConnectivityDetails = ({
         details: (
           <>
             {/* Failures */}
-            <div className="flex">
-              <DetailsBox
-                title={
-                  <FormattedMessage id="Measurement.Details.Websites.Failures.Heading" />
-                }
-                content={
-                  <div className="flex mb-2 flex-wrap">
-                    <div className="w-1/3">
-                      <FormattedMessage id="Measurement.Details.Websites.Failures.Label.HTTP" />
-                    </div>
-                    <div className="w-2/3">
-                      <FailureString failure={http_experiment_failure} />
-                    </div>
-                    <div className="w-1/3">
-                      <FormattedMessage id="Measurement.Details.Websites.Failures.Label.DNS" />
-                    </div>
-                    <div className="w-2/3">
-                      <FailureString failure={dns_experiment_failure} />
-                    </div>
-                    <div className="w-1/3">
-                      <FormattedMessage id="Measurement.Details.Websites.Failures.Label.Control" />
-                    </div>
-                    <div className="w-2/3">
-                      <FailureString failure={control_failure} />
-                    </div>
+
+            <DetailsBox
+              title={
+                <FormattedMessage id="Measurement.Details.Websites.Failures.Heading" />
+              }
+              content={
+                <div className="flex mb-2 flex-wrap">
+                  <div className="w-1/2 md:w-1/3">
+                    <FormattedMessage id="Measurement.Details.Websites.Failures.Label.HTTP" />
                   </div>
-                }
-              />
-            </div>
+                  <div className="w-1/2 md:w-2/3">
+                    <FailureString failure={http_experiment_failure} />
+                  </div>
+                  <div className="w-1/2 md:w-1/3">
+                    <FormattedMessage id="Measurement.Details.Websites.Failures.Label.DNS" />
+                  </div>
+                  <div className="w-1/2 md:w-2/3">
+                    <FailureString failure={dns_experiment_failure} />
+                  </div>
+                  <div className="w-1/2 md:w-1/3">
+                    <FormattedMessage id="Measurement.Details.Websites.Failures.Label.Control" />
+                  </div>
+                  <div className="w-1/2 md:w-2/3">
+                    <FailureString failure={control_failure} />
+                  </div>
+                </div>
+              }
+            />
+
             {/* DNS Queries */}
-            <div className="flex">
-              <DetailsBox
-                title={
-                  <FormattedMessage id="Measurement.Details.Websites.DNSQueries.Heading" />
-                }
-                content={
-                  Array.isArray(queries) ? (
-                    <>
-                      <div className="flex flex-wrap mb-2">
-                        <div className="mr-1">
-                          <strong>
-                            <FormattedMessage id="Measurement.Details.Websites.DNSQueries.Label.Resolver" />
-                            :
-                          </strong>
-                        </div>
-                        <div>{client_resolver || '(unknown)'}</div>
+
+            <DetailsBox
+              title={
+                <FormattedMessage id="Measurement.Details.Websites.DNSQueries.Heading" />
+              }
+              content={
+                Array.isArray(queries) ? (
+                  <>
+                    <div className="flex flex-wrap mb-2">
+                      <div className="mr-1">
+                        <strong>
+                          <FormattedMessage id="Measurement.Details.Websites.DNSQueries.Label.Resolver" />
+                          :
+                        </strong>
                       </div>
-                      <div className="w-full">
-                        {queries.map((query, index) => (
-                          <QueryContainer key={index} query={query} />
-                        ))}
-                      </div>
-                    </>
-                  ) : (
-                    <FormattedMessage id="General.NoData" />
-                  )
-                }
-              />
-            </div>
+                      <div>{client_resolver || '(unknown)'}</div>
+                    </div>
+                    <div className="w-full">
+                      {queries.map((query, index) => (
+                        <QueryContainer key={index} query={query} />
+                      ))}
+                    </div>
+                  </>
+                ) : (
+                  <FormattedMessage id="General.NoData" />
+                )
+              }
+            />
+
             {/* TCP COnnections */}
-            <div className="flex">
-              <DetailsBox
-                title={
-                  <FormattedMessage id="Measurement.Details.Websites.TCP.Heading" />
-                }
-                content={
-                  tcpConnections.length > 0 ? (
-                    tcpConnections.map((connection, index) => (
-                      <div className="flex" key={index}>
-                        <div>
-                          <strong>{connection.destination}</strong>:{' '}
-                          {connection.failure
-                            ? `${intl.formatMessage({ id: 'Measurement.Details.Websites.TCP.ConnectionTo.Failed' })} (${connection.failure})`
-                            : intl.formatMessage({
-                                id: 'Measurement.Details.Websites.TCP.ConnectionTo.Success',
-                              })}
-                        </div>
+
+            <DetailsBox
+              title={
+                <FormattedMessage id="Measurement.Details.Websites.TCP.Heading" />
+              }
+              content={
+                tcpConnections.length > 0 ? (
+                  tcpConnections.map((connection, index) => (
+                    <div className="flex" key={index}>
+                      <div>
+                        <strong>{connection.destination}</strong>:{' '}
+                        {connection.failure
+                          ? `${intl.formatMessage({ id: 'Measurement.Details.Websites.TCP.ConnectionTo.Failed' })} (${connection.failure})`
+                          : intl.formatMessage({
+                              id: 'Measurement.Details.Websites.TCP.ConnectionTo.Success',
+                            })}
                       </div>
-                    ))
-                  ) : (
-                    <FormattedMessage id="General.NoData" />
-                  )
-                }
-              />
-            </div>
+                    </div>
+                  ))
+                ) : (
+                  <FormattedMessage id="General.NoData" />
+                )
+              }
+            />
+
             {/* I would like us to enrich the HTTP response body section with
               information about every request and response as this is a very common
             thing we look at when investigating a case. */}
-            <div className="flex">
-              <DetailsBox
-                title={
-                  <FormattedMessage id="Measurement.Details.Websites.HTTP.Heading" />
-                }
-                content={
-                  Array.isArray(requests) ? (
-                    <div className="w-full">
-                      {requests.map((request, index) => (
-                        <RequestResponseContainer
-                          key={index}
-                          request={request}
-                        />
-                      ))}
-                    </div>
-                  ) : (
-                    <FormattedMessage id="General.NoData" />
-                  )
-                }
-              />
-            </div>
+
+            <DetailsBox
+              title={
+                <FormattedMessage id="Measurement.Details.Websites.HTTP.Heading" />
+              }
+              content={
+                Array.isArray(requests) ? (
+                  <div className="w-full">
+                    {requests.map((request, index) => (
+                      <RequestResponseContainer key={index} request={request} />
+                    ))}
+                  </div>
+                ) : (
+                  <FormattedMessage id="General.NoData" />
+                )
+              }
+            />
           </>
         ),
       })}
