@@ -22,7 +22,6 @@ export const firaSans = Fira_Sans({
 })
 
 export default function App({ Component, pageProps, err }) {
-  console.log('pageProps', pageProps)
   const router = useRouter()
 
   useEffect(() => {
