@@ -40,7 +40,7 @@ const Hero = ({ status, icon, label, info }) => {
   }
 
   return (
-    <div className="text-white my-8">
+    <div className="text-white my-7">
       <div className="font-normal text-2xl">
         <div className="flex my-2 justify-center items-center">
           {icon} <div>{label}</div>

@@ -52,7 +52,7 @@ export default function App({ Component, pageProps, err }) {
         }
       `}</style>
       <LocaleProvider>
-        <Layout isEmbeddedView={!!pageProps?.isEmbeddedView}>
+        <Layout>
           <Component {...pageProps} err={err} />
         </Layout>
       </LocaleProvider>

@@ -63,27 +63,32 @@ const TelegramDetails = ({ measurement, render }) => {
     },
     details: (
       <>
-        <div className="flex gap-8 mb-8">
-          <AccessPointStatus
-            icon={<MdPhoneAndroid />}
-            label={
-              <FormattedMessage id="Measurement.Details.Telegram.Endpoint.Label.Mobile" />
-            }
-            ok={telegramDesktopOK}
-          />
-          <AccessPointStatus
-            icon={<MdWebAsset />}
-            label={
-              <FormattedMessage id="Measurement.Details.Telegram.Endpoint.Label.Web" />
-            }
-            ok={telegramWebOK}
-          />
+        <div className="flex mb-8">
+          <div className="w-1/4">
+            <AccessPointStatus
+              icon={<MdPhoneAndroid />}
+              label={
+                <FormattedMessage id="Measurement.Details.Telegram.Endpoint.Label.Mobile" />
+              }
+              ok={telegramDesktopOK}
+            />
+          </div>
+          <div className="w-1/4">
+            <AccessPointStatus
+              icon={<MdWebAsset />}
+              label={
+                <FormattedMessage id="Measurement.Details.Telegram.Endpoint.Label.Web" />
+              }
+              ok={telegramWebOK}
+            />
+          </div>
         </div>
         {Array.isArray(tcp_connect) && tcp_connect.length > 0 && (
           <DetailsBox
             title={
               <FormattedMessage id="Measurement.Details.Telegram.Endpoint.Status.Heading" />
             }
+            collapsed={false}
           >
             {tcp_connect.map((connection, index) => (
               <div className="flex" key={index}>

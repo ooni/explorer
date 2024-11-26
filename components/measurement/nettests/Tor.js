@@ -208,7 +208,7 @@ const TorDetails = ({ isAnomaly, isFailure, measurement, render }) => {
           <>
             {!!Object.keys(testKeys).length && (
               <>
-                <div className="flex gap-8 my-8">
+                <div className="flex my-8">
                   <AccessPointStatus
                     width={1 / 2}
                     label={

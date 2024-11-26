@@ -25,7 +25,7 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
     },
   })
 
-  let summaryText = ' '
+  let summaryText = ''
   let statusMessage = []
 
   if (!isWorking) {
@@ -44,7 +44,7 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
       })
     }
 
-    summaryText += ' '
+    summaryText += ''
 
     if (dnsBlocking) {
       summaryText += intl.formatMessage({
@@ -84,19 +84,23 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
     },
     details: (
       <>
-        <div className="flex gap-8 mb-8">
-          <AccessPointStatus
-            label={
-              <FormattedMessage id="Measurement.Details.FacebookMessenger.DNS.Label.Title" />
-            }
-            ok={!dnsBlocking}
-          />
-          <AccessPointStatus
-            label={
-              <FormattedMessage id="Measurement.Details.FacebookMessenger.TCP.Label.Title" />
-            }
-            ok={!tcpBlocking}
-          />
+        <div className="flex mb-8">
+          <div className="w-1/4">
+            <AccessPointStatus
+              label={
+                <FormattedMessage id="Measurement.Details.FacebookMessenger.DNS.Label.Title" />
+              }
+              ok={!dnsBlocking}
+            />
+          </div>
+          <div className="w-1/4">
+            <AccessPointStatus
+              label={
+                <FormattedMessage id="Measurement.Details.FacebookMessenger.TCP.Label.Title" />
+              }
+              ok={!tcpBlocking}
+            />
+          </div>
         </div>
         <DetailsBox
           title={

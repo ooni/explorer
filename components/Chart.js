@@ -95,13 +95,16 @@ const Chart = memo(function Chart({
         )}
         {error && (
           <DetailsBox
+            collapsed={false}
             content={
-              <details>
-                <summary>
-                  <span>Error: {error.message}</span>
-                </summary>
-                <pre>{JSON.stringify(error, null, 2)}</pre>
-              </details>
+              <>
+                <details>
+                  <summary>
+                    <span>Error: {error.message}</span>
+                  </summary>
+                  <pre>{JSON.stringify(error, null, 2)}</pre>
+                </details>
+              </>
             }
           />
         )}

@@ -62,29 +62,36 @@ const WhatsAppDetails = ({ isAnomaly, scores, measurement, render }) => {
     },
     details: (
       <>
-        <div className="mb-8 flex gap-8 md:gap-12">
-          <AccessPointStatus
-            icon={<MdPhoneAndroid />}
-            label={
-              <FormattedMessage id="Measurement.Details.WhatsApp.Endpoint.Label.Mobile" />
-            }
-            ok={endpointsAccessible}
-          />
-
-          <AccessPointStatus
-            icon={<MdWebAsset />}
-            label={
-              <FormattedMessage id="Measurement.Details.WhatsApp.Endpoint.Label.Web" />
-            }
-            ok={webAccessible}
-          />
-          <AccessPointStatus
-            icon={<MdPersonAdd />}
-            label={
-              <FormattedMessage id="Measurement.Details.WhatsApp.Endpoint.Label.Registration" />
-            }
-            ok={registrationServerAccessible}
-          />
+        <div className="mb-8 w-1/2">
+          <div className="flex">
+            <div className="w-1/3">
+              <AccessPointStatus
+                icon={<MdPhoneAndroid />}
+                label={
+                  <FormattedMessage id="Measurement.Details.WhatsApp.Endpoint.Label.Mobile" />
+                }
+                ok={endpointsAccessible}
+              />
+            </div>
+            <div className="w-1/3">
+              <AccessPointStatus
+                icon={<MdWebAsset />}
+                label={
+                  <FormattedMessage id="Measurement.Details.WhatsApp.Endpoint.Label.Web" />
+                }
+                ok={webAccessible}
+              />
+            </div>
+            <div className="w-1/3">
+              <AccessPointStatus
+                icon={<MdPersonAdd />}
+                label={
+                  <FormattedMessage id="Measurement.Details.WhatsApp.Endpoint.Label.Registration" />
+                }
+                ok={registrationServerAccessible}
+              />
+            </div>
+          </div>
         </div>
         {Array.isArray(tcp_connect) && tcp_connect.length > 0 && (
           <>

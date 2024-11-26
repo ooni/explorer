@@ -312,7 +312,10 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
   })
 
   return (
-    <DetailsBox title={intl.formatMessage({ id: 'MAT.Table.Filters' })}>
+    <DetailsBox
+      title={intl.formatMessage({ id: 'MAT.Table.Filters' })}
+      collapsed={false}
+    >
       <div className="flex flex-col">
         <div className="flex mb-4 items-center">
           <button

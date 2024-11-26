@@ -1,11 +1,10 @@
 import axios from 'axios'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
 import { colors } from 'ooni-components'
 import PropTypes from 'prop-types'
-import { createContext, useMemo, useState } from 'react'
-import { useIntl } from 'react-intl'
+import { useMemo, useState } from 'react'
 import useSWR from 'swr'
+import { getLocalisedRegionName } from '/utils/i18nCountries'
 
 import CommonDetails from 'components/measurement/CommonDetails'
 import CommonSummary from 'components/measurement/CommonSummary'
@@ -15,11 +14,12 @@ import HeadMetadata from 'components/measurement/HeadMetadata'
 import Hero from 'components/measurement/Hero'
 import MeasurementContainer from 'components/measurement/MeasurementContainer'
 import SummaryText from 'components/measurement/SummaryText'
+
 import useUser from 'hooks/useUser'
 import ErrorPage from 'pages/_error'
+import { useIntl } from 'react-intl'
 import NotFound from '../../components/NotFound'
 import { fetcher } from '/lib/api'
-import { getLocalisedRegionName } from '/utils/i18nCountries'
 
 const pageColors = {
   default: colors.blue['500'],
@@ -30,13 +30,10 @@ const pageColors = {
   confirmed: colors.red['700'],
 }
 
-export const EmbeddedViewContext = createContext(false)
-
-export async function getServerSideProps({ query, req }) {
+export async function getServerSideProps({ query }) {
   let initialProps = {
     error: null,
     userFeedback: null,
-    isEmbeddedView: !!req.headers['enable-embedded-view'] || !!query?.webview,
   }
 
   const measurement_uid = query?.measurement_uid
@@ -120,7 +117,6 @@ const Measurement = ({
   measurement_uid,
   report_id,
   scores,
-  isEmbeddedView,
   ...rest
 }) => {
   const intl = useIntl()
@@ -142,7 +138,7 @@ const Measurement = ({
           value,
         }))
       : []
-  }, [userFeedback, intl])
+  }, [userFeedback])
 
   // Add the 'AS' prefix to probe_asn when API chooses to send just the number
   probe_asn = typeof probe_asn === 'number' ? `AS${probe_asn}` : probe_asn
@@ -151,7 +147,7 @@ const Measurement = ({
   }
 
   return (
-    <EmbeddedViewContext.Provider value={isEmbeddedView}>
+    <>
       <Head>
         <title>{intl.formatMessage({ id: 'General.OoniExplorer' })}</title>
       </Head>
@@ -256,7 +252,7 @@ const Measurement = ({
           />
         </>
       )}
-    </EmbeddedViewContext.Provider>
+    </>
   )
 }
 
