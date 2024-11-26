@@ -22,10 +22,11 @@ export const firaSans = Fira_Sans({
 })
 
 export default function App({ Component, pageProps, err }) {
+  console.log('pageProps', pageProps)
   const router = useRouter()
 
   useEffect(() => {
-    const handleStart = (url) => {
+    const handleStart = () => {
       NProgress.start()
     }
     const handleStop = () => {
@@ -52,7 +53,7 @@ export default function App({ Component, pageProps, err }) {
         }
       `}</style>
       <LocaleProvider>
-        <Layout>
+        <Layout isEmbeddedView={false}>
           <Component {...pageProps} err={err} />
         </Layout>
       </LocaleProvider>

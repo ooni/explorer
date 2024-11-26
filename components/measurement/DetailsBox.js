@@ -1,7 +1,8 @@
 import PropTypes from 'prop-types'
-import { useCallback, useState } from 'react'
+import { useCallback, useContext, useState } from 'react'
 import { MdExpandLess } from 'react-icons/md'
 import { twMerge } from 'tailwind-merge'
+import { EmbeddedViewContext } from '../../pages/m/[measurement_uid]'
 
 export const DetailsBoxTable = ({ title, items, className }) => (
   <DetailsBox
@@ -9,7 +10,7 @@ export const DetailsBoxTable = ({ title, items, className }) => (
     className={className}
     content={items.map((item, index) => (
       <div className="flex flex-wrap" key={index}>
-        <div className="md:w-1/4 font-bold">{item.label}</div>
+        <div className="md:w-1/4 font-bold pe-4">{item.label}</div>
         <div className="md:w-3/4 break-words">{item.value}</div>
       </div>
     ))}
@@ -39,11 +40,11 @@ export const DetailsBox = ({
 
   const onToggle = useCallback(() => {
     setIsOpen(!isOpen)
-  }, [isOpen, setIsOpen])
+  }, [isOpen])
 
   return (
     <div
-      className={twMerge('border-2 border-gray-200 w-full mb-4', className)}
+      className={twMerge('border-2 border-gray-200 w-full my-8', className)}
       {...rest}
     >
       {title && (
@@ -59,7 +60,7 @@ export const DetailsBox = ({
         </div>
       )}
       {isOpen && (
-        <div className="p-4 flex-wrap overflow-x-auto">
+        <div className="p-4 flex-wrap overflow-x-auto text-sm">
           {content || children}
         </div>
       )}

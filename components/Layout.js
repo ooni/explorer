@@ -4,11 +4,12 @@ import { useMemo } from 'react'
 import { StyledStickyNavBar } from 'components/SharedStyledComponents'
 import { UserProvider } from 'hooks/useUser'
 import { useRouter } from 'next/router'
+// import ConditionalWrapper from './ConditionalWrapper'
 import Footer from './Footer'
 import Header from './Header'
 import NavBar from './NavBar'
 
-const Layout = ({ children }) => {
+const Layout = ({ children, isEmbeddedView }) => {
   const { pathname } = useRouter()
 
   const navbarColor = useMemo(() => {
