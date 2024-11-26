@@ -141,7 +141,7 @@ const NdtDetails = ({ measurement, render }) => {
         )}
       </div>
     ),
-    details: <div>{!isFailed && performanceDetails}</div>,
+    details: <>{!isFailed && performanceDetails}</>,
   })
 }
 

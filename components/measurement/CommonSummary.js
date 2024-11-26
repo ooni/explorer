@@ -1,7 +1,10 @@
 import Link from 'next/link'
 import PropTypes from 'prop-types'
+import { useContext } from 'react'
 import { MdOutlineFactCheck } from 'react-icons/md'
 import { useIntl } from 'react-intl'
+import { EmbeddedViewContext } from '../../pages/m/[measurement_uid]'
+import ConditionalWrapper from '../ConditionalWrapper'
 import Flag from '../Flag'
 
 const CommonSummary = ({
@@ -14,6 +17,7 @@ const CommonSummary = ({
   hero,
   onVerifyClick,
 }) => {
+  const isEmbeddedView = useContext(EmbeddedViewContext)
   const intl = useIntl()
   const startTime = measurement_start_time
   const network = probe_asn
@@ -32,27 +36,36 @@ const CommonSummary = ({
     >
       <div className="container">
         <div className="flex justify-between">
-          <div className="text-base">{formattedDate}</div>
-          <div
-            className="flex flex-col items-center cursor-pointer"
-            onClick={onVerifyClick}
-          >
-            <div className="text-lg text-center">
-              <MdOutlineFactCheck />
+          <div className="text-base w-1/2">{formattedDate}</div>
+          {!isEmbeddedView && (
+            <div
+              className="flex flex-col items-center cursor-pointer"
+              onClick={onVerifyClick}
+            >
+              <div className="text-lg text-center">
+                <MdOutlineFactCheck />
+              </div>
+              <div className="text-xs font-bold text-center">
+                {intl
+                  .formatMessage({ id: 'Measurement.CommonSummary.Verify' })
+                  .toUpperCase()}
+              </div>
             </div>
-            <div className="text-xs font-bold text-center">
-              {intl
-                .formatMessage({ id: 'Measurement.CommonSummary.Verify' })
-                .toUpperCase()}
-            </div>
-          </div>
+          )}
         </div>
         {hero}
-        <div className="flex mt-2 underline">
+        <div className="flex mt-2">
           <div className="lg:w-1/2">
-            <Link
-              className="text-white hover:text-white block"
-              href={`/country/${countryCode}`}
+            <ConditionalWrapper
+              condition={!isEmbeddedView}
+              wrapper={(children) => (
+                <Link
+                  className="text-white hover:text-white block underline"
+                  href={`/country/${countryCode}`}
+                >
+                  {children}
+                </Link>
+              )}
             >
               <div className="flex items-center text-xl">
                 <div className="mr-2">
@@ -60,13 +73,22 @@ const CommonSummary = ({
                 </div>
                 {country}
               </div>
-            </Link>
-            <Link
-              className="text-base my-2 text-white hover:text-white block"
-              href={`/as/${network}`}
+            </ConditionalWrapper>
+            <ConditionalWrapper
+              condition={!isEmbeddedView}
+              wrapper={(children) => (
+                <Link
+                  className="text-white hover:text-white block underline"
+                  href={`/as/${network}`}
+                >
+                  {children}
+                </Link>
+              )}
             >
-              {network} {networkName}
-            </Link>
+              <div className="my-2 text-base">
+                {network} {networkName}
+              </div>
+            </ConditionalWrapper>
           </div>
         </div>
       </div>
