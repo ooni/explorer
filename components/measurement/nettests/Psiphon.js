@@ -59,20 +59,18 @@ const PsiphonDetails = ({ measurement, render }) => {
           formatted: false,
         },
         details: (
-          <div className="container">
-            <div className="flex">
-              {bootstrap_time && (
-                <AccessPointStatus
-                  icon={<MdTimer />}
-                  label={
-                    <FormattedMessage id="Measurement.Details.Psiphon.BootstrapTime.Label" />
-                  }
-                  content={Number(bootstrap_time).toFixed(2)}
-                  ok={true}
-                />
-              )}
-            </div>
-          </div>
+          <>
+            {bootstrap_time && (
+              <AccessPointStatus
+                icon={<MdTimer />}
+                label={
+                  <FormattedMessage id="Measurement.Details.Psiphon.BootstrapTime.Label" />
+                }
+                content={Number(bootstrap_time).toFixed(2)}
+                ok={true}
+              />
+            )}
+          </>
         ),
       })}
     </>

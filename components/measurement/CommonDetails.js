@@ -1,10 +1,10 @@
 import dynamic from 'next/dynamic'
 import { useRouter } from 'next/router'
-import { colors } from 'ooni-components'
 import PropTypes from 'prop-types'
-import { useState } from 'react'
+import { useContext, useState } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 
+import { EmbeddedViewContext } from '../../pages/m/[measurement_uid]'
 import { DetailsBox, DetailsBoxTable } from './DetailsBox'
 
 const LoadingRawData = () => {
@@ -21,7 +21,7 @@ const ReactJson = dynamic(() => import('react-json-view'), {
 })
 
 const JsonViewer = ({ src, collapsed }) => (
-  <div className="[&_.string-value]:overflow-ellipsis [&_.string-value]:max-w-[800px] [&_.string-value]:overflow-hidden [&_.string-value]:inline-block">
+  <div className="text-xs md:text-sm [&_.string-value]:overflow-ellipsis [&_.string-value]:max-w-[800px] [&_.string-value]:overflow-hidden [&_.string-value]:inline-block">
     <ReactJson collapsed={collapsed} src={src} name={null} indentWidth={2} />
   </div>
 )
@@ -44,6 +44,8 @@ const CommonDetails = ({
     resolver_ip,
     resolver_network_name,
   } = measurement ?? {}
+
+  const isEmbeddedView = useContext(EmbeddedViewContext)
 
   const { query } = useRouter()
   const queryString = new URLSearchParams(query)
@@ -137,42 +139,35 @@ const CommonDetails = ({
   return (
     <>
       {showResolverItems && (
-        <div className="flex my-8">
-          {/* Resolver data */}
-          <DetailsBoxTable
-            title={
-              <FormattedMessage id="Measurement.CommonDetails.Label.Resolver" />
-            }
-            items={resolverItems}
-          />
-        </div>
+        // Resolver data
+        <DetailsBoxTable
+          title={
+            <FormattedMessage id="Measurement.CommonDetails.Label.Resolver" />
+          }
+          items={resolverItems}
+        />
       )}
-      <div className="flex my-8">
-        {/* Metadata: platform, probe, MK version etc. */}
-        <DetailsBoxTable items={items} className="bg-gray-200" />
-      </div>
+      {/* Metadata: platform, probe, MK version etc. */}
+      <DetailsBoxTable items={items} className="bg-gray-200" />
       {/* User Feedback */}
       {!!userFeedbackItems.length && (
-        <div className="flex my-8">
-          <DetailsBoxTable
-            title={
-              <FormattedMessage id="Measurement.CommonDetails.Label.UserFeedback" />
-            }
-            items={userFeedbackItems}
-          />
-        </div>
+        <DetailsBoxTable
+          title={
+            <FormattedMessage id="Measurement.CommonDetails.Label.UserFeedback" />
+          }
+          items={userFeedbackItems}
+        />
       )}
       {/* Raw Measurement */}
-      <div className="flex">
-        <DetailsBox
-          collapsed={false}
-          title={
-            <div className="flex flex-1 px-4 justify-between flex-col md:flex-row items-center bg-gray-200">
-              <div>
-                {intl.formatMessage({
-                  id: 'Measurement.CommonDetails.RawMeasurement.Heading',
-                })}
-              </div>
+      <DetailsBox
+        title={
+          <div className="flex flex-1 justify-between flex-col md:flex-row items-center bg-gray-200">
+            <div className="self-start">
+              {intl.formatMessage({
+                id: 'Measurement.CommonDetails.RawMeasurement.Heading',
+              })}
+            </div>
+            {!isEmbeddedView && (
               <div className="flex">
                 <a
                   className="text-blue-700"
@@ -201,19 +196,19 @@ const CommonDetails = ({
                   })}
                 </button>
               </div>
+            )}
+          </div>
+        }
+        content={
+          measurement && typeof measurement === 'object' ? (
+            <div className="flex bg-white" style={{ direction: 'ltr' }}>
+              <JsonViewer src={measurement} collapsed={collapsed} />
             </div>
-          }
-          content={
-            measurement && typeof measurement === 'object' ? (
-              <div className="flex bg-white p-4" style={{ direction: 'ltr' }}>
-                <JsonViewer src={measurement} collapsed={collapsed} />
-              </div>
-            ) : (
-              <FormattedMessage id="Measurement.CommonDetails.RawMeasurement.Unavailable" />
-            )
-          }
-        />
-      </div>
+          ) : (
+            <FormattedMessage id="Measurement.CommonDetails.RawMeasurement.Unavailable" />
+          )
+        }
+      />
     </>
   )
 }
