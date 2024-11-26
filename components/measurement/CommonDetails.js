@@ -50,7 +50,7 @@ const CommonDetails = ({
   const { query } = useRouter()
   const queryString = new URLSearchParams(query)
   const rawMsmtDownloadURL = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/raw_measurement?${queryString}`
-  const [collapsed, setCollapsed] = useState(isEmbeddedView ? 50 : 1)
+  const [collapsed, setCollapsed] = useState(1)
 
   const intl = useIntl()
   const unavailable = intl.formatMessage({

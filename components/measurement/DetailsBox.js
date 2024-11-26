@@ -36,8 +36,6 @@ export const DetailsBox = ({
   className,
   ...rest
 }) => {
-  const isEmbeddedView = useContext(EmbeddedViewContext)
-
   const [isOpen, setIsOpen] = useState(!collapsed)
 
   const onToggle = useCallback(() => {
@@ -49,23 +47,18 @@ export const DetailsBox = ({
       className={twMerge('border-2 border-gray-200 w-full my-8', className)}
       {...rest}
     >
-      {title &&
-        (isEmbeddedView ? (
-          <div className="flex justify-between font-bold text-lg cursor-pointer px-4 py-2 bg-gray-200 items-center">
-            {title}
-          </div>
-        ) : (
-          <div
-            className="flex justify-between font-bold text-lg cursor-pointer px-4 py-2 bg-gray-200 items-center"
-            onClick={onToggle}
-          >
-            {title}
-            <MdExpandLess
-              className={`cursor-pointer bg-white rounded-[50%] transition-transform ${isOpen ? 'rotate-0' : 'rotate-180'}`}
-              size={36}
-            />
-          </div>
-        ))}
+      {title && (
+        <div
+          className="flex justify-between font-bold text-lg cursor-pointer px-4 py-2 bg-gray-200 items-center"
+          onClick={onToggle}
+        >
+          {title}
+          <MdExpandLess
+            className={`cursor-pointer bg-white rounded-[50%] transition-transform ${isOpen ? 'rotate-0' : 'rotate-180'}`}
+            size={36}
+          />
+        </div>
+      )}
       {isOpen && (
         <div className="p-4 flex-wrap overflow-x-auto text-sm">
           {content || children}
