@@ -35,22 +35,17 @@ export async function getServerSideProps({ res, query }) {
   try {
     const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API }) // eslint-disable-line
     const results = await Promise.all([
-      // XXX cc @darkk we should ideally have better dedicated daily dumps for this view
-      client.get('/api/_/test_coverage', { params: { probe_cc: countryCode } }),
       client.get('/api/_/country_overview', {
         params: { probe_cc: countryCode },
       }),
       client.get('https://ooni.org/pageindex.json'),
     ])
-    const testCoverage = results[0].data.test_coverage
-    const networkCoverage = results[0].data.network_coverage
-    const overviewStats = results[1].data
-    const reports = getCountryReports(countryCode, results[2].data)
+
+    const overviewStats = results[0].data
+    const reports = getCountryReports(countryCode, results[1].data)
 
     return {
       props: {
-        testCoverage,
-        networkCoverage,
         overviewStats,
         reports,
         countryCode,
@@ -65,13 +60,7 @@ export async function getServerSideProps({ res, query }) {
   }
 }
 
-const Country = ({
-  countryCode,
-  overviewStats,
-  reports,
-  error,
-  ...coverageDataSSR
-}) => {
+const Country = ({ countryCode, overviewStats, reports, error }) => {
   return (
     <>
       {error ? (
@@ -81,7 +70,6 @@ const Country = ({
           countryCode={countryCode}
           overviewStats={overviewStats}
           reports={reports}
-          coverageDataSSR={coverageDataSSR}
         />
       )}
     </>
