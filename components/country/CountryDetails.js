@@ -1,4 +1,3 @@
-import axios from 'axios'
 import Flag from 'components/Flag'
 import { StyledStickySubMenu } from 'components/SharedStyledComponents'
 import ThirdPartyDataChart from 'components/ThirdPartyDataChart'
@@ -10,7 +9,7 @@ import Overview from 'components/country/Overview'
 import PageNavMenu from 'components/country/PageNavMenu'
 import WebsitesSection from 'components/country/Websites'
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
 import useScrollPosition from '/hooks/useScrollPosition'
@@ -37,15 +36,9 @@ const Header = ({ countryCode, countryName }) => {
   )
 }
 
-const CountryDetails = ({
-  countryCode,
-  overviewStats,
-  reports,
-  coverageDataSSR,
-}) => {
+const CountryDetails = ({ countryCode, overviewStats, reports }) => {
   const intl = useIntl()
   const countryName = getLocalisedRegionName(countryCode, intl.locale)
-  const [newData, setNewData] = useState(false)
   const router = useRouter()
   const { query } = router
 
@@ -77,29 +70,6 @@ const CountryDetails = ({
     }
   }, [])
 
-  const fetchTestCoverageData = useCallback(
-    (testGroupList) => {
-      const fetcher = async (testGroupList) => {
-        const client = axios.create({
-          baseURL: process.env.NEXT_PUBLIC_OONI_API,
-        }) // eslint-disable-line
-        const result = await client.get('/api/_/test_coverage', {
-          params: {
-            probe_cc: countryCode,
-            test_groups: testGroupList,
-          },
-        })
-        // TODO: Use React.createContext to pass along data and methods
-        setNewData({
-          networkCoverage: result.data.network_coverage,
-          testCoverage: result.data.test_coverage,
-        })
-      }
-      fetcher(testGroupList)
-    },
-    [countryCode, setNewData],
-  )
-
   // Sync page URL params with changes from form values
   const onSubmit = ({ since, until }) => {
     const params = {
@@ -116,9 +86,6 @@ const CountryDetails = ({
       router.push(href, href, { shallow: true })
     }
   }
-
-  const { testCoverage, networkCoverage } =
-    newData !== false ? newData : coverageDataSSR
 
   return (
     <>
@@ -141,16 +108,9 @@ const CountryDetails = ({
           >
             <Overview
               countryName={countryName}
-              middleboxCount={overviewStats.middlebox_detected_networks}
-              imCount={overviewStats.im_apps_blocked}
-              circumventionTools={overviewStats.circumvention_tools_blocked}
-              blockedWebsitesCount={overviewStats.websites_confirmed_blocked}
               networkCount={overviewStats.network_count}
               measurementCount={overviewStats.measurement_count}
               measuredSince={overviewStats.first_bucket_date}
-              testCoverage={testCoverage}
-              networkCoverage={networkCoverage}
-              fetchTestCoverageData={fetchTestCoverageData}
               featuredArticles={reports}
             />
             <Form onSubmit={onSubmit} since={since} until={until} />
