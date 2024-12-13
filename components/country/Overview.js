@@ -6,13 +6,13 @@ import { useCountry } from './CountryContext'
 import SectionHeader from './SectionHeader'
 import { BoxWithTitle } from './boxes'
 
-const ooniBlogBaseURL = 'https://ooni.org'
+export const OONI_BLOG_BASE_URL = 'https://ooni.org'
 
 export const FeaturedArticle = ({ link, title }) => (
   <div className="py-1">
     <a
       className="text-blue-700"
-      href={ooniBlogBaseURL + link}
+      href={OONI_BLOG_BASE_URL + link}
       target="_blank"
       rel="noopener noreferrer"
     >

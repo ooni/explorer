@@ -1,4 +1,4 @@
-import { FindingBox } from 'components/landing/HighlightBox'
+import { FindingBoxSmall } from 'components/landing/HighlightBox'
 import Link from 'next/link'
 
 interface Finding {
@@ -18,20 +18,18 @@ const FindingsSection = ({
 }: FindingsSectionProps) => {
   return (
     <section className="mb-12">
-      <h3>{title}</h3>
+      <h2>{title}</h2>
       {findings.length ? (
         <>
-          <div className="grid my-8 gap-6 grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+          <div className="grid my-8 gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
             {findings.map((finding) => (
-              <FindingBox key={finding.id} incident={finding} />
+              <FindingBoxSmall key={finding.id} incident={finding} />
             ))}
-          </div>
-          <div className="flex my-4 justify-center">
-            <Link href={`/findings?theme=${theme}`}>
-              <button type="button" className="btn btn-primary-hollow">
-                See more
-              </button>
-            </Link>
+            <div className="flex items-center justify-center px-24 text-center">
+              <Link href={`/findings?theme=${theme}`}>
+                See all related censorship findings »
+              </Link>
+            </div>
           </div>
         </>
       ) : (
