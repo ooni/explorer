@@ -1,14 +1,8 @@
-import ChartWrapper from 'components/ChartWrapper'
-import Form from 'components/domain/Form'
-import FindingsSection from 'components/FindingsSection'
-import ReportsSection from 'components/ReportsSection'
-import {
-  StickySubMenuUpdated,
-  StyledStickySubMenu,
-} from 'components/SharedStyledComponents'
-import { getCountries, getReports } from 'lib/api'
 import { useRouter } from 'next/router'
 import { useIntl } from 'react-intl'
+
+import ThematicPage from 'components/ThematicPage'
+import { getCountries, getReports } from 'lib/api'
 
 export const getServerSideProps = async () => {
   try {
@@ -39,7 +33,7 @@ const HUMAN_RIGHTS_DOMAINS = [
   'www.fidh.org',
 ]
 
-const HumanRights = ({ countries, reports }) => {
+const HumanRights = (props) => {
   const intl = useIntl()
   const router = useRouter()
   const { query } = router
@@ -66,41 +60,38 @@ const HumanRights = ({ countries, reports }) => {
     }
   }
 
+  const domains = HUMAN_RIGHTS_DOMAINS.sort((a, b) => {
+    return a.replace('www.', '').localeCompare(b.replace('www.', ''))
+  })
+
   return (
-    <div className="container">
-      <StickySubMenuUpdated
-        topClass="top-[116px]"
-        title={intl.formatMessage({ id: 'Navbar.HumanRights' })}
-        menu={
-          <>
-            <a href="#findings">Findings</a>
-            <a href="#reports">Reports</a>
-            <a href="#websites">Websites</a>
-          </>
-        }
-      />
-      <FindingsSection
-        title="Findings on blocking Human Rights websites"
-        theme="human_rights"
-      />
-      <ReportsSection
-        title="Reports on blocking Human Rights websites"
-        reports={reports}
-      />
-      <StyledStickySubMenu topClass="top-[193px]">
-        <div className="pb-4 pt-2">
-          <Form
-            onSubmit={onSubmit}
-            availableCountries={countries.map((c) => c.alpha_2)}
-          />
-        </div>
-      </StyledStickySubMenu>
-      {HUMAN_RIGHTS_DOMAINS.map((domain) => (
-        <div key={domain} className="my-6">
-          <ChartWrapper domain={domain} testName="web_connectivity" />
-        </div>
-      ))}
-    </div>
+    <ThematicPage
+      domains={domains}
+      {...props}
+      theme="human_rights"
+      title={intl.formatMessage({ id: 'Navbar.HumanRights' })}
+      findingsTitle="Findings on blocking Human Rights Websites"
+      reportsTitle="Reports on blocking Human Rights Websites"
+      menu={
+        <>
+          <a href="#findings">Findings</a>
+          <a href="#reports">Reports</a>
+          <a href="#websites">Websites</a>
+        </>
+      }
+      text={
+        <>
+          {/* <FormattedMarkdown id="ReachabilityDash.CircumventionTools.Description" /> */}
+          <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
+            {domains.map((d) => (
+              <li key={d}>
+                <a href={`#${d}`}>{d}</a>
+              </li>
+            ))}
+          </ul>
+        </>
+      }
+    />
   )
 }
 
