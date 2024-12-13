@@ -114,15 +114,13 @@ const ThirdPartyDataChart = ({ since, until, country, asn, ...props }) => {
             </SectionHeader.Title>
           </SectionHeader>
           <SimpleBox>
-            <div className="text-base">
-              <SectionText
-                location={location}
-                asn={asn}
-                country={country}
-                from={from}
-                until={to}
-              />
-            </div>
+            <SectionText
+              location={location}
+              asn={asn}
+              country={country}
+              from={from}
+              until={to}
+            />
           </SimpleBox>
         </>
       ) : (
@@ -217,9 +215,7 @@ const ThirdPartyDataChart = ({ since, until, country, asn, ...props }) => {
             ]}
           />
         )}
-        {error && (
-          <div className="mt-4 text-base">Unable to retrieve the data</div>
-        )}
+        {error && <div className="mt-4">Unable to retrieve the data</div>}
       </div>
     </>
   )

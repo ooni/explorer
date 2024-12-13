@@ -4,7 +4,7 @@ import { MATChartWrapper } from 'components/MATChart'
 import Markdown from 'markdown-to-jsx'
 import Link from 'next/link'
 import { useIntl } from 'react-intl'
-import { formatLongDate } from 'utils'
+import { formatLongDateUTC } from 'utils'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
 
 const FormattedMarkdown = ({ children }) => {
@@ -28,7 +28,8 @@ const FindingDisplay = ({ incident }) => {
 
   const reportedBy = incident?.reported_by
   const formattedCreationDate =
-    incident?.create_time && formatLongDate(incident?.create_time, intl.locale)
+    incident?.create_time &&
+    formatLongDateUTC(incident?.create_time, intl.locale)
   const listOfNetworks = incident?.ASNs?.map((as) => (
     <Link key={as} href={`/as/AS${as}`}>{`AS${as}`}</Link>
   )).reduce((prev, curr) => (prev ? [prev, ', ', curr] : curr), null)
@@ -46,10 +47,10 @@ const FindingDisplay = ({ incident }) => {
       )}
       <div className="text-gray-600 mb-4">
         {incident?.start_time &&
-          formatLongDate(incident?.start_time, intl.locale)}{' '}
+          formatLongDateUTC(incident?.start_time, intl.locale)}{' '}
         -{' '}
         {incident?.end_time
-          ? formatLongDate(incident?.end_time, intl.locale)
+          ? formatLongDateUTC(incident?.end_time, intl.locale)
           : 'ongoing'}
       </div>
       {!!incident?.tags?.length && (
