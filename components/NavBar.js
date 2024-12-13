@@ -92,16 +92,16 @@ const SubMenu = () => {
       href: '/news-media',
       umami: 'navigation-news-media',
     },
-    // {
-    //   label: <FormattedMessage id="Navbar.HumanRights" />,
-    //   href: '/human-rights',
-    //   umami: 'navigation-human-rights',
-    // },
     {
       label: <FormattedMessage id="Navbar.Circumvention" />,
       href: '/circumvention',
       umami: 'navigation-circumvention',
     },
+    // {
+    //   label: <FormattedMessage id="Navbar.HumanRights" />,
+    //   href: '/human-rights',
+    //   umami: 'navigation-human-rights',
+    // },
     {
       label: <FormattedMessage id="Navbar.Domains" />,
       href: '/domains',
