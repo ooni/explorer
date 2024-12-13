@@ -25,7 +25,7 @@ export default function App({ Component, pageProps, err }) {
   const router = useRouter()
 
   useEffect(() => {
-    const handleStart = (url) => {
+    const handleStart = () => {
       NProgress.start()
     }
     const handleStop = () => {
@@ -52,7 +52,7 @@ export default function App({ Component, pageProps, err }) {
         }
       `}</style>
       <LocaleProvider>
-        <Layout>
+        <Layout isEmbeddedView={!!pageProps?.isEmbeddedView}>
           <Component {...pageProps} err={err} />
         </Layout>
       </LocaleProvider>

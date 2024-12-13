@@ -6,9 +6,9 @@ const SocialButtons = ({ url }) => {
   const intl = useIntl()
 
   return (
-    <div className="flex px-2 items-center">
+    <div className="flex gap-2 items-center">
       <MdShare height="20px" width="20px" />
-      <div className="pl-2 text-right">
+      <div>
         {intl.formatMessage(
           { id: 'SocialButtons.CTA' },
           {

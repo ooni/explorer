@@ -59,9 +59,9 @@ export const UserProvider = ({ children }) => {
   // new one if needed
   useEffect(() => {
     const interval = setInterval(() => {
-      const tokenCreatedAt = JSON.parse(
-        localStorage.getItem('bearer'),
-      )?.created_at
+      const tokenCreatedAt = localStorage
+        ? JSON.parse(localStorage.getItem('bearer'))?.created_at
+        : null // if localStorage is disabled in the browser it returns null
       if (tokenCreatedAt) {
         const tokenExpiry = tokenCreatedAt + TWELVE_HOURS
         const now = Date.now()

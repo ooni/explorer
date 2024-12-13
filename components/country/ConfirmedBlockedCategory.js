@@ -56,37 +56,32 @@ const ConfirmedBlockedCategory = () => {
           id: 'Country.Websites.ConfirmedBlockedCategories',
         })}
       </h3>
-      <>
-        {!blockedCategoriesData && !error ? (
-          <div> Loading ...</div>
-        ) : blockedCategoriesData === null ||
-          blockedCategoriesData.length === 0 ? (
-          <h5>
-            <FormattedMessage id="General.NoData" />
-          </h5>
-        ) : (
-          <div className="flex flex-wrap gap-2">
-            {blockedCategoriesData?.map((category) => (
-              <CategoryBadge
-                key={category.category_code}
-                categoryCode={category.category_code}
-              />
-            ))}
-          </div>
-        )}
-      </>
+      {!blockedCategoriesData && !error ? (
+        <div> Loading ...</div>
+      ) : blockedCategoriesData === null ||
+        blockedCategoriesData.length === 0 ? (
+        <h5>
+          <FormattedMessage id="General.NoData" />
+        </h5>
+      ) : (
+        <div className="flex flex-wrap gap-2">
+          {blockedCategoriesData?.map((category) => (
+            <CategoryBadge
+              key={category.category_code}
+              categoryCode={category.category_code}
+            />
+          ))}
+        </div>
+      )}
       {error && (
         <DetailsBox
-          collapsed={false}
           content={
-            <>
-              <details>
-                <summary>
-                  <span>Error: {error.message}</span>
-                </summary>
-                <pre>{JSON.stringify(error, null, 2)}</pre>
-              </details>
-            </>
+            <details>
+              <summary>
+                <span>Error: {error.message}</span>
+              </summary>
+              <pre>{JSON.stringify(error, null, 2)}</pre>
+            </details>
           }
         />
       )}

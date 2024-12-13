@@ -61,29 +61,27 @@ const TorSnowflakeDetails = ({ isAnomaly, isFailure, measurement, render }) => {
           formatted: false,
         },
         details: (
-          <div className="container">
-            <div className="flex">
-              {isAnomaly && (
-                <AccessPointStatus
-                  label={
-                    <FormattedMessage id="Measurement.Details.TorSnowflake.Error.Label" />
-                  }
-                  content={failure}
-                  ok={true}
-                />
-              )}
-              {!isAnomaly && !isFailure && bootstrap_time !== null && (
-                <AccessPointStatus
-                  icon={<MdTimer />}
-                  label={
-                    <FormattedMessage id="Measurement.Details.TorSnowflake.BootstrapTime.Label" />
-                  }
-                  content={Number(bootstrap_time).toFixed(2)}
-                  ok={true}
-                />
-              )}
-            </div>
-          </div>
+          <>
+            {isAnomaly && (
+              <AccessPointStatus
+                label={
+                  <FormattedMessage id="Measurement.Details.TorSnowflake.Error.Label" />
+                }
+                content={failure}
+                ok={true}
+              />
+            )}
+            {!isAnomaly && !isFailure && bootstrap_time !== null && (
+              <AccessPointStatus
+                icon={<MdTimer />}
+                label={
+                  <FormattedMessage id="Measurement.Details.TorSnowflake.BootstrapTime.Label" />
+                }
+                content={Number(bootstrap_time).toFixed(2)}
+                ok={true}
+              />
+            )}
+          </>
         ),
       })}
     </>

@@ -98,7 +98,6 @@ const Chart = ({ queryParams = {}, setState = null, headerOptions = {} }) => {
         </>
         {error && (
           <DetailsBox
-            collapsed={false}
             content={
               <details>
                 <summary>

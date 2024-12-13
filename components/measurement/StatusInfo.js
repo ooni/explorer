@@ -2,11 +2,16 @@ import PropTypes from 'prop-types'
 
 const StatusInfo = ({ title, message }) => (
   <div className="flex flex-col">
-    <div className="text-center text-3xl mb-3"> {title} </div>
-    <div className="text-center text-lg font-bold whitespace-pre">
+    <div className="text-center text-2xl md:text-3xl break-words">
       {' '}
-      {message}{' '}
+      {title}{' '}
     </div>
+    {message && (
+      <div className="text-center text-lg font-bold mt-3 whitespace-pre">
+        {' '}
+        {message}{' '}
+      </div>
+    )}
   </div>
 )
 

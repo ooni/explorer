@@ -15,7 +15,7 @@ const boxTitle = (
 
 const Help = () => {
   return (
-    <DetailsBox title={boxTitle} collapsed={false}>
+    <DetailsBox title={boxTitle}>
       <FormattedMarkdown id="MAT.Help.Content" />
       <div className="flex flex-col">
         {[...getCategoryCodesMap().values()].map(
