@@ -3,6 +3,7 @@ import GridChart, {
 } from 'components/aggregation/mat/GridChart'
 import { MATContextProvider } from 'components/aggregation/mat/MATContext'
 import { DetailsBox } from 'components/measurement/DetailsBox'
+import SpinLoader from 'components/vendor/SpinLoader'
 import Link from 'next/link'
 import { memo, useEffect, useMemo } from 'react'
 import { MdBarChart, MdOutlineFileDownload } from 'react-icons/md'
@@ -46,11 +47,19 @@ export const MATLink = ({ query }) => {
   )
 }
 
-const Chart = memo(function Chart({
-  testGroup = null,
-  queryParams = {},
-  setState,
-}) {
+export const ChartSpinLoader = ({ height = '300px' }) => {
+  return (
+    <div
+      className="bg-gray-100 flex items-center justify-center p-6"
+      style={{ height }}
+    >
+      {/* <FormattedMessage id="General.Loading" /> */}
+      <SpinLoader />
+    </div>
+  )
+}
+
+const Chart = ({ queryParams = {}, setState = null, headerOptions = {} }) => {
   const apiQuery = useMemo(() => {
     const qs = new URLSearchParams(queryParams).toString()
     return qs
@@ -75,24 +84,18 @@ const Chart = memo(function Chart({
     if (setState && data?.data) setState(data.data)
   }, [data, setState])
 
-  const headerOptions = { probe_cc: false, subtitle: false }
-
   return (
-    // <MATContextProvider key={name} test_name={name} {...queryParams}>
     <MATContextProvider {...queryParams}>
       <div className="flex flex-col">
-        {!chartData && !error ? (
-          <FormattedMessage id="General.Loading" />
-        ) : (
-          <>
-            <GridChart
-              data={chartData}
-              rowKeys={rowKeys}
-              rowLabels={rowLabels}
-            />
-            {!!chartData?.size && <MATLink query={queryParams} />}
-          </>
-        )}
+        <>
+          <GridChart
+            data={chartData}
+            rowKeys={rowKeys}
+            rowLabels={rowLabels}
+            header={headerOptions}
+          />
+          {!!chartData?.size && <MATLink query={queryParams} />}
+        </>
         {error && (
           <DetailsBox
             content={
@@ -108,6 +111,6 @@ const Chart = memo(function Chart({
       </div>
     </MATContextProvider>
   )
-})
+}
 
-export default Chart
+export default memo(Chart)

@@ -194,6 +194,7 @@ const CountriesList = ({ countriesData }) => {
         localisedName: getLocalisedRegionName(c.alpha_2, locale),
       })),
   )
+  console.log('countriesData', countriesData)
 
   const numberOfCountries = countriesData.length
 
@@ -315,7 +316,7 @@ const NetworkDashboard = ({ probe_asn, networkName, countriesData }) => {
                     <div className="pb-4 pt-2">
                       <Form
                         onSubmit={onSubmit}
-                        availableCountries={countriesData.map((c) => c.country)}
+                        availableCountries={countriesData.map((c) => c.alpha_2)}
                       />
                     </div>
                   </StyledSticky>
