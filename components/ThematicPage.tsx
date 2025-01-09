@@ -67,7 +67,7 @@ const ThematicPage = ({
         <AnchorLink id="reports" />
         <ReportsSection title={reportsTitle} reports={reports} theme={theme} />
 
-        <StyledStickySubMenu topClass="top-[193px]">
+        <StyledStickySubMenu className="top-[193px] max-sm:static">
           <div className="pb-4 pt-2">
             <Form
               countries={countries}
