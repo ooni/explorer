@@ -9,7 +9,7 @@ import {
 } from 'components/SharedStyledComponents'
 import { Form } from 'components/dashboard/Form'
 import { MetaTags } from 'components/dashboard/MetaTags'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 
 // type ThematicPageProps = {
 //   countries: string[],
@@ -43,8 +43,20 @@ const ThematicPage = ({
   menu = '',
 }) => {
   const { query } = useRouter()
+  const [filters, setFilters] = useState([])
   const [filteredDomains, setFilteredDomains] = useState(domains)
   const [filteredApps, setFilteredApps] = useState(apps)
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
+  useEffect(() => {
+    if (filters.length) {
+      setFilteredDomains(domains.filter((d) => filters.includes(d)))
+      setFilteredApps(apps.filter((a) => filters.includes(a)))
+    } else {
+      setFilteredDomains(domains)
+      setFilteredApps(apps)
+    }
+  }, [filters])
 
   return (
     <>
@@ -74,14 +86,13 @@ const ThematicPage = ({
               selectedCountries={selectedCountries}
               domains={domains}
               apps={apps}
-              setDomains={setFilteredDomains}
-              setApps={setFilteredApps}
+              setFilters={setFilters}
             />
           </div>
         </StyledStickySubMenu>
         {Object.keys(query).length > 0 && (
           <>
-            {!!apps?.length && (
+            {!!filteredApps.length && (
               <section>
                 <AnchorLinkLower id="apps" />
                 <h2>Apps</h2>
@@ -96,20 +107,22 @@ const ThematicPage = ({
                 ))}
               </section>
             )}
-            <section className="mt-10">
-              <AnchorLinkLower id="websites" />
-              <h2>Websites</h2>
-              {filteredDomains?.map((domain: string) => (
-                <div key={domain} className="my-6">
-                  <AnchorLinkLower id={domain} />
-                  <ChartIntersectionObserver
-                    domain={domain}
-                    testName="web_connectivity"
-                    headerOptions={{ probe_cc: false, test_name: false }}
-                  />
-                </div>
-              ))}
-            </section>
+            {!!filteredDomains.length && (
+              <section className="mt-10">
+                <AnchorLinkLower id="websites" />
+                <h2>Websites</h2>
+                {filteredDomains?.map((domain: string) => (
+                  <div key={domain} className="my-6">
+                    <AnchorLinkLower id={domain} />
+                    <ChartIntersectionObserver
+                      domain={domain}
+                      testName="web_connectivity"
+                      headerOptions={{ probe_cc: false, test_name: false }}
+                    />
+                  </div>
+                ))}
+              </section>
+            )}
           </>
         )}
       </div>
