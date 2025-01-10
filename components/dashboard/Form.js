@@ -24,8 +24,8 @@ export const Form = ({
   selectedCountries = ['CN', 'IR', 'RU'],
   domains,
   apps,
-  setDomains,
-  setApps,
+  setFilters,
+  // setApps,
 }) => {
   const intl = useIntl()
   const router = useRouter()
@@ -159,19 +159,15 @@ export const Form = ({
         onChange(cleanedUpData(getValues()))
       if (name === 'domains' && type === 'change')
         getValues('domains').length
-          ? setDomains(getValues('domains').map((d) => d.value))
-          : setDomains(domains)
-      if (name === 'apps' && type === 'change')
-        getValues('apps').length
-          ? setApps(getValues('apps').map((a) => a.value))
-          : setApps(apps)
+          ? setFilters(getValues('domains').map((d) => d.value))
+          : setFilters([])
     })
     return () => subscription.unsubscribe()
   }, [watch, getValues, onChange])
 
   return (
     <form>
-      <div className="grid md:grid-cols-2 lg:grid-cols-[1fr_1.3fr_1fr_1fr] gap-4">
+      <div className="grid md:grid-cols-2 lg:grid-cols-[1fr_1fr_1fr] gap-4">
         <div>
           <div className="grid grid-cols-2 gap-4">
             <Controller
@@ -227,29 +223,20 @@ export const Form = ({
           <Controller
             render={({ field }) => (
               <MultiSelect
-                // label={intl.formatMessage({ id: 'Search.Sidebar.Country' })}
-                label="Websites"
-                options={domainOptions}
+                label={apps.length ? 'Websites & Tools' : 'Websites'}
+                options={
+                  apps.length
+                    ? [
+                        { label: 'Tools', options: appOptions },
+                        { label: 'Websites', options: domainOptions },
+                      ]
+                    : domainOptions
+                }
                 overrideStrings={multiSelectStrings}
                 {...field}
               />
             )}
             name="domains"
-            control={control}
-          />
-        )}
-        {apps && (
-          <Controller
-            render={({ field }) => (
-              <MultiSelect
-                // label={intl.formatMessage({ id: 'Search.Sidebar.Country' })}
-                label="Tools"
-                options={appOptions}
-                overrideStrings={multiSelectStrings}
-                {...field}
-              />
-            )}
-            name="apps"
             control={control}
           />
         )}
