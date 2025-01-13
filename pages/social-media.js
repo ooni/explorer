@@ -25,6 +25,16 @@ const SOCIAL_MEDIA_IM_TESTS = [
   'facebook_messenger',
 ]
 
+export const SOCIAL_MEDIA_TESTS_STRINGS = {
+  telegram: 'Tests.Telegram.Name',
+  facebook_messenger: 'Tests.Facebook.Name',
+  whatsapp: 'Tests.WhatsApp.Name',
+  signal: 'Tests.Signal.Name',
+  psiphon: 'Tests.Psiphon.Name',
+  tor: 'Tests.Tor.Name',
+  torsf: 'Tests.TorSnowflake.Name',
+}
+
 export const getServerSideProps = async () => {
   try {
     const { reports, findings, countries, selectedCountries } =
@@ -101,7 +111,11 @@ const Page = (props) => {
           <ul className="mt-4">
             {SOCIAL_MEDIA_IM_TESTS.map((d) => (
               <li key={d}>
-                <a href={`#${d}`}>{d}</a>
+                <a href={`#${d}`}>
+                  {intl.formatMessage({
+                    id: SOCIAL_MEDIA_TESTS_STRINGS[d],
+                  })}
+                </a>
               </li>
             ))}
           </ul>
