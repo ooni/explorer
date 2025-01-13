@@ -7,6 +7,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
 import DateRangePicker from 'components/DateRangePicker'
+import { SOCIAL_MEDIA_TESTS_STRINGS } from 'pages/social-media'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
 
 const cleanedUpData = (values) => {
@@ -36,8 +37,11 @@ export const Form = ({
   }, [domains])
 
   const appOptions = useMemo(() => {
-    return apps?.map((a) => ({ label: a, value: a }))
-  }, [apps])
+    return apps?.map((a) => ({
+      label: intl.formatMessage({ id: SOCIAL_MEDIA_TESTS_STRINGS[a] }),
+      value: a,
+    }))
+  }, [apps, intl])
 
   // initial placement of query params when they are not defined
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -56,8 +60,6 @@ export const Form = ({
     }
     router.replace(href, undefined, { shallow: true })
   }, [])
-
-  console.log('query', query)
 
   // Sync page URL params with changes from form values
   const onChange = useCallback(
