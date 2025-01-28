@@ -18,11 +18,12 @@ import {
   themeForInvisibleTooltip,
 } from './CustomTooltip'
 import { useMATContext } from './MATContext'
-import { colorMap } from './colorMap'
+import { colorMap, v5ColorMap } from './colorMap'
 import { getXAxisTicks } from './timeScaleXAxis'
 
 const keys = ['anomaly_count', 'confirmed_count', 'failure_count', 'ok_count']
-
+// const v5keys = ['outcome_blocked', 'outcome_down', 'outcome_ok']
+const v5keys = keys
 const colorFunc = (d) => colorMap[d.id] || '#ccc'
 
 const barLayers = ['grid', 'axes', 'bars']
@@ -133,7 +134,7 @@ const RowChart = ({
 }) => {
   const intl = useIntl()
   const [query, updateMATContext] = useMATContext()
-  const { tooltipIndex } = query
+  const { tooltipIndex, v5 } = query
   const { showTooltipFromEvent, hideTooltip } = useTooltip()
 
   const onClose = useCallback(() => {
@@ -179,7 +180,7 @@ const RowChart = ({
       <div style={{ height, width: '100%' }}>
         <Bar
           data={chartData}
-          keys={keys}
+          keys={v5 ? v5keys : keys}
           indexBy={indexBy}
           tooltip={InvisibleTooltip}
           onClick={handleClick}

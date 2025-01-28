@@ -21,7 +21,11 @@ const swrOptions = {
 
 const fetcher = (query) => {
   const qs = new URLSearchParams(query).toString()
-  const reqUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation?${qs}`
+  let reqUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation?${qs}`
+  if (query.v5) {
+    const { v5, ...v5qs } = query
+    reqUrl = `https://api.dev.ooni.io/api/v1/aggregation/analysis?${new URLSearchParams(v5qs).toString()}`
+  }
   console.debug(`API Query: ${reqUrl}`)
   return axios
     .get(reqUrl)
@@ -87,26 +91,38 @@ const MATChart = ({ query, showFilters = true }) => {
     swrOptions,
   )
 
+  const results = useMemo(
+    () => data?.data?.result || data?.data?.results || [],
+    [data],
+  )
+
   return (
     <>
       <MATContextProvider queryParams={query}>
         {error && <NoCharts message={error?.info ?? JSON.stringify(error)} />}
+
         {isValidating ? (
           <ChartSpinLoader height="500px" />
         ) : (
           <>
-            {data && data.data.dimension_count === 0 && (
-              <FunnelChart data={data.data.result} />
-            )}
-            {data && data.data.dimension_count === 1 && (
-              <StackedBarChart data={data.data.result} query={query} />
-            )}
-            {data && data.data.dimension_count > 1 && (
-              <TableView
-                data={data.data.result}
-                query={query}
-                showFilters={showFilters}
-              />
+            {results.length > 0 ? (
+              <>
+                {data && data.data.dimension_count === 0 && (
+                  <FunnelChart data={results} />
+                )}
+                {data && data.data.dimension_count === 1 && (
+                  <StackedBarChart data={results} query={query} />
+                )}
+                {data && data.data.dimension_count > 1 && (
+                  <TableView
+                    data={results}
+                    query={query}
+                    showFilters={showFilters}
+                  />
+                )}
+              </>
+            ) : (
+              <NoCharts />
             )}
           </>
         )}

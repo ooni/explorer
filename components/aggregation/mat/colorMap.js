@@ -7,3 +7,9 @@ export const colorMap = {
   ok_count: colors.green['500'],
   measurement_count: colors.blue['500'],
 }
+
+export const v5ColorMap = {
+  outcome_blocked: colors.red['700'],
+  outcome_down: colors.yellow['500'],
+  outcome_ok: colors.green['500'],
+}
