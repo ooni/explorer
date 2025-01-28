@@ -2,8 +2,6 @@ import dayjs from 'services/dayjs'
 import { localisedCountries } from 'utils/i18nCountries'
 import { getCategoryCodesMap } from '../../utils/categoryCodes'
 
-const categoryCodesMap = getCategoryCodesMap()
-
 export function getDatesBetween(startDate, endDate, timeGrain) {
   const dateSet = new Set()
   let currentDate = startDate
@@ -63,7 +61,7 @@ export function fillRowHoles(data, query, locale) {
   const sampleDataPoint = { ...newData[0] }
 
   // Add empty datapoints for columns where measurements are not available
-  missingCols.forEach((col) => {
+  for (const col of missingCols) {
     // use any (first) column data to popuplate yAxis value e.g `input` | `probe_cc`
     // and then overwrite with zero-data for that missing date
     newData.splice([...domain].indexOf(col), 0, {
@@ -75,7 +73,7 @@ export function fillRowHoles(data, query, locale) {
       measurement_count: 0,
       ok_count: 0,
     })
-  })
+  }
 
   return newData
 }

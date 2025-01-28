@@ -1,13 +1,26 @@
 import PropTypes from 'prop-types'
 import { useIntl } from 'react-intl'
-import GridChart, { prepareDataForGridChart } from './GridChart'
+import GridChart, {
+  prepareDataForGridChart,
+  preparePipelineV5DataForGridChart,
+} from './GridChart'
 import { NoCharts } from './NoCharts'
 
 export const StackedBarChart = ({ data, query }) => {
   const intl = useIntl()
 
   try {
-    const [gridData, rows] = prepareDataForGridChart(data, query, intl.locale)
+    let gridData
+    let rows
+    if (query?.v5) {
+      ;[gridData, rows] = preparePipelineV5DataForGridChart(
+        data,
+        query,
+        intl.locale,
+      )
+    } else {
+      ;[gridData, rows] = prepareDataForGridChart(data, query, intl.locale)
+    }
 
     return (
       <div className="flex relative flex-col">
