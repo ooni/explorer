@@ -123,7 +123,7 @@ const Calendar = React.memo(function Calendar({ startYear }) {
     }
     return []
   }, [data])
-  console.log('calendarData', calendarData)
+
   return (
     <div className="mb-16 mt-2">
       {isLoading && (
