@@ -138,9 +138,9 @@ const FeedbackBox = ({
   const submitEnabled = useMemo(() => !!firstLevelRadio, [firstLevelRadio])
 
   return (
-    <div className="p-4 bg-gray-50 absolute rounded-md w-[320px] right-[60px] top-[60px] shadow-[2px 5px 10px 0px rgba(0, 0, 0, 0.3)] z-[100] text-base">
+    <div className="p-4 bg-gray-50 absolute rounded-md w-[320px] right-[60px] top-[60px] shadow-[2px 5px 10px 0px rgba(0, 0, 0, 0.3)] z-[100]">
       <GrClose
-        className="absolute top-4 right-4 text-base cursor-pointer"
+        className="absolute top-4 right-4 cursor-pointer"
         onClick={() => setShowModal(false)}
       />
       <>

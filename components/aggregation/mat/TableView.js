@@ -1,4 +1,4 @@
-import { useMemo, useRef, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useIntl } from 'react-intl'
 
 import Filters from './Filters'
@@ -29,11 +29,11 @@ const prepareDataforTable = (data, query, locale) => {
       measurement_count: 0,
     }
 
-    rowData.forEach((d) => {
-      countKeys.forEach((countKey) => {
+    for (const d of rowData) {
+      for (const countKey of countKeys) {
         row[countKey] = row[countKey] + d[countKey]
-      })
-    })
+      }
+    }
 
     table.push(row)
   }
@@ -46,8 +46,6 @@ const noRowsSelected = null
 
 const TableView = ({ data, query, showFilters = true }) => {
   const intl = useIntl()
-  const resetTableRef = useRef(false)
-  const yAxis = query.axis_y
 
   // The incoming data is reshaped to generate:
   // - reshapedData: holds the full set that will be used by GridChart
