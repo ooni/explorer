@@ -1,6 +1,8 @@
+import { UTCDate } from '@date-fns/utc'
 import { ResponsiveCalendar } from '@nivo/calendar'
 import CTABox from 'components/CallToActionBox'
 import SpinLoader from 'components/vendor/SpinLoader'
+import { add, compareDesc } from 'date-fns'
 import { colors } from 'ooni-components'
 import React, { useMemo, useState } from 'react'
 import { FormattedMessage } from 'react-intl'
@@ -64,22 +66,18 @@ const colorLegend = [
 
 const dateRange = (startDate, endDate) => {
   if (!startDate || !endDate) return
-  const start = new Date(
-    new Date(startDate.getFullYear(), 0, 0, 0).setUTCHours(0, 0, 0, 0),
-  )
-  const end = new Date(new Date(endDate).setUTCHours(0, 0, 0, 0))
-  const date = new Date(start.getTime())
+  let date = startDate
   const dates = []
 
-  while (date <= end) {
+  while (compareDesc(date, endDate) >= 0) {
     dates.push(new Date(date).toISOString().split('T')[0])
-    date.setUTCDate(date.getDate() + 1)
+    date = add(date, { days: 1 })
   }
   return dates
 }
 
 const backfillData = (data) => {
-  const range = dateRange(new Date(data[0].day), new Date())
+  const range = dateRange(new UTCDate(data[0].day), new UTCDate())
   return range.map((r) => data.find((d) => d.day === r) || { value: 0, day: r })
 }
 
@@ -87,18 +85,13 @@ const Calendar = React.memo(function Calendar({ startYear }) {
   const { countryCode } = useCountry()
   const today = new Date()
   const currentYear = today.getFullYear()
-  const firstMeasurementYear = startYear
-    ? new Date(startYear).getFullYear()
-    : new Date(data[0].day).getFullYear()
-
   const [selectedYear, setSelectedYear] = useState(currentYear)
+
   const since = `${selectedYear}-01-01`
   const until =
     selectedYear === currentYear
       ? dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
       : `${selectedYear + 1}-01-01`
-
-  const yearsOptions = getRange(firstMeasurementYear, currentYear)
 
   const { data, error, isLoading } = useSWR(
     [
@@ -118,12 +111,17 @@ const Calendar = React.memo(function Calendar({ startYear }) {
     swrOptions,
   )
 
+  const firstMeasurementYear = startYear
+    ? new Date(startYear).getFullYear()
+    : new Date(data[0].day).getFullYear()
+
+  const yearsOptions = getRange(firstMeasurementYear, currentYear)
+
   const calendarData = useMemo(() => {
-    if (data && data.length) {
+    if (data?.length) {
       return backfillData(data)
-    } else {
-      return []
     }
+    return []
   }, [data])
 
   return (
@@ -137,8 +135,8 @@ const Calendar = React.memo(function Calendar({ startYear }) {
         <div className="h-[180px]">
           <ResponsiveCalendar
             data={calendarData}
-            from={`${selectedYear}-01-01`}
-            to={`${selectedYear}-12-31`}
+            from={new Date(selectedYear, 0, 1, 0, 0, 0, 0)}
+            to={new Date(selectedYear, 11, 31, 23, 59, 59, 999)}
             emptyColor={colors.gray['100']}
             colorScale={(value) => findColor(value)}
             margin={{ top: 20, right: 0, bottom: 0, left: 20 }}
