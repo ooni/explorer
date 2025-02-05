@@ -43,7 +43,7 @@ export const prepareDataForGridChart = (data, query, locale) => {
   const rowLabels = {}
   const reshapedData = {}
 
-  data.forEach((item) => {
+  for (const item of data) {
     // Convert non-string keys (e.g `probe_asn`) to string
     // because they get casted to strings during Object transformations
     const key = String(item[query.axis_y])
@@ -54,7 +54,7 @@ export const prepareDataForGridChart = (data, query, locale) => {
       reshapedData[key] = [item]
       rowLabels[key] = getRowLabel(key, query.axis_y, locale)
     }
-  })
+  }
 
   const reshapedDataWithoutHoles = fillDataHoles(reshapedData, query)
 
