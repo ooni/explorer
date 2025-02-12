@@ -76,7 +76,7 @@ const NoCountriesFound = ({ searchTerm }) => (
 )
 
 export const getStaticProps = async () => {
-  const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API }) // eslint-disable-line
+  const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
   const result = await client.get('/api/_/countries')
 
   return {

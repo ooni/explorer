@@ -4,7 +4,6 @@
 // [ [code, name, description], [], [], ...]
 //
 
-/* eslint-disable quotes */
 export const categoryCodes = [
   [
     'ALDR',
@@ -134,7 +133,6 @@ export const categoryCodes = [
     'Sites promoting terrorism, violent militant or separatist movements.',
   ],
 ]
-/* eslint-enable quotes */
 
 export const getCategoryCodesMap = () => {
   const map = categoryCodes.reduce(

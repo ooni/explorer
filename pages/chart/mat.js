@@ -51,7 +51,6 @@ const MeasurementAggregationToolkit = () => {
     }
     // Ignore the dependency on `router` because we want
     // this effect to run only once, on mount, if query is empty.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [router.isReady])
 
   let linkToAPIQuery = null

@@ -33,7 +33,7 @@ export async function getServerSideProps({ res, query }) {
   }
 
   try {
-    const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API }) // eslint-disable-line
+    const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
     const results = await Promise.all([
       client.get('/api/_/country_overview', {
         params: { probe_cc: countryCode },

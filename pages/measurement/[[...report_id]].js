@@ -22,7 +22,7 @@ export async function getServerSideProps({ query }) {
     }
   }
 
-  const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API }) // eslint-disable-line
+  const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
   const params = {
     report_id,
     full: true,

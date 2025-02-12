@@ -83,7 +83,7 @@ const DashboardCircumvention = ({ availableCountries }) => {
 export async function getServerSideProps() {
   let availableCountries = []
   try {
-    const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API }) // eslint-disable-line
+    const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
     const res = await client.get('/api/_/circumvention_stats_by_country')
     const { results } = res.data
 
@@ -91,12 +91,12 @@ export async function getServerSideProps() {
   } catch (e) {
     console.error(e)
     // Sentry.captureException(e)
-  } finally {
-    return {
-      props: {
-        availableCountries,
-      },
-    }
+  }
+
+  return {
+    props: {
+      availableCountries,
+    },
   }
 }
 
