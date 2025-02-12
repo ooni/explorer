@@ -38,7 +38,6 @@ const Filters = ({ data, setDataForCharts, query }) => {
   const intl = useIntl()
   const resetTableRef = useRef(false)
   const yAxis = query.axis_y
-
   const getRowId = useCallback((row) => row[query.axis_y], [query.axis_y])
 
   const columns = useMemo(
@@ -120,11 +119,24 @@ const Filters = ({ data, setDataForCharts, query }) => {
   } = useReactTable({
     columns,
     data,
+    initialState: {
+      sorting: [
+        {
+          id: 'yAxisLabel',
+          desc: yAxis === 'domain',
+        },
+      ],
+    },
+    globalFilterFn: (row, _, filterValue) => {
+      const value = row.getValue('yAxisLabel')
+      return typeof value === 'string'
+        ? value.toLowerCase().includes(filterValue.toLowerCase())
+        : row.id.toLowerCase().includes(filterValue.toLowerCase())
+    },
     getRowId,
     getSortedRowModel: getSortedRowModel(),
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
-    globalFilterFn: 'includesString',
   })
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
@@ -206,15 +218,11 @@ const Filters = ({ data, setDataForCharts, query }) => {
             {intl.formatMessage({ id: 'General.Reset' })}
           </button>
         </div>
+
         <div className="flex-1">
-          <div className="border border-black border-spacing-0">
-            <div className="last:border-b-2 last:border-black overflow-hidden">
-              <table
-                style={{
-                  tableLayout: 'fixed',
-                  width: '100%',
-                }}
-              >
+          <div className="border border-black border-spacing-0 min-w-[800px]">
+            <div className="last:border-b-2 last:border-black">
+              <table className="w-full table-fixed">
                 <thead>
                   {getHeaderGroups().map((headerGroup) => (
                     <tr
@@ -232,20 +240,26 @@ const Filters = ({ data, setDataForCharts, query }) => {
                             }`}
                             key={header.id}
                             onClick={header.column.getToggleSortingHandler()}
-                            style={{ width: header.getSize() }}
+                            style={{
+                              width:
+                                header.column.id === 'yAxisLabel'
+                                  ? '40%'
+                                  : header.getSize(),
+                              minWidth: '200px',
+                            }}
                           >
                             <span className="flex items-center">
                               {flexRender(
                                 header.column.columnDef.header,
                                 header.getContext(),
                               )}
-                              {({
-                                asc: <FaSortDown />,
-                                desc: <FaSortUp />,
-                              }[header.column.getIsSorted()] ??
-                              header.column.getCanSort()) ? (
-                                <FaSort />
-                              ) : null}
+                              {header.column.getCanSort()
+                                ? {
+                                    asc: <FaSortDown />,
+                                    desc: <FaSortUp />,
+                                    false: <FaSort />,
+                                  }[header.column.getIsSorted()]
+                                : null}
                             </span>
                           </th>
                         )
@@ -253,10 +267,10 @@ const Filters = ({ data, setDataForCharts, query }) => {
                     </tr>
                   ))}
                   <tr className="h-auto border-b border-black p-3">
-                    <td className="flex gap-1 p-2">
+                    <th colSpan={columns.length} className="flex gap-1 p-2">
                       {intl.formatMessage({ id: 'MAT.Table.Search' })}{' '}
                       <input
-                        className="border-0 outline-0"
+                        className="border-0 outline-0 font-normal"
                         value={getState().globalFilter ?? ''}
                         onChange={(e) =>
                           setGlobalFilter(String(e.target.value))
@@ -266,7 +280,7 @@ const Filters = ({ data, setDataForCharts, query }) => {
                           { count: rows?.length },
                         )}
                       />
-                    </td>
+                    </th>
                   </tr>
                 </thead>
               </table>
@@ -288,29 +302,19 @@ const Filters = ({ data, setDataForCharts, query }) => {
                               virtualRow.start - index * virtualRow.size
                             }px)`,
                           }}
-                          // data-index={virtualRow.index} //needed for dynamic row height measurement
-                          // ref={(node) => virtualizer.measureElement(node)} //measure dynamic row height
                         >
                           {row.getVisibleCells().map((cell) => {
                             return (
                               <td
                                 key={cell.id}
                                 className="px-2 py-1"
-                                style={{ width: cell.column.columnDef.size }}
-                                // style={{
-                                //   width: cell.column.columnDef.meta?.size,
-                                // }}
-                                // style={
-                                //   cell.column.columnDef.size !== 150
-                                //     ? {
-                                //         width: cell.column.columnDef.size,
-                                //       }
-                                //     : { width: 'auto', minWidth: 200 }
-                                //   // width:
-                                //   //   cell.column.columnDef.size !== 150
-                                //   //     ? cell.column.columnDef.size
-                                //   //     : 'auto',
-                                // }
+                                style={{
+                                  width:
+                                    cell.column.id === 'yAxisLabel'
+                                      ? '40%'
+                                      : cell.column.columnDef.size,
+                                  minWidth: '200px',
+                                }}
                               >
                                 {flexRender(
                                   cell.column.columnDef.cell,

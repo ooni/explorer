@@ -2,6 +2,19 @@ import PropTypes from 'prop-types'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
 import { testNames } from '../../test-info'
 
+const InputRowLabel = ({ input }) => {
+  const truncatedInput = input
+  return (
+    <div className="truncate" title={input}>
+      {truncatedInput}
+    </div>
+  )
+}
+
+InputRowLabel.propTypes = {
+  input: PropTypes.string,
+}
+
 const blockingTypeLabels = {
   '': '<empty>',
   dns: 'DNS Tampering',
@@ -20,7 +33,7 @@ export const getRowLabel = (key, yAxis, locale = 'en') => {
       return messages[`CategoryCode.${key}.Name`]
     case 'input':
     case 'domain':
-      return key
+      return <InputRowLabel input={key} />
     case 'blocking_type':
       return blockingTypeLabels[key] ?? key
     case 'probe_asn':
