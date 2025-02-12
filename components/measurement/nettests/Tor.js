@@ -1,10 +1,15 @@
+import {
+  flexRender,
+  getCoreRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table'
 import { colors } from 'ooni-components'
 import { Cross, Tick } from 'ooni-components/icons'
 import PropTypes from 'prop-types'
 import { useMemo } from 'react'
 import { FaClipboard } from 'react-icons/fa'
 import { FormattedMessage, defineMessages } from 'react-intl'
-import { useSortBy, useTable } from 'react-table'
 import { useClipboard } from 'use-clipboard-copy'
 
 import { twMerge } from 'tailwind-merge'
@@ -37,50 +42,45 @@ NameCell.propTypes = {
 }
 
 const Table = ({ columns, data }) => {
-  const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
-    useTable(
-      {
-        columns,
-        data,
-      },
-      useSortBy,
-    )
+  const { getHeaderGroups, getRowModel } = useReactTable({
+    columns,
+    data,
+    getSortedRowModel: getSortedRowModel(),
+    getCoreRowModel: getCoreRowModel(),
+  })
 
   const cellClassNames = 'm-0 p-2 border-b border-black text-center'
   return (
-    /* eslint-disable react/jsx-key */
-    <table
-      className="border border-black border-spacing-0 table-fixed break-all w-full"
-      {...getTableProps()}
-    >
+    <table className="border border-black border-spacing-0 table-fixed break-all w-full">
       <thead>
-        {headerGroups.map((headerGroup, i) => (
-          <tr key={i} {...headerGroup.getHeaderGroupProps()}>
-            {headerGroup.headers.map((column, j) => (
+        {getHeaderGroups().map((headerGroup) => (
+          <tr key={headerGroup.id}>
+            {headerGroup.headers.map((header) => (
               <th
-                key={j}
+                key={header.id}
                 className={twMerge('border-r', cellClassNames)}
-                {...column.getHeaderProps(column.getSortByToggleProps())}
               >
-                {column.render('Header')}
+                {flexRender(
+                  header.column.columnDef.header,
+                  header.getContext(),
+                )}
                 {/* Sort order indicator */}
-                <span>
+                {/* <span>
                   {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-                </span>
+                </span> */}
               </th>
             ))}
           </tr>
         ))}
       </thead>
-      <tbody {...getTableBodyProps()}>
-        {rows.map((row) => {
-          prepareRow(row)
+      <tbody>
+        {getRowModel().rows.map((row) => {
           return (
-            <tr {...row.getRowProps()}>
-              {row.cells.map((cell) => {
+            <tr key={row.id}>
+              {row.getVisibleCells().map((cell) => {
                 return (
-                  <td className={cellClassNames} {...cell.getCellProps()}>
-                    {cell.render('Cell')}
+                  <td key={cell.id} className={cellClassNames}>
+                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
                   </td>
                 )
               })}
@@ -89,11 +89,12 @@ const Table = ({ columns, data }) => {
         })}
       </tbody>
     </table>
-    /* eslint-enable react/jsx-key */
   )
 }
 
-const ConnectionStatusCell = ({ cell: { value } }) => {
+const ConnectionStatusCell = ({ getValue }) => {
+  const value = getValue()
+
   let statusIcon = null
   if (value === false) {
     statusIcon = <div className="font-bold text-base text-gray-700">N/A</div>
@@ -107,7 +108,7 @@ const ConnectionStatusCell = ({ cell: { value } }) => {
   }
   return (
     <>
-      {statusIcon} {value}
+      <span className="inline-block">{statusIcon}</span> {value}
     </>
   )
 }
@@ -144,31 +145,28 @@ const TorDetails = ({ isAnomaly, isFailure, measurement, render }) => {
   const columns = useMemo(
     () => [
       {
-        Header: (
+        header: (
           <FormattedMessage id="Measurement.Details.Tor.Table.Header.Name" />
         ),
-        accessor: 'name',
-        Cell: (
-          { cell: { value } }, // eslint-disable-line react/display-name,react/prop-types
-        ) => <NameCell>{value}</NameCell>,
+        accessorKey: 'name',
       },
       {
-        Header: (
+        header: (
           <FormattedMessage id="Measurement.Details.Tor.Table.Header.Address" />
         ),
-        accessor: 'address',
+        accessorKey: 'address',
       },
       {
-        Header: (
+        header: (
           <FormattedMessage id="Measurement.Details.Tor.Table.Header.Type" />
         ),
-        accessor: 'type',
+        accessorKey: 'type',
       },
       {
-        Header: <FormattedMessage id="General.Accessible" />,
-        accessor: 'failure',
-        collapse: true,
-        Cell: ConnectionStatusCell,
+        header: <FormattedMessage id="General.Accessible" />,
+        accessorKey: 'failure',
+        // collapse: true,
+        cell: ConnectionStatusCell,
       },
     ],
     [],

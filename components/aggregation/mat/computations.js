@@ -1,8 +1,6 @@
 import dayjs from 'services/dayjs'
-import { localisedCountries } from 'utils/i18nCountries'
+import { getLocalisedRegionName, localisedCountries } from 'utils/i18nCountries'
 import { getCategoryCodesMap } from '../../utils/categoryCodes'
-
-const categoryCodesMap = getCategoryCodesMap()
 
 export function getDatesBetween(startDate, endDate, timeGrain) {
   const dateSet = new Set()
@@ -63,7 +61,7 @@ export function fillRowHoles(data, query, locale) {
   const sampleDataPoint = { ...newData[0] }
 
   // Add empty datapoints for columns where measurements are not available
-  missingCols.forEach((col) => {
+  for (const col of missingCols) {
     // use any (first) column data to popuplate yAxis value e.g `input` | `probe_cc`
     // and then overwrite with zero-data for that missing date
     newData.splice([...domain].indexOf(col), 0, {
@@ -75,7 +73,7 @@ export function fillRowHoles(data, query, locale) {
       measurement_count: 0,
       ok_count: 0,
     })
-  })
+  }
 
   return newData
 }
@@ -95,8 +93,11 @@ export function fillDataHoles(data, query) {
 
 export const sortRows = (a, b, type, locale = 'en') => {
   switch (type) {
-    // case 'probe_cc':
-    //   return new Intl.Collator(locale).compare(getLocalisedRegionName(a, locale), getLocalisedRegionName(b, locale))
+    case 'probe_cc':
+      return new Intl.Collator(locale).compare(
+        getLocalisedRegionName(a, locale),
+        getLocalisedRegionName(b, locale),
+      )
     default:
       return new Intl.Collator(locale).compare(a, b)
   }
