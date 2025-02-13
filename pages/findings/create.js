@@ -35,10 +35,12 @@ const Create = () => {
   const { loading, user } = useUser()
   const [showModal, setShowModal] = useState(false)
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (!user && !loading && !showModal) router.push('/findings')
   }, [user, loading, showModal])
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (user && !loading && !getUserEmail()) setShowModal(true)
   }, [])

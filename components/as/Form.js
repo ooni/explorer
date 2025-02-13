@@ -32,6 +32,7 @@ const Form = ({ onSubmit, since, until }) => {
     setShowDatePicker(false)
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     // trigger submit only when the dates are valid
     if (
