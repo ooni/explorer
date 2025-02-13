@@ -2,8 +2,8 @@
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 const { withSentryConfig } = require('@sentry/nextjs')
 const glob = require('glob')
-const { dirname, basename, resolve } = require('path')
-const { execSync } = require('child_process')
+const { dirname, basename, resolve } = require('node:path')
+const { execSync } = require('node:child_process')
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
@@ -15,6 +15,7 @@ const DEFAULT_LOCALE = 'en'
 function getSupportedLanguages() {
   const supportedLanguages = new Set()
   supportedLanguages.add(DEFAULT_LOCALE) // at least 1 supported language
+  // biome-ignore lint/complexity/noForEach: <explanation>
   glob
     .sync(`${LANG_DIR}/**/*.json`)
     .forEach((f) => supportedLanguages.add(basename(f, '.json')))
