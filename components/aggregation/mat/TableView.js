@@ -19,6 +19,7 @@ const prepareDataforTable = (data, query, locale) => {
     'failure_count',
     'measurement_count',
   ]
+
   for (const [key, rowData] of reshapedData) {
     const row = {
       [query.axis_y]: key,
@@ -68,7 +69,7 @@ const TableView = ({ data, query, showFilters = true }) => {
       {showFilters && (
         <Filters
           query={query}
-          tableData={tableData}
+          data={tableData}
           setDataForCharts={setDataForCharts}
         />
       )}

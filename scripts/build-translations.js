@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 const glob = require('glob')
 const { dirname, basename, resolve } = require('path')
 const { readFileSync, writeFileSync } = require('fs')

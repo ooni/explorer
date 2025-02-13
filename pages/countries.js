@@ -73,7 +73,7 @@ const NoCountriesFound = ({ searchTerm }) => (
 )
 
 export const getStaticProps = async () => {
-  const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API }) // eslint-disable-line
+  const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
   const result = await client.get('/api/_/countries')
 
   return {
@@ -108,8 +108,9 @@ const Countries = ({ countries }) => {
       searchInput !== ''
         ? sortedCountries.filter(
             (country) =>
-              country.name.toLowerCase().indexOf(searchInput.toLowerCase()) >
-              -1,
+              country.localisedName
+                .toLowerCase()
+                .indexOf(searchInput.toLowerCase()) > -1,
           )
         : sortedCountries,
     [searchInput],
@@ -119,6 +120,7 @@ const Countries = ({ countries }) => {
     setSearchInput(searchTerm)
   }
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   const debouncedSearchHandler = useMemo(() => debounce(searchHandler, 200), [])
 
   // Africa Americas Asia Europe Oceania Antarctica

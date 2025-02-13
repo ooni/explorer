@@ -1,26 +1,11 @@
 import PropTypes from 'prop-types'
 import { useCallback, useRef } from 'react'
 
-import { defaultRangeExtractor, useVirtual } from 'react-virtual'
+import { useVirtualizer } from '@tanstack/react-virtual'
 import RowChart from './RowChart'
 
 const GRID_ROW_CSS_SELECTOR = 'outerListElement'
 const ROW_HEIGHT = 70
-const retainMountedRows = false
-
-const useKeepMountedRangeExtractor = () => {
-  const renderedRef = useRef(new Set())
-
-  const rangeExtractor = useCallback((range) => {
-    renderedRef.current = new Set([
-      ...renderedRef.current,
-      ...defaultRangeExtractor(range),
-    ])
-    return Array.from(renderedRef.current)
-  }, [])
-
-  return rangeExtractor
-}
 
 export const VirtualRows = ({
   data,
@@ -31,21 +16,13 @@ export const VirtualRows = ({
   tooltipIndex,
   xAxis = null,
 }) => {
-  const parentRef = useRef()
-  const keepMountedRangeExtractor = useKeepMountedRangeExtractor()
-
-  const keyExtractor = useCallback((index) => rows[index], [rows])
-
-  const rowVirtualizer = useVirtual({
-    size: Object.keys(rows).length,
-    parentRef,
+  const parentRef = useRef(null)
+  const rowVirtualizer = useVirtualizer({
+    count: Object.keys(rows).length,
+    getScrollElement: () => parentRef.current,
     estimateSize: useCallback(() => ROW_HEIGHT, []),
     paddingStart: 62, // for the sticky x-axis
     overscan: 0,
-    keyExtractor,
-    rangeExtractor: retainMountedRows
-      ? keepMountedRangeExtractor
-      : defaultRangeExtractor,
   })
 
   return (
@@ -58,32 +35,32 @@ export const VirtualRows = ({
     >
       <div
         style={{
-          height: `${rowVirtualizer.totalSize}px`,
+          height: `${rowVirtualizer.getTotalSize()}px`,
           width: '100%',
           position: 'relative',
         }}
       >
         {xAxis && <div className="bg-white sticky z-[1] top-0">{xAxis}</div>}
-        {rowVirtualizer.virtualItems.map((virtualRow) => (
+        {rowVirtualizer.getVirtualItems().map((virtualItem) => (
           <div
-            key={virtualRow.index}
+            key={virtualItem.index}
             style={{
               position: 'absolute',
               top: 0,
               left: 0,
               width: '100%',
-              height: `${virtualRow.size}px`,
-              transform: `translateY(${virtualRow.start}px)`,
-              zIndex: tooltipIndex[0] === virtualRow.index ? 1 : 0,
+              height: `${virtualItem.size}px`,
+              transform: `translateY(${virtualItem.start}px)`,
+              zIndex: tooltipIndex[0] === virtualItem.index ? 1 : 0,
             }}
           >
             <RowChart
-              key={virtualRow.key}
-              rowIndex={virtualRow.index}
-              data={data.get(rows[virtualRow.index])}
+              key={virtualItem.key}
+              rowIndex={virtualItem.index}
+              data={data.get(rows[virtualItem.index])}
               indexBy={indexBy}
-              height={virtualRow.size}
-              label={rowLabels[rows[virtualRow.index]]}
+              height={virtualItem.size}
+              label={rowLabels[rows[virtualItem.index]]}
             />
           </div>
         ))}
@@ -91,6 +68,7 @@ export const VirtualRows = ({
     </div>
   )
 }
+
 VirtualRows.propTypes = {
   data: PropTypes.objectOf(PropTypes.array).isRequired,
   gridHeight: PropTypes.number.isRequired,

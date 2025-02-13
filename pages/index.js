@@ -55,7 +55,7 @@ const FeatureBoxTitle = ({ className, ...props }) => (
 )
 
 export async function getServerSideProps({ query }) {
-  const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API }) // eslint-disable-line
+  const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
   const result = await client.get('/api/_/global_overview')
 
   return {

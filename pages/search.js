@@ -92,7 +92,7 @@ const queryToParams = ({ query }) => {
 }
 
 const getMeasurements = (query) => {
-  const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API }) // eslint-disable-line
+  const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
   const params = queryToParams({ query })
   return client.get('/api/v1/measurements', { params })
 }

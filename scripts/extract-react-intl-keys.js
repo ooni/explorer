@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 /* global require */
 
 const glob = require('glob')

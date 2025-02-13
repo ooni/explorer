@@ -1,21 +1,13 @@
 import {
-  forwardRef,
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-} from 'react'
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
+  useReactTable,
+} from '@tanstack/react-table'
+import { useVirtualizer } from '@tanstack/react-virtual'
+import { forwardRef, useCallback, useEffect, useMemo, useRef } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
-import {
-  useAsyncDebounce,
-  useFlexLayout,
-  useGlobalFilter,
-  useRowSelect,
-  useSortBy,
-  useTable,
-} from 'react-table'
-import { useVirtual } from 'react-virtual'
 import 'regenerator-runtime'
 
 import { FaSort, FaSortDown, FaSortUp } from 'react-icons/fa'
@@ -38,236 +30,130 @@ const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
 })
 IndeterminateCheckbox.displayName = 'IndeterminateCheckbox'
 
-const SearchFilter = ({
-  column: { filterValue, preFilteredRows, setFilter },
-  groupedRows,
-}) => {
-  const count = groupedRows.length
-
-  return (
-    <input
-      value={filterValue || ''}
-      onChange={(e) => {
-        setFilter(e.target.value || undefined) // Set undefined to remove the filter entirely
-      }}
-      placeholder={intl.formatMessage(
-        { id: 'MAT.Table.FilterPlaceholder' },
-        { count },
-      )}
-    />
-  )
-}
-
-function GlobalFilter({
-  preGlobalFilteredRows,
-  globalFilter,
-  setGlobalFilter,
-}) {
-  const intl = useIntl()
-  const count = preGlobalFilteredRows.length
-  const [value, setValue] = useState(globalFilter)
-  const onChange = useAsyncDebounce((value) => {
-    setGlobalFilter(value || '')
-  }, 200)
-
-  useEffect(() => {
-    if (!globalFilter || globalFilter === '') {
-      setValue('')
-    }
-  }, [globalFilter])
-
-  return (
-    <div className="m-4">
-      {intl.formatMessage({ id: 'MAT.Table.Search' })}{' '}
-      <input
-        className="border-0 outline-0"
-        value={value || ''}
-        onChange={(e) => {
-          setValue(e.target.value)
-          onChange(e.target.value)
-        }}
-        placeholder={intl.formatMessage(
-          { id: 'MAT.Table.FilterPlaceholder' },
-          { count },
-        )}
-      />
-    </div>
-  )
-}
-
-const SortHandle = ({ isSorted, isSortedDesc }) => {
-  return (
-    <>{isSorted ? isSortedDesc ? <FaSortDown /> : <FaSortUp /> : <FaSort />}</>
-  )
-}
-
 // This same reference is passed to GridChart when there are no rows to filter out
 // Maybe this can also be `[]`
 const noRowsSelected = null
 
-const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
+const Filters = ({ data, setDataForCharts, query }) => {
   const intl = useIntl()
   const resetTableRef = useRef(false)
   const yAxis = query.axis_y
-
-  const defaultColumn = useMemo(
-    () => ({
-      // When using the useFlexLayout:
-      width: 70, // width is used for both the flex-basis and flex-grow
-      Filter: SearchFilter,
-      Cell: ({ value }) => {
-        const intl = useIntl()
-        return typeof value === 'number'
-          ? intl.formatNumber(value, {})
-          : String(value)
-      },
-    }),
-    [],
-  )
-
-  // Aggregate by the first column
-  const initialState = useMemo(
-    () => ({
-      hiddenColumns: ['yAxisCode'],
-      sortBy: [{ id: 'yAxisLabel', desc: false }],
-    }),
-    [],
-  )
-
   const getRowId = useCallback((row) => row[query.axis_y], [query.axis_y])
 
   const columns = useMemo(
     () => [
       {
-        Header: intl.formatMessage({ id: `MAT.Table.Header.${yAxis}` }),
-        Cell: ({ value, row }) => (
-          <div className={row.isSelected && 'font-bold'}>{value}</div>
+        id: 'select',
+        enableSorting: false,
+        size: 30,
+        header: ({ table }) => (
+          <IndeterminateCheckbox
+            {...{
+              checked: table.getIsAllRowsSelected(),
+              indeterminate: table.getIsSomeRowsSelected(),
+              onChange: table.getToggleAllRowsSelectedHandler(),
+            }}
+          />
+        ),
+        cell: ({ row }) => (
+          <IndeterminateCheckbox
+            {...{
+              checked: row.getIsSelected(),
+              disabled: !row.getCanSelect(),
+              indeterminate: row.getIsSomeSelected(),
+              onChange: row.getToggleSelectedHandler(),
+            }}
+          />
+        ),
+      },
+      {
+        header: intl.formatMessage({ id: `MAT.Table.Header.${yAxis}` }),
+        cell: ({ row, cell }) => (
+          <div className={row.getIsSelected() && 'font-bold'}>
+            {cell.getValue()}
+          </div>
         ),
         id: 'yAxisLabel',
-        accessor: 'rowLabel',
-        filter: 'text',
-        style: {
-          width: '35%',
-        },
+        accessorKey: 'rowLabel',
+        size: 400,
       },
       {
-        id: 'yAxisCode',
-        accessor: yAxis,
-        disableFilters: true,
+        header: <FormattedMessage id="MAT.Table.Header.anomaly_count" />,
+        id: 'anomaly_count',
+        accessorKey: 'anomaly_count',
+        enableColumnFilter: false,
+        size: 160,
       },
       {
-        Header: <FormattedMessage id="MAT.Table.Header.anomaly_count" />,
-        accessor: 'anomaly_count',
-        width: 150,
-        sortDescFirst: true,
-        disableFilters: true,
-        style: {
-          textAlign: 'end',
-        },
+        header: <FormattedMessage id="MAT.Table.Header.confirmed_count" />,
+        id: 'confirmed_count',
+        accessorKey: 'confirmed_count',
+        enableColumnFilter: false,
+        size: 160,
       },
       {
-        Header: <FormattedMessage id="MAT.Table.Header.confirmed_count" />,
-        accessor: 'confirmed_count',
-        width: 150,
-        sortDescFirst: true,
-        disableFilters: true,
-        style: {
-          textAlign: 'end',
-        },
+        header: <FormattedMessage id="MAT.Table.Header.failure_count" />,
+        id: 'failure_count',
+        accessorKey: 'failure_count',
+        enableColumnFilter: false,
+        size: 160,
       },
       {
-        Header: <FormattedMessage id="MAT.Table.Header.failure_count" />,
-        accessor: 'failure_count',
-        width: 150,
-        sortDescFirst: true,
-        disableFilters: true,
-        style: {
-          textAlign: 'end',
-        },
-      },
-      {
-        Header: <FormattedMessage id="MAT.Table.Header.measurement_count" />,
-        accessor: 'measurement_count',
-        width: 150,
-        sortDescFirst: true,
-        disableFilters: true,
-        style: {
-          textAlign: 'end',
-        },
+        header: <FormattedMessage id="MAT.Table.Header.measurement_count" />,
+        id: 'measurement_count',
+        accessorKey: 'measurement_count',
+        enableColumnFilter: false,
+        size: 160,
       },
     ],
     [intl, yAxis],
   )
 
   const {
-    getTableProps,
-    getTableBodyProps,
-    headerGroups,
-    rows, // contains filtered rows
+    getHeaderGroups,
+    getRowModel,
     toggleAllRowsSelected,
-    selectedFlatRows,
-    prepareRow,
-    state,
+    getState,
+    getPreFilteredRowModel,
     setGlobalFilter,
-    preGlobalFilteredRows,
-    globalFilteredRows,
-  } = useTable(
-    {
-      columns,
-      data: tableData,
-      initialState,
-      defaultColumn,
-      getRowId,
-    },
-    useFlexLayout,
-    useGlobalFilter,
-    useSortBy,
-    useRowSelect,
-    (hooks) => {
-      hooks.visibleColumns.push((columns) => [
-        // Pseudo column for selection checkboxes
+  } = useReactTable({
+    columns,
+    data,
+    initialState: {
+      sorting: [
         {
-          id: 'selection',
-          width: 30,
-          // The header can use the table's getToggleAllRowsSelectedProps method
-          // to render a checkbox
-          // eslint-disable-next-line react/display-name
-          Header: ({ getToggleAllRowsSelectedProps }) => (
-            <div>
-              <IndeterminateCheckbox {...getToggleAllRowsSelectedProps()} />
-            </div>
-          ),
-          // The cell can use the individual row's getToggleRowSelectedProps method
-          // to the render a checkbox
-          // eslint-disable-next-line react/display-name
-          Cell: ({ row }) => (
-            <div>
-              <IndeterminateCheckbox {...row.getToggleRowSelectedProps()} />
-            </div>
-          ),
+          id: 'yAxisLabel',
+          desc: yAxis === 'domain',
         },
-        ...columns,
-      ])
+      ],
     },
-  )
+    globalFilterFn: (row, _, filterValue) => {
+      const value = row.getValue('yAxisLabel')
+      return typeof value === 'string'
+        ? value.toLowerCase().includes(filterValue.toLowerCase())
+        : row.id.toLowerCase().includes(filterValue.toLowerCase())
+    },
+    getRowId,
+    getSortedRowModel: getSortedRowModel(),
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+  })
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   const updateCharts = useCallback(() => {
-    const selectedRows = Object.keys(state.selectedRowIds).sort((a, b) =>
+    const selectedRows = Object.keys(getState().rowSelection).sort((a, b) =>
       sortRows(a, b, query.axis_y, intl.locale),
     )
 
-    if (
-      selectedRows.length > 0 &&
-      selectedRows.length !== preGlobalFilteredRows.length
-    ) {
+    if (selectedRows.length > 0 && selectedRows.length !== rows?.length) {
       setDataForCharts(selectedRows)
     } else {
       setDataForCharts(noRowsSelected)
     }
   }, [
-    preGlobalFilteredRows.length,
+    getPreFilteredRowModel,
     query.axis_y,
-    state.selectedRowIds,
+    getState,
     setDataForCharts,
     intl.locale,
   ])
@@ -276,39 +162,41 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
    * Reset the table filter
    * Note: doesn't reset the sort state
    */
+
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   const resetFilter = useCallback(() => {
     // toggleAllRowsSelected() doesn't work after calling setGlobalFilter('')
     // so if globalFilter is set, then use resetTableRef to make it a two-step
     // reset (step 2 in the below useEffect)
     // otherwise, just toggle the selected rows and the reset is done
-    if (!state.globalFilter) {
+    if (!getState().globalFilter) {
       toggleAllRowsSelected(false)
     } else {
       resetTableRef.current = true
       setGlobalFilter('')
     }
     setDataForCharts(noRowsSelected)
-  }, [
-    setGlobalFilter,
-    state.globalFilter,
-    toggleAllRowsSelected,
-    setDataForCharts,
-  ])
+  }, [setGlobalFilter, toggleAllRowsSelected, setDataForCharts])
 
   useEffect(() => {
-    if (state.globalFilter === undefined && resetTableRef.current === true) {
+    if (
+      getState().globalFilter === undefined &&
+      resetTableRef.current === true
+    ) {
       resetTableRef.current = false
       toggleAllRowsSelected(false)
     }
-  }, [state.globalFilter, toggleAllRowsSelected])
+  }, [getState, toggleAllRowsSelected])
 
-  const parentRef = useRef()
+  const parentRef = useRef(null)
 
-  const { virtualItems: virtualRows, totalSize } = useVirtual({
-    size: rows.length,
-    parentRef,
+  const { rows } = getRowModel()
+
+  const virtualizer = useVirtualizer({
+    count: rows.length,
+    getScrollElement: () => parentRef.current,
     overscan: 10,
-    estimateSize: useCallback(() => 35, []),
+    estimateSize: useCallback(() => 28, []),
   })
 
   return (
@@ -330,101 +218,116 @@ const Filters = ({ data = [], tableData, setDataForCharts, query }) => {
             {intl.formatMessage({ id: 'General.Reset' })}
           </button>
         </div>
+
         <div className="flex-1">
-          <div
-            className="Table border border-black border-spacing-0"
-            {...getTableProps()}
-          >
-            <div className="TableHeader last:border-b-2 last:border-black">
-              {headerGroups.map((headerGroup, i) => (
-                <div
-                  className="TableRow flex h-auto mb-2 border-b border-black"
-                  key={i}
-                  {...headerGroup.getHeaderGroupProps()}
-                >
-                  {headerGroup.headers.map((column, i) => {
-                    return (
-                      <div
-                        className="Cell p-2 border-r border-black font-bold last:border-r-0"
-                        key={i}
-                        {...column.getHeaderProps([
-                          {
-                            style: column.style,
-                          },
-                        ])}
-                      >
-                        <span
-                          className="flex items-center"
-                          {...column.getSortByToggleProps()}
-                        >
-                          {column.render('Header')}
-                          {column.canSort && (
-                            <SortHandle
-                              isSorted={column.isSorted}
-                              isSortedDesc={column.isSortedDesc}
-                            />
-                          )}
-                        </span>
-                      </div>
-                    )
-                  })}
-                </div>
-              ))}
-              <div className="TableRow h-auto mb-2 border-b border-black">
-                <GlobalFilter
-                  preGlobalFilteredRows={preGlobalFilteredRows}
-                  globalFilter={state.globalFilter}
-                  setGlobalFilter={setGlobalFilter}
-                />
-              </div>
-            </div>
-            <div
-              ref={parentRef}
-              className="block h-[200px] overflow-auto w-full"
-            >
-              <div
-                className="TableBody h-[250px] overflow-auto block relative"
-                style={{
-                  height: `${totalSize}px`,
-                }}
-              >
-                {virtualRows.map((virtualRow) => {
-                  const row = rows[virtualRow.index]
-                  prepareRow(row)
-                  return (
-                    <div
-                      className="flex h-[35px] border-b border-black last:border-b-0"
-                      key={virtualRow.index}
-                      ref={virtualRow.measureRef}
-                      {...row.getRowProps({
-                        style: {
-                          position: 'absolute',
-                          top: 0,
-                          left: 0,
-                          width: '100%',
-                          height: `${virtualRow.size}px`,
-                          transform: `translateY(${virtualRow.start}px)`,
-                        },
-                      })}
+          <div className="border border-black border-spacing-0 min-w-[800px]">
+            <div className="last:border-b-2 last:border-black">
+              <table className="w-full table-fixed">
+                <thead>
+                  {getHeaderGroups().map((headerGroup) => (
+                    <tr
+                      className="h-auto border-b border-black "
+                      key={headerGroup.id}
                     >
-                      {row.cells.map((cell, i) => {
+                      {headerGroup.headers.map((header) => {
                         return (
-                          <div
-                            className="Cell p-3"
-                            key={i}
-                            {...cell.getCellProps([
-                              {
-                                style: cell.column.style,
-                              },
-                            ])}
+                          // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
+                          <th
+                            className={`p-2 border-r border-black font-bold last:border-r-0 ${
+                              header.column.getCanSort()
+                                ? 'cursor-pointer select-none'
+                                : ''
+                            }`}
+                            key={header.id}
+                            onClick={header.column.getToggleSortingHandler()}
+                            style={{
+                              width:
+                                header.column.id === 'yAxisLabel'
+                                  ? '40%'
+                                  : header.getSize(),
+                              minWidth: '200px',
+                            }}
                           >
-                            {cell.render('Cell')}
-                          </div>
+                            <span className="flex items-center">
+                              {flexRender(
+                                header.column.columnDef.header,
+                                header.getContext(),
+                              )}
+                              {header.column.getCanSort()
+                                ? {
+                                    asc: <FaSortDown />,
+                                    desc: <FaSortUp />,
+                                    false: <FaSort />,
+                                  }[header.column.getIsSorted()]
+                                : null}
+                            </span>
+                          </th>
                         )
                       })}
-                    </div>
-                  )
-                })}
+                    </tr>
+                  ))}
+                  <tr className="h-auto border-b border-black p-3">
+                    <th colSpan={columns.length} className="flex gap-1 p-2">
+                      {intl.formatMessage({ id: 'MAT.Table.Search' })}{' '}
+                      <input
+                        className="border-0 outline-0 font-normal"
+                        value={getState().globalFilter ?? ''}
+                        onChange={(e) =>
+                          setGlobalFilter(String(e.target.value))
+                        }
+                        placeholder={intl.formatMessage(
+                          { id: 'MAT.Table.FilterPlaceholder' },
+                          { count: rows?.length },
+                        )}
+                      />
+                    </th>
+                  </tr>
+                </thead>
+              </table>
+            </div>
+
+            <div ref={parentRef} className="h-[250px] overflow-auto">
+              <div style={{ height: `${virtualizer.getTotalSize()}px` }}>
+                <table style={{ tableLayout: 'fixed', width: '100%' }}>
+                  <tbody>
+                    {virtualizer.getVirtualItems().map((virtualRow, index) => {
+                      const row = rows[virtualRow.index]
+                      return (
+                        <tr
+                          key={row.id}
+                          style={{
+                            boxShadow: '0 1px black',
+                            height: `${virtualRow.size}px`,
+                            transform: `translateY(${
+                              virtualRow.start - index * virtualRow.size
+                            }px)`,
+                          }}
+                        >
+                          {row.getVisibleCells().map((cell) => {
+                            return (
+                              <td
+                                key={cell.id}
+                                className="px-2 py-1"
+                                style={{
+                                  width:
+                                    cell.column.id === 'yAxisLabel'
+                                      ? '40%'
+                                      : cell.column.columnDef.size,
+                                  minWidth: '200px',
+                                }}
+                              >
+                                {flexRender(
+                                  cell.column.columnDef.cell,
+                                  cell.getContext(),
+                                )}
+                              </td>
+                            )
+                          })}
+                        </tr>
+                      )
+                    })}
+                  </tbody>
+                </table>
               </div>
             </div>
           </div>
