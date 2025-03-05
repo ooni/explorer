@@ -18,6 +18,7 @@ import dayjs from 'services/dayjs'
 import { fetcherWithPreprocessing, simpleFetcher } from 'services/fetchers'
 import useSWR from 'swr'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
+import { SectionText } from '../../components/ThirdPartyDataChart'
 import { toCompactNumberUnit } from '../../utils'
 import TestGroupBadge from '/components/Badge'
 
@@ -322,11 +323,15 @@ const NetworkDashboard = ({ probe_asn, networkName, countriesData }) => {
                   <ChartsContainer />
                 </div>
                 {since && until && (
-                  <ThirdPartyDataChart
-                    since={since}
-                    until={until}
-                    asn={displayASN}
-                  />
+                  <>
+                    <h3>{intl.formatMessage({ id: 'Country.Outages' })}</h3>
+                    <SectionText asn={displayASN} from={since} until={until} />
+                    <ThirdPartyDataChart
+                      since={since}
+                      until={until}
+                      asn={displayASN}
+                    />
+                  </>
                 )}
                 {!!recentMeasurements?.length && (
                   <RecentMeasurements

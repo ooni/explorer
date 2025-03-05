@@ -3,6 +3,7 @@ import GridChart, {
 } from 'components/aggregation/mat/GridChart'
 import { MATContextProvider } from 'components/aggregation/mat/MATContext'
 import { DetailsBox } from 'components/measurement/DetailsBox'
+import SpinLoader from 'components/vendor/SpinLoader'
 import Link from 'next/link'
 import { memo, useEffect, useMemo } from 'react'
 import { MdBarChart, MdOutlineFileDownload } from 'react-icons/md'
@@ -13,6 +14,17 @@ import useSWR from 'swr'
 const swrOptions = {
   revalidateOnFocus: false,
   dedupingInterval: 10 * 60 * 1000,
+}
+
+export const ChartSpinLoader = ({ height = '300px' }) => {
+  return (
+    <div
+      className="bg-gray-100 flex items-center justify-center p-6"
+      style={{ height }}
+    >
+      <SpinLoader />
+    </div>
+  )
 }
 
 export const MATLink = ({ query }) => {
