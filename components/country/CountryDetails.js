@@ -9,9 +9,12 @@ import Overview from 'components/country/Overview'
 import PageNavMenu from 'components/country/PageNavMenu'
 import WebsitesSection from 'components/country/Websites'
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo } from 'react'
 import { useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
+import { SectionText } from '../ThirdPartyDataChart'
+import SectionHeader from './SectionHeader'
+import { SimpleBox } from './boxes'
 import useScrollPosition from '/hooks/useScrollPosition'
 import { getLocalisedRegionName } from '/utils/i18nCountries'
 
@@ -117,6 +120,16 @@ const CountryDetails = ({ countryCode, overviewStats, reports }) => {
             <WebsitesSection countryCode={countryCode} />
             <AppsSection />
           </CountryContextProvider>
+          <SectionHeader>
+            <SectionHeader.Title name="outages">
+              {intl.formatMessage({ id: 'Country.Outages' })}
+            </SectionHeader.Title>
+          </SectionHeader>
+          <SimpleBox>
+            <div className="text-base">
+              <SectionText country={countryCode} from={since} until={until} />
+            </div>
+          </SimpleBox>
           <ThirdPartyDataChart
             country={countryCode}
             since={since}

@@ -3,11 +3,11 @@ import axios from 'axios'
 import Slices from 'components/chart/Slices'
 import { colors } from 'ooni-components'
 import { memo, useEffect, useMemo, useState } from 'react'
+import { useInView } from 'react-intersection-observer'
 import { useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
+import { ChartSpinLoader } from './Chart'
 import FormattedMarkdown from './FormattedMarkdown'
-import SectionHeader from './country/SectionHeader'
-import { SimpleBox } from './country/boxes'
 
 const iodaLineColors = {
   gtr: colors.blue['500'],
@@ -16,7 +16,8 @@ const iodaLineColors = {
   'ping-slash24': colors.fuchsia['500'],
 }
 
-const SectionText = ({ location, asn, country, from, until }) => {
+export const SectionText = ({ asn, country, from, until }) => {
+  const location = country || asn
   let dateParams = ''
   if (from && until) {
     const formattedFrom = Math.round(dayjs(from).utc().valueOf() / 1000)
@@ -38,11 +39,12 @@ const SectionText = ({ location, asn, country, from, until }) => {
   )
 }
 
-const ThirdPartyDataChart = ({ since, until, country, asn, ...props }) => {
+const Chart = ({ since, until, country, asn }) => {
   const intl = useIntl()
-  const location = country || asn
+
   const [graphData, setGraphData] = useState([])
   const [error, setError] = useState(null)
+  const [loading, setLoading] = useState(false)
 
   const [from, to] = useMemo(() => {
     if (!since || !until) return []
@@ -54,11 +56,12 @@ const ThirdPartyDataChart = ({ since, until, country, asn, ...props }) => {
     return [from, to]
   }, [since, until])
 
-  const cloudflareData = useEffect(() => {
+  useEffect(() => {
     if (!since && !until) return
 
     setGraphData([])
     setError(null)
+    setLoading(true)
 
     Promise.allSettled([
       axios.get(
@@ -97,48 +100,22 @@ const ThirdPartyDataChart = ({ since, until, country, asn, ...props }) => {
                 }
               })
             : []
-
+        setLoading(false)
         setGraphData([...iodaChartData, ...cloudflareChartData])
       })
-      .catch((err) => {})
+      .catch((_) => {
+        setLoading(false)
+      })
   }, [since, until])
 
   return (
     <>
-      {/* keep distinct styles for country and network pages */}
-      {country ? (
-        <>
-          <SectionHeader>
-            <SectionHeader.Title name="outages">
-              {intl.formatMessage({ id: 'Country.Outages' })}
-            </SectionHeader.Title>
-          </SectionHeader>
-          <SimpleBox>
-            <div className="text-base">
-              <SectionText
-                location={location}
-                asn={asn}
-                country={country}
-                from={from}
-                until={to}
-              />
-            </div>
-          </SimpleBox>
-        </>
-      ) : (
-        <>
-          <h3>{intl.formatMessage({ id: 'Country.Outages' })}</h3>
-          <SectionText
-            location={location}
-            asn={asn}
-            country={country}
-            from={from}
-            until={to}
-          />
-        </>
-      )}
-
       <div className="w-full h-[500px]">
+        {loading && !error && (
+          <div className="mt-5">
+            <ChartSpinLoader height="480px" />
+          </div>
+        )}
         {!!graphData.length && !error && (
           <ResponsiveLine
             data={graphData}
@@ -222,6 +199,25 @@ const ThirdPartyDataChart = ({ since, until, country, asn, ...props }) => {
         )}
       </div>
     </>
+  )
+}
+
+const ThirdPartyDataChart = ({ since, until, country, asn }) => {
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    threshold: 0.1,
+  })
+
+  return (
+    <div ref={ref}>
+      {inView ? (
+        <Chart since={since} until={until} country={country} asn={asn} />
+      ) : (
+        <div className="mt-5">
+          <ChartSpinLoader height="480px" />
+        </div>
+      )}
+    </div>
   )
 }
 
