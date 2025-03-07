@@ -3,7 +3,7 @@ import ErrorPage from 'pages/_error'
 import { useIntl } from 'react-intl'
 import NotFound from '../../components/NotFound'
 
-export async function getServerSideProps({ query }) {
+export async function getServerSideProps({ query, req }) {
   let error = null
 
   // Get `report_id` using optional catch all dynamic route of Next.js
@@ -50,6 +50,7 @@ export async function getServerSideProps({ query }) {
   return {
     props: {
       ...(error && error),
+      isEmbeddedView: !!req.headers['enable-embedded-view'] || !!query?.webview,
     },
   }
 }
