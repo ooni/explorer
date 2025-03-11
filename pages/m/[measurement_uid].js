@@ -1,6 +1,5 @@
 import axios from 'axios'
 import Head from 'next/head'
-import { useRouter } from 'next/router'
 import { colors } from 'ooni-components'
 import PropTypes from 'prop-types'
 import { createContext, useMemo, useState } from 'react'
