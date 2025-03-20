@@ -58,18 +58,6 @@ export const MATLink = ({ query }) => {
   )
 }
 
-export const ChartSpinLoader = ({ height = '300px' }) => {
-  return (
-    <div
-      className="bg-gray-100 flex items-center justify-center p-6"
-      style={{ height }}
-    >
-      {/* <FormattedMessage id="General.Loading" /> */}
-      <SpinLoader />
-    </div>
-  )
-}
-
 const Chart = ({ queryParams = {}, setState = null, headerOptions = {} }) => {
   const apiQuery = useMemo(() => {
     const qs = new URLSearchParams(queryParams).toString()
