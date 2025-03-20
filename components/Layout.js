@@ -24,6 +24,10 @@ const Layout = ({ children, isEmbeddedView }) => {
     return (
       pathname === '/countries' ||
       pathname === '/domains' ||
+      pathname === '/human-rights' ||
+      pathname === '/social-media' ||
+      pathname === '/news-media' ||
+      pathname === '/circumvention' ||
       pathname === '/networks' ||
       pathname === '/findings' ||
       pathname.match(/^\/country\/\S+/)

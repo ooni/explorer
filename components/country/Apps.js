@@ -1,7 +1,8 @@
-import Chart from 'components/Chart'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
+
+import Chart from 'components/Chart'
 import FormattedMarkdown from '../FormattedMarkdown'
 import SectionHeader from './SectionHeader'
 import { SimpleBox } from './boxes'
@@ -75,9 +76,7 @@ const AppsSection = () => (
       </SectionHeader.Title>
     </SectionHeader>
     <SimpleBox>
-      <div className="text-base">
-        <FormattedMarkdown id="Country.Apps.Description" />
-      </div>
+      <FormattedMarkdown id="Country.Apps.Description" />
     </SimpleBox>
     <ChartsContainer />
   </>

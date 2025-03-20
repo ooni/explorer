@@ -194,9 +194,7 @@ const Chart = ({ since, until, country, asn }) => {
             ]}
           />
         )}
-        {error && (
-          <div className="mt-4 text-base">Unable to retrieve the data</div>
-        )}
+        {error && <div className="mt-4">Unable to retrieve the data</div>}
       </div>
     </>
   )

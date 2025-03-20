@@ -13,7 +13,6 @@ const getClassName = (classes) =>
     my-[50px] 
     mx-auto 
     rounded-[50%]
-    text-base
     bg-gradient-to-r
     from-blue-500
     from-10%
