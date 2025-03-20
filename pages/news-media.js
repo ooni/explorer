@@ -2,6 +2,8 @@ import { useIntl } from 'react-intl'
 
 import ThematicPage from 'components/ThematicPage'
 import { getThematicData } from 'lib/api'
+import FormattedMarkdown from 'components/FormattedMarkdown'
+import { domainsList } from 'pages/social-media'
 
 const NEWS_MEDIA_DOMAINS = [
   'www.bbc.com',
@@ -65,35 +67,32 @@ const Page = (props) => {
       {...props}
       theme="news_media"
       title={intl.formatMessage({ id: 'Navbar.NewsMedia' })}
-      findingsTitle="Findings on blocking News Media Websites"
-      reportsTitle="Reports on blocking News Media Websites"
+      findingsTitle={intl.formatMessage({
+        id: 'ThematicPage.NewsMedia.FindingsTitle',
+      })}
+      reportsTitle={intl.formatMessage({
+        id: 'ThematicPage.NewsMedia.ReportsTitle',
+      })}
       menu={
         <>
-          <a href="#findings">Findings</a>
-          <a href="#reports">Reports</a>
-          <a href="#websites">Websites</a>
+          <a href="#findings">
+            {intl.formatMessage({ id: 'Navbar.Findings' })}
+          </a>
+          <a href="#reports">
+            {intl.formatMessage({ id: 'ThematicPage.NavBar.Reports' })}
+          </a>
+          <a href="#websites">
+            {intl.formatMessage({ id: 'ThematicPage.NavBar.Websites' })}
+          </a>
         </>
       }
       text={
-        <>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-            tristique pharetra lectus a malesuada. Proin blandit justo eu porta
-            aliquam. Curabitur sed aliquam nunc. Nam non justo at arcu
-            condimentum ultrices. Donec at cursus sapien. Suspendisse
-            condimentum ex eu imperdiet pretium. Nulla blandit ex dui, id
-            ullamcorper tellus ultrices a. Suspendisse eleifend nisl dui, in
-            viverra ex blandit ullamcorper. Fusce consectetur nunc vel posuere
-            vehicula. Quisque vel magna nibh.
-          </p>
-          <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
-            {domains.map((d) => (
-              <li key={d}>
-                <a href={`#${d}`}>{d}</a>
-              </li>
-            ))}
-          </ul>
-        </>
+        <FormattedMarkdown
+          id="ThematicPage.NewsMedia.Text"
+          values={{
+            domainsList: domainsList(domains),
+          }}
+        />
       }
     />
   )

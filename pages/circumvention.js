@@ -3,6 +3,7 @@ import { useIntl } from 'react-intl'
 import FormattedMarkdown from 'components/FormattedMarkdown'
 import ThematicPage from 'components/ThematicPage'
 import { getThematicData } from 'lib/api'
+import { domainsList } from 'pages/social-media'
 
 const CIRCUMVENTION_DOMAINS = [
   'www.torproject.org',
@@ -29,6 +30,12 @@ const CIRCUMVENTION_DOMAINS = [
 ]
 
 const CIRCUMVENTION_TESTS = ['psiphon', 'tor', 'torsf']
+
+export const CIRCUMVENTION_TESTS_STRINGS = {
+  psiphon: 'Tests.Psiphon.Name',
+  tor: 'Tests.Tor.Name',
+  torsf: 'Tests.TorSnowflake.Name',
+}
 
 export async function getStaticProps() {
   try {
@@ -62,27 +69,43 @@ const Page = (props) => {
       {...props}
       theme="circumvention"
       title={intl.formatMessage({ id: 'Navbar.Circumvention' })}
-      findingsTitle="Findings on blocking Circumvention Tools/Websites"
-      reportsTitle="Reports on blocking Circumvention Tools/Websites"
+      findingsTitle={intl.formatMessage({
+        id: 'ThematicPage.Circumvention.FindingsTitle',
+      })}
+      reportsTitle={intl.formatMessage({
+        id: 'ThematicPage.Circumvention.ReportsTitle',
+      })}
       menu={
         <>
-          <a href="#findings">Findings</a>
-          <a href="#reports">Reports</a>
-          <a href="#apps">Circumvention Tools</a>
-          <a href="#websites">Websites</a>
+          <a href="#findings">
+            {intl.formatMessage({ id: 'Navbar.Findings' })}
+          </a>
+          <a href="#reports">
+            {intl.formatMessage({ id: 'ThematicPage.NavBar.Reports' })}
+          </a>
+          <a href="#apps">
+            {intl.formatMessage({
+              id: 'Country.Overview.TestsByClass.Circumvention',
+            })}
+          </a>
+          <a href="#websites">
+            {intl.formatMessage({ id: 'ThematicPage.NavBar.Websites' })}
+          </a>
         </>
       }
       text={
-        <>
-          <FormattedMarkdown id="ReachabilityDash.CircumventionTools.Description" />
-          <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
-            {domains.map((d) => (
-              <li key={d}>
-                <a href={`#${d}`}>{d}</a>
-              </li>
-            ))}
-          </ul>
-        </>
+        <FormattedMarkdown
+          id="ReachabilityDash.CircumventionTools.Description"
+          values={{
+            domainsList: domainsList(domains),
+            appsList: `<ul className="my-4">${CIRCUMVENTION_TESTS.map(
+              (d) =>
+                `<li><a href='#${d}'>${intl.formatMessage({
+                  id: CIRCUMVENTION_TESTS_STRINGS[d],
+                })}</a></li>`,
+            ).join('')}</ul>`,
+          }}
+        />
       }
     />
   )

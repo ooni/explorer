@@ -566,7 +566,7 @@
   "MAT.Help.Subtitle.Categories": "Categories",
   "MAT.CustomTooltip.ViewMeasurements": "View measurements",
   "ReachabilityDash.Heading.CircumventionTools": "Reachability of Censorship Circumvention Tools",
-  "ReachabilityDash.CircumventionTools.Description": "The charts below display aggregate views of OONI data based on the testing of the following circumvention tools:\n\n* [Psiphon](https://ooni.org/nettest/psiphon)\n\n* [Tor](https://ooni.org/nettest/tor)\n\n* [Tor Snowflake](https://ooni.org/nettest/tor-snowflake/)\n\nPlease note that the presence of [anomalous measurements](https://ooni.org/support/faq/#what-do-you-mean-by-anomalies) is not always indicative of blocking, as [false positives](https://ooni.org/support/faq/#what-are-false-positives) can occur. Moreover, circumvention tools often have built-in circumvention techniques for evading censorship. \n\nWe therefore recommend referring to **[Tor Metrics](https://metrics.torproject.org/)** and to the **[Psiphon Data Engine](https://psix.ca/)** to view usage stats and gain a more comprehensive understanding of whether these tools work in each country.",
+  "ReachabilityDash.CircumventionTools.Description": "The charts below display aggregate views of OONI data based on the testing of the following circumvention tools:\n\n* [Psiphon](https://ooni.org/nettest/psiphon)\n\n* [Tor](https://ooni.org/nettest/tor)\n\n* [Tor Snowflake](https://ooni.org/nettest/tor-snowflake/)\n\nPlease note that the presence of [anomalous measurements](https://ooni.org/support/faq/#what-do-you-mean-by-anomalies) is not always indicative of blocking, as [false positives](https://ooni.org/support/faq/#what-are-false-positives) can occur. Moreover, circumvention tools often have built-in circumvention techniques for evading censorship. \n\nWe therefore recommend referring to **[Tor Metrics](https://metrics.torproject.org/)** and to the **[Psiphon Data Engine](https://psix.ca/)** to view usage stats and gain a more comprehensive understanding of whether these tools work in each country. {domainsList} {appsList}",
   "ReachabilityDash.Form.Label.CountrySelect.AllSelected": "All countries selected",
   "ReachabilityDash.Form.Label.CountrySelect.SearchPlaceholder": "Search",
   "ReachabilityDash.Form.Label.CountrySelect.SelectAll": "Select All",
@@ -671,5 +671,16 @@
   "Findings.LoginRequiredModal.Title": "Email address is missing. Please log in again to be able to create a censorship finding.",
   "Findings.Display.NotFound": "Censorship Finding not found",
   "Findings.Display.CreatedByOn": "published by {reportedBy} on {formattedDate}",
-  "Findings.Display.Network": "Network(s): {listOfNetworks}"
+  "Findings.Display.Network": "Network(s): {listOfNetworks}",
+  "ThematicPage.NavBar.Reports": "Reports",
+  "ThematicPage.NavBar.Websites": "Websites",
+  "ThematicPage.NavBar.Apps": "Apps",
+  "ThematicPage.SocialMedia.FindingsTitle": "Findings on blocking Social Media & IM Tools/Websites",
+  "ThematicPage.SocialMedia.ReportsTitle": "Reports on blocking Social Media & IM Tools/Websites",
+  "ThematicPage.SocialMedia.Text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tristique pharetra lectus a malesuada. Proin blandit justo eu porta aliquam. Curabitur sed aliquam nunc. Nam non justo at arcu condimentum ultrices. Donec at cursus sapien. Suspendisse condimentum ex eu imperdiet pretium. Nulla blandit ex dui, id ullamcorper tellus ultrices a. Suspendisse eleifend nisl dui, in viverra ex blandit ullamcorper. Fusce consectetur nunc vel posuere vehicula. Quisque vel magna nibh. vehicula. Quisque vel magna nibh. {domainsList} In porta lorem neque. Nam tincidunt iaculis pretium. Fusce massa urna, lobortis ut velit in, bibendum maximus felis. Integer sed pretium metus, in rhoncus elit. Maecenas placerat turpis at odio congue, vitae sagittis elit pharetra. Mauris vehicula nisl lectus, non suscipit sem consequat eget. Maecenas vitae mi mi. {appsList}",
+  "ThematicPage.NewsMedia.FindingsTitle": "Findings on blocking News Media Websites",
+  "ThematicPage.NewsMedia.ReportsTitle": "Reports on blocking News Media Websites",
+  "ThematicPage.NewsMedia.Text": "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec tristique pharetra lectus a malesuada. Proin blandit justo eu porta aliquam. Curabitur sed aliquam nunc. Nam non justo at arcu condimentum ultrices. Donec at cursus sapien. Suspendisse condimentum ex eu imperdiet pretium. Nulla blandit ex dui, id ullamcorper tellus ultrices a. Suspendisse eleifend nisl dui, in viverra ex blandit ullamcorper. Fusce consectetur nunc vel posuere vehicula. Quisque vel magna nibh. vehicula. Quisque vel magna nibh. {domainsList}",
+  "ThematicPage.Circumvention.FindingsTitle": "Findings on blocking Circumvention Tools/Websites",
+  "ThematicPage.Circumvention.ReportsTitle": "Reports on blocking Circumvention Tools/Websites"
 }

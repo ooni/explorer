@@ -2,6 +2,7 @@ import { useIntl } from 'react-intl'
 
 import ThematicPage from 'components/ThematicPage'
 import { getThematicData } from 'lib/api'
+import FormattedMarkdown from 'components/FormattedMarkdown'
 
 const SOCIAL_MEDIA_IM_DOMAINS = [
   'www.facebook.com',
@@ -34,6 +35,9 @@ export const SOCIAL_MEDIA_TESTS_STRINGS = {
   tor: 'Tests.Tor.Name',
   torsf: 'Tests.TorSnowflake.Name',
 }
+
+export const domainsList = (domains) =>
+  `<ul className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 my-4'>${domains.map((d) => `<li><a href='#${d}'>${d}</a></li>`).join('')}</ul>`
 
 export const getServerSideProps = async () => {
   try {
@@ -70,55 +74,41 @@ const Page = (props) => {
       {...props}
       theme="social_media"
       title={intl.formatMessage({ id: 'Navbar.SocialMedia' })}
-      findingsTitle="Findings on blocking Social Media & IM Tools/Websites"
-      reportsTitle="Reports on blocking Social Media & IM Tools/Websites"
+      findingsTitle={intl.formatMessage({
+        id: 'ThematicPage.SocialMedia.FindingsTitle',
+      })}
+      reportsTitle={intl.formatMessage({
+        id: 'ThematicPage.SocialMedia.ReportsTitle',
+      })}
       menu={
         <>
-          <a href="#findings">Findings</a>
-          <a href="#reports">Reports</a>
-          <a href="#apps">IM Apps</a>
-          <a href="#websites">Websites</a>
+          <a href="#findings">
+            {intl.formatMessage({ id: 'Navbar.Findings' })}
+          </a>
+          <a href="#reports">
+            {intl.formatMessage({ id: 'ThematicPage.NavBar.Reports' })}
+          </a>
+          <a href="#apps">
+            {intl.formatMessage({ id: 'ThematicPage.NavBar.Apps' })}
+          </a>
+          <a href="#websites">
+            {intl.formatMessage({ id: 'ThematicPage.NavBar.Websites' })}
+          </a>
         </>
       }
       text={
-        // <FormattedMarkdown id="ReachabilityDash.CircumventionTools.Description" />
-        <>
-          <p>
-            Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-            tristique pharetra lectus a malesuada. Proin blandit justo eu porta
-            aliquam. Curabitur sed aliquam nunc. Nam non justo at arcu
-            condimentum ultrices. Donec at cursus sapien. Suspendisse
-            condimentum ex eu imperdiet pretium. Nulla blandit ex dui, id
-            ullamcorper tellus ultrices a. Suspendisse eleifend nisl dui, in
-            viverra ex blandit ullamcorper. Fusce consectetur nunc vel posuere
-            vehicula. Quisque vel magna nibh.
-          </p>
-          <ul className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4">
-            {domains.map((d) => (
-              <li key={d}>
-                <a href={`#${d}`}>{d}</a>
-              </li>
-            ))}
-          </ul>
-          <p>
-            In porta lorem neque. Nam tincidunt iaculis pretium. Fusce massa
-            urna, lobortis ut velit in, bibendum maximus felis. Integer sed
-            pretium metus, in rhoncus elit. Maecenas placerat turpis at odio
-            congue, vitae sagittis elit pharetra. Mauris vehicula nisl lectus,
-            non suscipit sem consequat eget. Maecenas vitae mi mi.
-          </p>
-          <ul className="mt-4">
-            {SOCIAL_MEDIA_IM_TESTS.map((d) => (
-              <li key={d}>
-                <a href={`#${d}`}>
-                  {intl.formatMessage({
-                    id: SOCIAL_MEDIA_TESTS_STRINGS[d],
-                  })}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </>
+        <FormattedMarkdown
+          id="ThematicPage.SocialMedia.Text"
+          values={{
+            domainsList: domainsList(domains),
+            appsList: `<ul className="my-4">${SOCIAL_MEDIA_IM_TESTS.map(
+              (d) =>
+                `<li><a href='#${d}'>${intl.formatMessage({
+                  id: SOCIAL_MEDIA_TESTS_STRINGS[d],
+                })}</a></li>`,
+            ).join('')}</ul>`,
+          }}
+        />
       }
     />
   )
