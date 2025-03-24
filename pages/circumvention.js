@@ -95,7 +95,7 @@ const Page = (props) => {
       }
       text={
         <FormattedMarkdown
-          id="ReachabilityDash.CircumventionTools.Description"
+          id="ThematicPage.Circumvention.Text"
           values={{
             domainsList: domainsList(domains),
             appsList: `<ul className="my-4">${CIRCUMVENTION_TESTS.map(

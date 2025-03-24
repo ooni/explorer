@@ -2,8 +2,8 @@
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 const { withSentryConfig } = require('@sentry/nextjs')
 const glob = require('glob')
-const { basename, resolve } = require('node:path')
-const { execSync } = require('node:child_process')
+const { basename, resolve } = require('path')
+const { execSync } = require('child_process')
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
