@@ -21,10 +21,7 @@ const CIRCUMVENTION_DOMAINS = [
   'www.purevpn.com',
   'www.cyberghostvpn.com',
   'mullvad.net',
-  'windscribe.com',
   'strongvpn.com',
-  'www.vyprvpn.com',
-  'goosevpn.com',
   'ultrasurf.us',
   'ultravpn.com',
 ]
