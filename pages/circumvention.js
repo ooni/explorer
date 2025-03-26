@@ -65,7 +65,7 @@ const Page = (props) => {
       apps={CIRCUMVENTION_TESTS}
       {...props}
       theme="circumvention"
-      title={intl.formatMessage({ id: 'Navbar.Circumvention' })}
+      title={intl.formatMessage({ id: 'ThematicPage.Circumvention.Title' })}
       findingsTitle={intl.formatMessage({
         id: 'ThematicPage.Circumvention.FindingsTitle',
       })}

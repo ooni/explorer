@@ -64,7 +64,7 @@ const Page = (props) => {
       domains={domains}
       {...props}
       theme="news_media"
-      title={intl.formatMessage({ id: 'Navbar.NewsMedia' })}
+      title={intl.formatMessage({ id: 'ThematicPage.NewsMedia.Title' })}
       findingsTitle={intl.formatMessage({
         id: 'ThematicPage.NewsMedia.FindingsTitle',
       })}

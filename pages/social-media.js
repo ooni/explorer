@@ -73,7 +73,7 @@ const Page = (props) => {
       apps={SOCIAL_MEDIA_IM_TESTS}
       {...props}
       theme="social_media"
-      title={intl.formatMessage({ id: 'Navbar.SocialMedia' })}
+      title={intl.formatMessage({ id: 'ThematicPage.SocialMedia.Title' })}
       findingsTitle={intl.formatMessage({
         id: 'ThematicPage.SocialMedia.FindingsTitle',
       })}
