@@ -24,6 +24,7 @@ const CIRCUMVENTION_DOMAINS = [
   'strongvpn.com',
   'ultrasurf.us',
   'ultravpn.com',
+  'amnezia.org',
 ]
 
 const CIRCUMVENTION_TESTS = ['psiphon', 'tor', 'torsf']

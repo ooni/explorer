@@ -17,7 +17,6 @@ const NEWS_MEDIA_DOMAINS = [
   'news.google.com',
   'www.indiatimes.com',
   'www.theguardian.com',
-  'www.cnbc.com',
   'www.voanews.com',
   'www.reuters.com',
   'www.rt.com',
