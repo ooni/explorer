@@ -10,6 +10,7 @@ import {
 import { Form } from 'components/dashboard/Form'
 import { MetaTags } from 'components/dashboard/MetaTags'
 import { useEffect, useState } from 'react'
+import { useIntl } from 'react-intl'
 
 // type ThematicPageProps = {
 //   countries: string[],
@@ -41,7 +42,9 @@ const ThematicPage = ({
   text = '',
   theme = '',
   menu = '',
+  appSectionTitle = '',
 }) => {
+  const intl = useIntl()
   const { query } = useRouter()
   const [filters, setFilters] = useState([])
   const [filteredDomains, setFilteredDomains] = useState(domains)
@@ -78,7 +81,6 @@ const ThematicPage = ({
 
         <AnchorLink id="reports" />
         <ReportsSection title={reportsTitle} reports={reports} theme={theme} />
-
         <StyledStickySubMenu className="top-[193px] max-sm:static">
           <div className="pb-4 pt-2">
             <Form
@@ -95,7 +97,7 @@ const ThematicPage = ({
             {!!filteredApps.length && (
               <section>
                 <AnchorLinkLower id="apps" />
-                <h2>Apps</h2>
+                <h2>{appSectionTitle}</h2>
                 {filteredApps?.map((testName: string) => (
                   <div key={testName} className="my-6">
                     <AnchorLinkLower id={testName} />
@@ -110,7 +112,9 @@ const ThematicPage = ({
             {!!filteredDomains.length && (
               <section className="mt-10">
                 <AnchorLinkLower id="websites" />
-                <h2>Websites</h2>
+                <h2>
+                  {intl.formatMessage({ id: 'ThematicPage.NavBar.Websites' })}
+                </h2>
                 {filteredDomains?.map((domain: string) => (
                   <div key={domain} className="my-6">
                     <AnchorLinkLower id={domain} />

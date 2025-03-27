@@ -72,6 +72,9 @@ const Page = (props) => {
       reportsTitle={intl.formatMessage({
         id: 'ThematicPage.Circumvention.ReportsTitle',
       })}
+      appSectionTitle={intl.formatMessage({
+        id: 'Navbar.Circumvention',
+      })}
       menu={
         <>
           <a href="#findings">

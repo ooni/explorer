@@ -80,6 +80,9 @@ const Page = (props) => {
       reportsTitle={intl.formatMessage({
         id: 'ThematicPage.SocialMedia.ReportsTitle',
       })}
+      appSectionTitle={intl.formatMessage({
+        id: 'ThematicPage.NavBar.Apps',
+      })}
       menu={
         <>
           <a href="#findings">
