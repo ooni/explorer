@@ -28,6 +28,7 @@
     "flag-icons": "^7.1.0",
     "html-validate": "^9.5.2",
     "lodash.debounce": "^4.0.8",
+    "lost-pixel": "^3.22.0",
     "lru-cache": "^10.1.0",
     "markdown-to-jsx": "^7.7.4",
     "next": "14.2.25",
