@@ -636,6 +636,7 @@
   "Findings.Index.HighLightBox.ReadMore": "Read More",
   "Findings.Index.HighLightBox.CreatedOn": "published on {date}",
   "Findings.Dashboard.ShortTitle": "Dashboard",
+  "Findings.Themes.Options.All": "All Findings",
   "Findings.Themes.Options.SocialMedia": "Social Media",
   "Findings.Themes.Options.IM": "Instant Messaging",
   "Findings.Themes.Options.NewsMedia": "News Media",

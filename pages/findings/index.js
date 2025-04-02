@@ -17,11 +17,10 @@ const sortOptions = [
 ]
 
 const themeOptions = [
-  { key: '' },
-  { key: 'social_media', intlKey: 'Sort.StartAsc' },
-  { key: 'circumvention', intlKey: 'Sort.StartDesc' },
-  { key: 'news_media', intlKey: 'Sort.EndAsc' },
-  // { key: 'end_desc', intlKey: 'Sort.EndDesc' },
+  { key: '', intlKey: 'Findings.Themes.Options.All' },
+  { key: 'social_media', intlKey: 'Findings.Themes.Options.SocialMedia' },
+  { key: 'circumvention', intlKey: 'Findings.Themes.Options.Circumvention' },
+  { key: 'news_media', intlKey: 'Findings.Themes.Options.NewsMedia' },
 ]
 
 const Index = () => {
@@ -91,8 +90,7 @@ const Index = () => {
             >
               {themeOptions.map(({ key, intlKey }) => (
                 <option key={key} value={key}>
-                  {key}
-                  {/* {intl.formatMessage({ id: intlKey })} */}
+                  {intl.formatMessage({ id: intlKey })}
                 </option>
               ))}
             </Select>
