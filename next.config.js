@@ -54,18 +54,18 @@ module.exports = withBundleAnalyzer(
         }
         return headers
       },
-      async rewrites() {
-        return [
-          {
-            source: '/api/v1/:path*',
-            destination: 'https://api.ooni.org/api/v1/:path*',
-          },
-          {
-            source: '/api/_/:path*',
-            destination: 'https://api.ooni.org/api/_/:path*',
-          },
-        ]
-      },
+      // async rewrites() {
+      //   return [
+      //     {
+      //       source: '/api/v1/:path*',
+      //       destination: 'https://api.ooni.org/api/v1/:path*',
+      //     },
+      //     {
+      //       source: '/api/_/:path*',
+      //       destination: 'https://api.ooni.org/api/_/:path*',
+      //     },
+      //   ]
+      // },
       webpack: (config, options) => {
         const gitCommitSHAShort = process.env.RUN_GIT_COMMIT_SHA_SHORT
           ? execSync(process.env.RUN_GIT_COMMIT_SHA_SHORT)
