@@ -35,10 +35,12 @@ const Create = () => {
   const { loading, user } = useUser()
   const [showModal, setShowModal] = useState(false)
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (!user && !loading && !showModal) router.push('/findings')
   }, [user, loading, showModal])
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
     if (user && !loading && !getUserEmail()) setShowModal(true)
   }, [])
@@ -58,9 +60,7 @@ const Create = () => {
         <div className="container">
           <LoginRequiredModal show={showModal} />
           <div className="flex justify-between items-center">
-            <h1 className="mt-16 mb-8">
-              {intl.formatMessage({ id: 'Findings.Create.Title' })}
-            </h1>
+            <h1 className="mt-16 mb-8">Create Finding</h1>
             <Link href="/findings/dashboard">
               <button className="btn btn-primary-hollow" type="button">
                 {intl.formatMessage({ id: 'Findings.Dashboard.ShortTitle' })}

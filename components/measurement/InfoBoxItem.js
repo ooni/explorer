@@ -6,7 +6,7 @@ export const InfoBoxItem = ({ label, content, unit }) => (
     <div className="text-2xl">
       {content} {unit && <small>{unit}</small>}
     </div>
-    <div className="font-bold text-base">{label}</div>
+    <div className="font-bold">{label}</div>
   </div>
 )
 

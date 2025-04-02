@@ -50,9 +50,15 @@ export const formatLongDate = (date, locale) =>
   `${new Intl.DateTimeFormat(locale, {
     dateStyle: 'long',
     timeZone: 'UTC',
+  }).format(new Date(date))}`
+
+export const formatLongDateUTC = (date, locale) =>
+  `${new Intl.DateTimeFormat(locale, {
+    dateStyle: 'long',
+    timeZone: 'UTC',
   }).format(new Date(date))} UTC`
 
-export const formatMediumDate = (date, locale) =>
+export const formatMediumDateUTC = (date, locale) =>
   `${new Intl.DateTimeFormat(locale, {
     dateStyle: 'medium',
     timeZone: 'UTC',

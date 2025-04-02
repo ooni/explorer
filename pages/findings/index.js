@@ -1,15 +1,13 @@
+import { FindingBox } from 'components/landing/HighlightBox'
 import { StickySubMenu } from 'components/SharedStyledComponents'
-import HighlightBox from 'components/landing/HighlightBox'
 import SpinLoader from 'components/vendor/SpinLoader'
 import useFilterWithSort from 'hooks/useFilterWithSort'
+import useFindings from 'hooks/useFindings'
 import useUser from 'hooks/useUser'
 import Link from 'next/link'
+import { useRouter } from 'next/router'
 import { Input, Select } from 'ooni-components'
-import { useMemo } from 'react'
 import { useIntl } from 'react-intl'
-import useSWR from 'swr'
-import { formatLongDate } from 'utils'
-import { apiEndpoints, fetcher } from '/lib/api'
 
 const sortOptions = [
   { key: 'start_asc', intlKey: 'Sort.StartAsc' },
@@ -18,72 +16,39 @@ const sortOptions = [
   { key: 'end_desc', intlKey: 'Sort.EndDesc' },
 ]
 
+const themeOptions = [
+  { key: '', intlKey: 'Findings.Themes.Options.All' },
+  { key: 'social_media', intlKey: 'Findings.Themes.Options.SocialMedia' },
+  { key: 'circumvention', intlKey: 'Findings.Themes.Options.Circumvention' },
+  { key: 'news_media', intlKey: 'Findings.Themes.Options.NewsMedia' },
+]
+
 const Index = () => {
   const intl = useIntl()
   const { user } = useUser()
+  const { query } = useRouter()
+  const { theme } = query
 
-  const { data, isLoading, error } = useSWR(
-    apiEndpoints.SEARCH_INCIDENTS,
-    fetcher,
-  )
+  const {
+    searchValue,
+    sortValue,
+    setSortValue,
+    debouncedSearchHandler,
+    categoryValue,
+    setCategoryValue,
+  } = useFilterWithSort({
+    initialSortValue: 'end_desc',
+    initialCategoryValue: theme,
+  })
 
-  const { searchValue, sortValue, setSortValue, debouncedSearchHandler } =
-    useFilterWithSort({ initialSortValue: 'end_desc' })
-
-  const displayData = useMemo(() => {
-    if (data) {
-      return data.incidents
-        .filter((incident) => incident.published)
-        .map((incident) => ({
-          ...incident,
-          start_time: new Date(incident.start_time),
-          ...(incident.end_time && { end_time: new Date(incident.end_time) }),
-          sort_end_time: incident.end_time
-            ? new Date(incident.end_time)
-            : new Date(),
-        }))
-    }
-    return []
-  }, [data])
-
-  const sortedAndFilteredData = useMemo(() => {
-    const sortedData = displayData
-      .sort((a, b) => b.start_time - a.start_time) // make sure ongoing events are always chronologically sorted
-      .sort((a, b) => {
-        if (sortValue === 'start_asc') {
-          return a.start_time - b.start_time
-        }
-        if (sortValue === 'start_desc') {
-          return b.start_time - a.start_time
-        }
-        if (sortValue === 'end_asc') {
-          return a.sort_end_time - b.sort_end_time
-        }
-        // default to 'end_desc' sort
-        return b.sort_end_time - a.sort_end_time
-      })
-
-    const filteredData = searchValue.length
-      ? sortedData.filter((incident) =>
-          searchValue
-            ? incident.title
-                .toLowerCase()
-                .includes(searchValue.toLowerCase()) ||
-              incident.short_description
-                .toLowerCase()
-                .includes(searchValue.toLowerCase())
-            : true,
-        )
-      : sortedData
-
-    return filteredData
-  }, [displayData, sortValue, searchValue])
+  const { sortedAndFilteredData, isLoading, error } = useFindings({
+    sortValue,
+    searchValue,
+    themeValue: categoryValue,
+  })
 
   return (
     <>
-      {/* <Head>
-        <title></title>
-      </Head> */}
       <div className="container">
         {user?.role === 'admin' && (
           <div className="mt-4 flex justify-end">
@@ -120,6 +85,16 @@ const Index = () => {
               }
             />
             <Select
+              value={categoryValue}
+              onChange={(e) => setCategoryValue(e.target.value)}
+            >
+              {themeOptions.map(({ key, intlKey }) => (
+                <option key={key} value={key}>
+                  {intl.formatMessage({ id: intlKey })}
+                </option>
+              ))}
+            </Select>
+            <Select
               value={sortValue}
               onChange={(e) => setSortValue(e.target.value)}
             >
@@ -139,48 +114,7 @@ const Index = () => {
         {!!sortedAndFilteredData?.length && (
           <div className="grid my-8 gap-6 grid-cols-1 md:grid-cols-2">
             {sortedAndFilteredData.map((incident) => (
-              <HighlightBox
-                key={incident.id}
-                countryCode={incident.CCs[0]}
-                title={incident.title}
-                text={incident.short_description}
-                dates={
-                  <div className="text-gray-600">
-                    <div className=" mb-2">
-                      {incident.start_time &&
-                        formatLongDate(incident.start_time, intl.locale)}{' '}
-                      -{' '}
-                      {incident.end_time
-                        ? formatLongDate(incident.end_time, intl.locale)
-                        : 'ongoing'}
-                    </div>
-                    <div>
-                      {intl.formatMessage(
-                        { id: 'Findings.Index.HighLightBox.CreatedOn' },
-                        {
-                          date:
-                            incident?.create_time &&
-                            formatLongDate(incident?.create_time, intl.locale),
-                        },
-                      )}
-                    </div>
-                  </div>
-                }
-                footer={
-                  <div className="mx-auto mt-4">
-                    <Link href={`/findings/${incident.id}`}>
-                      <button
-                        className="btn btn-primary-hollow btn-sm"
-                        type="button"
-                      >
-                        {intl.formatMessage({
-                          id: 'Findings.Index.HighLightBox.ReadMore',
-                        })}
-                      </button>
-                    </Link>
-                  </div>
-                }
-              />
+              <FindingBox key={incident.id} incident={incident} />
             ))}
           </div>
         )}

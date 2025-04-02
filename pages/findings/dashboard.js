@@ -21,7 +21,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import useSWR from 'swr'
 import useSWRMutation from 'swr/mutation'
-import { formatMediumDate } from 'utils'
+import { formatMediumDateUTC } from 'utils'
 
 const Dashboard = () => {
   const intl = useIntl()
@@ -84,7 +84,7 @@ const Dashboard = () => {
       {
         header: 'Last Update',
         accessorKey: 'update_time',
-        cell: (info) => formatMediumDate(info.getValue()),
+        cell: (info) => formatMediumDateUTC(info.getValue()),
       },
       {
         header: 'Reported by',
@@ -93,12 +93,12 @@ const Dashboard = () => {
       {
         header: 'Start Date',
         accessorKey: 'start_time',
-        cell: (info) => formatMediumDate(info.getValue()),
+        cell: (info) => formatMediumDateUTC(info.getValue()),
       },
       {
         header: 'End Date',
         accessorKey: 'end_time',
-        cell: (info) => info.getValue() && formatMediumDate(info.getValue()),
+        cell: (info) => info.getValue() && formatMediumDateUTC(info.getValue()),
       },
       {
         header: 'Published',
@@ -112,7 +112,7 @@ const Dashboard = () => {
           <>
             <Link href={`/findings/edit/${info.getValue()}`}>
               <button className="btn btn-primary-hollow btn-sm" type="button">
-                {intl.formatMessage({ id: 'Findings.Dashboard.Edit' })}
+                Edit
               </button>
             </Link>
             {info.row.original.published ? (
@@ -122,7 +122,7 @@ const Dashboard = () => {
                 disabled={isPublishMutating}
                 type="button"
               >
-                {intl.formatMessage({ id: 'Findings.Dashboard.Unpublish' })}
+                Unpublish
               </button>
             ) : (
               <button
@@ -131,7 +131,7 @@ const Dashboard = () => {
                 disabled={isUnpublishMutating}
                 type="button"
               >
-                {intl.formatMessage({ id: 'Findings.Dashboard.Publish' })}
+                Publish
               </button>
             )}
           </>
@@ -157,9 +157,7 @@ const Dashboard = () => {
       {user?.role === 'admin' ? (
         <div className="container">
           <ToastContainer />
-          <h1 className="mt-8">
-            {intl.formatMessage({ id: 'Findings.Dashboard.Title' })}
-          </h1>
+          <h1 className="mt-8">Censorship Findings Dashboard</h1>
           <table className="w-full border-collapse">
             <thead>
               {table.getHeaderGroups().map((headerGroup) => (
@@ -234,12 +232,12 @@ const Dashboard = () => {
           <div className="flex mt-8">
             <Link href="/findings/create">
               <button className="btn btn-primary mr-4" type="button">
-                {intl.formatMessage({ id: 'Findings.Create.Title' })}
+                Create Finding
               </button>
             </Link>
             <Link href="/findings">
               <button className="btn btn-primary-hollow" type="button">
-                {intl.formatMessage({ id: 'Findings.Dashboard.ViewPublished' })}
+                View Published Findings
               </button>
             </Link>
           </div>

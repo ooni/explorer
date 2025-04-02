@@ -405,7 +405,7 @@ const FilterSidebar = ({
 
       {(showConfirmedFilter || showAnomalyFilter) && (
         <>
-          <label className="mb-1 block text-base text-blue-500 pt-4">
+          <label className="mb-1 block text-blue-500 pt-4">
             {intl.formatMessage({ id: 'Search.Sidebar.Status' })}
           </label>
 

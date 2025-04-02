@@ -35,7 +35,7 @@ const Form = ({ onSubmit, availableCountries = [] }) => {
     return {
       since: query?.since ?? defaultDefaultValues.since,
       until: query?.until ?? defaultDefaultValues.until,
-      probe_cc: defaultDefaultValues.probe_cc,
+      probe_cc: query?.probe_cc ?? defaultDefaultValues.probe_cc,
     }
   }, [query])
 
@@ -58,7 +58,7 @@ const Form = ({ onSubmit, availableCountries = [] }) => {
   }
 
   useEffect(() => {
-    const subscription = watch((value, { name, type }) => {
+    const subscription = watch((value, { name }) => {
       if (
         value[name] !== query[name] &&
         dayjs(value.since, 'YYYY-MM-DD', true).isValid() &&

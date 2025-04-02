@@ -1,7 +1,7 @@
-/** @type {import('tailwindcss').Config} */
 import { theme } from 'ooni-components'
+import type { Config } from 'tailwindcss'
 
-module.exports = {
+const config: Config = {
   content: [
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
@@ -10,3 +10,5 @@ module.exports = {
   safelist: ['lg:grid-cols-4', 'lg:grid-cols-6'],
   theme,
 }
+
+export default config

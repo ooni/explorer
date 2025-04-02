@@ -6,13 +6,13 @@ import { useCountry } from './CountryContext'
 import SectionHeader from './SectionHeader'
 import { BoxWithTitle } from './boxes'
 
-const ooniBlogBaseURL = 'https://ooni.org'
+export const OONI_BLOG_BASE_URL = 'https://ooni.org'
 
-const FeaturedArticle = ({ link, title }) => (
+export const FeaturedArticle = ({ link, title }) => (
   <div className="py-1">
     <a
       className="text-blue-700"
-      href={ooniBlogBaseURL + link}
+      href={OONI_BLOG_BASE_URL + link}
       target="_blank"
       rel="noopener noreferrer"
     >
@@ -55,9 +55,7 @@ const Overview = ({
       <h4 className="my-2">
         <FormattedMessage id="Country.Overview.Heading.TestsByClass" />
       </h4>
-      <div className="text-base">
-        <FormattedMarkdown id="Country.Overview.Heading.TestsByClass.Description" />
-      </div>
+      <FormattedMarkdown id="Country.Overview.Heading.TestsByClass.Description" />
       <Calendar startYear={measuredSince} />
       <BoxWithTitle
         title={<FormattedMessage id="Country.Overview.FeaturedResearch" />}

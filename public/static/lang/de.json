@@ -511,7 +511,7 @@
   "Error.404.GoBack": "Zurückgehen",
   "Error.404.Heading": "Die angeforderte Seite existiert nicht",
   "Error.404.Message": "Wir konnten den von dir gesuchten Inhalt nicht finden. Versuche es vielleicht mit {measurementLink} oder schau dir {homePageLink} an.",
-  "Error.404.MeasurementLinkText": "erforschung einiger Messungen",
+  "Error.404.MeasurmentLinkText": "erforschung einiger Messungen",
   "Error.404.HomepageLinkText": "die Homepage",
   "MAT.Title": "OONI Measurement Aggregation Toolkit (MAT)",
   "MAT.SubTitle": "Erstelle Diagramme auf der Grundlage aggregierter Ansichten von OONI-Echtzeitdaten aus aller Welt",

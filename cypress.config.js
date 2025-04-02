@@ -12,6 +12,6 @@ module.exports = defineConfig({
     testIsolation: false,
   },
   env: {
-    apiUrl: 'https://backend-hel.ooni.org',
+    apiUrl: 'https://api.ooni.org',
   },
 })

@@ -14,9 +14,7 @@ export const GridBox = ({
   return (
     <Link href={href}>
       <div className="flex flex-col group p-3 justify-between min-h-[150px] border border-gray-300 hover:border-blue-500 relative text-black ">
-        <div className="text-base font-bold group-hover:text-blue-500">
-          {title}
-        </div>
+        <div className="font-bold group-hover:text-blue-500">{title}</div>
         <div className="text-xs">
           {(hasCount || tag) && (
             <>

@@ -235,13 +235,7 @@ const Form = ({ defaultValues, onSubmit }) => {
               control={control}
               name="published"
               render={({ field }) => (
-                <Checkbox
-                  {...field}
-                  label={intl.formatMessage({
-                    id: 'Findings.Form.Published.Label',
-                  })}
-                  checked={field.value}
-                />
+                <Checkbox {...field} label="Published" checked={field.value} />
               )}
             />
           </div>
@@ -253,7 +247,7 @@ const Form = ({ defaultValues, onSubmit }) => {
             <Input
               className="mb-4 required"
               {...field}
-              label={intl.formatMessage({ id: 'Findings.Form.Title.Label' })}
+              label="Title*"
               error={errors?.title?.message}
             />
           )}
@@ -265,7 +259,7 @@ const Form = ({ defaultValues, onSubmit }) => {
             <Input
               className="mb-4 required"
               {...field}
-              label={intl.formatMessage({ id: 'Findings.Form.Author.Label' })}
+              label="Author*"
               error={errors?.reported_by?.message}
             />
           )}
@@ -277,9 +271,7 @@ const Form = ({ defaultValues, onSubmit }) => {
             <Input
               className="mb-4 required [&>input]:bg-gray-200"
               {...field}
-              label={intl.formatMessage({
-                id: 'Findings.Form.EmailAddress.Label',
-              })}
+              label="Email Address*"
               error={errors?.email_address?.message}
               disabled
             />
@@ -294,9 +286,7 @@ const Form = ({ defaultValues, onSubmit }) => {
                 <Input
                   {...field}
                   type="date"
-                  label={intl.formatMessage({
-                    id: 'Findings.Form.StartTime.Label',
-                  })}
+                  label="Start Time*"
                   id="start_time"
                   error={errors?.start_time?.message}
                 />
@@ -312,9 +302,7 @@ const Form = ({ defaultValues, onSubmit }) => {
                   {...field}
                   type="date"
                   error={errors?.end_time?.message}
-                  label={intl.formatMessage({
-                    id: 'Findings.Form.EndTime.Label',
-                  })}
+                  label="End Time"
                   id="end_time"
                 />
               )}
@@ -328,12 +316,10 @@ const Form = ({ defaultValues, onSubmit }) => {
             <MultiSelectCreatable
               className="mb-4"
               {...field}
-              label={intl.formatMessage({ id: 'Findings.Form.Tags.Label' })}
+              label="Tags"
               components={{ DropdownIndicator: null }}
               menuIsOpen={false}
-              placeholder={intl.formatMessage({
-                id: 'Findings.Form.Tags.Placeholder',
-              })}
+              placeholder="Press Enter to add tags"
             />
           )}
         />
@@ -344,7 +330,7 @@ const Form = ({ defaultValues, onSubmit }) => {
             <MultiSelect
               className="mb-4"
               {...field}
-              label={intl.formatMessage({ id: 'Findings.Form.Themes.Label' })}
+              label="Themes"
               options={themeOptions}
             />
           )}
@@ -357,9 +343,7 @@ const Form = ({ defaultValues, onSubmit }) => {
               className="mb-4"
               {...field}
               options={testNamesOptions}
-              label={intl.formatMessage({
-                id: 'Findings.Form.TestNames.Label',
-              })}
+              label="Test Names"
             />
           )}
         />
@@ -385,10 +369,8 @@ const Form = ({ defaultValues, onSubmit }) => {
               menuIsOpen={false}
               components={{ DropdownIndicator: null }}
               className="mb-4"
-              label={intl.formatMessage({ id: 'Findings.Form.ASNs.Label' })}
-              placeholder={intl.formatMessage({
-                id: 'Findings.Form.ASNs.Placeholder',
-              })}
+              label="ASNs"
+              placeholder="Press Enter to add ASNs"
               error={errors?.ASNs?.message}
             />
           )}
@@ -401,9 +383,7 @@ const Form = ({ defaultValues, onSubmit }) => {
               {...field}
               className="mb-4"
               label={intl.formatMessage({ id: 'Navbar.Domains' })}
-              placeholder={intl.formatMessage({
-                id: 'Findings.Form.Domains.Placeholder',
-              })}
+              placeholder="Press Enter to add domains"
             />
           )}
         />
@@ -415,9 +395,7 @@ const Form = ({ defaultValues, onSubmit }) => {
               className="mb-4"
               {...field}
               error={errors?.short_description?.message}
-              label={intl.formatMessage({
-                id: 'Findings.Form.ShortDescription.Label',
-              })}
+              label="Short Description*"
             />
           )}
         />
@@ -428,7 +406,7 @@ const Form = ({ defaultValues, onSubmit }) => {
             <Textarea
               className="mb-4 required [&>textarea]:min-h-[500px]"
               {...field}
-              label={intl.formatMessage({ id: 'Findings.Form.Text.Label' })}
+              label="Text*"
               error={errors?.text?.message}
             />
           )}
@@ -438,7 +416,7 @@ const Form = ({ defaultValues, onSubmit }) => {
           type="button"
           onClick={() => setShowPreview(true)}
         >
-          {intl.formatMessage({ id: 'Findings.Edit.ShowPreview' })}
+          Show Preview
         </button>
         <button className="btn btn-primary" type="submit">
           {intl.formatMessage({ id: 'General.Submit' })}

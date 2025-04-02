@@ -1,7 +1,8 @@
-import ChartCountry from 'components/Chart'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { FormattedMessage } from 'react-intl'
+
+import Chart from 'components/Chart'
 import FormattedMarkdown from '../FormattedMarkdown'
 import ConfirmedBlockedCategory from './ConfirmedBlockedCategory'
 import SectionHeader from './SectionHeader'
@@ -34,13 +35,11 @@ const WebsitesSection = ({ countryCode }) => {
         </SectionHeader.Title>
       </SectionHeader>
       <SimpleBox>
-        <div className="text-base">
-          <FormattedMarkdown id="Country.Websites.Description" />
-        </div>
+        <FormattedMarkdown id="Country.Websites.Description" />
       </SimpleBox>
       <ConfirmedBlockedCategory />
       <div className="my-8">
-        <ChartCountry testName="web_connectivity" queryParams={query} />
+        <Chart testName="web_connectivity" queryParams={query} />
       </div>
     </>
   )

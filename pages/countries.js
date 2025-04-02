@@ -54,10 +54,7 @@ const RegionBlock = ({ regionCode, countries }) => {
 }
 
 const RegionLink = ({ href, label }) => (
-  <a
-    className="px-2 md:px-4 text-base block text-blue-500 underline"
-    href={href}
-  >
+  <a className="px-2 md:px-4 block text-blue-500 underline" href={href}>
     {label}
   </a>
 )
@@ -135,7 +132,7 @@ const Countries = ({ countries }) => {
         <title>{intl.formatMessage({ id: 'Countries.PageTitle' })}</title>
       </Head>
       <div className="container">
-        <StickySubMenu title="Countries">
+        <StickySubMenu title={intl.formatMessage({ id: 'Navbar.Countries' })}>
           <div className="flex flex-col md:flex-row justify-start md:justify-end items-start md:items-center">
             <div className="my-2">
               <Input

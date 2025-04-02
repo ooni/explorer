@@ -58,11 +58,7 @@ export const MATLink = ({ query }) => {
   )
 }
 
-const Chart = memo(function Chart({
-  testGroup = null,
-  queryParams = {},
-  setState,
-}) {
+const Chart = ({ queryParams = {}, setState = null, headerOptions = {} }) => {
   const apiQuery = useMemo(() => {
     const qs = new URLSearchParams(queryParams).toString()
     return qs
@@ -87,24 +83,18 @@ const Chart = memo(function Chart({
     if (setState && data?.data) setState(data.data)
   }, [data, setState])
 
-  const headerOptions = { probe_cc: false, subtitle: false }
-
   return (
-    // <MATContextProvider key={name} test_name={name} {...queryParams}>
     <MATContextProvider {...queryParams}>
       <div className="flex flex-col">
-        {!chartData && !error ? (
-          <FormattedMessage id="General.Loading" />
-        ) : (
-          <>
-            <GridChart
-              data={chartData}
-              rowKeys={rowKeys}
-              rowLabels={rowLabels}
-            />
-            {!!chartData?.size && <MATLink query={queryParams} />}
-          </>
-        )}
+        <>
+          <GridChart
+            data={chartData}
+            rowKeys={rowKeys}
+            rowLabels={rowLabels}
+            header={headerOptions}
+          />
+          {!!chartData?.size && <MATLink query={queryParams} />}
+        </>
         {error && (
           <DetailsBox
             content={
@@ -120,6 +110,6 @@ const Chart = memo(function Chart({
       </div>
     </MATContextProvider>
   )
-})
+}
 
-export default Chart
+export default memo(Chart)

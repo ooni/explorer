@@ -1,10 +1,8 @@
-/* global module */
-
 // https://nextjs.org/docs/api-reference/next.config.js/introduction
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 const { withSentryConfig } = require('@sentry/nextjs')
 const glob = require('glob')
-const { dirname, basename, resolve } = require('path')
+const { basename, resolve } = require('path')
 const { execSync } = require('child_process')
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
@@ -17,9 +15,10 @@ const DEFAULT_LOCALE = 'en'
 function getSupportedLanguages() {
   const supportedLanguages = new Set()
   supportedLanguages.add(DEFAULT_LOCALE) // at least 1 supported language
-  glob
-    .sync(`${LANG_DIR}/**/*.json`)
-    .forEach((f) => supportedLanguages.add(basename(f, '.json')))
+  const files = glob.sync(`${LANG_DIR}/**/*.json`)
+  for (const f of files) {
+    supportedLanguages.add(basename(f, '.json'))
+  }
   return [...supportedLanguages]
 }
 
@@ -54,6 +53,18 @@ module.exports = withBundleAnalyzer(
           })
         }
         return headers
+      },
+      async rewrites() {
+        return [
+          {
+            source: '/api/v1/:path*',
+            destination: 'https://api.ooni.org/api/v1/:path*',
+          },
+          {
+            source: '/api/_/:path*',
+            destination: 'https://api.ooni.org/api/_/:path*',
+          },
+        ]
       },
       webpack: (config, options) => {
         const gitCommitSHAShort = process.env.RUN_GIT_COMMIT_SHA_SHORT
