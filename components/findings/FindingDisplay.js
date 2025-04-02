@@ -31,7 +31,7 @@ const FindingDisplay = ({ incident }) => {
     incident?.create_time &&
     formatLongDateUTC(incident?.create_time, intl.locale)
   const listOfNetworks = incident?.ASNs?.map((as) => (
-    <Link key={as} href={`/as/AS${as}`}>{`AS${as}`}</Link>
+    <Link key={as} href={`/as/AS${as}`} prefetch={false}>{`AS${as}`}</Link>
   )).reduce((prev, curr) => (prev ? [prev, ', ', curr] : curr), null)
 
   return (

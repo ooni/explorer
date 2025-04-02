@@ -46,7 +46,6 @@ export const Form = ({
   // initial placement of query params when they are not defined
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
-    console.log('query---', query)
     const tomorrow = dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
     const monthAgo = dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD')
     const probe_cc = selectedCountries.join(',')

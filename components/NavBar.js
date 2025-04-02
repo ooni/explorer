@@ -29,6 +29,7 @@ const LanguageSelect = (props) => (
 
 const StyledNavItem = ({ isActive, ...props }) => (
   <Link
+    prefetch={false}
     className={`
         block
         cursor-pointer
@@ -68,6 +69,7 @@ const SubNavItem = ({ label, href, ...props }) => {
 
   return (
     <Link
+      prefetch={false}
       href={href}
       className={`${isActive && 'border-black'} text-black hover:border-black hover:text-gray7 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium`}
       {...props}
@@ -174,7 +176,7 @@ export const NavBar = ({ color }) => {
         <div className="container">
           <div className="flex flex-row justify-between items-end">
             <div className="z-[1] mb-1">
-              <Link href="/">
+              <Link href="/" prefetch={false}>
                 <ExplorerLogo height="26px" />
               </Link>
             </div>
