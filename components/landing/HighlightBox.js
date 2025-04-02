@@ -76,7 +76,7 @@ export const FindingBox = ({ incident }) => {
       }
       footer={
         <div className="mx-auto mt-4">
-          <Link href={`/findings/${incident.id}`}>
+          <Link href={`/findings/${incident.id}`} prefetch={false}>
             <button className="btn btn-primary-hollow btn-sm" type="button">
               {intl.formatMessage({
                 id: 'Findings.Index.HighLightBox.ReadMore',
@@ -93,7 +93,11 @@ export const FindingBoxSmall = ({ incident }) => {
   const intl = useIntl()
 
   return (
-    <Link href={`/findings/${incident.id}`} className="flex text-black">
+    <Link
+      href={`/findings/${incident.id}`}
+      className="flex text-black"
+      prefetch={false}
+    >
       <HighlightBox
         key={incident.id}
         countryCode={incident.CCs[0]}
