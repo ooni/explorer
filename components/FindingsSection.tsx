@@ -10,7 +10,7 @@ type FindingsSectionProps = {
   title: string
   theme: string
   findings: Finding[]
-  isLoading: boolean
+  isLoading?: boolean
 }
 
 const FindingsSection = ({
