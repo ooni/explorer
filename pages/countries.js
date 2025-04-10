@@ -53,7 +53,7 @@ const RegionBlock = ({ regionCode, countries }) => {
   )
 }
 
-const RegionLink = ({ href, label }) => (
+export const RegionLink = ({ href, label }) => (
   <a className="px-2 md:px-4 block text-blue-500 underline" href={href}>
     {label}
   </a>

@@ -5,8 +5,6 @@ import { FormattedMessage } from 'react-intl'
 import Chart from 'components/Chart'
 import FormattedMarkdown from '../FormattedMarkdown'
 import ConfirmedBlockedCategory from './ConfirmedBlockedCategory'
-import SectionHeader from './SectionHeader'
-import { SimpleBox } from './boxes'
 
 const WebsitesSection = ({ countryCode }) => {
   const router = useRouter()
@@ -29,14 +27,12 @@ const WebsitesSection = ({ countryCode }) => {
 
   return (
     <>
-      <SectionHeader>
-        <SectionHeader.Title name="websites">
-          <FormattedMessage id="Country.Heading.Websites" />
-        </SectionHeader.Title>
-      </SectionHeader>
-      <SimpleBox>
+      <h2 name="websites" className="mt-8">
+        <FormattedMessage id="Country.Heading.Websites" />
+      </h2>
+      <div className="mt-2 bg-gray-50 px-4 py-2 text-sm">
         <FormattedMarkdown id="Country.Websites.Description" />
-      </SimpleBox>
+      </div>
       <ConfirmedBlockedCategory />
       <div className="my-8">
         <Chart testName="web_connectivity" queryParams={query} />

@@ -18,7 +18,8 @@ const LoginRequiredModal = ({ show }) => {
       <div className="container text-center p-1 md:p-4 py-8">
         <div className="flex">
           <h4>
-            {intl.formatMessage({ id: 'Findings.LoginRequiredModal.Title' })}
+            Email address is missing. Please log in again to be able to create a
+            censorship finding.
           </h4>
         </div>
         <button

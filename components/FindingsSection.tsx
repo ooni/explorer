@@ -25,11 +25,13 @@ const FindingsSection = ({
             {findings.map((finding) => (
               <FindingBoxSmall key={finding.id} incident={finding} />
             ))}
-            <div className="flex items-center justify-center px-24 text-center">
-              <Link href={`/findings?theme=${theme}`}>
-                See all related censorship findings »
-              </Link>
-            </div>
+            {theme && (
+              <div className="flex items-center justify-center px-24 text-center">
+                <Link href={`/findings?theme=${theme}`}>
+                  See all related censorship findings »
+                </Link>
+              </div>
+            )}
           </div>
         </>
       ) : (

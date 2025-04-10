@@ -3,8 +3,10 @@ import Calendar from 'components/country/Calendar'
 import { FormattedMessage, useIntl } from 'react-intl'
 import FormattedMarkdown from '../FormattedMarkdown'
 import { useCountry } from './CountryContext'
-import SectionHeader from './SectionHeader'
 import { BoxWithTitle } from './boxes'
+import ReportsSection from 'components/ReportsSection'
+import FindingsSection from 'components/FindingsSection'
+import useFindings from 'hooks/useFindings'
 
 export const OONI_BLOG_BASE_URL = 'https://ooni.org'
 
@@ -30,15 +32,16 @@ const Overview = ({
 }) => {
   const intl = useIntl()
   const { countryCode } = useCountry()
+  const {
+    sortedAndFilteredData: findings,
+    isLoading,
+    error: findingsError,
+  } = useFindings({
+    params: { country_code: countryCode },
+  })
 
   return (
     <>
-      <SectionHeader>
-        <SectionHeader.Title name="overview">
-          <FormattedMessage id="Country.Heading.Overview" />
-        </SectionHeader.Title>
-      </SectionHeader>
-      {/* <SummaryText> */}
       <BlockText className="my-4">
         <FormattedMarkdown
           id="Country.Overview.SummaryTextTemplate"
@@ -50,29 +53,22 @@ const Overview = ({
           }}
         />
       </BlockText>
-      {/* </SummaryText> */}
 
       <h4 className="my-2">
         <FormattedMessage id="Country.Overview.Heading.TestsByClass" />
       </h4>
-      <FormattedMarkdown id="Country.Overview.Heading.TestsByClass.Description" />
+      <div className="my-6 bg-gray-50 px-4 py-2 text-sm">
+        <FormattedMarkdown id="Country.Overview.Heading.TestsByClass.Description" />
+      </div>
       <Calendar startYear={measuredSince} />
-      <BoxWithTitle
-        title={<FormattedMessage id="Country.Overview.FeaturedResearch" />}
-      >
-        {featuredArticles.length === 0 ? (
-          <FormattedMessage id="Country.Overview.FeaturedResearch.None" />
-        ) : (
-          <ul>
-            {featuredArticles.map((article, index) => (
-              <li key={index}>
-                <FeaturedArticle link={article.href} title={article.title} />
-              </li>
-            ))}
-          </ul>
-        )}
-      </BoxWithTitle>
-      {/* Highlight Box */}
+      <FindingsSection
+        title={intl.formatMessage({ id: 'ThematicPage.NavBar.Findings' })}
+        findings={findings}
+      />
+      <ReportsSection
+        title={intl.formatMessage({ id: 'Country.Overview.FeaturedResearch' })}
+        reports={featuredArticles}
+      />
     </>
   )
 }
