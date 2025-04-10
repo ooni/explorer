@@ -1,6 +1,5 @@
 import Link from 'next/link'
 import { FormattedMessage } from 'react-intl'
-import { BoxWithTitle } from './country/boxes'
 import { FeaturedArticle, OONI_BLOG_BASE_URL } from './country/Overview'
 import ReportBox from './ReportBox'
 
@@ -26,13 +25,17 @@ const ReportsSection = ({ title, reports, theme }) => {
               title={article.title}
             />
           ))}
-          <div className="flex items-center justify-center px-4 text-center">
-            <Link href={`${OONI_BLOG_BASE_URL}/reports/${ooniOrgPath[theme]}`}>
-              <div className="after:content-['_»']">
-                <FormattedMessage id="ThematicPage.Reports.SeeAll" />
-              </div>
-            </Link>
-          </div>
+          {theme && (
+            <div className="flex items-center justify-center px-4 text-center">
+              <Link
+                href={`${OONI_BLOG_BASE_URL}/reports/${ooniOrgPath[theme]}`}
+              >
+                <div className="after:content-['_»']">
+                  <FormattedMessage id="ThematicPage.Reports.SeeAll" />
+                </div>
+              </Link>
+            </div>
+          )}
         </div>
       )}
     </section>

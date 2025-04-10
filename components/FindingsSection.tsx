@@ -28,13 +28,15 @@ const FindingsSection = ({
             {findings.map((finding) => (
               <FindingBoxSmall key={finding.id} incident={finding} />
             ))}
-            <div className="flex items-center justify-center px-24 text-center">
-              <Link href={`/findings?theme=${theme}`}>
-                <div className='after:content-["_»"]'>
-                  {intl.formatMessage({ id: 'ThematicPage.Findings.SeeAll' })}
-                </div>
-              </Link>
-            </div>
+            {theme && (
+              <div className="flex items-center justify-center px-24 text-center">
+                <Link href={`/findings?theme=${theme}`}>
+                  <div className='after:content-["_»"]'>
+                    {intl.formatMessage({ id: 'ThematicPage.Findings.SeeAll' })}
+                  </div>
+                </Link>
+              </div>
+            )}
           </div>
         </>
       ) : (

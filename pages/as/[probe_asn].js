@@ -7,12 +7,9 @@ import ThirdPartyDataChart from 'components/ThirdPartyDataChart'
 import Calendar from 'components/as/Calendar'
 import Loader from 'components/as/Loader'
 import Form from 'components/domain/Form'
-import ResultsList from 'components/search/ResultsList'
 import Head from 'next/head'
-import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
-import { MdOutlineSearch } from 'react-icons/md'
 import { FormattedMessage, useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
 import { fetcherWithPreprocessing, simpleFetcher } from 'services/fetchers'
@@ -21,6 +18,7 @@ import { getLocalisedRegionName } from 'utils/i18nCountries'
 import { SectionText } from '../../components/ThirdPartyDataChart'
 import { toCompactNumberUnit } from '../../utils'
 import TestGroupBadge from '/components/Badge'
+import RecentMeasurements from '../../components/RecentMeasurements'
 
 const swrOptions = {
   revalidateOnFocus: false,
@@ -110,25 +108,6 @@ const ChartsContainer = () => {
         </div>
         <Chart queryParams={queryCircumventionTools} />
       </section>
-    </>
-  )
-}
-
-export const RecentMeasurements = ({ recentMeasurements, query }) => {
-  const intl = useIntl()
-
-  return (
-    <>
-      <h3 className="mb-4 mt-8">
-        {intl.formatMessage({ id: 'Domain.RecentMeasurements.Title' })}
-      </h3>
-      <ResultsList results={recentMeasurements} />
-      <Link href={`/search?${new URLSearchParams(query)}`}>
-        <button type="button" className="btn btn-primary-hollow mt-4 mb-16">
-          {intl.formatMessage({ id: 'Domain.Button.SearchResults' })}{' '}
-          <MdOutlineSearch size={20} style={{ verticalAlign: 'bottom' }} />
-        </button>
-      </Link>
     </>
   )
 }
@@ -247,19 +226,11 @@ const NetworkDashboard = ({ probe_asn, networkName, countriesData }) => {
     swrOptions,
   )
 
-  console.log(calendarDataError)
-
   const measurementsTotal = useMemo(() => {
     return calendarData?.length
       ? calendarData.reduce((a, b) => a + b.value, 0)
       : null
   }, [calendarData])
-
-  const { data: recentMeasurements, error: recentMeasurementsError } = useSWR(
-    ['/api/v1/measurements', { limit: 5, failure: false, probe_asn }],
-    simpleFetcher,
-    swrOptions,
-  )
 
   // Sync page URL params with changes from form values
   const onSubmit = (data) => {
@@ -334,12 +305,7 @@ const NetworkDashboard = ({ probe_asn, networkName, countriesData }) => {
                     />
                   </>
                 )}
-                {!!recentMeasurements?.length && (
-                  <RecentMeasurements
-                    recentMeasurements={recentMeasurements}
-                    query={query}
-                  />
-                )}
+                <RecentMeasurements query={{ probe_asn }} />
               </>
             )}
             {calendarData?.length === 0 && (
