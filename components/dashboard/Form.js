@@ -224,12 +224,28 @@ export const Form = ({
           <Controller
             render={({ field }) => (
               <MultiSelect
-                label={apps.length ? 'Websites & Tools' : 'Websites'}
+                label={
+                  apps.length
+                    ? intl.formatMessage({
+                        id: 'ThematicPage.Form.WebsitesTools',
+                      })
+                    : intl.formatMessage({ id: 'Tests.Groups.Websites.Name' })
+                }
                 options={
                   apps.length
                     ? [
-                        { label: 'Tools', options: appOptions },
-                        { label: 'Websites', options: domainOptions },
+                        {
+                          label: intl.formatMessage({
+                            id: 'ThematicPage.Form.Tools',
+                          }),
+                          options: appOptions,
+                        },
+                        {
+                          label: intl.formatMessage({
+                            id: 'Tests.Groups.Websites.Name',
+                          }),
+                          options: domainOptions,
+                        },
                       ]
                     : domainOptions
                 }
