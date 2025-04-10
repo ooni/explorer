@@ -1,5 +1,6 @@
 import { FindingBoxSmall } from 'components/landing/HighlightBox'
 import Link from 'next/link'
+import { useIntl } from 'react-intl'
 
 interface Finding {
   id: string
@@ -16,6 +17,8 @@ const FindingsSection = ({
   theme,
   findings = [],
 }: FindingsSectionProps) => {
+  const intl = useIntl()
+
   return (
     <section className="mb-12">
       <h2>{title}</h2>
@@ -27,7 +30,9 @@ const FindingsSection = ({
             ))}
             <div className="flex items-center justify-center px-24 text-center">
               <Link href={`/findings?theme=${theme}`}>
-                See all related censorship findings »
+                <div className='after:content-["_»"]'>
+                  {intl.formatMessage({ id: 'ThematicPage.Findings.SeeAll' })}
+                </div>
               </Link>
             </div>
           </div>

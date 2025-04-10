@@ -28,7 +28,9 @@ const ReportsSection = ({ title, reports, theme }) => {
           ))}
           <div className="flex items-center justify-center px-4 text-center">
             <Link href={`${OONI_BLOG_BASE_URL}/reports/${ooniOrgPath[theme]}`}>
-              See all related research reports »
+              <div className="after:content-['_»']">
+                <FormattedMessage id="ThematicPage.Reports.SeeAll" />
+              </div>
             </Link>
           </div>
         </div>

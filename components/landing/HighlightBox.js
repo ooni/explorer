@@ -27,7 +27,7 @@ const HighlightBox = ({ countryCode, title, text, dates, footer }) => {
           <Markdown>{text}</Markdown>
         </div>
       </div>
-      {footer}
+      <div className="mt-6">{footer}</div>
     </div>
   )
 }
