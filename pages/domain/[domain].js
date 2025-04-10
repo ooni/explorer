@@ -13,10 +13,10 @@ import Form from 'components/domain/Form'
 import Flag from 'components/Flag'
 import { StyledSticky } from 'components/SharedStyledComponents'
 import { GridBox } from 'components/VirtualizedGrid'
-import { RecentMeasurements } from 'pages/as/[probe_asn]'
 import { simpleFetcher } from 'services/fetchers'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
 import { sortByKey } from '../../utils'
+import RecentMeasurements from '../../components/RecentMeasurements'
 
 const CountryList = ({ countries }) => {
   const intl = useIntl()
