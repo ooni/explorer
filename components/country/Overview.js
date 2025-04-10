@@ -34,7 +34,7 @@ const Overview = ({
   const { countryCode } = useCountry()
   const {
     sortedAndFilteredData: findings,
-    isLoading,
+    isLoading: isFindingsLoading,
     error: findingsError,
   } = useFindings({
     params: { country_code: countryCode },
@@ -64,6 +64,7 @@ const Overview = ({
       <FindingsSection
         title={intl.formatMessage({ id: 'ThematicPage.NavBar.Findings' })}
         findings={findings}
+        isLoading={isFindingsLoading}
       />
       <ReportsSection
         title={intl.formatMessage({ id: 'Country.Overview.FeaturedResearch' })}
