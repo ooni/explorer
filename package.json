@@ -30,7 +30,7 @@
     "lodash.debounce": "^4.0.8",
     "lru-cache": "^10.1.0",
     "markdown-to-jsx": "^7.7.4",
-    "next": "14.2.25",
+    "next": "14.2.26",
     "nprogress": "^0.2.0",
     "ooni-components": "0.7.0-alpha.11",
     "pretty-ms": "^8.0.0",
