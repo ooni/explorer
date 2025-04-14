@@ -185,21 +185,24 @@ const Country = ({ countryCode, overviewStats, reports, error }) => {
                   </StyledStickySubMenu>
                   <WebsitesSection countryCode={countryCode} />
                   <AppsSection />
+
+                  <h2 name="outages" className="mt-12">
+                    {intl.formatMessage({ id: 'Country.Outages' })}
+                  </h2>
+                  <div className="mt-2 bg-gray-50 px-4 py-2 text-sm">
+                    <SectionText
+                      country={countryCode}
+                      from={since}
+                      until={until}
+                    />
+                  </div>
+                  <ThirdPartyDataChart
+                    country={countryCode}
+                    since={since}
+                    until={until}
+                  />
                 </div>
               </CountryContextProvider>
-
-              <h2 name="outages" className="mt-12">
-                {intl.formatMessage({ id: 'Country.Outages' })}
-              </h2>
-              <div className="mt-2 bg-gray-50 px-4 py-2 text-sm">
-                <SectionText country={countryCode} from={since} until={until} />
-              </div>
-
-              <ThirdPartyDataChart
-                country={countryCode}
-                since={since}
-                until={until}
-              />
 
               <RecentMeasurements query={{ probe_cc: countryCode }} />
             </div>
