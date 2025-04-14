@@ -12,6 +12,7 @@ type FindingsSectionProps = {
   theme: string
   findings: Finding[]
   isLoading?: boolean
+  displayCountry?: boolean
 }
 
 const FindingsSection = ({
@@ -19,6 +20,7 @@ const FindingsSection = ({
   theme,
   findings = [],
   isLoading = false,
+  displayCountry = true,
 }: FindingsSectionProps) => {
   const intl = useIntl()
 
@@ -34,7 +36,11 @@ const FindingsSection = ({
             <>
               <div className="grid my-8 gap-4 grid-cols-1 sm:grid-cols-2 md:grid-cols-3">
                 {findings.map((finding) => (
-                  <FindingBoxSmall key={finding.id} incident={finding} />
+                  <FindingBoxSmall
+                    key={finding.id}
+                    incident={finding}
+                    displayCountry={displayCountry}
+                  />
                 ))}
                 {theme && (
                   <div className="flex items-center justify-center px-24 text-center">

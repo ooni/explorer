@@ -65,6 +65,7 @@ const Overview = ({
         title={intl.formatMessage({ id: 'ThematicPage.NavBar.Findings' })}
         findings={findings}
         isLoading={isFindingsLoading}
+        displayCountry={false}
       />
       <ReportsSection
         title={intl.formatMessage({ id: 'Country.Overview.FeaturedResearch' })}
