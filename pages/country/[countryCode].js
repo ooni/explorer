@@ -148,6 +148,18 @@ const Country = ({ countryCode, overviewStats, reports, error }) => {
                 />
 
                 <RegionLink
+                  href="#findings"
+                  label={intl.formatMessage({ id: 'Navbar.Findings' })}
+                />
+
+                <RegionLink
+                  href="#reports"
+                  label={intl.formatMessage({
+                    id: 'ThematicPage.NavBar.Reports',
+                  })}
+                />
+
+                <RegionLink
                   href="#websites"
                   label={intl.formatMessage({ id: 'Country.Heading.Websites' })}
                 />
@@ -185,8 +197,11 @@ const Country = ({ countryCode, overviewStats, reports, error }) => {
                   </StyledStickySubMenu>
                   <WebsitesSection countryCode={countryCode} />
                   <AppsSection />
-
-                  <h2 name="outages" className="mt-12">
+                  <div
+                    id="outages"
+                    class="h-[200px] mt-[-200px] md:h-[200px] md:mt-[-200px]"
+                  />
+                  <h2 className="mt-12">
                     {intl.formatMessage({ id: 'Country.Outages' })}
                   </h2>
                   <div className="mt-2 bg-gray-50 px-4 py-2 text-sm">

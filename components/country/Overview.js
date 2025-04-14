@@ -42,6 +42,10 @@ const Overview = ({
 
   return (
     <>
+      <div
+        id="overview"
+        class="h-[200px] mt-[-200px] md:h-[200px] md:mt-[-200px]"
+      />
       <BlockText className="my-4">
         <FormattedMarkdown
           id="Country.Overview.SummaryTextTemplate"
@@ -61,11 +65,20 @@ const Overview = ({
         <FormattedMarkdown id="Country.Overview.Heading.TestsByClass.Description" />
       </div>
       <Calendar startYear={measuredSince} />
+      <div
+        id="findings"
+        class="h-[200px] mt-[-200px] md:h-[200px] md:mt-[-200px]"
+      />
       <FindingsSection
         title={intl.formatMessage({ id: 'ThematicPage.NavBar.Findings' })}
         findings={findings}
         isLoading={isFindingsLoading}
         displayCountry={false}
+      />
+
+      <div
+        id="reports"
+        class="h-[200px] mt-[-200px] md:h-[200px] md:mt-[-200px]"
       />
       <ReportsSection
         title={intl.formatMessage({ id: 'Country.Overview.FeaturedResearch' })}
