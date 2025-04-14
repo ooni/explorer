@@ -56,7 +56,7 @@ const useFindings = ({
     simpleFetcher,
     { shouldRetryOnError: false },
   )
-  console.log('datadata', data)
+
   const displayData = useMemo(() => {
     if (data) {
       return convertDatesData(data)

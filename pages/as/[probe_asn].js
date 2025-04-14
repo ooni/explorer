@@ -174,7 +174,6 @@ const CountriesList = ({ countriesData }) => {
         localisedName: getLocalisedRegionName(c.alpha_2, locale),
       })),
   )
-  console.log('countriesData', countriesData)
 
   const numberOfCountries = countriesData.length
 
@@ -206,7 +205,6 @@ const NetworkDashboard = ({ probe_asn, networkName, countriesData }) => {
       until: query.until ?? today.format('YYYY-MM-DD'),
     }
   }, [query])
-  console.log('since', since, until)
 
   const { data: calendarData, error: calendarDataError } = useSWR(
     [

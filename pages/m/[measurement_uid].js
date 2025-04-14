@@ -153,6 +153,7 @@ const Measurement = ({
     <EmbeddedViewContext.Provider value={isEmbeddedView}>
       <Head>
         <title>{intl.formatMessage({ id: 'General.OoniExplorer' })}</title>
+        <meta name="robots" content="noindex" />
       </Head>
       {notFound ? (
         <>

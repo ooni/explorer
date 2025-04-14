@@ -207,6 +207,7 @@ const DomainDashboard = ({
     <>
       <Head>
         <title>{title}</title>
+        <meta name="robots" content="noindex" />
       </Head>
       <div className="container mt-16">
         <h1 className="mb-0">{domain}</h1>
