@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import useSWR from 'swr'
 import { apiEndpoints, fetcher } from '/lib/api'
+import { simpleFetcher } from 'services/fetchers'
 
 export const convertDatesData = (data) => {
   return data
@@ -49,14 +50,16 @@ const useFindings = ({
   params = {},
 }) => {
   const { data, isLoading, error } = useSWR(
-    apiEndpoints.SEARCH_INCIDENTS,
-    fetcher,
+    // apiEndpoints.SEARCH_INCIDENTS,
+    [apiEndpoints.SEARCH_INCIDENTS, params],
+    // fetcher,
+    simpleFetcher,
     { shouldRetryOnError: false },
   )
-
+  console.log('datadata', data)
   const displayData = useMemo(() => {
     if (data) {
-      return convertDatesData(data?.incidents)
+      return convertDatesData(data)
     }
     return []
   }, [data])
@@ -68,7 +71,7 @@ const useFindings = ({
       data = filterData(data, searchValue)
     }
 
-    if (themeValue.length) {
+    if (themeValue?.length) {
       data = data.filter((f) => f.themes.includes(themeValue))
     }
 

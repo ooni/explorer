@@ -89,7 +89,7 @@ export const FindingBox = ({ incident }) => {
   )
 }
 
-export const FindingBoxSmall = ({ incident }) => {
+export const FindingBoxSmall = ({ incident, displayCountry = true }) => {
   const intl = useIntl()
 
   return (
@@ -100,7 +100,7 @@ export const FindingBoxSmall = ({ incident }) => {
     >
       <HighlightBox
         key={incident.id}
-        countryCode={incident.CCs[0]}
+        countryCode={displayCountry ? incident.CCs[0] : null}
         title={incident.title}
         text={incident.short_description}
         dates={

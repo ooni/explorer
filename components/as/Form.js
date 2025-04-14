@@ -49,7 +49,7 @@ const Form = ({ onSubmit, since, until }) => {
   return (
     <form>
       <div className="flex items-center">
-        <div className="w-full md:w-1/2 xl:w-1/5">
+        <div className="w-full md:w-1/2">
           <div className="flex">
             <div className="w-2/3 mr-4">
               <Controller

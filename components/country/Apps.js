@@ -4,8 +4,6 @@ import { FormattedMessage, useIntl } from 'react-intl'
 
 import Chart from 'components/Chart'
 import FormattedMarkdown from '../FormattedMarkdown'
-import SectionHeader from './SectionHeader'
-import { SimpleBox } from './boxes'
 
 const messagingTestNames = [
   'signal',
@@ -70,14 +68,13 @@ const ChartsContainer = () => {
 
 const AppsSection = () => (
   <>
-    <SectionHeader>
-      <SectionHeader.Title name="apps">
-        <FormattedMessage id="Country.Heading.Apps" />
-      </SectionHeader.Title>
-    </SectionHeader>
-    <SimpleBox>
+    <div id="apps" class="h-[200px] mt-[-200px] md:h-[200px] md:mt-[-200px]" />
+    <h2>
+      <FormattedMessage id="Country.Heading.Apps" />
+    </h2>
+    <div className="mt-2 bg-gray-50 px-4 py-2 text-sm">
       <FormattedMarkdown id="Country.Apps.Description" />
-    </SimpleBox>
+    </div>
     <ChartsContainer />
   </>
 )

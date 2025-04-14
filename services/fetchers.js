@@ -1,7 +1,8 @@
 import axios from 'axios'
 // import { axiosResponseTime } from 'components/axios-plugins'
 
-const baseURL = process.env.NEXT_PUBLIC_OONI_API
+// const baseURL = process.env.NEXT_PUBLIC_OONI_API
+const baseURL = process.env.NEXT_PUBLIC_USER_FEEDBACK_API
 export const client = axios.create({ baseURL })
 
 export const MATFetcher = (query) => {
@@ -29,8 +30,21 @@ export const MATFetcher = (query) => {
     })
 }
 
-export const simpleFetcher = (url, params) =>
-  client.get(url, { params }).then((res) => res.data.results)
+export const simpleFetcher = (args) => {
+  let url = ''
+  let params = {}
+  if (Array.isArray(args)) {
+    url = args[0]
+    params = args[1]
+  } else {
+    url = args
+  }
+
+  return client.get(url, { params }).then((res) => {
+    // console.log('res.data.results', res.data)
+    return res.data?.results || res.data?.incidents
+  })
+}
 
 export const fetcherWithPreprocessing = ([
   url,
