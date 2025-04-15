@@ -12,7 +12,7 @@ import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
-import { fetcherWithPreprocessing, simpleFetcher } from 'services/fetchers'
+import { fetcherWithPreprocessing } from 'services/fetchers'
 import useSWR from 'swr'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
 import { SectionText } from '../../components/ThirdPartyDataChart'
@@ -195,16 +195,7 @@ const NetworkDashboard = ({ probe_asn, networkName, countriesData }) => {
   const router = useRouter()
   const { query } = router
   const displayASN = probe_asn.replace('AS', '')
-
-  const { since, until } = useMemo(() => {
-    const today = dayjs.utc().add(1, 'day')
-    const monthAgo = dayjs.utc(today).subtract(1, 'month')
-
-    return {
-      since: query.since ?? monthAgo.format('YYYY-MM-DD'),
-      until: query.until ?? today.format('YYYY-MM-DD'),
-    }
-  }, [query])
+  const { since, until } = query
 
   const { data: calendarData, error: calendarDataError } = useSWR(
     [
@@ -229,29 +220,6 @@ const NetworkDashboard = ({ probe_asn, networkName, countriesData }) => {
       ? calendarData.reduce((a, b) => a + b.value, 0)
       : null
   }, [calendarData])
-
-  // Sync page URL params with changes from form values
-  const onSubmit = (data) => {
-    const params = {}
-    for (const p of Object.keys(data)) {
-      if (data[p]) {
-        params[p] = data[p]
-      }
-    }
-    params.probe_asn = probe_asn
-    // since: "2022-01-02",
-    // until: "2022-02-01",
-
-    const { since, until, probe_cc } = params
-
-    if (
-      query.since !== since ||
-      query.until !== until ||
-      query.probe_cc !== probe_cc
-    ) {
-      router.push({ query: params }, undefined, { shallow: true })
-    }
-  }
 
   return (
     <>
@@ -285,7 +253,6 @@ const NetworkDashboard = ({ probe_asn, networkName, countriesData }) => {
                   <StyledSticky>
                     <div className="pb-4 pt-2">
                       <Form
-                        onSubmit={onSubmit}
                         availableCountries={countriesData.map((c) => c.alpha_2)}
                       />
                     </div>

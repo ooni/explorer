@@ -64,9 +64,10 @@ const ChartContainer = ({ domain, ...props }) => {
       domain,
       since,
       until,
+      ...(probe_cc && { probe_cc }),
       time_grain: 'day',
     }),
-    [domain, since, until],
+    [domain, since, until, probe_cc],
   )
 
   return (
@@ -74,7 +75,7 @@ const ChartContainer = ({ domain, ...props }) => {
       <div className="mb-4">
         <TestGroupBadge testName="web_connectivity" />
       </div>
-      <Chart queryParams={queryParams} />
+      <Chart queryParams={queryParams} {...props} />
     </>
   )
 }
@@ -144,7 +145,7 @@ const DomainDashboard = ({
   const { query } = router
   const [testedCountries, setTestedCountries] = useState(null)
   const intl = useIntl()
-
+  const title = `${intl.formatMessage({ id: 'General.OoniExplorer' })} | ${domain}`
   const hasCanonical = domain !== canonicalDomain
 
   const blockedCountries = useMemo(() => {
@@ -181,28 +182,6 @@ const DomainDashboard = ({
     swrOptions,
   )
 
-  const onSubmit = (data) => {
-    const params = {}
-    for (const p of Object.keys(data)) {
-      if (data[p]) {
-        params[p] = data[p]
-      }
-    }
-    params.domain = domain
-
-    const { since, until, probe_cc } = params
-
-    if (
-      query.since !== since ||
-      query.until !== until ||
-      query.probe_cc !== probe_cc
-    ) {
-      router.push({ query: params }, undefined, { shallow: true })
-    }
-  }
-
-  const title = `${intl.formatMessage({ id: 'General.OoniExplorer' })} | ${domain}`
-
   return (
     <>
       <Head>
@@ -219,10 +198,7 @@ const DomainDashboard = ({
           {/* we want sticky header only while scrolling over the charts */}
           <StyledSticky>
             <div className="pb-4 pt-2">
-              <Form
-                onSubmit={onSubmit}
-                availableCountries={countries.map((c) => c.alpha_2)}
-              />
+              <Form availableCountries={countries.map((c) => c.alpha_2)} />
             </div>
           </StyledSticky>
           <div className="mt-8">
