@@ -50,7 +50,7 @@ export const config: CustomProjectConfig = {
   generateOnly: true,
   failOnDifference: true,
   waitBeforeScreenshot: 3500,
-  lostPixelProjectId: 'cm8ygw0lo0s9zg9qy1lg9p86r',
+  lostPixelProjectId: 'cm9ldxgtv0s5s3wy0f1s8vo70',
   apiKey: process.env.LOST_PIXEL_API_KEY,
 
   // Lost Pixel Platform (to use in Platform mode, comment out the OSS mode and uncomment this part )
