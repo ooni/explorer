@@ -21,7 +21,7 @@ export const config: CustomProjectConfig = {
         name: 'domain',
       },
       {
-        path: '/as/AS31334?since=2025-03-01&until=2025-03-02',
+        path: '/as/AS15598?since=2025-04-07&until=2025-04-08',
         name: 'network',
       },
       {
