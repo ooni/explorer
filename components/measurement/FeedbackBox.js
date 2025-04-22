@@ -294,9 +294,7 @@ const FeedbackBox = ({
             </div>
           </form>
         )}
-        {state.value === 'submit' && (
-          <SpinLoader $background={colors.gray['50']} />
-        )}
+        {state.value === 'submit' && <SpinLoader />}
         {state.value === 'success' && (
           <>
             <div className="text-lg font-bold mb-4">
