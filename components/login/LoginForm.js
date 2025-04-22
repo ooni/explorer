@@ -84,7 +84,7 @@ export const LoginForm = ({ onLogin, redirectTo }) => {
               <FormattedMessage id="General.Login" />
             </button>
           ) : (
-            <SpinLoader size={3} margin="1px" />
+            <SpinLoader />
           )}
         </div>
       </div>

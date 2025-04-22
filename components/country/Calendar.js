@@ -128,7 +128,7 @@ const Calendar = React.memo(function Calendar({ startYear }) {
     <div className="mb-16 mt-2">
       {isLoading && (
         <div className="flex h-[180px] bg-gray-100 items-center justify-center">
-          <SpinLoader size={3} />
+          <SpinLoader />
         </div>
       )}
       {!!calendarData.length && (

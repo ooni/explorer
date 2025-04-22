@@ -10,6 +10,7 @@ public/static/lang/.messages/
 cypress/screenshots
 .yalc
 yalc.lock
+.lostpixel
 
 # Sentry Config File
 .sentryclirc

@@ -306,6 +306,7 @@ export const getServerSideProps = async (context) => {
           count: res.measurement_count,
         })),
       )
+      .catch(() => {})
 
     const networkName = await client
       .get('/api/_/asnmeta', { params: { asn: probe_asn.replace('AS', '') } })
