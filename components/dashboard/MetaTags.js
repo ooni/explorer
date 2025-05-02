@@ -1,14 +1,30 @@
 import Head from 'next/head'
 import { useIntl } from 'react-intl'
 
-export const MetaTags = () => {
+const strings = {
+  social_media: [
+    'ThematicPage.SocialMedia.MetaTags.Title',
+    'ThematicPage.SocialMedia.MetaTags.Description',
+  ],
+  news_media: [
+    'ThematicPage.NewsMedia.MetaTags.Title',
+    'ThematicPage.NewsMedia.MetaTags.Description',
+  ],
+  circumvention: [
+    'ThematicPage.Circumvention.MetaTags.Title',
+    'ThematicPage.Circumvention.MetaTags.Description',
+  ],
+}
+
+export const MetaTags = ({ theme }) => {
   const intl = useIntl()
   const title = intl.formatMessage({
-    id: 'ReachabilityDash.Heading.CircumventionTools',
+    id: strings[theme][0],
   })
   const description = intl.formatMessage({
-    id: 'ReachabilityDash.Meta.Description',
+    id: strings[theme][1],
   })
+
   return (
     <Head>
       <title>{title}</title>

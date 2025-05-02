@@ -63,7 +63,7 @@ const ThematicPage = ({
 
   return (
     <>
-      <MetaTags />
+      <MetaTags theme={theme} />
       <div className="container">
         <StickySubMenuUpdated
           topClass="top-[116px]"
