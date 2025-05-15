@@ -3,6 +3,10 @@ import useSWR from 'swr'
 import { apiEndpoints, fetcher } from '/lib/api'
 import { simpleFetcher } from 'services/fetchers'
 
+function normalizeString(str) {
+  return str.normalize('NFD').replace(/\p{Diacritic}/gu, '')
+}
+
 export const convertDatesData = (data) => {
   return data
     .filter((incident) => incident.published)
@@ -34,14 +38,17 @@ export const sortData = (data, sortValue) =>
     })
 
 export const filterData = (data, searchValue) =>
-  data.filter((incident) =>
-    searchValue
-      ? incident.title.toLowerCase().includes(searchValue.toLowerCase()) ||
-        incident.short_description
+  data.filter((incident) => {
+    const normalizedSearchValue = normalizeString(searchValue).toLowerCase()
+    return searchValue
+      ? normalizeString(incident.title)
           .toLowerCase()
-          .includes(searchValue.toLowerCase())
-      : true,
-  )
+          .includes(normalizedSearchValue) ||
+          normalizeString(incident.short_description)
+            .toLowerCase()
+            .includes(normalizedSearchValue)
+      : true
+  })
 
 const useFindings = ({
   sortValue = 'end_desc',
