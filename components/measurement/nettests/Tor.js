@@ -49,46 +49,50 @@ const Table = ({ columns, data }) => {
     getCoreRowModel: getCoreRowModel(),
   })
 
-  const cellClassNames = 'm-0 p-2 border-b border-black text-center'
   return (
-    <table className="border border-black border-spacing-0 table-fixed break-all w-full">
-      <thead>
-        {getHeaderGroups().map((headerGroup) => (
-          <tr key={headerGroup.id}>
-            {headerGroup.headers.map((header) => (
-              <th
-                key={header.id}
-                className={twMerge('border-r', cellClassNames)}
-              >
-                {flexRender(
-                  header.column.columnDef.header,
-                  header.getContext(),
-                )}
-                {/* Sort order indicator */}
-                {/* <span>
-                  {column.isSorted ? (column.isSortedDesc ? ' 🔽' : ' 🔼') : ''}
-                </span> */}
-              </th>
-            ))}
-          </tr>
-        ))}
-      </thead>
-      <tbody>
-        {getRowModel().rows.map((row) => {
-          return (
-            <tr key={row.id}>
-              {row.getVisibleCells().map((cell) => {
-                return (
-                  <td key={cell.id} className={cellClassNames}>
-                    {flexRender(cell.column.columnDef.cell, cell.getContext())}
-                  </td>
-                )
-              })}
+    <div className="flow-root overflow-x-auto">
+      <table className="min-w-full divide-y divide-gray-400">
+        <thead>
+          {getHeaderGroups().map((headerGroup) => (
+            <tr key={headerGroup.id}>
+              {headerGroup.headers.map((header) => (
+                <th
+                  key={header.id}
+                  className="px-3 py-3.5 text-sm text-start font-semibold text-gray-900"
+                  scope="col"
+                >
+                  {flexRender(
+                    header.column.columnDef.header,
+                    header.getContext(),
+                  )}
+                </th>
+              ))}
             </tr>
-          )
-        })}
-      </tbody>
-    </table>
+          ))}
+        </thead>
+        <tbody>
+          {getRowModel().rows.map((row) => {
+            return (
+              <tr key={row.id} className="even:bg-gray-50">
+                {row.getVisibleCells().map((cell) => {
+                  return (
+                    <td
+                      key={cell.id}
+                      className="whitespace-nowrap px-3 py-4 text-sm"
+                    >
+                      {flexRender(
+                        cell.column.columnDef.cell,
+                        cell.getContext(),
+                      )}
+                    </td>
+                  )
+                })}
+              </tr>
+            )
+          })}
+        </tbody>
+      </table>
+    </div>
   )
 }
 
@@ -175,8 +179,12 @@ const TorDetails = ({ isAnomaly, isFailure, measurement, render }) => {
   const data = useMemo(
     () =>
       Object.keys(targets).map((target) => {
+        const shortenedTarget =
+          target.length === 64
+            ? `${target.slice(0, 8)}…${target.slice(56, 64)}`
+            : target
         return {
-          name: targets[target].target_name || target,
+          name: targets[target].target_name || shortenedTarget,
           address: targets[target].target_address,
           type: targets[target].target_protocol,
           failure: targets[target].failure,
