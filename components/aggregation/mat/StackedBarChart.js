@@ -12,7 +12,7 @@ export const StackedBarChart = ({ data, query }) => {
   try {
     let gridData
     let rows
-    if (query?.v5) {
+    if (query?.v5 === 'true') {
       ;[gridData, rows] = preparePipelineV5DataForGridChart(
         data,
         query,

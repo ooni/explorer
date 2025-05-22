@@ -22,7 +22,7 @@ const swrOptions = {
 const fetcher = (query) => {
   const qs = new URLSearchParams(query).toString()
   let reqUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation?${qs}`
-  if (query.v5) {
+  if (query.v5 === 'true') {
     const { v5, ...v5qs } = query
     reqUrl = `https://api.dev.ooni.io/api/v1/aggregation/analysis?${new URLSearchParams(v5qs).toString()}`
   }
