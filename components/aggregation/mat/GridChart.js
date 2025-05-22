@@ -39,11 +39,39 @@ const GRID_MAX_HEIGHT = 600
  *
 */
 
+export const preparePipelineV5DataForGridChart = (data, query, locale) => {
+  const rows = []
+  const rowLabels = {}
+  const reshapedData = {}
+  for (let item of data) {
+    // Convert non-string keys (e.g `probe_asn`) to string
+    // because they get casted to strings during Object transformations
+    item = {
+      ...item,
+      measurement_start_day: item.measurement_start_day.split('T')[0],
+    }
+    const key = String(item[query.axis_y])
+    if (key in reshapedData) {
+      reshapedData[key].push(item)
+    } else {
+      rows.push(key)
+      reshapedData[key] = [item]
+      rowLabels[key] = getRowLabel(key, query.axis_y, locale)
+    }
+  }
+
+  const reshapedDataWithoutHoles = fillDataHoles(reshapedData, query)
+
+  const sortedRowKeys = rows.sort((a, b) =>
+    sortRows(rowLabels[a], rowLabels[b], query.axis_y, locale),
+  )
+  return [reshapedDataWithoutHoles, sortedRowKeys, rowLabels]
+}
+
 export const prepareDataForGridChart = (data, query, locale) => {
   const rows = []
   const rowLabels = {}
   const reshapedData = {}
-
   for (const item of data) {
     // Convert non-string keys (e.g `probe_asn`) to string
     // because they get casted to strings during Object transformations
@@ -56,7 +84,6 @@ export const prepareDataForGridChart = (data, query, locale) => {
       rowLabels[key] = getRowLabel(key, query.axis_y, locale)
     }
   }
-
   const reshapedDataWithoutHoles = fillDataHoles(reshapedData, query)
 
   const sortedRowKeys = rows.sort((a, b) =>
@@ -103,6 +130,7 @@ const GridChart = ({
   const indexBy = query.axis_x
   const tooltipContainer = useRef(null)
 
+  // rows in grid chart - when axis_y is in use
   const rowsToRender = useMemo(() => {
     if (!selectedRows) {
       return rowKeys
@@ -137,42 +165,39 @@ const GridChart = ({
             />
             {!data && <ChartSpinLoader />}
             {data?.size === 0 && <NoCharts />}
-            {data?.size > 0 && (
+            {data?.size > 0 &&
               // Fake axis on top of list. Possible alternative: dummy chart with axis and valid tickValues
               // Use a virtual list only for higher count of rows
-              <>
-                {rowsToRender.length < 10 ? (
-                  <div
-                    className="outerListElement flex flex-col"
-                    style={{
-                      height: gridHeight,
-                    }}
-                  >
-                    {!noLabels && <XAxis data={xAxisData} />}
-                    {rowsToRender.map((rowKey, index) => (
-                      <RowChart
-                        key={rowKey}
-                        rowIndex={index}
-                        data={data.get(rowKey)}
-                        indexBy={indexBy}
-                        height={rowHeight}
-                        label={rowLabels[rowKey]}
-                      />
-                    ))}
-                  </div>
-                ) : (
-                  <VirtualRows
-                    xAxis={!noLabels && <XAxis data={xAxisData} />}
-                    data={data}
-                    rows={rowsToRender}
-                    rowLabels={rowLabels}
-                    gridHeight={gridHeight}
-                    indexBy={indexBy}
-                    tooltipIndex={tooltipIndex}
-                  />
-                )}
-              </>
-            )}
+              (rowsToRender.length < 10 ? (
+                <div
+                  className="outerListElement flex flex-col"
+                  style={{
+                    height: gridHeight,
+                  }}
+                >
+                  {!noLabels && <XAxis data={xAxisData} />}
+                  {rowsToRender.map((rowKey, index) => (
+                    <RowChart
+                      key={rowKey}
+                      rowIndex={index}
+                      data={data.get(rowKey)}
+                      indexBy={indexBy}
+                      height={rowHeight}
+                      label={rowLabels[rowKey]}
+                    />
+                  ))}
+                </div>
+              ) : (
+                <VirtualRows
+                  xAxis={!noLabels && <XAxis data={xAxisData} />}
+                  data={data}
+                  rows={rowsToRender}
+                  rowLabels={rowLabels}
+                  gridHeight={gridHeight}
+                  indexBy={indexBy}
+                  tooltipIndex={tooltipIndex}
+                />
+              ))}
           </div>
         </div>
         <Tooltip />

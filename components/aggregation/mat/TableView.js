@@ -2,16 +2,18 @@ import { useMemo, useState } from 'react'
 import { useIntl } from 'react-intl'
 
 import Filters from './Filters'
-import GridChart, { prepareDataForGridChart } from './GridChart'
+import GridChart, {
+  prepareDataForGridChart,
+  preparePipelineV5DataForGridChart,
+} from './GridChart'
 
 const prepareDataforTable = (data, query, locale) => {
   const table = []
 
-  const [reshapedData, rows, rowLabels] = prepareDataForGridChart(
-    data,
-    query,
-    locale,
-  )
+  const [reshapedData, rows, rowLabels] =
+    query.v5 === 'true'
+      ? preparePipelineV5DataForGridChart(data, query, locale)
+      : prepareDataForGridChart(data, query, locale)
 
   const countKeys = [
     'anomaly_count',

@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import { useRouter } from 'next/router'
-import { Input, Select } from 'ooni-components'
+import { Checkbox, Input, Select } from 'ooni-components'
 import PropTypes from 'prop-types'
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
@@ -115,6 +115,7 @@ const defaultDefaultValues = {
   axis_y: '',
   time_grain: 'day',
   ooni_run_link_id: '',
+  v5: false,
 }
 
 export const Form = ({ onSubmit, query }) => {
@@ -123,7 +124,11 @@ export const Form = ({ onSubmit, query }) => {
   const [showConfirmation, setShowConfirmation] = useState(false)
 
   const defaultValues = useMemo(
-    () => Object.assign({}, defaultDefaultValues, query),
+    () =>
+      Object.assign({}, defaultDefaultValues, {
+        ...query,
+        v5: query.v5 === 'true',
+      }),
     [query],
   )
 
@@ -142,6 +147,7 @@ export const Form = ({ onSubmit, query }) => {
   const [until, setUntil] = useState(defaultValues.until)
   const [countryValue, setCountryValue] = useState(defaultValues.probe_cc)
   const [testNameValue, setTestNameValue] = useState(defaultValues.test_name)
+  // const [v5, setV5Value] = useState(defaultValues.v5)
 
   useEffect(() => {
     const subscription = watch((value, { name }) => {
@@ -149,6 +155,7 @@ export const Form = ({ onSubmit, query }) => {
       if (name === 'until') setUntil(value.until)
       if (name === 'probe_cc') setCountryValue(value.probe_cc)
       if (name === 'test_name') setTestNameValue(value.test_name)
+      // if (name === 'v5') setV5Value(value.v5)
     })
     return () => subscription.unsubscribe()
   }, [watch])
@@ -280,6 +287,15 @@ export const Form = ({ onSubmit, query }) => {
         onConfirm={onConfirm}
         onCancel={onCancel}
       />
+
+      <Controller
+        render={({ field }) => (
+          <Checkbox id="v5" label="v5" checked={field.value} {...field} />
+        )}
+        name="v5"
+        control={control}
+      />
+
       <div className="flex items-center flex-row flex-wrap gap-4 my-2">
         <div className="w-full sm:w-5/12 md:w-3/12 lg:w-2/12">
           <Controller
@@ -363,7 +379,9 @@ export const Form = ({ onSubmit, query }) => {
             render={({ field }) => (
               <Select
                 {...field}
-                label={intl.formatMessage({ id: 'MAT.Form.Label.TimeGrain' })}
+                label={intl.formatMessage({
+                  id: 'MAT.Form.Label.TimeGrain',
+                })}
                 width={1}
               >
                 {timeGrainOptions.map((option, idx) => (
@@ -426,7 +444,9 @@ export const Form = ({ onSubmit, query }) => {
             render={({ field }) => (
               <Select
                 {...field}
-                label={intl.formatMessage({ id: 'Search.Sidebar.TestName' })}
+                label={intl.formatMessage({
+                  id: 'Search.Sidebar.TestName',
+                })}
                 width={1}
               >
                 <TestNameOptions includeAllOption={false} />
@@ -442,7 +462,9 @@ export const Form = ({ onSubmit, query }) => {
                 control={control}
                 render={({ field }) => (
                   <Input
-                    label={intl.formatMessage({ id: 'Search.Sidebar.Domain' })}
+                    label={intl.formatMessage({
+                      id: 'Search.Sidebar.Domain',
+                    })}
                     placeholder="twitter.com"
                     {...field}
                   />
@@ -455,7 +477,9 @@ export const Form = ({ onSubmit, query }) => {
                 control={control}
                 render={({ field }) => (
                   <Input
-                    label={intl.formatMessage({ id: 'Search.Sidebar.Input' })}
+                    label={intl.formatMessage({
+                      id: 'Search.Sidebar.Input',
+                    })}
                     placeholder="https://fbcdn.net/robots.txt"
                     {...field}
                   />
@@ -506,6 +530,7 @@ export const Form = ({ onSubmit, query }) => {
           />
         </div>
       </div>
+
       <div className="flex my-8">
         <button
           type="button"
