@@ -62,6 +62,10 @@ const xAxisOptions = [
   ['measurement_start_day', [], false],
   ['category_code', ['web_connectivity'], false],
   ['probe_cc', [], true],
+  // ['probe_asn', [], false],
+  // ['test_name', [], false],
+  // ['input', [], false],
+  // ['domain', [], false],
   ['', [], false],
 ]
 
@@ -128,6 +132,7 @@ export const Form = ({ onSubmit, query }) => {
     () =>
       Object.assign({}, defaultDefaultValues, {
         ...query,
+        axis_x: query?.axis_x || '',
         v5: query.v5 === 'true',
       }),
     [query],
@@ -406,7 +411,7 @@ export const Form = ({ onSubmit, query }) => {
               >
                 {xAxisOptionsFiltered.map((option, idx) => (
                   <option key={idx} value={option}>
-                    {option.length > 0
+                    {option.length > 0 && messages[option]
                       ? intl.formatMessage(messages[option])
                       : option}
                   </option>
