@@ -62,6 +62,7 @@ const xAxisOptions = [
   ['measurement_start_day', [], false],
   ['category_code', ['web_connectivity'], false],
   ['probe_cc', [], true],
+  ['', [], false],
 ]
 
 const yAxisOptions = [

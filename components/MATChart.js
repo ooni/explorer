@@ -6,7 +6,6 @@ import { StackedBarChart } from 'components/aggregation/mat/StackedBarChart'
 import TableView from 'components/aggregation/mat/TableView'
 import { axiosResponseTime } from 'components/axios-plugins'
 import { useMemo } from 'react'
-import { useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
 import useSWR from 'swr'
 import { ChartSpinLoader } from './Chart'
@@ -84,7 +83,6 @@ export const MATChartWrapper = ({ link, caption }) => {
 }
 
 const MATChart = ({ query, showFilters = true }) => {
-  const intl = useIntl()
   const { data, error, isValidating } = useSWR(
     query ? query : null,
     fetcher,
@@ -105,7 +103,7 @@ const MATChart = ({ query, showFilters = true }) => {
           <ChartSpinLoader height="500px" />
         ) : (
           <>
-            {results.length > 0 ? (
+            {results.length > 0 || Object.keys(results).length ? (
               <>
                 {data && data.data.dimension_count === 0 && (
                   <FunnelChart data={results} />

@@ -19,19 +19,21 @@ const reshapeData = (data) => {
 }
 
 export const FunnelChart = ({ data }) => (
-  <ResponsiveFunnel
-    data={reshapeData(data)}
-    margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
-    valueFormat=">-.2s"
-    colors={(d) => stateColors[d.id.split('_')[0]] ?? colors.blue['500']}
-    borderWidth={20}
-    labelColor={{ from: 'color', modifiers: [['darker', 3]] }}
-    beforeSeparatorLength={100}
-    beforeSeparatorOffset={20}
-    afterSeparatorLength={100}
-    afterSeparatorOffset={20}
-    currentPartSizeExtension={10}
-    currentBorderWidth={40}
-    motionConfig="wobbly"
-  />
+  <div className="h-[500px]">
+    <ResponsiveFunnel
+      data={reshapeData(data)}
+      margin={{ top: 20, right: 20, bottom: 20, left: 20 }}
+      valueFormat=">-.2s"
+      colors={(d) => stateColors[d.id.split('_')[0]] ?? colors.blue['500']}
+      borderWidth={20}
+      labelColor={{ from: 'color', modifiers: [['darker', 3]] }}
+      beforeSeparatorLength={100}
+      beforeSeparatorOffset={20}
+      afterSeparatorLength={100}
+      afterSeparatorOffset={20}
+      currentPartSizeExtension={10}
+      currentBorderWidth={40}
+      motionConfig="wobbly"
+    />
+  </div>
 )
