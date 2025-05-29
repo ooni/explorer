@@ -17,6 +17,45 @@ const ROW_HEIGHT = 70
 const XAXIS_HEIGHT = 62
 const GRID_MAX_HEIGHT = 600
 
+export const preparePipelineV5DataForGridChart = (dataOG, query, locale) => {
+  const data = dataOG.map((item) => {
+    return {
+      ...item,
+      measurement_start_day: item.measurement_start_day.split('T')[0],
+      confirmed_count: item.outcome_blocked,
+      anomaly_count: item.outcome_down,
+      ok_count: item.outcome_ok,
+    }
+  })
+  console.log('data', data)
+  const rows = []
+  const rowLabels = {}
+  const reshapedData = {}
+  for (const item of data) {
+    // Convert non-string keys (e.g `probe_asn`) to string
+    // because they get casted to strings during Object transformations
+    // item = {
+    //   ...item,
+    //   measurement_start_day: item.measurement_start_day.split('T')[0],
+    // }
+    const key = String(item[query.axis_y])
+    if (key in reshapedData) {
+      reshapedData[key].push(item)
+    } else {
+      rows.push(key)
+      reshapedData[key] = [item]
+      rowLabels[key] = getRowLabel(key, query.axis_y, locale)
+    }
+  }
+
+  const reshapedDataWithoutHoles = fillDataHoles(reshapedData, query)
+
+  const sortedRowKeys = rows.sort((a, b) =>
+    sortRows(rowLabels[a], rowLabels[b], query.axis_y, locale),
+  )
+  return [reshapedDataWithoutHoles, sortedRowKeys, rowLabels]
+}
+
 /** Transforms data received by GridChart into an collection of arrays each of
  * which is used to generate a RowChart
  * {
@@ -38,35 +77,6 @@ const GRID_MAX_HEIGHT = 600
    }
  *
 */
-
-export const preparePipelineV5DataForGridChart = (data, query, locale) => {
-  const rows = []
-  const rowLabels = {}
-  const reshapedData = {}
-  for (let item of data) {
-    // Convert non-string keys (e.g `probe_asn`) to string
-    // because they get casted to strings during Object transformations
-    item = {
-      ...item,
-      measurement_start_day: item.measurement_start_day.split('T')[0],
-    }
-    const key = String(item[query.axis_y])
-    if (key in reshapedData) {
-      reshapedData[key].push(item)
-    } else {
-      rows.push(key)
-      reshapedData[key] = [item]
-      rowLabels[key] = getRowLabel(key, query.axis_y, locale)
-    }
-  }
-
-  const reshapedDataWithoutHoles = fillDataHoles(reshapedData, query)
-
-  const sortedRowKeys = rows.sort((a, b) =>
-    sortRows(rowLabels[a], rowLabels[b], query.axis_y, locale),
-  )
-  return [reshapedDataWithoutHoles, sortedRowKeys, rowLabels]
-}
 
 export const prepareDataForGridChart = (data, query, locale) => {
   const rows = []

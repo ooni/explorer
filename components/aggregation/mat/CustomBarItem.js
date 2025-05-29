@@ -1,7 +1,7 @@
 // Based on BarItem.tsx in @nivo/bar @v0.79.1
 // https://github.com/plouc/nivo/blob/f0a673005e918b2e2d3e635c6f214aa088bac5e1/packages/bar/src/BarItem.tsx
 
-import { useTheme } from '@nivo/core'
+// import { useTheme } from '@nivo/core'
 import { useTooltip } from '@nivo/tooltip'
 import { animated, to } from '@react-spring/web'
 import { createElement, useCallback, useEffect, useState } from 'react'
@@ -39,7 +39,7 @@ export const CustomBarItem = ({
   ariaLabelledBy,
   ariaDescribedBy,
 }) => {
-  const theme = useTheme()
+  // const theme = useTheme()
   const { showTooltipAt, hideTooltip } = useTooltip()
   const [extraBorderWidth, setExtraBorderWidth] = useState(0)
   const [isHovering, setIsHovering] = useState(false)
@@ -134,7 +134,7 @@ export const CustomBarItem = ({
           dominantBaseline="central"
           fillOpacity={labelOpacity}
           style={{
-            ...theme.labels.text,
+            // ...theme.labels.text,
             pointerEvents: 'none',
             fill: labelColor,
           }}

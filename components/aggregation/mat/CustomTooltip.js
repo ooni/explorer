@@ -1,4 +1,4 @@
-import { useTheme } from '@nivo/core'
+// import { useTheme } from '@nivo/core'
 import { Chip } from '@nivo/tooltip'
 import Link from 'next/link'
 import { colors } from 'ooni-components'
@@ -90,7 +90,7 @@ export const generateSearchQuery = (data, query) => {
 }
 
 const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
-  const theme = useTheme()
+  // const theme = useTheme()
   const intl = useIntl()
   const [query] = useMATContext()
   const dataKeysToShow = [
@@ -115,7 +115,8 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
   }, [data, query, title])
 
   return (
-    <div className="flex flex-col" style={{ ...theme.tooltip.container }}>
+    // <div className="flex flex-col" style={{ ...theme.tooltip.container }}>
+    <div className="flex flex-col">
       <div className="flex my-1">
         <div className="font-bold mr-auto">{derivedTitle}</div>
         <MdClear title="Close" strokeWidth={2} onClick={onClose} />
