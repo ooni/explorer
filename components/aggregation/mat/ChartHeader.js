@@ -4,8 +4,9 @@ import CountryNameLabel from './CountryNameLabel'
 import { useMATContext } from './MATContext'
 import { colorMap } from './colorMap'
 import { testGroups, testNames } from '/components/test-info'
+import { useRouter } from 'next/router'
 
-const Legend = ({ label, color }) => {
+const LegendItem = ({ label, color }) => {
   return (
     <div className="flex items-center mr-2">
       <div className="px-2">
@@ -71,6 +72,60 @@ export const SubtitleStr = ({ query, options }) => {
 
   return [...params].join(', ')
 }
+
+const legendItems = [
+  {
+    label: 'MAT.Table.Header.ok_count',
+    color: colorMap.ok_count,
+  },
+  {
+    label: 'MAT.Table.Header.confirmed_count',
+    color: colorMap.confirmed_count,
+  },
+  {
+    label: 'MAT.Table.Header.anomaly_count',
+    color: colorMap.anomaly_count,
+  },
+  {
+    label: 'MAT.Table.Header.failure_count',
+    color: colorMap.failure_count,
+  },
+]
+
+const legendItemsV5 = [
+  {
+    label: 'MAT.Table.Header.ok_count',
+    color: colorMap.ok_count,
+  },
+  {
+    label: 'MAT.Table.Header.blocked',
+    color: colorMap.confirmed_count,
+  },
+  {
+    label: 'MAT.Table.Header.down',
+    color: colorMap.anomaly_count,
+  },
+]
+
+const Legend = ({ label, color }) => {
+  const intl = useIntl()
+  const { query } = useRouter()
+
+  const items = query.loni ? legendItemsV5 : legendItems
+
+  return (
+    <div className="flex justify-center my-2 flex-wrap">
+      {items.map((item) => (
+        <LegendItem
+          key={item.label}
+          label={intl.formatMessage({ id: item.label })}
+          color={item.color}
+        />
+      ))}
+    </div>
+  )
+}
+
 /**
  * ChartHeader generates formatted headings to show above the charts in GridChart
  * @param {Object} options - Object with flags for header components eg. { probe_cc: false }
@@ -104,32 +159,7 @@ export const ChartHeader = ({ options: opts }) => {
         )}
       </div>
       <div className="flex mb-2 justify-between text-sm">
-        {options.legend && (
-          <div className="flex justify-center my-2 flex-wrap">
-            <Legend
-              label={intl.formatMessage({ id: 'MAT.Table.Header.ok_count' })}
-              color={colorMap.ok_count}
-            />
-            <Legend
-              label={intl.formatMessage({
-                id: 'MAT.Table.Header.confirmed_count',
-              })}
-              color={colorMap.confirmed_count}
-            />
-            <Legend
-              label={intl.formatMessage({
-                id: 'MAT.Table.Header.anomaly_count',
-              })}
-              color={colorMap.anomaly_count}
-            />
-            <Legend
-              label={intl.formatMessage({
-                id: 'MAT.Table.Header.failure_count',
-              })}
-              color={colorMap.failure_count}
-            />
-          </div>
-        )}
+        {options.legend && <Legend />}
         {options.logo && <OONILogo className="opacity-50" height="32px" />}
       </div>
     </>

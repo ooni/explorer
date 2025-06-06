@@ -12,7 +12,7 @@ export const StackedBarChart = ({ data, query }) => {
   try {
     let gridData
     let rows
-    if (query?.v5 === 'true') {
+    if (query?.loni) {
       ;[gridData, rows] = preparePipelineV5DataForGridChart(
         data,
         query,
@@ -38,14 +38,14 @@ export const StackedBarChart = ({ data, query }) => {
   }
 }
 
-StackedBarChart.propTypes = {
-  data: PropTypes.shape({
-    data: PropTypes.shape({
-      dimension_count: PropTypes.number,
-      result: PropTypes.array,
-    }),
-    loadTime: PropTypes.number,
-    url: PropTypes.string,
-  }),
-  query: PropTypes.object,
-}
+// StackedBarChart.propTypes = {
+//   data: PropTypes.shape({
+//     data: PropTypes.shape({
+//       dimension_count: PropTypes.number,
+//       result: PropTypes.array,
+//     }),
+//     loadTime: PropTypes.number,
+//     url: PropTypes.string,
+//   }),
+//   query: PropTypes.object,
+// }

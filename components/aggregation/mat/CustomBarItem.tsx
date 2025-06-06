@@ -1,107 +1,88 @@
-// Based on BarItem.tsx in @nivo/bar @v0.79.1
-// https://github.com/plouc/nivo/blob/f0a673005e918b2e2d3e635c6f214aa088bac5e1/packages/bar/src/BarItem.tsx
+// Based on BarItem.tsx in @nivo/bar @v0.99.0
+// https://github.com/plouc/nivo/blob/aa19899518a8cd2c386581d0c6d37093d53f66d2/packages/bar/src/BarItem.tsx
 
-// import { useTheme } from '@nivo/core'
-import { useTooltip } from '@nivo/tooltip'
+import { type MouseEvent, useCallback, useState, useEffect } from 'react'
 import { animated, to } from '@react-spring/web'
-import { createElement, useCallback, useEffect, useState } from 'react'
+import type { BarDatum, BarItemProps } from '@nivo/bar'
 
-export const CustomBarItem = ({
+type CustomBarItemProps<D extends BarDatum> = Omit<
+  BarItemProps<D>,
+  'enableLabel'
+> & {
+  enableLabel: string | false
+}
+
+export const CustomBarItem = <D extends BarDatum>({
   bar: { data, ...bar },
-
   style: {
     borderColor,
     color,
     height,
-    labelColor,
-    labelOpacity,
-    labelX,
-    labelY,
+    // labelColor,
+    // labelOpacity,
+    // labelX,
+    // labelY,
     transform,
     width,
+    // textAnchor,
   },
-
   borderRadius,
   borderWidth,
   enableLabel,
-  label,
-  shouldRenderLabel,
-
+  //   label,
+  //   shouldRenderLabel,
   isInteractive,
   onClick,
   onMouseEnter,
   onMouseLeave,
-
-  tooltip,
-
+  //   tooltip,
   isFocusable,
   ariaLabel,
   ariaLabelledBy,
   ariaDescribedBy,
-}) => {
-  // const theme = useTheme()
-  const { showTooltipAt, hideTooltip } = useTooltip()
+  ariaDisabled,
+  ariaHidden,
+}: CustomBarItemProps<D>) => {
   const [extraBorderWidth, setExtraBorderWidth] = useState(0)
   const [isHovering, setIsHovering] = useState(false)
-
-  const onClose = useCallback(() => {
-    hideTooltip()
-    // Use the onclick handler to reset the tooltip column
-    // without this setExtraBorderWidth(0) only affects
-    // the clicked bar in the stack (e.g ok_count)
-    onClick({ column: '' })
-  }, [hideTooltip, onClick])
 
   useEffect(() => {
     // We receive tooltip coordinates in `enableLabel`
     // to determine if a tooltip is enabled and if the column should be highlighted.
     if (enableLabel === false) {
-      hideTooltip()
+      // hideTooltip()
       setExtraBorderWidth(0)
     } else {
       setExtraBorderWidth(enableLabel === data.indexValue ? 2 : 0)
     }
-  }, [data.indexValue, enableLabel, hideTooltip])
-
-  const renderTooltip = useCallback(
-    () => createElement(tooltip, { ...bar, ...data, onClose }),
-    [tooltip, bar, data, onClose],
-  )
+  }, [data.indexValue, enableLabel])
 
   const handleClick = useCallback(
-    (event) => {
+    (event: MouseEvent<SVGRectElement>) => {
       onClick?.({ color: bar.color, ...data }, event)
     },
     [bar, data, onClick],
   )
-  // Disable events upon mouse movement events
-  // const handleTooltip = useCallback(
-  //   (event) => showTooltipFromEvent(renderTooltip(), event),
-  //   [showTooltipFromEvent, renderTooltip]
-  // )
+
   const handleMouseEnter = useCallback(
-    (event) => {
+    (event: MouseEvent<SVGRectElement>) => {
       onMouseEnter?.(data, event)
       setIsHovering(true)
+      //   showTooltipFromEvent(renderTooltip(), event)
     },
     [data, onMouseEnter],
-  )
-  const handleMouseLeave = useCallback(
-    (event) => {
-      onMouseLeave?.(data, event)
-      setIsHovering(false)
-      // hideTooltip()
-    },
-    [data, onMouseLeave],
+    // [data, onMouseEnter, showTooltipFromEvent, renderTooltip],
   )
 
-  // extra handlers to allow keyboard navigation
-  const handleFocus = useCallback(() => {
-    showTooltipAt(renderTooltip(), [bar.absX + bar.width / 2, bar.absY])
-  }, [showTooltipAt, renderTooltip, bar])
-  const handleBlur = useCallback(() => {
-    hideTooltip()
-  }, [hideTooltip])
+  const handleMouseLeave = useCallback(
+    (event: MouseEvent<SVGRectElement>) => {
+      onMouseLeave?.(data, event)
+      setIsHovering(false)
+      //   hideTooltip()
+    },
+    [data, onMouseLeave],
+    // [data, hideTooltip, onMouseLeave],
+  )
 
   return (
     <animated.g transform={transform}>
@@ -113,35 +94,40 @@ export const CustomBarItem = ({
         fill={data.fill ?? color}
         opacity={isHovering ? 0.8 : 1}
         strokeWidth={borderWidth + extraBorderWidth}
+        // strokeWidth={borderWidth}
         stroke={borderColor}
         focusable={isFocusable}
         tabIndex={isFocusable ? 0 : undefined}
         aria-label={ariaLabel ? ariaLabel(data) : undefined}
         aria-labelledby={ariaLabelledBy ? ariaLabelledBy(data) : undefined}
         aria-describedby={ariaDescribedBy ? ariaDescribedBy(data) : undefined}
+        aria-disabled={ariaDisabled ? ariaDisabled(data) : undefined}
+        aria-hidden={ariaHidden ? ariaHidden(data) : undefined}
         onMouseEnter={isInteractive ? handleMouseEnter : undefined}
         // onMouseMove={isInteractive ? handleTooltip : undefined}
         onMouseLeave={isInteractive ? handleMouseLeave : undefined}
         onClick={isInteractive ? handleClick : undefined}
-        onFocus={isInteractive && isFocusable ? handleFocus : undefined}
-        onBlur={isInteractive && isFocusable ? handleBlur : undefined}
+        // onFocus={isInteractive && isFocusable ? handleFocus : undefined}
+        // onBlur={isInteractive && isFocusable ? handleBlur : undefined}
+        data-testid={`bar.item.${data.id}.${data.index}`}
       />
-      {shouldRenderLabel && (
-        <animated.text
+      {/* {shouldRenderLabel && (
+        <Text
           x={labelX}
           y={labelY}
-          textAnchor="middle"
+          textAnchor={textAnchor}
           dominantBaseline="central"
           fillOpacity={labelOpacity}
           style={{
-            // ...theme.labels.text,
+            ...theme.labels.text,
+            // We don't want the label to intercept mouse events
             pointerEvents: 'none',
             fill: labelColor,
           }}
         >
           {label}
-        </animated.text>
-      )}
+        </Text>
+      )} */}
     </animated.g>
   )
 }

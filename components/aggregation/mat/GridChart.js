@@ -2,7 +2,7 @@ import { Container } from '@nivo/core'
 import { Tooltip, TooltipProvider } from '@nivo/tooltip'
 import { ChartSpinLoader } from 'components/Chart'
 import PropTypes from 'prop-types'
-import { memo, useMemo, useRef } from 'react'
+import { memo, useMemo, useRef, useCallback } from 'react'
 import { ChartHeader } from './ChartHeader'
 import { barThemeForTooltip } from './CustomTooltip'
 import { useMATContext } from './MATContext'
@@ -12,32 +12,47 @@ import { VirtualRows } from './VirtualRows'
 import { XAxis } from './XAxis'
 import { fillDataHoles, sortRows } from './computations'
 import { getRowLabel } from './labels'
+import { useRouter } from 'next/router'
+import { useState, useEffect } from 'react'
+import { twMerge } from 'tailwind-merge'
 
 const ROW_HEIGHT = 70
 const XAXIS_HEIGHT = 62
 const GRID_MAX_HEIGHT = 600
+
+const generateQuery = (q) => new URLSearchParams(q).toString()
 
 export const preparePipelineV5DataForGridChart = (dataOG, query, locale) => {
   const data = dataOG.map((item) => {
     return {
       ...item,
       measurement_start_day: item.measurement_start_day.split('T')[0],
-      confirmed_count: item.outcome_blocked,
-      anomaly_count: item.outcome_down,
-      ok_count: item.outcome_ok,
+      ...item.loni,
+      // outcome_label: item.outcome_label,
+      // outcome_ok: item.outcome_ok,
+      // outcome_blocked: item.outcome_blocked,
+      // outcome_down: item.outcome_down,
+      // dns_isp_blocked: item.loni.dns_isp_blocked,
+      // dns_isp_down: item.loni.dns_isp_down,
+      // dns_isp_ok: item.loni.dns_isp_ok,
+      // dns_other_blocked: item.loni.dns_other_blocked,
+      // dns_other_down: item.loni.dns_other_down,
+      // dns_other_ok: item.loni.dns_other_ok,
+      // tls_blocked: item.loni.tls_blocked,
+      // tls_down: item.loni.tls_down,
+      // tls_ok: item.loni.tls_ok,
+      // tcp_blocked: item.loni.tcp_blocked,
+      // tcp_down: item.loni.tcp_down,
+      // tcp_ok: item.loni.tcp_ok,
     }
   })
-  console.log('data', data)
+
   const rows = []
   const rowLabels = {}
   const reshapedData = {}
   for (const item of data) {
     // Convert non-string keys (e.g `probe_asn`) to string
     // because they get casted to strings during Object transformations
-    // item = {
-    //   ...item,
-    //   measurement_start_day: item.measurement_start_day.split('T')[0],
-    // }
     const key = String(item[query.axis_y])
     if (key in reshapedData) {
       reshapedData[key].push(item)
@@ -103,6 +118,23 @@ export const prepareDataForGridChart = (data, query, locale) => {
   return [reshapedDataWithoutHoles, sortedRowKeys, rowLabels]
 }
 
+const ChartTypeButton = ({ chartType, isActive, onClick }) => {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={twMerge(
+        'btn text-white btn-sm',
+        isActive
+          ? 'bg-blue-400 border-blue-400'
+          : 'bg-blue-200 border-blue-200 ',
+      )}
+    >
+      {chartType}
+    </button>
+  )
+}
+
 /**
  * Renders the collection of RowCharts. This is either passed down from
  * TableView or from other components like `<Chart>` (`components/dashboard/Charts.js`)
@@ -133,6 +165,7 @@ const GridChart = ({
   selectedRows = null,
   noLabels = false,
 }) => {
+  const router = useRouter()
   // Fetch query state from context instead of router
   // because some params not present in the URL are injected in the context
   const [query] = useMATContext()
@@ -165,65 +198,98 @@ const GridChart = ({
 
   const rowHeight = noLabels ? 500 : ROW_HEIGHT
 
+  const handleChartTypeChange = useCallback((chartType) => {
+    const pathname = router.pathname
+    const query = router.query
+
+    const href = {
+      pathname: router.pathname,
+      query: { ...query, loni: chartType },
+    }
+
+    return router.push(href, href, { shallow: true })
+  })
+
+  const chartTypes = ['outcome', 'dns_isp', 'dns_other', 'tls', 'tcp']
+
   return (
-    <Container theme={barThemeForTooltip}>
-      <TooltipProvider container={tooltipContainer}>
-        <div className="flex flex-col" ref={tooltipContainer}>
-          <div className="flex flex-col">
-            <ChartHeader
-              options={{ ...header, logo: !!data?.size, legend: !!data?.size }}
+    <div>
+      {router.query.loni && (
+        <div className="flex flex-row gap-6 mb-4">
+          {chartTypes.map((chartType) => (
+            <ChartTypeButton
+              key={chartType}
+              chartType={chartType}
+              isActive={router.query.loni === chartType}
+              onClick={() => handleChartTypeChange(chartType)}
             />
-            {!data && <ChartSpinLoader />}
-            {data?.size === 0 && <NoCharts />}
-            {data?.size > 0 &&
-              // Fake axis on top of list. Possible alternative: dummy chart with axis and valid tickValues
-              // Use a virtual list only for higher count of rows
-              (rowsToRender.length < 10 ? (
-                <div
-                  className="outerListElement flex flex-col"
-                  style={{
-                    height: gridHeight,
-                  }}
-                >
-                  {!noLabels && <XAxis data={xAxisData} />}
-                  {rowsToRender.map((rowKey, index) => (
-                    <RowChart
-                      key={rowKey}
-                      rowIndex={index}
-                      data={data.get(rowKey)}
-                      indexBy={indexBy}
-                      height={rowHeight}
-                      label={rowLabels[rowKey]}
-                    />
-                  ))}
-                </div>
-              ) : (
-                <VirtualRows
-                  xAxis={!noLabels && <XAxis data={xAxisData} />}
-                  data={data}
-                  rows={rowsToRender}
-                  rowLabels={rowLabels}
-                  gridHeight={gridHeight}
-                  indexBy={indexBy}
-                  tooltipIndex={tooltipIndex}
-                />
-              ))}
-          </div>
+          ))}
         </div>
-        <Tooltip />
-      </TooltipProvider>
-    </Container>
+      )}
+
+      <Container theme={barThemeForTooltip}>
+        <TooltipProvider container={tooltipContainer}>
+          <div className="flex flex-col" ref={tooltipContainer}>
+            <div className="flex flex-col">
+              <ChartHeader
+                options={{
+                  ...header,
+                  logo: !!data?.size,
+                  legend: !!data?.size,
+                }}
+              />
+              {!data && <ChartSpinLoader />}
+              {data?.size === 0 && <NoCharts />}
+              {data?.size > 0 &&
+                // Fake axis on top of list. Possible alternative: dummy chart with axis and valid tickValues
+                // Use a virtual list only for higher count of rows
+                (rowsToRender.length < 10 ? (
+                  <div
+                    className="outerListElement flex flex-col"
+                    style={{
+                      height: gridHeight,
+                    }}
+                  >
+                    {!noLabels && <XAxis data={xAxisData} />}
+                    {rowsToRender.map((rowKey, index) => (
+                      <RowChart
+                        key={rowKey}
+                        rowIndex={index}
+                        data={data.get(rowKey)}
+                        indexBy={indexBy}
+                        height={rowHeight}
+                        label={rowLabels[rowKey]}
+                      />
+                    ))}
+                  </div>
+                ) : (
+                  <VirtualRows
+                    xAxis={!noLabels && <XAxis data={xAxisData} />}
+                    data={data}
+                    rows={rowsToRender}
+                    rowLabels={rowLabels}
+                    gridHeight={gridHeight}
+                    indexBy={indexBy}
+                    tooltipIndex={tooltipIndex}
+                  />
+                ))}
+            </div>
+          </div>
+          <Tooltip />
+        </TooltipProvider>
+      </Container>
+    </div>
   )
 }
 
-GridChart.propTypes = {
-  data: PropTypes.objectOf(PropTypes.array).isRequired,
-  rowKeys: PropTypes.arrayOf(PropTypes.string),
-  rowLabels: PropTypes.objectOf(PropTypes.string),
-  selectedRows: PropTypes.arrayOf(PropTypes.string),
-  height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  header: PropTypes.element,
-  noLabels: PropTypes.bool,
-}
+// GridChart.propTypes = {
+//   data: PropTypes.objectOf(PropTypes.array).isRequired,
+//   rowKeys: PropTypes.arrayOf(PropTypes.string),
+//   rowLabels: PropTypes.objectOf(PropTypes.string),
+//   selectedRows: PropTypes.arrayOf(PropTypes.string),
+//   height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+//   header: PropTypes.element,
+//   noLabels: PropTypes.bool,
+// }
 
 export default memo(GridChart)

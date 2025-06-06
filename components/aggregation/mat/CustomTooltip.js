@@ -1,4 +1,4 @@
-// import { useTheme } from '@nivo/core'
+import { useTheme } from '@nivo/theming'
 import { Chip } from '@nivo/tooltip'
 import Link from 'next/link'
 import { colors } from 'ooni-components'
@@ -8,6 +8,7 @@ import { MdClear } from 'react-icons/md'
 import { useIntl } from 'react-intl'
 import { useMATContext } from './MATContext'
 import { colorMap } from './colorMap'
+import { useRouter } from 'next/router'
 
 export const themeForInvisibleTooltip = {
   tooltip: {
@@ -89,16 +90,34 @@ export const generateSearchQuery = (data, query) => {
   }
 }
 
+const keys = ['anomaly_count', 'confirmed_count', 'failure_count', 'ok_count']
+const v5keys = ['outcome_blocked', 'outcome_down', 'outcome_ok']
+
+const getKeys = (loni) => {
+  if (loni) {
+    switch (loni) {
+      case 'dns_isp':
+        return ['dns_isp_blocked', 'dns_isp_down', 'dns_isp_ok']
+      case 'dns_other':
+        return ['dns_other_blocked', 'dns_other_down', 'dns_other_ok']
+      case 'tls':
+        return ['tls_blocked', 'tls_down', 'tls_ok']
+      case 'tcp':
+        return ['tcp_blocked', 'tcp_down', 'tcp_ok']
+      default:
+        return v5keys
+    }
+  }
+  return keys
+}
+
 const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
-  // const theme = useTheme()
+  const theme = useTheme()
   const intl = useIntl()
   const [query] = useMATContext()
-  const dataKeysToShow = [
-    'anomaly_count',
-    'confirmed_count',
-    'failure_count',
-    'ok_count',
-  ]
+  const { query: routerQuery } = useRouter()
+
+  const dataKeysToShow = getKeys(routerQuery?.loni)
 
   const [linkToMeasurements, derivedTitle] = useMemo(() => {
     const searchQuery = generateSearchQuery(data, query)
@@ -115,8 +134,7 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
   }, [data, query, title])
 
   return (
-    // <div className="flex flex-col" style={{ ...theme.tooltip.container }}>
-    <div className="flex flex-col">
+    <div className="flex flex-col" style={{ ...theme.tooltip.container }}>
       <div className="flex my-1">
         <div className="font-bold mr-auto">{derivedTitle}</div>
         <MdClear title="Close" strokeWidth={2} onClick={onClose} />

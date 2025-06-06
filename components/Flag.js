@@ -268,6 +268,7 @@ export const Flag = ({ countryCode = 'zz', size = 60, border }) => {
       style={{ width: `${size + 2}px`, height: `${size + 2}px` }}
     >
       <Image
+        alt={countryCode}
         height={size}
         width={size}
         src={src}

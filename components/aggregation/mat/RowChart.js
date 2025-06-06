@@ -20,10 +20,28 @@ import {
 import { useMATContext } from './MATContext'
 import { colorMap, v5ColorMap } from './colorMap'
 import { getXAxisTicks } from './timeScaleXAxis'
+import { useRouter } from 'next/router'
 
 const keys = ['anomaly_count', 'confirmed_count', 'failure_count', 'ok_count']
-// const v5keys = ['outcome_blocked', 'outcome_down', 'outcome_ok']
-const v5keys = keys
+const v5keys = ['outcome_blocked', 'outcome_down', 'outcome_ok']
+
+const getKeys = (loni) => {
+  if (loni) {
+    switch (loni) {
+      case 'dns_isp':
+        return ['dns_isp_blocked', 'dns_isp_down', 'dns_isp_ok']
+      case 'dns_other':
+        return ['dns_other_blocked', 'dns_other_down', 'dns_other_ok']
+      case 'tls':
+        return ['tls_blocked', 'tls_down', 'tls_ok']
+      case 'tcp':
+        return ['tcp_blocked', 'tcp_down', 'tcp_ok']
+    }
+    return v5keys
+  }
+  return keys
+}
+
 const colorFunc = (d) => colorMap[d.id] || '#ccc'
 
 const barLayers = ['grid', 'axes', 'bars']
@@ -133,11 +151,15 @@ const RowChart = ({
   rowIndex /* width, first, last */,
 }) => {
   const intl = useIntl()
+  const { query: routerQuery } = useRouter()
   const [query, updateMATContext] = useMATContext()
-  const { tooltipIndex, v5 } = query
+  const { tooltipIndex } = query
+
   const { showTooltipFromEvent, hideTooltip } = useTooltip()
 
   const onClose = useCallback(() => {
+    // update MATContext to remove the highlighted border around BarItem
+    updateMATContext({ tooltipIndex: [-1, ''] }, true)
     hideTooltip()
   }, [hideTooltip])
 
@@ -180,7 +202,7 @@ const RowChart = ({
       <div style={{ height, width: '100%' }}>
         <Bar
           data={chartData}
-          keys={v5 ? v5keys : keys}
+          keys={getKeys(routerQuery?.loni)}
           indexBy={indexBy}
           tooltip={InvisibleTooltip}
           onClick={handleClick}
