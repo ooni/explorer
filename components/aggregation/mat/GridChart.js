@@ -27,23 +27,38 @@ export const preparePipelineV5DataForGridChart = (dataOG, query, locale) => {
     return {
       ...item,
       measurement_start_day: item.measurement_start_day.split('T')[0],
-      ...item.loni,
-      // outcome_label: item.outcome_label,
-      // outcome_ok: item.outcome_ok,
-      // outcome_blocked: item.outcome_blocked,
-      // outcome_down: item.outcome_down,
-      // dns_isp_blocked: item.loni.dns_isp_blocked,
-      // dns_isp_down: item.loni.dns_isp_down,
-      // dns_isp_ok: item.loni.dns_isp_ok,
-      // dns_other_blocked: item.loni.dns_other_blocked,
-      // dns_other_down: item.loni.dns_other_down,
-      // dns_other_ok: item.loni.dns_other_ok,
-      // tls_blocked: item.loni.tls_blocked,
-      // tls_down: item.loni.tls_down,
-      // tls_ok: item.loni.tls_ok,
-      // tcp_blocked: item.loni.tcp_blocked,
-      // tcp_down: item.loni.tcp_down,
-      // tcp_ok: item.loni.tcp_ok,
+      // ...item.loni,
+      dns_isp: 1,
+      dns_other: 1,
+      tls: 1,
+      tcp: 1,
+      loni: {
+        // outcome: {
+        //   ok: item.loni.outcome_ok,
+        //   blocked: item.loni.outcome_blocked,
+        //   down: item.loni.outcome_down,
+        // },
+        dns_isp: {
+          ok: item.loni.dns_isp_ok,
+          blocked: item.loni.dns_isp_blocked,
+          down: item.loni.dns_isp_down,
+        },
+        dns_other: {
+          ok: item.loni.dns_other_ok,
+          blocked: item.loni.dns_other_blocked,
+          down: item.loni.dns_other_down,
+        },
+        tls: {
+          ok: item.loni.tls_ok,
+          blocked: item.loni.tls_blocked,
+          down: item.loni.tls_down,
+        },
+        tcp: {
+          ok: item.loni.tcp_ok,
+          blocked: item.loni.tcp_blocked,
+          down: item.loni.tcp_down,
+        },
+      },
     }
   })
 
@@ -210,7 +225,7 @@ const GridChart = ({
     return router.push(href, href, { shallow: true })
   })
 
-  const chartTypes = ['outcome', 'dns_isp', 'dns_other', 'tls', 'tcp']
+  const chartTypes = ['outcome', 'detailed']
 
   return (
     <div>

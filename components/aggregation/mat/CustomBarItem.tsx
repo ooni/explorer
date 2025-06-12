@@ -53,7 +53,7 @@ export const CustomBarItem = <D extends BarDatum>({
       // hideTooltip()
       setExtraBorderWidth(0)
     } else {
-      setExtraBorderWidth(enableLabel === data.indexValue ? 2 : 0)
+      setExtraBorderWidth(enableLabel === data.indexValue ? 1.8 : 0)
     }
   }, [data.indexValue, enableLabel])
 
@@ -89,8 +89,8 @@ export const CustomBarItem = <D extends BarDatum>({
       <animated.rect
         width={to(width, (value) => Math.max(value, 0))}
         height={to(height, (value) => Math.max(value, 0))}
-        rx={borderRadius}
-        ry={borderRadius}
+        // rx={borderRadius}
+        // ry={borderRadius}
         fill={data.fill ?? color}
         opacity={isHovering ? 0.8 : 1}
         strokeWidth={borderWidth + extraBorderWidth}

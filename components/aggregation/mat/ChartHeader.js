@@ -5,6 +5,7 @@ import { useMATContext } from './MATContext'
 import { colorMap } from './colorMap'
 import { testGroups, testNames } from '/components/test-info'
 import { useRouter } from 'next/router'
+import { blockingTypeColors } from './colorMap'
 
 const LegendItem = ({ label, color }) => {
   return (
@@ -92,26 +93,31 @@ const legendItems = [
   },
 ]
 
-const legendItemsV5 = [
-  {
-    label: 'MAT.Table.Header.ok_count',
-    color: colorMap.ok_count,
-  },
-  {
-    label: 'MAT.Table.Header.blocked',
-    color: colorMap.confirmed_count,
-  },
-  {
-    label: 'MAT.Table.Header.down',
-    color: colorMap.anomaly_count,
-  },
-]
+const legendItemsV5 = () => {
+  return [
+    ...Object.entries(blockingTypeColors).flatMap(([type, states]) =>
+      Object.entries(states)
+        .map(([state, color]) => {
+          if (state !== 'ok') {
+            return {
+              label: `${type}.${state}`,
+              color: color,
+            }
+          }
+        })
+        .filter((item) => item !== undefined),
+    ),
+    {
+      label: 'ok',
+      color: colorMap.ok_count,
+    },
+  ]
+}
 
 const Legend = ({ label, color }) => {
   const intl = useIntl()
   const { query } = useRouter()
-
-  const items = query.loni ? legendItemsV5 : legendItems
+  const items = query.loni ? legendItemsV5() : legendItems
 
   return (
     <div className="flex justify-center my-2 flex-wrap">

@@ -18,31 +18,43 @@ import {
   themeForInvisibleTooltip,
 } from './CustomTooltip'
 import { useMATContext } from './MATContext'
-import { colorMap, v5ColorMap } from './colorMap'
+import { colorMap } from './colorMap'
 import { getXAxisTicks } from './timeScaleXAxis'
 import { useRouter } from 'next/router'
+import CustomStackedBarItem from './CustomStackedBarItem'
 
 const keys = ['anomaly_count', 'confirmed_count', 'failure_count', 'ok_count']
 const v5keys = ['outcome_blocked', 'outcome_down', 'outcome_ok']
+const loniKeys = ['dns_isp', 'dns_other', 'tls', 'tcp']
 
 const getKeys = (loni) => {
-  if (loni) {
-    switch (loni) {
-      case 'dns_isp':
-        return ['dns_isp_blocked', 'dns_isp_down', 'dns_isp_ok']
-      case 'dns_other':
-        return ['dns_other_blocked', 'dns_other_down', 'dns_other_ok']
-      case 'tls':
-        return ['tls_blocked', 'tls_down', 'tls_ok']
-      case 'tcp':
-        return ['tcp_blocked', 'tcp_down', 'tcp_ok']
-    }
+  if (loni === 'detailed') {
+    return loniKeys
+  }
+  if (loni === 'outcome') {
     return v5keys
   }
   return keys
 }
 
-const colorFunc = (d) => colorMap[d.id] || '#ccc'
+const colorFunc = (d) => {
+  if (d?.data?.outcome_label) {
+    const label = d.data.outcome_label
+    const blockingType = label.split('.')[0]
+
+    if (blockingType === 'ok') {
+      return colorMap.ok_count
+    }
+    if (d.id === 'outcome_blocked') {
+      return colorMap[`${blockingType}.blocked`] || colorMap.failure_count
+    }
+
+    if (d.id === 'outcome_down') {
+      return colorMap[`${blockingType}.down`] || colorMap.anomaly_count
+    }
+  }
+  return colorMap[d.id] || '#ccc'
+}
 
 const barLayers = ['grid', 'axes', 'bars']
 export const chartMargins = { top: 4, right: 50, bottom: 4, left: 0 }
@@ -112,6 +124,7 @@ const chartProps1D = (query, intl) => ({
 const chartProps2D = (query) => ({
   // NOTE: These dimensions are linked to accuracy of the custom axes rendered in
   // <GridChart />
+  // innerPadding: '3px',
   margin: chartMargins,
   padding: 0.3,
   borderColor: { from: 'color', modifiers: [['darker', 1.6]] },
@@ -195,10 +208,10 @@ const RowChart = ({
   const chartProps = useMemo(() => {
     return label === undefined ? chartProps1D(query, intl) : chartProps2D(query)
   }, [intl, label, query])
-
+  // console.log('chartData', chartData)
   return (
     <div className="flex items-center relative" style={{ direction: 'ltr' }}>
-      {label && <div className="w-[12.5%]">{label}</div>}
+      {label && <div className="w-[12.5%] overflow-hidden">{label}</div>}
       <div style={{ height, width: '100%' }}>
         <Bar
           data={chartData}
@@ -206,7 +219,16 @@ const RowChart = ({
           indexBy={indexBy}
           tooltip={InvisibleTooltip}
           onClick={handleClick}
-          barComponent={CustomBarItem}
+          barComponent={
+            routerQuery?.loni && routerQuery?.loni !== 'outcome'
+              ? CustomStackedBarItem
+              : CustomBarItem
+          }
+          groupMode={
+            routerQuery?.loni && routerQuery?.loni !== 'outcome'
+              ? 'grouped'
+              : 'stacked'
+          }
           theme={themeForInvisibleTooltip}
           // HACK: To show the tooltip, we hijack the
           // `enableLabel` prop to pass in the tooltip coordinates (row, col_index) from `GridChart`

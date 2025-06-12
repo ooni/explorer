@@ -17,20 +17,14 @@ const prepareDataforTable = (data, query, locale) => {
   const countKeys =
     query.loni === 'outcome'
       ? ['outcome_blocked', 'outcome_down', 'outcome_ok']
-      : query.loni === 'dns_isp'
+      : query.loni === 'detailed'
         ? ['dns_isp_blocked', 'dns_isp_down', 'dns_isp_ok']
-        : query.loni === 'dns_other'
-          ? ['dns_other_blocked', 'dns_other_down', 'dns_other_ok']
-          : query.loni === 'tls'
-            ? ['tls_blocked', 'tls_down', 'tls_ok']
-            : query.loni === 'tcp'
-              ? ['tcp_blocked', 'tcp_down', 'tcp_ok']
-              : [
-                  'anomaly_count',
-                  'confirmed_count',
-                  'failure_count',
-                  'measurement_count',
-                ]
+        : [
+            'anomaly_count',
+            'confirmed_count',
+            'failure_count',
+            'measurement_count',
+          ]
 
   for (const [key, rowData] of reshapedData) {
     const row = {
@@ -43,17 +37,32 @@ const prepareDataforTable = (data, query, locale) => {
       outcome_blocked: 0,
       outcome_down: 0,
       outcome_ok: 0,
-      dns_isp_blocked: 0,
-      dns_isp_down: 0,
-      dns_isp_ok: 0,
-      dns_other_blocked: 0,
-      dns_other_down: 0,
-      dns_other_ok: 0,
-      tls_blocked: 0,
-      tls_down: 0,
-      tls_ok: 0,
-      tcp_blocked: 0,
-      tcp_down: 0,
+      dns_isp: 0,
+      dns_other: 0,
+      tls: 0,
+      tcp: 0,
+      loni: {
+        dns_isp: {
+          blocked: 0,
+          down: 0,
+          ok: 0,
+        },
+        dns_other: {
+          blocked: 0,
+          down: 0,
+          ok: 0,
+        },
+        tls: {
+          blocked: 0,
+          down: 0,
+          ok: 0,
+        },
+        tcp: {
+          blocked: 0,
+          down: 0,
+          ok: 0,
+        },
+      },
     }
 
     for (const d of rowData) {

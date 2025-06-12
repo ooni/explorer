@@ -94,19 +94,11 @@ const keys = ['anomaly_count', 'confirmed_count', 'failure_count', 'ok_count']
 const v5keys = ['outcome_blocked', 'outcome_down', 'outcome_ok']
 
 const getKeys = (loni) => {
-  if (loni) {
-    switch (loni) {
-      case 'dns_isp':
-        return ['dns_isp_blocked', 'dns_isp_down', 'dns_isp_ok']
-      case 'dns_other':
-        return ['dns_other_blocked', 'dns_other_down', 'dns_other_ok']
-      case 'tls':
-        return ['tls_blocked', 'tls_down', 'tls_ok']
-      case 'tcp':
-        return ['tcp_blocked', 'tcp_down', 'tcp_ok']
-      default:
-        return v5keys
-    }
+  if (loni === 'detailed') {
+    return ['dns_isp', 'dns_other', 'tls', 'tcp']
+  }
+  if (loni === 'outcome') {
+    return v5keys
   }
   return keys
 }
@@ -140,21 +132,102 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
         <MdClear title="Close" strokeWidth={2} onClick={onClose} />
       </div>
       <div className="flex flex-col pr-4 my-1">
-        {dataKeysToShow.map((k) => (
-          <div className="my-1" key={k}>
-            <div className="flex items-center">
-              <div className="mr-4">
-                <Chip color={colorMap[k]} />
-              </div>
-              <div className="mr-8">
-                {intl.formatMessage({ id: `MAT.Table.Header.${k}` })}
-              </div>
-              <div className="ml-auto">
-                {intl.formatNumber(Number(data[k] ?? 0))}
-              </div>
+        {routerQuery?.loni ? (
+          <>
+            <div>
+              Outcome:{' '}
+              <span className="font-semibold">{data.outcome_label}</span>
             </div>
-          </div>
-        ))}
+            {routerQuery?.loni === 'outcome' && (
+              // biome-ignore lint/complexity/noUselessFragments: <explanation>
+              <>
+                {dataKeysToShow.map((k) => (
+                  <div className="my-1" key={k}>
+                    <div className="flex items-center">
+                      {/* <div className="mr-4">
+                        <Chip
+                          color={
+                            k === 'outcome_blocked'
+                              ? colorMap[data.outcome_label.split(':')[0]] ||
+                                'black'
+                              : k === 'outcome_down'
+                                ? '#ccc'
+                                : colorMap[k]
+                          }
+                        />
+                      </div> */}
+                      <div className="mr-8">
+                        {intl.formatMessage({ id: `MAT.Table.Header.${k}` })}
+                      </div>
+                      <div className="ml-auto">
+                        {intl.formatNumber(Number(data[k] ?? 0) * 100)}%
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </>
+            )}
+            {routerQuery?.loni === 'detailed' && (
+              // biome-ignore lint/complexity/noUselessFragments: <explanation>
+              <div className="grid grid-cols-2 gap-4">
+                {dataKeysToShow.map((k) => (
+                  <div className="my-1" key={k}>
+                    <div className="flex items-center">
+                      <div className="text-sm">
+                        <div className="font-semibold">{k}</div>
+                        <div>
+                          OK:{' '}
+                          {intl.formatNumber(
+                            Number(data?.loni[k].ok ?? 0) * 100,
+                          )}
+                          %
+                        </div>
+                        <div>
+                          Down:{' '}
+                          {intl.formatNumber(
+                            Number(data?.loni[k].down ?? 0) * 100,
+                          )}
+                          %
+                        </div>
+                        <div>
+                          Blocked:{' '}
+                          {intl.formatNumber(
+                            Number(data?.loni[k].blocked ?? 0) * 100,
+                          )}
+                          %
+                        </div>
+                        {/* <div className="mr-4">
+                              <Chip color={colorMap[blockingType]} />
+                            </div>
+                            <div className="mr-8">
+                              {intl.formatMessage({ id: `MAT.Table.Header.${k}` })}
+                            </div> */}
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </>
+        ) : (
+          <>
+            {dataKeysToShow.map((k) => (
+              <div className="my-1" key={k}>
+                <div className="flex items-center">
+                  <div className="mr-4">
+                    <Chip color={colorMap[k]} />
+                  </div>
+                  <div className="mr-8">
+                    {intl.formatMessage({ id: `MAT.Table.Header.${k}` })}
+                  </div>
+                  <div className="ml-auto">
+                    {intl.formatNumber(Number(data[k] ?? 0))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </>
+        )}
       </div>
       {link && (
         <div className="my-2 ml-auto pr-4">

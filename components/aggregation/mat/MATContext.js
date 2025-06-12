@@ -21,7 +21,6 @@ export const defaultMATContext = {
   domain: '',
   category_code: '',
   tooltipIndex: [-1, ''],
-  v5: false,
 }
 
 export const MATContextProvider = ({
