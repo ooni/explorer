@@ -26,7 +26,7 @@ export const CustomBarItem = <D extends BarDatum>({
     width,
     // textAnchor,
   },
-  borderRadius,
+  // borderRadius,
   borderWidth,
   enableLabel,
   //   label,

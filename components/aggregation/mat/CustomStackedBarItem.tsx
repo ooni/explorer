@@ -7,7 +7,7 @@ const CustomBarComponent = (props) => {
     bar: { data, width, ...bar },
     style: {
       borderColor,
-      color,
+      // color,
       height,
       // labelColor,
       // labelOpacity,
@@ -17,7 +17,7 @@ const CustomBarComponent = (props) => {
       //   width,
       // textAnchor,
     },
-    borderRadius,
+    // borderRadius,
     borderWidth,
     enableLabel,
     //   label,
@@ -27,12 +27,12 @@ const CustomBarComponent = (props) => {
     onMouseEnter,
     onMouseLeave,
     //   tooltip,
-    isFocusable,
-    ariaLabel,
-    ariaLabelledBy,
-    ariaDescribedBy,
-    ariaDisabled,
-    ariaHidden,
+    // isFocusable,
+    // ariaLabel,
+    // ariaLabelledBy,
+    // ariaDescribedBy,
+    // ariaDisabled,
+    // ariaHidden,
   } = props
   const [extraBorderWidth, setExtraBorderWidth] = useState(0)
   const [isHovering, setIsHovering] = useState(false)
