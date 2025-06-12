@@ -43,6 +43,8 @@ const colorFunc = (d) => {
     const blockingType = label.split('.')[0]
 
     if (blockingType === 'ok') {
+      if (d.id === 'outcome_blocked') return colorMap.confirmed_count
+      if (d.id === 'outcome_down') return colorMap.anomaly_count
       return colorMap.ok_count
     }
     if (d.id === 'outcome_blocked') {
