@@ -41,10 +41,9 @@ const CustomBarComponent = (props) => {
   const selectedDateData = detailedData?.[data?.id]
 
   const heightValue = bar.height
-  const heightScalePercentage = heightValue
-  const okHeightInPX = selectedDateData?.ok * heightScalePercentage
-  const blockedHeightInPX = selectedDateData?.blocked * heightScalePercentage
-  const downHeightInPX = selectedDateData?.down * heightScalePercentage
+  const okHeightInPX = selectedDateData?.ok * heightValue
+  const blockedHeightInPX = selectedDateData?.blocked * heightValue
+  const downHeightInPX = selectedDateData?.down * heightValue
 
   const handleClick = useCallback(
     (event: MouseEvent<SVGRectElement>) => {
@@ -84,6 +83,8 @@ const CustomBarComponent = (props) => {
     }
   }, [data.indexValue, enableLabel])
 
+  const isDataAvailable = okHeightInPX || blockedHeightInPX || downHeightInPX
+
   return (
     <animated.g
       stroke={borderColor}
@@ -94,34 +95,49 @@ const CustomBarComponent = (props) => {
       onMouseLeave={isInteractive ? handleMouseLeave : undefined}
       onClick={isInteractive ? handleClick : undefined}
     >
-      {/* Blocked - bottom */}
-      <animated.rect
-        width={to(width, (value) => Math.max(value, 0))}
-        height={to(blockedHeightInPX, (value) => Math.max(value, 0))}
-        y={to(height, (value) => value - blockedHeightInPX)}
-        fill={colors[data.id].blocked}
-        data-testid={`bar.item.${data.id}.${data.index}.blocked`}
-      />
-      {/* Down - middle */}
-      <animated.rect
-        width={to(width, (value) => Math.max(value, 0))}
-        height={to(downHeightInPX, (value) => Math.max(value, 0))}
-        y={to(height, (value) => value - (downHeightInPX + blockedHeightInPX))}
-        fill={colors[data.id].down}
-        data-testid={`bar.item.${data.id}.${data.index}.down`}
-      />
-      {/* OK - top */}
-      <animated.rect
-        width={to(width, (value) => Math.max(value, 0))}
-        height={to(okHeightInPX, (value) => Math.max(value, 0))}
-        y={to(
-          height,
-          (value) =>
-            value - (okHeightInPX + downHeightInPX + blockedHeightInPX),
-        )}
-        fill={colors[data.id].ok}
-        data-testid={`bar.item.${data.id}.${data.index}.ok`}
-      />
+      {isDataAvailable ? (
+        <>
+          {/* Blocked - bottom */}
+          <animated.rect
+            width={to(width, (value) => Math.max(value, 0))}
+            height={to(blockedHeightInPX, (value) => Math.max(value, 0))}
+            y={to(height, (value) => value - blockedHeightInPX)}
+            fill={colors[data.id].blocked}
+            data-testid={`bar.item.${data.id}.${data.index}.blocked`}
+          />
+          {/* Down - middle */}
+          <animated.rect
+            width={to(width, (value) => Math.max(value, 0))}
+            height={to(downHeightInPX, (value) => Math.max(value, 0))}
+            y={to(
+              height,
+              (value) => value - (downHeightInPX + blockedHeightInPX),
+            )}
+            fill={colors[data.id].down}
+            data-testid={`bar.item.${data.id}.${data.index}.down`}
+          />
+          {/* OK - top */}
+          <animated.rect
+            width={to(width, (value) => Math.max(value, 0))}
+            height={to(okHeightInPX, (value) => Math.max(value, 0))}
+            y={to(
+              height,
+              (value) =>
+                value - (okHeightInPX + downHeightInPX + blockedHeightInPX),
+            )}
+            fill={colors[data.id].ok}
+            data-testid={`bar.item.${data.id}.${data.index}.ok`}
+          />
+        </>
+      ) : (
+        <animated.rect
+          width={to(width, (value) => Math.max(value, 0))}
+          height={to(height, (value) => Math.max(value, 0))}
+          y={0}
+          fill="#dee2e6" //{colors.unavailable}
+          data-testid={`bar.item.${data.id}.${data.index}.ok`}
+        />
+      )}
     </animated.g>
   )
 }
