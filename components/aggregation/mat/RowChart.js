@@ -210,7 +210,7 @@ const RowChart = ({
   const chartProps = useMemo(() => {
     return label === undefined ? chartProps1D(query, intl) : chartProps2D(query)
   }, [intl, label, query])
-  // console.log('chartData', chartData)
+
   return (
     <div className="flex items-center relative" style={{ direction: 'ltr' }}>
       {label && <div className="w-[12.5%] overflow-hidden">{label}</div>}

@@ -41,6 +41,7 @@ const prepareDataforTable = (data, query, locale) => {
       dns_other: 0,
       tls: 0,
       tcp: 0,
+      count: 0,
       loni: {
         dns_isp: {
           blocked: 0,

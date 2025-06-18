@@ -26,12 +26,14 @@ export const preparePipelineV5DataForGridChart = (dataOG, query, locale) => {
   const data = dataOG.map((item) => {
     return {
       ...item,
+      observation_count: item.count,
+      count: item.count,
       measurement_start_day: item.measurement_start_day.split('T')[0],
       // ...item.loni,
-      dns_isp: 1,
-      dns_other: 1,
-      tls: 1,
-      tcp: 1,
+      dns_isp: item.count ? 1 : 0,
+      dns_other: item.count ? 1 : 0,
+      tls: item.count ? 1 : 0,
+      tcp: item.count ? 1 : 0,
       loni: {
         // outcome: {
         //   ok: item.loni.outcome_ok,
@@ -124,6 +126,7 @@ export const prepareDataForGridChart = (data, query, locale) => {
       rowLabels[key] = getRowLabel(key, query.axis_y, locale)
     }
   }
+
   const reshapedDataWithoutHoles = fillDataHoles(reshapedData, query)
 
   const sortedRowKeys = rows.sort((a, b) =>
