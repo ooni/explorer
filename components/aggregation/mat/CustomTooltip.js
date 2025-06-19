@@ -179,6 +179,14 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
                     <div className="flex items-center">
                       <div className="text-sm">
                         <div className="font-semibold">{k}</div>
+                        {data?.loni[k].outcome_label && (
+                          <div>
+                            Outcome:{' '}
+                            <span className="font-semibold">
+                              {data?.loni[k].outcome_label}
+                            </span>
+                          </div>
+                        )}
                         <div>
                           OK:{' '}
                           {intl.formatNumber(

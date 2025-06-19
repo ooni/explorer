@@ -43,7 +43,7 @@ const Line = (props) => {
         id: 'only',
         data: uniqBars.map((it) => ({
           x: it.data.index,
-          y: it.data.data.count,
+          y: it.data.data.count || 0,
         })),
       },
     ],

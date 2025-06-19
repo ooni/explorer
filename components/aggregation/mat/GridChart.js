@@ -43,21 +43,25 @@ export const preparePipelineV5DataForGridChart = (dataOG, query, locale) => {
           ok: item.loni.dns_isp_ok,
           blocked: item.loni.dns_isp_blocked,
           down: item.loni.dns_isp_down,
+          outcome_label: item.loni.dns_isp_outcome,
         },
         dns_other: {
           ok: item.loni.dns_other_ok,
           blocked: item.loni.dns_other_blocked,
           down: item.loni.dns_other_down,
+          outcome_label: item.loni.dns_other_outcome,
         },
         tls: {
           ok: item.loni.tls_ok,
           blocked: item.loni.tls_blocked,
           down: item.loni.tls_down,
+          outcome_label: item.loni.tls_outcome,
         },
         tcp: {
           ok: item.loni.tcp_ok,
           blocked: item.loni.tcp_blocked,
           down: item.loni.tcp_down,
+          outcome_label: item.loni.tcp_outcome,
         },
       },
     }
