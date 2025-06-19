@@ -138,6 +138,10 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
               Outcome:{' '}
               <span className="font-semibold">{data.outcome_label}</span>
             </div>
+            <div>
+              Observation count:{' '}
+              <span className="font-semibold">{data.count}</span>
+            </div>
             {routerQuery?.loni === 'outcome' && (
               // biome-ignore lint/complexity/noUselessFragments: <explanation>
               <>

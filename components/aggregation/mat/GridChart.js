@@ -26,7 +26,6 @@ export const preparePipelineV5DataForGridChart = (dataOG, query, locale) => {
   const data = dataOG.map((item) => {
     return {
       ...item,
-      observation_count: item.count,
       count: item.count,
       measurement_start_day: item.measurement_start_day.split('T')[0],
       // ...item.loni,

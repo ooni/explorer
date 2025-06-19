@@ -22,6 +22,97 @@ import { colorMap } from './colorMap'
 import { getXAxisTicks } from './timeScaleXAxis'
 import { useRouter } from 'next/router'
 import CustomStackedBarItem from './CustomStackedBarItem'
+import { line } from 'd3-shape'
+import { computeXYScalesForSeries } from '@nivo/scales'
+import { Axes } from '@nivo/axes'
+
+const lineColor = 'rgba(200, 30, 15, 1)'
+
+const Line = (props) => {
+  const { bars, xScale, innerWidth, innerHeight, tooltip } = props
+  console.log('props', props)
+  // return <div>Line</div>
+  const uniqBars = bars.filter(
+    (bar, index, self) =>
+      index === self.findIndex((b) => b.data.index === bar.data.index),
+  )
+
+  const scale = computeXYScalesForSeries(
+    [
+      {
+        id: 'only',
+        data: uniqBars.map((it) => ({
+          x: it.data.index,
+          y: it.data.data.count,
+        })),
+      },
+    ],
+    { type: 'linear' },
+    { type: 'linear' },
+    innerWidth,
+    innerHeight,
+  )
+
+  const lineGenerator = line()
+    .x((bar) => bar.x + bar.width / 2)
+    .y((bar) => scale.yScale(bar.data.data.count))
+
+  // // const tip = useTooltip()
+  // // function renderTip(e, idx) {
+  // //   return tip.showTooltipFromEvent(
+  // //     <CustomTooltip barValue={data[idx].v} lineValue={data[idx].count} />,
+  // //     e,
+  // //   )
+  // // }
+
+  return (
+    <>
+      <Axes
+        yScale={scale.yScale}
+        xScale={xScale}
+        width={innerWidth}
+        height={innerHeight}
+        right={{
+          ticksPosition: 'after',
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0,
+          tickOffset: 10,
+        }}
+      />
+      <path
+        d={lineGenerator(uniqBars)}
+        fill="none"
+        stroke={lineColor}
+        style={{ pointerEvents: 'none' }}
+      />
+      {/* {bars.map((bar) => (
+        <circle
+          key={bar.key}
+          cx={xScale(bar.data.index) + bar.width / 2}
+          cy={scale.yScale(bar.data.data.count)}
+          r={4}
+          fill="white"
+          stroke={lineColor}
+          style={{ pointerEvents: 'none' }}
+        />
+      ))} */}
+      {/* {bars.map((bar, idx) => (
+        <rect
+          key={bar.key}
+          x={bar.x}
+          y={0}
+          height={innerHeight}
+          width={bar.width}
+          fill="transparent"
+          // onMouseEnter={(e) => renderTip(e, idx)}
+          // onMouseMove={(e) => renderTip(e, idx)}
+          // onMouseLeave={tip.hideTooltip}
+        />
+      ))} */}
+    </>
+  )
+}
 
 const keys = ['anomaly_count', 'confirmed_count', 'failure_count', 'ok_count']
 const v5keys = ['outcome_blocked', 'outcome_down', 'outcome_ok']
@@ -58,7 +149,7 @@ const colorFunc = (d) => {
   return colorMap[d.id] || '#ccc'
 }
 
-const barLayers = ['grid', 'axes', 'bars']
+const barLayers = ['grid', 'axes', 'bars', Line]
 export const chartMargins = { top: 4, right: 50, bottom: 4, left: 0 }
 
 const formatXAxisValues = (value, query, intl) => {
@@ -85,7 +176,7 @@ const chartProps1D = (query, intl) => ({
   },
   margin: {
     top: 30,
-    right: 20,
+    right: 70,
     bottom: 80,
     left: 70,
   },
@@ -121,6 +212,7 @@ const chartProps1D = (query, intl) => ({
   animate: true,
   motionStiffness: 90,
   motionDamping: 15,
+  layers: barLayers,
 })
 
 const chartProps2D = (query) => ({
