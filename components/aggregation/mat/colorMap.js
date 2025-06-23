@@ -1,27 +1,27 @@
 import { colors } from 'ooni-components'
 
-const okColor = colors.green['300']
+const okColor = '#91eb8d'
 
 export const blockingTypeColors = {
   dns_isp: {
     ok: okColor,
-    blocked: colors.violet['700'],
-    down: colors.violet['300'],
+    blocked: colors.orange['600'],
+    down: colors.blue['300'],
   },
   dns_other: {
     ok: okColor,
-    blocked: colors.fuchsia['700'],
-    down: colors.fuchsia['300'],
+    blocked: colors.yellow['500'],
+    down: colors.indigo['300'],
   },
   tls: {
     ok: okColor,
-    blocked: colors.orange['700'],
-    down: colors.orange['300'],
+    blocked: colors.red['800'],
+    down: colors.violet['200'],
   },
   tcp: {
     ok: okColor,
-    blocked: colors.indigo['700'],
-    down: colors.indigo['300'],
+    blocked: colors.pink['600'],
+    down: colors.cyan['300'],
   },
 }
 
