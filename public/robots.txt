@@ -1,6 +1,4 @@
 User-agent: *
 Disallow: /measurement/
 Disallow: /m/
-Disallow: /domain/
-Disallow: /as/
 Crawl-delay: 600
