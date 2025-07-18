@@ -53,6 +53,7 @@
   "Tests.RiseupVPN.Name": "RiseupVPN Test",
   "Tests.TorSnowflake.Name": "Tor Snowflake Test",
   "Tests.DNSCheck.Name": "DNS Check",
+  "Tests.ECHCheck.Name": "ECH Check",
   "Tests.StunReachability.Name": "STUN Reachability",
   "Tests.URLGetter.Name": "URL Getter",
   "Tests.ProbeWeb.Name": "OONI Probe Web",
