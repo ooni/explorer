@@ -22,6 +22,72 @@ const GRID_MAX_HEIGHT = 600
 
 const generateQuery = (q) => new URLSearchParams(q).toString()
 
+export const prepareObservationsDataForGridChart = (
+  dataOG,
+  query,
+  locale,
+  selectedBlockingTypes,
+) => {
+  console.log('selectedBlockingTypes', selectedBlockingTypes)
+  // const data = dataOG.map((item) => {
+  //   return {
+  //     ...item,
+  //     count: item.count,
+  //     measurement_start_day: item.timestamp.split('T')[0],
+  //   }
+  // })
+
+  const data = dataOG.reduce(
+    (acc, { timestamp, failure, observation_count, probe_cc }) => {
+      const reducedFailure = selectedBlockingTypes.includes(failure)
+        ? failure
+        : 'other'
+      const existing = acc.find(
+        (item) => item.measurement_start_day === timestamp.split('T')[0],
+      )
+      if (existing) {
+        if (existing[reducedFailure]) {
+          existing[reducedFailure] += observation_count
+        } else {
+          existing[reducedFailure] = observation_count
+        }
+      } else {
+        acc.push({
+          measurement_start_day: timestamp.split('T')[0],
+          probe_cc,
+          [reducedFailure]: observation_count,
+        })
+      }
+      return acc
+    },
+    [],
+  )
+
+  // console.log('data====', data)
+  const rows = []
+  const rowLabels = {}
+  const reshapedData = {}
+  for (const item of data) {
+    // Convert non-string keys (e.g `probe_asn`) to string
+    // because they get casted to strings during Object transformations
+    const key = String(item[query.axis_y])
+    if (key in reshapedData) {
+      reshapedData[key].push(item)
+    } else {
+      rows.push(key)
+      reshapedData[key] = [item]
+      rowLabels[key] = getRowLabel(key, query.axis_y, locale)
+    }
+  }
+
+  const reshapedDataWithoutHoles = fillDataHoles(reshapedData, query)
+
+  const sortedRowKeys = rows.sort((a, b) =>
+    sortRows(rowLabels[a], rowLabels[b], query.axis_y, locale),
+  )
+  return [reshapedDataWithoutHoles, sortedRowKeys, rowLabels]
+}
+
 export const preparePipelineV5DataForGridChart = (dataOG, query, locale) => {
   const data = dataOG.map((item) => {
     return {
@@ -112,7 +178,6 @@ export const preparePipelineV5DataForGridChart = (dataOG, query, locale) => {
    }
  *
 */
-
 export const prepareDataForGridChart = (data, query, locale) => {
   const rows = []
   const rowLabels = {}
@@ -180,12 +245,15 @@ const ChartTypeButton = ({ chartType, isActive, onClick }) => {
 const GridChart = ({
   data,
   rowKeys,
-  rowLabels,
+  rowLabels = {},
   height = 'auto',
   header,
   selectedRows = null,
-  noLabels = false,
+  // noLabels = false,
+  colorScheme,
 }) => {
+  const noLabels = !Object.keys(rowLabels).length
+  console.log('rowLabels', rowLabels)
   const router = useRouter()
   // Fetch query state from context instead of router
   // because some params not present in the URL are injected in the context
@@ -218,24 +286,24 @@ const GridChart = ({
     : null
 
   const rowHeight = noLabels ? 500 : ROW_HEIGHT
+  // console.log('rowHeight', noLabels, rowHeight)
+  // const handleChartTypeChange = useCallback((chartType) => {
+  //   const pathname = router.pathname
+  //   const query = router.query
 
-  const handleChartTypeChange = useCallback((chartType) => {
-    const pathname = router.pathname
-    const query = router.query
+  //   const href = {
+  //     pathname: router.pathname,
+  //     query: { ...query, loni: chartType },
+  //   }
 
-    const href = {
-      pathname: router.pathname,
-      query: { ...query, loni: chartType },
-    }
+  //   return router.push(href, href, { shallow: true })
+  // })
 
-    return router.push(href, href, { shallow: true })
-  })
-
-  const chartTypes = ['outcome', 'detailed']
+  // const chartTypes = ['outcome', 'detailed', 'observations']
 
   return (
     <div>
-      {router.query.loni && (
+      {/* {router.query.loni && (
         <div className="flex flex-row gap-6 mb-4">
           {chartTypes.map((chartType) => (
             <ChartTypeButton
@@ -246,7 +314,7 @@ const GridChart = ({
             />
           ))}
         </div>
-      )}
+      )} */}
 
       <Container theme={barThemeForTooltip}>
         <TooltipProvider container={tooltipContainer}>
@@ -280,6 +348,7 @@ const GridChart = ({
                         indexBy={indexBy}
                         height={rowHeight}
                         label={rowLabels[rowKey]}
+                        colorScheme={colorScheme}
                       />
                     ))}
                   </div>

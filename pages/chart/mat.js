@@ -16,12 +16,13 @@ const MeasurementAggregationToolkit = () => {
 
   const onSubmit = useCallback(
     (data) => {
-      const { v5, loni, ...rest } = data
+      // const { v5, loni, ...rest } = data
+      const { ...rest } = data
       const params = {}
 
-      if (v5) {
-        params.loni = 'outcome'
-      }
+      // if (v5) {
+      //   params.loni = 'outcome'
+      // }
 
       for (const p of Object.keys(rest)) {
         if (data[p] !== '') {
@@ -33,7 +34,7 @@ const MeasurementAggregationToolkit = () => {
         pathname: router.pathname,
         query: params,
       }
-
+      // console.log('href', href)
       return router.push(href, href, { shallow: true })
     },
     [router],

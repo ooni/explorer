@@ -1,5 +1,5 @@
 import axios from 'axios'
-import { FunnelChart } from 'components/aggregation/mat/FunnelChart'
+// import { FunnelChart } from 'components/aggregation/mat/FunnelChart'
 import { MATContextProvider } from 'components/aggregation/mat/MATContext'
 import { NoCharts } from 'components/aggregation/mat/NoCharts'
 import { StackedBarChart } from 'components/aggregation/mat/StackedBarChart'
@@ -24,7 +24,16 @@ const fetcher = (query) => {
 
   if (query.loni) {
     const { loni, v5, ...v5qs } = query
-    reqUrl = `https://api.dev.ooni.io/api/v1/aggregation/analysis?${new URLSearchParams(v5qs).toString()}`
+    if (loni === 'observations') {
+      const axisX =
+        v5qs.axis_x === 'measurement_start_day'
+          ? '&group_by=timestamp'
+          : `&group_by=${v5qs.axis_x}`
+      const axisY = v5qs.axis_Y ? `&group_by=${v5qs.axis_Y}` : ''
+      reqUrl = `https://api.dev.ooni.io/api/v1/aggregation/observations?group_by=failure${axisX}${axisY}&${new URLSearchParams(v5qs).toString()}`
+    } else {
+      reqUrl = `https://api.dev.ooni.io/api/v1/aggregation/analysis?${new URLSearchParams(v5qs).toString()}`
+    }
   }
   console.debug(`API Query: ${reqUrl}`)
   return axios
@@ -84,6 +93,7 @@ export const MATChartWrapper = ({ link, caption }) => {
 }
 
 const MATChart = ({ query, showFilters = true }) => {
+  // console.log('MATChart query', query)
   const { data, error, isValidating } = useSWR(
     query ? query : null,
     fetcher,
@@ -106,13 +116,15 @@ const MATChart = ({ query, showFilters = true }) => {
           <>
             {results.length > 0 || Object.keys(results).length ? (
               <>
-                {data && data.data.dimension_count === 0 && (
+                {/* {data && data.data.dimension_count === 0 && (
                   <FunnelChart data={results} />
-                )}
-                {data && data.data.dimension_count === 1 && (
+                )} */}
+                {((data && data.data.dimension_count === 1) ||
+                  (data && query.axis_x && !query.axis_y)) && (
                   <StackedBarChart data={results} query={query} />
                 )}
-                {data && data.data.dimension_count > 1 && (
+                {((data && data.data.dimension_count > 1) ||
+                  (data && query.axis_x && query.axis_y)) && (
                   <TableView
                     data={results}
                     query={query}

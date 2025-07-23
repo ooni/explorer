@@ -66,7 +66,7 @@ const xAxisOptions = [
   // ['test_name', [], false],
   // ['input', [], false],
   // ['domain', [], false],
-  ['', [], false],
+  // ['', [], false],
 ]
 
 const yAxisOptions = [
@@ -120,7 +120,8 @@ const defaultDefaultValues = {
   axis_y: '',
   time_grain: 'day',
   ooni_run_link_id: '',
-  v5: false,
+  // v5: false,
+  loni: '',
 }
 
 export const Form = ({ onSubmit, query }) => {
@@ -133,7 +134,7 @@ export const Form = ({ onSubmit, query }) => {
       Object.assign({}, defaultDefaultValues, {
         ...query,
         axis_x: query?.axis_x || '',
-        v5: !!query?.loni,
+        // v5: !!query?.loni,
       }),
     [query],
   )
@@ -291,7 +292,7 @@ export const Form = ({ onSubmit, query }) => {
         onConfirm={onConfirm}
         onCancel={onCancel}
       />
-
+      {/* 
       <Controller
         render={({ field }) => (
           <div className="flex flex-row items-center gap-2">
@@ -304,7 +305,7 @@ export const Form = ({ onSubmit, query }) => {
                 type="checkbox"
                 className="peer appearance-none w-11 h-5 bg-gray-400 rounded-full checked:bg-blue-500 cursor-pointer transition-colors duration-300"
               />
-              {/* biome-ignore lint/a11y/noLabelWithoutControl: <explanation> */}
+           
               <label
                 htmlFor="v5"
                 className="absolute top-0 left-0 w-5 h-5 bg-white rounded-full border-2 border-gray-400 shadow-sm transition-transform duration-300 peer-checked:translate-x-6 peer-checked:border-blue-500 cursor-pointer"
@@ -313,6 +314,21 @@ export const Form = ({ onSubmit, query }) => {
           </div>
         )}
         name="v5"
+        control={control}
+      /> */}
+
+      <Controller
+        render={({ field }) => (
+          <Select {...field} label="loni">
+            <option value="">old pipeline</option>
+            {['outcome', 'detailed', 'observations'].map((c) => (
+              <option key={c} value={c}>
+                {c}
+              </option>
+            ))}
+          </Select>
+        )}
+        name="loni"
         control={control}
       />
 
@@ -323,7 +339,6 @@ export const Form = ({ onSubmit, query }) => {
               <Select
                 {...field}
                 label={intl.formatMessage({ id: 'Search.Sidebar.Country' })}
-                width={1}
               >
                 <option value="">
                   {intl.formatMessage({ id: 'MAT.Form.AllCountries' })}
@@ -402,7 +417,6 @@ export const Form = ({ onSubmit, query }) => {
                 label={intl.formatMessage({
                   id: 'MAT.Form.Label.TimeGrain',
                 })}
-                width={1}
               >
                 {timeGrainOptions.map((option, idx) => (
                   <option key={idx} value={option}>
@@ -421,7 +435,6 @@ export const Form = ({ onSubmit, query }) => {
               <Select
                 {...field}
                 label={intl.formatMessage({ id: 'MAT.Form.Label.XAxis' })}
-                width={1}
               >
                 {xAxisOptionsFiltered.map((option, idx) => (
                   <option key={idx} value={option}>
@@ -442,7 +455,6 @@ export const Form = ({ onSubmit, query }) => {
               <Select
                 {...field}
                 label={intl.formatMessage({ id: 'MAT.Form.Label.YAxis' })}
-                width={1}
               >
                 {yAxisOptionsFiltered.map((option, idx) => (
                   <option key={idx} value={option}>
@@ -467,7 +479,6 @@ export const Form = ({ onSubmit, query }) => {
                 label={intl.formatMessage({
                   id: 'Search.Sidebar.TestName',
                 })}
-                width={1}
               >
                 <TestNameOptions includeAllOption={false} />
               </Select>

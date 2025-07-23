@@ -93,7 +93,7 @@ const legendItems = [
   },
 ]
 
-const legendItemsV5 = () => {
+const legendItemsDetailedV5 = () => {
   return [
     ...Object.entries(blockingTypeColors).flatMap(([type, states]) =>
       Object.entries(states)
@@ -114,10 +114,30 @@ const legendItemsV5 = () => {
   ]
 }
 
+const legendItemsOutcomeV5 = [
+  {
+    label: 'blocked',
+    color: colorMap.confirmed_count,
+  },
+  {
+    label: 'down',
+    color: colorMap.anomaly_count,
+  },
+  {
+    label: 'ok',
+    color: colorMap.ok_count,
+  },
+]
+
 const Legend = ({ label, color }) => {
   const intl = useIntl()
   const { query } = useRouter()
-  const items = query.loni ? legendItemsV5() : legendItems
+  const items =
+    query.loni === 'detailed'
+      ? legendItemsDetailedV5()
+      : query.loni === 'outcome'
+        ? legendItemsOutcomeV5
+        : legendItems
 
   return (
     <div className="flex justify-center my-2 flex-wrap">

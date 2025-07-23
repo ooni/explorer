@@ -30,7 +30,6 @@ const lineColor = 'rgba(200, 30, 15, 1)'
 
 const Line = (props) => {
   const { bars, xScale, innerWidth, innerHeight, tooltip } = props
-  console.log('props', props)
   // return <div>Line</div>
   const uniqBars = bars.filter(
     (bar, index, self) =>
@@ -118,17 +117,24 @@ const keys = ['anomaly_count', 'confirmed_count', 'failure_count', 'ok_count']
 const v5keys = ['outcome_blocked', 'outcome_down', 'outcome_ok']
 const loniKeys = ['dns_isp', 'dns_other', 'tls', 'tcp']
 
-const getKeys = (loni) => {
+const getKeys = (loni, observationKeys) => {
   if (loni === 'detailed') {
     return loniKeys
   }
   if (loni === 'outcome') {
     return v5keys
   }
+  if (loni === 'observations') {
+    return observationKeys
+  }
   return keys
 }
 
-const colorFunc = (d) => {
+const colorFunc = (d, query, colorScheme) => {
+  // console.log('d', d, query)
+  if (query?.loni === 'observations') {
+    return colorScheme[d.id]
+  }
   if (d?.data?.outcome_label) {
     const label = d.data.outcome_label
     const blockingType = label.split('.')[0]
@@ -168,8 +174,8 @@ const formatXAxisValues = (value, query, intl) => {
   }
 }
 
-const chartProps1D = (query, intl) => ({
-  colors: colorFunc,
+const chartProps1D = (query, intl, colorScheme) => ({
+  colors: (data) => colorFunc(data, query, colorScheme),
   indexScale: {
     type: 'band',
     round: false,
@@ -215,14 +221,14 @@ const chartProps1D = (query, intl) => ({
   layers: barLayers,
 })
 
-const chartProps2D = (query) => ({
+const chartProps2D = (query, intl, colorScheme) => ({
   // NOTE: These dimensions are linked to accuracy of the custom axes rendered in
   // <GridChart />
   // innerPadding: '3px',
   margin: chartMargins,
   padding: 0.3,
   borderColor: { from: 'color', modifiers: [['darker', 1.6]] },
-  colors: colorFunc,
+  colors: (data) => colorFunc(data, query, colorScheme),
   axisTop: null,
   axisRight: {
     enable: true,
@@ -256,6 +262,7 @@ const RowChart = ({
   label,
   height,
   rowIndex /* width, first, last */,
+  colorScheme,
 }) => {
   const intl = useIntl()
   const { query: routerQuery } = useRouter()
@@ -300,26 +307,46 @@ const RowChart = ({
   }, [data])
 
   const chartProps = useMemo(() => {
-    return label === undefined ? chartProps1D(query, intl) : chartProps2D(query)
+    return label === undefined
+      ? chartProps1D(query, intl, colorScheme)
+      : chartProps2D(query, colorScheme)
   }, [intl, label, query])
 
+  const uniqueFailures = chartData.length
+    ? [
+        ...new Set(
+          chartData.reduce((acc, next) => [...acc, ...Object.keys(next)], []),
+        ),
+      ].filter(
+        (item) => item !== 'measurement_start_day' && item !== 'probe_cc',
+      )
+    : []
+  // const uniqueFailures = [...new Set(chartData.map((item) => item.failure))]
+
+  // console.log('uniqueFailures', uniqueFailures)
+  // console.log(
+  //   'getKeys(routerQuery?.loni, uniqueFailures)',
+  //   getKeys(routerQuery?.loni, uniqueFailures),
+  // )
+  // console.log('chartProps', chartProps.colors())
+  // console.log('chartProps', colorScheme)
   return (
     <div className="flex items-center relative" style={{ direction: 'ltr' }}>
       {label && <div className="w-[12.5%] overflow-hidden">{label}</div>}
       <div style={{ height, width: '100%' }}>
         <Bar
           data={chartData}
-          keys={getKeys(routerQuery?.loni)}
+          keys={getKeys(routerQuery?.loni, uniqueFailures)}
           indexBy={indexBy}
           tooltip={InvisibleTooltip}
           onClick={handleClick}
           barComponent={
-            routerQuery?.loni && routerQuery?.loni !== 'outcome'
+            routerQuery?.loni && routerQuery?.loni === 'detailed'
               ? CustomStackedBarItem
               : CustomBarItem
           }
           groupMode={
-            routerQuery?.loni && routerQuery?.loni !== 'outcome'
+            routerQuery?.loni && routerQuery?.loni === 'detailed'
               ? 'grouped'
               : 'stacked'
           }
@@ -329,6 +356,7 @@ const RowChart = ({
           // `showTooltip` contains `[rowHasTooltip, columnwithTooltip]` e.g `[true, '2022-02-01']`
           enableLabel={tooltipIndex[0] === rowIndex ? tooltipIndex[1] : false}
           {...chartProps}
+          // colors={colorScheme}
         />
       </div>
     </div>
