@@ -15,7 +15,7 @@ import { getRowLabel } from './labels'
 
 const ROW_HEIGHT = 70
 const XAXIS_HEIGHT = 62
-const GRID_MAX_HEIGHT = 600
+const GRID_MAX_HEIGHT = 680
 
 /** Transforms data received by GridChart into an collection of arrays each of
  * which is used to generate a RowChart
