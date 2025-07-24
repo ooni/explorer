@@ -32,12 +32,18 @@
     "incremental": true,
     "resolveJsonModule": true,
     "isolatedModules": true,
-    "target": "ES2017"
+    "target": "ES2017",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
-    "next-env.d.ts",
     "**/*.ts",
-    "**/*.tsx"
+    "**/*.tsx",
+    "next-env.d.ts",
+    ".next/types/**/*.ts"
   ],
   "exclude": [
     "node_modules"

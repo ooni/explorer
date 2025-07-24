@@ -5,8 +5,9 @@ import GridChart, {
   prepareObservationsDataForGridChart,
 } from './GridChart'
 import { NoCharts } from './NoCharts'
-import { colors } from 'ooni-components'
+import { Checkbox, colors } from 'ooni-components'
 import { useState } from 'react'
+import { Controller, useForm } from 'react-hook-form'
 
 const getAllBlockingTypes = (dataOG) => {
   return dataOG.reduce((acc, obj) => {
@@ -92,11 +93,42 @@ export const StackedBarChart = ({ data, query }) => {
         },
       )
 
+    const { register, handleSubmit, control } = useForm({
+      defaultValues: {
+        blockingTypes: selectedBlockingTypes.reduce((acc, curr) => {
+          acc[curr] = { included: false, other: false }
+          return acc
+        }, {}),
+      },
+    })
+
+    const onSubmit = (data) => {
+      console.log(JSON.stringify(data))
+    }
+
     return (
       <>
-        {allBlockingTypes?.map((b) => (
-          <div key="b">{b}</div>
-        ))}
+        <form onSubmit={handleSubmit(onSubmit)}>
+          {allBlockingTypes?.map((b) => (
+            <div key={b} className="flex flex-row">
+              <Controller
+                control={control}
+                name={`blockingTypes.${b}.included`}
+                render={({ field }) => (
+                  <Checkbox {...field} checked={field.value} />
+                )}
+              />
+              <Controller
+                control={control}
+                name={`blockingTypes.${b}.other`}
+                render={({ field }) => (
+                  <Checkbox {...field} label={b} checked={field.value} />
+                )}
+              />
+            </div>
+          ))}
+          <button>click</button>
+        </form>
         <div className="flex relative flex-col">
           <GridChart
             data={gridData}
