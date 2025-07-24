@@ -175,7 +175,7 @@ const RowChart = ({
 
   return (
     <div className="flex items-center relative" style={{ direction: 'ltr' }}>
-      {label && <div className="w-[12.5%]">{label}</div>}
+      {label && <div className="w-[12.5%] overflow-hidden">{label}</div>}
       <div style={{ height, width: '100%' }}>
         <Bar
           data={chartData}
