@@ -2,78 +2,101 @@ import { useMemo, useState } from 'react'
 import { useIntl } from 'react-intl'
 
 import Filters from './Filters'
-import GridChart, {
-  prepareDataForGridChart,
-  preparePipelineV5DataForGridChart,
-} from './GridChart'
+import GridChart, { prepareDataForGridChart } from './GridChart'
+import { useMATContext } from './MATContext'
 
-const prepareDataforTable = (data, query, locale) => {
-  const table = []
+const COUNT_KEYS_CONFIG = {
+  outcome: ['outcome_blocked', 'outcome_down', 'outcome_ok'],
+  detailed: ['dns_isp_blocked', 'dns_isp_down', 'dns_isp_ok'],
+  default: [
+    'anomaly_count',
+    'confirmed_count',
+    'failure_count',
+    'measurement_count',
+  ],
+}
 
-  const [reshapedData, rows, rowLabels] = query.loni
-    ? preparePipelineV5DataForGridChart(data, query, locale)
-    : prepareDataForGridChart(data, query, locale)
+const DEFAULT_ROW_TEMPLATE = {
+  anomaly_count: 0,
+  confirmed_count: 0,
+  failure_count: 0,
+  measurement_count: 0,
+  outcome_blocked: 0,
+  outcome_down: 0,
+  outcome_ok: 0,
+  dns_isp: 0,
+  dns_other: 0,
+  tls: 0,
+  tcp: 0,
+  count: 0,
+  loni: {
+    dns_isp: { blocked: 0, down: 0, ok: 0 },
+    dns_other: { blocked: 0, down: 0, ok: 0 },
+    tls: { blocked: 0, down: 0, ok: 0 },
+    tcp: { blocked: 0, down: 0, ok: 0 },
+  },
+}
 
-  const countKeys =
-    query.loni === 'outcome'
-      ? ['outcome_blocked', 'outcome_down', 'outcome_ok']
-      : query.loni === 'detailed'
-        ? ['dns_isp_blocked', 'dns_isp_down', 'dns_isp_ok']
-        : [
-            'anomaly_count',
-            'confirmed_count',
-            'failure_count',
-            'measurement_count',
-          ]
+const getCountKeys = (query) => {
+  if (query.loni === 'outcome') return COUNT_KEYS_CONFIG.outcome
+  if (query.loni === 'detailed') return COUNT_KEYS_CONFIG.detailed
+  return COUNT_KEYS_CONFIG.default
+}
 
-  for (const [key, rowData] of reshapedData) {
-    const row = {
-      [query.axis_y]: key,
-      rowLabel: rowLabels[key],
-      anomaly_count: 0,
-      confirmed_count: 0,
-      failure_count: 0,
-      measurement_count: 0,
-      outcome_blocked: 0,
-      outcome_down: 0,
-      outcome_ok: 0,
-      dns_isp: 0,
-      dns_other: 0,
-      tls: 0,
-      tcp: 0,
-      count: 0,
-      loni: {
-        dns_isp: {
-          blocked: 0,
-          down: 0,
-          ok: 0,
-        },
-        dns_other: {
-          blocked: 0,
-          down: 0,
-          ok: 0,
-        },
-        tls: {
-          blocked: 0,
-          down: 0,
-          ok: 0,
-        },
-        tcp: {
-          blocked: 0,
-          down: 0,
-          ok: 0,
-        },
-      },
+// create a new row with default values
+const createRowTemplate = (key, rowLabel, axisY) => ({
+  [axisY]: key,
+  rowLabel,
+  ...DEFAULT_ROW_TEMPLATE,
+})
+
+// aggregate counts for a single row
+const aggregateRowCounts = (rowData, countKeys) => {
+  const aggregatedRow = { ...DEFAULT_ROW_TEMPLATE }
+
+  for (const dataPoint of rowData) {
+    for (const countKey of countKeys) {
+      aggregatedRow[countKey] += dataPoint[countKey] || 0
     }
-
-    for (const d of rowData) {
-      for (const countKey of countKeys) {
-        row[countKey] = row[countKey] + d[countKey]
-      }
-    }
-
-    table.push(row)
   }
+
+  return aggregatedRow
+}
+
+const processRow = (key, rowData, rowLabels, query, countKeys) => {
+  const rowLabel = rowLabels[key]
+  const baseRow = createRowTemplate(key, rowLabel, query.axis_y)
+  const aggregatedCounts = aggregateRowCounts(rowData, countKeys)
+
+  return {
+    ...baseRow,
+    ...aggregatedCounts,
+  }
+}
+
+const prepareDataforTable = (
+  data,
+  query,
+  locale,
+  includedItems,
+  selectedItems,
+) => {
+  const [reshapedData, rows, rowLabels] = prepareDataForGridChart(
+    data,
+    query,
+    locale,
+    includedItems,
+    selectedItems,
+  )
+
+  // Determine which count keys to use
+  const countKeys = getCountKeys(query)
+
+  // Process each row and build the table
+  const table = Array.from(reshapedData, ([key, rowData]) =>
+    processRow(key, rowData, rowLabels, query, countKeys),
+  )
+
   return [reshapedData, table, rows, rowLabels]
 }
 
@@ -83,6 +106,7 @@ const noRowsSelected = null
 
 const TableView = ({ data, query, showFilters = true }) => {
   const intl = useIntl()
+  const [matState] = useMATContext()
 
   // The incoming data is reshaped to generate:
   // - reshapedData: holds the full set that will be used by GridChart
@@ -92,11 +116,17 @@ const TableView = ({ data, query, showFilters = true }) => {
   // - indexes -
   const [reshapedData, tableData, rowKeys, rowLabels] = useMemo(() => {
     try {
-      return prepareDataforTable(data, query, intl.locale)
+      return prepareDataforTable(
+        data,
+        query,
+        intl.locale,
+        matState.includedItems,
+        matState.legendItems,
+      )
     } catch (e) {
       return [null, [], [], {}]
     }
-  }, [query, data, intl.locale])
+  }, [query, data, matState, intl.locale])
 
   const [dataForCharts, setDataForCharts] = useState(noRowsSelected)
 

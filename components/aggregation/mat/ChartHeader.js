@@ -6,15 +6,12 @@ import { colorMap } from './colorMap'
 import { testGroups, testNames } from '/components/test-info'
 import { useRouter } from 'next/router'
 import { blockingTypeColors } from './colorMap'
+import { colors } from 'ooni-components'
 
 const LegendItem = ({ label, color }) => {
   return (
-    <div className="flex items-center mr-2">
-      <div className="px-2">
-        <div
-          style={{ width: '10px', height: '10px', backgroundColor: color }}
-        />
-      </div>
+    <div className="flex items-center gap-1">
+      <div style={{ width: '10px', height: '10px', backgroundColor: color }} />
       <div>{label}</div>
     </div>
   )
@@ -93,7 +90,7 @@ const legendItems = [
   },
 ]
 
-const legendItemsV5 = () => {
+const legendItemsDetailedV5 = () => {
   return [
     ...Object.entries(blockingTypeColors).flatMap(([type, states]) =>
       Object.entries(states)
@@ -114,13 +111,64 @@ const legendItemsV5 = () => {
   ]
 }
 
-const Legend = ({ label, color }) => {
+const legendItemsOutcomeV5 = [
+  {
+    label: 'blocked',
+    color: colorMap.confirmed_count,
+  },
+  {
+    label: 'down',
+    color: colorMap.anomaly_count,
+  },
+  {
+    label: 'ok',
+    color: colorMap.ok_count,
+  },
+]
+
+const ooniColors = [
+  colors.red['800'],
+  colors.yellow['600'],
+  colors.gray['600'],
+  colors.blue['600'],
+  colors.orange['600'],
+  colors.fuchsia['600'],
+  colors.pink['600'],
+  colors.teal['600'],
+]
+
+const chartColors = (legendItems) =>
+  legendItems
+    .filter((f) => !['none', 'others'].includes(f))
+    .reduce(
+      (acc, current, i) => {
+        acc[current] = ooniColors[i]
+        acc.push({ label: current, color: ooniColors[i] })
+        return acc
+      },
+      [
+        { label: 'none', color: colors.green['600'] },
+        { label: 'other', color: colors.gray['300'] },
+      ],
+    )
+
+const Legend = () => {
   const intl = useIntl()
   const { query } = useRouter()
-  const items = query.loni ? legendItemsV5() : legendItems
+  const [matState] = useMATContext()
+  const legendItemsObservations = chartColors(matState.legendItems)
+
+  const items =
+    query.loni === 'detailed'
+      ? legendItemsDetailedV5()
+      : query.loni === 'outcome'
+        ? legendItemsOutcomeV5
+        : query.loni === 'observations'
+          ? legendItemsObservations
+          : legendItems
 
   return (
-    <div className="flex justify-center my-2 flex-wrap">
+    <div className="flex my-2 gap-x-2 flex-wrap">
       {items.map((item) => (
         <LegendItem
           key={item.label}

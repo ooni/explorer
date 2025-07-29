@@ -125,6 +125,8 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
     return [linkObj, derivedTitle]
   }, [data, query, title])
 
+  const { probe_cc, measurement_start_day, ...observationsKeys } = data
+
   return (
     <div className="flex flex-col" style={{ ...theme.tooltip.container }}>
       <div className="flex my-1">
@@ -132,23 +134,34 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
         <MdClear title="Close" strokeWidth={2} onClick={onClose} />
       </div>
       <div className="flex flex-col pr-4 my-1">
-        {routerQuery?.loni ? (
+        {routerQuery?.loni === 'observations' ? (
           <>
-            <div>
-              Outcome:{' '}
-              <span className="font-semibold">{data.outcome_label}</span>
-            </div>
-            <div>
-              Observation count:{' '}
-              <span className="font-semibold">{data.count}</span>
-            </div>
-            {routerQuery?.loni === 'outcome' && (
-              // biome-ignore lint/complexity/noUselessFragments: <explanation>
+            {Object.keys(observationsKeys).map((key) => (
+              <div key={key} className="flex gap-3">
+                <span>{key}</span>
+                <span>{observationsKeys[key]}</span>
+              </div>
+            ))}
+          </>
+        ) : (
+          <>
+            {routerQuery?.loni ? (
               <>
-                {dataKeysToShow.map((k) => (
-                  <div className="my-1" key={k}>
-                    <div className="flex items-center">
-                      {/* <div className="mr-4">
+                <div>
+                  Outcome:{' '}
+                  <span className="font-semibold">{data.outcome_label}</span>
+                </div>
+                <div>
+                  Observation count:{' '}
+                  <span className="font-semibold">{data.count}</span>
+                </div>
+                {routerQuery?.loni === 'outcome' && (
+                  // biome-ignore lint/complexity/noUselessFragments: <explanation>
+                  <>
+                    {dataKeysToShow.map((k) => (
+                      <div className="my-1" key={k}>
+                        <div className="flex items-center">
+                          {/* <div className="mr-4">
                         <Chip
                           color={
                             k === 'outcome_blocked'
@@ -160,84 +173,88 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
                           }
                         />
                       </div> */}
+                          <div className="mr-8">
+                            {intl.formatMessage({
+                              id: `MAT.Table.Header.${k}`,
+                            })}
+                          </div>
+                          <div className="ml-auto">
+                            {intl.formatNumber(Number(data[k] ?? 0) * 100)}%
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </>
+                )}
+                {routerQuery?.loni === 'detailed' && (
+                  // biome-ignore lint/complexity/noUselessFragments: <explanation>
+                  <div className="grid grid-cols-2 gap-4">
+                    {dataKeysToShow.map((k) => (
+                      <div className="my-1" key={k}>
+                        <div className="flex items-center">
+                          <div className="text-sm">
+                            <div className="font-semibold">{k}</div>
+                            {data?.loni[k].outcome_label && (
+                              <div>
+                                Outcome:{' '}
+                                <span className="font-semibold">
+                                  {data?.loni[k].outcome_label}
+                                </span>
+                              </div>
+                            )}
+                            <div>
+                              OK:{' '}
+                              {intl.formatNumber(
+                                Number(data?.loni[k].ok ?? 0) * 100,
+                              )}
+                              %
+                            </div>
+                            <div>
+                              Down:{' '}
+                              {intl.formatNumber(
+                                Number(data?.loni[k].down ?? 0) * 100,
+                              )}
+                              %
+                            </div>
+                            <div>
+                              Blocked:{' '}
+                              {intl.formatNumber(
+                                Number(data?.loni[k].blocked ?? 0) * 100,
+                              )}
+                              %
+                            </div>
+                            {/* <div className="mr-4">
+                              <Chip color={colorMap[blockingType]} />
+                            </div>
+                            <div className="mr-8">
+                              {intl.formatMessage({ id: `MAT.Table.Header.${k}` })}
+                            </div> */}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </>
+            ) : (
+              <>
+                {dataKeysToShow.map((k) => (
+                  <div className="my-1" key={k}>
+                    <div className="flex items-center">
+                      <div className="mr-4">
+                        <Chip color={colorMap[k]} />
+                      </div>
                       <div className="mr-8">
                         {intl.formatMessage({ id: `MAT.Table.Header.${k}` })}
                       </div>
                       <div className="ml-auto">
-                        {intl.formatNumber(Number(data[k] ?? 0) * 100)}%
+                        {intl.formatNumber(Number(data[k] ?? 0))}
                       </div>
                     </div>
                   </div>
                 ))}
               </>
             )}
-            {routerQuery?.loni === 'detailed' && (
-              // biome-ignore lint/complexity/noUselessFragments: <explanation>
-              <div className="grid grid-cols-2 gap-4">
-                {dataKeysToShow.map((k) => (
-                  <div className="my-1" key={k}>
-                    <div className="flex items-center">
-                      <div className="text-sm">
-                        <div className="font-semibold">{k}</div>
-                        {data?.loni[k].outcome_label && (
-                          <div>
-                            Outcome:{' '}
-                            <span className="font-semibold">
-                              {data?.loni[k].outcome_label}
-                            </span>
-                          </div>
-                        )}
-                        <div>
-                          OK:{' '}
-                          {intl.formatNumber(
-                            Number(data?.loni[k].ok ?? 0) * 100,
-                          )}
-                          %
-                        </div>
-                        <div>
-                          Down:{' '}
-                          {intl.formatNumber(
-                            Number(data?.loni[k].down ?? 0) * 100,
-                          )}
-                          %
-                        </div>
-                        <div>
-                          Blocked:{' '}
-                          {intl.formatNumber(
-                            Number(data?.loni[k].blocked ?? 0) * 100,
-                          )}
-                          %
-                        </div>
-                        {/* <div className="mr-4">
-                              <Chip color={colorMap[blockingType]} />
-                            </div>
-                            <div className="mr-8">
-                              {intl.formatMessage({ id: `MAT.Table.Header.${k}` })}
-                            </div> */}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            )}
-          </>
-        ) : (
-          <>
-            {dataKeysToShow.map((k) => (
-              <div className="my-1" key={k}>
-                <div className="flex items-center">
-                  <div className="mr-4">
-                    <Chip color={colorMap[k]} />
-                  </div>
-                  <div className="mr-8">
-                    {intl.formatMessage({ id: `MAT.Table.Header.${k}` })}
-                  </div>
-                  <div className="ml-auto">
-                    {intl.formatNumber(Number(data[k] ?? 0))}
-                  </div>
-                </div>
-              </div>
-            ))}
           </>
         )}
       </div>

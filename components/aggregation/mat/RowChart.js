@@ -25,13 +25,13 @@ import CustomStackedBarItem from './CustomStackedBarItem'
 import { line } from 'd3-shape'
 import { computeXYScalesForSeries } from '@nivo/scales'
 import { Axes } from '@nivo/axes'
+import { colors } from 'ooni-components'
 
-const lineColor = 'rgba(200, 30, 15, 1)'
+const lineColor = colors.gray['700']
 
 const Line = (props) => {
   const { bars, xScale, innerWidth, innerHeight, tooltip } = props
-  console.log('props', props)
-  // return <div>Line</div>
+
   const uniqBars = bars.filter(
     (bar, index, self) =>
       index === self.findIndex((b) => b.data.index === bar.data.index),
@@ -54,49 +54,55 @@ const Line = (props) => {
   )
 
   const lineGenerator = line()
-    .x((bar) => bar.x + bar.width / 2)
-    .y((bar) => scale.yScale(bar.data.data.count))
-
-  // // const tip = useTooltip()
-  // // function renderTip(e, idx) {
-  // //   return tip.showTooltipFromEvent(
-  // //     <CustomTooltip barValue={data[idx].v} lineValue={data[idx].count} />,
-  // //     e,
-  // //   )
-  // // }
+    .x((bar) => {
+      return bar.data.id === 'dns_isp' // this is true for detailed chart, where dns_isp is first bar in the group
+        ? bar.x + (4 * bar.width) / 2
+        : bar.x + bar.width / 2
+    })
+    .y((bar) => {
+      return scale.yScale(bar.data.data.count || 0)
+    })
 
   return (
     <>
-      <Axes
-        yScale={scale.yScale}
-        xScale={xScale}
-        width={innerWidth}
-        height={innerHeight}
-        right={{
-          ticksPosition: 'after',
-          tickSize: 5,
-          tickPadding: 5,
-          tickRotation: 0,
-          tickOffset: 10,
-        }}
-      />
+      {innerHeight > 70 && (
+        <Axes
+          yScale={scale.yScale}
+          xScale={xScale}
+          width={innerWidth}
+          height={innerHeight}
+          right={{
+            ticksPosition: 'after',
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            tickOffset: 10,
+            // tickValues: 2,
+          }}
+        />
+      )}
+
       <path
         d={lineGenerator(uniqBars)}
         fill="none"
         stroke={lineColor}
         style={{ pointerEvents: 'none' }}
       />
-      {/* {bars.map((bar) => (
+      {uniqBars.map((bar) => (
         <circle
           key={bar.key}
-          cx={xScale(bar.data.index) + bar.width / 2}
-          cy={scale.yScale(bar.data.data.count)}
-          r={4}
+          cx={
+            bar.data.id === 'dns_isp'
+              ? bar.x + (4 * bar.width) / 2
+              : bar.x + bar.width / 2
+          }
+          cy={scale.yScale(bar.data.data.count || 0)}
+          r={2}
           fill="white"
           stroke={lineColor}
           style={{ pointerEvents: 'none' }}
         />
-      ))} */}
+      ))}
       {/* {bars.map((bar, idx) => (
         <rect
           key={bar.key}
@@ -118,18 +124,22 @@ const keys = ['anomaly_count', 'confirmed_count', 'failure_count', 'ok_count']
 const v5keys = ['outcome_blocked', 'outcome_down', 'outcome_ok']
 const loniKeys = ['dns_isp', 'dns_other', 'tls', 'tcp']
 
-const getKeys = (loni) => {
+const getKeys = (loni, observationKeys) => {
   if (loni === 'detailed') {
     return loniKeys
   }
   if (loni === 'outcome') {
     return v5keys
   }
+  if (loni === 'observations') {
+    return observationKeys
+  }
   return keys
 }
 
-const colorFunc = (d) => {
-  if (d?.data?.outcome_label) {
+const colorFunc = (d, query, colorScheme = []) => {
+  if (query.colors) return query.colors[d.id]
+  if (query?.loni === 'detailed' && d?.data?.outcome_label) {
     const label = d.data.outcome_label
     const blockingType = label.split('.')[0]
 
@@ -149,7 +159,13 @@ const colorFunc = (d) => {
   return colorMap[d.id] || '#ccc'
 }
 
-const barLayers = ['grid', 'axes', 'bars', Line]
+const baseLayers = ['grid', 'axes', 'bars']
+const barLayers = (query) => {
+  return query?.loni === 'outcome' || query?.loni === 'detailed'
+    ? [...baseLayers, Line]
+    : baseLayers
+}
+
 export const chartMargins = { top: 4, right: 50, bottom: 4, left: 0 }
 
 const formatXAxisValues = (value, query, intl) => {
@@ -168,8 +184,8 @@ const formatXAxisValues = (value, query, intl) => {
   }
 }
 
-const chartProps1D = (query, intl) => ({
-  colors: colorFunc,
+const chartProps1D = (query, intl, colorScheme) => ({
+  colors: (data) => colorFunc(data, query, colorScheme),
   indexScale: {
     type: 'band',
     round: false,
@@ -212,17 +228,17 @@ const chartProps1D = (query, intl) => ({
   animate: true,
   motionStiffness: 90,
   motionDamping: 15,
-  layers: barLayers,
+  layers: barLayers(query),
 })
 
-const chartProps2D = (query) => ({
+const chartProps2D = (query, intl, colorScheme) => ({
   // NOTE: These dimensions are linked to accuracy of the custom axes rendered in
   // <GridChart />
   // innerPadding: '3px',
   margin: chartMargins,
   padding: 0.3,
   borderColor: { from: 'color', modifiers: [['darker', 1.6]] },
-  colors: colorFunc,
+  colors: (data) => colorFunc(data, query, colorScheme),
   axisTop: null,
   axisRight: {
     enable: true,
@@ -247,7 +263,7 @@ const chartProps2D = (query) => ({
   },
   animate: false,
   isInteractive: true,
-  layers: barLayers,
+  layers: barLayers(query),
 })
 
 const RowChart = ({
@@ -256,6 +272,7 @@ const RowChart = ({
   label,
   height,
   rowIndex /* width, first, last */,
+  colorScheme = [],
 }) => {
   const intl = useIntl()
   const { query: routerQuery } = useRouter()
@@ -300,8 +317,20 @@ const RowChart = ({
   }, [data])
 
   const chartProps = useMemo(() => {
-    return label === undefined ? chartProps1D(query, intl) : chartProps2D(query)
+    return label === undefined
+      ? chartProps1D(query, intl, colorScheme)
+      : chartProps2D(query, colorScheme)
   }, [intl, label, query])
+
+  const uniqueFailures = chartData.length
+    ? [
+        ...new Set(
+          chartData.reduce((acc, next) => [...acc, ...Object.keys(next)], []),
+        ),
+      ].filter(
+        (item) => item !== 'measurement_start_day' && item !== 'probe_cc',
+      )
+    : []
 
   return (
     <div className="flex items-center relative" style={{ direction: 'ltr' }}>
@@ -309,17 +338,17 @@ const RowChart = ({
       <div style={{ height, width: '100%' }}>
         <Bar
           data={chartData}
-          keys={getKeys(routerQuery?.loni)}
+          keys={getKeys(routerQuery?.loni, uniqueFailures)}
           indexBy={indexBy}
           tooltip={InvisibleTooltip}
           onClick={handleClick}
           barComponent={
-            routerQuery?.loni && routerQuery?.loni !== 'outcome'
+            routerQuery?.loni && routerQuery?.loni === 'detailed'
               ? CustomStackedBarItem
               : CustomBarItem
           }
           groupMode={
-            routerQuery?.loni && routerQuery?.loni !== 'outcome'
+            routerQuery?.loni && routerQuery?.loni === 'detailed'
               ? 'grouped'
               : 'stacked'
           }
@@ -329,6 +358,7 @@ const RowChart = ({
           // `showTooltip` contains `[rowHasTooltip, columnwithTooltip]` e.g `[true, '2022-02-01']`
           enableLabel={tooltipIndex[0] === rowIndex ? tooltipIndex[1] : false}
           {...chartProps}
+          // colors={colorScheme}
         />
       </div>
     </div>
