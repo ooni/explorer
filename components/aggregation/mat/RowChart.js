@@ -25,12 +25,13 @@ import CustomStackedBarItem from './CustomStackedBarItem'
 import { line } from 'd3-shape'
 import { computeXYScalesForSeries } from '@nivo/scales'
 import { Axes } from '@nivo/axes'
+import { colors } from 'ooni-components'
 
-const lineColor = 'rgba(200, 30, 15, 1)'
+const lineColor = colors.gray['700']
 
 const Line = (props) => {
   const { bars, xScale, innerWidth, innerHeight, tooltip } = props
-  // return <div>Line</div>
+
   const uniqBars = bars.filter(
     (bar, index, self) =>
       index === self.findIndex((b) => b.data.index === bar.data.index),
@@ -53,49 +54,55 @@ const Line = (props) => {
   )
 
   const lineGenerator = line()
-    .x((bar) => bar.x + bar.width / 2)
-    .y((bar) => scale.yScale(bar.data.data.count))
-
-  // // const tip = useTooltip()
-  // // function renderTip(e, idx) {
-  // //   return tip.showTooltipFromEvent(
-  // //     <CustomTooltip barValue={data[idx].v} lineValue={data[idx].count} />,
-  // //     e,
-  // //   )
-  // // }
+    .x((bar) => {
+      return bar.data.id === 'dns_isp' // this is true for detailed chart, where dns_isp is first bar in the group
+        ? bar.x + (4 * bar.width) / 2
+        : bar.x + bar.width / 2
+    })
+    .y((bar) => {
+      return scale.yScale(bar.data.data.count || 0)
+    })
 
   return (
     <>
-      <Axes
-        yScale={scale.yScale}
-        xScale={xScale}
-        width={innerWidth}
-        height={innerHeight}
-        right={{
-          ticksPosition: 'after',
-          tickSize: 5,
-          tickPadding: 5,
-          tickRotation: 0,
-          tickOffset: 10,
-        }}
-      />
+      {innerHeight > 70 && (
+        <Axes
+          yScale={scale.yScale}
+          xScale={xScale}
+          width={innerWidth}
+          height={innerHeight}
+          right={{
+            ticksPosition: 'after',
+            tickSize: 5,
+            tickPadding: 5,
+            tickRotation: 0,
+            tickOffset: 10,
+            // tickValues: 2,
+          }}
+        />
+      )}
+
       <path
         d={lineGenerator(uniqBars)}
         fill="none"
         stroke={lineColor}
         style={{ pointerEvents: 'none' }}
       />
-      {/* {bars.map((bar) => (
+      {uniqBars.map((bar) => (
         <circle
           key={bar.key}
-          cx={xScale(bar.data.index) + bar.width / 2}
-          cy={scale.yScale(bar.data.data.count)}
-          r={4}
+          cx={
+            bar.data.id === 'dns_isp'
+              ? bar.x + (4 * bar.width) / 2
+              : bar.x + bar.width / 2
+          }
+          cy={scale.yScale(bar.data.data.count || 0)}
+          r={2}
           fill="white"
           stroke={lineColor}
           style={{ pointerEvents: 'none' }}
         />
-      ))} */}
+      ))}
       {/* {bars.map((bar, idx) => (
         <rect
           key={bar.key}
@@ -130,12 +137,9 @@ const getKeys = (loni, observationKeys) => {
   return keys
 }
 
-const colorFunc = (d, query, colorScheme) => {
-  // console.log('d', d, query)
-  if (query?.loni === 'observations') {
-    return colorScheme[d.id]
-  }
-  if (d?.data?.outcome_label) {
+const colorFunc = (d, query, colorScheme = []) => {
+  if (query.colors) return query.colors[d.id]
+  if (query?.loni === 'detailed' && d?.data?.outcome_label) {
     const label = d.data.outcome_label
     const blockingType = label.split('.')[0]
 
@@ -155,7 +159,13 @@ const colorFunc = (d, query, colorScheme) => {
   return colorMap[d.id] || '#ccc'
 }
 
-const barLayers = ['grid', 'axes', 'bars', Line]
+const baseLayers = ['grid', 'axes', 'bars']
+const barLayers = (query) => {
+  return query?.loni === 'outcome' || query?.loni === 'detailed'
+    ? [...baseLayers, Line]
+    : baseLayers
+}
+
 export const chartMargins = { top: 4, right: 50, bottom: 4, left: 0 }
 
 const formatXAxisValues = (value, query, intl) => {
@@ -218,7 +228,7 @@ const chartProps1D = (query, intl, colorScheme) => ({
   animate: true,
   motionStiffness: 90,
   motionDamping: 15,
-  layers: barLayers,
+  layers: barLayers(query),
 })
 
 const chartProps2D = (query, intl, colorScheme) => ({
@@ -253,7 +263,7 @@ const chartProps2D = (query, intl, colorScheme) => ({
   },
   animate: false,
   isInteractive: true,
-  layers: barLayers,
+  layers: barLayers(query),
 })
 
 const RowChart = ({
@@ -262,7 +272,7 @@ const RowChart = ({
   label,
   height,
   rowIndex /* width, first, last */,
-  colorScheme,
+  colorScheme = [],
 }) => {
   const intl = useIntl()
   const { query: routerQuery } = useRouter()
@@ -321,15 +331,7 @@ const RowChart = ({
         (item) => item !== 'measurement_start_day' && item !== 'probe_cc',
       )
     : []
-  // const uniqueFailures = [...new Set(chartData.map((item) => item.failure))]
 
-  // console.log('uniqueFailures', uniqueFailures)
-  // console.log(
-  //   'getKeys(routerQuery?.loni, uniqueFailures)',
-  //   getKeys(routerQuery?.loni, uniqueFailures),
-  // )
-  // console.log('chartProps', chartProps.colors())
-  // console.log('chartProps', colorScheme)
   return (
     <div className="flex items-center relative" style={{ direction: 'ltr' }}>
       {label && <div className="w-[12.5%] overflow-hidden">{label}</div>}

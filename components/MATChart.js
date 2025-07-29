@@ -1,15 +1,15 @@
 import axios from 'axios'
-// import { FunnelChart } from 'components/aggregation/mat/FunnelChart'
 import { MATContextProvider } from 'components/aggregation/mat/MATContext'
 import { NoCharts } from 'components/aggregation/mat/NoCharts'
 import { StackedBarChart } from 'components/aggregation/mat/StackedBarChart'
 import TableView from 'components/aggregation/mat/TableView'
 import { axiosResponseTime } from 'components/axios-plugins'
-import { useMemo } from 'react'
 import dayjs from 'services/dayjs'
 import useSWR from 'swr'
 import { ChartSpinLoader } from './Chart'
 import { FormattedMarkdownBase } from './FormattedMarkdown'
+import { useMemo } from 'react'
+import FailureForm from './aggregation/mat/FailureForm'
 
 axiosResponseTime(axios)
 
@@ -29,7 +29,7 @@ const fetcher = (query) => {
         v5qs.axis_x === 'measurement_start_day'
           ? '&group_by=timestamp'
           : `&group_by=${v5qs.axis_x}`
-      const axisY = v5qs.axis_Y ? `&group_by=${v5qs.axis_Y}` : ''
+      const axisY = v5qs.axis_y ? `&group_by=${v5qs.axis_y}` : ''
       reqUrl = `https://api.dev.ooni.io/api/v1/aggregation/observations?group_by=failure${axisX}${axisY}&${new URLSearchParams(v5qs).toString()}`
     } else {
       reqUrl = `https://api.dev.ooni.io/api/v1/aggregation/analysis?${new URLSearchParams(v5qs).toString()}`
@@ -108,6 +108,10 @@ const MATChart = ({ query, showFilters = true }) => {
   return (
     <>
       <MATContextProvider queryParams={query}>
+        {query?.loni === 'observations' && results.length > 0 && (
+          <FailureForm data={results} />
+        )}
+
         {error && <NoCharts message={error?.info ?? JSON.stringify(error)} />}
 
         {isValidating ? (

@@ -22,74 +22,58 @@ const GRID_MAX_HEIGHT = 600
 
 const generateQuery = (q) => new URLSearchParams(q).toString()
 
-export const prepareObservationsDataForGridChart = (
-  dataOG,
+const prepareObservationsData = (
+  data,
   query,
-  locale,
-  selectedBlockingTypes,
+  includedBlockingTypes = [],
+  selectedBlockingTypes = [],
 ) => {
-  console.log('selectedBlockingTypes', selectedBlockingTypes)
-  // const data = dataOG.map((item) => {
-  //   return {
-  //     ...item,
-  //     count: item.count,
-  //     measurement_start_day: item.timestamp.split('T')[0],
-  //   }
-  // })
+  return data
+    .reduce(
+      (acc, { timestamp, failure, observation_count, probe_cc, ...rest }) => {
+        if (!includedBlockingTypes.includes(failure)) return acc
 
-  const data = dataOG.reduce(
-    (acc, { timestamp, failure, observation_count, probe_cc }) => {
-      const reducedFailure = selectedBlockingTypes.includes(failure)
-        ? failure
-        : 'other'
-      const existing = acc.find(
-        (item) => item.measurement_start_day === timestamp.split('T')[0],
-      )
-      if (existing) {
-        if (existing[reducedFailure]) {
-          existing[reducedFailure] += observation_count
+        const reducedFailure = selectedBlockingTypes.includes(failure)
+          ? failure
+          : 'other'
+
+        const existing = query.axis_y
+          ? acc.find(
+              (item) =>
+                item.measurement_start_day === timestamp.split('T')[0] &&
+                item[query.axis_y] === rest[query.axis_y],
+            )
+          : acc.find(
+              (item) => item.measurement_start_day === timestamp.split('T')[0],
+            )
+        if (existing) {
+          if (existing[reducedFailure]) {
+            existing[reducedFailure] += observation_count
+          } else {
+            existing[reducedFailure] = observation_count
+          }
         } else {
-          existing[reducedFailure] = observation_count
+          acc.push({
+            measurement_start_day: timestamp.split('T')[0],
+            [reducedFailure]: observation_count,
+            probe_cc,
+            ...(query.axis_y ? { [query.axis_y]: rest[query.axis_y] } : {}),
+            // ...rest,
+          })
         }
-      } else {
-        acc.push({
-          measurement_start_day: timestamp.split('T')[0],
-          probe_cc,
-          [reducedFailure]: observation_count,
-        })
-      }
-      return acc
-    },
-    [],
-  )
-
-  // console.log('data====', data)
-  const rows = []
-  const rowLabels = {}
-  const reshapedData = {}
-  for (const item of data) {
-    // Convert non-string keys (e.g `probe_asn`) to string
-    // because they get casted to strings during Object transformations
-    const key = String(item[query.axis_y])
-    if (key in reshapedData) {
-      reshapedData[key].push(item)
-    } else {
-      rows.push(key)
-      reshapedData[key] = [item]
-      rowLabels[key] = getRowLabel(key, query.axis_y, locale)
-    }
-  }
-
-  const reshapedDataWithoutHoles = fillDataHoles(reshapedData, query)
-
-  const sortedRowKeys = rows.sort((a, b) =>
-    sortRows(rowLabels[a], rowLabels[b], query.axis_y, locale),
-  )
-  return [reshapedDataWithoutHoles, sortedRowKeys, rowLabels]
+        return acc
+      },
+      [],
+    )
+    .sort((a, b) => {
+      return (
+        new Date(a.measurement_start_day) - new Date(b.measurement_start_day)
+      )
+    })
 }
 
-export const preparePipelineV5DataForGridChart = (dataOG, query, locale) => {
-  const data = dataOG.map((item) => {
+const prepareDetailedData = (data, query) => {
+  return data.map((item) => {
     return {
       ...item,
       count: item.count,
@@ -100,11 +84,6 @@ export const preparePipelineV5DataForGridChart = (dataOG, query, locale) => {
       tls: item.count ? 1 : 0,
       tcp: item.count ? 1 : 0,
       loni: {
-        // outcome: {
-        //   ok: item.loni.outcome_ok,
-        //   blocked: item.loni.outcome_blocked,
-        //   down: item.loni.outcome_down,
-        // },
         dns_isp: {
           ok: item.loni.dns_isp_ok,
           blocked: item.loni.dns_isp_blocked,
@@ -132,29 +111,6 @@ export const preparePipelineV5DataForGridChart = (dataOG, query, locale) => {
       },
     }
   })
-
-  const rows = []
-  const rowLabels = {}
-  const reshapedData = {}
-  for (const item of data) {
-    // Convert non-string keys (e.g `probe_asn`) to string
-    // because they get casted to strings during Object transformations
-    const key = String(item[query.axis_y])
-    if (key in reshapedData) {
-      reshapedData[key].push(item)
-    } else {
-      rows.push(key)
-      reshapedData[key] = [item]
-      rowLabels[key] = getRowLabel(key, query.axis_y, locale)
-    }
-  }
-
-  const reshapedDataWithoutHoles = fillDataHoles(reshapedData, query)
-
-  const sortedRowKeys = rows.sort((a, b) =>
-    sortRows(rowLabels[a], rowLabels[b], query.axis_y, locale),
-  )
-  return [reshapedDataWithoutHoles, sortedRowKeys, rowLabels]
 }
 
 /** Transforms data received by GridChart into an collection of arrays each of
@@ -178,7 +134,27 @@ export const preparePipelineV5DataForGridChart = (dataOG, query, locale) => {
    }
  *
 */
-export const prepareDataForGridChart = (data, query, locale) => {
+export const prepareDataForGridChart = (
+  initialData,
+  query,
+  locale,
+  includedBlockingTypes = [],
+  selectedBlockingTypes = [],
+) => {
+  const data =
+    query?.loni === 'observations'
+      ? prepareObservationsData(
+          initialData,
+          query,
+          includedBlockingTypes,
+          selectedBlockingTypes,
+        )
+      : query?.loni === 'detailed'
+        ? prepareDetailedData(initialData, query)
+        : query?.loni === 'outcome'
+          ? prepareDetailedData(initialData, query)
+          : initialData
+
   const rows = []
   const rowLabels = {}
   const reshapedData = {}
@@ -286,36 +262,9 @@ const GridChart = ({
     : null
 
   const rowHeight = noLabels ? 500 : ROW_HEIGHT
-  // console.log('rowHeight', noLabels, rowHeight)
-  // const handleChartTypeChange = useCallback((chartType) => {
-  //   const pathname = router.pathname
-  //   const query = router.query
-
-  //   const href = {
-  //     pathname: router.pathname,
-  //     query: { ...query, loni: chartType },
-  //   }
-
-  //   return router.push(href, href, { shallow: true })
-  // })
-
-  // const chartTypes = ['outcome', 'detailed', 'observations']
 
   return (
     <div>
-      {/* {router.query.loni && (
-        <div className="flex flex-row gap-6 mb-4">
-          {chartTypes.map((chartType) => (
-            <ChartTypeButton
-              key={chartType}
-              chartType={chartType}
-              isActive={router.query.loni === chartType}
-              onClick={() => handleChartTypeChange(chartType)}
-            />
-          ))}
-        </div>
-      )} */}
-
       <Container theme={barThemeForTooltip}>
         <TooltipProvider container={tooltipContainer}>
           <div className="flex flex-col" ref={tooltipContainer}>
@@ -371,15 +320,5 @@ const GridChart = ({
     </div>
   )
 }
-
-// GridChart.propTypes = {
-//   data: PropTypes.objectOf(PropTypes.array).isRequired,
-//   rowKeys: PropTypes.arrayOf(PropTypes.string),
-//   rowLabels: PropTypes.objectOf(PropTypes.string),
-//   selectedRows: PropTypes.arrayOf(PropTypes.string),
-//   height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-//   header: PropTypes.element,
-//   noLabels: PropTypes.bool,
-// }
 
 export default memo(GridChart)
