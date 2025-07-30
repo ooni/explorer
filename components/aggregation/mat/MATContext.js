@@ -22,6 +22,8 @@ export const defaultMATContext = {
   category_code: '',
   tooltipIndex: [-1, ''],
   legendItems: [],
+  colors: null,
+  loni: null,
 }
 
 export const MATContextProvider = ({

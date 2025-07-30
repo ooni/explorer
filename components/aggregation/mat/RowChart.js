@@ -138,7 +138,7 @@ const getKeys = (loni, observationKeys) => {
 }
 
 const colorFunc = (d, query, colorScheme = []) => {
-  if (query.colors) return query.colors[d.id]
+  if (query?.colors && query?.loni === 'observations') return query.colors[d.id]
   if (query?.loni === 'detailed' && d?.data?.outcome_label) {
     const label = d.data.outcome_label
     const blockingType = label.split('.')[0]
@@ -161,6 +161,11 @@ const colorFunc = (d, query, colorScheme = []) => {
 
 const baseLayers = ['grid', 'axes', 'bars']
 const barLayers = (query) => {
+  console.log(
+    '+++++query++++',
+    query,
+    query?.loni === 'outcome' || query?.loni === 'detailed',
+  )
   return query?.loni === 'outcome' || query?.loni === 'detailed'
     ? [...baseLayers, Line]
     : baseLayers

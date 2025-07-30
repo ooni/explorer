@@ -125,7 +125,7 @@ const FailureForm = ({ data }) => {
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="columns-2">
         {allBlockingTypes?.map((b, i) => (
-          <div key={b} className="flex flex-row">
+          <div key={b} className="flex flex-row gap-2">
             <Controller
               control={control}
               name={`blockingTypes.${i}.include`}
@@ -141,6 +141,7 @@ const FailureForm = ({ data }) => {
                         disabled={!includeField.value}
                         label={b}
                         checked={field.value}
+                        className="gap-2"
                       />
                     )}
                   />
