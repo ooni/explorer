@@ -322,15 +322,7 @@ const RowChart = ({
       : chartProps2D(query, colorScheme)
   }, [intl, label, query])
 
-  const uniqueFailures = chartData.length
-    ? [
-        ...new Set(
-          chartData.reduce((acc, next) => [...acc, ...Object.keys(next)], []),
-        ),
-      ].filter(
-        (item) => item !== 'measurement_start_day' && item !== 'probe_cc',
-      )
-    : []
+  const uniqueFailures = ['other', ...query.legendItems]
 
   return (
     <div className="flex items-center relative" style={{ direction: 'ltr' }}>

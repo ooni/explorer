@@ -1,14 +1,15 @@
 import { useForm, Controller } from 'react-hook-form'
 import { Checkbox, colors } from 'ooni-components'
 import { useMATContext } from './MATContext'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
 const getAllBlockingTypes = (dataOG) => {
   return dataOG.reduce((acc, obj) => {
-    if (acc[obj.failure]) {
-      acc[obj.failure] += obj.observation_count
+    const failure = obj.failure //.replace(/(?:\[scrubbed\]|\.)*/g, '')
+    if (acc[failure]) {
+      acc[failure] += obj.observation_count
     } else {
-      acc[obj.failure] = obj.observation_count
+      acc[failure] = obj.observation_count
     }
     // const existing = acc.find(
     //   (item) => item.failure === failure,
@@ -59,7 +60,7 @@ const chartColors = (selectedBlockingTypes) =>
 const FailureForm = ({ data }) => {
   const [_, updateMATContext] = useMATContext()
 
-  const allBlockingTypes = getSortedBlockingTypes(data)
+  const allBlockingTypes = useMemo(() => getSortedBlockingTypes(data), [data])
 
   const [includedBlockingTypes, setInlcudedBlockingTypes] =
     useState(allBlockingTypes)
@@ -81,24 +82,22 @@ const FailureForm = ({ data }) => {
 
   const { setValue, handleSubmit, control, subscribe } = useForm({
     defaultValues: {
-      blockingTypes: allBlockingTypes.reduce((acc, curr, i) => {
-        acc[curr] = { include: true, other: i > 7 }
+      blockingTypes: allBlockingTypes.reduce((acc, _, i) => {
+        acc[i] = { include: true, other: i > 7 }
         return acc
       }, {}),
     },
   })
 
   useEffect(() => {
-    // make sure to unsubscribe;
     const callback = subscribe({
       formState: {
         values: true,
       },
       callback: ({ values: { blockingTypes } }) => {
-        // biome-ignore lint/complexity/noForEach: <explanation>
-        Object.entries(blockingTypes).forEach(([b, value]) => {
+        Object.entries(blockingTypes).forEach(([_, value], i) => {
           if (!value.include && value.other) {
-            setValue(`blockingTypes.${b}.other`, false, {
+            setValue(`blockingTypes.${i}.other`, false, {
               shouldDirty: false,
               shouldTouch: false,
             })
@@ -108,19 +107,15 @@ const FailureForm = ({ data }) => {
     })
 
     return () => callback()
-
-    // You can also just return the subscribe
-    // return subscribe();
   }, [subscribe])
 
   const onSubmit = (data) => {
     const included = Object.entries(data.blockingTypes)
       .filter(([_, v]) => v.include)
-      .map(([k]) => k)
-
+      .map(([k]) => allBlockingTypes[k])
     const selected = Object.entries(data.blockingTypes)
       .filter(([_, v]) => !v.other)
-      .map(([k]) => k)
+      .map(([k]) => allBlockingTypes[k])
 
     setInlcudedBlockingTypes(included)
     setSelectedBlockingTypes(selected)
@@ -129,17 +124,17 @@ const FailureForm = ({ data }) => {
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <div className="columns-2">
-        {allBlockingTypes?.map((b) => (
+        {allBlockingTypes?.map((b, i) => (
           <div key={b} className="flex flex-row">
             <Controller
               control={control}
-              name={`blockingTypes.${b}.include`}
+              name={`blockingTypes.${i}.include`}
               render={({ field: includeField }) => (
                 <>
                   <Checkbox {...includeField} checked={includeField.value} />
                   <Controller
                     control={control}
-                    name={`blockingTypes.${b}.other`}
+                    name={`blockingTypes.${i}.other`}
                     render={({ field }) => (
                       <Checkbox
                         {...field}
