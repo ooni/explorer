@@ -7,6 +7,7 @@ import { testGroups, testNames } from '/components/test-info'
 import { useRouter } from 'next/router'
 import { blockingTypeColors } from './colorMap'
 import { colors } from 'ooni-components'
+import { useMemo } from 'react'
 
 const LegendItem = ({ label, color }) => {
   return (
@@ -156,7 +157,11 @@ const Legend = () => {
   const intl = useIntl()
   const { query } = useRouter()
   const [matState] = useMATContext()
-  const legendItemsObservations = chartColors(matState.legendItems)
+
+  const legendItemsObservations = useMemo(
+    () => chartColors(matState.legendItems),
+    [matState.legendItems],
+  )
 
   const items =
     query.loni === 'detailed'
