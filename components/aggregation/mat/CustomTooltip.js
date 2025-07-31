@@ -125,8 +125,6 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
     return [linkObj, derivedTitle]
   }, [data, query, title])
 
-  const { probe_cc, measurement_start_day, ...observationsKeys } = data
-
   return (
     <div className="flex flex-col" style={{ ...theme.tooltip.container }}>
       <div className="flex my-1">
@@ -136,10 +134,19 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
       <div className="flex flex-col pr-4 my-1">
         {routerQuery?.loni === 'observations' ? (
           <>
-            {Object.keys(observationsKeys).map((key) => (
-              <div key={key} className="flex gap-3">
-                <span>{key}</span>
-                <span>{observationsKeys[key]}</span>
+            {query.legendItems.map((key) => (
+              <div key={key}>
+                {!!Number(data[key] ?? 0) && (
+                  <div className="flex items-center">
+                    <div className="mr-4">
+                      <Chip color={query.colors[key]} />
+                    </div>
+                    <div className="mr-8">{key}</div>
+                    <div className="ml-auto">
+                      {intl.formatNumber(Number(data[key] ?? 0))}
+                    </div>
+                  </div>
+                )}
               </div>
             ))}
           </>
@@ -179,7 +186,8 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
                             })}
                           </div>
                           <div className="ml-auto">
-                            {intl.formatNumber(Number(data[k] ?? 0) * 100)}%
+                            {/* {intl.formatNumber(Number(data[k] ?? 0) * 100)}% */}
+                            {intl.formatNumber(Number(data[k] ?? 0))}
                           </div>
                         </div>
                       </div>
@@ -204,24 +212,31 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
                             )}
                             <div>
                               OK:{' '}
-                              {intl.formatNumber(
+                              {/* {intl.formatNumber(
                                 Number(data?.loni[k].ok ?? 0) * 100,
                               )}
-                              %
+                              % */}
+                              {intl.formatNumber(Number(data?.loni[k].ok ?? 0))}
                             </div>
                             <div>
                               Down:{' '}
-                              {intl.formatNumber(
+                              {/* {intl.formatNumber(
                                 Number(data?.loni[k].down ?? 0) * 100,
                               )}
-                              %
+                              % */}
+                              {intl.formatNumber(
+                                Number(data?.loni[k].down ?? 0),
+                              )}
                             </div>
                             <div>
                               Blocked:{' '}
-                              {intl.formatNumber(
+                              {/* {intl.formatNumber(
                                 Number(data?.loni[k].blocked ?? 0) * 100,
                               )}
-                              %
+                              % */}
+                              {intl.formatNumber(
+                                Number(data?.loni[k].blocked ?? 0),
+                              )}
                             </div>
                             {/* <div className="mr-4">
                               <Chip color={colorMap[blockingType]} />

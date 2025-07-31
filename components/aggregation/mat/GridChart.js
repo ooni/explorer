@@ -229,7 +229,6 @@ const GridChart = ({
   colorScheme,
 }) => {
   const noLabels = !Object.keys(rowLabels).length
-  console.log('rowLabels', rowLabels)
   const router = useRouter()
   // Fetch query state from context instead of router
   // because some params not present in the URL are injected in the context

@@ -161,11 +161,6 @@ const colorFunc = (d, query, colorScheme = []) => {
 
 const baseLayers = ['grid', 'axes', 'bars']
 const barLayers = (query) => {
-  console.log(
-    '+++++query++++',
-    query,
-    query?.loni === 'outcome' || query?.loni === 'detailed',
-  )
   return query?.loni === 'outcome' || query?.loni === 'detailed'
     ? [...baseLayers, Line]
     : baseLayers
