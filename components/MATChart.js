@@ -30,9 +30,9 @@ const fetcher = (query) => {
           ? '&group_by=timestamp'
           : `&group_by=${v5qs.axis_x}`
       const axisY = v5qs.axis_y ? `&group_by=${v5qs.axis_y}` : ''
-      reqUrl = `https://api.dev.ooni.io/api/v1/aggregation/observations?group_by=failure${axisX}${axisY}&${new URLSearchParams(v5qs).toString()}`
+      reqUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation/observations?group_by=failure${axisX}${axisY}&${new URLSearchParams(v5qs).toString()}`
     } else {
-      reqUrl = `https://api.dev.ooni.io/api/v1/aggregation/analysis?${new URLSearchParams(v5qs).toString()}`
+      reqUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation/analysis?${new URLSearchParams(v5qs).toString()}`
     }
   }
   console.debug(`API Query: ${reqUrl}`)
@@ -93,7 +93,6 @@ export const MATChartWrapper = ({ link, caption }) => {
 }
 
 const MATChart = ({ query, showFilters = true }) => {
-  // console.log('MATChart query', query)
   const { data, error, isValidating } = useSWR(
     query ? query : null,
     fetcher,
@@ -107,11 +106,10 @@ const MATChart = ({ query, showFilters = true }) => {
 
   return (
     <>
-      <MATContextProvider queryParams={query}>
-        {query?.loni === 'observations' && results.length > 0 && (
-          <FailureForm data={results} />
-        )}
-
+      <MATContextProvider
+        queryParams={query}
+        // allBlockingTypes={allBlockingTypes}
+      >
         {error && <NoCharts message={error?.info ?? JSON.stringify(error)} />}
 
         {isValidating ? (
@@ -120,9 +118,10 @@ const MATChart = ({ query, showFilters = true }) => {
           <>
             {results.length > 0 || Object.keys(results).length ? (
               <>
-                {/* {data && data.data.dimension_count === 0 && (
-                  <FunnelChart data={results} />
-                )} */}
+                {query?.loni === 'observations' && (
+                  <FailureForm data={results} />
+                )}
+
                 {((data && data.data.dimension_count === 1) ||
                   (data && query.axis_x && !query.axis_y)) && (
                   <StackedBarChart data={results} query={query} />
