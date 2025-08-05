@@ -127,41 +127,21 @@ const legendItemsOutcomeV5 = [
   },
 ]
 
-const ooniColors = [
-  colors.red['800'],
-  colors.yellow['600'],
-  colors.gray['600'],
-  colors.blue['600'],
-  colors.orange['600'],
-  colors.fuchsia['600'],
-  colors.pink['600'],
-  colors.teal['600'],
-]
-
-const chartColors = (legendItems) =>
-  legendItems
-    .filter((f) => !['none', 'others'].includes(f))
-    .reduce(
-      (acc, current, i) => {
-        acc[current] = ooniColors[i]
-        acc.push({ label: current, color: ooniColors[i] })
-        return acc
-      },
-      [
-        { label: 'none', color: colors.green['600'] },
-        { label: 'other', color: colors.gray['300'] },
-      ],
-    )
-
 const Legend = () => {
   const intl = useIntl()
   const { query } = useRouter()
   const [matState] = useMATContext()
 
-  const legendItemsObservations = useMemo(
-    () => chartColors(matState.legendItems),
-    [matState.legendItems],
-  )
+  const legendItemsObservations = useMemo(() => {
+    const items = matState.legendItems.map((item) => ({
+      label: item,
+      color: matState.colors[item],
+    }))
+    if (matState?.colors?.other) {
+      items.push({ label: 'other', color: matState.colors.other })
+    }
+    return items
+  }, [matState.colors, matState.legendItems])
 
   const items =
     query.loni === 'detailed'

@@ -137,7 +137,7 @@ const getKeys = (loni, observationKeys) => {
   return keys
 }
 
-const colorFunc = (d, query, colorScheme = []) => {
+const colorFunc = (d, query) => {
   if (query?.colors && query?.loni === 'observations') return query.colors[d.id]
   if (query?.loni === 'detailed' && d?.data?.outcome_label) {
     const label = d.data.outcome_label
@@ -184,8 +184,8 @@ const formatXAxisValues = (value, query, intl) => {
   }
 }
 
-const chartProps1D = (query, intl, colorScheme) => ({
-  colors: (data) => colorFunc(data, query, colorScheme),
+const chartProps1D = (query, intl) => ({
+  colors: (data) => colorFunc(data, query),
   indexScale: {
     type: 'band',
     round: false,
@@ -231,14 +231,14 @@ const chartProps1D = (query, intl, colorScheme) => ({
   layers: barLayers(query),
 })
 
-const chartProps2D = (query, intl, colorScheme) => ({
+const chartProps2D = (query, intl) => ({
   // NOTE: These dimensions are linked to accuracy of the custom axes rendered in
   // <GridChart />
   // innerPadding: '3px',
   margin: chartMargins,
   padding: 0.3,
   borderColor: { from: 'color', modifiers: [['darker', 1.6]] },
-  colors: (data) => colorFunc(data, query, colorScheme),
+  colors: (data) => colorFunc(data, query),
   axisTop: null,
   axisRight: {
     enable: true,
@@ -272,7 +272,6 @@ const RowChart = ({
   label,
   height,
   rowIndex /* width, first, last */,
-  colorScheme = [],
 }) => {
   const intl = useIntl()
   const { query: routerQuery } = useRouter()
@@ -317,13 +316,17 @@ const RowChart = ({
   }, [data])
 
   const chartProps = useMemo(() => {
-    return label === undefined
-      ? chartProps1D(query, intl, colorScheme)
-      : chartProps2D(query, colorScheme)
+    return label === undefined ? chartProps1D(query, intl) : chartProps2D(query)
   }, [intl, label, query])
 
   const uniqueFailures = ['other', ...query.legendItems]
 
+  // const uniqueFailures = useMemo(
+  //   () => (query.legendItems.length ? [...query.legendItems, 'other'] : []),
+  //   [query.legendItems],
+  // )
+  // console.log('query', query)
+  // console.log('uniqueFailures', uniqueFailures)
   return (
     <div className="flex items-center relative" style={{ direction: 'ltr' }}>
       {label && <div className="w-[12.5%] overflow-hidden">{label}</div>}
@@ -350,7 +353,6 @@ const RowChart = ({
           // `showTooltip` contains `[rowHasTooltip, columnwithTooltip]` e.g `[true, '2022-02-01']`
           enableLabel={tooltipIndex[0] === rowIndex ? tooltipIndex[1] : false}
           {...chartProps}
-          // colors={colorScheme}
         />
       </div>
     </div>

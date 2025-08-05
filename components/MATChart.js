@@ -8,7 +8,7 @@ import dayjs from 'services/dayjs'
 import useSWR from 'swr'
 import { ChartSpinLoader } from './Chart'
 import { FormattedMarkdownBase } from './FormattedMarkdown'
-import { useMemo } from 'react'
+import { useMemo, useState, useEffect } from 'react'
 import FailureForm from './aggregation/mat/FailureForm'
 
 axiosResponseTime(axios)
@@ -92,6 +92,25 @@ export const MATChartWrapper = ({ link, caption }) => {
   )
 }
 
+const getAllBlockingTypes = (data) => {
+  return data.reduce((acc, obj) => {
+    const failure = obj.failure
+    if (acc[failure]) {
+      acc[failure] += obj.observation_count
+    } else {
+      acc[failure] = obj.observation_count
+    }
+    return acc
+  }, {})
+}
+
+const getSortedBlockingTypes = (OGdata) => {
+  const blockingTypes = getAllBlockingTypes(OGdata)
+  return Object.entries(blockingTypes)
+    .sort(([, a], [, b]) => b - a)
+    .map(([key]) => key)
+}
+
 const MATChart = ({ query, showFilters = true }) => {
   const { data, error, isValidating } = useSWR(
     query ? query : null,
@@ -104,11 +123,30 @@ const MATChart = ({ query, showFilters = true }) => {
     [data],
   )
 
+  const allBlockingTypes = useMemo(() => {
+    if (query.loni === 'observations') {
+      return getSortedBlockingTypes(results)
+    }
+    return []
+  }, [results, query])
+
+  const [includedBlockingTypes, setInlcudedBlockingTypes] =
+    useState(allBlockingTypes)
+  const [selectedBlockingTypes, setSelectedBlockingTypes] = useState(
+    allBlockingTypes.slice(0, 8),
+  )
+
+  useEffect(() => {
+    setInlcudedBlockingTypes(allBlockingTypes)
+    setSelectedBlockingTypes(allBlockingTypes.slice(0, 8))
+  }, [allBlockingTypes])
+
   return (
     <>
       <MATContextProvider
         queryParams={query}
-        // allBlockingTypes={allBlockingTypes}
+        includedBlockingTypes={includedBlockingTypes}
+        selectedBlockingTypes={selectedBlockingTypes}
       >
         {error && <NoCharts message={error?.info ?? JSON.stringify(error)} />}
 
@@ -119,7 +157,14 @@ const MATChart = ({ query, showFilters = true }) => {
             {results.length > 0 || Object.keys(results).length ? (
               <>
                 {query?.loni === 'observations' && (
-                  <FailureForm data={results} />
+                  <FailureForm
+                    allBlockingTypes={allBlockingTypes}
+                    includedBlockingTypes={includedBlockingTypes}
+                    selectedBlockingTypes={selectedBlockingTypes}
+                    setInlcudedBlockingTypes={setInlcudedBlockingTypes}
+                    setSelectedBlockingTypes={setSelectedBlockingTypes}
+                    data={results}
+                  />
                 )}
 
                 {((data && data.data.dimension_count === 1) ||

@@ -225,8 +225,6 @@ const GridChart = ({
   height = 'auto',
   header,
   selectedRows = null,
-  // noLabels = false,
-  colorScheme,
 }) => {
   const noLabels = !Object.keys(rowLabels).length
   const router = useRouter()
@@ -296,7 +294,6 @@ const GridChart = ({
                         indexBy={indexBy}
                         height={rowHeight}
                         label={rowLabels[rowKey]}
-                        colorScheme={colorScheme}
                       />
                     ))}
                   </div>

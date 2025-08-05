@@ -34,7 +34,6 @@ const MeasurementAggregationToolkit = () => {
         pathname: router.pathname,
         query: params,
       }
-      // console.log('href', href)
       return router.push(href, href, { shallow: true })
     },
     [router],
