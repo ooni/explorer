@@ -43,7 +43,7 @@ const FailureForm = ({
       .filter(([_, v]) => v.include)
       .map(([k]) => allBlockingTypes[k])
     const selected = Object.entries(data.blockingTypes)
-      .filter(([_, v]) => !v.other)
+      .filter(([_, v]) => v.other)
       .map(([k]) => allBlockingTypes[k])
 
     setInlcudedBlockingTypes(included)
