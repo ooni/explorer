@@ -12,7 +12,7 @@ const FailureForm = ({
   const { setValue, handleSubmit, control, subscribe } = useForm({
     defaultValues: {
       blockingTypes: allBlockingTypes.reduce((acc, _, i) => {
-        acc[i] = { include: true, other: i > 7 }
+        acc[i] = { include: true, other: i > 6 }
         return acc
       }, {}),
     },
@@ -43,7 +43,7 @@ const FailureForm = ({
       .filter(([_, v]) => v.include)
       .map(([k]) => allBlockingTypes[k])
     const selected = Object.entries(data.blockingTypes)
-      .filter(([_, v]) => v.other)
+      .filter(([_, v]) => v.include && !v.other)
       .map(([k]) => allBlockingTypes[k])
 
     setInlcudedBlockingTypes(included)

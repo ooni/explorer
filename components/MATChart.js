@@ -133,7 +133,7 @@ const MATChart = ({ query, showFilters = true }) => {
   const [includedBlockingTypes, setInlcudedBlockingTypes] =
     useState(allBlockingTypes)
   const [selectedBlockingTypes, setSelectedBlockingTypes] = useState(
-    allBlockingTypes.slice(0, 8),
+    allBlockingTypes.slice(0, 7),
   )
 
   useEffect(() => {
