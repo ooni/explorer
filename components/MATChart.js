@@ -8,8 +8,8 @@ import dayjs from 'services/dayjs'
 import useSWR from 'swr'
 import { ChartSpinLoader } from './Chart'
 import { FormattedMarkdownBase } from './FormattedMarkdown'
-import { useMemo, useState, useEffect } from 'react'
-import FailureForm from './aggregation/mat/FailureForm'
+import { useMemo } from 'react'
+import { BlockingTypesProvider } from './aggregation/mat/BlockingTypesContext'
 
 axiosResponseTime(axios)
 
@@ -129,44 +129,19 @@ const MATChart = ({ query, showFilters = true }) => {
     }
     return []
   }, [results, query])
-
-  const [includedBlockingTypes, setInlcudedBlockingTypes] =
-    useState(allBlockingTypes)
-  const [selectedBlockingTypes, setSelectedBlockingTypes] = useState(
-    allBlockingTypes.slice(0, 7),
-  )
-
-  useEffect(() => {
-    setInlcudedBlockingTypes(allBlockingTypes)
-    setSelectedBlockingTypes(allBlockingTypes.slice(0, 8))
-  }, [allBlockingTypes])
+  console.log('allBlockingTypes', allBlockingTypes)
 
   return (
     <>
-      <MATContextProvider
-        queryParams={query}
-        includedBlockingTypes={includedBlockingTypes}
-        selectedBlockingTypes={selectedBlockingTypes}
-      >
+      <MATContextProvider queryParams={query}>
         {error && <NoCharts message={error?.info ?? JSON.stringify(error)} />}
 
         {isValidating ? (
           <ChartSpinLoader height="500px" />
         ) : (
-          <>
+          <BlockingTypesProvider allBlockingTypes={allBlockingTypes}>
             {results.length > 0 || Object.keys(results).length ? (
               <>
-                {query?.loni === 'observations' && (
-                  <FailureForm
-                    allBlockingTypes={allBlockingTypes}
-                    includedBlockingTypes={includedBlockingTypes}
-                    selectedBlockingTypes={selectedBlockingTypes}
-                    setInlcudedBlockingTypes={setInlcudedBlockingTypes}
-                    setSelectedBlockingTypes={setSelectedBlockingTypes}
-                    data={results}
-                  />
-                )}
-
                 {((data && data.data.dimension_count === 1) ||
                   (data && query.axis_x && !query.axis_y)) && (
                   <StackedBarChart data={results} query={query} />
@@ -183,7 +158,7 @@ const MATChart = ({ query, showFilters = true }) => {
             ) : (
               <NoCharts />
             )}
-          </>
+          </BlockingTypesProvider>
         )}
       </MATContextProvider>
     </>

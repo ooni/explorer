@@ -1,18 +1,19 @@
 import { useForm, Controller } from 'react-hook-form'
 import { Checkbox } from 'ooni-components'
 import { useEffect } from 'react'
+import { useBlockingTypes } from './BlockingTypesContext'
 
-const FailureForm = ({
-  allBlockingTypes,
-  setInlcudedBlockingTypes,
-  setSelectedBlockingTypes,
-  // includedBlockingTypes,
-  // selectedBlockingTypes,
-}) => {
+const FailureForm = ({ afterSubmit }) => {
+  const { state, dispatch } = useBlockingTypes()
+  const allBlockingTypes = state.all
+
   const { setValue, handleSubmit, control, subscribe } = useForm({
     defaultValues: {
       blockingTypes: allBlockingTypes.reduce((acc, _, i) => {
-        acc[i] = { include: true, other: i > 6 }
+        acc[i] = {
+          include: state.included.includes(allBlockingTypes[i]),
+          other: !state.selected.includes(allBlockingTypes[i]),
+        }
         return acc
       }, {}),
     },
@@ -38,16 +39,17 @@ const FailureForm = ({
     return () => callback()
   }, [subscribe, setValue])
 
-  const onSubmit = (data) => {
-    const included = Object.entries(data.blockingTypes)
+  const onSubmit = ({ blockingTypes }) => {
+    const included = Object.entries(blockingTypes)
       .filter(([_, v]) => v.include)
       .map(([k]) => allBlockingTypes[k])
-    const selected = Object.entries(data.blockingTypes)
+    const selected = Object.entries(blockingTypes)
       .filter(([_, v]) => v.include && !v.other)
       .map(([k]) => allBlockingTypes[k])
 
-    setInlcudedBlockingTypes(included)
-    setSelectedBlockingTypes(selected)
+    dispatch({ type: 'setIncluded', payload: included })
+    dispatch({ type: 'setSelected', payload: selected })
+    afterSubmit()
   }
 
   return (

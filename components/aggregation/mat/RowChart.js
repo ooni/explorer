@@ -26,6 +26,7 @@ import { line } from 'd3-shape'
 import { computeXYScalesForSeries } from '@nivo/scales'
 import { Axes } from '@nivo/axes'
 import { colors } from 'ooni-components'
+import { useBlockingTypes } from './BlockingTypesContext'
 
 const lineColor = colors.gray['700']
 
@@ -137,8 +138,9 @@ const getKeys = (loni, observationKeys) => {
   return keys
 }
 
-const colorFunc = (d, query) => {
-  if (query?.colors && query?.loni === 'observations') return query.colors[d.id]
+const colorFunc = (d, query, state) => {
+  // console.log('d', state?.colors && query?.loni === 'observations')
+  if (state?.colors && query?.loni === 'observations') return state.colors[d.id]
   if (query?.loni === 'detailed' && d?.data?.outcome_label) {
     const label = d.data.outcome_label
     const blockingType = label.split('.')[0]
@@ -184,8 +186,8 @@ const formatXAxisValues = (value, query, intl) => {
   }
 }
 
-const chartProps1D = (query, intl) => ({
-  colors: (data) => colorFunc(data, query),
+const chartProps1D = (query, intl, state) => ({
+  colors: (data) => colorFunc(data, query, state),
   indexScale: {
     type: 'band',
     round: false,
@@ -231,14 +233,14 @@ const chartProps1D = (query, intl) => ({
   layers: barLayers(query),
 })
 
-const chartProps2D = (query, intl) => ({
+const chartProps2D = (query, intl, state) => ({
   // NOTE: These dimensions are linked to accuracy of the custom axes rendered in
   // <GridChart />
   // innerPadding: '3px',
   margin: chartMargins,
   padding: 0.3,
   borderColor: { from: 'color', modifiers: [['darker', 1.6]] },
-  colors: (data) => colorFunc(data, query),
+  colors: (data) => colorFunc(data, query, state),
   axisTop: null,
   axisRight: {
     enable: true,
@@ -277,6 +279,7 @@ const RowChart = ({
   const { query: routerQuery } = useRouter()
   const [query, updateMATContext] = useMATContext()
   const { tooltipIndex } = query
+  const { state } = useBlockingTypes()
 
   const { showTooltipFromEvent, hideTooltip } = useTooltip()
 
@@ -316,17 +319,17 @@ const RowChart = ({
   }, [data])
 
   const chartProps = useMemo(() => {
-    return label === undefined ? chartProps1D(query, intl) : chartProps2D(query)
-  }, [intl, label, query])
+    console.log('state', state)
+    return label === undefined
+      ? chartProps1D(query, intl, state)
+      : chartProps2D(query, intl, state)
+  }, [intl, label, query, state])
 
-  const uniqueFailures = ['other', ...query.legendItems]
+  const uniqueFailures = useMemo(
+    () => ['other', ...(state.selected ?? [])],
+    [state.selected],
+  )
 
-  // const uniqueFailures = useMemo(
-  //   () => (query.legendItems.length ? [...query.legendItems, 'other'] : []),
-  //   [query.legendItems],
-  // )
-  // console.log('query', query)
-  // console.log('uniqueFailures', uniqueFailures)
   return (
     <div className="flex items-center relative" style={{ direction: 'ltr' }}>
       {label && <div className="w-[12.5%] overflow-hidden">{label}</div>}

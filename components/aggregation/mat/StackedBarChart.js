@@ -1,19 +1,19 @@
 import { useIntl } from 'react-intl'
 import GridChart, { prepareDataForGridChart } from './GridChart'
 import { NoCharts } from './NoCharts'
-import { useMATContext } from './MATContext'
+import { useBlockingTypes } from './BlockingTypesContext'
 
 export const StackedBarChart = ({ data, query }) => {
   const intl = useIntl()
-  const [matState] = useMATContext()
+  const { state } = useBlockingTypes()
 
   try {
     const [gridData, rows] = prepareDataForGridChart(
       data,
       query,
       intl.locale,
-      matState.includedItems,
-      matState.legendItems,
+      state.included,
+      state.selected,
     )
 
     return (

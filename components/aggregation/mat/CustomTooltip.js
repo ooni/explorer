@@ -9,6 +9,7 @@ import { useIntl } from 'react-intl'
 import { useMATContext } from './MATContext'
 import { colorMap } from './colorMap'
 import { useRouter } from 'next/router'
+import { useBlockingTypes } from './BlockingTypesContext'
 
 export const themeForInvisibleTooltip = {
   tooltip: {
@@ -108,6 +109,7 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
   const intl = useIntl()
   const [query] = useMATContext()
   const { query: routerQuery } = useRouter()
+  const { state } = useBlockingTypes()
 
   const dataKeysToShow = getKeys(routerQuery?.loni)
 
@@ -134,12 +136,12 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
       <div className="flex flex-col pr-4 my-1">
         {routerQuery?.loni === 'observations' ? (
           <>
-            {query.legendItems.map((key) => (
+            {state?.selected?.map((key) => (
               <div key={key}>
                 {!!Number(data[key] ?? 0) && (
                   <div className="flex items-center">
                     <div className="mr-4">
-                      <Chip color={query.colors[key]} />
+                      <Chip color={state.colors[key]} />
                     </div>
                     <div className="mr-8">{key}</div>
                     <div className="ml-auto">

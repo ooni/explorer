@@ -1,4 +1,5 @@
 import OONILogo from 'ooni-components/svgs/logos/OONI-HorizontalMonochrome.svg'
+import { FaEdit } from 'react-icons/fa'
 import { useIntl } from 'react-intl'
 import CountryNameLabel from './CountryNameLabel'
 import { useMATContext } from './MATContext'
@@ -7,7 +8,9 @@ import { testGroups, testNames } from '/components/test-info'
 import { useRouter } from 'next/router'
 import { blockingTypeColors } from './colorMap'
 import { colors } from 'ooni-components'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
+import { useBlockingTypes } from './BlockingTypesContext'
+import FailureForm from './FailureForm'
 
 const LegendItem = ({ label, color }) => {
   return (
@@ -130,18 +133,20 @@ const legendItemsOutcomeV5 = [
 const Legend = () => {
   const intl = useIntl()
   const { query } = useRouter()
-  const [matState] = useMATContext()
+  const { state } = useBlockingTypes()
+
+  const [showLegendEditor, setShowLegendEditor] = useState(false)
 
   const legendItemsObservations = useMemo(() => {
-    const items = matState.legendItems.map((item) => ({
+    const items = state.selected.map((item) => ({
       label: item,
-      color: matState.colors[item],
+      color: state?.colors?.[item],
     }))
-    if (matState?.colors?.other) {
-      items.push({ label: 'other', color: matState.colors.other })
+    if (state?.colors?.other) {
+      items.push({ label: 'other', color: state.colors.other })
     }
     return items
-  }, [matState.colors, matState.legendItems])
+  }, [state.colors, state.selected])
 
   const items =
     query.loni === 'detailed'
@@ -153,15 +158,31 @@ const Legend = () => {
           : legendItems
 
   return (
-    <div className="flex my-2 gap-x-2 flex-wrap">
-      {items.map((item) => (
-        <LegendItem
-          key={item.label}
-          label={intl.formatMessage({ id: item.label })}
-          color={item.color}
-        />
-      ))}
-    </div>
+    <>
+      {showLegendEditor ? (
+        <div>
+          <FailureForm afterSubmit={() => setShowLegendEditor(false)} />
+        </div>
+      ) : (
+        <div className="group flex my-2 gap-x-2 flex-wrap items-center">
+          {items.map((item) => (
+            <LegendItem
+              key={item.label}
+              label={intl.formatMessage({ id: item.label })}
+              color={item.color}
+            />
+          ))}
+          <button
+            type="button"
+            aria-label="Edit legend"
+            className="opacity-0 text-blue-500 group-hover:opacity-100 focus:opacity-100 transition-opacity duration-150"
+            onClick={() => setShowLegendEditor(true)}
+          >
+            <FaEdit size={12} />
+          </button>
+        </div>
+      )}
+    </>
   )
 }
 
@@ -197,7 +218,7 @@ export const ChartHeader = ({ options: opts }) => {
           </span>
         )}
       </div>
-      <div className="flex mb-2 justify-between text-sm">
+      <div className="flex mb-2 justify-between text-sm gap-x-2">
         {options.legend && <Legend />}
         {options.logo && <OONILogo className="opacity-50" height="32px" />}
       </div>
