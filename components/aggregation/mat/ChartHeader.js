@@ -11,6 +11,7 @@ import { colors } from 'ooni-components'
 import { useMemo, useState } from 'react'
 import { useBlockingTypes } from './BlockingTypesContext'
 import FailureForm from './FailureForm'
+import { MdClose } from 'react-icons/md'
 
 const LegendItem = ({ label, color }) => {
   return (
@@ -160,8 +161,20 @@ const Legend = () => {
   return (
     <>
       {showLegendEditor ? (
-        <div>
-          <FailureForm afterSubmit={() => setShowLegendEditor(false)} />
+        <div className="bg-gray-100 p-4 rounded-md block w-full">
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-semibold">Chart editor</span>
+            <button
+              type="button"
+              className="text-md px-2"
+              onClick={() => setShowLegendEditor(false)}
+            >
+              <MdClose />
+            </button>
+          </div>
+          <div>
+            <FailureForm afterSubmit={() => setShowLegendEditor(false)} />
+          </div>
         </div>
       ) : (
         <div className="group flex my-2 gap-x-2 flex-wrap items-center">
@@ -218,7 +231,7 @@ export const ChartHeader = ({ options: opts }) => {
           </span>
         )}
       </div>
-      <div className="flex mb-2 justify-between text-sm gap-x-2">
+      <div className="flex mb-2 justify-between text-sm gap-x-6">
         {options.legend && <Legend />}
         {options.logo && <OONILogo className="opacity-50" height="32px" />}
       </div>
