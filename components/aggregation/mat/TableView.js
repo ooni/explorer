@@ -3,7 +3,7 @@ import { useIntl } from 'react-intl'
 
 import Filters from './Filters'
 import GridChart, { prepareDataForGridChart } from './GridChart'
-import { useMATContext } from './MATContext'
+import { useBlockingTypes } from './BlockingTypesContext'
 
 const COUNT_KEYS_CONFIG = {
   outcome: ['outcome_blocked', 'outcome_down', 'outcome_ok'],
@@ -37,9 +37,10 @@ const DEFAULT_ROW_TEMPLATE = {
   },
 }
 
-const getCountKeys = (query) => {
+const getCountKeys = (query, selectedItems) => {
   if (query.loni === 'outcome') return COUNT_KEYS_CONFIG.outcome
   if (query.loni === 'detailed') return COUNT_KEYS_CONFIG.detailed
+  if (query.loni === 'observations') return selectedItems
   return COUNT_KEYS_CONFIG.default
 }
 
@@ -52,7 +53,10 @@ const createRowTemplate = (key, rowLabel, axisY) => ({
 
 // aggregate counts for a single row
 const aggregateRowCounts = (rowData, countKeys) => {
-  const aggregatedRow = { ...DEFAULT_ROW_TEMPLATE }
+  const aggregatedRow = countKeys.reduce(
+    (acc, countKey) => ({ ...acc, [countKey]: 0 }),
+    {},
+  )
 
   for (const dataPoint of rowData) {
     for (const countKey of countKeys) {
@@ -64,10 +68,18 @@ const aggregateRowCounts = (rowData, countKeys) => {
 }
 
 const processRow = (key, rowData, rowLabels, query, countKeys) => {
+  // console.log(
+  //   'key, rowData, rowLabels, query, countKeys',
+  //   key,
+  //   rowData,
+  //   rowLabels,
+  //   query,
+  //   countKeys,
+  // )
   const rowLabel = rowLabels[key]
   const baseRow = createRowTemplate(key, rowLabel, query.axis_y)
   const aggregatedCounts = aggregateRowCounts(rowData, countKeys)
-
+  // console.log('aggregatedCounts', aggregatedCounts)
   return {
     ...baseRow,
     ...aggregatedCounts,
@@ -90,7 +102,7 @@ const prepareDataforTable = (
   )
 
   // Determine which count keys to use
-  const countKeys = getCountKeys(query)
+  const countKeys = getCountKeys(query, selectedItems)
 
   // Process each row and build the table
   const table = Array.from(reshapedData, ([key, rowData]) =>
@@ -106,7 +118,7 @@ const noRowsSelected = null
 
 const TableView = ({ data, query, showFilters = true }) => {
   const intl = useIntl()
-  const [matState] = useMATContext()
+  const { state } = useBlockingTypes()
 
   // The incoming data is reshaped to generate:
   // - reshapedData: holds the full set that will be used by GridChart
@@ -120,31 +132,33 @@ const TableView = ({ data, query, showFilters = true }) => {
         data,
         query,
         intl.locale,
-        matState.includedItems,
-        matState.legendItems,
+        state.included,
+        state.selected,
       )
     } catch (e) {
       return [null, [], [], {}]
     }
-  }, [query, data, matState, intl.locale])
+  }, [query, data, intl.locale, state.included, state.selected])
 
   const [dataForCharts, setDataForCharts] = useState(noRowsSelected)
 
   return (
     <div className="flex flex-col">
-      {showFilters && (
-        <Filters
-          query={query}
-          data={tableData}
-          setDataForCharts={setDataForCharts}
-        />
-      )}
       <GridChart
         data={reshapedData}
         selectedRows={dataForCharts}
         rowKeys={rowKeys}
         rowLabels={rowLabels}
       />
+      {showFilters && (
+        <div className="mt-8">
+          <Filters
+            query={query}
+            data={tableData}
+            setDataForCharts={setDataForCharts}
+          />
+        </div>
+      )}
     </div>
   )
 }
