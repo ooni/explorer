@@ -149,11 +149,19 @@ const Legend = () => {
     return items
   }, [state.colors, state.selected])
 
+  const legendItemsOutcome = useMemo(() => {
+    const items = state.selected.map((item) => ({
+      label: item,
+      color: state?.colors?.[item],
+    }))
+    return items
+  }, [state.colors, state.selected])
+
   const items =
     query.loni === 'detailed'
       ? legendItemsDetailedV5()
       : query.loni === 'outcome'
-        ? legendItemsOutcomeV5
+        ? legendItemsOutcome
         : query.loni === 'observations'
           ? legendItemsObservations
           : legendItems
@@ -181,7 +189,9 @@ const Legend = () => {
           {items.map((item) => (
             <LegendItem
               key={item.label}
-              label={intl.formatMessage({ id: item.label })}
+              label={
+                item.label ? intl.formatMessage({ id: item.label }) : item.label
+              }
               color={item.color}
             />
           ))}

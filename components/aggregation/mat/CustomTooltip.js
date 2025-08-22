@@ -92,7 +92,7 @@ export const generateSearchQuery = (data, query) => {
 }
 
 const keys = ['anomaly_count', 'confirmed_count', 'failure_count', 'ok_count']
-const v5keys = ['outcome_blocked', 'outcome_down', 'outcome_ok']
+const v5keys = []
 
 const getKeys = (loni) => {
   if (loni === 'detailed') {
@@ -158,8 +158,24 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
               <>
                 <div>
                   Outcome:{' '}
-                  <span className="font-semibold">{data.outcome_label}</span>
+                  <span className="font-semibold">
+                    {data.blocked_max_outcome}
+                  </span>
                 </div>
+                {data?.likely_blocked_protocols && (
+                  <div>
+                    Likely blocked protocols:{' '}
+                    <ul>
+                      {data?.likely_blocked_protocols.map(
+                        ([protocol, value]) => (
+                          <li key={protocol}>
+                            {protocol}: {value}
+                          </li>
+                        ),
+                      )}
+                    </ul>
+                  </div>
+                )}
                 <div>
                   Observation count:{' '}
                   <span className="font-semibold">{data.count}</span>

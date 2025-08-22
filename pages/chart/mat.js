@@ -85,7 +85,7 @@ const MeasurementAggregationToolkit = () => {
           </h5>
           <Form onSubmit={onSubmit} query={router.query} />
           <MATChart query={query} />
-          {linkToAPIQuery && (
+          {/* {linkToAPIQuery && (
             <div className="flex mt-4 justify-start md:justify-end">
               <a
                 className="flex items-center"
@@ -108,8 +108,8 @@ const MeasurementAggregationToolkit = () => {
                 <FaExternalLinkAlt className="ml-1" />
               </a>
             </div>
-          )}
-          <div className="my-8">
+          )} */}
+          <div>
             <Help />
           </div>
         </div>

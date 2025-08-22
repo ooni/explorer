@@ -122,7 +122,7 @@ const Line = (props) => {
 }
 
 const keys = ['anomaly_count', 'confirmed_count', 'failure_count', 'ok_count']
-const v5keys = ['outcome_blocked', 'outcome_down', 'outcome_ok']
+const v5keys = ['blocked_max']
 const loniKeys = ['dns_isp', 'dns_other', 'tls', 'tcp']
 
 const getKeys = (loni, observationKeys) => {
@@ -139,8 +139,9 @@ const getKeys = (loni, observationKeys) => {
 }
 
 const colorFunc = (d, query, state) => {
-  // console.log('d', state?.colors && query?.loni === 'observations')
   if (state?.colors && query?.loni === 'observations') return state.colors[d.id]
+  if (state?.colors && query?.loni === 'outcome')
+    return state.colors[d.data.blocked_max_outcome]
   if (query?.loni === 'detailed' && d?.data?.outcome_label) {
     const label = d.data.outcome_label
     const blockingType = label.split('.')[0]
@@ -319,7 +320,6 @@ const RowChart = ({
   }, [data])
 
   const chartProps = useMemo(() => {
-    console.log('state', state)
     return label === undefined
       ? chartProps1D(query, intl, state)
       : chartProps2D(query, intl, state)

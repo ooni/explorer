@@ -78,7 +78,10 @@ const prepareDetailedData = (data, query) => {
       ...item,
       count: item.count,
       measurement_start_day: item.measurement_start_day.split('T')[0],
-      // ...item.loni,
+      blocked_max: item.loni.blocked_max,
+      blocked_max_label: item.loni.blocked_max_label,
+      blocked_max_outcome: item.loni.blocked_max_outcome,
+      likely_blocked_protocols: item.loni.likely_blocked_protocols,
       dns_isp: item.count ? 1 : 0,
       dns_other: item.count ? 1 : 0,
       tls: item.count ? 1 : 0,
@@ -154,7 +157,7 @@ export const prepareDataForGridChart = (
         : query?.loni === 'outcome'
           ? prepareDetailedData(initialData, query)
           : initialData
-
+  console.log('====data', data)
   const rows = []
   const rowLabels = {}
   const reshapedData = {}

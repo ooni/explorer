@@ -59,11 +59,14 @@ export const DetailsBox = ({
           />
         </div>
       )}
-      {isOpen && (
-        <div className="p-4 flex-wrap overflow-x-auto text-sm">
-          {content || children}
-        </div>
-      )}
+      <div
+        className={twMerge(
+          'p-4 flex-wrap overflow-x-auto text-sm',
+          isOpen ? 'block' : 'hidden',
+        )}
+      >
+        {content || children}
+      </div>
     </div>
   )
 }

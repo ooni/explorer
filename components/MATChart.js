@@ -111,6 +111,10 @@ const getSortedBlockingTypes = (OGdata) => {
     .map(([key]) => key)
 }
 
+const getOutcomeBlockingTypes = (data) => {
+  return [...new Set(data.map((item) => item.loni.blocked_max_outcome))]
+}
+
 const MATChart = ({ query, showFilters = true }) => {
   const { data, error, isValidating } = useSWR(
     query ? query : null,
@@ -127,9 +131,11 @@ const MATChart = ({ query, showFilters = true }) => {
     if (query.loni === 'observations') {
       return getSortedBlockingTypes(results)
     }
+    if (query.loni === 'outcome') {
+      return getOutcomeBlockingTypes(results)
+    }
     return []
   }, [results, query])
-  console.log('allBlockingTypes', allBlockingTypes)
 
   return (
     <>

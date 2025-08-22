@@ -80,6 +80,7 @@ export function fillRowHoles(data, query, locale) {
       tcp: 0,
       dns_isp: 0,
       dns_other: 0,
+      blocked_max: 0,
       outcome_label: null,
       loni: {
         dns_isp: {
