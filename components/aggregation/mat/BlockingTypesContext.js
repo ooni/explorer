@@ -84,7 +84,7 @@ export function BlockingTypesProvider({ allBlockingTypes = [], children }) {
     included: allBlockingTypes,
     colors: chartColors(getSelected(allBlockingTypes)),
   }
-  console.log('initialState', initialState)
+
   const [state, dispatch] = useReducer(reducer, initialState)
 
   useEffect(() => {

@@ -68,18 +68,9 @@ const aggregateRowCounts = (rowData, countKeys) => {
 }
 
 const processRow = (key, rowData, rowLabels, query, countKeys) => {
-  // console.log(
-  //   'key, rowData, rowLabels, query, countKeys',
-  //   key,
-  //   rowData,
-  //   rowLabels,
-  //   query,
-  //   countKeys,
-  // )
   const rowLabel = rowLabels[key]
   const baseRow = createRowTemplate(key, rowLabel, query.axis_y)
   const aggregatedCounts = aggregateRowCounts(rowData, countKeys)
-  // console.log('aggregatedCounts', aggregatedCounts)
   return {
     ...baseRow,
     ...aggregatedCounts,

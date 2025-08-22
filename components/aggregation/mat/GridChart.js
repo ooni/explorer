@@ -157,7 +157,7 @@ export const prepareDataForGridChart = (
         : query?.loni === 'outcome'
           ? prepareDetailedData(initialData, query)
           : initialData
-  console.log('====data', data)
+
   const rows = []
   const rowLabels = {}
   const reshapedData = {}
