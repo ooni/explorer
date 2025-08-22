@@ -166,7 +166,7 @@ const FailureForm = ({ afterSubmit }) => {
             <tr className="border-b-2 border-gray-300">
               <th className="text-left p-2 w-24">Include in the chart</th>
               <th className="text-left p-2 w-24">Show as "other"</th>
-              <th className="text-left p-2">Blocking type</th>
+              <th className="text-left p-2">Failure type</th>
             </tr>
             <tr className="border-b border-gray-200">
               <td className="p-2">

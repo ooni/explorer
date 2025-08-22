@@ -177,7 +177,7 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
                   </div>
                 )}
                 <div>
-                  Observation count:{' '}
+                  Measurement count:{' '}
                   <span className="font-semibold">{data.count}</span>
                 </div>
                 {routerQuery?.loni === 'outcome' && (
