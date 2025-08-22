@@ -4,14 +4,18 @@ import { createContext, useReducer, useContext, useMemo } from 'react'
 import { useEffect } from 'react'
 
 const ooniColors = [
-  colors.red['800'],
+  colors.red['800'], // #d62728
   colors.yellow['600'],
   colors.gray['600'],
-  colors.blue['600'],
-  colors.orange['600'],
+  colors.blue['600'], // #1f76b4
+  colors.orange['600'], // #ff7e0e
   colors.fuchsia['600'],
-  colors.pink['600'],
+  colors.pink['600'], // #e377c2
   colors.teal['600'],
+  '#9467bd', //violet
+  '#8c564b', //brown
+  '#bcbd22', //light blue
+  '#17becf', //green
 ]
 
 const chartColors = (selectedBlockingTypes) =>

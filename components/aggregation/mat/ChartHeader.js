@@ -243,7 +243,11 @@ export const ChartHeader = ({ options: opts }) => {
       </div>
       <div className="flex mb-2 justify-between text-sm gap-x-6">
         {options.legend && <Legend />}
-        {options.logo && <OONILogo className="opacity-50" height="32px" />}
+        {options.logo && (
+          <div>
+            <OONILogo className="opacity-50" height="32px" />
+          </div>
+        )}
       </div>
     </>
   )
