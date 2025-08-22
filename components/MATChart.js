@@ -30,9 +30,9 @@ const fetcher = (query) => {
           ? '&group_by=timestamp'
           : `&group_by=${v5qs.axis_x}`
       const axisY = v5qs.axis_y ? `&group_by=${v5qs.axis_y}` : ''
-      reqUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation/observations?group_by=failure${axisX}${axisY}&${new URLSearchParams(v5qs).toString()}`
+      reqUrl = `https://api.dev.ooni.io/api/v1/aggregation/observations?group_by=failure${axisX}${axisY}&${new URLSearchParams(v5qs).toString()}`
     } else {
-      reqUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation/analysis?${new URLSearchParams(v5qs).toString()}`
+      reqUrl = `https://api.dev.ooni.io/api/v1/aggregation/analysis?${new URLSearchParams(v5qs).toString()}`
     }
   }
   console.debug(`API Query: ${reqUrl}`)
