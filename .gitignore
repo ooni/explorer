@@ -11,6 +11,14 @@ cypress/screenshots
 .yalc
 yalc.lock
 .lostpixel
+.tool-versions
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/sdks
+!.yarn/versions
 
 # Sentry Config File
 .sentryclirc

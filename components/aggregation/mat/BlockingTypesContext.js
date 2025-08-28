@@ -2,6 +2,7 @@
 import { colors } from 'ooni-components'
 import { createContext, useReducer, useContext, useMemo } from 'react'
 import { useEffect } from 'react'
+import { useRouter } from 'next/router'
 
 const ooniColors = [
   colors.red['800'], // #d62728
@@ -49,15 +50,16 @@ const getSelected = (allBlockingTypes) =>
 function reducer(state, action) {
   switch (action.type) {
     case 'initFromData': {
-      const all = action.payload // ordered list
+      //   const all = action.payload // ordered list
       return {
-        ...state,
-        all,
-        selected: getSelected(all),
-        included: all,
-        colors: action.payload.length
-          ? chartColors(getSelected(action.payload))
-          : null,
+        ...action.payload,
+        // ...state,
+        // all,
+        // selected: getSelected(all),
+        // included: all,
+        // colors: action.payload.length
+        //   ? chartColors(getSelected(action.payload))
+        //   : null,
       }
     }
     case 'setIncluded':
@@ -78,12 +80,26 @@ function reducer(state, action) {
 const Ctx = createContext(null)
 
 export function BlockingTypesProvider({ allBlockingTypes = [], children }) {
-  const initialState = {
-    all: allBlockingTypes,
-    selected: getSelected(allBlockingTypes),
-    included: allBlockingTypes,
-    colors: chartColors(getSelected(allBlockingTypes)),
-  }
+  const router = useRouter()
+  //   console.log('router', router.query?.loni)
+  //   console.log('allBlockingTypes', allBlockingTypes)
+  const selected = useMemo(
+    () =>
+      router.query?.loni === 'observations'
+        ? getSelected(allBlockingTypes)
+        : allBlockingTypes,
+    [allBlockingTypes, router.query],
+  )
+  console.log('selected', selected)
+  const initialState = useMemo(
+    () => ({
+      all: allBlockingTypes,
+      selected,
+      included: allBlockingTypes,
+      colors: chartColors(selected),
+    }),
+    [allBlockingTypes, selected],
+  )
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
@@ -91,9 +107,9 @@ export function BlockingTypesProvider({ allBlockingTypes = [], children }) {
     if (!allBlockingTypes?.length) {
       dispatch({ type: 'reset' })
     } else {
-      dispatch({ type: 'initFromData', payload: allBlockingTypes })
+      dispatch({ type: 'initFromData', payload: initialState })
     }
-  }, [allBlockingTypes])
+  }, [allBlockingTypes, initialState])
 
   const value = useMemo(() => ({ state, dispatch }), [state])
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>

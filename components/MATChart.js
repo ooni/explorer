@@ -112,7 +112,13 @@ const getSortedBlockingTypes = (OGdata) => {
 }
 
 const getOutcomeBlockingTypes = (data) => {
-  return [...new Set(data.map((item) => item.loni.blocked_max_outcome))]
+  return [
+    ...new Set(
+      data
+        .map((item) => item.loni.blocked_max_outcome)
+        .filter((item) => item !== 'none'),
+    ),
+  ]
 }
 
 const MATChart = ({ query, showFilters = true }) => {
