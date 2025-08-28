@@ -169,7 +169,7 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
                       {data?.likely_blocked_protocols.map(
                         ([protocol, value]) => (
                           <li key={protocol}>
-                            {protocol}: {value}
+                            {protocol}: {Math.floor(value * 100) / 100}
                           </li>
                         ),
                       )}
