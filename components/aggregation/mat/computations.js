@@ -69,7 +69,9 @@ export function fillRowHoles(data, query, locale) {
     newData.splice([...domain].indexOf(col), 0, {
       // ...sampleDataPoint,
       [query.axis_x]: col,
-      [query.axis_y]: sampleDataPoint[query.axis_y],
+      ...(query?.axis_y
+        ? { [query.axis_y]: sampleDataPoint[query.axis_y] }
+        : {}),
       anomaly_count: 0,
       confirmed_count: 0,
       failure_count: 0,
