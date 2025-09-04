@@ -6,8 +6,8 @@ import GridChart, { prepareDataForGridChart } from './GridChart'
 import { useBlockingTypes } from './BlockingTypesContext'
 
 const COUNT_KEYS_CONFIG = {
-  outcome: ['outcome_blocked', 'outcome_down', 'outcome_ok'],
-  detailed: ['dns_isp_blocked', 'dns_isp_down', 'dns_isp_ok'],
+  // outcome: ['outcome_blocked', 'outcome_down', 'outcome_ok'],
+  // detailed: ['dns_isp_blocked', 'dns_isp_down', 'dns_isp_ok'],
   default: [
     'anomaly_count',
     'confirmed_count',
@@ -21,9 +21,6 @@ const DEFAULT_ROW_TEMPLATE = {
   confirmed_count: 0,
   failure_count: 0,
   measurement_count: 0,
-  outcome_blocked: 0,
-  outcome_down: 0,
-  outcome_ok: 0,
   dns_isp: 0,
   dns_other: 0,
   tls: 0,
@@ -38,7 +35,7 @@ const DEFAULT_ROW_TEMPLATE = {
 }
 
 const getCountKeys = (query, selectedItems) => {
-  if (query.loni === 'outcome') return COUNT_KEYS_CONFIG.outcome
+  // if (query.loni === 'outcome') return COUNT_KEYS_CONFIG.outcome
   // if (query.loni === 'detailed') return COUNT_KEYS_CONFIG.detailed
   if (query.loni === 'observations') return selectedItems
   return COUNT_KEYS_CONFIG.default
