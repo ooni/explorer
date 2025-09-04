@@ -3,6 +3,7 @@ import { DetailsBox } from 'components/measurement/DetailsBox'
 import { getCategoryCodesMap } from 'components/utils/categoryCodes'
 import { MdHelp } from 'react-icons/md'
 import { FormattedMessage } from 'react-intl'
+import { useRouter } from 'next/router'
 
 const boxTitle = (
   <div className="flex items-center">
@@ -14,6 +15,21 @@ const boxTitle = (
 )
 
 const Help = () => {
+  const router = useRouter()
+  const redirectToOutcomeChart = () => {
+    router.push({
+      pathname: '/chart/mat',
+      query: { ...router.query, loni: 'outcome' },
+    })
+  }
+
+  const redirectToObservationsChart = () => {
+    router.push({
+      pathname: '/chart/mat',
+      query: { ...router.query, loni: 'observations' },
+    })
+  }
+
   return (
     <DetailsBox title={boxTitle}>
       <FormattedMarkdown id="MAT.Help.Content" />
@@ -34,6 +50,20 @@ const Help = () => {
           ),
         )}
       </div>
+      <button
+        onClick={() => redirectToOutcomeChart()}
+        type="button"
+        className="block mt-4 mb-2 text-blue-500"
+      >
+        Pipeline v5 Analysis Chart
+      </button>
+      <button
+        onClick={() => redirectToObservationsChart()}
+        type="button"
+        className="block text-blue-500"
+      >
+        Pipeline v5 Observations Chart
+      </button>
     </DetailsBox>
   )
 }

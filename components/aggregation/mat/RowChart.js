@@ -28,15 +28,22 @@ import { Axes } from '@nivo/axes'
 import { colors } from 'ooni-components'
 import { useBlockingTypes } from './BlockingTypesContext'
 
+const chartMargins = { top: 5, right: 50, bottom: 5, left: 0 }
+
 const lineColor = colors.gray['700']
 
 const Line = (props) => {
   const { bars, xScale, innerWidth, innerHeight, tooltip } = props
 
-  const uniqBars = bars.filter(
-    (bar, index, self) =>
-      index === self.findIndex((b) => b.data.index === bar.data.index),
-  )
+  const uniqBars = bars
+  // .filter(
+  //   (bar, index, self) =>
+  //     index === self.findIndex((b) => b.data.index === bar.data.index),
+  // )
+  const maxValue = Math.max(...uniqBars.map((bar) => bar.data.data.count || 0))
+  const roundedMaxValue = maxValue // Math.ceil(maxValue / 10) * 10
+  const midValue = Math.ceil(roundedMaxValue / 2)
+  const tickValues = [0, midValue, roundedMaxValue]
 
   const scale = computeXYScalesForSeries(
     [
@@ -56,9 +63,10 @@ const Line = (props) => {
 
   const lineGenerator = line()
     .x((bar) => {
-      return bar.data.id === 'dns_isp' // this is true for detailed chart, where dns_isp is first bar in the group
-        ? bar.x + (4 * bar.width) / 2
-        : bar.x + bar.width / 2
+      return bar.x + bar.width / 2
+      // bar.data.id === 'dns_isp' // this is true for detailed chart, where dns_isp is first bar in the group
+      //   ? bar.x + (4 * bar.width) / 2
+      //   : bar.x + bar.width / 2
     })
     .y((bar) => {
       return scale.yScale(bar.data.data.count || 0)
@@ -66,22 +74,25 @@ const Line = (props) => {
 
   return (
     <>
-      {innerHeight > 70 && (
-        <Axes
-          yScale={scale.yScale}
-          xScale={xScale}
-          width={innerWidth}
-          height={innerHeight}
-          right={{
-            ticksPosition: 'after',
-            tickSize: 5,
-            tickPadding: 5,
-            tickRotation: 0,
-            tickOffset: 10,
-            // tickValues: 2,
-          }}
-        />
-      )}
+      {/* {innerHeight > 70 && ( */}
+      <Axes
+        yScale={scale.yScale}
+        xScale={xScale}
+        width={innerWidth}
+        height={innerHeight}
+        right={{
+          ticksPosition: 'after',
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0,
+          tickOffset: 10,
+          tickValues: innerHeight < 70 ? tickValues : undefined,
+          legendPosition: 'middle',
+          legendOffset: 68,
+          legend: innerHeight > 70 ? 'Measurement count' : undefined,
+        }}
+      />
+      {/* )} */}
 
       <path
         d={lineGenerator(uniqBars)}
@@ -104,19 +115,6 @@ const Line = (props) => {
           style={{ pointerEvents: 'none' }}
         />
       ))}
-      {/* {bars.map((bar, idx) => (
-        <rect
-          key={bar.key}
-          x={bar.x}
-          y={0}
-          height={innerHeight}
-          width={bar.width}
-          fill="transparent"
-          // onMouseEnter={(e) => renderTip(e, idx)}
-          // onMouseMove={(e) => renderTip(e, idx)}
-          // onMouseLeave={tip.hideTooltip}
-        />
-      ))} */}
     </>
   )
 }
@@ -126,9 +124,9 @@ const v5keys = ['blocked_max']
 const loniKeys = ['dns_isp', 'dns_other', 'tls', 'tcp']
 
 const getKeys = (loni, observationKeys) => {
-  if (loni === 'detailed') {
-    return loniKeys
-  }
+  // if (loni === 'detailed') {
+  //   return loniKeys
+  // }
   if (loni === 'outcome') {
     return v5keys
   }
@@ -142,34 +140,32 @@ const colorFunc = (d, query, state) => {
   if (state?.colors && query?.loni === 'observations') return state.colors[d.id]
   if (state?.colors && query?.loni === 'outcome')
     return state.colors[d.data.blocked_max_outcome]
-  if (query?.loni === 'detailed' && d?.data?.outcome_label) {
-    const label = d.data.outcome_label
-    const blockingType = label.split('.')[0]
+  //   if (query?.loni === 'detailed' && d?.data?.outcome_label) {
+  //     const label = d.data.outcome_label
+  //     const blockingType = label.split('.')[0]
 
-    if (blockingType === 'ok') {
-      if (d.id === 'outcome_blocked') return colorMap.confirmed_count
-      if (d.id === 'outcome_down') return colorMap.anomaly_count
-      return colorMap.ok_count
-    }
-    if (d.id === 'outcome_blocked') {
-      return colorMap[`${blockingType}.blocked`] || colorMap.failure_count
-    }
+  //     if (blockingType === 'ok') {
+  //       if (d.id === 'outcome_blocked') return colorMap.confirmed_count
+  //       if (d.id === 'outcome_down') return colorMap.anomaly_count
+  //       return colorMap.ok_count
+  //     }
+  //     if (d.id === 'outcome_blocked') {
+  //       return colorMap[`${blockingType}.blocked`] || colorMap.failure_count
+  //     }
 
-    if (d.id === 'outcome_down') {
-      return colorMap[`${blockingType}.down`] || colorMap.anomaly_count
-    }
-  }
+  //     if (d.id === 'outcome_down') {
+  //       return colorMap[`${blockingType}.down`] || colorMap.anomaly_count
+  //     }
+  //   }
   return colorMap[d.id] || '#ccc'
 }
 
 const baseLayers = ['grid', 'axes', 'bars']
 const barLayers = (query) => {
-  return query?.loni === 'outcome' || query?.loni === 'detailed'
-    ? [...baseLayers, Line]
+  return query?.loni === 'outcome' //|| query?.loni === 'detailed'
+    ? ['grid', 'axes', 'markers', 'bars', Line]
     : baseLayers
 }
-
-export const chartMargins = { top: 4, right: 50, bottom: 4, left: 0 }
 
 const formatXAxisValues = (value, query, intl) => {
   if (query.axis_x === 'measurement_start_day' && Date.parse(value)) {
@@ -195,9 +191,9 @@ const chartProps1D = (query, intl, state) => ({
   },
   margin: {
     top: 30,
-    right: 70,
+    right: 76,
     bottom: 80,
-    left: 70,
+    left: 42,
   },
   padding: 0.3,
   borderColor: { from: 'color', modifiers: [['darker', 1.6]] },
@@ -223,7 +219,9 @@ const chartProps1D = (query, intl, state) => ({
     tickPadding: 5,
     tickRotation: 0,
     legendPosition: 'middle',
-    legendOffset: -60,
+    legendOffset: -36,
+    tickValues: query?.loni === 'outcome' ? 3 : undefined,
+    legend: query?.loni === 'outcome' ? 'Analysis outcome' : undefined,
   },
   labelSkipWidth: 80,
   labelSkipHeight: 20,
@@ -243,12 +241,22 @@ const chartProps2D = (query, intl, state) => ({
   borderColor: { from: 'color', modifiers: [['darker', 1.6]] },
   colors: (data) => colorFunc(data, query, state),
   axisTop: null,
-  axisRight: {
-    enable: true,
-    tickSize: 5,
-    tickPadding: 5,
-    tickValues: 2,
-  },
+  ...(query?.loni !== 'outcome'
+    ? {
+        axisRight: {
+          enable: true,
+          tickSize: 5,
+          tickPadding: 5,
+          tickValues: 2,
+        },
+      }
+    : {}),
+  // axisRight: {
+  //   enable: true,
+  //   tickSize: 5,
+  //   tickPadding: 5,
+  //   tickValues: 2,
+  // },
   axisBottom: null,
   axisLeft: null,
   enableGridX: true,
@@ -329,6 +337,15 @@ const RowChart = ({
     () => ['other', ...(state.selected ?? [])],
     [state.selected],
   )
+  const theme = useMemo(() => {
+    if (routerQuery?.loni === 'outcome') {
+      return {
+        ...themeForInvisibleTooltip,
+        axis: { ticks: { text: { fontSize: 10 } } },
+      }
+    }
+    return themeForInvisibleTooltip
+  }, [routerQuery?.loni])
 
   return (
     <div className="flex items-center relative" style={{ direction: 'ltr' }}>
@@ -340,46 +357,46 @@ const RowChart = ({
           indexBy={indexBy}
           tooltip={InvisibleTooltip}
           onClick={handleClick}
-          barComponent={
-            routerQuery?.loni && routerQuery?.loni === 'detailed'
-              ? CustomStackedBarItem
-              : CustomBarItem
-          }
-          groupMode={
-            routerQuery?.loni && routerQuery?.loni === 'detailed'
-              ? 'grouped'
-              : 'stacked'
-          }
-          theme={themeForInvisibleTooltip}
+          // routerQuery?.loni && routerQuery?.loni === 'detailed'
+          //   ? CustomStackedBarItem
+          //   : CustomBarItem
+          barComponent={CustomBarItem}
+          // routerQuery?.loni && routerQuery?.loni === 'detailed'
+          //   ? 'grouped'
+          //   : 'stacked'
+          groupMode={'stacked'}
+          theme={theme}
           // HACK: To show the tooltip, we hijack the
           // `enableLabel` prop to pass in the tooltip coordinates (row, col_index) from `GridChart`
           // `showTooltip` contains `[rowHasTooltip, columnwithTooltip]` e.g `[true, '2022-02-01']`
           enableLabel={tooltipIndex[0] === rowIndex ? tooltipIndex[1] : false}
+          valueScale={{
+            type: 'linear',
+            ...(routerQuery?.loni && routerQuery?.loni === 'outcome'
+              ? { min: 0, max: 1 }
+              : { min: 0, max: 'auto' }),
+          }}
+          gridYValues={
+            routerQuery?.loni && routerQuery?.loni === 'outcome'
+              ? [0, 0.5, 1]
+              : undefined
+          }
+          markers={[
+            {
+              axis: 'y',
+              value: 0.5,
+              lineStyle: {
+                stroke: colors.gray['400'],
+                strokeWidth: 2,
+              },
+              legendOrientation: 'vertical',
+            },
+          ]}
           {...chartProps}
         />
       </div>
     </div>
   )
 }
-
-RowChart.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      anomaly_count: PropTypes.number,
-      confirmed_count: PropTypes.number,
-      failure_count: PropTypes.number,
-      input: PropTypes.string,
-      measurement_count: PropTypes.number,
-      measurement_start_day: PropTypes.string,
-      ok_count: PropTypes.number,
-    }),
-  ),
-  height: PropTypes.number,
-  indexBy: PropTypes.string,
-  label: PropTypes.node,
-  rowIndex: PropTypes.number,
-}
-
-RowChart.displayName = 'RowChart'
 
 export default memo(RowChart)

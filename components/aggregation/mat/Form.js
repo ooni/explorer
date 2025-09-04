@@ -120,7 +120,6 @@ const defaultDefaultValues = {
   axis_y: '',
   time_grain: 'day',
   ooni_run_link_id: '',
-  // v5: false,
   loni: '',
 }
 
@@ -134,7 +133,6 @@ export const Form = ({ onSubmit, query }) => {
       Object.assign({}, defaultDefaultValues, {
         ...query,
         axis_x: query?.axis_x || '',
-        // v5: !!query?.loni,
       }),
     [query],
   )
@@ -321,7 +319,7 @@ export const Form = ({ onSubmit, query }) => {
         render={({ field }) => (
           <Select {...field} label="loni">
             <option value="">old pipeline</option>
-            {['outcome', 'detailed', 'observations'].map((c) => (
+            {['outcome', 'observations'].map((c) => (
               <option key={c} value={c}>
                 {c}
               </option>

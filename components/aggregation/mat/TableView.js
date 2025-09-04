@@ -39,7 +39,7 @@ const DEFAULT_ROW_TEMPLATE = {
 
 const getCountKeys = (query, selectedItems) => {
   if (query.loni === 'outcome') return COUNT_KEYS_CONFIG.outcome
-  if (query.loni === 'detailed') return COUNT_KEYS_CONFIG.detailed
+  // if (query.loni === 'detailed') return COUNT_KEYS_CONFIG.detailed
   if (query.loni === 'observations') return selectedItems
   return COUNT_KEYS_CONFIG.default
 }

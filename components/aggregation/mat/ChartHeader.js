@@ -136,6 +136,10 @@ const Legend = () => {
   const { query } = useRouter()
   const { state } = useBlockingTypes()
 
+  const showEditorButton = useMemo(
+    () => query.loni === 'observations',
+    [query.loni],
+  )
   const [showLegendEditor, setShowLegendEditor] = useState(false)
 
   const legendItemsObservations = useMemo(() => {
@@ -158,13 +162,14 @@ const Legend = () => {
   }, [state.colors, state.selected])
 
   const items =
-    query.loni === 'detailed'
-      ? legendItemsDetailedV5()
-      : query.loni === 'outcome'
-        ? legendItemsOutcome
-        : query.loni === 'observations'
-          ? legendItemsObservations
-          : legendItems
+    // query.loni === 'detailed'
+    //   ? legendItemsDetailedV5()
+    //   :
+    query.loni === 'outcome'
+      ? legendItemsOutcome
+      : query.loni === 'observations'
+        ? legendItemsObservations
+        : legendItems
 
   return (
     <>
@@ -195,14 +200,16 @@ const Legend = () => {
               color={item.color}
             />
           ))}
-          <button
-            type="button"
-            aria-label="Edit legend"
-            className="opacity-0 text-blue-500 group-hover:opacity-100 focus:opacity-100 transition-opacity duration-150"
-            onClick={() => setShowLegendEditor(true)}
-          >
-            <FaEdit size={12} />
-          </button>
+          {showEditorButton && (
+            <button
+              type="button"
+              aria-label="Edit legend"
+              className="opacity-0 text-blue-500 group-hover:opacity-100 focus:opacity-100 transition-opacity duration-150"
+              onClick={() => setShowLegendEditor(true)}
+            >
+              <FaEdit size={12} />
+            </button>
+          )}
         </div>
       )}
     </>
