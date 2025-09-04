@@ -64,9 +64,12 @@ export function fillRowHoles(data, query, locale) {
   for (const col of missingCols) {
     // use any (first) column data to popuplate yAxis value e.g `input` | `probe_cc`
     // and then overwrite with zero-data for that missing date
+    // console.log('col', col)
+
     newData.splice([...domain].indexOf(col), 0, {
-      ...sampleDataPoint,
+      // ...sampleDataPoint,
       [query.axis_x]: col,
+      [query.axis_y]: sampleDataPoint[query.axis_y],
       anomaly_count: 0,
       confirmed_count: 0,
       failure_count: 0,
@@ -81,6 +84,9 @@ export function fillRowHoles(data, query, locale) {
       dns_isp: 0,
       dns_other: 0,
       blocked_max: 0,
+      blocked_max_outcome: null,
+      blocked_max_label: null,
+      likely_blocked_protocols: [],
       outcome_label: null,
       loni: {
         dns_isp: {
