@@ -120,7 +120,7 @@ const defaultDefaultValues = {
   axis_y: '',
   time_grain: 'day',
   ooni_run_link_id: '',
-  loni: '',
+  // loni: '',
 }
 
 export const Form = ({ onSubmit, query }) => {
@@ -315,7 +315,7 @@ export const Form = ({ onSubmit, query }) => {
         control={control}
       /> */}
 
-      <Controller
+      {/* <Controller
         render={({ field }) => (
           <Select {...field} label="loni">
             <option value="">old pipeline</option>
@@ -328,7 +328,7 @@ export const Form = ({ onSubmit, query }) => {
         )}
         name="loni"
         control={control}
-      />
+      /> */}
 
       <div className="flex items-center flex-row flex-wrap gap-4 my-2">
         <div className="w-full sm:w-5/12 md:w-3/12 lg:w-2/12">

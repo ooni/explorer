@@ -90,6 +90,7 @@ const Line = (props) => {
           legendPosition: 'middle',
           legendOffset: 68,
           legend: innerHeight > 70 ? 'Measurement count' : undefined,
+          format: (e) => (Math.floor(e) === e ? e : ''),
         }}
       />
       {/* )} */}
@@ -222,6 +223,9 @@ const chartProps1D = (query, intl, state) => ({
     legendOffset: -36,
     tickValues: query?.loni === 'outcome' ? 3 : undefined,
     legend: query?.loni === 'outcome' ? 'Analysis outcome' : undefined,
+    ...(query?.loni !== 'outcome'
+      ? { format: (e) => (Math.floor(e) === e ? e : '') }
+      : {}),
   },
   labelSkipWidth: 80,
   labelSkipHeight: 20,
