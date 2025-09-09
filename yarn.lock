@@ -1744,23 +1744,6 @@
     react-virtualized-auto-sizer "^1.0.26"
     use-debounce "^10.0.4"
 
-"@nivo/funnel@^0.99.0":
-  version "0.99.0"
-  resolved "https://registry.yarnpkg.com/@nivo/funnel/-/funnel-0.99.0.tgz#e05fe4d2ba299f9585d6dfa730346b96eb127221"
-  integrity sha512-1wiAeY/+Xl1W7Y6S2aNTatEjXXtKX2BW94+zlICML8eWxx/ke7wyiiMsiu3XtJD+tADepzx9DsZKeXUyErat+A==
-  dependencies:
-    "@nivo/annotations" "0.99.0"
-    "@nivo/colors" "0.99.0"
-    "@nivo/core" "0.99.0"
-    "@nivo/text" "0.99.0"
-    "@nivo/theming" "0.99.0"
-    "@nivo/tooltip" "0.99.0"
-    "@react-spring/web" "9.4.5 || ^9.7.2 || ^10.0"
-    "@types/d3-scale" "^4.0.8"
-    "@types/d3-shape" "^3.1.6"
-    d3-scale "^4.0.2"
-    d3-shape "^3.2.0"
-
 "@nivo/legends@0.99.0":
   version "0.99.0"
   resolved "https://registry.yarnpkg.com/@nivo/legends/-/legends-0.99.0.tgz#4f1fede8c450dad942b851a9a429838e343aea1b"

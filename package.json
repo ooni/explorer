@@ -13,7 +13,6 @@
     "@nivo/bar": "^0.99.0",
     "@nivo/calendar": "^0.99.0",
     "@nivo/core": "^0.99.0",
-    "@nivo/funnel": "^0.99.0",
     "@nivo/line": "^0.99.0",
     "@nivo/tooltip": "^0.99.0",
     "@sentry/nextjs": "^8.49.0",

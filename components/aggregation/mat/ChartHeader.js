@@ -91,21 +91,6 @@ const legendItems = [
   },
 ]
 
-const legendItemsOutcomeV5 = [
-  {
-    label: 'blocked',
-    color: colorMap.confirmed_count,
-  },
-  {
-    label: 'down',
-    color: colorMap.anomaly_count,
-  },
-  {
-    label: 'ok',
-    color: colorMap.ok_count,
-  },
-]
-
 const Legend = () => {
   const intl = useIntl()
   const { state } = useMATContext()
