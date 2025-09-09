@@ -93,9 +93,6 @@ const keys = ['anomaly_count', 'confirmed_count', 'failure_count', 'ok_count']
 const v5keys = []
 
 const getKeys = (loni) => {
-  // if (loni === 'detailed') {
-  //   return ['dns_isp', 'dns_other', 'tls', 'tcp']
-  // }
   if (loni === 'outcome') {
     return v5keys
   }
@@ -183,25 +180,12 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
                     {dataKeysToShow.map((k) => (
                       <div className="my-1" key={k}>
                         <div className="flex items-center">
-                          {/* <div className="mr-4">
-                        <Chip
-                          color={
-                            k === 'outcome_blocked'
-                              ? colorMap[data.outcome_label.split(':')[0]] ||
-                                'black'
-                              : k === 'outcome_down'
-                                ? '#ccc'
-                                : colorMap[k]
-                          }
-                        />
-                      </div> */}
                           <div className="mr-8">
                             {intl.formatMessage({
                               id: `MAT.Table.Header.${k}`,
                             })}
                           </div>
                           <div className="ml-auto">
-                            {/* {intl.formatNumber(Number(data[k] ?? 0) * 100)}% */}
                             {intl.formatNumber(Number(data[k] ?? 0))}
                           </div>
                         </div>
@@ -209,65 +193,6 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
                     ))}
                   </>
                 )}
-
-                {
-                  // routerQuery?.loni === 'detailed' && (
-                  //   // biome-ignore lint/complexity/noUselessFragments: <explanation>
-                  //   <div className="grid grid-cols-2 gap-4">
-                  //     {dataKeysToShow.map((k) => (
-                  //       <div className="my-1" key={k}>
-                  //         <div className="flex items-center">
-                  //           <div className="text-sm">
-                  //             <div className="font-semibold">{k}</div>
-                  //             {data?.loni[k].outcome_label && (
-                  //               <div>
-                  //                 Outcome:{' '}
-                  //                 <span className="font-semibold">
-                  //                   {data?.loni[k].outcome_label}
-                  //                 </span>
-                  //               </div>
-                  //             )}
-                  //             <div>
-                  //               OK:{' '}
-                  //               {/* {intl.formatNumber(
-                  //                 Number(data?.loni[k].ok ?? 0) * 100,
-                  //               )}
-                  //               % */}
-                  //               {intl.formatNumber(Number(data?.loni[k].ok ?? 0))}
-                  //             </div>
-                  //             <div>
-                  //               Down:{' '}
-                  //               {/* {intl.formatNumber(
-                  //                 Number(data?.loni[k].down ?? 0) * 100,
-                  //               )}
-                  //               % */}
-                  //               {intl.formatNumber(
-                  //                 Number(data?.loni[k].down ?? 0),
-                  //               )}
-                  //             </div>
-                  //             <div>
-                  //               Blocked:{' '}
-                  //               {/* {intl.formatNumber(
-                  //                 Number(data?.loni[k].blocked ?? 0) * 100,
-                  //               )}
-                  //               % */}
-                  //               {intl.formatNumber(
-                  //                 Number(data?.loni[k].blocked ?? 0),
-                  //               )}
-                  //             </div>
-                  //             {/* <div className="mr-4">
-                  //               <Chip color={colorMap[blockingType]} />
-                  //             </div>
-                  //             <div className="mr-8">
-                  //               {intl.formatMessage({ id: `MAT.Table.Header.${k}` })}
-                  //             </div> */}
-                  //           </div>
-                  //         </div>
-                  //       </div>
-                  //     ))}
-                  //   </div>
-                  // )
-                }
               </>
             ) : (
               <>

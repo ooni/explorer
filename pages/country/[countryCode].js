@@ -20,7 +20,6 @@ import { getLocalisedRegionName } from '/utils/i18nCountries'
 import { RegionLink } from '../../pages/countries'
 import { StyledStickySubMenu } from '../../components/SharedStyledComponents'
 import RecentMeasurements from '../../components/RecentMeasurements'
-import useFindings from '../../hooks/useFindings'
 
 export async function getServerSideProps({ res, query }) {
   const { countryCode } = query

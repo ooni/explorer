@@ -256,13 +256,6 @@ const Filters = ({ data, setDataForCharts, query }) => {
                         }`}
                         key={header.id}
                         onClick={header.column.getToggleSortingHandler()}
-                        // style={{
-                        //   width:
-                        //     header.column.id === 'yAxisLabel'
-                        //       ? '200px'
-                        //       : header.getSize(),
-                        //   minWidth: '200px',
-                        // }}
                         style={{
                           display: 'flex',
                           width: header.getSize(),
@@ -317,13 +310,6 @@ const Filters = ({ data, setDataForCharts, query }) => {
                 return (
                   <tr
                     key={row.id}
-                    // style={{
-                    //   boxShadow: '0 1px black',
-                    //   height: `${virtualRow.size}px`,
-                    //   transform: `translateY(${
-                    //     virtualRow.start - index * virtualRow.size
-                    //   }px)`,
-                    // }}
                     style={{
                       boxShadow: '0 1px black',
                       display: 'flex',
@@ -337,13 +323,6 @@ const Filters = ({ data, setDataForCharts, query }) => {
                         <td
                           key={cell.id}
                           className="px-2 py-1"
-                          // style={{
-                          //   width:
-                          //     cell.column.id === 'yAxisLabel'
-                          //       ? '40%'
-                          //       : cell.column.columnDef.size,
-                          //   minWidth: '200px',
-                          // }}
                           style={{
                             display: 'flex',
                             width: cell.column.getSize(),

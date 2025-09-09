@@ -6,8 +6,6 @@ import GridChart, { prepareDataForGridChart } from './GridChart'
 import { useMATContext } from './MATContext'
 
 const COUNT_KEYS_CONFIG = {
-  // outcome: ['outcome_blocked', 'outcome_down', 'outcome_ok'],
-  // detailed: ['dns_isp_blocked', 'dns_isp_down', 'dns_isp_ok'],
   default: [
     'anomaly_count',
     'confirmed_count',
@@ -21,22 +19,10 @@ const DEFAULT_ROW_TEMPLATE = {
   confirmed_count: 0,
   failure_count: 0,
   measurement_count: 0,
-  dns_isp: 0,
-  dns_other: 0,
-  tls: 0,
-  tcp: 0,
   count: 0,
-  loni: {
-    dns_isp: { blocked: 0, down: 0, ok: 0 },
-    dns_other: { blocked: 0, down: 0, ok: 0 },
-    tls: { blocked: 0, down: 0, ok: 0 },
-    tcp: { blocked: 0, down: 0, ok: 0 },
-  },
 }
 
 const getCountKeys = (query, selectedItems) => {
-  // if (query.loni === 'outcome') return COUNT_KEYS_CONFIG.outcome
-  // if (query.loni === 'detailed') return COUNT_KEYS_CONFIG.detailed
   if (query.loni === 'outcome') return ['blocked_max']
   if (query.loni === 'observations') return selectedItems
   return COUNT_KEYS_CONFIG.default

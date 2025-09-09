@@ -49,19 +49,6 @@ const getSelected = (allFailureTypes) =>
 
 function reducer(state, action) {
   switch (action.type) {
-    case 'initFromData': {
-      //   const all = action.payload // ordered list
-      return {
-        ...action.payload,
-        // ...state,
-        // all,
-        // selected: getSelected(all),
-        // included: all,
-        // colors: action.payload.length
-        //   ? chartColors(getSelected(action.payload))
-        //   : null,
-      }
-    }
     case 'updateQuery':
       return { ...state, query: action.payload }
     case 'updateFailureTypes':
@@ -105,17 +92,6 @@ export function MATContextProvider({
         : allFailureTypes,
     [allFailureTypes, MATquery.loni],
   )
-
-  // const initialState = useMemo(
-  //   () => ({
-  //     all: allFailureTypes,
-  //     selected,
-  //     included: allFailureTypes,
-  //     colors: chartColors(selected),
-  //     query: MATquery,
-  //   }),
-  //   [allFailureTypes, selected, MATquery],
-  // )
 
   const [state, dispatch] = useReducer(reducer, {
     all: allFailureTypes,

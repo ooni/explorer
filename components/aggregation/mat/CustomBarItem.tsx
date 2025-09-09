@@ -14,28 +14,14 @@ type CustomBarItemProps<D extends BarDatum> = Omit<
 
 export const CustomBarItem = <D extends BarDatum>({
   bar: { data, ...bar },
-  style: {
-    borderColor,
-    color,
-    height,
-    // labelColor,
-    // labelOpacity,
-    // labelX,
-    // labelY,
-    transform,
-    width,
-    // textAnchor,
-  },
-  // borderRadius,
+  style: { borderColor, color, height, transform, width },
   borderWidth,
   enableLabel,
-  //   label,
-  //   shouldRenderLabel,
+
   isInteractive,
   onClick,
   onMouseEnter,
   onMouseLeave,
-  //   tooltip,
   isFocusable,
   ariaLabel,
   ariaLabelledBy,
@@ -89,12 +75,9 @@ export const CustomBarItem = <D extends BarDatum>({
       <animated.rect
         width={to(width, (value) => Math.max(value, 0))}
         height={to(height, (value) => Math.max(value, 0))}
-        // rx={borderRadius}
-        // ry={borderRadius}
         fill={data.fill ?? color}
         opacity={isHovering ? 0.8 : 1}
         strokeWidth={borderWidth + extraBorderWidth}
-        // strokeWidth={borderWidth}
         stroke={borderColor}
         focusable={isFocusable}
         tabIndex={isFocusable ? 0 : undefined}
@@ -104,30 +87,10 @@ export const CustomBarItem = <D extends BarDatum>({
         aria-disabled={ariaDisabled ? ariaDisabled(data) : undefined}
         aria-hidden={ariaHidden ? ariaHidden(data) : undefined}
         onMouseEnter={isInteractive ? handleMouseEnter : undefined}
-        // onMouseMove={isInteractive ? handleTooltip : undefined}
         onMouseLeave={isInteractive ? handleMouseLeave : undefined}
         onClick={isInteractive ? handleClick : undefined}
-        // onFocus={isInteractive && isFocusable ? handleFocus : undefined}
-        // onBlur={isInteractive && isFocusable ? handleBlur : undefined}
         data-testid={`bar.item.${data.id}.${data.index}`}
       />
-      {/* {shouldRenderLabel && (
-        <Text
-          x={labelX}
-          y={labelY}
-          textAnchor={textAnchor}
-          dominantBaseline="central"
-          fillOpacity={labelOpacity}
-          style={{
-            ...theme.labels.text,
-            // We don't want the label to intercept mouse events
-            pointerEvents: 'none',
-            fill: labelColor,
-          }}
-        >
-          {label}
-        </Text>
-      )} */}
     </animated.g>
   )
 }

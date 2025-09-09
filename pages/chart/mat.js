@@ -15,13 +15,8 @@ const MeasurementAggregationToolkit = () => {
 
   const onSubmit = useCallback(
     (data) => {
-      // const { v5, loni, ...rest } = data
       const { ...rest } = data
       const params = {}
-
-      // if (v5) {
-      //   params.loni = 'outcome'
-      // }
 
       for (const p of Object.keys(rest)) {
         if (data[p] !== '') {

@@ -264,7 +264,7 @@ export const Flag = ({ countryCode = 'zz', size = 60, border }) => {
   const src = `/static/flags/1x1/${countryCode}.svg`
   return (
     <div
-      className={`rounded-[50%] ${border && 'border border-white'}`}
+      className={`rounded-[50%] ${border ? 'border border-white' : ''}`}
       style={{ width: `${size + 2}px`, height: `${size + 2}px` }}
     >
       <Image

@@ -85,36 +85,6 @@ const prepareDetailedData = (data, query) => {
       blocked_max: item.loni.blocked_max,
       blocked_max_outcome: item.loni.blocked_max_outcome,
       likely_blocked_protocols: item.loni.likely_blocked_protocols,
-      // dns_isp: item.count ? 1 : 0,
-      // dns_other: item.count ? 1 : 0,
-      // tls: item.count ? 1 : 0,
-      // tcp: item.count ? 1 : 0,
-      // loni: {
-      //   dns_isp: {
-      //     ok: item.loni.dns_isp_ok,
-      //     blocked: item.loni.dns_isp_blocked,
-      //     down: item.loni.dns_isp_down,
-      //     outcome_label: item.loni.dns_isp_outcome,
-      //   },
-      //   dns_other: {
-      //     ok: item.loni.dns_other_ok,
-      //     blocked: item.loni.dns_other_blocked,
-      //     down: item.loni.dns_other_down,
-      //     outcome_label: item.loni.dns_other_outcome,
-      //   },
-      //   tls: {
-      //     ok: item.loni.tls_ok,
-      //     blocked: item.loni.tls_blocked,
-      //     down: item.loni.tls_down,
-      //     outcome_label: item.loni.tls_outcome,
-      //   },
-      //   tcp: {
-      //     ok: item.loni.tcp_ok,
-      //     blocked: item.loni.tcp_blocked,
-      //     down: item.loni.tcp_down,
-      //     outcome_label: item.loni.tcp_outcome,
-      //   },
-      // },
     }
   })
 }
@@ -155,9 +125,7 @@ export const prepareDataForGridChart = (
           includedFailureTypes,
           selectedFailureTypes,
         )
-      : // : query?.loni === 'detailed'
-        //   ? prepareDetailedData(initialData, query)
-        query?.loni === 'outcome'
+      : query?.loni === 'outcome'
         ? prepareDetailedData(initialData, query)
         : initialData
 

@@ -4,7 +4,6 @@ import { useIntl } from 'react-intl'
 import CountryNameLabel from './CountryNameLabel'
 import { colorMap } from './colorMap'
 import { testGroups, testNames } from '/components/test-info'
-import { blockingTypeColors } from './colorMap'
 import { useMemo, useState } from 'react'
 import { useMATContext } from './MATContext'
 import FailureForm from './FailureForm'
@@ -92,27 +91,6 @@ const legendItems = [
   },
 ]
 
-// const legendItemsDetailedV5 = () => {
-//   return [
-//     ...Object.entries(blockingTypeColors).flatMap(([type, states]) =>
-//       Object.entries(states)
-//         .map(([state, color]) => {
-//           if (state !== 'ok') {
-//             return {
-//               label: `${type}.${state}`,
-//               color: color,
-//             }
-//           }
-//         })
-//         .filter((item) => item !== undefined),
-//     ),
-//     {
-//       label: 'ok',
-//       color: colorMap.ok_count,
-//     },
-//   ]
-// }
-
 const legendItemsOutcomeV5 = [
   {
     label: 'blocked',
@@ -159,9 +137,6 @@ const Legend = () => {
   }, [state.colors, state.selected])
 
   const items =
-    // query.loni === 'detailed'
-    //   ? legendItemsDetailedV5()
-    //   :
     query.loni === 'outcome'
       ? legendItemsOutcome
       : query.loni === 'observations'

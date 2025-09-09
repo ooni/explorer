@@ -19,7 +19,6 @@ import {
 } from './CustomTooltip'
 import { colorMap } from './colorMap'
 import { getXAxisTicks } from './timeScaleXAxis'
-import CustomStackedBarItem from './CustomStackedBarItem'
 import { line } from 'd3-shape'
 import { computeXYScalesForSeries } from '@nivo/scales'
 import { Axes } from '@nivo/axes'
@@ -34,12 +33,7 @@ const Line = (props) => {
   const { bars, xScale, innerWidth, innerHeight, tooltip } = props
   if (bars.length === 0) return null
 
-  const uniqBars = bars
-  // .filter(
-  //   (bar, index, self) =>
-  //     index === self.findIndex((b) => b.data.index === bar.data.index),
-  // )
-  const maxValue = Math.max(...uniqBars.map((bar) => bar.data.data.count || 0))
+  const maxValue = Math.max(...bars.map((bar) => bar.data.data.count || 0))
   const roundedMaxValue = maxValue // Math.ceil(maxValue / 10) * 10
   const midValue = Math.ceil(roundedMaxValue / 2)
   const tickValues = [0, midValue, roundedMaxValue]
@@ -48,7 +42,7 @@ const Line = (props) => {
     [
       {
         id: 'only',
-        data: uniqBars.map((it) => ({
+        data: bars.map((it) => ({
           x: it.data.index,
           y: it.data.data.count || 0,
         })),
@@ -63,9 +57,6 @@ const Line = (props) => {
   const lineGenerator = line()
     .x((bar) => {
       return bar.x + bar.width / 2
-      // bar.data.id === 'dns_isp' // this is true for detailed chart, where dns_isp is first bar in the group
-      //   ? bar.x + (4 * bar.width) / 2
-      //   : bar.x + bar.width / 2
     })
     .y((bar) => {
       return scale.yScale(bar.data.data.count || 0)
@@ -73,7 +64,6 @@ const Line = (props) => {
 
   return (
     <>
-      {/* {innerHeight > 70 && ( */}
       <Axes
         yScale={scale.yScale}
         xScale={xScale}
@@ -92,15 +82,14 @@ const Line = (props) => {
           format: (e) => (Math.floor(e) === e ? e : ''),
         }}
       />
-      {/* )} */}
 
       <path
-        d={lineGenerator(uniqBars)}
+        d={lineGenerator(bars)}
         fill="none"
         stroke={lineColor}
         style={{ pointerEvents: 'none' }}
       />
-      {uniqBars.map((bar) => (
+      {bars.map((bar) => (
         <circle
           key={bar.key}
           cx={
@@ -124,9 +113,6 @@ const v5keys = ['blocked_max']
 const loniKeys = ['dns_isp', 'dns_other', 'tls', 'tcp']
 
 const getKeys = (loni, observationKeys) => {
-  // if (loni === 'detailed') {
-  //   return loniKeys
-  // }
   if (loni === 'outcome') {
     return v5keys
   }
@@ -140,29 +126,12 @@ const colorFunc = (d, query, state) => {
   if (state?.colors && query?.loni === 'observations') return state.colors[d.id]
   if (state?.colors && query?.loni === 'outcome')
     return state.colors[d.data.blocked_max_outcome]
-  //   if (query?.loni === 'detailed' && d?.data?.outcome_label) {
-  //     const label = d.data.outcome_label
-  //     const blockingType = label.split('.')[0]
-
-  //     if (blockingType === 'ok') {
-  //       if (d.id === 'outcome_blocked') return colorMap.confirmed_count
-  //       if (d.id === 'outcome_down') return colorMap.anomaly_count
-  //       return colorMap.ok_count
-  //     }
-  //     if (d.id === 'outcome_blocked') {
-  //       return colorMap[`${blockingType}.blocked`] || colorMap.failure_count
-  //     }
-
-  //     if (d.id === 'outcome_down') {
-  //       return colorMap[`${blockingType}.down`] || colorMap.anomaly_count
-  //     }
-  //   }
   return colorMap[d.id] || '#ccc'
 }
 
 const baseLayers = ['grid', 'axes', 'bars']
 const barLayers = (query) => {
-  return query?.loni === 'outcome' //|| query?.loni === 'detailed'
+  return query?.loni === 'outcome'
     ? ['grid', 'axes', 'markers', 'bars', Line]
     : baseLayers
 }
@@ -358,13 +327,7 @@ const RowChart = ({
           indexBy={indexBy}
           tooltip={InvisibleTooltip}
           onClick={handleClick}
-          // query?.loni && query?.loni === 'detailed'
-          //   ? CustomStackedBarItem
-          //   : CustomBarItem
           barComponent={CustomBarItem}
-          // query?.loni && query?.loni === 'detailed'
-          //   ? 'grouped'
-          //   : 'stacked'
           groupMode={'stacked'}
           theme={theme}
           // HACK: To show the tooltip, we hijack the

@@ -79,7 +79,7 @@ const SubNavItem = ({ label, href, ...props }) => {
     <Link
       prefetch={false}
       href={href}
-      className={`${isActive && 'border-black'} text-black hover:border-black hover:text-gray7 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium`}
+      className={`${isActive ? 'border-black' : ''} text-black hover:border-black hover:text-gray7 whitespace-nowrap border-b-2 py-4 px-1 text-sm font-medium`}
       {...props}
     >
       {label}
