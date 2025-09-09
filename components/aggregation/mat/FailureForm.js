@@ -1,18 +1,18 @@
 import { useForm, Controller, useWatch } from 'react-hook-form'
 import { Checkbox } from 'ooni-components'
 import { useEffect, useMemo, useRef, useCallback, forwardRef } from 'react'
-import { useBlockingTypes } from './BlockingTypesContext'
+import { useFailureTypes } from './FailureTypesContext'
 
 const FailureForm = ({ afterSubmit }) => {
-  const { state, dispatch } = useBlockingTypes()
-  const allBlockingTypes = state.all
+  const { state, dispatch } = useFailureTypes()
+  const allFailureTypes = state.all
 
   const { setValue, handleSubmit, control, subscribe, watch, reset } = useForm({
     defaultValues: {
-      blockingTypes: allBlockingTypes.reduce((acc, _, i) => {
+      failureTypes: allFailureTypes.reduce((acc, _, i) => {
         acc[i] = {
-          include: state.included.includes(allBlockingTypes[i]),
-          other: !state.selected.includes(allBlockingTypes[i]),
+          include: state.included.includes(allFailureTypes[i]),
+          select: state.selected.includes(allFailureTypes[i]),
         }
         return acc
       }, {}),
@@ -22,16 +22,16 @@ const FailureForm = ({ afterSubmit }) => {
   // Keep form in sync if external state changes list order/contents
   useEffect(() => {
     const defaults = {
-      blockingTypes: allBlockingTypes.reduce((acc, _, i) => {
+      failureTypes: allFailureTypes.reduce((acc, _, i) => {
         acc[i] = {
-          include: state.included.includes(allBlockingTypes[i]),
-          other: !state.selected.includes(allBlockingTypes[i]),
+          include: state.included.includes(allFailureTypes[i]),
+          select: state.selected.includes(allFailureTypes[i]),
         }
         return acc
       }, {}),
     }
     reset(defaults)
-  }, [allBlockingTypes, state.included, state.selected, reset])
+  }, [allFailureTypes, state.included, state.selected, reset])
 
   const IndeterminateCheckbox = forwardRef(
     ({ indeterminate, className = '', ...rest }, ref) => {
@@ -61,10 +61,10 @@ const FailureForm = ({ afterSubmit }) => {
       formState: {
         values: true,
       },
-      callback: ({ values: { blockingTypes } }) => {
-        Object.entries(blockingTypes).forEach(([_, value], i) => {
-          if (!value.include && value.other) {
-            setValue(`blockingTypes.${i}.other`, false, {
+      callback: ({ values: { failureTypes } }) => {
+        Object.entries(failureTypes).forEach(([_, value], i) => {
+          if (!value.include && value.select) {
+            setValue(`failureTypes.${i}.select`, false, {
               shouldDirty: false,
               shouldTouch: false,
             })
@@ -77,19 +77,19 @@ const FailureForm = ({ afterSubmit }) => {
   }, [subscribe, setValue])
 
   // Compute master checkbox states
-  const blockingTypes = useWatch({ control, name: 'blockingTypes' }) || {}
-  const totalCount = allBlockingTypes.length
+  const failureTypes = useWatch({ control, name: 'failureTypes' }) || {}
+  const totalCount = allFailureTypes.length
 
   const counts = useMemo(() => {
     let included = 0
     let selected = 0
     for (let i = 0; i < totalCount; i += 1) {
-      const v = blockingTypes[i] || { include: false, other: false }
+      const v = failureTypes[i] || { include: false, select: true }
       if (v.include) included += 1
-      if (v.other) selected += 1
+      if (v.select) selected += 1
     }
     return { included, selected }
-  }, [blockingTypes, totalCount])
+  }, [failureTypes, totalCount])
 
   const includedMasterChecked = useMemo(
     () => totalCount > 0 && counts.included === totalCount,
@@ -113,13 +113,13 @@ const FailureForm = ({ afterSubmit }) => {
     (e) => {
       const checked = e.target.checked
       for (let i = 0; i < totalCount; i += 1) {
-        setValue(`blockingTypes.${i}.include`, checked, {
+        setValue(`failureTypes.${i}.include`, checked, {
           shouldDirty: false,
           shouldTouch: false,
         })
         if (!checked) {
           // If not included, ensure it's not selected
-          setValue(`blockingTypes.${i}.other`, false, {
+          setValue(`failureTypes.${i}.select`, false, {
             shouldDirty: false,
             shouldTouch: false,
           })
@@ -133,25 +133,25 @@ const FailureForm = ({ afterSubmit }) => {
     (e) => {
       const checked = e.target.checked
       for (let i = 0; i < totalCount; i += 1) {
-        const v = blockingTypes[i] || { include: false, other: true }
+        const v = failureTypes[i] || { include: false, select: true }
         if (v.include) {
-          setValue(`blockingTypes.${i}.other`, checked, {
+          setValue(`failureTypes.${i}.select`, checked, {
             shouldDirty: false,
             shouldTouch: false,
           })
         }
       }
     },
-    [blockingTypes, setValue, totalCount],
+    [failureTypes, setValue, totalCount],
   )
 
-  const onSubmit = ({ blockingTypes }) => {
-    const included = Object.entries(blockingTypes)
+  const onSubmit = ({ failureTypes }) => {
+    const included = Object.entries(failureTypes)
       .filter(([_, v]) => v.include)
-      .map(([k]) => allBlockingTypes[k])
-    const selected = Object.entries(blockingTypes)
-      .filter(([_, v]) => v.include && !v.other)
-      .map(([k]) => allBlockingTypes[k])
+      .map(([k]) => allFailureTypes[k])
+    const selected = Object.entries(failureTypes)
+      .filter(([_, v]) => v.include && v.select)
+      .map(([k]) => allFailureTypes[k])
 
     dispatch({ type: 'setIncluded', payload: included })
     dispatch({ type: 'setSelected', payload: selected })
@@ -165,7 +165,7 @@ const FailureForm = ({ afterSubmit }) => {
           <thead>
             <tr className="border-b-2 border-gray-300">
               <th className="text-left p-2 w-24">Include in the chart</th>
-              <th className="text-left p-2 w-24">Show as "other"</th>
+              <th className="text-left p-2 w-24">Show individually</th>
               <th className="text-left p-2">Failure type</th>
             </tr>
             <tr className="border-b border-gray-200">
@@ -198,12 +198,12 @@ const FailureForm = ({ afterSubmit }) => {
             </tr>
           </thead>
           <tbody>
-            {allBlockingTypes?.map((b, i) => (
+            {allFailureTypes?.map((b, i) => (
               <tr key={b} className="border-b border-gray-200">
                 <td className="p-2">
                   <Controller
                     control={control}
-                    name={`blockingTypes.${i}.include`}
+                    name={`failureTypes.${i}.include`}
                     render={({ field: includeField }) => (
                       <input
                         type="checkbox"
@@ -216,12 +216,12 @@ const FailureForm = ({ afterSubmit }) => {
                 <td className="p-2">
                   <Controller
                     control={control}
-                    name={`blockingTypes.${i}.other`}
+                    name={`failureTypes.${i}.select`}
                     render={({ field }) => (
                       <input
                         type="checkbox"
                         {...field}
-                        disabled={!blockingTypes[i]?.include}
+                        disabled={!failureTypes[i]?.include}
                         checked={field.value}
                       />
                     )}

@@ -25,15 +25,15 @@ const generateQuery = (q) => new URLSearchParams(q).toString()
 const prepareObservationsData = (
   data,
   query,
-  includedBlockingTypes = [],
-  selectedBlockingTypes = [],
+  includedFailureTypes = [],
+  selectedFailureTypes = [],
 ) => {
   return data
     .reduce(
       (acc, { timestamp, failure, observation_count, probe_cc, ...rest }) => {
-        if (!includedBlockingTypes.includes(failure)) return acc
+        if (!includedFailureTypes.includes(failure)) return acc
 
-        const reducedFailure = selectedBlockingTypes.includes(failure)
+        const reducedFailure = selectedFailureTypes.includes(failure)
           ? failure
           : 'other'
 
@@ -144,16 +144,16 @@ export const prepareDataForGridChart = (
   initialData,
   query,
   locale,
-  includedBlockingTypes = [],
-  selectedBlockingTypes = [],
+  includedFailureTypes = [],
+  selectedFailureTypes = [],
 ) => {
   const data =
     query?.loni === 'observations'
       ? prepareObservationsData(
           initialData,
           query,
-          includedBlockingTypes,
-          selectedBlockingTypes,
+          includedFailureTypes,
+          selectedFailureTypes,
         )
       : // : query?.loni === 'detailed'
         //   ? prepareDetailedData(initialData, query)

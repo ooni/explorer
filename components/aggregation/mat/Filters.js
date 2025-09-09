@@ -13,7 +13,7 @@ import 'regenerator-runtime'
 import { FaSort, FaSortDown, FaSortUp } from 'react-icons/fa'
 import { DetailsBox } from '../../measurement/DetailsBox'
 import { sortRows } from './computations'
-import { useBlockingTypes } from './BlockingTypesContext'
+import { useFailureTypes } from './FailureTypesContext'
 
 const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
   const defaultRef = useRef()
@@ -35,27 +35,35 @@ IndeterminateCheckbox.displayName = 'IndeterminateCheckbox'
 // Maybe this can also be `[]`
 const noRowsSelected = null
 
-const rowConfig = (selectedItems) => {
-  const keys = selectedItems?.length
-    ? selectedItems
-    : [
-        'anomaly_count',
-        'confirmed_count',
-        'failure_count',
-        'measurement_count',
-        'tcp_generic_timeout_error',
-      ]
-  return keys.map((key) => ({
-    header: selectedItems?.length ? (
-      key
-    ) : (
-      <FormattedMessage id={`MAT.Table.Header.${key}`} />
-    ),
-    id: key,
-    accessorKey: key,
-    enableColumnFilter: false,
-    minSize: 220,
-  }))
+const rowConfig = (selectedItems, loni) => {
+  const keys =
+    loni === 'outcome'
+      ? ['blocked_max']
+      : loni === 'observations'
+        ? selectedItems
+        : [
+            'anomaly_count',
+            'confirmed_count',
+            'failure_count',
+            'measurement_count',
+            'tcp_generic_timeout_error',
+          ]
+  return keys.map((key) => {
+    return {
+      header: selectedItems?.length ? (
+        key
+      ) : (
+        <FormattedMessage id={`MAT.Table.Header.${key}`} />
+      ),
+      id: key,
+      // accessorKey: key,
+      accessorFn: (row) => {
+        return row[key]
+      },
+      enableColumnFilter: false,
+      minSize: 220,
+    }
+  })
 }
 
 const Filters = ({ data, setDataForCharts, query }) => {
@@ -63,9 +71,12 @@ const Filters = ({ data, setDataForCharts, query }) => {
   const resetTableRef = useRef(false)
   const yAxis = query.axis_y
   const getRowId = useCallback((row) => row[query.axis_y], [query.axis_y])
-  const { state } = useBlockingTypes()
+  const { state } = useFailureTypes()
+  const config = useMemo(
+    () => rowConfig(state.selected, query.loni),
+    [state.selected, query.loni],
+  )
 
-  const config = useMemo(() => rowConfig(state.selected), [state.selected])
   const columns = useMemo(
     () => [
       {

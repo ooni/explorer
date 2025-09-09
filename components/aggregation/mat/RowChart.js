@@ -26,7 +26,7 @@ import { line } from 'd3-shape'
 import { computeXYScalesForSeries } from '@nivo/scales'
 import { Axes } from '@nivo/axes'
 import { colors } from 'ooni-components'
-import { useBlockingTypes } from './BlockingTypesContext'
+import { useFailureTypes } from './FailureTypesContext'
 
 const chartMargins = { top: 5, right: 50, bottom: 5, left: 0 }
 
@@ -292,7 +292,7 @@ const RowChart = ({
   const { query: routerQuery } = useRouter()
   const [query, updateMATContext] = useMATContext()
   const { tooltipIndex } = query
-  const { state } = useBlockingTypes()
+  const { state } = useFailureTypes()
 
   const { showTooltipFromEvent, hideTooltip } = useTooltip()
 

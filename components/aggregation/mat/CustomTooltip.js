@@ -9,7 +9,7 @@ import { useIntl } from 'react-intl'
 import { useMATContext } from './MATContext'
 import { colorMap } from './colorMap'
 import { useRouter } from 'next/router'
-import { useBlockingTypes } from './BlockingTypesContext'
+import { useFailureTypes } from './FailureTypesContext'
 
 export const themeForInvisibleTooltip = {
   tooltip: {
@@ -109,7 +109,7 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
   const intl = useIntl()
   const [query] = useMATContext()
   const { query: routerQuery } = useRouter()
-  const { state } = useBlockingTypes()
+  const { state } = useFailureTypes()
 
   const dataKeysToShow = getKeys(routerQuery?.loni)
 

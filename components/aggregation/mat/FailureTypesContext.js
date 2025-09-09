@@ -1,30 +1,30 @@
-// BlockingTypesContext.tsx
 import { colors } from 'ooni-components'
 import { createContext, useReducer, useContext, useMemo } from 'react'
 import { useEffect } from 'react'
 import { useRouter } from 'next/router'
 
 const ooniColors = [
-  colors.red['800'], // #d62728
+  colors.red['800'],
   colors.yellow['600'],
   colors.gray['600'],
-  colors.blue['600'], // #1f76b4
-  colors.orange['600'], // #ff7e0e
+  colors.blue['600'],
+  colors.orange['600'],
   colors.fuchsia['600'],
-  colors.pink['600'], // #e377c2
+  colors.pink['600'],
   colors.teal['600'],
-  '#9467bd', //violet
+  colors.violet['600'],
+  colors.fuchsia['600'],
   '#8c564b', //brown
-  '#bcbd22', //light blue
-  '#17becf', //green
+  colors.lime['300'],
+  colors.cyan['600'],
 ]
 
-const chartColors = (selectedBlockingTypes) =>
-  selectedBlockingTypes
+const chartColors = (selectedFailureTypes) =>
+  selectedFailureTypes
     .filter((f) => !['none', 'others'].includes(f))
     .reduce(
       (acc, current, i) => {
-        acc[current] = ooniColors[i]
+        acc[current] = ooniColors[i % ooniColors.length]
         return acc
       },
       {
@@ -40,10 +40,10 @@ const initialState = {
   colors: null,
 }
 
-const getSelected = (allBlockingTypes) =>
-  allBlockingTypes
+const getSelected = (allFailureTypes) =>
+  allFailureTypes
     .filter(
-      (f) => !['tcp_network_unreachable', 'tcp_host_unreachable'].includes(f),
+      (f) => !['tcp.network_unreachable', 'tcp.host_unreachable'].includes(f),
     )
     .slice(0, 7)
 
@@ -79,60 +79,43 @@ function reducer(state, action) {
 
 const Ctx = createContext(null)
 
-export function BlockingTypesProvider({ allBlockingTypes = [], children }) {
+export function FailureTypesProvider({ allFailureTypes = [], children }) {
   const router = useRouter()
-  //   console.log('router', router.query?.loni)
-  //   console.log('allBlockingTypes', allBlockingTypes)
+
   const selected = useMemo(
     () =>
       router.query?.loni === 'observations'
-        ? getSelected(allBlockingTypes)
-        : allBlockingTypes,
-    [allBlockingTypes, router.query],
+        ? getSelected(allFailureTypes)
+        : allFailureTypes,
+    [allFailureTypes, router.query],
   )
-  console.log('selected', selected)
+
   const initialState = useMemo(
     () => ({
-      all: allBlockingTypes,
+      all: allFailureTypes,
       selected,
-      included: allBlockingTypes,
+      included: allFailureTypes,
       colors: chartColors(selected),
     }),
-    [allBlockingTypes, selected],
+    [allFailureTypes, selected],
   )
 
   const [state, dispatch] = useReducer(reducer, initialState)
 
   useEffect(() => {
-    if (!allBlockingTypes?.length) {
+    if (!allFailureTypes?.length) {
       dispatch({ type: 'reset' })
     } else {
       dispatch({ type: 'initFromData', payload: initialState })
     }
-  }, [allBlockingTypes, initialState])
+  }, [allFailureTypes, initialState])
 
   const value = useMemo(() => ({ state, dispatch }), [state])
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>
 }
 
-export const useBlockingTypes = () => {
+export const useFailureTypes = () => {
   const ctx = useContext(Ctx)
-  if (!ctx) throw new Error('useBlockingTypes must be used within provider')
+  if (!ctx) throw new Error('useFailureTypes must be used within provider')
   return ctx
 }
-
-// const [state, dispatch] = useReducer(reducer, {
-//     all: allBlockingTypes,
-//     selected: allBlockingTypes.slice(0, 8),
-//     included: allBlockingTypes,
-//     colors: chartColors(allBlockingTypes.slice(0, 8)),
-//   })
-
-// When allBlockingTypes changes, sync reducer state
-// useEffect(() => {
-//   if (!allBlockingTypes?.length) return
-//   dispatch({ type: 'initFromData', payload: allBlockingTypes })
-// }, [allBlockingTypes])
-
-//   const value = useMemo(() => ({ state, dispatch }), [state])
-//   return <Ctx.Provider value={value}>{children}</Ctx.Provider>

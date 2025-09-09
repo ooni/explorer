@@ -3,7 +3,7 @@ import { useIntl } from 'react-intl'
 
 import Filters from './Filters'
 import GridChart, { prepareDataForGridChart } from './GridChart'
-import { useBlockingTypes } from './BlockingTypesContext'
+import { useFailureTypes } from './FailureTypesContext'
 
 const COUNT_KEYS_CONFIG = {
   // outcome: ['outcome_blocked', 'outcome_down', 'outcome_ok'],
@@ -37,6 +37,7 @@ const DEFAULT_ROW_TEMPLATE = {
 const getCountKeys = (query, selectedItems) => {
   // if (query.loni === 'outcome') return COUNT_KEYS_CONFIG.outcome
   // if (query.loni === 'detailed') return COUNT_KEYS_CONFIG.detailed
+  if (query.loni === 'outcome') return ['blocked_max']
   if (query.loni === 'observations') return selectedItems
   return COUNT_KEYS_CONFIG.default
 }
@@ -64,10 +65,23 @@ const aggregateRowCounts = (rowData, countKeys) => {
   return aggregatedRow
 }
 
+const getBlockedMax = (rowData) => {
+  return rowData.reduce(
+    (acc, dataPoint) => {
+      acc.blocked_max = Math.max(acc.blocked_max, dataPoint.blocked_max)
+      return acc
+    },
+    { blocked_max: 0 },
+  )
+}
+
 const processRow = (key, rowData, rowLabels, query, countKeys) => {
   const rowLabel = rowLabels[key]
   const baseRow = createRowTemplate(key, rowLabel, query.axis_y)
-  const aggregatedCounts = aggregateRowCounts(rowData, countKeys)
+  const aggregatedCounts =
+    query.loni === 'outcome'
+      ? getBlockedMax(rowData)
+      : aggregateRowCounts(rowData, countKeys)
   return {
     ...baseRow,
     ...aggregatedCounts,
@@ -106,7 +120,7 @@ const noRowsSelected = null
 
 const TableView = ({ data, query, showFilters = true }) => {
   const intl = useIntl()
-  const { state } = useBlockingTypes()
+  const { state } = useFailureTypes()
 
   // The incoming data is reshaped to generate:
   // - reshapedData: holds the full set that will be used by GridChart

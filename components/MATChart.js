@@ -9,7 +9,7 @@ import useSWR from 'swr'
 import { ChartSpinLoader } from './Chart'
 import { FormattedMarkdownBase } from './FormattedMarkdown'
 import { useMemo } from 'react'
-import { BlockingTypesProvider } from './aggregation/mat/BlockingTypesContext'
+import { FailureTypesProvider } from './aggregation/mat/FailureTypesContext'
 
 axiosResponseTime(axios)
 
@@ -23,6 +23,8 @@ const fetcher = (query) => {
   let reqUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation?${qs}`
 
   if (query.loni) {
+    const urlBase = 'https://api.dev.ooni.io/api/v1/aggregation'
+    // const urlBase = 'https://oonimeasurements.dev.ooni.io/api/v1/aggregation'
     const { loni, v5, ...v5qs } = query
     if (loni === 'observations') {
       const { axis_y, axis_x, domain, ...v5qs } = query
@@ -32,9 +34,9 @@ const fetcher = (query) => {
           : `&group_by=${axis_x}`
       const axisY = axis_y ? `&group_by=${axis_y}` : ''
       const domainParam = domain ? `&hostname=${domain}` : ''
-      reqUrl = `https://api.dev.ooni.io/api/v1/aggregation/observations?group_by=failure${axisX}${axisY}${domainParam}&${new URLSearchParams(v5qs).toString()}`
+      reqUrl = `${urlBase}/observations?group_by=failure${axisX}${axisY}${domainParam}&${new URLSearchParams(v5qs).toString()}`
     } else {
-      reqUrl = `https://api.dev.ooni.io/api/v1/aggregation/analysis?${new URLSearchParams(v5qs).toString()}`
+      reqUrl = `${urlBase}/analysis?${new URLSearchParams(v5qs).toString()}`
     }
   }
   console.debug(`API Query: ${reqUrl}`)
@@ -94,7 +96,7 @@ export const MATChartWrapper = ({ link, caption }) => {
   )
 }
 
-const getAllBlockingTypes = (data) => {
+const getallFailureTypes = (data) => {
   return data.reduce((acc, obj) => {
     const failure = obj.failure
     if (acc[failure]) {
@@ -106,14 +108,14 @@ const getAllBlockingTypes = (data) => {
   }, {})
 }
 
-const getSortedBlockingTypes = (OGdata) => {
-  const blockingTypes = getAllBlockingTypes(OGdata)
-  return Object.entries(blockingTypes)
+const getSortedFailureTypes = (OGdata) => {
+  const failureTypes = getallFailureTypes(OGdata)
+  return Object.entries(failureTypes)
     .sort(([, a], [, b]) => b - a)
     .map(([key]) => key)
 }
 
-const getOutcomeBlockingTypes = (data) => {
+const getOutcomeFailureTypes = (data) => {
   return [
     ...new Set(
       data
@@ -135,12 +137,12 @@ const MATChart = ({ query, showFilters = true }) => {
     [data],
   )
 
-  const allBlockingTypes = useMemo(() => {
+  const allFailureTypes = useMemo(() => {
     if (query.loni === 'observations') {
-      return getSortedBlockingTypes(results)
+      return getSortedFailureTypes(results)
     }
     if (query.loni === 'outcome') {
-      return getOutcomeBlockingTypes(results)
+      return getOutcomeFailureTypes(results)
     }
     return []
   }, [results, query])
@@ -153,7 +155,7 @@ const MATChart = ({ query, showFilters = true }) => {
         {isValidating ? (
           <ChartSpinLoader height="500px" />
         ) : (
-          <BlockingTypesProvider allBlockingTypes={allBlockingTypes}>
+          <FailureTypesProvider allFailureTypes={allFailureTypes}>
             {results.length > 0 || Object.keys(results).length ? (
               <>
                 {((data && data.data.dimension_count === 1) ||
@@ -172,7 +174,7 @@ const MATChart = ({ query, showFilters = true }) => {
             ) : (
               <NoCharts />
             )}
-          </BlockingTypesProvider>
+          </FailureTypesProvider>
         )}
       </MATContextProvider>
     </>

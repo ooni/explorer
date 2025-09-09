@@ -9,7 +9,7 @@ import { useRouter } from 'next/router'
 import { blockingTypeColors } from './colorMap'
 import { colors } from 'ooni-components'
 import { useMemo, useState } from 'react'
-import { useBlockingTypes } from './BlockingTypesContext'
+import { useFailureTypes } from './FailureTypesContext'
 import FailureForm from './FailureForm'
 import { MdClose } from 'react-icons/md'
 
@@ -134,7 +134,7 @@ const legendItemsOutcomeV5 = [
 const Legend = () => {
   const intl = useIntl()
   const { query } = useRouter()
-  const { state } = useBlockingTypes()
+  const { state } = useFailureTypes()
 
   const showEditorButton = useMemo(
     () => query.loni === 'observations',

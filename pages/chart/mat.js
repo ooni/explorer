@@ -6,7 +6,6 @@ import { FormattedMessage, useIntl } from 'react-intl'
 import MATChart from 'components/MATChart'
 import { Form } from 'components/aggregation/mat/Form'
 import Help from 'components/aggregation/mat/Help'
-import { FaExternalLinkAlt } from 'react-icons/fa'
 import dayjs from 'services/dayjs'
 
 const MeasurementAggregationToolkit = () => {
@@ -42,7 +41,7 @@ const MeasurementAggregationToolkit = () => {
   // Upon mount, check if the page was accessed without query params
   // In that case, trigger a shallow navigation that shows a chart
   useEffect(() => {
-    if (Object.keys(query).length === 0) {
+    if (router.isReady) {
       const today = dayjs.utc().add(1, 'day')
       const monthAgo = dayjs.utc(today).subtract(1, 'month')
       const href = {
@@ -52,14 +51,14 @@ const MeasurementAggregationToolkit = () => {
           since: monthAgo.format('YYYY-MM-DD'),
           until: today.format('YYYY-MM-DD'),
           time_grain: 'day',
-          // ...query,
+          ...query,
         },
       }
       router.replace(href, undefined, { shallow: true })
     }
     // Ignore the dependency on `router` because we want
     // this effect to run only once, on mount, if query is empty.
-  }, [query])
+  }, [router.isReady])
 
   let linkToAPIQuery = null
   try {

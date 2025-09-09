@@ -1,11 +1,11 @@
 import { useIntl } from 'react-intl'
 import GridChart, { prepareDataForGridChart } from './GridChart'
 import { NoCharts } from './NoCharts'
-import { useBlockingTypes } from './BlockingTypesContext'
+import { useFailureTypes } from './FailureTypesContext'
 
 export const StackedBarChart = ({ data, query }) => {
   const intl = useIntl()
-  const { state } = useBlockingTypes()
+  const { state } = useFailureTypes()
 
   try {
     const [gridData, rows] = prepareDataForGridChart(
