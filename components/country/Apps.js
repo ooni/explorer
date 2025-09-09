@@ -68,7 +68,10 @@ const ChartsContainer = () => {
 
 const AppsSection = () => (
   <>
-    <div id="apps" class="h-[200px] mt-[-200px] md:h-[200px] md:mt-[-200px]" />
+    <div
+      id="apps"
+      className="h-[200px] mt-[-200px] md:h-[200px] md:mt-[-200px]"
+    />
     <h2>
       <FormattedMessage id="Country.Heading.Apps" />
     </h2>

@@ -9,7 +9,6 @@ import useSWR from 'swr'
 import { ChartSpinLoader } from './Chart'
 import { FormattedMarkdownBase } from './FormattedMarkdown'
 import { useMemo } from 'react'
-import { FailureTypesProvider } from './aggregation/mat/FailureTypesContext'
 
 axiosResponseTime(axios)
 
@@ -32,8 +31,16 @@ const fetcher = (query) => {
         axis_x === 'measurement_start_day'
           ? '&group_by=timestamp'
           : `&group_by=${axis_x}`
-      const axisY = axis_y ? `&group_by=${axis_y}` : ''
+
+      const axisY =
+        axis_y === 'domain'
+          ? '&group_by=hostname'
+          : axis_y
+            ? `&group_by=${axis_y}`
+            : ''
+
       const domainParam = domain ? `&hostname=${domain}` : ''
+
       reqUrl = `${urlBase}/observations?group_by=failure${axisX}${axisY}${domainParam}&${new URLSearchParams(v5qs).toString()}`
     } else {
       reqUrl = `${urlBase}/analysis?${new URLSearchParams(v5qs).toString()}`
@@ -149,34 +156,35 @@ const MATChart = ({ query, showFilters = true }) => {
 
   return (
     <>
-      <MATContextProvider queryParams={query}>
-        {error && <NoCharts message={error?.info ?? JSON.stringify(error)} />}
+      {error && <NoCharts message={error?.info ?? JSON.stringify(error)} />}
 
-        {isValidating ? (
-          <ChartSpinLoader height="500px" />
-        ) : (
-          <FailureTypesProvider allFailureTypes={allFailureTypes}>
-            {results.length > 0 || Object.keys(results).length ? (
-              <>
-                {((data && data.data.dimension_count === 1) ||
-                  (data && query.axis_x && !query.axis_y)) && (
-                  <StackedBarChart data={results} query={query} />
-                )}
-                {((data && data.data.dimension_count > 1) ||
-                  (data && query.axis_x && query.axis_y)) && (
-                  <TableView
-                    data={results}
-                    query={query}
-                    showFilters={showFilters}
-                  />
-                )}
-              </>
-            ) : (
-              <NoCharts />
-            )}
-          </FailureTypesProvider>
-        )}
-      </MATContextProvider>
+      {isValidating ? (
+        <ChartSpinLoader height="500px" />
+      ) : (
+        <MATContextProvider
+          allFailureTypes={allFailureTypes}
+          // queryProps={query}
+        >
+          {results.length > 0 || Object.keys(results).length ? (
+            <>
+              {((data && data.data.dimension_count === 1) ||
+                (data && query.axis_x && !query.axis_y)) && (
+                <StackedBarChart data={results} query={query} />
+              )}
+              {((data && data.data.dimension_count > 1) ||
+                (data && query.axis_x && query.axis_y)) && (
+                <TableView
+                  data={results}
+                  query={query}
+                  showFilters={showFilters}
+                />
+              )}
+            </>
+          ) : (
+            <NoCharts />
+          )}
+        </MATContextProvider>
+      )}
     </>
   )
 }

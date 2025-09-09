@@ -1,10 +1,10 @@
 import { useForm, Controller, useWatch } from 'react-hook-form'
 import { Checkbox } from 'ooni-components'
 import { useEffect, useMemo, useRef, useCallback, forwardRef } from 'react'
-import { useFailureTypes } from './FailureTypesContext'
+import { useMATContext } from './MATContext'
 
 const FailureForm = ({ afterSubmit }) => {
-  const { state, dispatch } = useFailureTypes()
+  const { state, dispatch } = useMATContext()
   const allFailureTypes = state.all
 
   const { setValue, handleSubmit, control, subscribe, watch, reset } = useForm({

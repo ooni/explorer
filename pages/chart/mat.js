@@ -41,7 +41,7 @@ const MeasurementAggregationToolkit = () => {
   // Upon mount, check if the page was accessed without query params
   // In that case, trigger a shallow navigation that shows a chart
   useEffect(() => {
-    if (router.isReady) {
+    if (router.isReady && Object.keys(query).length === 0) {
       const today = dayjs.utc().add(1, 'day')
       const monthAgo = dayjs.utc(today).subtract(1, 'month')
       const href = {
@@ -82,7 +82,7 @@ const MeasurementAggregationToolkit = () => {
           <h5 className="mb-2">
             <FormattedMessage id="MAT.SubTitle" />
           </h5>
-          <Form onSubmit={onSubmit} query={router.query} />
+          <Form onSubmit={onSubmit} query={query} />
           <MATChart query={query} />
           {/* {linkToAPIQuery && (
             <div className="flex mt-4 justify-start md:justify-end">

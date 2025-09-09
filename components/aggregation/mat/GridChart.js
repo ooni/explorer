@@ -5,16 +5,15 @@ import PropTypes from 'prop-types'
 import { memo, useMemo, useRef, useCallback } from 'react'
 import { ChartHeader } from './ChartHeader'
 import { barThemeForTooltip } from './CustomTooltip'
-import { useMATContext } from './MATContext'
 import { NoCharts } from './NoCharts'
 import RowChart from './RowChart'
 import { VirtualRows } from './VirtualRows'
 import { XAxis } from './XAxis'
 import { fillDataHoles, sortRows } from './computations'
 import { getRowLabel } from './labels'
-import { useRouter } from 'next/router'
 import { useState, useEffect } from 'react'
 import { twMerge } from 'tailwind-merge'
+import { useMATContext } from './MATContext'
 
 const ROW_HEIGHT = 70
 const XAXIS_HEIGHT = 62
@@ -28,44 +27,45 @@ const prepareObservationsData = (
   includedFailureTypes = [],
   selectedFailureTypes = [],
 ) => {
+  const axisY = query.axis_y === 'domain' ? 'hostname' : query.axis_y
+  const axisYKey = query.axis_y === 'domain' ? 'domain' : query.axis_y
+
   return data
-    .reduce(
-      (acc, { timestamp, failure, observation_count, probe_cc, ...rest }) => {
-        if (!includedFailureTypes.includes(failure)) return acc
+    .reduce((acc, { timestamp, failure, observation_count, ...rest }) => {
+      if (!includedFailureTypes.includes(failure)) return acc
 
-        const reducedFailure = selectedFailureTypes.includes(failure)
-          ? failure
-          : 'other'
+      const reducedFailure = selectedFailureTypes.includes(failure)
+        ? failure
+        : 'other'
 
-        const existing = query.axis_y
-          ? acc.find(
-              (item) =>
-                item.measurement_start_day === timestamp.split('T')[0] &&
-                item[query.axis_y] === rest[query.axis_y],
-            )
-          : acc.find(
-              (item) => item.measurement_start_day === timestamp.split('T')[0],
-            )
-        if (existing) {
-          if (existing[reducedFailure]) {
-            existing[reducedFailure] += observation_count
-          } else {
-            existing[reducedFailure] = observation_count
-          }
+      const existing = axisY
+        ? acc.find(
+            (item) =>
+              item.measurement_start_day === timestamp.split('T')[0] &&
+              item[axisYKey] === rest[axisY],
+          )
+        : acc.find(
+            (item) => item.measurement_start_day === timestamp.split('T')[0],
+          )
+
+      if (existing) {
+        if (existing[reducedFailure]) {
+          existing[reducedFailure] += observation_count
         } else {
-          acc.push({
-            measurement_start_day:
-              query.time_grain === 'hour' ? timestamp : timestamp.split('T')[0],
-            [reducedFailure]: observation_count,
-            probe_cc,
-            ...(query.axis_y ? { [query.axis_y]: rest[query.axis_y] } : {}),
-            // ...rest,
-          })
+          existing[reducedFailure] = observation_count
         }
-        return acc
-      },
-      [],
-    )
+      } else {
+        acc.push({
+          measurement_start_day:
+            query.time_grain === 'hour' ? timestamp : timestamp.split('T')[0],
+          [reducedFailure]: observation_count,
+          ...(axisY ? { [axisYKey]: rest[axisY] } : {}),
+          // ...rest,
+        })
+      }
+
+      return acc
+    }, [])
     .sort((a, b) => {
       return (
         new Date(a.measurement_start_day) - new Date(b.measurement_start_day)
@@ -233,11 +233,10 @@ const GridChart = ({
   selectedRows = null,
 }) => {
   const noLabels = !Object.keys(rowLabels).length
-  const router = useRouter()
   // Fetch query state from context instead of router
   // because some params not present in the URL are injected in the context
-  const [query] = useMATContext()
-  const { tooltipIndex } = query
+  const { state } = useMATContext()
+  const { query, tooltipIndex } = state
   const indexBy = query.axis_x
   const tooltipContainer = useRef(null)
 

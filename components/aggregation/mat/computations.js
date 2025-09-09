@@ -64,8 +64,6 @@ export function fillRowHoles(data, query, locale) {
   for (const col of missingCols) {
     // use any (first) column data to popuplate yAxis value e.g `input` | `probe_cc`
     // and then overwrite with zero-data for that missing date
-    // console.log('col', col)
-
     newData.splice([...domain].indexOf(col), 0, {
       // ...sampleDataPoint,
       [query.axis_x]: col,

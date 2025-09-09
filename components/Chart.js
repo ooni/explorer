@@ -10,7 +10,6 @@ import { MdBarChart, MdOutlineFileDownload } from 'react-icons/md'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { MATFetcher } from 'services/fetchers'
 import useSWR from 'swr'
-import { FailureTypesProvider } from './aggregation/mat/FailureTypesContext'
 
 const swrOptions = {
   revalidateOnFocus: false,
@@ -85,32 +84,34 @@ const Chart = ({ queryParams = {}, setState = null, headerOptions = {} }) => {
   }, [data, setState])
 
   return (
-    <MATContextProvider {...queryParams}>
-      <FailureTypesProvider allFailureTypes={[]}>
-        <div className="flex flex-col">
-          <>
-            <GridChart
-              data={chartData}
-              rowKeys={rowKeys}
-              rowLabels={rowLabels}
-              header={headerOptions}
-            />
-            {!!chartData?.size && <MATLink query={queryParams} />}
-          </>
-          {error && (
-            <DetailsBox
-              content={
-                <details>
-                  <summary>
-                    <span>Error: {error.message}</span>
-                  </summary>
-                  <pre>{JSON.stringify(error, null, 2)}</pre>
-                </details>
-              }
-            />
-          )}
-        </div>
-      </FailureTypesProvider>
+    <MATContextProvider
+      allFailureTypes={[]}
+      queryProps={queryParams}
+      {...queryParams}
+    >
+      <div className="flex flex-col">
+        <>
+          <GridChart
+            data={chartData}
+            rowKeys={rowKeys}
+            rowLabels={rowLabels}
+            header={headerOptions}
+          />
+          {!!chartData?.size && <MATLink query={queryParams} />}
+        </>
+        {error && (
+          <DetailsBox
+            content={
+              <details>
+                <summary>
+                  <span>Error: {error.message}</span>
+                </summary>
+                <pre>{JSON.stringify(error, null, 2)}</pre>
+              </details>
+            }
+          />
+        )}
+      </div>
     </MATContextProvider>
   )
 }

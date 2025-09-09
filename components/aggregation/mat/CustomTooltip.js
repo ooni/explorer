@@ -6,10 +6,8 @@ import { memo, useMemo } from 'react'
 
 import { MdClear } from 'react-icons/md'
 import { useIntl } from 'react-intl'
-import { useMATContext } from './MATContext'
 import { colorMap } from './colorMap'
-import { useRouter } from 'next/router'
-import { useFailureTypes } from './FailureTypesContext'
+import { useMATContext } from './MATContext'
 
 export const themeForInvisibleTooltip = {
   tooltip: {
@@ -107,11 +105,10 @@ const getKeys = (loni) => {
 const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
   const theme = useTheme()
   const intl = useIntl()
-  const [query] = useMATContext()
-  const { query: routerQuery } = useRouter()
-  const { state } = useFailureTypes()
+  const { state } = useMATContext()
+  const { query } = state
 
-  const dataKeysToShow = getKeys(routerQuery?.loni)
+  const dataKeysToShow = getKeys(query?.loni)
 
   const [linkToMeasurements, derivedTitle] = useMemo(() => {
     const searchQuery = generateSearchQuery(data, query)
@@ -122,7 +119,7 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
 
     const derivedTitle =
       title ??
-      `${data[query?.axis_x]} ${query?.axis_y !== '' ? ` - ${data[query.axis_y]}` : ''}`
+      `${data[query?.axis_x]} ${query?.axis_y ? ` - ${data[query.axis_y]}` : ''}`
 
     return [linkObj, derivedTitle]
   }, [data, query, title])
@@ -134,7 +131,7 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
         <MdClear title="Close" strokeWidth={2} onClick={onClose} />
       </div>
       <div className="flex flex-col pr-4 my-1">
-        {routerQuery?.loni === 'observations' ? (
+        {query?.loni === 'observations' ? (
           <>
             {state?.selected?.map((key) => (
               <div key={key}>
@@ -154,7 +151,7 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
           </>
         ) : (
           <>
-            {routerQuery?.loni ? (
+            {query?.loni ? (
               <>
                 <div>
                   Outcome:{' '}
@@ -180,7 +177,7 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
                   Measurement count:{' '}
                   <span className="font-semibold">{data.count}</span>
                 </div>
-                {routerQuery?.loni === 'outcome' && (
+                {query?.loni === 'outcome' && (
                   // biome-ignore lint/complexity/noUselessFragments: <explanation>
                   <>
                     {dataKeysToShow.map((k) => (

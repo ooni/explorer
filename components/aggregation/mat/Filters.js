@@ -13,7 +13,7 @@ import 'regenerator-runtime'
 import { FaSort, FaSortDown, FaSortUp } from 'react-icons/fa'
 import { DetailsBox } from '../../measurement/DetailsBox'
 import { sortRows } from './computations'
-import { useFailureTypes } from './FailureTypesContext'
+import { useMATContext } from './MATContext'
 
 const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
   const defaultRef = useRef()
@@ -46,7 +46,6 @@ const rowConfig = (selectedItems, loni) => {
             'confirmed_count',
             'failure_count',
             'measurement_count',
-            'tcp_generic_timeout_error',
           ]
   return keys.map((key) => {
     return {
@@ -71,7 +70,7 @@ const Filters = ({ data, setDataForCharts, query }) => {
   const resetTableRef = useRef(false)
   const yAxis = query.axis_y
   const getRowId = useCallback((row) => row[query.axis_y], [query.axis_y])
-  const { state } = useFailureTypes()
+  const { state } = useMATContext()
   const config = useMemo(
     () => rowConfig(state.selected, query.loni),
     [state.selected, query.loni],

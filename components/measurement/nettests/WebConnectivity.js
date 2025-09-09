@@ -176,29 +176,29 @@ const QueryContainer = ({ query }) => {
       {!failure && (
         <table class="w-full flex flex-row flex-no-wrap sm:inline-table table-fixed">
           <thead>
-            <tr class="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0">
-              <th class="py-1 pe-1 text-left">Name</th>
-              <th class="py-1 pe-1 text-left">Class</th>
-              <th class="py-1 pe-1 text-left">TTL</th>
-              <th class="py-1 pe-1 text-left">Type</th>
-              <th class="py-1 pe-1 text-left">DATA</th>
-              <th class="py-1 pe-1 text-left">Answer IP Info</th>
+            <tr className="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0">
+              <th className="py-1 pe-1 text-left">Name</th>
+              <th className="py-1 pe-1 text-left">Class</th>
+              <th className="py-1 pe-1 text-left">TTL</th>
+              <th className="py-1 pe-1 text-left">Type</th>
+              <th className="py-1 pe-1 text-left">DATA</th>
+              <th className="py-1 pe-1 text-left">Answer IP Info</th>
             </tr>
           </thead>
-          <tbody class="flex-1 sm:flex-none">
+          <tbody className="flex-1 sm:flex-none">
             {Array.isArray(answers) &&
               answers.map((dnsAnswer, index) => (
                 <tr
                   key={index}
-                  class="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0"
+                  className="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0"
                 >
-                  <td class="py-1 pe-1">@</td>
-                  <td class="py-1 pe-1">IN</td>
-                  <td class="py-1 pe-1">{dnsAnswer.ttl || <>&nbsp;</>}</td>
-                  <td class="py-1 pe-1">
+                  <td className="py-1 pe-1">@</td>
+                  <td className="py-1 pe-1">IN</td>
+                  <td className="py-1 pe-1">{dnsAnswer.ttl || <>&nbsp;</>}</td>
+                  <td className="py-1 pe-1">
                     {dnsAnswer.answer_type || <>&nbsp;</>}
                   </td>
-                  <td class="py-1 pe-1">
+                  <td className="py-1 pe-1">
                     {
                       dnsAnswer.answer_type === 'A' ? (
                         dnsAnswer.ipv4
@@ -211,7 +211,7 @@ const QueryContainer = ({ query }) => {
                       ) // for any other answer_type, DATA column will be empty
                     }
                   </td>
-                  <td class="py-1">
+                  <td className="py-1">
                     {dnsAnswerIpInfo(dnsAnswer) || <>&nbsp;</>}
                   </td>
                 </tr>

@@ -49,7 +49,7 @@ const Layout = ({ children, isEmbeddedView }) => {
               <NavBar color={navbarColor} />
             </ConditionalWrapper>
           )}
-          <div className={`content ${!navbarColor && 'mt-[-66px]'}`}>
+          <div className={`content ${!navbarColor ? 'mt-[-66px]' : ''}`}>
             {children}
           </div>
         </div>

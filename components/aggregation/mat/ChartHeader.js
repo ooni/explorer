@@ -2,14 +2,11 @@ import OONILogo from 'ooni-components/svgs/logos/OONI-HorizontalMonochrome.svg'
 import { FaEdit } from 'react-icons/fa'
 import { useIntl } from 'react-intl'
 import CountryNameLabel from './CountryNameLabel'
-import { useMATContext } from './MATContext'
 import { colorMap } from './colorMap'
 import { testGroups, testNames } from '/components/test-info'
-import { useRouter } from 'next/router'
 import { blockingTypeColors } from './colorMap'
-import { colors } from 'ooni-components'
 import { useMemo, useState } from 'react'
-import { useFailureTypes } from './FailureTypesContext'
+import { useMATContext } from './MATContext'
 import FailureForm from './FailureForm'
 import { MdClose } from 'react-icons/md'
 
@@ -95,26 +92,26 @@ const legendItems = [
   },
 ]
 
-const legendItemsDetailedV5 = () => {
-  return [
-    ...Object.entries(blockingTypeColors).flatMap(([type, states]) =>
-      Object.entries(states)
-        .map(([state, color]) => {
-          if (state !== 'ok') {
-            return {
-              label: `${type}.${state}`,
-              color: color,
-            }
-          }
-        })
-        .filter((item) => item !== undefined),
-    ),
-    {
-      label: 'ok',
-      color: colorMap.ok_count,
-    },
-  ]
-}
+// const legendItemsDetailedV5 = () => {
+//   return [
+//     ...Object.entries(blockingTypeColors).flatMap(([type, states]) =>
+//       Object.entries(states)
+//         .map(([state, color]) => {
+//           if (state !== 'ok') {
+//             return {
+//               label: `${type}.${state}`,
+//               color: color,
+//             }
+//           }
+//         })
+//         .filter((item) => item !== undefined),
+//     ),
+//     {
+//       label: 'ok',
+//       color: colorMap.ok_count,
+//     },
+//   ]
+// }
 
 const legendItemsOutcomeV5 = [
   {
@@ -133,8 +130,8 @@ const legendItemsOutcomeV5 = [
 
 const Legend = () => {
   const intl = useIntl()
-  const { query } = useRouter()
-  const { state } = useFailureTypes()
+  const { state } = useMATContext()
+  const { query } = state
 
   const showEditorButton = useMemo(
     () => query.loni === 'observations',
@@ -194,9 +191,7 @@ const Legend = () => {
           {items.map((item) => (
             <LegendItem
               key={item.label}
-              label={
-                item.label ? intl.formatMessage({ id: item.label }) : item.label
-              }
+              label={intl.messages[item.label] || item.label}
               color={item.color}
             />
           ))}
@@ -222,8 +217,11 @@ const Legend = () => {
  * @param {boolean} options.probe_cc - Show/hide country name
  */
 export const ChartHeader = ({ options: opts }) => {
+  const { state } = useMATContext()
+  const { query } = state
+
   const intl = useIntl()
-  const [query] = useMATContext()
+
   const options = {
     subtitle: true,
     probe_cc: true,

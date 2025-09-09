@@ -3,7 +3,7 @@ import { useIntl } from 'react-intl'
 
 import Filters from './Filters'
 import GridChart, { prepareDataForGridChart } from './GridChart'
-import { useFailureTypes } from './FailureTypesContext'
+import { useMATContext } from './MATContext'
 
 const COUNT_KEYS_CONFIG = {
   // outcome: ['outcome_blocked', 'outcome_down', 'outcome_ok'],
@@ -120,7 +120,7 @@ const noRowsSelected = null
 
 const TableView = ({ data, query, showFilters = true }) => {
   const intl = useIntl()
-  const { state } = useFailureTypes()
+  const { state } = useMATContext()
 
   // The incoming data is reshaped to generate:
   // - reshapedData: holds the full set that will be used by GridChart

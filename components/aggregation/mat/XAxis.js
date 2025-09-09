@@ -7,7 +7,8 @@ import { getXAxisTicks } from './timeScaleXAxis'
 
 export const XAxis = ({ data }) => {
   const { locale } = useIntl()
-  const [query] = useMATContext()
+  const { state } = useMATContext()
+  const query = state.query
   const xAxisTickValues = getXAxisTicks(query, 30)
   const xAxisMargins = { right: 50, left: 0, top: 60, bottom: 0 }
   const axisTop = {

@@ -29,7 +29,7 @@ const WebsitesSection = ({ countryCode }) => {
     <>
       <div
         id="websites"
-        class="h-[200px] mt-[-200px] md:h-[200px] md:mt-[-200px]"
+        className="h-[200px] mt-[-200px] md:h-[200px] md:mt-[-200px]"
       />
       <h2 className="mt-8">
         <FormattedMessage id="Country.Heading.Websites" />

@@ -17,16 +17,14 @@ import {
   InvisibleTooltip,
   themeForInvisibleTooltip,
 } from './CustomTooltip'
-import { useMATContext } from './MATContext'
 import { colorMap } from './colorMap'
 import { getXAxisTicks } from './timeScaleXAxis'
-import { useRouter } from 'next/router'
 import CustomStackedBarItem from './CustomStackedBarItem'
 import { line } from 'd3-shape'
 import { computeXYScalesForSeries } from '@nivo/scales'
 import { Axes } from '@nivo/axes'
 import { colors } from 'ooni-components'
-import { useFailureTypes } from './FailureTypesContext'
+import { useMATContext } from './MATContext'
 
 const chartMargins = { top: 5, right: 50, bottom: 5, left: 0 }
 
@@ -34,6 +32,7 @@ const lineColor = colors.gray['700']
 
 const Line = (props) => {
   const { bars, xScale, innerWidth, innerHeight, tooltip } = props
+  if (bars.length === 0) return null
 
   const uniqBars = bars
   // .filter(
@@ -289,23 +288,21 @@ const RowChart = ({
   rowIndex /* width, first, last */,
 }) => {
   const intl = useIntl()
-  const { query: routerQuery } = useRouter()
-  const [query, updateMATContext] = useMATContext()
-  const { tooltipIndex } = query
-  const { state } = useFailureTypes()
+  const { dispatch, state } = useMATContext()
+  const { query, tooltipIndex } = state
 
   const { showTooltipFromEvent, hideTooltip } = useTooltip()
 
   const onClose = useCallback(() => {
     // update MATContext to remove the highlighted border around BarItem
-    updateMATContext({ tooltipIndex: [-1, ''] }, true)
+    dispatch({ type: 'setTooltipIndex', payload: [-1, ''] })
     hideTooltip()
-  }, [hideTooltip])
+  }, [hideTooltip, dispatch])
 
   const handleClick = useCallback(
     ({ data }) => {
       const column = data[query.axis_x]
-      updateMATContext({ tooltipIndex: [rowIndex, column] }, true)
+      dispatch({ type: 'setTooltipIndex', payload: [rowIndex, column] })
       showTooltipFromEvent(
         createElement(CustomToolTip, {
           data: data,
@@ -315,7 +312,7 @@ const RowChart = ({
         'top',
       )
     },
-    [onClose, query.axis_x, rowIndex, showTooltipFromEvent, updateMATContext],
+    [onClose, query.axis_x, rowIndex, showTooltipFromEvent, dispatch],
   )
 
   // Load the chart with an empty data to avoid
@@ -342,14 +339,14 @@ const RowChart = ({
     [state.selected],
   )
   const theme = useMemo(() => {
-    if (routerQuery?.loni === 'outcome') {
+    if (query?.loni === 'outcome') {
       return {
         ...themeForInvisibleTooltip,
         axis: { ticks: { text: { fontSize: 10 } } },
       }
     }
     return themeForInvisibleTooltip
-  }, [routerQuery?.loni])
+  }, [query?.loni])
 
   return (
     <div className="flex items-center relative" style={{ direction: 'ltr' }}>
@@ -357,15 +354,15 @@ const RowChart = ({
       <div style={{ height, width: '100%' }}>
         <Bar
           data={chartData}
-          keys={getKeys(routerQuery?.loni, uniqueFailures)}
+          keys={getKeys(query?.loni, uniqueFailures)}
           indexBy={indexBy}
           tooltip={InvisibleTooltip}
           onClick={handleClick}
-          // routerQuery?.loni && routerQuery?.loni === 'detailed'
+          // query?.loni && query?.loni === 'detailed'
           //   ? CustomStackedBarItem
           //   : CustomBarItem
           barComponent={CustomBarItem}
-          // routerQuery?.loni && routerQuery?.loni === 'detailed'
+          // query?.loni && query?.loni === 'detailed'
           //   ? 'grouped'
           //   : 'stacked'
           groupMode={'stacked'}
@@ -376,14 +373,12 @@ const RowChart = ({
           enableLabel={tooltipIndex[0] === rowIndex ? tooltipIndex[1] : false}
           valueScale={{
             type: 'linear',
-            ...(routerQuery?.loni && routerQuery?.loni === 'outcome'
+            ...(query?.loni && query?.loni === 'outcome'
               ? { min: 0, max: 1 }
               : { min: 0, max: 'auto' }),
           }}
           gridYValues={
-            routerQuery?.loni && routerQuery?.loni === 'outcome'
-              ? [0, 0.5, 1]
-              : undefined
+            query?.loni && query?.loni === 'outcome' ? [0, 0.5, 1] : undefined
           }
           markers={[
             {

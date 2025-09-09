@@ -207,7 +207,7 @@ export const NavBar = ({ color }) => {
                   </div>
                 )}
                 <div
-                  className={`flex gap-4 lg:gap-8 text-sm ${showMenu && 'pt-2 flex-col items-start [&>a]:border-black [&>a]:hover:border-black [&>*]:opacity-100 [&>*]:text-black [&>*]:hover:text-black'}`}
+                  className={`flex gap-4 lg:gap-8 text-sm ${showMenu ? 'pt-2 flex-col items-start [&>a]:border-black [&>a]:hover:border-black [&>*]:opacity-100 [&>*]:text-black [&>*]:hover:text-black' : ''}`}
                 >
                   <NavItem
                     label={<FormattedMessage id="Navbar.Findings" />}

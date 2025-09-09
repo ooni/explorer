@@ -1,77 +1,157 @@
+import { colors } from 'ooni-components'
+import { createContext, useReducer, useContext, useMemo } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from 'next/router'
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-} from 'react'
 
-export const MATStateContext = createContext()
+const ooniColors = [
+  colors.red['800'],
+  colors.yellow['600'],
+  colors.gray['600'],
+  colors.blue['600'],
+  colors.orange['600'],
+  colors.fuchsia['600'],
+  colors.pink['600'],
+  colors.teal['600'],
+  colors.violet['600'],
+  colors.fuchsia['600'],
+  '#8c564b', //brown
+  colors.lime['300'],
+  colors.cyan['600'],
+]
 
-export const defaultMATContext = {
-  since: '',
-  until: '',
-  axis_x: '',
-  axis_y: '',
-  test_name: '',
-  probe_cc: '',
-  probe_asn: '',
-  input: '',
-  domain: '',
-  category_code: '',
-  tooltipIndex: [-1, ''],
-  loni: 'null',
+const chartColors = (selectedFailureTypes) =>
+  selectedFailureTypes
+    .filter((f) => !['none', 'others'].includes(f))
+    .reduce(
+      (acc, current, i) => {
+        acc[current] = ooniColors[i % ooniColors.length]
+        return acc
+      },
+      {
+        none: colors.green['600'],
+        other: colors.gray['300'],
+      },
+    )
+
+const initialState = {
+  all: [],
+  selected: [],
+  included: [],
+  colors: null,
 }
 
-export const MATContextProvider = ({
+const getSelected = (allFailureTypes) =>
+  allFailureTypes
+    .filter(
+      (f) => !['tcp.network_unreachable', 'tcp.host_unreachable'].includes(f),
+    )
+    .slice(0, 7)
+
+function reducer(state, action) {
+  switch (action.type) {
+    case 'initFromData': {
+      //   const all = action.payload // ordered list
+      return {
+        ...action.payload,
+        // ...state,
+        // all,
+        // selected: getSelected(all),
+        // included: all,
+        // colors: action.payload.length
+        //   ? chartColors(getSelected(action.payload))
+        //   : null,
+      }
+    }
+    case 'updateQuery':
+      return { ...state, query: action.payload }
+    case 'updateFailureTypes':
+      return { ...state, ...action.payload }
+    case 'setIncluded':
+      return { ...state, included: action.payload }
+    case 'setSelected':
+      return {
+        ...state,
+        selected: action.payload,
+        colors: action.payload.length ? chartColors(action.payload) : null,
+      }
+    case 'setTooltipIndex':
+      return { ...state, tooltipIndex: action.payload }
+    case 'reset':
+      return initialState
+    case 'resetFailureTypes':
+      return { ...state, ...initialState }
+    default:
+      return state
+  }
+}
+
+const Ctx = createContext(null)
+
+export function MATContextProvider({
+  queryProps,
+  allFailureTypes = [],
   children,
-  queryParams,
-  ...initialContext
-}) => {
-  const [state, setState] = useState({
-    ...defaultMATContext,
-    ...initialContext,
+}) {
+  const router = useRouter()
+  const MATquery = useMemo(
+    () => queryProps || router.query,
+    [queryProps, router.query],
+  )
+
+  const selected = useMemo(
+    () =>
+      MATquery?.loni === 'observations'
+        ? getSelected(allFailureTypes)
+        : allFailureTypes,
+    [allFailureTypes, MATquery.loni],
+  )
+
+  // const initialState = useMemo(
+  //   () => ({
+  //     all: allFailureTypes,
+  //     selected,
+  //     included: allFailureTypes,
+  //     colors: chartColors(selected),
+  //     query: MATquery,
+  //   }),
+  //   [allFailureTypes, selected, MATquery],
+  // )
+
+  const [state, dispatch] = useReducer(reducer, {
+    all: allFailureTypes,
+    selected,
+    included: allFailureTypes,
+    colors: chartColors(selected),
+    query: MATquery,
+    tooltipIndex: [-1, ''],
   })
 
-  const { query } = useRouter()
-
-  const MATquery = queryParams || query
-
-  const stateReducer = useCallback(
-    (updates, partial = false) => {
-      setState((state) =>
-        partial
-          ? Object.assign({}, state, updates)
-          : Object.assign(
-              {},
-              state,
-              defaultMATContext,
-              initialContext,
-              updates,
-            ),
-      )
-    },
-    [initialContext],
-  )
+  useEffect(() => {
+    if (!allFailureTypes?.length) {
+      dispatch({ type: 'resetFailureTypes' })
+    } else {
+      dispatch({
+        type: 'updateFailureTypes',
+        payload: {
+          all: allFailureTypes,
+          selected,
+          included: allFailureTypes,
+          colors: chartColors(selected),
+        },
+      })
+    }
+  }, [allFailureTypes])
 
   useEffect(() => {
-    stateReducer(MATquery)
+    dispatch({ type: 'updateQuery', payload: MATquery })
   }, [MATquery])
 
-  return (
-    <MATStateContext.Provider
-      value={{ ...state, updateMATContext: stateReducer }}
-    >
-      {children}
-    </MATStateContext.Provider>
-  )
+  const value = useMemo(() => ({ state, dispatch }), [state])
+  return <Ctx.Provider value={value}>{children}</Ctx.Provider>
 }
 
-export function useMATContext() {
-  const { updateMATContext, ...state } = useContext(MATStateContext)
-  if (typeof state === 'undefined') {
-    throw new Error('useMATContext should be used within a MATContextProvider')
-  }
-  return [state, updateMATContext]
+export const useMATContext = () => {
+  const ctx = useContext(Ctx)
+  if (!ctx) throw new Error('useMATContext must be used within provider')
+  return ctx
 }
