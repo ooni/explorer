@@ -29,8 +29,7 @@ const chartMargins = { top: 5, right: 50, bottom: 5, left: 0 }
 
 const lineColor = colors.gray['700']
 
-const Line = (props) => {
-  const { bars, xScale, innerWidth, innerHeight, tooltip } = props
+const Line = ({ bars, xScale, innerWidth, innerHeight, onClick }) => {
   if (bars.length === 0) return null
 
   const maxValue = Math.max(...bars.map((bar) => bar.data.data.count || 0))
@@ -90,19 +89,30 @@ const Line = (props) => {
         style={{ pointerEvents: 'none' }}
       />
       {bars.map((bar) => (
-        <circle
-          key={bar.key}
-          cx={
-            bar.data.id === 'dns_isp'
-              ? bar.x + (4 * bar.width) / 2
-              : bar.x + bar.width / 2
-          }
-          cy={scale.yScale(bar.data.data.count || 0)}
-          r={2}
-          fill="white"
-          stroke={lineColor}
-          style={{ pointerEvents: 'none' }}
-        />
+        <g key={bar.key}>
+          {/* Outer transparent circle for larger click area */}
+          <circle
+            cx={bar.x + bar.width / 2}
+            cy={scale.yScale(bar.data.data.count || 0)}
+            r={bar.width - 4}
+            fill="transparent"
+            stroke="transparent"
+            onClick={() => onClick({ data: bar.data.data })}
+            className="cursor-pointer"
+          />
+
+          {/* Inner visible circle */}
+          <circle
+            cx={bar.x + bar.width / 2}
+            cy={scale.yScale(bar.data.data.count || 0)}
+            r={3}
+            fill="white"
+            stroke={lineColor}
+            strokeWidth={1}
+            className="cursor-pointer"
+            style={{ pointerEvents: 'none' }}
+          />
+        </g>
       ))}
     </>
   )
@@ -307,15 +317,6 @@ const RowChart = ({
     () => ['other', ...(state.selected ?? [])],
     [state.selected],
   )
-  const theme = useMemo(() => {
-    if (query?.loni === 'outcome') {
-      return {
-        ...themeForInvisibleTooltip,
-        axis: { ticks: { text: { fontSize: 10 } } },
-      }
-    }
-    return themeForInvisibleTooltip
-  }, [query?.loni])
 
   return (
     <div className="flex items-center relative" style={{ direction: 'ltr' }}>
@@ -329,7 +330,7 @@ const RowChart = ({
           onClick={handleClick}
           barComponent={CustomBarItem}
           groupMode={'stacked'}
-          theme={theme}
+          theme={themeForInvisibleTooltip}
           // HACK: To show the tooltip, we hijack the
           // `enableLabel` prop to pass in the tooltip coordinates (row, col_index) from `GridChart`
           // `showTooltip` contains `[rowHasTooltip, columnwithTooltip]` e.g `[true, '2022-02-01']`

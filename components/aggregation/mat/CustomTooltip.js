@@ -144,7 +144,7 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
               Outcome:{' '}
               <span className="font-semibold">{data.blocked_max_outcome}</span>
             </div>
-            {data?.likely_blocked_protocols && (
+            {!!data?.likely_blocked_protocols.length && (
               <div>
                 Likely blocked protocols:{' '}
                 <ul>
