@@ -90,22 +90,12 @@ export const generateSearchQuery = (data, query) => {
 }
 
 const keys = ['anomaly_count', 'confirmed_count', 'failure_count', 'ok_count']
-const v5keys = []
-
-const getKeys = (loni) => {
-  if (loni === 'outcome') {
-    return v5keys
-  }
-  return keys
-}
 
 const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
   const theme = useTheme()
   const intl = useIntl()
   const { state } = useMATContext()
   const { query } = state
-
-  const dataKeysToShow = getKeys(query?.loni)
 
   const [linkToMeasurements, derivedTitle] = useMemo(() => {
     const searchQuery = generateSearchQuery(data, query)
@@ -128,7 +118,7 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
         <MdClear title="Close" strokeWidth={2} onClick={onClose} />
       </div>
       <div className="flex flex-col pr-4 my-1">
-        {query?.loni === 'observations' ? (
+        {query?.loni === 'observations' && (
           <>
             {state?.selected?.map((key) => (
               <div key={key}>
@@ -146,73 +136,50 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
               </div>
             ))}
           </>
-        ) : (
+        )}
+
+        {query?.loni === 'outcome' && (
           <>
-            {query?.loni ? (
-              <>
-                <div>
-                  Outcome:{' '}
-                  <span className="font-semibold">
-                    {data.blocked_max_outcome}
-                  </span>
-                </div>
-                {data?.likely_blocked_protocols && (
-                  <div>
-                    Likely blocked protocols:{' '}
-                    <ul>
-                      {data?.likely_blocked_protocols.map(
-                        ([protocol, value]) => (
-                          <li key={protocol}>
-                            {protocol}: {Math.floor(value * 100) / 100}
-                          </li>
-                        ),
-                      )}
-                    </ul>
-                  </div>
-                )}
-                <div>
-                  Measurement count:{' '}
-                  <span className="font-semibold">{data.count}</span>
-                </div>
-                {query?.loni === 'outcome' && (
-                  // biome-ignore lint/complexity/noUselessFragments: <explanation>
-                  <>
-                    {dataKeysToShow.map((k) => (
-                      <div className="my-1" key={k}>
-                        <div className="flex items-center">
-                          <div className="mr-8">
-                            {intl.formatMessage({
-                              id: `MAT.Table.Header.${k}`,
-                            })}
-                          </div>
-                          <div className="ml-auto">
-                            {intl.formatNumber(Number(data[k] ?? 0))}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </>
-                )}
-              </>
-            ) : (
-              <>
-                {dataKeysToShow.map((k) => (
-                  <div className="my-1" key={k}>
-                    <div className="flex items-center">
-                      <div className="mr-4">
-                        <Chip color={colorMap[k]} />
-                      </div>
-                      <div className="mr-8">
-                        {intl.formatMessage({ id: `MAT.Table.Header.${k}` })}
-                      </div>
-                      <div className="ml-auto">
-                        {intl.formatNumber(Number(data[k] ?? 0))}
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </>
+            <div>
+              Outcome:{' '}
+              <span className="font-semibold">{data.blocked_max_outcome}</span>
+            </div>
+            {data?.likely_blocked_protocols && (
+              <div>
+                Likely blocked protocols:{' '}
+                <ul>
+                  {data?.likely_blocked_protocols.map(([protocol, value]) => (
+                    <li key={protocol}>
+                      {protocol}: {Math.floor(value * 100) / 100}
+                    </li>
+                  ))}
+                </ul>
+              </div>
             )}
+            <div>
+              Measurement count:{' '}
+              <span className="font-semibold">{data.count}</span>
+            </div>
+          </>
+        )}
+
+        {!query?.loni && (
+          <>
+            {keys.map((k) => (
+              <div className="my-1" key={k}>
+                <div className="flex items-center">
+                  <div className="mr-4">
+                    <Chip color={colorMap[k]} />
+                  </div>
+                  <div className="mr-8">
+                    {intl.formatMessage({ id: `MAT.Table.Header.${k}` })}
+                  </div>
+                  <div className="ml-auto">
+                    {intl.formatNumber(Number(data[k] ?? 0))}
+                  </div>
+                </div>
+              </div>
+            ))}
           </>
         )}
       </div>

@@ -22,8 +22,6 @@ const fetcher = (query) => {
   let reqUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation?${qs}`
 
   if (query.loni) {
-    const urlBase = 'https://api.dev.ooni.io/api/v1/aggregation'
-    // const urlBase = 'https://oonimeasurements.dev.ooni.io/api/v1/aggregation'
     const { loni, v5, ...v5qs } = query
     if (loni === 'observations') {
       const { axis_y, axis_x, domain, ...v5qs } = query
@@ -41,9 +39,9 @@ const fetcher = (query) => {
 
       const domainParam = domain ? `&hostname=${domain}` : ''
 
-      reqUrl = `${urlBase}/observations?group_by=failure${axisX}${axisY}${domainParam}&${new URLSearchParams(v5qs).toString()}`
+      reqUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation/observations?group_by=failure${axisX}${axisY}${domainParam}&${new URLSearchParams(v5qs).toString()}`
     } else {
-      reqUrl = `${urlBase}/analysis?${new URLSearchParams(v5qs).toString()}`
+      reqUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation/analysis?${new URLSearchParams(v5qs).toString()}`
     }
   }
   console.debug(`API Query: ${reqUrl}`)
