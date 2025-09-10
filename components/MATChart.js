@@ -17,7 +17,7 @@ const swrOptions = {
   dedupingInterval: 10 * 60 * 1000,
 }
 
-const fetcher = (query) => {
+const getAPIEndpoint = (query) => {
   const qs = new URLSearchParams(query).toString()
   let reqUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation?${qs}`
 
@@ -44,6 +44,11 @@ const fetcher = (query) => {
       reqUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation/analysis?${new URLSearchParams(v5qs).toString()}`
     }
   }
+  return reqUrl
+}
+
+const fetcher = (query) => {
+  const reqUrl = getAPIEndpoint(query)
   console.debug(`API Query: ${reqUrl}`)
   return axios
     .get(reqUrl)
@@ -137,6 +142,8 @@ const MATChart = ({ query, showFilters = true }) => {
     swrOptions,
   )
 
+  const apiEndpoint = getAPIEndpoint(query)
+
   const results = useMemo(
     () => data?.data?.result || data?.data?.results || [],
     [data],
@@ -167,7 +174,11 @@ const MATChart = ({ query, showFilters = true }) => {
             <>
               {((data && data.data.dimension_count === 1) ||
                 (data && query.axis_x && !query.axis_y)) && (
-                <StackedBarChart data={results} query={query} />
+                <StackedBarChart
+                  data={results}
+                  query={query}
+                  apiEndpoint={apiEndpoint}
+                />
               )}
               {((data && data.data.dimension_count > 1) ||
                 (data && query.axis_x && query.axis_y)) && (
@@ -175,6 +186,7 @@ const MATChart = ({ query, showFilters = true }) => {
                   data={results}
                   query={query}
                   showFilters={showFilters}
+                  apiEndpoint={apiEndpoint}
                 />
               )}
             </>

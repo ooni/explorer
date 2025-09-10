@@ -4,6 +4,7 @@ import { useIntl } from 'react-intl'
 import Filters from './Filters'
 import GridChart, { prepareDataForGridChart } from './GridChart'
 import { useMATContext } from './MATContext'
+import { APIButtons } from '../../APIButtons'
 
 const COUNT_KEYS_CONFIG = {
   default: [
@@ -104,7 +105,7 @@ const prepareDataforTable = (
 // Maybe this can also be `[]`
 const noRowsSelected = null
 
-const TableView = ({ data, query, showFilters = true }) => {
+const TableView = ({ data, query, showFilters = true, apiEndpoint }) => {
   const intl = useIntl()
   const { state } = useMATContext()
 
@@ -138,6 +139,7 @@ const TableView = ({ data, query, showFilters = true }) => {
         rowKeys={rowKeys}
         rowLabels={rowLabels}
       />
+      <APIButtons apiEndpoint={apiEndpoint} />
       {showFilters && (
         <div className="mt-8">
           <Filters
