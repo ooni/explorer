@@ -19,13 +19,13 @@ const chartColors = {
 const chartLabels = {
   countries_by_month: 'Countries',
   networks_by_month: 'Networks',
-  measurements_by_month: 'Measurements',
+  measurements_by_month: 'Monthly Measurements',
 }
 
 export const MultiAxisLayer = ({ innerWidth, innerHeight, data }) => {
   const countriesMax = Math.max(...data[0].data.map((d) => d.value))
-  const networksMax = Math.max(...data[2].data.map((d) => d.value))
-  const measurementsMax = Math.max(...data[1].data.map((d) => d.value))
+  const networksMax = Math.max(...data[1].data.map((d) => d.value))
+  const measurementsMax = Math.max(...data[2].data.map((d) => d.value))
 
   // Scales for the 3 axes
   const yCountries = scaleLinear()
@@ -134,7 +134,11 @@ const CoverageChart = () => {
   const intl = useIntl()
 
   if (data) {
-    const chartData = Object.keys(data).map((key) => ({
+    const chartData = [
+      'countries_by_month',
+      'networks_by_month',
+      'measurements_by_month',
+    ].map((key) => ({
       id: key,
       data: data[key].slice(0, -1).map((d) => ({
         x: d.date.split('T')[0],
@@ -211,11 +215,14 @@ const CoverageChart = () => {
               return (
                 <div className="text-white text-xs bg-gray-800 p-2 rounded-md font-light">
                   <div>{slice.points[0].data.xFormatted}</div>
-                  {slice.points.map((point) => (
-                    <div key={point.id}>
-                      {chartLabels[point.serieId]}: {point.data.value}
-                    </div>
-                  ))}
+                  {slice.points
+                    .slice()
+                    .reverse()
+                    .map((point) => (
+                      <div key={point.id}>
+                        {chartLabels[point.serieId]}: {point.data.value}
+                      </div>
+                    ))}
                 </div>
               )
             }}
