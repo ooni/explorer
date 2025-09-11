@@ -2,30 +2,105 @@
 import axios from 'axios'
 import { colors } from 'ooni-components'
 import { useIntl } from 'react-intl'
-import dayjs from 'services/dayjs'
 import useSWR from 'swr'
-import {
-  createContainer,
-  LineSegment,
-  VictoryAxis,
-  VictoryChart,
-  VictoryLegend,
-  VictoryLine,
-} from 'victory'
+import { ResponsiveLine } from '@nivo/line'
 
-import Tooltip from '../country/Tooltip'
 import FormattedMarkdown from '../FormattedMarkdown'
-import VictoryTheme from '../VictoryTheme'
 import { ChartLoader } from './ChartLoader'
 
-const getMaxima = (data) => {
-  let maxima
-  data.forEach((d) => {
-    if (typeof maxima === 'undefined' || maxima < d.value) {
-      maxima = d.value
-    }
-  })
-  return maxima
+import { scaleLinear } from 'd3-scale'
+
+const chartColors = {
+  countries_by_month: colors.blue['800'],
+  networks_by_month: colors.gray['700'],
+  measurements_by_month: colors.yellow['700'],
+}
+
+const chartLabels = {
+  countries_by_month: 'Countries',
+  networks_by_month: 'Networks',
+  measurements_by_month: 'Measurements',
+}
+
+export const MultiAxisLayer = ({ innerWidth, innerHeight, data }) => {
+  const countriesMax = Math.max(...data[0].data.map((d) => d.value))
+  const networksMax = Math.max(...data[2].data.map((d) => d.value))
+  const measurementsMax = Math.max(...data[1].data.map((d) => d.value))
+
+  // Scales for the 3 axes
+  const yCountries = scaleLinear()
+    .domain([0, countriesMax])
+    .range([innerHeight, 0])
+  const yNetworks = scaleLinear()
+    .domain([0, networksMax])
+    .range([innerHeight, 0])
+  const yMeasurements = scaleLinear()
+    .domain([0, measurementsMax])
+    .range([innerHeight, 0])
+
+  // Helper to draw a simple custom axis anywhere
+  const renderAxis = (
+    scale,
+    { x, color = '#666', format = (v) => v, labelPosition = 'right', maxValue },
+  ) => {
+    // Manually define the 3 tick values
+    const tickValues = [0, Math.round(maxValue / 2), maxValue]
+
+    return (
+      <g transform={`translate(${x},0)`} style={{ pointerEvents: 'none' }}>
+        <line
+          x1={0}
+          x2={0}
+          y1={0}
+          y2={innerHeight}
+          stroke={color}
+          strokeWidth={2}
+        />
+
+        {tickValues.map((t) => (
+          <g key={t} transform={`translate(0,${scale(t)})`}>
+            <text
+              x={labelPosition === 'left' ? -9 : 9}
+              dy="0.32em"
+              fontSize={11}
+              fill="black"
+              textAnchor={labelPosition === 'left' ? 'end' : 'start'}
+            >
+              {format(t)}
+            </text>
+          </g>
+        ))}
+      </g>
+    )
+  }
+
+  return (
+    <g>
+      {/* Left axis: countries */}
+      {renderAxis(yCountries, {
+        x: 0,
+        color: chartColors.countries_by_month,
+        labelPosition: 'left',
+        maxValue: countriesMax,
+      })}
+
+      {/* Middle axis: networks  */}
+      {renderAxis(yNetworks, {
+        x: innerWidth / 2,
+        color: chartColors.networks_by_month,
+        labelPosition: 'left',
+        maxValue: networksMax,
+      })}
+
+      {/* Right axis: measurements */}
+      {renderAxis(yMeasurements, {
+        x: innerWidth,
+        color: chartColors.measurements_by_month,
+        format: (v) => `${Math.round(v / 1000)}k`,
+        maxValue: measurementsMax,
+      })}
+    </g>
+  )
 }
 
 const BASE_URL = `${process.env.NEXT_PUBLIC_OONI_API}`
@@ -46,7 +121,7 @@ const getLastMonthData = (collection) => {
       today.getUTCMonth() === dt.getUTCMonth()
     )
   })
-  return cc.length === 0 ? 0 : cc[0]?.value ?? 0
+  return cc.length === 0 ? 0 : (cc[0]?.value ?? 0)
 }
 
 const CoverageChart = () => {
@@ -59,9 +134,14 @@ const CoverageChart = () => {
   const intl = useIntl()
 
   if (data) {
-    const countryCoverage = data.countries_by_month.slice(0, -1)
-    const networkCoverage = data.networks_by_month.slice(0, -1)
-    const measurementsByMonth = data.measurements_by_month.slice(0, -1)
+    const chartData = Object.keys(data).map((key) => ({
+      id: key,
+      data: data[key].slice(0, -1).map((d) => ({
+        x: d.date.split('T')[0],
+        y: d.value / Math.max(...data[key].map((item) => item.value)),
+        value: d.value,
+      })),
+    }))
 
     // API responses are ordered by date, with most recent month at the end
     const lastMonth = {
@@ -70,172 +150,77 @@ const CoverageChart = () => {
       measurementCount: getLastMonthData(data.measurements_by_month),
     }
 
-    // Determine the maximum value for each data set
-    // Used to scale the charts on a y-axis shared with other charts
-    const countryCoverageMaxima = getMaxima(countryCoverage)
-    const networkCoverageMaxima = getMaxima(networkCoverage)
-    const measurementMaxima = getMaxima(measurementsByMonth)
-
-    const VictoryCursorVoronoiContainer = createContainer('cursor', 'voronoi')
-
     return (
       <>
         <div className="flex justify-center text-lg">
           <FormattedMarkdown
             id={'Home.MonthlyStats.SummaryText'}
             values={{
-              // Added **'s to format the variables in bold text
               measurementCount: `**${intl.formatNumber(lastMonth.measurementCount)}**`,
               networkCount: `**${intl.formatNumber(lastMonth.networkCount)}**`,
               countryCount: `**${intl.formatNumber(lastMonth.countryCount)}**`,
             }}
           />
         </div>
-        <VictoryChart
-          height={250}
-          width={800}
-          theme={VictoryTheme}
-          containerComponent={
-            <VictoryCursorVoronoiContainer
-              cursorComponent={
-                <LineSegment
-                  style={{
-                    strokeDasharray: [6, 6],
-                    stroke: colors.gray['500'],
-                  }}
-                />
-              }
-              voronoiDimension="x"
-              labels={(d) => {
-                if (d.childName === 'countryCoverage') {
-                  return `${d.date}\n \nCountries: ${d.value}`
-                }
-                if (d.childName === 'networkCoverage') {
-                  return `Networks: ${d.value}`
-                }
-                if (d.childName === 'measurementsByMonth') {
-                  return `Measurements: ${d.value}`
-                }
-              }}
-              labelComponent={<Tooltip />}
-            />
-          }
-          domainPadding={{
-            x: 0,
-            y: 10,
-          }}
-        >
-          <VictoryLegend
-            centerTitle
-            x={230}
-            y={230}
-            orientation="horizontal"
-            gutter={40}
-            data={[
+        <div className="w-full h-[350px]">
+          <ResponsiveLine
+            data={chartData}
+            layers={[
+              'axes',
+              'crosshair',
+              'lines',
+              'slices',
+              'legends',
+              MultiAxisLayer,
+            ]}
+            colors={(d) => chartColors[d.id]}
+            margin={{ top: 50, right: 110, bottom: 50, left: 60 }}
+            xScale={{
+              type: 'time',
+              format: '%Y-%m-%d',
+              precision: 'day',
+              useUTC: true,
+            }}
+            xFormat="time:%Y-%m-%d"
+            axisLeft={null}
+            axisBottom={{
+              format: "%b'%y",
+              tickPadding: 20,
+              tickSize: 0,
+            }}
+            legends={[
               {
-                name: 'Countries',
-                symbol: {
-                  type: 'minus',
-                  fill: colors.blue['800'],
-                },
-              },
-              {
-                name: 'Networks',
-                symbol: {
-                  type: 'minus',
-                  fill: colors.gray['700'],
-                },
-              },
-              {
-                name: 'Monthly Measurements',
-                symbol: {
-                  type: 'minus',
-                  fill: colors.yellow['700'],
-                },
+                data: chartData.map((d) => ({
+                  id: d.id,
+                  label: chartLabels[d.id],
+                  color: chartColors[d.id],
+                })),
+                anchor: 'bottom',
+                direction: 'row',
+                itemWidth: 170,
+                itemHeight: 20,
+                itemsSpacing: 4,
+                symbolSize: 10,
+                symbolShape: 'circle',
+                itemTextColor: '#777',
+                translateY: 54,
               },
             ]}
-          />
-          <VictoryAxis
-            tickCount={12}
-            tickFormat={(t) => dayjs(t).format("MMM'YY")}
-          />
-          <VictoryAxis
-            dependentAxis
-            style={{
-              axis: {
-                stroke: colors.blue['700'],
-                strokeWidth: 2,
-              },
-            }}
-            tickValues={[0, 0.5, 1]}
-            tickFormat={(t) => Math.floor(t * countryCoverageMaxima)}
-          />
-          <VictoryLine
-            name="countryCoverage"
-            data={countryCoverage}
-            x="date"
-            y={(d) => d.value / countryCoverageMaxima}
-            scale={{ x: 'time', y: 'linear' }}
-            style={{
-              data: {
-                stroke: colors.blue['800'],
-              },
+            enableSlices="x"
+            sliceTooltip={({ slice }) => {
+              return (
+                <div className="text-white text-xs bg-gray-800 p-2 rounded-md font-light">
+                  <div>{slice.points[0].data.xFormatted}</div>
+                  {slice.points.map((point) => (
+                    <div key={point.id}>
+                      {chartLabels[point.serieId]}: {point.data.value}
+                    </div>
+                  ))}
+                </div>
+              )
             }}
           />
-          <VictoryAxis
-            dependentAxis
-            offsetX={400}
-            style={{
-              axis: {
-                stroke: colors.gray['700'],
-                strokeWidth: 2,
-              },
-            }}
-            tickValues={[0, 0.5, 1]}
-            // Hide tick value 0 for the axis in the middle of the chart
-            tickFormat={(t) =>
-              t > 0 ? Math.floor(t * networkCoverageMaxima) : ''
-            }
-          />
-          <VictoryLine
-            name="networkCoverage"
-            data={networkCoverage}
-            x="date"
-            y={(d) => (d.value + 20) / networkCoverageMaxima}
-            scale={{ x: 'time', y: 'linear' }}
-            style={{
-              data: {
-                stroke: colors.gray['700'],
-              },
-            }}
-          />
-          <VictoryAxis
-            dependentAxis
-            orientation="right"
-            style={{
-              axis: {
-                stroke: colors.yellow['700'],
-                strokeWidth: 2,
-              },
-            }}
-            tickValues={[0, 0.5, 1]}
-            tickFormat={(t) =>
-              `${Math.round((t * measurementMaxima) / 1000, 2)}k`
-            }
-          />
-          <VictoryLine
-            name="measurementsByMonth"
-            data={measurementsByMonth}
-            x="date"
-            y={(d) => (d.value + 20) / measurementMaxima}
-            scale={{ x: 'time', y: 'linear' }}
-            style={{
-              data: {
-                stroke: colors.yellow['700'],
-              },
-            }}
-          />
-        </VictoryChart>
+        </div>
       </>
     )
   }
