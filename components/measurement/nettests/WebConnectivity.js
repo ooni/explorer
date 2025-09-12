@@ -11,6 +11,7 @@ import { EmbeddedViewContext } from '../../../pages/m/[measurement_uid]'
 import ConditionalWrapper from '../../ConditionalWrapper'
 import { DetailsBox } from '../DetailsBox'
 import StatusInfo from '../StatusInfo'
+import { formatTwoTuple } from 'utils'
 
 const messages = defineMessages({
   'blockingReason.http-diff': {
@@ -483,7 +484,7 @@ const WebConnectivityDetails = ({
   const tcpConnections = Array.isArray(tcp_connect)
     ? tcp_connect.map((connection) => {
         return {
-          destination: `${connection.ip}:${connection.port}`,
+          destination: formatTwoTuple(connection.ip, connection.port),
           failure: connection.status?.failure,
         }
       })
@@ -588,7 +589,7 @@ const WebConnectivityDetails = ({
                   tcpConnections.map((connection, index) => (
                     <div className="flex" key={index}>
                       <div>
-                        <strong>{connection.destination}</strong>:{' '}
+                        <strong>{connection.destination}</strong>{' '}:{' '}
                         {connection.failure
                           ? `${intl.formatMessage({ id: 'Measurement.Details.Websites.TCP.ConnectionTo.Failed' })} (${connection.failure})`
                           : intl.formatMessage({

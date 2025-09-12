@@ -3,6 +3,7 @@ import { MdPhoneAndroid, MdWebAsset } from 'react-icons/md'
 import { FormattedMessage, defineMessages } from 'react-intl'
 import AccessPointStatus from '../AccessPointStatus'
 import { DetailsBox } from '../DetailsBox'
+import { formatTwoTuple } from 'utils'
 
 const TelegramDetails = ({ measurement, render }) => {
   const testKeys = measurement.test_keys
@@ -95,7 +96,7 @@ const TelegramDetails = ({ measurement, render }) => {
                         destination: (
                           <strong>
                             {' '}
-                            {connection.ip}:{connection.port}{' '}
+                            {formatTwoTuple(connection.ip, connection.port)}{' '}
                           </strong>
                         ),
                       }}
@@ -108,7 +109,7 @@ const TelegramDetails = ({ measurement, render }) => {
                         destination: (
                           <strong>
                             {' '}
-                            {connection.ip}:{connection.port}{' '}
+                            {formatTwoTuple(connection.ip, connection.port)}{' '}
                           </strong>
                         ),
                       }}

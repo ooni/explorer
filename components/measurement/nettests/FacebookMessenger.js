@@ -3,6 +3,7 @@ import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 import AccessPointStatus from '../AccessPointStatus'
 import { DetailsBox } from '../DetailsBox'
 import StatusInfo from '../StatusInfo'
+import { formatTwoTuple } from 'utils'
 
 export const FacebookMessengerDetails = ({ measurement, render }) => {
   const intl = useIntl()
@@ -116,7 +117,7 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
                               destination: (
                                 <strong>
                                   {' '}
-                                  {connection.ip}:{connection.port}{' '}
+                                  {formatTwoTuple(connection.ip, connection.port)}{' '}
                                 </strong>
                               ),
                             }}
@@ -129,7 +130,7 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
                               destination: (
                                 <strong>
                                   {' '}
-                                  {connection.ip}:{connection.port}{' '}
+                                  {formatTwoTuple(connection.ip, connection.port)}{' '}
                                 </strong>
                               ),
                             }}

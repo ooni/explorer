@@ -63,3 +63,10 @@ export const formatMediumDateUTC = (date, locale) =>
     dateStyle: 'medium',
     timeZone: 'UTC',
   }).format(new Date(date))} UTC`
+
+export const formatTwoTuple = (ip, port) => {
+  if (ip.indexOf(':')===-1)
+    return `${ip}:${port}`;
+  else
+    return `[${ip}]:${port}`;
+}
