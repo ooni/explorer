@@ -177,7 +177,10 @@ const DomainDashboard = ({
   }, [testedCountries])
 
   const { data: recentMeasurements, error: recentMeasurementsError } = useSWR(
-    ['/api/v1/measurements', { limit: 5, failure: false, domain }],
+    [
+      '/api/v1/measurements',
+      { limit: 5, failure: false, order: 'desc', domain },
+    ],
     simpleFetcher,
     swrOptions,
   )

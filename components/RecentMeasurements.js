@@ -14,7 +14,10 @@ const swrOptions = {
 
 const List = ({ query }) => {
   const { data: recentMeasurements, error: recentMeasurementsError } = useSWR(
-    ['/api/v1/measurements', { limit: 5, failure: false, ...query }],
+    [
+      '/api/v1/measurements',
+      { limit: 5, failure: false, order: 'desc', ...query },
+    ],
     simpleFetcher,
     swrOptions,
   )
