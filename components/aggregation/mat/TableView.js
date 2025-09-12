@@ -24,8 +24,8 @@ const DEFAULT_ROW_TEMPLATE = {
 }
 
 const getCountKeys = (query, selectedItems) => {
-  if (query.loni === 'outcome') return ['blocked_max']
-  if (query.loni === 'observations') return selectedItems
+  if (query.data === 'analysis') return ['blocked_max']
+  if (query.data === 'observations') return selectedItems
   return COUNT_KEYS_CONFIG.default
 }
 
@@ -66,7 +66,7 @@ const processRow = (key, rowData, rowLabels, query, countKeys) => {
   const rowLabel = rowLabels[key]
   const baseRow = createRowTemplate(key, rowLabel, query.axis_y)
   const aggregatedCounts =
-    query.loni === 'outcome'
+    query.data === 'analysis'
       ? getBlockedMax(rowData)
       : aggregateRowCounts(rowData, countKeys)
   return {

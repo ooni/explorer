@@ -120,7 +120,6 @@ const defaultDefaultValues = {
   axis_y: '',
   time_grain: 'day',
   ooni_run_link_id: '',
-  // loni: '',
 }
 
 export const Form = ({ onSubmit, query }) => {
@@ -290,45 +289,6 @@ export const Form = ({ onSubmit, query }) => {
         onConfirm={onConfirm}
         onCancel={onCancel}
       />
-      {/* 
-      <Controller
-        render={({ field }) => (
-          <div className="flex flex-row items-center gap-2">
-            <div className="font-semibold block leading-none">V5</div>
-            <div className="relative inline-block w-11 h-5">
-              <input
-                id="v5"
-                checked={field.value}
-                {...field}
-                type="checkbox"
-                className="peer appearance-none w-11 h-5 bg-gray-400 rounded-full checked:bg-blue-500 cursor-pointer transition-colors duration-300"
-              />
-           
-              <label
-                htmlFor="v5"
-                className="absolute top-0 left-0 w-5 h-5 bg-white rounded-full border-2 border-gray-400 shadow-sm transition-transform duration-300 peer-checked:translate-x-6 peer-checked:border-blue-500 cursor-pointer"
-              />
-            </div>
-          </div>
-        )}
-        name="v5"
-        control={control}
-      /> */}
-
-      {/* <Controller
-        render={({ field }) => (
-          <Select {...field} label="loni">
-            <option value="">old pipeline</option>
-            {['outcome', 'observations'].map((c) => (
-              <option key={c} value={c}>
-                {c}
-              </option>
-            ))}
-          </Select>
-        )}
-        name="loni"
-        control={control}
-      /> */}
 
       <div className="flex items-center flex-row flex-wrap gap-4 my-2">
         <div className="w-full sm:w-5/12 md:w-3/12 lg:w-2/12">

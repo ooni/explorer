@@ -87,10 +87,10 @@ export function MATContextProvider({
 
   const selected = useMemo(
     () =>
-      MATquery?.loni === 'observations'
+      MATquery?.data === 'observations'
         ? getSelected(allFailureTypes)
         : allFailureTypes,
-    [allFailureTypes, MATquery.loni],
+    [allFailureTypes, MATquery.data],
   )
 
   const [state, dispatch] = useReducer(reducer, {

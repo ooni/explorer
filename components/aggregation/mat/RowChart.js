@@ -120,28 +120,27 @@ const Line = ({ bars, xScale, innerWidth, innerHeight, onClick }) => {
 
 const keys = ['anomaly_count', 'confirmed_count', 'failure_count', 'ok_count']
 const v5keys = ['blocked_max']
-const loniKeys = ['dns_isp', 'dns_other', 'tls', 'tcp']
 
-const getKeys = (loni, observationKeys) => {
-  if (loni === 'outcome') {
+const getKeys = (dataQuery, observationKeys) => {
+  if (dataQuery === 'analysis') {
     return v5keys
   }
-  if (loni === 'observations') {
+  if (dataQuery === 'observations') {
     return observationKeys
   }
   return keys
 }
 
 const colorFunc = (d, query, state) => {
-  if (state?.colors && query?.loni === 'observations') return state.colors[d.id]
-  if (state?.colors && query?.loni === 'outcome')
+  if (state?.colors && query?.data === 'observations') return state.colors[d.id]
+  if (state?.colors && query?.data === 'analysis')
     return state.colors[d.data.blocked_max_outcome]
   return colorMap[d.id] || '#ccc'
 }
 
 const baseLayers = ['grid', 'axes', 'bars']
 const barLayers = (query) => {
-  return query?.loni === 'outcome'
+  return query?.data === 'analysis'
     ? ['grid', 'axes', 'markers', 'bars', Line]
     : baseLayers
 }
@@ -199,9 +198,9 @@ const chartProps1D = (query, intl, state) => ({
     tickRotation: 0,
     legendPosition: 'middle',
     legendOffset: -36,
-    tickValues: query?.loni === 'outcome' ? 3 : undefined,
-    legend: query?.loni === 'outcome' ? 'Analysis outcome' : undefined,
-    ...(query?.loni !== 'outcome'
+    tickValues: query?.data === 'analysis' ? 3 : undefined,
+    legend: query?.data === 'analysis' ? 'Analysis outcome' : undefined,
+    ...(query?.data !== 'analysis'
       ? { format: (e) => (Math.floor(e) === e ? e : '') }
       : {}),
   },
@@ -223,7 +222,7 @@ const chartProps2D = (query, intl, state) => ({
   borderColor: { from: 'color', modifiers: [['darker', 1.6]] },
   colors: (data) => colorFunc(data, query, state),
   axisTop: null,
-  ...(query?.loni !== 'outcome'
+  ...(query?.data !== 'analysis'
     ? {
         axisRight: {
           enable: true,
@@ -233,12 +232,6 @@ const chartProps2D = (query, intl, state) => ({
         },
       }
     : {}),
-  // axisRight: {
-  //   enable: true,
-  //   tickSize: 5,
-  //   tickPadding: 5,
-  //   tickValues: 2,
-  // },
   axisBottom: null,
   axisLeft: null,
   enableGridX: true,
@@ -324,7 +317,7 @@ const RowChart = ({
       <div style={{ height, width: '100%' }}>
         <Bar
           data={chartData}
-          keys={getKeys(query?.loni, uniqueFailures)}
+          keys={getKeys(query?.data, uniqueFailures)}
           indexBy={indexBy}
           tooltip={InvisibleTooltip}
           onClick={handleClick}
@@ -337,12 +330,12 @@ const RowChart = ({
           enableLabel={tooltipIndex[0] === rowIndex ? tooltipIndex[1] : false}
           valueScale={{
             type: 'linear',
-            ...(query?.loni && query?.loni === 'outcome'
+            ...(query?.data && query?.data === 'analysis'
               ? { min: 0, max: 1 }
               : { min: 0, max: 'auto' }),
           }}
           gridYValues={
-            query?.loni && query?.loni === 'outcome' ? [0, 0.5, 1] : undefined
+            query?.data && query?.data === 'analysis' ? [0, 0.5, 1] : undefined
           }
           markers={[
             {

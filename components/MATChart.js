@@ -20,30 +20,30 @@ const swrOptions = {
 const getAPIEndpoint = (query) => {
   const qs = new URLSearchParams(query).toString()
   let reqUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation?${qs}`
+  const { data, ...q } = query
 
-  if (query.loni) {
-    const { loni, v5, ...v5qs } = query
-    if (loni === 'observations') {
-      const { axis_y, axis_x, domain, ...v5qs } = query
-      const axisX =
-        axis_x === 'measurement_start_day'
-          ? '&group_by=timestamp'
-          : `&group_by=${axis_x}`
+  if (data === 'observations') {
+    const { axis_y, axis_x, domain, ...q } = query
+    const axisX =
+      axis_x === 'measurement_start_day'
+        ? '&group_by=timestamp'
+        : `&group_by=${axis_x}`
 
-      const axisY =
-        axis_y === 'domain'
-          ? '&group_by=hostname'
-          : axis_y
-            ? `&group_by=${axis_y}`
-            : ''
+    const axisY =
+      axis_y === 'domain'
+        ? '&group_by=hostname'
+        : axis_y
+          ? `&group_by=${axis_y}`
+          : ''
 
-      const domainParam = domain ? `&hostname=${domain}` : ''
+    const domainParam = domain ? `&hostname=${domain}` : ''
 
-      reqUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation/observations?group_by=failure${axisX}${axisY}${domainParam}&${new URLSearchParams(v5qs).toString()}`
-    } else {
-      reqUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation/analysis?${new URLSearchParams(v5qs).toString()}`
-    }
+    reqUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation/observations?group_by=failure${axisX}${axisY}${domainParam}&${new URLSearchParams(q).toString()}`
   }
+  if (data === 'analysis') {
+    reqUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation/analysis?${new URLSearchParams(q).toString()}`
+  }
+
   return reqUrl
 }
 
@@ -150,10 +150,10 @@ const MATChart = ({ query, showFilters = true }) => {
   )
 
   const allFailureTypes = useMemo(() => {
-    if (query.loni === 'observations') {
+    if (query.data === 'observations') {
       return getSortedFailureTypes(results)
     }
-    if (query.loni === 'outcome') {
+    if (query.data === 'analysis') {
       return getOutcomeFailureTypes(results)
     }
     return []

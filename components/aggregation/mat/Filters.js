@@ -35,11 +35,11 @@ IndeterminateCheckbox.displayName = 'IndeterminateCheckbox'
 // Maybe this can also be `[]`
 const noRowsSelected = null
 
-const rowConfig = (selectedItems, loni) => {
+const rowConfig = (selectedItems, dataQuery) => {
   const keys =
-    loni === 'outcome'
+    dataQuery === 'analysis'
       ? ['blocked_max']
-      : loni === 'observations'
+      : dataQuery === 'observations'
         ? selectedItems
         : [
             'anomaly_count',
@@ -47,6 +47,7 @@ const rowConfig = (selectedItems, loni) => {
             'failure_count',
             'measurement_count',
           ]
+
   return keys.map((key) => {
     return {
       header: selectedItems?.length ? (
@@ -72,8 +73,8 @@ const Filters = ({ data, setDataForCharts, query }) => {
   const getRowId = useCallback((row) => row[query.axis_y], [query.axis_y])
   const { state } = useMATContext()
   const config = useMemo(
-    () => rowConfig(state.selected, query.loni),
-    [state.selected, query.loni],
+    () => rowConfig(state.selected, query.data),
+    [state.selected, query.data],
   )
 
   const columns = useMemo(

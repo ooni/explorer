@@ -97,8 +97,8 @@ const Legend = () => {
   const { query } = state
 
   const showEditorButton = useMemo(
-    () => query.loni === 'observations',
-    [query.loni],
+    () => query.data === 'observations',
+    [query.data],
   )
   const [showLegendEditor, setShowLegendEditor] = useState(false)
 
@@ -122,9 +122,9 @@ const Legend = () => {
   }, [state.colors, state.selected])
 
   const items =
-    query.loni === 'outcome'
+    query.data === 'analysis'
       ? legendItemsOutcome
-      : query.loni === 'observations'
+      : query.data === 'observations'
         ? legendItemsObservations
         : legendItems
 

@@ -19,14 +19,14 @@ const Help = () => {
   const redirectToOutcomeChart = () => {
     router.push({
       pathname: '/chart/mat',
-      query: { ...router.query, loni: 'outcome' },
+      query: { ...router.query, data: 'analysis' },
     })
   }
 
   const redirectToObservationsChart = () => {
     router.push({
       pathname: '/chart/mat',
-      query: { ...router.query, loni: 'observations' },
+      query: { ...router.query, data: 'observations' },
     })
   }
 

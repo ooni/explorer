@@ -118,7 +118,7 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
         <MdClear title="Close" strokeWidth={2} onClick={onClose} />
       </div>
       <div className="flex flex-col pr-4 my-1">
-        {query?.loni === 'observations' && (
+        {query?.data === 'observations' && (
           <>
             {state?.selected?.map((key) => (
               <div key={key}>
@@ -138,7 +138,7 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
           </>
         )}
 
-        {query?.loni === 'outcome' && (
+        {query?.data === 'analysis' && (
           <>
             <div>
               Outcome:{' '}
@@ -163,7 +163,7 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
           </>
         )}
 
-        {!query?.loni && (
+        {(!query?.data || query?.data === 'anomalies') && (
           <>
             {keys.map((k) => (
               <div className="my-1" key={k}>

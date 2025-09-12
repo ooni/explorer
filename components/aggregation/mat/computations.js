@@ -76,36 +76,9 @@ export function fillRowHoles(data, query, locale) {
       measurement_count: 0,
       ok_count: 0,
       count: 0,
-      // tls: 0,
-      // tcp: 0,
-      // dns_isp: 0,
-      // dns_other: 0,
       blocked_max: 0,
       blocked_max_outcome: null,
       likely_blocked_protocols: [],
-      // outcome_label: null,
-      // loni: {
-      //   dns_isp: {
-      //     ok: 0,
-      //     blocked: 0,
-      //     down: 0,
-      //   },
-      //   dns_other: {
-      //     ok: 0,
-      //     blocked: 0,
-      //     down: 0,
-      //   },
-      //   tls: {
-      //     ok: 0,
-      //     blocked: 0,
-      //     down: 0,
-      //   },
-      //   tcp: {
-      //     ok: 0,
-      //     blocked: 0,
-      //     down: 0,
-      //   },
-      // },
     })
   }
 

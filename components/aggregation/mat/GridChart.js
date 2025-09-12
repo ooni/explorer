@@ -118,14 +118,14 @@ export const prepareDataForGridChart = (
   selectedFailureTypes = [],
 ) => {
   const data =
-    query?.loni === 'observations'
+    query?.data === 'observations'
       ? prepareObservationsData(
           initialData,
           query,
           includedFailureTypes,
           selectedFailureTypes,
         )
-      : query?.loni === 'outcome'
+      : query?.data === 'analysis'
         ? prepareDetailedData(initialData, query)
         : initialData
 
