@@ -203,6 +203,12 @@ export const testNames = {
     id: 'Tests.TorVanilla.Name',
     info: 'https://ooni.org/nettest/vanilla-tor/',
   },
+  echcheck: {
+    group: 'experimental',
+    name: <FormattedMessage id="Tests.ECHCheck.Name" />,
+    id: 'Tests.ECHCheck.Name',
+    info: 'https://github.com/ooni/spec/blob/master/nettests/ts-039-echcheck.md',
+  },
   dnscheck: {
     group: 'experimental',
     name: <FormattedMessage id="Tests.DNSCheck.Name" />,

@@ -182,11 +182,15 @@ const DomainDashboard = ({
     swrOptions,
   )
 
+  const noIndexCategoryCodes = ['PORN', 'PROV', 'GMB']
+
   return (
     <>
       <Head>
         <title>{title}</title>
-        <meta name="robots" content="noindex" />
+        {noIndexCategoryCodes.includes(categoryCode) && (
+          <meta name="robots" content="noindex" />
+        )}
       </Head>
       <div className="container mt-16">
         <h1 className="mb-0">{domain}</h1>

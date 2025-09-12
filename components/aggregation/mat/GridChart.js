@@ -17,7 +17,7 @@ import { useMATContext } from './MATContext'
 
 const ROW_HEIGHT = 70
 const XAXIS_HEIGHT = 62
-const GRID_MAX_HEIGHT = 600
+const GRID_MAX_HEIGHT = 680
 
 const generateQuery = (q) => new URLSearchParams(q).toString()
 
