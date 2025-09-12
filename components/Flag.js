@@ -273,6 +273,7 @@ export const Flag = ({ countryCode = 'zz', size = 60, border }) => {
         src={src}
         loading="lazy"
         style={{ clipPath: 'circle(50% at 50% 50%)' }}
+        alt={countryCode}
       />
     </div>
   )
