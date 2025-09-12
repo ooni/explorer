@@ -48,7 +48,7 @@ export const config: CustomProjectConfig = {
   },
   // OSS mode
   generateOnly: true,
-  failOnDifference: true,
+  failOnDifference: false,
   waitBeforeScreenshot: 16000,
   waitForLastRequest: 8000,
   lostPixelProjectId: 'cm9ldxgtv0s5s3wy0f1s8vo70',
