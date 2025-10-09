@@ -16,7 +16,9 @@ const MeasurementAggregationToolkit = () => {
   const onSubmit = useCallback(
     (data) => {
       const { ...rest } = data
-      const params = {}
+      const params = {
+        ...(router.query.data ? { data: router.query.data } : {}),
+      }
 
       for (const p of Object.keys(rest)) {
         if (data[p] !== '') {
@@ -36,7 +38,7 @@ const MeasurementAggregationToolkit = () => {
   // Upon mount, check if the page was accessed without query params
   // In that case, trigger a shallow navigation that shows a chart
   useEffect(() => {
-    if (router.isReady && Object.keys(query).length === 0) {
+    if (Object.keys(router.query).length === 0) {
       const today = dayjs.utc().add(1, 'day')
       const monthAgo = dayjs.utc(today).subtract(1, 'month')
       const href = {
@@ -46,14 +48,11 @@ const MeasurementAggregationToolkit = () => {
           since: monthAgo.format('YYYY-MM-DD'),
           until: today.format('YYYY-MM-DD'),
           time_grain: 'day',
-          ...query,
         },
       }
       router.replace(href, undefined, { shallow: true })
     }
-    // Ignore the dependency on `router` because we want
-    // this effect to run only once, on mount, if query is empty.
-  }, [router.isReady])
+  }, [router])
 
   let linkToAPIQuery = null
   try {
