@@ -158,7 +158,7 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
             )}
             <div>
               Measurement count:{' '}
-              <span className="font-semibold">{data.count}</span>
+              <span className="font-semibold">{data.count || 0}</span>
             </div>
           </>
         )}

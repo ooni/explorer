@@ -2,9 +2,8 @@ import OONILogo from 'ooni-components/svgs/logos/OONI-HorizontalMonochrome.svg'
 import { FaEdit } from 'react-icons/fa'
 import { useIntl } from 'react-intl'
 import CountryNameLabel from './CountryNameLabel'
-import { colorMap } from './colorMap'
 import { testGroups, testNames } from '/components/test-info'
-import { useMemo, useState } from 'react'
+import { useState, useMemo } from 'react'
 import { useMATContext } from './MATContext'
 import FailureForm from './FailureForm'
 import { MdClose } from 'react-icons/md'
@@ -72,61 +71,12 @@ export const SubtitleStr = ({ query, options }) => {
   return [...params].join(', ')
 }
 
-const legendItems = [
-  {
-    label: 'MAT.Table.Header.ok_count',
-    color: colorMap.ok_count,
-  },
-  {
-    label: 'MAT.Table.Header.confirmed_count',
-    color: colorMap.confirmed_count,
-  },
-  {
-    label: 'MAT.Table.Header.anomaly_count',
-    color: colorMap.anomaly_count,
-  },
-  {
-    label: 'MAT.Table.Header.failure_count',
-    color: colorMap.failure_count,
-  },
-]
-
 const Legend = () => {
   const intl = useIntl()
   const { state } = useMATContext()
-  const { query } = state
+  const { query, legendItems } = state
 
-  const showEditorButton = useMemo(
-    () => query.data === 'observations',
-    [query.data],
-  )
   const [showLegendEditor, setShowLegendEditor] = useState(false)
-
-  const legendItemsObservations = useMemo(() => {
-    const items = state.selected.map((item) => ({
-      label: item,
-      color: state?.colors?.[item],
-    }))
-    if (state?.colors?.other) {
-      items.push({ label: 'other', color: state.colors.other })
-    }
-    return items
-  }, [state.colors, state.selected])
-
-  const legendItemsOutcome = useMemo(() => {
-    const items = state.selected.map((item) => ({
-      label: item,
-      color: state?.colors?.[item],
-    }))
-    return items
-  }, [state.colors, state.selected])
-
-  const items =
-    query.data === 'analysis'
-      ? legendItemsOutcome
-      : query.data === 'observations'
-        ? legendItemsObservations
-        : legendItems
 
   return (
     <>
@@ -148,14 +98,15 @@ const Legend = () => {
         </div>
       ) : (
         <div className="group flex my-2 gap-x-2 flex-wrap items-center">
-          {items.map((item) => (
-            <LegendItem
-              key={item.label}
-              label={intl.messages[item.label] || item.label}
-              color={item.color}
-            />
-          ))}
-          {showEditorButton && (
+          {!!legendItems?.length &&
+            legendItems.map((item) => (
+              <LegendItem
+                key={item.label}
+                label={intl.messages[item.label] || item.label}
+                color={item.color}
+              />
+            ))}
+          {state.showLegendEditorButton && (
             <button
               type="button"
               aria-label="Edit legend"

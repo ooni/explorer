@@ -24,6 +24,7 @@ import { computeXYScalesForSeries } from '@nivo/scales'
 import { Axes } from '@nivo/axes'
 import { colors } from 'ooni-components'
 import { useMATContext } from './MATContext'
+import { patternDotsDef, patternSquaresDef, patternLinesDef } from '@nivo/core'
 
 const chartMargins = { top: 5, right: 50, bottom: 5, left: 0 }
 
@@ -33,9 +34,8 @@ const Line = ({ bars, xScale, innerWidth, innerHeight, onClick }) => {
   if (bars.length === 0) return null
 
   const maxValue = Math.max(...bars.map((bar) => bar.data.data.count || 0))
-  const roundedMaxValue = maxValue // Math.ceil(maxValue / 10) * 10
-  const midValue = Math.ceil(roundedMaxValue / 2)
-  const tickValues = [0, midValue, roundedMaxValue]
+  const midValue = Math.ceil(maxValue / 2)
+  const tickValues = [0, midValue, maxValue]
 
   const scale = computeXYScalesForSeries(
     [
@@ -346,6 +346,23 @@ const RowChart = ({
                 strokeWidth: 2,
               },
               legendOrientation: 'vertical',
+            },
+          ]}
+          defs={[
+            patternLinesDef('lines', {
+              color: 'inherit',
+              background: 'white',
+              spacing: 6,
+              rotation: 45,
+              lineWidth: 4,
+            }),
+          ]}
+          fill={[
+            {
+              match: (d) => {
+                return d.data.data.blocked_max_outcome === 'none'
+              },
+              id: 'lines',
             },
           ]}
           {...chartProps}

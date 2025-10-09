@@ -75,11 +75,31 @@ export function fillRowHoles(data, query, locale) {
       failure_count: 0,
       measurement_count: 0,
       ok_count: 0,
-      count: 0,
-      blocked_max: 0,
-      blocked_max_outcome: null,
-      likely_blocked_protocols: [],
+      ...(query.data === 'analysis'
+        ? {
+            count: 0,
+            blocked_max: 1,
+            blocked_max_outcome: 'none',
+            ok_opacity_value: 0.3,
+            likely_blocked_protocols: [],
+          }
+        : {}),
     })
+  }
+
+  if (query.data === 'analysis') {
+    const maxCount = Math.max(
+      ...newData
+        .filter((i) => i.blocked_max_outcome === 'none')
+        .map((i) => i.count),
+    )
+
+    for (const item of newData) {
+      if (item.blocked_max_outcome === 'none') {
+        item.ok_opacity_value =
+          maxCount === 0 ? 0.3 : 0.3 + (0.7 * item.count) / maxCount
+      }
+    }
   }
 
   return newData

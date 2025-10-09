@@ -128,9 +128,8 @@ const getSortedFailureTypes = (OGdata) => {
 const getOutcomeFailureTypes = (data) => {
   return [
     ...new Set(
-      data
-        .map((item) => item.loni.blocked_max_outcome)
-        .filter((item) => item !== 'none'),
+      data.map((item) => item.loni.blocked_max_outcome),
+      // .filter((item) => item !== 'none'),
     ),
   ]
 }

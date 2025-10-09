@@ -82,7 +82,7 @@ const prepareDetailedData = (data, query) => {
         query.time_grain === 'hour'
           ? item.measurement_start_day
           : item.measurement_start_day.split('T')[0],
-      blocked_max: item.loni.blocked_max,
+      blocked_max: item.loni.blocked_max || 1,
       blocked_max_outcome: item.loni.blocked_max_outcome,
       likely_blocked_protocols: item.loni.likely_blocked_protocols,
     }

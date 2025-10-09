@@ -6,27 +6,12 @@ import GridChart, { prepareDataForGridChart } from './GridChart'
 import { useMATContext } from './MATContext'
 import { APIButtons } from '../../APIButtons'
 
-const COUNT_KEYS_CONFIG = {
-  default: [
-    'anomaly_count',
-    'confirmed_count',
-    'failure_count',
-    'measurement_count',
-  ],
-}
-
 const DEFAULT_ROW_TEMPLATE = {
   anomaly_count: 0,
   confirmed_count: 0,
   failure_count: 0,
   measurement_count: 0,
   count: 0,
-}
-
-const getCountKeys = (query, selectedItems) => {
-  if (query.data === 'analysis') return ['blocked_max']
-  if (query.data === 'observations') return selectedItems
-  return COUNT_KEYS_CONFIG.default
 }
 
 // create a new row with default values
@@ -81,6 +66,7 @@ const prepareDataforTable = (
   locale,
   includedItems,
   selectedItems,
+  countKeys,
 ) => {
   const [reshapedData, rows, rowLabels] = prepareDataForGridChart(
     data,
@@ -90,14 +76,10 @@ const prepareDataforTable = (
     selectedItems,
   )
 
-  // Determine which count keys to use
-  const countKeys = getCountKeys(query, selectedItems)
-
   // Process each row and build the table
-  const table = Array.from(reshapedData, ([key, rowData]) =>
-    processRow(key, rowData, rowLabels, query, countKeys),
-  )
-
+  const table = Array.from(reshapedData, ([key, rowData]) => {
+    return processRow(key, rowData, rowLabels, query, countKeys)
+  })
   return [reshapedData, table, rows, rowLabels]
 }
 
@@ -123,11 +105,19 @@ const TableView = ({ data, query, showFilters = true, apiEndpoint }) => {
         intl.locale,
         state.included,
         state.selected,
+        state.countKeys,
       )
     } catch (e) {
       return [null, [], [], {}]
     }
-  }, [query, data, intl.locale, state.included, state.selected])
+  }, [
+    query,
+    data,
+    intl.locale,
+    state.included,
+    state.selected,
+    state.countKeys,
+  ])
 
   const [dataForCharts, setDataForCharts] = useState(noRowsSelected)
 
