@@ -80,7 +80,7 @@ export function fillRowHoles(data, query, locale) {
             count: 0,
             blocked_max: 1,
             blocked_max_outcome: 'none',
-            ok_opacity_value: 0.3,
+            ok_opacity_value: 0,
             likely_blocked_protocols: [],
           }
         : {}),
@@ -96,8 +96,7 @@ export function fillRowHoles(data, query, locale) {
 
     for (const item of newData) {
       if (item.blocked_max_outcome === 'none') {
-        item.ok_opacity_value =
-          maxCount === 0 ? 0.3 : 0.3 + (0.7 * item.count) / maxCount
+        item.ok_opacity_value = item.count / maxCount || 0.0000000001
       }
     }
   }
