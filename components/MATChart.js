@@ -125,13 +125,8 @@ const getSortedFailureTypes = (OGdata) => {
     .map(([key]) => key)
 }
 
-const getOutcomeFailureTypes = (data) => {
-  return [
-    ...new Set(
-      data.map((item) => item.loni.blocked_max_outcome),
-      // .filter((item) => item !== 'none'),
-    ),
-  ]
+const getAnalysisFailureTypes = (data) => {
+  return [...new Set(data.map((item) => item.loni.blocked_max_outcome))]
 }
 
 const MATChart = ({ query, showFilters = true }) => {
@@ -153,7 +148,7 @@ const MATChart = ({ query, showFilters = true }) => {
       return getSortedFailureTypes(results)
     }
     if (query.data === 'analysis') {
-      return getOutcomeFailureTypes(results)
+      return getAnalysisFailureTypes(results)
     }
     return []
   }, [results, query])

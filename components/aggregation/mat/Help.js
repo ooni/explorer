@@ -16,7 +16,7 @@ const boxTitle = (
 
 const Help = () => {
   const router = useRouter()
-  const redirectToOutcomeChart = () => {
+  const redirectToAnalysisChart = () => {
     router.push({
       pathname: '/chart/mat',
       query: { ...router.query, data: 'analysis' },
@@ -51,7 +51,7 @@ const Help = () => {
         )}
       </div>
       <button
-        onClick={() => redirectToOutcomeChart()}
+        onClick={() => redirectToAnalysisChart()}
         type="button"
         className="block mt-4 mb-2 text-blue-500"
       >
