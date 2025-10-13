@@ -47,6 +47,7 @@ const getChartColors = (selectedFailureTypes) =>
         return acc
       },
       {
+        ok: colors.green['600'],
         none: colors.green['600'],
         other: colors.gray['300'],
       },
@@ -70,7 +71,7 @@ const getSelected = (allFailureTypes) =>
 const getLegendItems = (dataType, selected, colors = {}) => {
   if (dataType === 'observations') {
     const items = selected.map((item) => ({
-      label: item,
+      label: item === 'none' ? 'ok' : item,
       color: colors?.[item],
     }))
     if (colors?.other) {
@@ -80,7 +81,7 @@ const getLegendItems = (dataType, selected, colors = {}) => {
   }
   if (dataType === 'analysis') {
     return selected.map((item) => ({
-      label: item,
+      label: item === 'none' ? 'ok' : item,
       color: colors?.[item],
     }))
   }

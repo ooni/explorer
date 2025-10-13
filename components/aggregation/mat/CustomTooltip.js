@@ -127,7 +127,7 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
                     <div className="mr-4">
                       <Chip color={state.colors[key]} />
                     </div>
-                    <div className="mr-8">{key}</div>
+                    <div className="mr-8">{key === 'none' ? 'ok' : key}</div>
                     <div className="ml-auto">
                       {intl.formatNumber(Number(data[key] ?? 0))}
                     </div>
@@ -142,7 +142,11 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
           <>
             <div>
               Outcome:{' '}
-              <span className="font-semibold">{data.blocked_max_outcome}</span>
+              <span className="font-semibold">
+                {data.blocked_max_outcome === 'none'
+                  ? 'ok'
+                  : data.blocked_max_outcome}
+              </span>
             </div>
             {!!data?.likely_blocked_protocols.length && (
               <div>
