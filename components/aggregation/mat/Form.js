@@ -62,6 +62,11 @@ const xAxisOptions = [
   ['measurement_start_day', [], false],
   ['category_code', ['web_connectivity'], false],
   ['probe_cc', [], true],
+  // ['probe_asn', [], false],
+  // ['test_name', [], false],
+  // ['input', [], false],
+  // ['domain', [], false],
+  // ['', [], false],
 ]
 
 const yAxisOptions = [
@@ -123,7 +128,11 @@ export const Form = ({ onSubmit, query }) => {
   const [showConfirmation, setShowConfirmation] = useState(false)
 
   const defaultValues = useMemo(
-    () => Object.assign({}, defaultDefaultValues, query),
+    () =>
+      Object.assign({}, defaultDefaultValues, {
+        ...query,
+        axis_x: query?.axis_x || '',
+      }),
     [query],
   )
 
@@ -280,6 +289,7 @@ export const Form = ({ onSubmit, query }) => {
         onConfirm={onConfirm}
         onCancel={onCancel}
       />
+
       <div className="flex items-center flex-row flex-wrap gap-4 my-2">
         <div className="w-full sm:w-5/12 md:w-3/12 lg:w-2/12">
           <Controller
@@ -287,7 +297,6 @@ export const Form = ({ onSubmit, query }) => {
               <Select
                 {...field}
                 label={intl.formatMessage({ id: 'Search.Sidebar.Country' })}
-                width={1}
               >
                 <option value="">
                   {intl.formatMessage({ id: 'MAT.Form.AllCountries' })}
@@ -363,8 +372,9 @@ export const Form = ({ onSubmit, query }) => {
             render={({ field }) => (
               <Select
                 {...field}
-                label={intl.formatMessage({ id: 'MAT.Form.Label.TimeGrain' })}
-                width={1}
+                label={intl.formatMessage({
+                  id: 'MAT.Form.Label.TimeGrain',
+                })}
               >
                 {timeGrainOptions.map((option, idx) => (
                   <option key={idx} value={option}>
@@ -383,11 +393,10 @@ export const Form = ({ onSubmit, query }) => {
               <Select
                 {...field}
                 label={intl.formatMessage({ id: 'MAT.Form.Label.XAxis' })}
-                width={1}
               >
                 {xAxisOptionsFiltered.map((option, idx) => (
                   <option key={idx} value={option}>
-                    {option.length > 0
+                    {option.length > 0 && messages[option]
                       ? intl.formatMessage(messages[option])
                       : option}
                   </option>
@@ -404,7 +413,6 @@ export const Form = ({ onSubmit, query }) => {
               <Select
                 {...field}
                 label={intl.formatMessage({ id: 'MAT.Form.Label.YAxis' })}
-                width={1}
               >
                 {yAxisOptionsFiltered.map((option, idx) => (
                   <option key={idx} value={option}>
@@ -426,8 +434,9 @@ export const Form = ({ onSubmit, query }) => {
             render={({ field }) => (
               <Select
                 {...field}
-                label={intl.formatMessage({ id: 'Search.Sidebar.TestName' })}
-                width={1}
+                label={intl.formatMessage({
+                  id: 'Search.Sidebar.TestName',
+                })}
               >
                 <TestNameOptions includeAllOption={false} />
               </Select>
@@ -442,7 +451,9 @@ export const Form = ({ onSubmit, query }) => {
                 control={control}
                 render={({ field }) => (
                   <Input
-                    label={intl.formatMessage({ id: 'Search.Sidebar.Domain' })}
+                    label={intl.formatMessage({
+                      id: 'Search.Sidebar.Domain',
+                    })}
                     placeholder="twitter.com"
                     {...field}
                   />
@@ -455,7 +466,9 @@ export const Form = ({ onSubmit, query }) => {
                 control={control}
                 render={({ field }) => (
                   <Input
-                    label={intl.formatMessage({ id: 'Search.Sidebar.Input' })}
+                    label={intl.formatMessage({
+                      id: 'Search.Sidebar.Input',
+                    })}
                     placeholder="https://fbcdn.net/robots.txt"
                     {...field}
                   />
@@ -506,6 +519,7 @@ export const Form = ({ onSubmit, query }) => {
           />
         </div>
       </div>
+
       <div className="flex my-8">
         <button
           type="button"

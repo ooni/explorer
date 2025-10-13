@@ -3,41 +3,83 @@ import { useIntl } from 'react-intl'
 
 import Filters from './Filters'
 import GridChart, { prepareDataForGridChart } from './GridChart'
+import { useMATContext } from './MATContext'
+import { APIButtons } from '../../APIButtons'
 
-const prepareDataforTable = (data, query, locale) => {
-  const table = []
+const DEFAULT_ROW_TEMPLATE = {
+  anomaly_count: 0,
+  confirmed_count: 0,
+  failure_count: 0,
+  measurement_count: 0,
+  count: 0,
+}
 
+// create a new row with default values
+const createRowTemplate = (key, rowLabel, axisY) => ({
+  [axisY]: key,
+  rowLabel,
+  ...DEFAULT_ROW_TEMPLATE,
+})
+
+// aggregate counts for a single row
+const aggregateRowCounts = (rowData, countKeys) => {
+  const aggregatedRow = countKeys.reduce(
+    (acc, countKey) => ({ ...acc, [countKey]: 0 }),
+    {},
+  )
+
+  for (const dataPoint of rowData) {
+    for (const countKey of countKeys) {
+      aggregatedRow[countKey] += dataPoint[countKey] || 0
+    }
+  }
+
+  return aggregatedRow
+}
+
+const getBlockedMax = (rowData) => {
+  return rowData.reduce(
+    (acc, dataPoint) => {
+      acc.blocked_max = Math.max(acc.blocked_max, dataPoint.blocked_max)
+      return acc
+    },
+    { blocked_max: 0 },
+  )
+}
+
+const processRow = (key, rowData, rowLabels, query, countKeys) => {
+  const rowLabel = rowLabels[key]
+  const baseRow = createRowTemplate(key, rowLabel, query.axis_y)
+  const aggregatedCounts =
+    query.data === 'analysis'
+      ? getBlockedMax(rowData)
+      : aggregateRowCounts(rowData, countKeys)
+  return {
+    ...baseRow,
+    ...aggregatedCounts,
+  }
+}
+
+const prepareDataforTable = (
+  data,
+  query,
+  locale,
+  includedItems,
+  selectedItems,
+  countKeys,
+) => {
   const [reshapedData, rows, rowLabels] = prepareDataForGridChart(
     data,
     query,
     locale,
+    includedItems,
+    selectedItems,
   )
 
-  const countKeys = [
-    'anomaly_count',
-    'confirmed_count',
-    'failure_count',
-    'measurement_count',
-  ]
-
-  for (const [key, rowData] of reshapedData) {
-    const row = {
-      [query.axis_y]: key,
-      rowLabel: rowLabels[key],
-      anomaly_count: 0,
-      confirmed_count: 0,
-      failure_count: 0,
-      measurement_count: 0,
-    }
-
-    for (const d of rowData) {
-      for (const countKey of countKeys) {
-        row[countKey] = row[countKey] + d[countKey]
-      }
-    }
-
-    table.push(row)
-  }
+  // Process each row and build the table
+  const table = Array.from(reshapedData, ([key, rowData]) => {
+    return processRow(key, rowData, rowLabels, query, countKeys)
+  })
   return [reshapedData, table, rows, rowLabels]
 }
 
@@ -45,8 +87,9 @@ const prepareDataforTable = (data, query, locale) => {
 // Maybe this can also be `[]`
 const noRowsSelected = null
 
-const TableView = ({ data, query, showFilters = true }) => {
+const TableView = ({ data, query, showFilters = true, apiEndpoint }) => {
   const intl = useIntl()
+  const { state } = useMATContext()
 
   // The incoming data is reshaped to generate:
   // - reshapedData: holds the full set that will be used by GridChart
@@ -56,29 +99,46 @@ const TableView = ({ data, query, showFilters = true }) => {
   // - indexes -
   const [reshapedData, tableData, rowKeys, rowLabels] = useMemo(() => {
     try {
-      return prepareDataforTable(data, query, intl.locale)
+      return prepareDataforTable(
+        data,
+        query,
+        intl.locale,
+        state.included,
+        state.selected,
+        state.countKeys,
+      )
     } catch (e) {
       return [null, [], [], {}]
     }
-  }, [query, data, intl.locale])
+  }, [
+    query,
+    data,
+    intl.locale,
+    state.included,
+    state.selected,
+    state.countKeys,
+  ])
 
   const [dataForCharts, setDataForCharts] = useState(noRowsSelected)
 
   return (
     <div className="flex flex-col">
-      {showFilters && (
-        <Filters
-          query={query}
-          data={tableData}
-          setDataForCharts={setDataForCharts}
-        />
-      )}
       <GridChart
         data={reshapedData}
         selectedRows={dataForCharts}
         rowKeys={rowKeys}
         rowLabels={rowLabels}
       />
+      <APIButtons apiEndpoint={apiEndpoint} />
+      {showFilters && (
+        <div className="mt-8">
+          <Filters
+            query={query}
+            data={tableData}
+            setDataForCharts={setDataForCharts}
+          />
+        </div>
+      )}
     </div>
   )
 }

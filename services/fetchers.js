@@ -1,5 +1,4 @@
 import axios from 'axios'
-// import { axiosResponseTime } from 'components/axios-plugins'
 
 // const baseURL = process.env.NEXT_PUBLIC_OONI_API
 const baseURL = process.env.NEXT_PUBLIC_USER_FEEDBACK_API
@@ -41,7 +40,6 @@ export const simpleFetcher = (args) => {
   }
 
   return client.get(url, { params }).then((res) => {
-    // console.log('res.data.results', res.data)
     return res.data?.results || res.data?.incidents
   })
 }

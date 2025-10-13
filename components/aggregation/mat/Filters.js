@@ -13,6 +13,7 @@ import 'regenerator-runtime'
 import { FaSort, FaSortDown, FaSortUp } from 'react-icons/fa'
 import { DetailsBox } from '../../measurement/DetailsBox'
 import { sortRows } from './computations'
+import { useMATContext } from './MATContext'
 
 const IndeterminateCheckbox = forwardRef(({ indeterminate, ...rest }, ref) => {
   const defaultRef = useRef()
@@ -34,11 +35,47 @@ IndeterminateCheckbox.displayName = 'IndeterminateCheckbox'
 // Maybe this can also be `[]`
 const noRowsSelected = null
 
+const rowConfig = (selectedItems, dataQuery) => {
+  const keys =
+    dataQuery === 'analysis'
+      ? ['blocked_max']
+      : dataQuery === 'observations'
+        ? selectedItems
+        : [
+            'anomaly_count',
+            'confirmed_count',
+            'failure_count',
+            'measurement_count',
+          ]
+
+  return keys.map((key) => {
+    return {
+      header: selectedItems?.length ? (
+        key
+      ) : (
+        <FormattedMessage id={`MAT.Table.Header.${key}`} />
+      ),
+      id: key,
+      // accessorKey: key,
+      accessorFn: (row) => {
+        return row[key]
+      },
+      enableColumnFilter: false,
+      minSize: 220,
+    }
+  })
+}
+
 const Filters = ({ data, setDataForCharts, query }) => {
   const intl = useIntl()
   const resetTableRef = useRef(false)
   const yAxis = query.axis_y
   const getRowId = useCallback((row) => row[query.axis_y], [query.axis_y])
+  const { state } = useMATContext()
+  const config = useMemo(
+    () => rowConfig(state.selected, query.data),
+    [state.selected, query.data],
+  )
 
   const columns = useMemo(
     () => [
@@ -75,38 +112,11 @@ const Filters = ({ data, setDataForCharts, query }) => {
         ),
         id: 'yAxisLabel',
         accessorKey: 'rowLabel',
-        size: 400,
+        minSize: 220,
       },
-      {
-        header: <FormattedMessage id="MAT.Table.Header.anomaly_count" />,
-        id: 'anomaly_count',
-        accessorKey: 'anomaly_count',
-        enableColumnFilter: false,
-        size: 160,
-      },
-      {
-        header: <FormattedMessage id="MAT.Table.Header.confirmed_count" />,
-        id: 'confirmed_count',
-        accessorKey: 'confirmed_count',
-        enableColumnFilter: false,
-        size: 160,
-      },
-      {
-        header: <FormattedMessage id="MAT.Table.Header.failure_count" />,
-        id: 'failure_count',
-        accessorKey: 'failure_count',
-        enableColumnFilter: false,
-        size: 160,
-      },
-      {
-        header: <FormattedMessage id="MAT.Table.Header.measurement_count" />,
-        id: 'measurement_count',
-        accessorKey: 'measurement_count',
-        enableColumnFilter: false,
-        size: 160,
-      },
+      ...config,
     ],
-    [intl, yAxis],
+    [intl, yAxis, config],
   )
 
   const {
@@ -219,118 +229,118 @@ const Filters = ({ data, setDataForCharts, query }) => {
           </button>
         </div>
 
-        <div className="flex-1">
-          <div className="border border-black border-spacing-0 min-w-[800px]">
-            <div className="last:border-b-2 last:border-black">
-              <table className="w-full table-fixed">
-                <thead>
-                  {getHeaderGroups().map((headerGroup) => (
-                    <tr
-                      className="h-auto border-b border-black "
-                      key={headerGroup.id}
-                    >
-                      {headerGroup.headers.map((header) => {
-                        return (
-                          // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
-                          <th
-                            className={`p-2 border-r border-black font-bold last:border-r-0 ${
-                              header.column.getCanSort()
-                                ? 'cursor-pointer select-none'
-                                : ''
-                            }`}
-                            key={header.id}
-                            onClick={header.column.getToggleSortingHandler()}
-                            style={{
-                              width:
-                                header.column.id === 'yAxisLabel'
-                                  ? '40%'
-                                  : header.getSize(),
-                              minWidth: '200px',
-                            }}
-                          >
-                            <span className="flex items-center">
-                              {flexRender(
-                                header.column.columnDef.header,
-                                header.getContext(),
-                              )}
-                              {header.column.getCanSort()
-                                ? {
-                                    asc: <FaSortDown />,
-                                    desc: <FaSortUp />,
-                                    false: <FaSort />,
-                                  }[header.column.getIsSorted()]
-                                : null}
-                            </span>
-                          </th>
-                        )
-                      })}
-                    </tr>
-                  ))}
-                  <tr className="h-auto border-b border-black p-3">
-                    <th colSpan={columns.length} className="flex gap-1 p-2">
-                      {intl.formatMessage({ id: 'MAT.Table.Search' })}{' '}
-                      <input
-                        className="border-0 outline-0 font-normal"
-                        value={getState().globalFilter ?? ''}
-                        onChange={(e) =>
-                          setGlobalFilter(String(e.target.value))
-                        }
-                        placeholder={intl.formatMessage(
-                          { id: 'MAT.Table.FilterPlaceholder' },
-                          { count: rows?.length },
-                        )}
-                      />
-                    </th>
-                  </tr>
-                </thead>
-              </table>
-            </div>
+        <div
+          ref={parentRef}
+          className=" border border-black border-spacing-0"
+          style={{
+            overflow: 'auto', //our scrollable table container
+            position: 'relative', //needed for sticky header
+            height: '300px', //should be a fixed height
+          }}
+        >
+          <table style={{ display: 'grid' }}>
+            <thead className="grid sticky top-0 z-10 bg-white">
+              {getHeaderGroups().map((headerGroup) => (
+                <tr
+                  className="h-auto border-b border-black "
+                  style={{ display: 'flex', width: '100%' }}
+                  key={headerGroup.id}
+                >
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      // biome-ignore lint/a11y/useKeyWithClickEvents: <explanation>
+                      <th
+                        className={`p-2 border-r border-black font-bold last:border-r-0 ${
+                          header.column.getCanSort()
+                            ? 'cursor-pointer select-none'
+                            : ''
+                        }`}
+                        key={header.id}
+                        onClick={header.column.getToggleSortingHandler()}
+                        style={{
+                          display: 'flex',
+                          width: header.getSize(),
+                        }}
+                      >
+                        <span
+                          className="flex items-center"
+                          style={{ wordWrap: 'anywhere' }}
+                        >
+                          {flexRender(
+                            header.column.columnDef.header,
+                            header.getContext(),
+                          )}
+                          {header.column.getCanSort()
+                            ? {
+                                asc: <FaSortDown />,
+                                desc: <FaSortUp />,
+                                false: <FaSort />,
+                              }[header.column.getIsSorted()]
+                            : null}
+                        </span>
+                      </th>
+                    )
+                  })}
+                </tr>
+              ))}
+              <tr className="h-auto border-b border-black px-3">
+                <th colSpan={columns.length} className="flex gap-1 p-2">
+                  {intl.formatMessage({ id: 'MAT.Table.Search' })}{' '}
+                  <input
+                    className="border-0 outline-0 font-normal"
+                    value={getState().globalFilter ?? ''}
+                    onChange={(e) => setGlobalFilter(String(e.target.value))}
+                    placeholder={intl.formatMessage(
+                      { id: 'MAT.Table.FilterPlaceholder' },
+                      { count: rows?.length },
+                    )}
+                  />
+                </th>
+              </tr>
+            </thead>
 
-            <div ref={parentRef} className="h-[250px] overflow-auto">
-              <div style={{ height: `${virtualizer.getTotalSize()}px` }}>
-                <table style={{ tableLayout: 'fixed', width: '100%' }}>
-                  <tbody>
-                    {virtualizer.getVirtualItems().map((virtualRow, index) => {
-                      const row = rows[virtualRow.index]
+            <tbody
+              style={{
+                display: 'grid',
+                height: `${virtualizer.getTotalSize()}px`, //tells scrollbar how big the table is
+                position: 'relative', //needed for absolute positioning of rows
+              }}
+            >
+              {virtualizer.getVirtualItems().map((virtualRow, index) => {
+                const row = rows[virtualRow.index]
+                return (
+                  <tr
+                    key={row.id}
+                    style={{
+                      boxShadow: '0 1px black',
+                      display: 'flex',
+                      position: 'absolute',
+                      transform: `translateY(${virtualRow.start}px)`, //this should always be a `style` as it changes on scroll
+                      width: '100%',
+                    }}
+                  >
+                    {row.getVisibleCells().map((cell) => {
                       return (
-                        <tr
-                          key={row.id}
+                        <td
+                          key={cell.id}
+                          className="px-2 py-1"
                           style={{
-                            boxShadow: '0 1px black',
-                            height: `${virtualRow.size}px`,
-                            transform: `translateY(${
-                              virtualRow.start - index * virtualRow.size
-                            }px)`,
+                            display: 'flex',
+                            width: cell.column.getSize(),
                           }}
                         >
-                          {row.getVisibleCells().map((cell) => {
-                            return (
-                              <td
-                                key={cell.id}
-                                className="px-2 py-1"
-                                style={{
-                                  width:
-                                    cell.column.id === 'yAxisLabel'
-                                      ? '40%'
-                                      : cell.column.columnDef.size,
-                                  minWidth: '200px',
-                                }}
-                              >
-                                {flexRender(
-                                  cell.column.columnDef.cell,
-                                  cell.getContext(),
-                                )}
-                              </td>
-                            )
-                          })}
-                        </tr>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
+                        </td>
                       )
                     })}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          </div>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
         </div>
       </div>
     </DetailsBox>

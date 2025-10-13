@@ -84,7 +84,11 @@ const Chart = ({ queryParams = {}, setState = null, headerOptions = {} }) => {
   }, [data, setState])
 
   return (
-    <MATContextProvider {...queryParams}>
+    <MATContextProvider
+      allFailureTypes={[]}
+      queryProps={queryParams}
+      {...queryParams}
+    >
       <div className="flex flex-col">
         <>
           <GridChart

@@ -17,16 +17,133 @@ import {
   InvisibleTooltip,
   themeForInvisibleTooltip,
 } from './CustomTooltip'
-import { useMATContext } from './MATContext'
 import { colorMap } from './colorMap'
 import { getXAxisTicks } from './timeScaleXAxis'
+import { line } from 'd3-shape'
+import { computeXYScalesForSeries } from '@nivo/scales'
+import { Axes } from '@nivo/axes'
+import { colors } from 'ooni-components'
+import { useMATContext } from './MATContext'
+import { patternDotsDef, patternSquaresDef, patternLinesDef } from '@nivo/core'
+
+const chartMargins = { top: 5, right: 50, bottom: 5, left: 0 }
+
+const lineColor = colors.gray['700']
+
+const Line = ({ bars, xScale, innerWidth, innerHeight, onClick }) => {
+  if (bars.length === 0) return null
+
+  const maxValue = Math.max(...bars.map((bar) => bar.data.data.count || 0))
+  const midValue = Math.ceil(maxValue / 2)
+  const tickValues = [0, midValue, maxValue]
+
+  const scale = computeXYScalesForSeries(
+    [
+      {
+        id: 'only',
+        data: bars.map((it) => ({
+          x: it.data.index,
+          y: it.data.data.count || 0,
+        })),
+      },
+    ],
+    { type: 'linear' },
+    { type: 'linear' },
+    innerWidth,
+    innerHeight,
+  )
+
+  const lineGenerator = line()
+    .x((bar) => {
+      return bar.x + bar.width / 2
+    })
+    .y((bar) => {
+      return scale.yScale(bar.data.data.count || 0)
+    })
+
+  return (
+    <>
+      <Axes
+        yScale={scale.yScale}
+        xScale={xScale}
+        width={innerWidth}
+        height={innerHeight}
+        right={{
+          ticksPosition: 'after',
+          tickSize: 5,
+          tickPadding: 5,
+          tickRotation: 0,
+          tickOffset: 10,
+          tickValues: innerHeight < 70 ? tickValues : undefined,
+          legendPosition: 'middle',
+          legendOffset: 68,
+          legend: innerHeight > 70 ? 'Measurement count' : undefined,
+          format: (e) => (Math.floor(e) === e ? e : ''),
+        }}
+      />
+
+      <path
+        d={lineGenerator(bars)}
+        fill="none"
+        stroke={lineColor}
+        style={{ pointerEvents: 'none' }}
+      />
+      {bars.map((bar) => (
+        <g key={bar.key}>
+          {/* Outer transparent circle for larger click area */}
+          <circle
+            cx={bar.x + bar.width / 2}
+            cy={scale.yScale(bar.data.data.count || 0)}
+            r={bar.width - 4}
+            fill="transparent"
+            stroke="transparent"
+            onClick={() => onClick({ data: bar.data.data })}
+            className="cursor-pointer"
+          />
+
+          {/* Inner visible circle */}
+          <circle
+            cx={bar.x + bar.width / 2}
+            cy={scale.yScale(bar.data.data.count || 0)}
+            r={3}
+            fill="white"
+            stroke={lineColor}
+            strokeWidth={1}
+            className="cursor-pointer"
+            style={{ pointerEvents: 'none' }}
+          />
+        </g>
+      ))}
+    </>
+  )
+}
 
 const keys = ['anomaly_count', 'confirmed_count', 'failure_count', 'ok_count']
+const v5keys = ['blocked_max']
 
-const colorFunc = (d) => colorMap[d.id] || '#ccc'
+const getKeys = (dataQuery, observationKeys) => {
+  if (dataQuery === 'analysis') {
+    return v5keys
+  }
+  if (dataQuery === 'observations') {
+    return observationKeys
+  }
+  return keys
+}
 
-const barLayers = ['grid', 'axes', 'bars']
-export const chartMargins = { top: 4, right: 50, bottom: 4, left: 0 }
+const colorFunc = (d, query, state) => {
+  if (state?.colors && query?.data === 'observations') return state.colors[d.id]
+  if (state?.colors && query?.data === 'analysis')
+    return state.colors[d.data.blocked_max_outcome]
+  return colorMap[d.id] || '#ccc'
+}
+
+const baseLayers = ['grid', 'axes', 'bars']
+const barLayers = (query) => {
+  return query?.data === 'analysis'
+    ? ['grid', 'axes', 'markers', 'bars', Line]
+    : baseLayers
+}
 
 const formatXAxisValues = (value, query, intl) => {
   if (query.axis_x === 'measurement_start_day' && Date.parse(value)) {
@@ -44,17 +161,17 @@ const formatXAxisValues = (value, query, intl) => {
   }
 }
 
-const chartProps1D = (query, intl) => ({
-  colors: colorFunc,
+const chartProps1D = (query, intl, state) => ({
+  colors: (data) => colorFunc(data, query, state),
   indexScale: {
     type: 'band',
     round: false,
   },
   margin: {
     top: 30,
-    right: 20,
+    right: 76,
     bottom: 80,
-    left: 70,
+    left: 42,
   },
   padding: 0.3,
   borderColor: { from: 'color', modifiers: [['darker', 1.6]] },
@@ -80,7 +197,12 @@ const chartProps1D = (query, intl) => ({
     tickPadding: 5,
     tickRotation: 0,
     legendPosition: 'middle',
-    legendOffset: -60,
+    legendOffset: -36,
+    tickValues: query?.data === 'analysis' ? 3 : undefined,
+    legend: query?.data === 'analysis' ? 'Analysis outcome' : undefined,
+    ...(query?.data !== 'analysis'
+      ? { format: (e) => (Math.floor(e) === e ? e : '') }
+      : {}),
   },
   labelSkipWidth: 80,
   labelSkipHeight: 20,
@@ -88,22 +210,28 @@ const chartProps1D = (query, intl) => ({
   animate: true,
   motionStiffness: 90,
   motionDamping: 15,
+  layers: barLayers(query),
 })
 
-const chartProps2D = (query) => ({
+const chartProps2D = (query, intl, state) => ({
   // NOTE: These dimensions are linked to accuracy of the custom axes rendered in
   // <GridChart />
+  // innerPadding: '3px',
   margin: chartMargins,
   padding: 0.3,
   borderColor: { from: 'color', modifiers: [['darker', 1.6]] },
-  colors: colorFunc,
+  colors: (data) => colorFunc(data, query, state),
   axisTop: null,
-  axisRight: {
-    enable: true,
-    tickSize: 5,
-    tickPadding: 5,
-    tickValues: 2,
-  },
+  ...(query?.data !== 'analysis'
+    ? {
+        axisRight: {
+          enable: true,
+          tickSize: 5,
+          tickPadding: 5,
+          tickValues: 2,
+        },
+      }
+    : {}),
   axisBottom: null,
   axisLeft: null,
   enableGridX: true,
@@ -121,7 +249,7 @@ const chartProps2D = (query) => ({
   },
   animate: false,
   isInteractive: true,
-  layers: barLayers,
+  layers: barLayers(query),
 })
 
 const RowChart = ({
@@ -132,18 +260,21 @@ const RowChart = ({
   rowIndex /* width, first, last */,
 }) => {
   const intl = useIntl()
-  const [query, updateMATContext] = useMATContext()
-  const { tooltipIndex } = query
+  const { dispatch, state } = useMATContext()
+  const { query, tooltipIndex } = state
+
   const { showTooltipFromEvent, hideTooltip } = useTooltip()
 
   const onClose = useCallback(() => {
+    // update MATContext to remove the highlighted border around BarItem
+    dispatch({ type: 'setTooltipIndex', payload: [-1, ''] })
     hideTooltip()
-  }, [hideTooltip])
+  }, [hideTooltip, dispatch])
 
   const handleClick = useCallback(
     ({ data }) => {
       const column = data[query.axis_x]
-      updateMATContext({ tooltipIndex: [rowIndex, column] }, true)
+      dispatch({ type: 'setTooltipIndex', payload: [rowIndex, column] })
       showTooltipFromEvent(
         createElement(CustomToolTip, {
           data: data,
@@ -153,7 +284,7 @@ const RowChart = ({
         'top',
       )
     },
-    [onClose, query.axis_x, rowIndex, showTooltipFromEvent, updateMATContext],
+    [onClose, query.axis_x, rowIndex, showTooltipFromEvent, dispatch],
   )
 
   // Load the chart with an empty data to avoid
@@ -170,8 +301,15 @@ const RowChart = ({
   }, [data])
 
   const chartProps = useMemo(() => {
-    return label === undefined ? chartProps1D(query, intl) : chartProps2D(query)
-  }, [intl, label, query])
+    return label === undefined
+      ? chartProps1D(query, intl, state)
+      : chartProps2D(query, intl, state)
+  }, [intl, label, query, state])
+
+  const uniqueFailures = useMemo(
+    () => ['other', ...(state.selected ?? [])],
+    [state.selected],
+  )
 
   return (
     <div className="flex items-center relative" style={{ direction: 'ltr' }}>
@@ -179,41 +317,59 @@ const RowChart = ({
       <div style={{ height, width: '100%' }}>
         <Bar
           data={chartData}
-          keys={keys}
+          keys={getKeys(query?.data, uniqueFailures)}
           indexBy={indexBy}
           tooltip={InvisibleTooltip}
           onClick={handleClick}
           barComponent={CustomBarItem}
+          groupMode={'stacked'}
           theme={themeForInvisibleTooltip}
           // HACK: To show the tooltip, we hijack the
           // `enableLabel` prop to pass in the tooltip coordinates (row, col_index) from `GridChart`
           // `showTooltip` contains `[rowHasTooltip, columnwithTooltip]` e.g `[true, '2022-02-01']`
           enableLabel={tooltipIndex[0] === rowIndex ? tooltipIndex[1] : false}
+          valueScale={{
+            type: 'linear',
+            ...(query?.data && query?.data === 'analysis'
+              ? { min: 0, max: 1 }
+              : { min: 0, max: 'auto' }),
+          }}
+          gridYValues={
+            query?.data && query?.data === 'analysis' ? [0, 0.5, 1] : undefined
+          }
+          markers={[
+            {
+              axis: 'y',
+              value: 0.5,
+              lineStyle: {
+                stroke: colors.gray['400'],
+                strokeWidth: 2,
+              },
+              legendOrientation: 'vertical',
+            },
+          ]}
+          defs={[
+            patternLinesDef('lines', {
+              color: 'inherit',
+              background: 'white',
+              spacing: 6,
+              rotation: 45,
+              lineWidth: 4,
+            }),
+          ]}
+          fill={[
+            {
+              match: (d) => {
+                return d.data.data.blocked_max_outcome === 'none'
+              },
+              id: 'lines',
+            },
+          ]}
           {...chartProps}
         />
       </div>
     </div>
   )
 }
-
-RowChart.propTypes = {
-  data: PropTypes.arrayOf(
-    PropTypes.shape({
-      anomaly_count: PropTypes.number,
-      confirmed_count: PropTypes.number,
-      failure_count: PropTypes.number,
-      input: PropTypes.string,
-      measurement_count: PropTypes.number,
-      measurement_start_day: PropTypes.string,
-      ok_count: PropTypes.number,
-    }),
-  ),
-  height: PropTypes.number,
-  indexBy: PropTypes.string,
-  label: PropTypes.node,
-  rowIndex: PropTypes.number,
-}
-
-RowChart.displayName = 'RowChart'
 
 export default memo(RowChart)

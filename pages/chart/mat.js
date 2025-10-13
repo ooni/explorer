@@ -6,7 +6,6 @@ import { FormattedMessage, useIntl } from 'react-intl'
 import MATChart from 'components/MATChart'
 import { Form } from 'components/aggregation/mat/Form'
 import Help from 'components/aggregation/mat/Help'
-import { FaExternalLinkAlt } from 'react-icons/fa'
 import dayjs from 'services/dayjs'
 
 const MeasurementAggregationToolkit = () => {
@@ -16,12 +15,17 @@ const MeasurementAggregationToolkit = () => {
 
   const onSubmit = useCallback(
     (data) => {
-      const params = {}
-      for (const p of Object.keys(data)) {
+      const { ...rest } = data
+      const params = {
+        ...(router.query.data ? { data: router.query.data } : {}),
+      }
+
+      for (const p of Object.keys(rest)) {
         if (data[p] !== '') {
           params[p] = data[p]
         }
       }
+
       const href = {
         pathname: router.pathname,
         query: params,
@@ -34,7 +38,7 @@ const MeasurementAggregationToolkit = () => {
   // Upon mount, check if the page was accessed without query params
   // In that case, trigger a shallow navigation that shows a chart
   useEffect(() => {
-    if (router.isReady) {
+    if (Object.keys(router.query).length === 0) {
       const today = dayjs.utc().add(1, 'day')
       const monthAgo = dayjs.utc(today).subtract(1, 'month')
       const href = {
@@ -44,14 +48,11 @@ const MeasurementAggregationToolkit = () => {
           since: monthAgo.format('YYYY-MM-DD'),
           until: today.format('YYYY-MM-DD'),
           time_grain: 'day',
-          ...query,
         },
       }
       router.replace(href, undefined, { shallow: true })
     }
-    // Ignore the dependency on `router` because we want
-    // this effect to run only once, on mount, if query is empty.
-  }, [router.isReady])
+  }, [router])
 
   let linkToAPIQuery = null
   try {
@@ -75,33 +76,9 @@ const MeasurementAggregationToolkit = () => {
           <h5 className="mb-2">
             <FormattedMessage id="MAT.SubTitle" />
           </h5>
-          <Form onSubmit={onSubmit} query={router.query} />
+          <Form onSubmit={onSubmit} query={query} />
           <MATChart query={query} />
-          {linkToAPIQuery && (
-            <div className="flex mt-4 justify-start md:justify-end">
-              <a
-                className="flex items-center"
-                href={linkToAPIQuery}
-                target="_blank"
-                title="opens in new tab"
-                rel="noreferrer"
-              >
-                {intl.formatMessage({ id: 'MAT.JSONData' })}
-                <FaExternalLinkAlt className="ml-1" />
-              </a>
-              <a
-                className="flex items-center ml-3"
-                href={`${linkToAPIQuery}&format=CSV`}
-                target="_blank"
-                title="opens in new tab"
-                rel="noreferrer"
-              >
-                {intl.formatMessage({ id: 'MAT.CSVData' })}
-                <FaExternalLinkAlt className="ml-1" />
-              </a>
-            </div>
-          )}
-          <div className="my-8">
+          <div>
             <Help />
           </div>
         </div>

@@ -1,4 +1,4 @@
-import { useTheme } from '@nivo/core'
+import { useTheme } from '@nivo/theming'
 import { Chip } from '@nivo/tooltip'
 import Link from 'next/link'
 import { colors } from 'ooni-components'
@@ -6,8 +6,8 @@ import { memo, useMemo } from 'react'
 
 import { MdClear } from 'react-icons/md'
 import { useIntl } from 'react-intl'
-import { useMATContext } from './MATContext'
 import { colorMap } from './colorMap'
+import { useMATContext } from './MATContext'
 
 export const themeForInvisibleTooltip = {
   tooltip: {
@@ -89,16 +89,13 @@ export const generateSearchQuery = (data, query) => {
   }
 }
 
+const keys = ['anomaly_count', 'confirmed_count', 'failure_count', 'ok_count']
+
 const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
   const theme = useTheme()
   const intl = useIntl()
-  const [query] = useMATContext()
-  const dataKeysToShow = [
-    'anomaly_count',
-    'confirmed_count',
-    'failure_count',
-    'ok_count',
-  ]
+  const { state } = useMATContext()
+  const { query } = state
 
   const [linkToMeasurements, derivedTitle] = useMemo(() => {
     const searchQuery = generateSearchQuery(data, query)
@@ -109,7 +106,7 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
 
     const derivedTitle =
       title ??
-      `${data[query?.axis_x]} ${query?.axis_y !== '' ? ` - ${data[query.axis_y]}` : ''}`
+      `${data[query?.axis_x]} ${query?.axis_y ? ` - ${data[query.axis_y]}` : ''}`
 
     return [linkObj, derivedTitle]
   }, [data, query, title])
@@ -121,21 +118,74 @@ const CustomToolTip = memo(({ data, onClose, title, link = true }) => {
         <MdClear title="Close" strokeWidth={2} onClick={onClose} />
       </div>
       <div className="flex flex-col pr-4 my-1">
-        {dataKeysToShow.map((k) => (
-          <div className="my-1" key={k}>
-            <div className="flex items-center">
-              <div className="mr-4">
-                <Chip color={colorMap[k]} />
+        {query?.data === 'observations' && (
+          <>
+            {state?.selected?.map((key) => (
+              <div key={key}>
+                {!!Number(data[key] ?? 0) && (
+                  <div className="flex items-center">
+                    <div className="mr-4">
+                      <Chip color={state.colors[key]} />
+                    </div>
+                    <div className="mr-8">{key === 'none' ? 'ok' : key}</div>
+                    <div className="ml-auto">
+                      {intl.formatNumber(Number(data[key] ?? 0))}
+                    </div>
+                  </div>
+                )}
               </div>
-              <div className="mr-8">
-                {intl.formatMessage({ id: `MAT.Table.Header.${k}` })}
-              </div>
-              <div className="ml-auto">
-                {intl.formatNumber(Number(data[k] ?? 0))}
-              </div>
+            ))}
+          </>
+        )}
+
+        {query?.data === 'analysis' && (
+          <>
+            <div>
+              Outcome:{' '}
+              <span className="font-semibold">
+                {data.blocked_max_outcome === 'none'
+                  ? 'ok'
+                  : data.blocked_max_outcome}
+              </span>
             </div>
-          </div>
-        ))}
+            {!!data?.likely_blocked_protocols.length && (
+              <div>
+                Likely blocked protocols:{' '}
+                <ul>
+                  {data?.likely_blocked_protocols.map(([protocol, value]) => (
+                    <li key={protocol}>
+                      {protocol}: {Math.floor(value * 100) / 100}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            )}
+            <div>
+              Measurement count:{' '}
+              <span className="font-semibold">{data.count || 0}</span>
+            </div>
+          </>
+        )}
+
+        {(!query?.data || query?.data === 'anomalies') && (
+          <>
+            {keys.map((k) => (
+              <div className="my-1" key={k}>
+                <div className="flex items-center">
+                  <div className="mr-4">
+                    <Chip color={colorMap[k]} />
+                  </div>
+                  <div className="mr-8">
+                    {intl.formatMessage({ id: `MAT.Table.Header.${k}` })}
+                  </div>
+                  <div className="ml-auto">
+                    {intl.formatNumber(Number(data[k] ?? 0))}
+                  </div>
+                </div>
+              </div>
+            ))}
+          </>
+        )}
       </div>
       {link && (
         <div className="my-2 ml-auto pr-4">

@@ -1,18 +1,17 @@
 import OONILogo from 'ooni-components/svgs/logos/OONI-HorizontalMonochrome.svg'
+import { FaEdit } from 'react-icons/fa'
 import { useIntl } from 'react-intl'
 import CountryNameLabel from './CountryNameLabel'
-import { useMATContext } from './MATContext'
-import { colorMap } from './colorMap'
 import { testGroups, testNames } from '/components/test-info'
+import { useState, useMemo } from 'react'
+import { useMATContext } from './MATContext'
+import FailureForm from './FailureForm'
+import { MdClose } from 'react-icons/md'
 
-const Legend = ({ label, color }) => {
+const LegendItem = ({ label, color }) => {
   return (
-    <div className="flex items-center mr-2">
-      <div className="px-2">
-        <div
-          style={{ width: '10px', height: '10px', backgroundColor: color }}
-        />
-      </div>
+    <div className="flex items-center gap-1">
+      <div style={{ width: '10px', height: '10px', backgroundColor: color }} />
       <div>{label}</div>
     </div>
   )
@@ -71,14 +70,69 @@ export const SubtitleStr = ({ query, options }) => {
 
   return [...params].join(', ')
 }
+
+const Legend = () => {
+  const intl = useIntl()
+  const { state } = useMATContext()
+  const { query, legendItems } = state
+
+  const [showLegendEditor, setShowLegendEditor] = useState(false)
+
+  return (
+    <>
+      {showLegendEditor ? (
+        <div className="bg-gray-100 p-4 rounded-md block w-full">
+          <div className="flex items-center justify-between mb-2">
+            <span className="font-semibold">Chart editor</span>
+            <button
+              type="button"
+              className="text-md px-2"
+              onClick={() => setShowLegendEditor(false)}
+            >
+              <MdClose />
+            </button>
+          </div>
+          <div>
+            <FailureForm afterSubmit={() => setShowLegendEditor(false)} />
+          </div>
+        </div>
+      ) : (
+        <div className="group flex my-2 gap-x-2 flex-wrap items-center">
+          {!!legendItems?.length &&
+            legendItems.map((item) => (
+              <LegendItem
+                key={item.label}
+                label={intl.messages[item.label] || item.label}
+                color={item.color}
+              />
+            ))}
+          {state.showLegendEditorButton && (
+            <button
+              type="button"
+              aria-label="Edit legend"
+              className="opacity-0 text-blue-500 group-hover:opacity-100 focus:opacity-100 transition-opacity duration-150"
+              onClick={() => setShowLegendEditor(true)}
+            >
+              <FaEdit size={12} />
+            </button>
+          )}
+        </div>
+      )}
+    </>
+  )
+}
+
 /**
  * ChartHeader generates formatted headings to show above the charts in GridChart
  * @param {Object} options - Object with flags for header components eg. { probe_cc: false }
  * @param {boolean} options.probe_cc - Show/hide country name
  */
 export const ChartHeader = ({ options: opts }) => {
+  const { state } = useMATContext()
+  const { query } = state
+
   const intl = useIntl()
-  const [query] = useMATContext()
+
   const options = {
     subtitle: true,
     probe_cc: true,
@@ -103,34 +157,13 @@ export const ChartHeader = ({ options: opts }) => {
           </span>
         )}
       </div>
-      <div className="flex mb-2 justify-between text-sm">
-        {options.legend && (
-          <div className="flex justify-center my-2 flex-wrap">
-            <Legend
-              label={intl.formatMessage({ id: 'MAT.Table.Header.ok_count' })}
-              color={colorMap.ok_count}
-            />
-            <Legend
-              label={intl.formatMessage({
-                id: 'MAT.Table.Header.confirmed_count',
-              })}
-              color={colorMap.confirmed_count}
-            />
-            <Legend
-              label={intl.formatMessage({
-                id: 'MAT.Table.Header.anomaly_count',
-              })}
-              color={colorMap.anomaly_count}
-            />
-            <Legend
-              label={intl.formatMessage({
-                id: 'MAT.Table.Header.failure_count',
-              })}
-              color={colorMap.failure_count}
-            />
+      <div className="flex mb-2 justify-between text-sm gap-x-6">
+        {options.legend && <Legend />}
+        {options.logo && (
+          <div>
+            <OONILogo className="opacity-50" height="32px" />
           </div>
         )}
-        {options.logo && <OONILogo className="opacity-50" height="32px" />}
       </div>
     </>
   )

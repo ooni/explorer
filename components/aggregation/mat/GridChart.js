@@ -2,20 +2,92 @@ import { Container } from '@nivo/core'
 import { Tooltip, TooltipProvider } from '@nivo/tooltip'
 import { ChartSpinLoader } from 'components/Chart'
 import PropTypes from 'prop-types'
-import { memo, useMemo, useRef } from 'react'
+import { memo, useMemo, useRef, useCallback } from 'react'
 import { ChartHeader } from './ChartHeader'
 import { barThemeForTooltip } from './CustomTooltip'
-import { useMATContext } from './MATContext'
 import { NoCharts } from './NoCharts'
 import RowChart from './RowChart'
 import { VirtualRows } from './VirtualRows'
 import { XAxis } from './XAxis'
 import { fillDataHoles, sortRows } from './computations'
 import { getRowLabel } from './labels'
+import { useState, useEffect } from 'react'
+import { twMerge } from 'tailwind-merge'
+import { useMATContext } from './MATContext'
 
 const ROW_HEIGHT = 70
 const XAXIS_HEIGHT = 62
 const GRID_MAX_HEIGHT = 680
+
+const generateQuery = (q) => new URLSearchParams(q).toString()
+
+const prepareObservationsData = (
+  data,
+  query,
+  includedFailureTypes = [],
+  selectedFailureTypes = [],
+) => {
+  const axisY = query.axis_y === 'domain' ? 'hostname' : query.axis_y
+  const axisYKey = query.axis_y === 'domain' ? 'domain' : query.axis_y
+
+  return data
+    .reduce((acc, { timestamp, failure, observation_count, ...rest }) => {
+      if (!includedFailureTypes.includes(failure)) return acc
+
+      const reducedFailure = selectedFailureTypes.includes(failure)
+        ? failure
+        : 'other'
+
+      const existing = axisY
+        ? acc.find(
+            (item) =>
+              item.measurement_start_day === timestamp.split('T')[0] &&
+              item[axisYKey] === rest[axisY],
+          )
+        : acc.find(
+            (item) => item.measurement_start_day === timestamp.split('T')[0],
+          )
+
+      if (existing) {
+        if (existing[reducedFailure]) {
+          existing[reducedFailure] += observation_count
+        } else {
+          existing[reducedFailure] = observation_count
+        }
+      } else {
+        acc.push({
+          measurement_start_day:
+            query.time_grain === 'hour' ? timestamp : timestamp.split('T')[0],
+          [reducedFailure]: observation_count,
+          ...(axisY ? { [axisYKey]: rest[axisY] } : {}),
+          // ...rest,
+        })
+      }
+
+      return acc
+    }, [])
+    .sort((a, b) => {
+      return (
+        new Date(a.measurement_start_day) - new Date(b.measurement_start_day)
+      )
+    })
+}
+
+const prepareDetailedData = (data, query) => {
+  return data.map((item) => {
+    return {
+      ...item,
+      count: item.count,
+      measurement_start_day:
+        query.time_grain === 'hour'
+          ? item.measurement_start_day
+          : item.measurement_start_day.split('T')[0],
+      blocked_max: item.loni.blocked_max || 1,
+      blocked_max_outcome: item.loni.blocked_max_outcome,
+      likely_blocked_protocols: item.loni.likely_blocked_protocols,
+    }
+  })
+}
 
 /** Transforms data received by GridChart into an collection of arrays each of
  * which is used to generate a RowChart
@@ -38,12 +110,28 @@ const GRID_MAX_HEIGHT = 680
    }
  *
 */
+export const prepareDataForGridChart = (
+  initialData,
+  query,
+  locale,
+  includedFailureTypes = [],
+  selectedFailureTypes = [],
+) => {
+  const data =
+    query?.data === 'observations'
+      ? prepareObservationsData(
+          initialData,
+          query,
+          includedFailureTypes,
+          selectedFailureTypes,
+        )
+      : query?.data === 'analysis'
+        ? prepareDetailedData(initialData, query)
+        : initialData
 
-export const prepareDataForGridChart = (data, query, locale) => {
   const rows = []
   const rowLabels = {}
   const reshapedData = {}
-
   for (const item of data) {
     // Convert non-string keys (e.g `probe_asn`) to string
     // because they get casted to strings during Object transformations
@@ -64,6 +152,23 @@ export const prepareDataForGridChart = (data, query, locale) => {
   )
 
   return [reshapedDataWithoutHoles, sortedRowKeys, rowLabels]
+}
+
+const ChartTypeButton = ({ chartType, isActive, onClick }) => {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className={twMerge(
+        'btn text-white btn-sm',
+        isActive
+          ? 'bg-blue-400 border-blue-400'
+          : 'bg-blue-200 border-blue-200 ',
+      )}
+    >
+      {chartType}
+    </button>
+  )
 }
 
 /**
@@ -90,19 +195,20 @@ export const prepareDataForGridChart = (data, query, locale) => {
 const GridChart = ({
   data,
   rowKeys,
-  rowLabels,
+  rowLabels = {},
   height = 'auto',
   header,
   selectedRows = null,
-  noLabels = false,
 }) => {
+  const noLabels = !Object.keys(rowLabels).length
   // Fetch query state from context instead of router
   // because some params not present in the URL are injected in the context
-  const [query] = useMATContext()
-  const { tooltipIndex } = query
+  const { state } = useMATContext()
+  const { query, tooltipIndex } = state
   const indexBy = query.axis_x
   const tooltipContainer = useRef(null)
 
+  // rows in grid chart - when axis_y is in use
   const rowsToRender = useMemo(() => {
     if (!selectedRows) {
       return rowKeys
@@ -128,20 +234,24 @@ const GridChart = ({
   const rowHeight = noLabels ? 500 : ROW_HEIGHT
 
   return (
-    <Container theme={barThemeForTooltip}>
-      <TooltipProvider container={tooltipContainer}>
-        <div className="flex flex-col" ref={tooltipContainer}>
-          <div className="flex flex-col">
-            <ChartHeader
-              options={{ ...header, logo: !!data?.size, legend: !!data?.size }}
-            />
-            {!data && <ChartSpinLoader />}
-            {data?.size === 0 && <NoCharts />}
-            {data?.size > 0 && (
-              // Fake axis on top of list. Possible alternative: dummy chart with axis and valid tickValues
-              // Use a virtual list only for higher count of rows
-              <>
-                {rowsToRender.length < 10 ? (
+    <div>
+      <Container theme={barThemeForTooltip}>
+        <TooltipProvider container={tooltipContainer}>
+          <div className="flex flex-col" ref={tooltipContainer}>
+            <div className="flex flex-col">
+              <ChartHeader
+                options={{
+                  ...header,
+                  logo: !!data?.size,
+                  legend: !!data?.size,
+                }}
+              />
+              {!data && <ChartSpinLoader />}
+              {data?.size === 0 && <NoCharts />}
+              {data?.size > 0 &&
+                // Fake axis on top of list. Possible alternative: dummy chart with axis and valid tickValues
+                // Use a virtual list only for higher count of rows
+                (rowsToRender.length < 10 ? (
                   <div
                     className="outerListElement flex flex-col"
                     style={{
@@ -170,25 +280,14 @@ const GridChart = ({
                     indexBy={indexBy}
                     tooltipIndex={tooltipIndex}
                   />
-                )}
-              </>
-            )}
+                ))}
+            </div>
           </div>
-        </div>
-        <Tooltip />
-      </TooltipProvider>
-    </Container>
+          <Tooltip />
+        </TooltipProvider>
+      </Container>
+    </div>
   )
-}
-
-GridChart.propTypes = {
-  data: PropTypes.objectOf(PropTypes.array).isRequired,
-  rowKeys: PropTypes.arrayOf(PropTypes.string),
-  rowLabels: PropTypes.objectOf(PropTypes.string),
-  selectedRows: PropTypes.arrayOf(PropTypes.string),
-  height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  header: PropTypes.element,
-  noLabels: PropTypes.bool,
 }
 
 export default memo(GridChart)
