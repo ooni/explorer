@@ -66,21 +66,17 @@ const queryToParams = ({ query }) => {
     'ooni_run_link_id',
   ]
 
-  if (query.show) {
-    show = Number.parseInt(query.show)
-  }
-  params.limit = show
-
-  // Allow only `failure=false`. `true` results in showing only failures
-  if ('failure' in query && query.failure === false) {
-    params.failure = false
-  }
-
   for (const p of supportedParams) {
     if (p in query && query[p] !== queryToFilterMap[p][1]) {
       params[p] = query[p]
     }
   }
+
+  if (query.show) {
+    show = Number.parseInt(query.show)
+  }
+  params.limit = show
+
   if (query.only) {
     if (query.only === 'anomalies') {
       params.anomaly = true
@@ -88,6 +84,16 @@ const queryToParams = ({ query }) => {
       params.confirmed = true
     }
   }
+
+  // Allow only `failure=false`. `true` results in showing only failures
+  if ('failure' in query) {
+    if (query.failure === false) {
+      params.failure = false
+    } else {
+      params.failure = null
+    }
+  }
+
   return params
 }
 
