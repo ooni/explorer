@@ -11,7 +11,7 @@ const LoadingRawData = () => {
   return <FormattedMessage id="General.Loading" />
 }
 
-const ReactJson = dynamic(() => import('react-json-view'), {
+const ReactJson = dynamic(() => import('@microlink/react-json-view'), {
   ssr: false,
   loading: LoadingRawData,
 })
