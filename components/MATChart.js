@@ -162,7 +162,7 @@ const MATChart = ({ query, showFilters = true }) => {
       ) : (
         <MATContextProvider
           allFailureTypes={allFailureTypes}
-          // queryProps={query}
+          queryProps={query}
         >
           {results.length > 0 || Object.keys(results).length ? (
             <>
