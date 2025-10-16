@@ -38,7 +38,7 @@ const MeasurementAggregationToolkit = () => {
   // Upon mount, check if the page was accessed without query params
   // In that case, trigger a shallow navigation that shows a chart
   useEffect(() => {
-    if (Object.keys(router.query).length === 0) {
+    if (router.isReady) {
       const today = dayjs.utc().add(1, 'day')
       const monthAgo = dayjs.utc(today).subtract(1, 'month')
       const href = {
@@ -48,11 +48,12 @@ const MeasurementAggregationToolkit = () => {
           since: monthAgo.format('YYYY-MM-DD'),
           until: today.format('YYYY-MM-DD'),
           time_grain: 'day',
+          ...query,
         },
       }
       router.replace(href, undefined, { shallow: true })
     }
-  }, [router])
+  }, [router.isReady])
 
   let linkToAPIQuery = null
   try {
