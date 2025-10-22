@@ -6,7 +6,7 @@ import FindingDisplay from 'components/findings/FindingDisplay'
 import { useMemo } from 'react'
 import { useIntl } from 'react-intl'
 
-export const getServerSideProps = async ({ query }) => {
+export const getServerSideProps = async ({ query, req }) => {
   const data = await fetcher(
     apiEndpoints.SHOW_INCIDENT.replace(':id', query.id),
   ).catch(() => null)
@@ -14,6 +14,7 @@ export const getServerSideProps = async ({ query }) => {
   return {
     props: {
       data,
+      isEmbeddedView: !!req.headers['enable-embedded-view'] || !!query?.webview,
     },
   }
 }
