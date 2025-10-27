@@ -219,8 +219,8 @@ const CoverageChart = () => {
                     .slice()
                     .reverse()
                     .map((point) => (
-                      <div key={point.id}>
-                        {chartLabels[point.serieId]}: {point.data.value}
+                      <div key={point.id} className="text-nowrap">
+                        {chartLabels[point.seriesId]}: {point.data.value}
                       </div>
                     ))}
                 </div>
