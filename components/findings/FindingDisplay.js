@@ -15,6 +15,10 @@ const FormattedMarkdown = ({ children }) => {
           MAT: {
             component: MATChartWrapper,
           },
+          iframe: () => null,
+          script: () => null,
+          style: () => null,
+          object: () => null,
         },
       }}
     >
