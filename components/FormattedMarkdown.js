@@ -17,6 +17,10 @@ export const FormattedMarkdownBase = ({ children }) => {
       options={{
         overrides: {
           h1: { component: MdH1 },
+          iframe: () => null,
+          script: () => null,
+          style: () => null,
+          object: () => null,
         },
       }}
     >

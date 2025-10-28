@@ -24,7 +24,18 @@ const HighlightBox = ({ countryCode, title, text, dates, footer }) => {
         {dates}
         <h4 className="text-2xl my-2 leading-tight">{title}</h4>
         <div className="text-lg">
-          <Markdown>{text}</Markdown>
+          <Markdown
+            options={{
+              overrides: {
+                iframe: () => null,
+                script: () => null,
+                style: () => null,
+                object: () => null,
+              },
+            }}
+          >
+            {text}
+          </Markdown>
         </div>
       </div>
       <div className="mt-6">{footer}</div>

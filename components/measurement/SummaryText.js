@@ -31,6 +31,10 @@ const SummaryText = ({ testName, network, country, date, content }) => {
         options={{
           overrides: {
             a: { component: ({ children }) => <>{children}</> },
+            iframe: () => null,
+            script: () => null,
+            style: () => null,
+            object: () => null,
           },
         }}
       >
