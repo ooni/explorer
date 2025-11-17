@@ -7,6 +7,7 @@ import { MdClose, MdMenu } from 'react-icons/md'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { getLocalisedLanguageName } from 'utils/i18nCountries'
 import { getDirection } from './withIntl'
+import { twMerge } from 'tailwind-merge'
 
 const LanguageSelect = (props) => (
   <div className="flex items-center mb-2 opacity-60 hover:opacity-100">
@@ -154,7 +155,7 @@ const SubMenu = () => {
 
 const languages = process.env.LOCALES
 
-export const NavBar = ({ color }) => {
+export const NavBar = ({ color, className }) => {
   const { locale } = useIntl()
   const router = useRouter()
   const { pathname, asPath, query } = router
@@ -179,7 +180,7 @@ export const NavBar = ({ color }) => {
     setShowMenu(false)
   }, [pathname])
   return (
-    <div className="z-[8888]">
+    <div className={twMerge('z-[8888]', className)}>
       <div className={`${color} py-4`}>
         <div className="container">
           <div className="flex flex-row justify-between items-end">

@@ -11,6 +11,7 @@ import HighlightSection from '../components/landing/HighlightsSection'
 import CoverageChart from '../components/landing/Stats'
 import highlightContent from '../components/landing/highlights.json'
 import { toCompactNumberUnit } from '../utils'
+import { DonationBanner } from 'components/DonationBanner'
 
 const StatsItem = ({ label, unit, value }) => (
   <div className="text-center w-1/3 p-4 text-blue-900">
@@ -77,6 +78,7 @@ const LandingPage = ({ measurementCount, asnCount, countryCount }) => {
       <Head>
         <title>{intl.formatMessage({ id: 'General.OoniExplorer' })}</title>
       </Head>
+      <DonationBanner />
       <div
         className="pt-4 pb-12"
         style={{
