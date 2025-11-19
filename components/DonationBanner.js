@@ -12,7 +12,7 @@ export const DonationBanner = () => {
           class="bg-[#1B1E21] text-[#C3FAE8] relative flex items-end"
           style={{
             backgroundImage:
-              "url('/static/images/donate_banner/donate_banner_bg.svg')",
+              "url('/static/images/donate_banner/donate_banner_bg.png')",
             backgroundPosition: '33% center',
             backgroundSize: 'cover',
             backgroundRepeat: 'no-repeat',
@@ -30,33 +30,31 @@ export const DonationBanner = () => {
             <div class="flex md:flex-row flex-col-reverse">
               <div class="md:w-[52%] w-full flex items-end">
                 <img
-                  src="/static/images/donate_banner/tentacle.svg"
+                  src="/static/images/donate_banner/tentacle.png"
                   alt="Tentacle"
                 />
               </div>
               <div class="md:w-[48%] md:ml-[-20px] w-full py-8 flex flex-col">
                 <div>
                   <img
-                    src="/static/images/donate_banner/slogan.svg"
+                    src="/static/images/donate_banner/slogan.png"
                     alt="Protect Our Internet; Document Censorship"
                     class="md:ml-[-40px] md:w-[90%] mb-8 md:mb-4"
                   />
                 </div>
                 <div class="md:w-10/12">
                   <p class="mb-2">
-                    Around the world, access to online information is
-                    increasingly blocked.
+                    Around the world, access to information is increasingly
+                    blocked and manipulated.
                   </p>
                   <p class="mb-2">
-                    Transparency of internet censorship is more important than
+                    Transparency of Network Interference is more important than
                     ever.
                   </p>
                   <p class="mb-2">
-                    <b>
-                      Support the world's largest open dataset on internet
-                      censorship.
-                    </b>{' '}
-                    Donate to OONI and help keep the internet open.
+                    Support the world's largest open dataset on Internet
+                    censorship. Donate to OONI and help keep the Internet open
+                    and transparent.
                   </p>
                   <a
                     href="https://ooni.org/donate/"
