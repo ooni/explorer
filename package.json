@@ -67,7 +67,7 @@
     "@welldone-software/why-did-you-render": "^8.0.1",
     "autoprefixer": "^10.4.19",
     "cypress": "^13.6.2",
-    "glob": "^10.3.10",
+    "glob": "^10.5.0",
     "imap-simple": "^5.1.0",
     "jsdom": "^23.2.0",
     "msw": "^2.1.0",
