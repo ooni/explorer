@@ -22,7 +22,7 @@ const MeasurementAggregationToolkit = () => {
 
       for (const p of Object.keys(rest)) {
         if (data[p] !== '') {
-          params[p] = data[p]
+          params[p] = data[p].replaceAll(' ', '')
         }
       }
 
@@ -41,6 +41,12 @@ const MeasurementAggregationToolkit = () => {
     if (router.isReady) {
       const today = dayjs.utc().add(1, 'day')
       const monthAgo = dayjs.utc(today).subtract(1, 'month')
+      const queryWithoutSpaces = Object.fromEntries(
+        Object.entries(query).map(([key, value]) => [
+          key,
+          value.replaceAll(' ', ''),
+        ]),
+      )
       const href = {
         query: {
           test_name: 'web_connectivity',
@@ -48,7 +54,7 @@ const MeasurementAggregationToolkit = () => {
           since: monthAgo.format('YYYY-MM-DD'),
           until: today.format('YYYY-MM-DD'),
           time_grain: 'day',
-          ...query,
+          ...queryWithoutSpaces,
         },
       }
       router.replace(href, undefined, { shallow: true })
@@ -58,7 +64,7 @@ const MeasurementAggregationToolkit = () => {
   let linkToAPIQuery = null
   try {
     linkToAPIQuery = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation?${new URLSearchParams(
-      query,
+      queryWithoutSpaces,
     ).toString()}`
   } catch (e) {
     console.error(`Failed to construct API query link: ${e.message}`)
