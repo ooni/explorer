@@ -49,7 +49,7 @@ const RecentMeasurements = ({ query }) => {
       <div ref={ref}>
         {inView ? <List query={query} /> : <ChartSpinLoader height="340px" />}
       </div>
-      <Link href={`/search?${new URLSearchParams(query)}`}>
+      <Link href={`/search?${new URLSearchParams(query)}`} prefetch={false}>
         <button type="button" className="btn btn-primary-hollow mt-4 mb-16">
           {intl.formatMessage({ id: 'Domain.Button.SearchResults' })}{' '}
           <MdOutlineSearch size={20} style={{ verticalAlign: 'bottom' }} />

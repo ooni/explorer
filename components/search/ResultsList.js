@@ -302,7 +302,7 @@ const ResultItem = ({
   const testName = testNames[test_name]?.name || test_name
 
   return (
-    <Link href={`/m/${measurement_uid}`}>
+    <Link href={`/m/${measurement_uid}`} prefetch={false}>
       <div className="flex flex-wrap items-stretch text-gray-700 bg-white hover:bg-gray-50 border-b border-gray-400">
         <div className="w-1 mr-4">
           <div
