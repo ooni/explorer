@@ -3,11 +3,18 @@ import {
   getCoreRowModel,
   getSortedRowModel,
   useReactTable,
+  type SortingState,
 } from '@tanstack/react-table'
 import { addWeeks, format, parseISO, subWeeks } from 'date-fns'
 import Link from 'next/link'
-import { useMemo } from 'react'
-import { FaArrowAltCircleDown, FaArrowAltCircleUp } from 'react-icons/fa'
+import { useMemo, useState } from 'react'
+import {
+  FaArrowAltCircleDown,
+  FaArrowAltCircleUp,
+  FaSort,
+  FaSortDown,
+  FaSortUp,
+} from 'react-icons/fa'
 
 export interface Changepoint {
   id: string
@@ -24,11 +31,14 @@ export interface Changepoint {
 const AlertList: React.FC<{ changepoints: Changepoint[] }> = ({
   changepoints,
 }) => {
+  const [sorting, setSorting] = useState<SortingState>([])
+
   const columns = useMemo(
     () => [
       {
         header: 'Direction',
         accessorKey: 'change_dir',
+        enableSorting: true,
         cell: ({ getValue }: { getValue: () => 'up' | 'down' }) => {
           const direction = getValue()
           return (
@@ -45,6 +55,7 @@ const AlertList: React.FC<{ changepoints: Changepoint[] }> = ({
       {
         header: 'Time',
         accessorKey: 'start_time',
+        enableSorting: true,
         cell: ({ getValue }: { getValue: () => string }) => {
           const time = getValue()
           return time
@@ -53,10 +64,12 @@ const AlertList: React.FC<{ changepoints: Changepoint[] }> = ({
       {
         header: 'Country',
         accessorKey: 'probe_cc',
+        enableSorting: true,
       },
       {
         header: 'Network',
         accessorKey: 'probe_asn',
+        enableSorting: true,
         cell: ({ getValue }: { getValue: () => string }) => {
           const asn = getValue()
           return `AS${asn}`
@@ -65,10 +78,12 @@ const AlertList: React.FC<{ changepoints: Changepoint[] }> = ({
       {
         header: 'Domain',
         accessorKey: 'domain',
+        enableSorting: true,
       },
       {
         header: 'See more',
         id: 'see_more',
+        enableSorting: false,
         cell: ({ row }: { row: { original: Changepoint } }) => {
           const { probe_asn, probe_cc, domain, start_time } = row.original
           const startDate = parseISO(start_time)
@@ -97,9 +112,13 @@ const AlertList: React.FC<{ changepoints: Changepoint[] }> = ({
     [],
   )
 
-  const { getHeaderGroups, getRowModel } = useReactTable({
+  const table = useReactTable({
     columns,
     data: changepoints,
+    state: {
+      sorting,
+    },
+    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getSortedRowModel: getSortedRowModel(),
   })
@@ -108,7 +127,7 @@ const AlertList: React.FC<{ changepoints: Changepoint[] }> = ({
     <div className="flow-root overflow-x-auto">
       <table className="min-w-full divide-y divide-gray-400">
         <thead>
-          {getHeaderGroups().map((headerGroup) => (
+          {table.getHeaderGroups().map((headerGroup) => (
             <tr key={headerGroup.id}>
               {headerGroup.headers.map((header) => (
                 <th
@@ -116,9 +135,31 @@ const AlertList: React.FC<{ changepoints: Changepoint[] }> = ({
                   className="px-3 py-3.5 text-sm text-start font-semibold text-gray-900"
                   scope="col"
                 >
-                  {flexRender(
-                    header.column.columnDef.header,
-                    header.getContext(),
+                  {header.isPlaceholder ? null : (
+                    <div
+                      {...(header.column.getCanSort()
+                        ? {
+                            className:
+                              'flex items-center gap-2 cursor-pointer select-none hover:text-gray-700',
+                            onClick: header.column.getToggleSortingHandler(),
+                          }
+                        : { className: 'flex items-center' })}
+                    >
+                      {flexRender(
+                        header.column.columnDef.header,
+                        header.getContext(),
+                      )}
+                      {header.column.getCanSort() && (
+                        <span className="text-gray-400">
+                          {{
+                            asc: <FaSortUp />,
+                            desc: <FaSortDown />,
+                          }[header.column.getIsSorted() as string] ?? (
+                            <FaSort />
+                          )}
+                        </span>
+                      )}
+                    </div>
                   )}
                 </th>
               ))}
@@ -126,7 +167,7 @@ const AlertList: React.FC<{ changepoints: Changepoint[] }> = ({
           ))}
         </thead>
         <tbody>
-          {getRowModel().rows.map((row) => {
+          {table.getRowModel().rows.map((row) => {
             return (
               <tr key={row.id} className="even:bg-gray-50">
                 {row.getVisibleCells().map((cell) => {
