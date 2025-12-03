@@ -43,7 +43,7 @@
     "react-hook-form": "^7.55.0",
     "react-icons": "^5.2.1",
     "react-intersection-observer": "^9.15.1",
-    "react-intl": "^7.1.9",
+    "react-intl": "^7.1.14",
     "react-outside-click-handler": "^1.3.0",
     "react-toastify": "^10.0.2",
     "react-virtualized": "^9.22.5",

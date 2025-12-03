@@ -3,7 +3,6 @@ import axios from 'axios'
 import Head from 'next/head'
 import Link from 'next/link'
 import { colors } from 'ooni-components'
-import PropTypes from 'prop-types'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { twMerge } from 'tailwind-merge'
 import FormattedMarkdown from '../components/FormattedMarkdown'
@@ -13,49 +12,65 @@ import highlightContent from '../components/landing/highlights.json'
 import { toCompactNumberUnit } from '../utils'
 import { DonationBanner } from 'components/DonationBanner'
 
-const StatsItem = ({ label, unit, value }) => (
+interface StatsItemProps {
+  label: React.ReactNode
+  unit?: string
+  value: number
+}
+
+const StatsItem = ({ label, unit, value }: StatsItemProps) => (
   <div className="text-center w-1/3 p-4 text-blue-900">
     <div className="text-4xl md:text-5xl font-light">
       {value}
-      <span className="text-3xl" as="span">
-        {unit}
-      </span>
+      <span className="text-3xl">{unit}</span>
     </div>
     <div className="text-gray-700">{label}</div>
   </div>
 )
 
-StatsItem.propTypes = {
-  label: PropTypes.oneOfType([PropTypes.element, PropTypes.string]),
-  unit: PropTypes.string,
-  value: PropTypes.number,
-}
-
-const FeatureRow = ({ className, ...props }) => (
+const FeatureRow = ({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={twMerge(
       'flex flex-wrap items-center justify-center py-8',
       className,
     )}
     {...props}
-  />
+  >
+    {children}
+  </div>
 )
 
-const FeatureBox = ({ className, ...props }) => (
+const FeatureBox = ({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={twMerge('w-full md:w-1/2 leading-normal text-xl', className)}
     {...props}
-  />
+  >
+    {children}
+  </div>
 )
 
-const FeatureBoxTitle = ({ className, ...props }) => (
+const FeatureBoxTitle = ({
+  className,
+  children,
+  ...props
+}: React.HTMLAttributes<HTMLDivElement>) => (
   <div
     className={twMerge('flex text-blue-900 text-2xl font-bold mb-2', className)}
     {...props}
-  />
+  >
+    {children}
+  </div>
 )
 
-export async function getServerSideProps({ query }) {
+export async function getServerSideProps() {
   const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
   const result = await client.get('/api/_/global_overview')
 
@@ -68,10 +83,20 @@ export async function getServerSideProps({ query }) {
   }
 }
 
-const LandingPage = ({ measurementCount, asnCount, countryCount }) => {
+interface LandingPageProps {
+  measurementCount: number
+  asnCount: number
+  countryCount: number
+}
+
+const LandingPage = ({
+  measurementCount,
+  asnCount,
+  countryCount,
+}: LandingPageProps) => {
   const intl = useIntl()
-  measurementCount = toCompactNumberUnit(measurementCount)
-  asnCount = toCompactNumberUnit(asnCount)
+  const compactMeasurementCount = toCompactNumberUnit(measurementCount)
+  const compactAsnCount = toCompactNumberUnit(asnCount)
 
   return (
     <>
@@ -110,8 +135,8 @@ const LandingPage = ({ measurementCount, asnCount, countryCount }) => {
         <div className="flex flex-wrap rounded-2xl bg-white md:px-8 md:py-4 lg:mx-[25%] md:mt-[-118px] md:mb-12">
           <StatsItem
             label={<FormattedMessage id="Home.Banner.Stats.Measurements" />}
-            unit={measurementCount.unit}
-            value={measurementCount.value}
+            unit={compactMeasurementCount.unit}
+            value={compactMeasurementCount.value}
           />
           <StatsItem
             label={<FormattedMessage id="Home.Banner.Stats.Countries" />}
@@ -119,8 +144,8 @@ const LandingPage = ({ measurementCount, asnCount, countryCount }) => {
           />
           <StatsItem
             label={<FormattedMessage id="Home.Banner.Stats.Networks" />}
-            unit={asnCount.unit}
-            value={asnCount.value}
+            unit={compactAsnCount.unit}
+            value={compactAsnCount.value}
           />
         </div>
 
@@ -240,7 +265,7 @@ const LandingPage = ({ measurementCount, asnCount, countryCount }) => {
             <FormattedMessage
               id="Home.Highlights.CTA"
               values={{
-                'link-to-search': (string) => (
+                'link-to-search': (string: string) => (
                   <Link href="/search">{string}</Link>
                 ),
               }}
@@ -250,12 +275,6 @@ const LandingPage = ({ measurementCount, asnCount, countryCount }) => {
       </div>
     </>
   )
-}
-
-LandingPage.propTypes = {
-  countryCount: PropTypes.number,
-  asnCount: PropTypes.number,
-  measurementCount: PropTypes.number,
 }
 
 export default LandingPage
