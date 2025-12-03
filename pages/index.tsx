@@ -265,7 +265,7 @@ const LandingPage = ({
             <FormattedMessage
               id="Home.Highlights.CTA"
               values={{
-                'link-to-search': (string: string) => (
+                'link-to-search': (string: React.ReactNode) => (
                   <Link href="/search">{string}</Link>
                 ),
               }}
