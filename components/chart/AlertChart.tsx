@@ -93,13 +93,13 @@ export const transformAnalysisToChartData = (
 const ChangepointLines = ({
   changepoints,
   innerHeight,
-  marginTop,
+  // marginTop,
   innerWidth,
   series,
 }: {
   changepoints: Changepoint[] | undefined
   innerHeight: number
-  marginTop: number
+  // marginTop: number
   innerWidth: number
   series: ReadonlyArray<{ data: ReadonlyArray<{ data: { x: string | Date } }> }>
 }) => {
@@ -138,18 +138,9 @@ const ChangepointLines = ({
   return (
     <g>
       {changepoints.map((changepoint) => {
-        // Convert start_time to Date object
         const startDate = new Date(changepoint.start_time)
-        // Extract just the date part (set to midnight UTC) to match measurement_start_day format
-        const dateOnly = new Date(
-          Date.UTC(
-            startDate.getUTCFullYear(),
-            startDate.getUTCMonth(),
-            startDate.getUTCDate(),
-          ),
-        )
 
-        const x = xScale(dateOnly)
+        const x = xScale(startDate)
 
         if (Number.isNaN(x) || x < 0 || x > innerWidth) {
           return null
@@ -202,7 +193,7 @@ const Chart = ({
         xScale={{
           type: 'time',
           format: '%Y-%m-%dT%H:%M:%SZ',
-          precision: 'minute',
+          precision: 'hour',
           useUTC: true,
         }}
         yScale={{
@@ -219,11 +210,11 @@ const Chart = ({
           'grid',
           'axes',
           'lines',
-          ({ innerHeight, margin, innerWidth, series }) => (
+          ({ innerHeight, innerWidth, series }) => (
             <ChangepointLines
               changepoints={changepoints}
               innerHeight={innerHeight}
-              marginTop={margin.top ?? 0}
+              // marginTop={margin.top ?? 0}
               innerWidth={innerWidth}
               series={series}
             />
