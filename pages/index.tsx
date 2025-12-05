@@ -70,7 +70,7 @@ const FeatureBoxTitle = ({
   </div>
 )
 
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
   const result = await client.get('/api/_/global_overview')
 
@@ -80,6 +80,7 @@ export async function getServerSideProps() {
       asnCount: result.data.network_count,
       countryCount: result.data.country_count,
     },
+    revalidate: 60 * 60 * 12, // 12 hours
   }
 }
 
