@@ -77,7 +77,9 @@ export const CustomBarItem = <D extends BarDatum>({
         height={to(height, (value) => Math.max(value, 0))}
         fill={data.fill ?? color}
         opacity={
-          isHovering && data.data?.count > 0
+          isHovering &&
+          typeof data.data?.count === 'number' &&
+          data.data?.count > 0
             ? 0.8
             : data.data?.ok_opacity_value || 1
         }
