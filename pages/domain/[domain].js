@@ -16,7 +16,6 @@ import { GridBox } from 'components/VirtualizedGrid'
 import { simpleFetcher } from 'services/fetchers'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
 import RecentMeasurements from 'components/RecentMeasurements'
-import countriesData from 'data/countries.json'
 
 const CountryList = ({ countries }) => {
   const intl = useIntl()
@@ -200,7 +199,7 @@ const DomainDashboard = ({ domain, categoryCode, canonicalDomain }) => {
           {/* we want sticky header only while scrolling over the charts */}
           <StyledSticky>
             <div className="pb-4 pt-2">
-              <Form availableCountries={countriesData.map((c) => c.alpha_2)} />
+              <Form />
             </div>
           </StyledSticky>
           <div className="mt-8">

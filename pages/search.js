@@ -7,7 +7,6 @@ import { FormattedMessage, useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
 
 import dynamic from 'next/dynamic'
-import countriesData from 'data/countries.json'
 import FormattedMarkdown from '/components/FormattedMarkdown'
 import FilterSidebar, {
   queryToFilterMap,
@@ -302,7 +301,6 @@ const Search = ({ query: queryProp }) => {
               onlyFilter={query.only || 'all'}
               hideFailed={!query.failure}
               onApplyFilter={onApplyFilter}
-              countries={countriesData}
             />
           </div>
           <div className="w-full md:w-3/4 px-2">
