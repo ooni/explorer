@@ -17,39 +17,54 @@ import { useEffect, useMemo } from 'react'
 import { useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
 import { getLocalisedRegionName } from '/utils/i18nCountries'
-import { RegionLink } from '../../pages/countries'
-import { StyledStickySubMenu } from '../../components/SharedStyledComponents'
-import RecentMeasurements from '../../components/RecentMeasurements'
+import { RegionLink } from 'pages/countries'
+import { StyledStickySubMenu } from 'components/SharedStyledComponents'
+import RecentMeasurements from 'components/RecentMeasurements'
+import countriesData from 'data/countries.json'
+
+const availableCountryCodes = countriesData.map((country) => country.alpha_2)
 
 export const getStaticPaths = async () => {
-  const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
-  const result = await client.get('/api/_/countries')
-  const paths = result.data.countries.map((country) => ({
-    params: { countryCode: country.alpha_2 },
-  }))
-  return { paths, fallback: false }
+  // const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
+  // const result = await client.get('/api/_/countries')
+  // const paths = result.data.countries.map((country) => ({
+  //   params: { countryCode: country.alpha_2 },
+  // }))
+  return { paths: [], fallback: 'blocking' }
 }
 
 export async function getStaticProps({ params }) {
   const { countryCode } = params
+  if (!availableCountryCodes.includes(countryCode.toUpperCase())) {
+    return {
+      notFound: true,
+    }
+  }
 
-  const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
-  const results = await Promise.all([
-    client.get('/api/_/country_overview', {
-      params: { probe_cc: countryCode },
-    }),
-  ])
+  try {
+    const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
+    const [overviewStats, reports] = await Promise.all([
+      client.get('/api/_/country_overview', {
+        params: { probe_cc: countryCode },
+      }),
+      getReports(`country-${countryCode.toLowerCase()}`),
+    ])
 
-  const overviewStats = results[0].data
-  const reports = await getReports(`country-${countryCode.toLowerCase()}`)
-
-  return {
-    props: {
-      overviewStats,
-      reports,
-      countryCode,
-    },
-    revalidate: 60 * 60 * 12, // 12 hours
+    return {
+      props: {
+        overviewStats: overviewStats.data,
+        reports,
+        countryCode,
+      },
+      revalidate: 60 * 60 * 12, // 12 hours
+    }
+  } catch (error) {
+    return {
+      // props: {
+      //   error: JSON.stringify(error?.message),
+      // },
+      notFound: true,
+    }
   }
 }
 

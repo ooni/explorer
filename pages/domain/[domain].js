@@ -17,6 +17,7 @@ import { simpleFetcher } from 'services/fetchers'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
 import { sortByKey } from '../../utils'
 import RecentMeasurements from '../../components/RecentMeasurements'
+import countriesData from 'data/countries.json'
 
 const CountryList = ({ countries }) => {
   const intl = useIntl()
@@ -238,8 +239,8 @@ export const getServerSideProps = async (context) => {
         .get(path, { params: { domain } })
         .then((response) => response.data)
 
-    const countriesR = await client.get('/api/_/countries')
-    const countries = countriesR.data.countries
+    // Use countries data from JSON file generated at build time
+    const countries = [...countriesData]
     countries.sort(sortByKey('name'))
 
     return {

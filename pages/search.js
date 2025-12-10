@@ -8,6 +8,7 @@ import dayjs from 'services/dayjs'
 
 import dynamic from 'next/dynamic'
 import { sortByKey } from '../utils'
+import countriesData from 'data/countries.json'
 import FormattedMarkdown from '/components/FormattedMarkdown'
 import FilterSidebar, {
   queryToFilterMap,
@@ -36,10 +37,8 @@ export const getServerSideProps = async ({ query }) => {
     query.failure = !(query.failure === 'false')
   }
 
-  const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
-  const countriesR = await client.get('/api/_/countries')
-
-  const countries = countriesR.data.countries
+  // Use countries data from JSON file generated at build time
+  const countries = [...countriesData]
   countries.sort(sortByKey('name'))
 
   return {
