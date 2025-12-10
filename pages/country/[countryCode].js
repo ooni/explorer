@@ -21,49 +21,35 @@ import { RegionLink } from '../../pages/countries'
 import { StyledStickySubMenu } from '../../components/SharedStyledComponents'
 import RecentMeasurements from '../../components/RecentMeasurements'
 
-export async function getServerSideProps({ res, query }) {
-  const { countryCode } = query
-  if (countryCode.length > 2) {
-    return {
-      redirect: {
-        permanent: false,
-        destination: '/404',
-      },
-    }
-  }
+export const getStaticPaths = async () => {
+  const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
+  const result = await client.get('/api/_/countries')
+  const paths = result.data.countries.map((country) => ({
+    params: { countryCode: country.alpha_2 },
+  }))
+  return { paths, fallback: false }
+}
 
-  if (res && countryCode !== countryCode.toUpperCase()) {
-    res.writeHead(301, {
-      Location: `/country/${countryCode.toUpperCase()}`,
-    })
+export async function getStaticProps({ params }) {
+  const { countryCode } = params
 
-    res.end()
-  }
+  const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
+  const results = await Promise.all([
+    client.get('/api/_/country_overview', {
+      params: { probe_cc: countryCode },
+    }),
+  ])
 
-  try {
-    const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
-    const results = await Promise.all([
-      client.get('/api/_/country_overview', {
-        params: { probe_cc: countryCode },
-      }),
-    ])
+  const overviewStats = results[0].data
+  const reports = await getReports(`country-${countryCode.toLowerCase()}`)
 
-    const overviewStats = results[0].data
-    const reports = await getReports(`country-${countryCode.toLowerCase()}`)
-
-    return {
-      props: {
-        overviewStats,
-        reports,
-        countryCode,
-      },
-    }
-  } catch (error) {
-    return {
-      props: {
-        error: JSON.stringify(error?.message),
-      },
-    }
+  return {
+    props: {
+      overviewStats,
+      reports,
+      countryCode,
+    },
+    revalidate: 60 * 60 * 12, // 12 hours
   }
 }
 
