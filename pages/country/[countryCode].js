@@ -17,13 +17,22 @@ import { useEffect, useMemo } from 'react'
 import { useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
 import { getLocalisedRegionName } from '/utils/i18nCountries'
-import { RegionLink } from '../../pages/countries'
-import { StyledStickySubMenu } from '../../components/SharedStyledComponents'
-import RecentMeasurements from '../../components/RecentMeasurements'
+import { RegionLink } from 'pages/countries'
+import { StyledStickySubMenu } from 'components/SharedStyledComponents'
+import RecentMeasurements from 'components/RecentMeasurements'
+import countriesData from 'data/countries.json'
 
-export async function getServerSideProps({ res, query }) {
-  const { countryCode } = query
-  if (countryCode.length > 2) {
+const availableCountryCodes = countriesData.map((country) => country.alpha_2)
+
+export async function getServerSideProps({ params, res }) {
+  res.setHeader(
+    'Cache-Control',
+    `public, max-age=${60 * 60}, s-maxage=${60 * 60 * 12}, stale-while-revalidate=120`,
+  )
+
+  const { countryCode } = params
+  const upperCaseCountryCode = countryCode.toUpperCase()
+  if (!availableCountryCodes.includes(upperCaseCountryCode)) {
     return {
       redirect: {
         permanent: false,
@@ -32,9 +41,9 @@ export async function getServerSideProps({ res, query }) {
     }
   }
 
-  if (res && countryCode !== countryCode.toUpperCase()) {
+  if (res && countryCode !== upperCaseCountryCode) {
     res.writeHead(301, {
-      Location: `/country/${countryCode.toUpperCase()}`,
+      Location: `/country/${upperCaseCountryCode}`,
     })
 
     res.end()
@@ -42,18 +51,16 @@ export async function getServerSideProps({ res, query }) {
 
   try {
     const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
-    const results = await Promise.all([
+    const [overviewStats, reports] = await Promise.all([
       client.get('/api/_/country_overview', {
         params: { probe_cc: countryCode },
       }),
+      getReports(`country-${countryCode.toLowerCase()}`),
     ])
-
-    const overviewStats = results[0].data
-    const reports = await getReports(`country-${countryCode.toLowerCase()}`)
 
     return {
       props: {
-        overviewStats,
+        overviewStats: overviewStats.data,
         reports,
         countryCode,
       },

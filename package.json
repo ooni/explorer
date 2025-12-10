@@ -91,6 +91,7 @@
     "cypress:run": "cypress run",
     "test:e2e": "yarn build:test && start-server-and-test start:testServer http://localhost:3100 cypress:run",
     "test": "yarn run test:e2e",
+    "script:build-countries": "node scripts/build-countries.js",
     "script:build-translations": "node ./scripts/build-translations.js",
     "script:extract-i18n-keys": "yarn build && node ./scripts/extract-react-intl-keys.js",
     "git:getReleasesAndTags": "git tag --points-at HEAD",

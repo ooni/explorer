@@ -8,8 +8,11 @@ import dayjs from 'services/dayjs'
 import { useRouter } from 'next/router'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
 import DateRangePicker from '../DateRangePicker'
+import countries from 'data/countries.json'
 
-const Form = ({ availableCountries = [] }) => {
+const availableCountries = countries.map((c) => c.alpha_2)
+
+const Form = () => {
   const initialLoad = useRef(false)
   const router = useRouter()
   const { query } = router
@@ -17,11 +20,13 @@ const Form = ({ availableCountries = [] }) => {
   const intl = useIntl()
   const countriesList = useMemo(
     () =>
-      availableCountries.map((c) => ({
-        name: getLocalisedRegionName(c, intl.locale),
-        value: c,
-      })),
-    [availableCountries, intl.locale],
+      availableCountries
+        .map((c) => ({
+          name: getLocalisedRegionName(c, intl.locale),
+          value: c,
+        }))
+        .sort((a, b) => a.name.localeCompare(b.name)),
+    [intl.locale],
   )
 
   const { since, until, probe_cc } = useMemo(() => {

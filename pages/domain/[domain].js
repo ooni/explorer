@@ -15,8 +15,7 @@ import { StyledSticky } from 'components/SharedStyledComponents'
 import { GridBox } from 'components/VirtualizedGrid'
 import { simpleFetcher } from 'services/fetchers'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
-import { sortByKey } from '../../utils'
-import RecentMeasurements from '../../components/RecentMeasurements'
+import RecentMeasurements from 'components/RecentMeasurements'
 
 const CountryList = ({ countries }) => {
   const intl = useIntl()
@@ -135,12 +134,7 @@ const Canonical = ({ canonicalDomain }) => {
   )
 }
 
-const DomainDashboard = ({
-  domain,
-  categoryCode,
-  canonicalDomain,
-  countries,
-}) => {
+const DomainDashboard = ({ domain, categoryCode, canonicalDomain }) => {
   const router = useRouter()
   const { query } = router
   const [testedCountries, setTestedCountries] = useState(null)
@@ -205,7 +199,7 @@ const DomainDashboard = ({
           {/* we want sticky header only while scrolling over the charts */}
           <StyledSticky>
             <div className="pb-4 pt-2">
-              <Form availableCountries={countries.map((c) => c.alpha_2)} />
+              <Form />
             </div>
           </StyledSticky>
           <div className="mt-8">
@@ -238,16 +232,11 @@ export const getServerSideProps = async (context) => {
         .get(path, { params: { domain } })
         .then((response) => response.data)
 
-    const countriesR = await client.get('/api/_/countries')
-    const countries = countriesR.data.countries
-    countries.sort(sortByKey('name'))
-
     return {
       props: {
         domain,
         canonicalDomain,
         categoryCode,
-        countries,
       },
     }
   }

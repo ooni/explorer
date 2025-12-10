@@ -7,7 +7,6 @@ import { FormattedMessage, useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
 
 import dynamic from 'next/dynamic'
-import { sortByKey } from '../utils'
 import FormattedMarkdown from '/components/FormattedMarkdown'
 import FilterSidebar, {
   queryToFilterMap,
@@ -36,15 +35,8 @@ export const getServerSideProps = async ({ query }) => {
     query.failure = !(query.failure === 'false')
   }
 
-  const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
-  const countriesR = await client.get('/api/_/countries')
-
-  const countries = countriesR.data.countries
-  countries.sort(sortByKey('name'))
-
   return {
     props: {
-      countries,
       query,
     },
   }
@@ -166,7 +158,7 @@ const NoResults = () => (
   </div>
 )
 
-const Search = ({ countries, query: queryProp }) => {
+const Search = ({ query: queryProp }) => {
   const router = useRouter()
   const intl = useIntl()
   const { query, replace } = router
@@ -309,7 +301,6 @@ const Search = ({ countries, query: queryProp }) => {
               onlyFilter={query.only || 'all'}
               hideFailed={!query.failure}
               onApplyFilter={onApplyFilter}
-              countries={countries}
             />
           </div>
           <div className="w-full md:w-3/4 px-2">
@@ -347,7 +338,6 @@ const Search = ({ countries, query: queryProp }) => {
 }
 
 Search.propTypes = {
-  countries: PropTypes.array,
   query: PropTypes.object,
 }
 

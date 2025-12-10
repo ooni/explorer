@@ -15,6 +15,7 @@ import { categoryCodes } from 'components/utils/categoryCodes'
 import dayjs from 'services/dayjs'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
 import DateRangePicker from '../DateRangePicker'
+import countries from 'data/countries.json'
 
 const CategoryOptions = () => {
   const intl = useIntl()
@@ -89,7 +90,6 @@ export const queryToFilterMap = {
 
 const FilterSidebar = ({
   testNames,
-  countries,
   domainFilter,
   inputFilter,
   ooniRunLinkId,
@@ -202,14 +202,14 @@ const FilterSidebar = ({
       })),
     ]
 
-    options.sort((a, b) => (a.name < b.name ? -1 : a.name > b.name ? 1 : 0))
+    options.sort((a, b) => a.name.localeCompare(b.name))
     options.unshift({
       name: intl.formatMessage({ id: 'Search.Sidebar.Country.AllCountries' }),
       alpha_2: 'XX',
     })
 
     return options
-  }, [countries, intl])
+  }, [intl])
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
