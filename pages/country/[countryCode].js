@@ -24,21 +24,29 @@ import countriesData from 'data/countries.json'
 
 const availableCountryCodes = countriesData.map((country) => country.alpha_2)
 
-export const getStaticPaths = async () => {
-  // const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
-  // const result = await client.get('/api/_/countries')
-  // const paths = result.data.countries.map((country) => ({
-  //   params: { countryCode: country.alpha_2 },
-  // }))
-  return { paths: [], fallback: 'blocking' }
-}
+export async function getServerSideProps({ params, res }) {
+  res.setHeader(
+    'Cache-Control',
+    `public, max-age=${60 * 60}, s-maxage=${60 * 60 * 12}, stale-while-revalidate=120`,
+  )
 
-export async function getStaticProps({ params }) {
   const { countryCode } = params
-  if (!availableCountryCodes.includes(countryCode.toUpperCase())) {
+  const upperCaseCountryCode = countryCode.toUpperCase()
+  if (!availableCountryCodes.includes(upperCaseCountryCode)) {
     return {
-      notFound: true,
+      redirect: {
+        permanent: false,
+        destination: '/404',
+      },
     }
+  }
+
+  if (res && countryCode !== upperCaseCountryCode) {
+    res.writeHead(301, {
+      Location: `/country/${upperCaseCountryCode}`,
+    })
+
+    res.end()
   }
 
   try {
@@ -56,14 +64,12 @@ export async function getStaticProps({ params }) {
         reports,
         countryCode,
       },
-      revalidate: 60 * 60 * 12, // 12 hours
     }
   } catch (error) {
     return {
-      // props: {
-      //   error: JSON.stringify(error?.message),
-      // },
-      notFound: true,
+      props: {
+        error: JSON.stringify(error?.message),
+      },
     }
   }
 }
