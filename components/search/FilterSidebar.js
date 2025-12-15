@@ -67,6 +67,7 @@ function isValidFilterForTestname(testName = 'XX', arrayWithMapping) {
 // Display `${tomorrow}` as the end date for default search
 // to include the measurements of `${today}` as well.
 const tomorrowUTC = dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
+const monthAgoUTC = dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD')
 
 const asnRegEx = /^(AS)?([1-9][0-9]*)$/
 const domainRegEx =
@@ -98,7 +99,7 @@ const FilterSidebar = ({
   testNameFilter = 'XX',
   countryFilter = 'XX',
   asnFilter,
-  sinceFilter,
+  sinceFilter = monthAgoUTC,
   untilFilter = tomorrowUTC,
   hideFailed = true,
   onApplyFilter,

@@ -42,6 +42,7 @@ const queryToParams = ({ query }) => {
   if (query.show) {
     show = Number.parseInt(query.show)
   }
+
   params.limit = show
 
   if (query.only) {
@@ -144,18 +145,8 @@ const Search = () => {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    // const q = Object.keys(query).length > 0 ? query
-
-    // // If there is no 'failure' in query, default to a false
-    // if ('failure' in query === false) {
-    //   query.failure = false
-    // } else {
-    //   // Convert the string param into boolean
-    //   query.failure = !(query.failure === 'false')
-    // }
-
     const queryParams = {
-      since: dayjs(query.until).utc().subtract(30, 'day').format('YYYY-MM-DD'),
+      since: dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD'),
       until: dayjs.utc().add(1, 'day').format('YYYY-MM-DD'),
       failure: false,
       ...query,
