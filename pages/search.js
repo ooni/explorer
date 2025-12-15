@@ -17,31 +17,6 @@ const Loader = dynamic(() => import('/components/search/Loader'), {
   ssr: false,
 })
 
-export const getServerSideProps = async ({ query }) => {
-  // By default, on '/search' show measurements published until today
-  // including the measurements of today (so the date of tomorrow).
-  // This prevents the search page from showing time-travelling future
-  // measurements from showing up
-  query.since =
-    query.since ||
-    dayjs(query.until).utc().subtract(30, 'day').format('YYYY-MM-DD')
-  query.until = query.until || dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
-
-  // If there is no 'failure' in query, default to a false
-  if ('failure' in query === false) {
-    query.failure = false
-  } else {
-    // Convert the string param into boolean
-    query.failure = !(query.failure === 'false')
-  }
-
-  return {
-    props: {
-      query,
-    },
-  }
-}
-
 const queryToParams = ({ query }) => {
   const params = {}
   let show = 50
@@ -158,24 +133,42 @@ const NoResults = () => (
   </div>
 )
 
-const Search = ({ query: queryProp }) => {
+const Search = () => {
   const router = useRouter()
   const intl = useIntl()
   const { query, replace } = router
+
   const [nextURL, setNextURL] = useState(null)
   const [loading, setLoading] = useState(true)
   const [results, setResults] = useState([])
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    const q = Object.keys(query).length > 0 ? query : queryProp
+    // const q = Object.keys(query).length > 0 ? query
+
+    // // If there is no 'failure' in query, default to a false
+    // if ('failure' in query === false) {
+    //   query.failure = false
+    // } else {
+    //   // Convert the string param into boolean
+    //   query.failure = !(query.failure === 'false')
+    // }
+
+    const queryParams = {
+      since: dayjs(query.until).utc().subtract(30, 'day').format('YYYY-MM-DD'),
+      until: dayjs.utc().add(1, 'day').format('YYYY-MM-DD'),
+      failure: false,
+      ...query,
+    }
+
     const href = {
       pathname: '/search',
-      query: q,
+      query: queryParams,
     }
+
     replace(href, href, { shallow: true })
 
-    getMeasurements(q)
+    getMeasurements(queryParams)
       .then(
         ({
           data: {
@@ -296,8 +289,8 @@ const Search = ({ query: queryProp }) => {
               testNameFilter={query.test_name}
               countryFilter={query.probe_cc}
               asnFilter={query.probe_asn}
-              sinceFilter={queryProp.since}
-              untilFilter={queryProp.until}
+              sinceFilter={query.since}
+              untilFilter={query.until}
               onlyFilter={query.only || 'all'}
               hideFailed={!query.failure}
               onApplyFilter={onApplyFilter}
