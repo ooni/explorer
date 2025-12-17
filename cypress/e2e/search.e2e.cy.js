@@ -16,16 +16,20 @@ describe('Search Page Tests', () => {
   })
 
   it('shows relevant search results when filter changes', () => {
+    cy.intercept('/api/v1/measurements*').as('searchAPI')
     cy.get('select[name="testNameFilter"]').select('web_connectivity')
     cy.get('button')
       .contains('Filter Results')
       .should('not.be.disabled')
       .click()
+    cy.wait('@searchAPI')
     cy.get('[data-test-id="results-list"]', { timeout: 10000 })
       .children('a')
       .should('have.length', 50)
+    cy.get('[data-test-id="results-list"]')
+      .children('a')
       .each(($el) => {
-        cy.wrap($el).contains('Web Connectivity')
+        cy.wrap($el).should('contain', 'Web Connectivity')
       })
   })
 

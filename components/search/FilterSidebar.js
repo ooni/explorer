@@ -6,7 +6,7 @@ import {
   RadioGroup,
   Select,
 } from 'ooni-components'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 
@@ -16,6 +16,7 @@ import dayjs from 'services/dayjs'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
 import DateRangePicker from '../DateRangePicker'
 import countries from 'data/countries.json'
+import { useRouter } from 'next/router'
 
 const CategoryOptions = () => {
   const intl = useIntl()
@@ -26,8 +27,8 @@ const CategoryOptions = () => {
       </option>
       {categoryCodes
         .sort((a, b) => (a[1] < b[1] ? -1 : a[1] > b[1] ? 1 : 0))
-        .map(([code, label], idx) => (
-          <option key={idx} value={code}>
+        .map(([code]) => (
+          <option key={code} value={code}>
             {intl.formatMessage({ id: `CategoryCode.${code}.Name` })}
           </option>
         ))}
@@ -67,6 +68,7 @@ function isValidFilterForTestname(testName = 'XX', arrayWithMapping) {
 // Display `${tomorrow}` as the end date for default search
 // to include the measurements of `${today}` as well.
 const tomorrowUTC = dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
+const monthAgoUTC = dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD')
 
 const asnRegEx = /^(AS)?([1-9][0-9]*)$/
 const domainRegEx =
@@ -88,35 +90,64 @@ export const queryToFilterMap = {
   failure: ['hideFailed', true],
 }
 
-const FilterSidebar = ({
-  testNames,
-  domainFilter,
-  inputFilter,
-  ooniRunLinkId,
-  categoryFilter,
-  onlyFilter = 'all',
-  testNameFilter = 'XX',
-  countryFilter = 'XX',
-  asnFilter,
-  sinceFilter,
-  untilFilter = tomorrowUTC,
-  hideFailed = true,
-  onApplyFilter,
-}) => {
-  const intl = useIntl()
-  const defaultValues = {
-    domainFilter,
-    inputFilter,
-    ooniRunLinkId,
-    categoryFilter,
-    onlyFilter,
-    testNameFilter,
-    countryFilter,
-    asnFilter,
-    sinceFilter,
-    untilFilter,
-    hideFailed,
+const getFilterQuery = (state, query) => {
+  const resetValues = [undefined, 'XX', '']
+  for (const [queryParam, [key]] of Object.entries(queryToFilterMap)) {
+    // If it's unset or marked as XX, let's be sure the path is clean
+    if (resetValues.includes(state[key])) {
+      if (queryParam in query) {
+        delete query[queryParam]
+      }
+    } else if (key === 'onlyFilter' && state[key] === 'all') {
+      // If the onlyFilter is not set to 'confirmed' or 'anomalies'
+      // remove it from the path
+      if (queryParam in query) {
+        delete query[queryParam]
+      }
+    } else if (key === 'hideFailed') {
+      if (state[key] === true) {
+        // When `hideFailure` is true, add `failure=false` in the query
+        query[queryParam] = false
+      } else {
+        query[queryParam] = true
+      }
+    } else {
+      query[queryParam] = state[key]
+    }
   }
+  return query
+}
+
+const FilterSidebar = () => {
+  const router = useRouter()
+  const { query, isReady } = router
+  const intl = useIntl()
+
+  const onApplyFilter = (state) => {
+    const filterQuery = getFilterQuery(state, query)
+    const href = {
+      pathname: '/search',
+      query: filterQuery,
+    }
+    router.push(href, href, { shallow: true })
+  }
+
+  // Compute default values from query params
+  const defaultValues = useMemo(() => {
+    return {
+      domainFilter: query.domain || '',
+      inputFilter: query.input || '',
+      ooniRunLinkId: query.ooni_run_link_id || '',
+      categoryFilter: query.category_code || '',
+      onlyFilter: query.only || 'all',
+      testNameFilter: query.test_name || 'XX',
+      countryFilter: query.probe_cc || 'XX',
+      asnFilter: query.probe_asn || '',
+      sinceFilter: query.since || monthAgoUTC,
+      untilFilter: query.until || tomorrowUTC,
+      hideFailed: query.failure === undefined ? true : !query.failure,
+    }
+  }, [query])
 
   const {
     handleSubmit,
@@ -126,9 +157,18 @@ const FilterSidebar = ({
     formState,
     setValue,
     getValues,
+    reset,
   } = useForm({
     defaultValues,
   })
+
+  // Initialize/reset form when query params are available
+  useEffect(() => {
+    if (isReady) {
+      reset(defaultValues)
+    }
+  }, [isReady])
+
   const { errors } = formState
 
   const testNameFilterValue = watch('testNameFilter')
@@ -315,7 +355,7 @@ const FilterSidebar = ({
             label={intl.formatMessage({ id: 'Search.Sidebar.TestName' })}
             data-test-id="testname-filter"
           >
-            <TestNameOptions testNames={testNames} />
+            <TestNameOptions />
           </Select>
         )}
       />
