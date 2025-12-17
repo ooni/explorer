@@ -1,6 +1,5 @@
-import axios from 'axios'
 import ErrorPage from 'pages/_error'
-import { getReports } from '../../lib/api'
+import { getCountryOverviewData, getReports } from 'lib/api'
 import Flag from 'components/Flag'
 import { StickySubMenu } from 'components/SharedStyledComponents'
 import ThirdPartyDataChart, {
@@ -22,7 +21,9 @@ import { StyledStickySubMenu } from 'components/SharedStyledComponents'
 import RecentMeasurements from 'components/RecentMeasurements'
 import countriesData from 'data/countries.json'
 
-const availableCountryCodes = countriesData.map((country) => country.alpha_2)
+const availableCountryCodes = new Set(
+  countriesData.map((country) => country.alpha_2),
+)
 
 export async function getServerSideProps({ params, res }) {
   res.setHeader(
@@ -32,7 +33,7 @@ export async function getServerSideProps({ params, res }) {
 
   const { countryCode } = params
   const upperCaseCountryCode = countryCode.toUpperCase()
-  if (!availableCountryCodes.includes(upperCaseCountryCode)) {
+  if (!availableCountryCodes.has(upperCaseCountryCode)) {
     return {
       redirect: {
         permanent: false,
@@ -50,18 +51,15 @@ export async function getServerSideProps({ params, res }) {
   }
 
   try {
-    const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
-    const [overviewStats, reports] = await Promise.all([
-      client.get('/api/_/country_overview', {
-        params: { probe_cc: countryCode },
-      }),
+    const [overviewStats, reports] = await Promise.allSettled([
+      getCountryOverviewData(countryCode),
       getReports(`country-${countryCode.toLowerCase()}`),
     ])
 
     return {
       props: {
-        overviewStats: overviewStats.data,
-        reports,
+        overviewStats: overviewStats.value || {},
+        reports: reports.value || [],
         countryCode,
       },
     }
