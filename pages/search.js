@@ -2,11 +2,12 @@ import axios from 'axios'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
+import useSWR from 'swr'
 import dayjs from 'services/dayjs'
-
 import dynamic from 'next/dynamic'
+
 import FormattedMarkdown from '/components/FormattedMarkdown'
 import FilterSidebar, {
   queryToFilterMap,
@@ -65,12 +66,16 @@ const queryToParams = ({ query }) => {
   return params
 }
 
-const getMeasurements = (query) => {
+const measurementsFetcher = async (queryParams) => {
   const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
-  const params = queryToParams({ query })
-  return client.get('/api/v1/measurements', {
+  const params = queryToParams({ query: queryParams })
+  const response = await client.get('/api/v1/measurements', {
     params: { ...params, order: 'desc' },
   })
+  return {
+    results: response.data.results,
+    next_url: response.data.metadata?.next_url,
+  }
 }
 
 const serializeError = (err) => {
@@ -140,9 +145,8 @@ const Search = () => {
   const { query, replace } = router
 
   const [nextURL, setNextURL] = useState(null)
-  const [loading, setLoading] = useState(true)
-  const [results, setResults] = useState([])
-  const [error, setError] = useState(null)
+  const [accumulatedResults, setAccumulatedResults] = useState([])
+  const prevQueryRef = useRef()
 
   useEffect(() => {
     const queryParams = {
@@ -151,34 +155,55 @@ const Search = () => {
       failure: false,
       ...query,
     }
-
     const href = {
       pathname: '/search',
       query: queryParams,
     }
-
-    replace(href, href, { shallow: true })
-
-    getMeasurements(queryParams)
-      .then(
-        ({
-          data: {
-            results,
-            metadata: { next_url },
-          },
-        }) => {
-          setLoading(false)
-          setResults(results)
-          setNextURL(next_url)
-        },
-      )
-      .catch((err) => {
-        console.error(err)
-        const error = serializeError(err)
-        setLoading(false)
-        setError(error)
-      })
+    replace(href, undefined, { shallow: true })
   }, [])
+
+  const {
+    data: searchData,
+    error: swrError,
+    isLoading,
+  } = useSWR(query, measurementsFetcher, {
+    revalidateOnFocus: false,
+  })
+
+  // Reset accumulated results when query changes
+  const queryKey = JSON.stringify(query)
+  useEffect(() => {
+    if (prevQueryRef.current && prevQueryRef.current !== queryKey) {
+      setAccumulatedResults([])
+      setNextURL(null)
+    }
+    prevQueryRef.current = queryKey
+  }, [queryKey])
+
+  // Update accumulated results when search data changes
+  useEffect(() => {
+    if (searchData) {
+      setAccumulatedResults(searchData.results)
+      setNextURL(searchData.next_url)
+    }
+  }, [searchData])
+
+  // const results = accumulatedResults
+  const error = swrError
+    ? serializeError(
+        swrError.isAxiosError
+          ? swrError
+          : Object.assign(new Error(swrError.message), {
+              toJSON: () => ({
+                name: swrError.name || 'Error',
+                message: swrError.message,
+                stack: swrError.stack,
+                config: {},
+              }),
+              response: swrError.response,
+            }),
+      )
+    : null
 
   const loadMore = () => {
     axios
@@ -190,78 +215,13 @@ const Search = () => {
             metadata: { next_url },
           },
         }) => {
-          setResults(results.concat(nextPageResults))
+          setAccumulatedResults((prev) => prev.concat(nextPageResults))
           setNextURL(next_url)
         },
       )
       .catch((err) => {
         console.error(err)
-        const error = serializeError(err)
-        setLoading(false)
-        setError(error)
       })
-  }
-
-  const onApplyFilter = (state) => {
-    setLoading(true)
-    setResults([])
-    setError(null)
-
-    const query = getFilterQuery(state)
-    const href = {
-      pathname: '/search',
-      query,
-    }
-    router.push(href, href, { shallow: true }).then(() => {
-      getMeasurements(query)
-        .then(
-          ({
-            data: {
-              results,
-              metadata: { next_url },
-            },
-          }) => {
-            setLoading(false)
-            setResults(results)
-            setNextURL(next_url)
-          },
-        )
-        .catch((err) => {
-          console.error(err)
-          const error = serializeError(err)
-          setError(error)
-          setLoading(false)
-        })
-    })
-  }
-
-  const getFilterQuery = (state) => {
-    const query = { ...router.query }
-    const resetValues = [undefined, 'XX', '']
-    for (const [queryParam, [key]] of Object.entries(queryToFilterMap)) {
-      // If it's unset or marked as XX, let's be sure the path is clean
-      if (resetValues.includes(state[key])) {
-        if (queryParam in query) {
-          delete query[queryParam]
-        }
-      } else if (key === 'onlyFilter' && state[key] === 'all') {
-        // If the onlyFilter is not set to 'confirmed' or 'anomalies'
-        // remove it from the path
-        if (queryParam in query) {
-          delete query[queryParam]
-        }
-      } else if (key === 'hideFailed') {
-        if (state[key] === true) {
-          // When `hideFailure` is true, add `failure=false` in the query
-          query[queryParam] = false
-        } else {
-          query[queryParam] = true
-        }
-      } else {
-        query[queryParam] = state[key]
-      }
-    }
-    return query
   }
 
   return (
@@ -272,33 +232,22 @@ const Search = () => {
       <div className="container">
         <div className="flex pt-4 flex-wrap">
           <div className="w-full md:w-1/4 px-2">
-            <FilterSidebar
-              domainFilter={query.domain}
-              inputFilter={query.input}
-              ooniRunLinkId={query.ooni_run_link_id}
-              categoryFilter={query.category_code}
-              testNameFilter={query.test_name}
-              countryFilter={query.probe_cc}
-              asnFilter={query.probe_asn}
-              sinceFilter={query.since}
-              untilFilter={query.until}
-              onlyFilter={query.only || 'all'}
-              hideFailed={!query.failure}
-              onApplyFilter={onApplyFilter}
-            />
+            <FilterSidebar />
           </div>
           <div className="w-full md:w-3/4 px-2">
             {error && <ErrorBox error={error} />}
-            {loading && (
+            {isLoading && (
               <div className="my-8">
                 <Loader />
               </div>
             )}
-            {!error && !loading && results.length === 0 && <NoResults />}
-            {!error && !loading && results.length > 0 && (
+            {!error && !isLoading && accumulatedResults.length === 0 && (
+              <NoResults />
+            )}
+            {!error && !isLoading && accumulatedResults.length > 0 && (
               <>
                 <div className="my-8">
-                  <ResultsList results={results} />
+                  <ResultsList results={accumulatedResults} />
                 </div>
                 {nextURL && (
                   <div className="flex items-center justify-center">
@@ -319,10 +268,6 @@ const Search = () => {
       </div>
     </>
   )
-}
-
-Search.propTypes = {
-  query: PropTypes.object,
 }
 
 export default Search
