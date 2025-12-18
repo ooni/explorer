@@ -277,8 +277,7 @@ const Alert = () => {
           <MATChart
             query={{
               axis_x: 'measurement_start_day',
-              time_grain: 'hour',
-              data: 'analysis',
+              time_grain: 'day',
               ...query,
             }}
           />
@@ -286,6 +285,7 @@ const Alert = () => {
             query={{
               axis_x: 'measurement_start_day',
               time_grain: 'day',
+              data: 'analysis',
               ...query,
             }}
           />
