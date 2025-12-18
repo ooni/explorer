@@ -1,11 +1,15 @@
 import { useEffect, useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import useSWR from 'swr'
 import { useRouter } from 'next/router'
+import { useIntl } from 'react-intl'
+import { Input, Select } from 'ooni-components'
 import AlertList from 'components/alerts/list'
 import AlertCharts from 'components/chart/AlertChart'
 import { ChartSpinLoader } from 'components/Chart'
 import SpinLoader from 'components/vendor/SpinLoader'
+import countries from 'data/countries.json'
+import { getLocalisedRegionName } from 'utils/i18nCountries'
 
 const ALERTS_ENDPOINT =
   'https://oonimeasurements.dev.ooni.io/api/v1/detector/changepoints'
@@ -24,7 +28,7 @@ const fetcher = async (url) => {
 const Alert = () => {
   const router = useRouter()
   const defaultUntil = new Date().toISOString().slice(0, 10)
-
+  const intl = useIntl()
   const baseDefaults = useMemo(
     () => ({
       probe_asn: '',
@@ -39,13 +43,27 @@ const Alert = () => {
   const [query, setQuery] = useState(null)
 
   const {
-    register,
+    control,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm({
     defaultValues: baseDefaults,
   })
+
+  const countryOptions = useMemo(() => {
+    const locale = intl.locale
+    const options = [
+      ...countries.map((c) => ({
+        ...c,
+        name: getLocalisedRegionName(c.alpha_2, locale),
+      })),
+    ]
+
+    options.sort((a, b) => a.name.localeCompare(b.name))
+
+    return options
+  }, [intl])
 
   useEffect(() => {
     if (!router.isReady) {
@@ -151,82 +169,76 @@ const Alert = () => {
 
   return (
     <div className="container mx-auto space-y-6">
-      <h1>Alerts</h1>
+      <h1 className="my-8">Alerts</h1>
       <form
         className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3"
         onSubmit={handleSubmit(onSubmit)}
       >
-        <label className="flex flex-col">
-          <span>Country</span>
-          <input
-            className="rounded border border-gray-300 p-2"
-            type="text"
-            {...register('probe_cc', { required: 'Probe CC is required' })}
-          />
-          {errors.probe_cc && (
-            <span className="text-sm text-red-600">
-              {errors.probe_cc.message}
-            </span>
+        <Controller
+          control={control}
+          name="probe_cc"
+          rules={{ required: 'Probe CC is required' }}
+          render={({ field }) => (
+            <Select {...field} label="Country" error={errors.probe_cc?.message}>
+              {countryOptions.map((v) => {
+                return (
+                  <option key={v.alpha_2} value={v.alpha_2}>
+                    {v.name}
+                  </option>
+                )
+              })}
+            </Select>
           )}
-        </label>
+        />
 
-        <label className="flex flex-col">
-          <span>ASN</span>
-          <input
-            className="rounded border border-gray-300 p-2"
-            type="text"
-            {...register('probe_asn', { required: 'Probe ASN is required' })}
-          />
-          {errors.probe_asn && (
-            <span className="text-sm text-red-600">
-              {errors.probe_asn.message}
-            </span>
+        <Controller
+          control={control}
+          name="probe_asn"
+          rules={{ required: 'Probe ASN is required' }}
+          render={({ field }) => (
+            <Input {...field} label="ASN" error={errors.probe_asn?.message} />
           )}
-        </label>
+        />
 
-        <label className="flex flex-col">
-          <span>Domain</span>
-          <input
-            className="rounded border border-gray-300 p-2"
-            type="text"
-            {...register('domain', { required: 'Domain is required' })}
-          />
-          {errors.domain && (
-            <span className="text-sm text-red-600">
-              {errors.domain.message}
-            </span>
+        <Controller
+          control={control}
+          name="domain"
+          rules={{ required: 'Domain is required' }}
+          render={({ field }) => (
+            <Input {...field} label="Domain" error={errors.domain?.message} />
           )}
-        </label>
+        />
 
-        <label className="flex flex-col">
-          <span>Since</span>
-          <input
-            className="rounded border border-gray-300 p-2"
-            type="date"
-            {...register('since', { required: 'Since date is required' })}
-          />
-          {errors.since && (
-            <span className="text-sm text-red-600">{errors.since.message}</span>
+        <Controller
+          control={control}
+          name="since"
+          rules={{ required: 'Since date is required' }}
+          render={({ field }) => (
+            <Input
+              {...field}
+              type="date"
+              label="Since"
+              error={errors.since?.message}
+            />
           )}
-        </label>
+        />
 
-        <label className="flex flex-col">
-          <span>Until</span>
-          <input
-            className="rounded border border-gray-300 p-2"
-            type="date"
-            {...register('until', { required: 'Until date is required' })}
-          />
-          {errors.until && (
-            <span className="text-sm text-red-600">{errors.until.message}</span>
+        <Controller
+          control={control}
+          name="until"
+          rules={{ required: 'Until date is required' }}
+          render={({ field }) => (
+            <Input
+              {...field}
+              type="date"
+              label="Until"
+              error={errors.until?.message}
+            />
           )}
-        </label>
+        />
 
         <div className="flex items-end">
-          <button
-            className="w-full rounded bg-blue-600 px-4 py-2 font-semibold text-white hover:bg-blue-700"
-            type="submit"
-          >
+          <button className="btn btn-primary w-full" type="submit">
             Fetch alerts
           </button>
         </div>

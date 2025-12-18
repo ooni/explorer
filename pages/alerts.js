@@ -35,7 +35,7 @@ const Alerts = () => {
 
   return (
     <div className="container mx-auto">
-      <h1>Alerts</h1>
+      <h1 className="my-8">Alerts</h1>
       {isLoading && (
         <div className="container pt-32 flex justify-center items-center">
           <SpinLoader />
