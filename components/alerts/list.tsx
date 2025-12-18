@@ -81,6 +81,11 @@ const AlertList: React.FC<{ changepoints: Changepoint[] }> = ({
         enableSorting: true,
       },
       {
+        header: 'Failure type',
+        accessorKey: 'block_type',
+        enableSorting: true,
+      },
+      {
         header: 'See more',
         id: 'see_more',
         enableSorting: false,
@@ -100,8 +105,9 @@ const AlertList: React.FC<{ changepoints: Changepoint[] }> = ({
 
           return (
             <Link
-              href={`/chart/alert?${params.toString()}`}
+              href={`/chart/alerts?${params.toString()}`}
               className="text-blue-600 hover:text-blue-800 underline"
+              prefetch={false}
             >
               See more
             </Link>
