@@ -4,6 +4,8 @@ import useSWR from 'swr'
 import { useRouter } from 'next/router'
 import AlertList from 'components/alerts/list'
 import AlertCharts from 'components/chart/AlertChart'
+import { ChartSpinLoader } from 'components/Chart'
+import SpinLoader from 'components/vendor/SpinLoader'
 
 const ALERTS_ENDPOINT =
   'https://oonimeasurements.dev.ooni.io/api/v1/detector/changepoints'
@@ -232,7 +234,11 @@ const Alert = () => {
 
       {query && (
         <div className="space-y-6">
-          {(isLoading || isAnalysisLoading) && <p>Loading data…</p>}
+          {isLoading && (
+            <div className="container pt-32 flex justify-center items-center">
+              <SpinLoader />
+            </div>
+          )}
           {error && <p className="text-red-600">{error.message}</p>}
           {analysisError && (
             <p className="text-red-600">{analysisError.message}</p>
@@ -240,19 +246,20 @@ const Alert = () => {
           {changepointResults.length > 0 && (
             <AlertList changepoints={changepointResults} />
           )}
-          {analysis && (
-            <>
-              {/* {analysis.results.map((analysisResult) => ( */}
-              <AlertCharts
-                // key={analysisResult.measurement_start_day}
-                analysis={analysis.results}
-                changepoints={changepointResults}
-              />
-              {/* ))} */}
-              {/* <pre className="overflow-x-auto rounded bg-gray-100 p-4 text-sm">
-                {JSON.stringify(analysis, null, 2)}
-              </pre> */}
-            </>
+          {isAnalysisLoading ? (
+            <ChartSpinLoader height="500px" />
+          ) : (
+            analysis && (
+              <>
+                <AlertCharts
+                  analysis={analysis.results}
+                  changepoints={changepointResults}
+                />
+                {/* <pre className="overflow-x-auto rounded bg-gray-100 p-4 text-sm">
+                  {JSON.stringify(analysis, null, 2)}
+                </pre> */}
+              </>
+            )
           )}
         </div>
       )}
