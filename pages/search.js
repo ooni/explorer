@@ -149,18 +149,20 @@ const Search = () => {
   const prevQueryRef = useRef()
 
   useEffect(() => {
-    const queryParams = {
-      since: dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD'),
-      until: dayjs.utc().add(1, 'day').format('YYYY-MM-DD'),
-      failure: false,
-      ...query,
+    if (router.isReady) {
+      const queryParams = {
+        since: dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD'),
+        until: dayjs.utc().add(1, 'day').format('YYYY-MM-DD'),
+        failure: false,
+        ...query,
+      }
+      const href = {
+        pathname: '/search',
+        query: queryParams,
+      }
+      replace(href, undefined, { shallow: true })
     }
-    const href = {
-      pathname: '/search',
-      query: queryParams,
-    }
-    replace(href, undefined, { shallow: true })
-  }, [])
+  }, [router.isReady])
 
   const {
     data: searchData,
