@@ -96,7 +96,7 @@ const AlertList: React.FC<{ changepoints: Changepoint[] }> = ({
           const until = format(addWeeks(startDate, 2), 'yyyy-MM-dd')
 
           const params = new URLSearchParams({
-            probe_asn,
+            probe_asn: `AS${probe_asn}`,
             probe_cc,
             domain,
             since,

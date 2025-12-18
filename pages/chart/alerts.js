@@ -10,6 +10,7 @@ import { ChartSpinLoader } from 'components/Chart'
 import SpinLoader from 'components/vendor/SpinLoader'
 import countries from 'data/countries.json'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
+import MATChart from 'components/MATChart'
 
 const ALERTS_ENDPOINT =
   'https://oonimeasurements.dev.ooni.io/api/v1/detector/changepoints'
@@ -273,6 +274,21 @@ const Alert = () => {
               </>
             )
           )}
+          <MATChart
+            query={{
+              axis_x: 'measurement_start_day',
+              time_grain: 'hour',
+              data: 'analysis',
+              ...query,
+            }}
+          />
+          <MATChart
+            query={{
+              axis_x: 'measurement_start_day',
+              time_grain: 'day',
+              ...query,
+            }}
+          />
         </div>
       )}
     </div>

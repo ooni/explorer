@@ -187,8 +187,9 @@ const Chart = ({
       <ResponsiveLine
         data={data}
         margin={{ top: 50, right: 110, bottom: 70, left: 30 }}
-        enablePoints={false}
-        lineWidth={2}
+        pointSize={5}
+        pointBorderWidth={4}
+        lineWidth={1}
         colors={getColor}
         xScale={{
           type: 'time',
@@ -210,6 +211,7 @@ const Chart = ({
           'grid',
           'axes',
           'lines',
+          'points',
           ({ innerHeight, innerWidth, series }) => (
             <ChangepointLines
               changepoints={changepoints}
