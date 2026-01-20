@@ -524,7 +524,7 @@ export const Form = ({ onSubmit, query }) => {
         <button
           type="button"
           className="btn btn-primary"
-          data-test-id="mat-form-submit"
+          data-testid="mat-form-submit"
           onClick={maybeWarnBeforeSubmit}
         >
           <FormattedMessage id="MAT.Form.Submit" />

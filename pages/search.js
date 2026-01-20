@@ -257,7 +257,7 @@ const Search = () => {
                       type="button"
                       className="btn btn-primary"
                       onClick={loadMore}
-                      data-test-id="load-more-button"
+                      data-testid="load-more-button"
                     >
                       <FormattedMessage id="Search.Button.LoadMore" />
                     </button>

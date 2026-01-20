@@ -35,18 +35,20 @@ const MeasurementAggregationToolkit = () => {
     [router],
   )
 
+  const queryWithoutSpaces = Object.fromEntries(
+    Object.entries(query).map(([key, value]) => [
+      key,
+      value.replaceAll(' ', ''),
+    ]),
+  )
+
   // Upon mount, check if the page was accessed without query params
   // In that case, trigger a shallow navigation that shows a chart
   useEffect(() => {
     if (router.isReady) {
       const today = dayjs.utc().add(1, 'day')
       const monthAgo = dayjs.utc(today).subtract(1, 'month')
-      const queryWithoutSpaces = Object.fromEntries(
-        Object.entries(query).map(([key, value]) => [
-          key,
-          value.replaceAll(' ', ''),
-        ]),
-      )
+
       const href = {
         query: {
           test_name: 'web_connectivity',

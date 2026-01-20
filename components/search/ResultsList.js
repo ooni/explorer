@@ -367,7 +367,7 @@ const ResultsList = ({ results }) => {
     <div className="flex">
       <div
         className="border overflow-hidden rounded w-full"
-        data-test-id="results-list"
+        data-testid="results-list"
       >
         {results.map((msmt, idx) => {
           return <ResultItem key={idx} {...msmt} />
