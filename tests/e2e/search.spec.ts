@@ -38,15 +38,6 @@ test.describe('Search Page Tests', () => {
 
     await page.goto('/search')
     await page.waitForLoadState('networkidle')
-
-    await page.addStyleTag({
-      content: `
-        __next-build-watcher,
-        nextjs-portal {
-          display: none !important;
-        }
-      `,
-    })
   })
 
   test('default filter shows 50 results', async ({ page }) => {

@@ -9,7 +9,7 @@ export const DonationBanner = () => {
       <>
         <NavBar color="bg-blue-500" className="relative pt-1 z-[99999999]" />
         <div
-          class="bg-[#1B1E21] text-[#C3FAE8] relative flex items-end"
+          className="bg-[#1B1E21] text-[#C3FAE8] relative flex items-end"
           style={{
             backgroundImage:
               "url('/static/images/donate_banner/donate_banner_bg.png')",

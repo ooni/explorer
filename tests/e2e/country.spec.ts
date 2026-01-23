@@ -4,15 +4,6 @@ test.describe('Country Page Tests', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/country/CA')
     await page.waitForLoadState('networkidle')
-
-    await page.addStyleTag({
-      content: `
-        __next-build-watcher,
-        nextjs-portal {
-          display: none !important;
-        }
-      `,
-    })
   })
 
   // TODO: is overview text is populated
