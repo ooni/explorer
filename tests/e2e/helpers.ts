@@ -1,4 +1,4 @@
-import { expect, type Page } from '@playwright/test'
+import type { Page } from '@playwright/test'
 
 // Scroll to bottom of the page so that all the lazy loaded content is loaded
 export const scrollToBottom = async (page: Page) => {
