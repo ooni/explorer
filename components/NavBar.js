@@ -243,6 +243,7 @@ export const NavBar = ({ color, className }) => {
                   <LanguageSelect onChange={handleLocaleChange} value={locale}>
                     {languages.map((c) => (
                       <option
+                        suppressHydrationWarning
                         className="text-inherit opacity-100"
                         key={c}
                         value={c}
