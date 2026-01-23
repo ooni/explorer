@@ -302,7 +302,11 @@ export const Form = ({ onSubmit, query }) => {
                   {intl.formatMessage({ id: 'MAT.Form.AllCountries' })}
                 </option>
                 {sortedCountries.map((c, idx) => (
-                  <option key={idx} value={c.iso3166_alpha2}>
+                  <option
+                    key={idx}
+                    value={c.iso3166_alpha2}
+                    suppressHydrationWarning
+                  >
                     {c.localisedCountryName}
                   </option>
                 ))}

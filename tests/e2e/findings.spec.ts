@@ -89,7 +89,9 @@ test.describe('Findings Edit', () => {
     await page.goto('/findings/edit/1234')
     await page.waitForLoadState('networkidle')
 
-    await expect(page.getByText('Edit Censorship Finding')).toBeVisible()
+    await expect(
+      page.getByRole('heading', { name: 'Edit Censorship Finding' }),
+    ).toBeVisible()
   })
 
   test('report creator can see edit incident page', async ({ page }) => {
@@ -116,7 +118,9 @@ test.describe('Findings Edit', () => {
     await page.goto('/findings/edit/1234')
     await page.waitForLoadState('networkidle')
 
-    await expect(page.getByText('Edit Censorship Finding')).toBeVisible()
+    await expect(
+      page.getByRole('heading', { name: 'Edit Censorship Finding' }),
+    ).toBeVisible()
   })
 
   test('redirects user if not logged in', async ({ page }) => {
@@ -127,7 +131,9 @@ test.describe('Findings Edit', () => {
     await page.goto('/findings/edit/1234')
     await page.waitForLoadState('networkidle')
 
-    await expect(page.getByText('Edit Censorship Finding')).not.toBeVisible()
+    await expect(
+      page.getByRole('heading', { name: 'Edit Censorship Finding' }),
+    ).not.toBeVisible()
     await expect(page).toHaveURL('http://localhost:3100/findings', {
       timeout: 6000,
     })
@@ -150,7 +156,9 @@ test.describe('Findings Edit', () => {
     await page.goto('/findings/edit/1234')
     await page.waitForLoadState('networkidle')
 
-    await expect(page.getByText('Edit Censorship Finding')).not.toBeVisible()
+    await expect(
+      page.getByRole('heading', { name: 'Edit Censorship Finding' }),
+    ).not.toBeVisible()
     await expect(page).toHaveURL('http://localhost:3100/findings', {
       timeout: 6000,
     })

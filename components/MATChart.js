@@ -164,29 +164,31 @@ const MATChart = ({ query, showFilters = true }) => {
           allFailureTypes={allFailureTypes}
           queryProps={query}
         >
-          {results.length > 0 || Object.keys(results).length ? (
-            <>
-              {((data && data.data.dimension_count === 1) ||
-                (data && query.axis_x && !query.axis_y)) && (
-                <StackedBarChart
-                  data={results}
-                  query={query}
-                  apiEndpoint={apiEndpoint}
-                />
-              )}
-              {((data && data.data.dimension_count > 1) ||
-                (data && query.axis_x && query.axis_y)) && (
-                <TableView
-                  data={results}
-                  query={query}
-                  showFilters={showFilters}
-                  apiEndpoint={apiEndpoint}
-                />
-              )}
-            </>
-          ) : (
-            <NoCharts />
-          )}
+          <div data-testid="mat-chart">
+            {results.length > 0 || Object.keys(results).length ? (
+              <>
+                {((data && data.data.dimension_count === 1) ||
+                  (data && query.axis_x && !query.axis_y)) && (
+                  <StackedBarChart
+                    data={results}
+                    query={query}
+                    apiEndpoint={apiEndpoint}
+                  />
+                )}
+                {((data && data.data.dimension_count > 1) ||
+                  (data && query.axis_x && query.axis_y)) && (
+                  <TableView
+                    data={results}
+                    query={query}
+                    showFilters={showFilters}
+                    apiEndpoint={apiEndpoint}
+                  />
+                )}
+              </>
+            ) : (
+              <NoCharts />
+            )}
+          </div>
         </MATContextProvider>
       )}
     </>
