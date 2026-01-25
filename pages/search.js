@@ -139,6 +139,8 @@ const NoResults = () => (
   </div>
 )
 
+const requiredParams = ['since', 'until']
+
 const Search = () => {
   const router = useRouter()
   const intl = useIntl()
@@ -146,10 +148,13 @@ const Search = () => {
 
   const [nextURL, setNextURL] = useState(null)
   const [accumulatedResults, setAccumulatedResults] = useState([])
-  const prevQueryRef = useRef()
+  const prevQueryRef = useRef('{}')
 
   useEffect(() => {
-    if (router.isReady) {
+    if (
+      router.isReady &&
+      !requiredParams.every((key) => Object.keys(query).includes(key))
+    ) {
       const queryParams = {
         since: dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD'),
         until: dayjs.utc().add(1, 'day').format('YYYY-MM-DD'),
@@ -168,14 +173,18 @@ const Search = () => {
     data: searchData,
     error: swrError,
     isLoading,
-  } = useSWR(query, measurementsFetcher, {
-    revalidateOnFocus: false,
-  })
+  } = useSWR(
+    Object.keys(query).length > 0 ? query : null,
+    measurementsFetcher,
+    {
+      revalidateOnFocus: false,
+    },
+  )
 
   // Reset accumulated results when query changes
   const queryKey = JSON.stringify(query)
   useEffect(() => {
-    if (prevQueryRef.current && prevQueryRef.current !== queryKey) {
+    if (prevQueryRef.current !== '{}' && prevQueryRef.current !== queryKey) {
       setAccumulatedResults([])
       setNextURL(null)
     }
@@ -190,7 +199,6 @@ const Search = () => {
     }
   }, [searchData])
 
-  // const results = accumulatedResults
   const error = swrError
     ? serializeError(
         swrError.isAxiosError
