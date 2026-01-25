@@ -130,7 +130,6 @@ const getAnalysisFailureTypes = (data) => {
 }
 
 const MATChart = ({ query, showFilters = true }) => {
-  console.log('query query', query, Object.keys(query).length)
   const { data, error, isValidating } = useSWR(
     Object.keys(query).length > 0 ? query : null,
     fetcher,
