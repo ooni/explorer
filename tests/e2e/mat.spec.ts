@@ -28,7 +28,7 @@ test.describe('MAT Tests', () => {
 
   test.describe('MAT Basics', () => {
     test.beforeEach(async ({ page }) => {
-      await page.route('**/api/v1/aggregation**', async (route) => {
+      await page.route('**/api/v1/aggregation*', async (route) => {
         const request = route.request()
 
         // Handle OPTIONS preflight requests
@@ -63,18 +63,14 @@ test.describe('MAT Tests', () => {
 
       await page.goto(
         '/chart/mat?test_name=web_connectivity&since=2022-03-01&until=2022-03-04&axis_x=measurement_start_day&time_grain=day',
-        {
-          waitUntil: 'networkidle', // Wait for network to be idle
-        },
       )
-      // await page.waitForLoadState('networkidle')
+      await page.waitForLoadState('networkidle')
     })
 
     test('it loads', async ({ page }) => {
       await expect(page.getByRole('heading', { level: 1 })).toContainText(
         'Measurement Aggregation Toolkit',
       )
-      await page.unrouteAll({ behavior: 'ignoreErrors' })
     })
 
     test('Clicking Submit button loads table and charts', async ({ page }) => {
@@ -82,7 +78,6 @@ test.describe('MAT Tests', () => {
       await expect(page.getByTestId('mat-chart')).toContainText(
         'Web Connectivity Test',
       )
-      await page.unrouteAll({ behavior: 'ignoreErrors' })
     })
   })
 })
