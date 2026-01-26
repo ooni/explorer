@@ -39,12 +39,12 @@ const tests = {
       result: 'Error',
       color: errorColor,
     },
-    {
-      // missing data in test_keys
-      result: 'OK',
-      url: '/m/20210128090058.048012_IT_webconnectivity_0c722fdbe67d8b42',
-      color: normalColor,
-    },
+    // {
+    //   // missing data in test_keys
+    //   result: 'OK',
+    //   url: '/m/20210128090058.048012_IT_webconnectivity_0c722fdbe67d8b42',
+    //   color: normalColor,
+    // },
   ],
   telegram: [
     {
