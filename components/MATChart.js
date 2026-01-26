@@ -36,7 +36,12 @@ const getAPIEndpoint = (query) => {
           ? `&group_by=${axis_y}`
           : ''
 
-    const domainParam = domain ? `&hostname=${domain}` : ''
+    const domainParam = domain
+      ? domain
+          .split(',')
+          .map((d) => `&hostname=${d}`)
+          .join('')
+      : ''
 
     reqUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation/observations?group_by=failure${axisX}${axisY}${domainParam}&${new URLSearchParams(q).toString()}`
   }
