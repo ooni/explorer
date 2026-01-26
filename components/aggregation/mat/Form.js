@@ -302,7 +302,11 @@ export const Form = ({ onSubmit, query }) => {
                   {intl.formatMessage({ id: 'MAT.Form.AllCountries' })}
                 </option>
                 {sortedCountries.map((c, idx) => (
-                  <option key={idx} value={c.iso3166_alpha2}>
+                  <option
+                    key={idx}
+                    value={c.iso3166_alpha2}
+                    suppressHydrationWarning
+                  >
                     {c.localisedCountryName}
                   </option>
                 ))}
@@ -524,7 +528,7 @@ export const Form = ({ onSubmit, query }) => {
         <button
           type="button"
           className="btn btn-primary"
-          data-test-id="mat-form-submit"
+          data-testid="mat-form-submit"
           onClick={maybeWarnBeforeSubmit}
         >
           <FormattedMessage id="MAT.Form.Submit" />

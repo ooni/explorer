@@ -141,7 +141,7 @@ const Country = ({ countryCode, overviewStats, reports, error }) => {
               title={
                 <div className="flex flex-row items-center gap-3">
                   <Flag countryCode={countryCode} size={38} />
-                  <h1>{countryName}</h1>
+                  {countryName}
                 </div>
               }
             >

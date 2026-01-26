@@ -185,7 +185,7 @@ const Form = () => {
                 {...field}
                 pt={2}
                 label={intl.formatMessage({ id: 'Search.Sidebar.Country' })}
-                data-test-id="country-filter"
+                data-testid="country-filter"
               >
                 <option key="empty" value="">
                   {intl.formatMessage({ id: 'MAT.Form.AllCountries' })}

@@ -32,7 +32,7 @@ const CommonSummary = ({
     <div
       className="pb-8 pt-24 text-white"
       style={{ backgroundColor: color }}
-      data-test-id="common-summary"
+      data-testid="common-summary"
     >
       <div className="container">
         <div className="flex justify-between">

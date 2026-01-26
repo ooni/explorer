@@ -175,7 +175,7 @@ const QueryContainer = ({ query }) => {
         </div>
       )}
       {!failure && (
-        <table class="w-full flex flex-row flex-no-wrap sm:inline-table table-fixed">
+        <table className="w-full flex flex-row flex-no-wrap sm:inline-table table-fixed">
           <thead>
             <tr className="flex flex-col flex-no wrap sm:table-row mb-2 sm:mb-0">
               <th className="py-1 pe-1 text-left">Name</th>
@@ -589,7 +589,7 @@ const WebConnectivityDetails = ({
                   tcpConnections.map((connection, index) => (
                     <div className="flex" key={index}>
                       <div>
-                        <strong>{connection.destination}</strong>{' '}:{' '}
+                        <strong>{connection.destination}</strong> :{' '}
                         {connection.failure
                           ? `${intl.formatMessage({ id: 'Measurement.Details.Websites.TCP.ConnectionTo.Failed' })} (${connection.failure})`
                           : intl.formatMessage({

@@ -261,7 +261,7 @@ const FilterSidebar = () => {
             className="my-4"
             {...field}
             label={intl.formatMessage({ id: 'Search.Sidebar.Country' })}
-            data-test-id="country-filter"
+            data-testid="country-filter"
           >
             {countryOptions.map((v, idx) => {
               return (
@@ -283,7 +283,7 @@ const FilterSidebar = () => {
             {...field}
             label={intl.formatMessage({ id: 'Search.Sidebar.ASN' })}
             error={errors?.asnFilter?.message}
-            data-test-id="asn-filter"
+            data-testid="asn-filter"
             placeholder={intl.formatMessage({
               id: 'Search.Sidebar.ASN.example',
             })}
@@ -353,7 +353,7 @@ const FilterSidebar = () => {
             {...field}
             pt={2}
             label={intl.formatMessage({ id: 'Search.Sidebar.TestName' })}
-            data-test-id="testname-filter"
+            data-testid="testname-filter"
           >
             <TestNameOptions />
           </Select>
@@ -369,7 +369,7 @@ const FilterSidebar = () => {
               className="mb-4"
               {...field}
               label={intl.formatMessage({ id: 'Search.Sidebar.Categories' })}
-              data-test-id="category-filter"
+              data-testid="category-filter"
             >
               <CategoryOptions />
             </Select>
@@ -386,7 +386,7 @@ const FilterSidebar = () => {
                 className="mb-4"
                 {...field}
                 label={intl.formatMessage({ id: 'Search.Sidebar.Domain' })}
-                data-test-id="domain-filter"
+                data-testid="domain-filter"
                 error={errors?.domainFilter?.message}
                 placeholder={intl.formatMessage({
                   id: 'Search.Sidebar.Domain.Placeholder',
@@ -408,7 +408,7 @@ const FilterSidebar = () => {
               <Input
                 {...field}
                 label={intl.formatMessage({ id: 'Search.Sidebar.Input' })}
-                data-test-id="input-filter"
+                data-testid="input-filter"
                 error={errors?.inputFilter?.message}
                 placeholder={intl.formatMessage({
                   id: 'Search.Sidebar.Input.Placeholder',
