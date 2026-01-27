@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types'
 import { MdFlashOn } from 'react-icons/md'
 import { defineMessages, useIntl } from 'react-intl'
 import { InfoBoxItem } from '../InfoBoxItem'
@@ -47,12 +46,12 @@ const minimumBitrateForVideo = [
 
 const getOptimalQualityForBitrate = (testKeys) => {
   let optimalQuality = minimumBitrateForVideo[0]
-  minimumBitrateForVideo.forEach((rate) => {
+  for (const rate of minimumBitrateForVideo) {
     // Note: we use SFR rather than HFR because SFR is more common
-    if (testKeys.simple.median_bitrate >= rate['sfr_min_bitrate']) {
+    if (testKeys.simple.median_bitrate >= rate.sfr_min_bitrate) {
       optimalQuality = rate
     }
-  })
+  }
   return optimalQuality
 }
 
@@ -127,10 +126,6 @@ const DashDetails = ({ measurement, country, render }) => {
     ),
     details: null,
   })
-}
-
-DashDetails.propTypes = {
-  testKeys: PropTypes.object.isRequired,
 }
 
 export default DashDetails
