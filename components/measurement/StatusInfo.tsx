@@ -1,6 +1,9 @@
-import PropTypes from 'prop-types'
+interface StatusInfoProps {
+  title: React.ReactNode
+  message?: string
+}
 
-const StatusInfo = ({ title, message }) => (
+const StatusInfo = ({ title, message }: StatusInfoProps) => (
   <div className="flex flex-col">
     <div className="text-center text-2xl md:text-3xl break-words">
       {' '}
@@ -14,10 +17,5 @@ const StatusInfo = ({ title, message }) => (
     )}
   </div>
 )
-
-StatusInfo.propTypes = {
-  title: PropTypes.string,
-  message: PropTypes.string,
-}
 
 export default StatusInfo

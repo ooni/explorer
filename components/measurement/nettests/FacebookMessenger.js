@@ -62,7 +62,9 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
       })
     }
   } else {
-    summaryText = 'Measurement.Details.SummaryText.FacebookMessenger.Reachable'
+    summaryText = intl.formatMessage({
+      id: 'Measurement.Details.SummaryText.FacebookMessenger.Reachable',
+    })
   }
 
   statusMessage = statusMessage.join('\n')
@@ -78,7 +80,7 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
   return render({
     status: isWorking ? 'reachable' : 'anomaly',
     statusInfo: <StatusInfo title={statusTitle} message={statusMessage} />,
-    summaryText: summaryText,
+    summaryText: () => summaryText,
     headMetadata: {
       message: isWorking ? messages.reachable : messages.notReachable,
       formatted: false,
@@ -104,44 +106,46 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
             <FormattedMessage id="Measurement.Details.FacebookMessenger.Endpoint.Status.Heading" />
           }
           content={
-            <>
-              {Array.isArray(tcpConnections) && tcpConnections.length > 0 && (
-                <>
-                  {tcpConnections.map((connection, index) => (
-                    <div className="flex" key={index}>
-                      <div>
-                        {connection.status.failure && (
-                          <FormattedMessage
-                            id="Measurement.Details.FacebookMessenger.Endpoint.ConnectionTo.Failed"
-                            values={{
-                              destination: (
-                                <strong>
-                                  {' '}
-                                  {formatTwoTuple(connection.ip, connection.port)}{' '}
-                                </strong>
-                              ),
-                            }}
-                          />
-                        )}
-                        {connection.status.success && (
-                          <FormattedMessage
-                            id="Measurement.Details.FacebookMessenger.Endpoint.ConnectionTo.Successful"
-                            values={{
-                              destination: (
-                                <strong>
-                                  {' '}
-                                  {formatTwoTuple(connection.ip, connection.port)}{' '}
-                                </strong>
-                              ),
-                            }}
-                          />
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </>
-              )}
-            </>
+            Array.isArray(tcpConnections) &&
+            tcpConnections.length > 0 &&
+            tcpConnections.map((connection, index) => (
+              <div className="flex" key={index}>
+                <div>
+                  {connection.status.failure && (
+                    <FormattedMessage
+                      id="Measurement.Details.FacebookMessenger.Endpoint.ConnectionTo.Failed"
+                      values={{
+                        destination: (
+                          <strong>
+                            {' '}
+                            {formatTwoTuple(
+                              connection.ip,
+                              connection.port,
+                            )}{' '}
+                          </strong>
+                        ),
+                      }}
+                    />
+                  )}
+                  {connection.status.success && (
+                    <FormattedMessage
+                      id="Measurement.Details.FacebookMessenger.Endpoint.ConnectionTo.Successful"
+                      values={{
+                        destination: (
+                          <strong>
+                            {' '}
+                            {formatTwoTuple(
+                              connection.ip,
+                              connection.port,
+                            )}{' '}
+                          </strong>
+                        ),
+                      }}
+                    />
+                  )}
+                </div>
+              </div>
+            ))
           }
         />
       </>
