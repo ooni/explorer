@@ -132,7 +132,10 @@ const Measurement = ({
     data: userFeedback,
     error: userFeedbackError,
     mutate: mutateUserFeedback,
-  } = useSWR(`/api/_/measurement_feedback/${measurement_uid}`, fetcher)
+  } = useSWR(`/api/_/measurement_feedback/${measurement_uid}`, fetcher, {
+    revalidateOnFocus: false,
+    shouldRetryOnError: false,
+  })
 
   const userFeedbackItems = useMemo(() => {
     return userFeedback
