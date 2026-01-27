@@ -1,19 +1,19 @@
-import PropTypes from 'prop-types'
-import { FormattedMessage, defineMessages } from 'react-intl'
+import { defineMessages, useIntl } from 'react-intl'
 
 export const HttpHeaderFieldManipulationDetails = ({ measurement, render }) => {
+  const intl = useIntl()
   const testKeys = measurement.test_keys
   let isAnomaly = false
   let isFailed = true
   const tampering = testKeys?.tampering || {}
-  Object.keys(tampering).forEach((key) => {
+  for (const key of Object.keys(tampering)) {
     if (tampering[key] === true) {
       isAnomaly = true
     }
     if (tampering[key] !== null) {
       isFailed = false
     }
-  })
+  }
 
   const messages = defineMessages({
     middleboxes: {
@@ -28,11 +28,13 @@ export const HttpHeaderFieldManipulationDetails = ({ measurement, render }) => {
 
   return render({
     status: isAnomaly ? 'anomaly' : 'reachable',
-    statusLabel: isAnomaly ? (
-      <FormattedMessage id="Measurement.Hero.Status.HTTPHeaderManipulation.MiddleboxesDetected" />
-    ) : (
-      <FormattedMessage id="Measurement.Hero.Status.HTTPHeaderManipulation.NoMiddleBoxes" />
-    ),
+    statusLabel: isAnomaly
+      ? intl.formatMessage({
+          id: 'Measurement.Hero.Status.HTTPHeaderManipulation.MiddleboxesDetected',
+        })
+      : intl.formatMessage({
+          id: 'Measurement.Hero.Status.HTTPHeaderManipulation.NoMiddleBoxes',
+        }),
     summaryText: isAnomaly
       ? 'Measurement.HTTPHeaderManipulation.MiddleBoxesDetected.SummaryText'
       : 'Measurement.HTTPHeaderManipulation.NoMiddleBoxes.SummaryText',
@@ -41,10 +43,6 @@ export const HttpHeaderFieldManipulationDetails = ({ measurement, render }) => {
       formatted: false,
     },
   })
-}
-
-HttpHeaderFieldManipulationDetails.propTypes = {
-  testKeys: PropTypes.object,
 }
 
 export default HttpHeaderFieldManipulationDetails
