@@ -61,10 +61,9 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
         id: 'Measurement.Details.SummaryText.FacebookMessenger.DNSSuccess',
       })
     }
+    summaryText = () => summaryText //function is called in the SummaryText component
   } else {
-    summaryText = intl.formatMessage({
-      id: 'Measurement.Details.SummaryText.FacebookMessenger.Reachable',
-    })
+    summaryText = 'Measurement.Details.SummaryText.FacebookMessenger.Reachable'
   }
 
   statusMessage = statusMessage.join('\n')
@@ -80,7 +79,7 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
   return render({
     status: isWorking ? 'reachable' : 'anomaly',
     statusInfo: <StatusInfo title={statusTitle} message={statusMessage} />,
-    summaryText: () => summaryText,
+    summaryText: summaryText,
     headMetadata: {
       message: isWorking ? messages.reachable : messages.notReachable,
       formatted: false,
