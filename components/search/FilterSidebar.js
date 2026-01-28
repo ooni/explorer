@@ -145,7 +145,7 @@ const FilterSidebar = () => {
       asnFilter: query.probe_asn || '',
       sinceFilter: query.since || monthAgoUTC,
       untilFilter: query.until || tomorrowUTC,
-      hideFailed: query.failure === undefined ? true : !query.failure,
+      hideFailed: !(query?.failure === 'true'),
     }
   }, [query])
 
