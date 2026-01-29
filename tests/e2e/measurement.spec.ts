@@ -331,4 +331,48 @@ test.describe('Measurement Page Tests', () => {
       await expect(page.getByText('Thank you!')).toBeVisible()
     })
   })
+
+  test.describe('Embedded view with language redirect', () => {
+    test('does not redirect if only language is provided', async ({ page }) => {
+      await page.goto(
+        '/m/20230307142542.625294_US_webconnectivity_9215f30cf2412f49?language=fr',
+      )
+
+      await expect(page).toHaveURL(
+        'http://localhost:3100/m/20230307142542.625294_US_webconnectivity_9215f30cf2412f49?language=fr',
+      )
+    })
+
+    test('does not redirect if language is default language', async ({
+      page,
+    }) => {
+      await page.goto(
+        '/m/20230307142542.625294_US_webconnectivity_9215f30cf2412f49?webview=true&language=en-US',
+      )
+
+      await expect(page).toHaveURL(
+        'http://localhost:3100/m/20230307142542.625294_US_webconnectivity_9215f30cf2412f49?webview=true&language=en-US',
+      )
+    })
+
+    test('does not redirect if language is not supported', async ({ page }) => {
+      await page.goto(
+        '/m/20230307142542.625294_US_webconnectivity_9215f30cf2412f49?webview=true&language=si',
+      )
+
+      await expect(page).toHaveURL(
+        'http://localhost:3100/m/20230307142542.625294_US_webconnectivity_9215f30cf2412f49?webview=true&language=si',
+      )
+    })
+
+    test('redirects if language is supported', async ({ page }) => {
+      await page.goto(
+        '/m/20230307142542.625294_US_webconnectivity_9215f30cf2412f49?webview=true&language=de',
+      )
+
+      await expect(page).toHaveURL(
+        'http://localhost:3100/de/m/20230307142542.625294_US_webconnectivity_9215f30cf2412f49?webview=true&language=de',
+      )
+    })
+  })
 })
