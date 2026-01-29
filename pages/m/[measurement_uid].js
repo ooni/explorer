@@ -43,6 +43,7 @@ export async function getServerSideProps({
     isEmbeddedView: !!req.headers['enable-embedded-view'] || !!query?.webview,
   }
 
+  const languageQuery = query?.language
   if (
     initialProps.isEmbeddedView &&
     locale === 'en' &&
