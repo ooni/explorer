@@ -61,7 +61,10 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
         id: 'Measurement.Details.SummaryText.FacebookMessenger.DNSSuccess',
       })
     }
-    summaryText = () => summaryText //function is called in the SummaryText component
+    const textValue = summaryText
+    summaryText = () => {
+      return textValue
+    } //function is called in the SummaryText component
   } else {
     summaryText = 'Measurement.Details.SummaryText.FacebookMessenger.Reachable'
   }
