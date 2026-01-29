@@ -1,33 +1,44 @@
+// @ts-ignore
 import { Cross, Tick } from 'ooni-components/icons'
-import PropTypes from 'prop-types'
 import { FaQuestion } from 'react-icons/fa'
 import { MdPriorityHigh, MdWarning } from 'react-icons/md'
-import { FormattedMessage } from 'react-intl'
+import { useIntl } from 'react-intl'
 
-const Hero = ({ status, icon, label, info }) => {
+interface HeroProps {
+  status: string
+  icon: React.ReactNode
+  label: string
+  info: React.ReactNode
+}
+
+const Hero = ({ status, icon, label, info }: HeroProps) => {
+  const intl = useIntl()
   let computedLabel = ''
+
   if (status) {
     switch (status) {
       case 'anomaly':
-        computedLabel = <FormattedMessage id="General.Anomaly" />
+        computedLabel = intl.formatMessage({ id: 'General.Anomaly' })
         icon = <MdPriorityHigh />
         break
       case 'reachable':
-        computedLabel = <FormattedMessage id="General.OK" />
+        computedLabel = intl.formatMessage({ id: 'General.OK' })
         icon = <Tick />
         break
       case 'error':
-        computedLabel = <FormattedMessage id="General.Error" />
+        computedLabel = intl.formatMessage({ id: 'General.Error' })
         icon = <FaQuestion size={36} />
         break
       case 'confirmed':
-        computedLabel = (
-          <FormattedMessage id="Measurement.Hero.Status.Confirmed" />
-        )
+        computedLabel = intl.formatMessage({
+          id: 'Measurement.Hero.Status.Confirmed',
+        })
         icon = <Cross />
         break
       case 'down':
-        computedLabel = <FormattedMessage id="Measurement.Hero.Status.Down" />
+        computedLabel = intl.formatMessage({
+          id: 'Measurement.Hero.Status.Down',
+        })
         icon = <MdWarning />
         break
       default:
@@ -51,10 +62,4 @@ const Hero = ({ status, icon, label, info }) => {
   )
 }
 
-Hero.propTypes = {
-  status: PropTypes.string,
-  icon: PropTypes.node,
-  label: PropTypes.string,
-  info: PropTypes.node,
-}
 export default Hero

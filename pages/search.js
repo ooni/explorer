@@ -56,7 +56,7 @@ const queryToParams = ({ query }) => {
 
   // Allow only `failure=false`. `true` results in showing only failures
   if ('failure' in query) {
-    if (query.failure === false) {
+    if (query.failure === 'false') {
       params.failure = false
     } else {
       params.failure = null
