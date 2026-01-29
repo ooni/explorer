@@ -31,11 +31,42 @@ const pageColors = {
 
 export const EmbeddedViewContext = createContext(false)
 
-export async function getServerSideProps({ query, req }) {
+export async function getServerSideProps({
+  query,
+  req,
+  locale,
+  defaultLocale,
+}) {
   let initialProps = {
     error: null,
     userFeedback: null,
     isEmbeddedView: !!req.headers['enable-embedded-view'] || !!query?.webview,
+  }
+
+  const languageQuery = query?.language
+  if (
+    initialProps.isEmbeddedView &&
+    locale === 'en' &&
+    query?.language &&
+    query?.language !== locale
+  ) {
+    if (process.env.LOCALES.includes(languageQuery)) {
+      return {
+        redirect: {
+          destination: `/${languageQuery}${req.url}`,
+          permanent: false,
+        },
+      }
+    }
+    const fallbackLang = languageQuery.split('-')[0]
+    if (process.env.LOCALES.includes(fallbackLang)) {
+      return {
+        redirect: {
+          destination: `/${fallbackLang}${req.url}`,
+          permanent: false,
+        },
+      }
+    }
   }
 
   const measurement_uid = query?.measurement_uid
