@@ -19,6 +19,7 @@ import ErrorPage from 'pages/_error'
 import NotFound from '../../components/NotFound'
 import { fetcher } from '/lib/api'
 import { getLocalisedRegionName } from '/utils/i18nCountries'
+import SpinLoader from 'components/vendor/SpinLoader'
 
 const pageColors = {
   default: colors.blue['500'],
@@ -85,7 +86,7 @@ export async function getServerSideProps({
     client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
     const params = {
       measurement_uid,
-      full: true,
+      // full: true,
     }
     if (query.input) {
       params.input = query.input
@@ -101,8 +102,7 @@ export async function getServerSideProps({
       )
     }
 
-    // If response `data` is an empty object, the measurement was
-    // probably not found
+    // If response `data` is an empty object, the measurement was probably not found
     if (
       Object.prototype.hasOwnProperty.call(response, 'data') &&
       Object.keys(response.data).length !== 0
@@ -116,14 +116,6 @@ export async function getServerSideProps({
           throw new Error(`Failed to parse JSON in scores: ${e.toString()}`)
         }
       }
-
-      initialProps.raw_measurement
-        ? // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
-          (initialProps.raw_measurement = JSON.parse(
-            initialProps.raw_measurement,
-          ))
-        : // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
-          (initialProps.notFound = true)
     } else {
       // Measurement not found
       initialProps.notFound = true
@@ -134,6 +126,16 @@ export async function getServerSideProps({
   return {
     props: initialProps,
   }
+}
+
+const rawMeasurementFetcher = async (url) => {
+  const response = await fetch(url)
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch: ${response.status} ${response.statusText}`,
+    )
+  }
+  return response.json()
 }
 
 const Measurement = ({
@@ -147,7 +149,7 @@ const Measurement = ({
   probe_asn,
   notFound = false,
   input,
-  raw_measurement,
+  // raw_measurement,
   measurement_uid,
   report_id,
   scores,
@@ -159,6 +161,15 @@ const Measurement = ({
 
   const { user, setSubmitted } = useUser()
   const [showModal, setShowModal] = useState(false)
+
+  const { data: raw_measurement, isLoading: isLoadingRawMeasurement } = useSWR(
+    `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/raw_measurement?measurement_uid=${measurement_uid}`,
+    rawMeasurementFetcher,
+    {
+      revalidateOnFocus: false,
+      shouldRetryOnError: false,
+    },
+  )
 
   const {
     data: userFeedback,
@@ -198,97 +209,103 @@ const Measurement = ({
         </>
       ) : (
         <>
-          <MeasurementContainer
-            isConfirmed={confirmed}
-            isAnomaly={anomaly}
-            isFailure={failure}
-            testName={test_name}
-            country={country}
-            measurement={raw_measurement}
-            input={input}
-            measurement_start_time={measurement_start_time}
-            probe_asn={probe_asn}
-            scores={scores}
-            {...rest}
-            render={({
-              status = 'default',
-              statusIcon,
-              statusLabel,
-              statusInfo,
-              legacy = false,
-              summaryText,
-              headMetadata,
-              details,
-            }) => {
-              const color =
-                failure === true ? pageColors.error : pageColors[status]
-              const info = scores?.msg ?? statusInfo
-              return (
-                <>
-                  {headMetadata && (
-                    <HeadMetadata
-                      content={headMetadata}
-                      testName={test_name}
-                      testUrl={input}
-                      country={country}
-                      date={measurement_start_time}
-                    />
-                  )}
-                  {showModal && (
-                    <FeedbackBox
-                      user={user}
-                      measurement_uid={measurement_uid}
-                      setShowModal={setShowModal}
-                      previousFeedback={userFeedback?.user_feedback}
-                      mutateUserFeedback={mutateUserFeedback}
-                    />
-                  )}
-                  <CommonSummary
-                    measurement_start_time={measurement_start_time}
-                    probe_asn={probe_asn}
-                    probe_cc={probe_cc}
-                    networkName={raw_measurement?.probe_network_name}
-                    color={color}
-                    country={country}
-                    hero={
-                      <Hero
-                        status={status}
-                        icon={statusIcon}
-                        label={statusLabel}
-                        info={info}
-                      />
-                    }
-                    onVerifyClick={() => setShowModal(true)}
-                  />
-                  <div className="container">
-                    <DetailsHeader
-                      testName={test_name}
-                      runtime={raw_measurement?.test_runtime}
-                      notice={legacy}
-                      url={`measurement/${measurement_uid}`}
-                    />
-                    {summaryText && (
-                      <SummaryText
+          {raw_measurement ? (
+            <MeasurementContainer
+              isConfirmed={confirmed}
+              isAnomaly={anomaly}
+              isFailure={failure}
+              testName={test_name}
+              country={country}
+              measurement={raw_measurement}
+              input={input}
+              measurement_start_time={measurement_start_time}
+              probe_asn={probe_asn}
+              scores={scores}
+              {...rest}
+              render={({
+                status = 'default',
+                statusIcon,
+                statusLabel,
+                statusInfo,
+                legacy = false,
+                summaryText,
+                headMetadata,
+                details,
+              }) => {
+                const color =
+                  failure === true ? pageColors.error : pageColors[status]
+                const info = scores?.msg ?? statusInfo
+                return (
+                  <>
+                    {headMetadata && (
+                      <HeadMetadata
+                        content={headMetadata}
                         testName={test_name}
                         testUrl={input}
-                        network={probe_asn}
                         country={country}
                         date={measurement_start_time}
-                        content={summaryText}
                       />
                     )}
-                    {details}
-                    <CommonDetails
-                      measurement={raw_measurement}
-                      reportId={report_id}
-                      measurementUid={measurement_uid}
-                      userFeedbackItems={userFeedbackItems}
+                    {showModal && (
+                      <FeedbackBox
+                        user={user}
+                        measurement_uid={measurement_uid}
+                        setShowModal={setShowModal}
+                        previousFeedback={userFeedback?.user_feedback}
+                        mutateUserFeedback={mutateUserFeedback}
+                      />
+                    )}
+                    <CommonSummary
+                      measurement_start_time={measurement_start_time}
+                      probe_asn={probe_asn}
+                      probe_cc={probe_cc}
+                      networkName={raw_measurement?.probe_network_name}
+                      color={color}
+                      country={country}
+                      hero={
+                        <Hero
+                          status={status}
+                          icon={statusIcon}
+                          label={statusLabel}
+                          info={info}
+                        />
+                      }
+                      onVerifyClick={() => setShowModal(true)}
                     />
-                  </div>
-                </>
-              )
-            }}
-          />
+                    <div className="container">
+                      <DetailsHeader
+                        testName={test_name}
+                        runtime={raw_measurement?.test_runtime}
+                        notice={legacy}
+                        url={`measurement/${measurement_uid}`}
+                      />
+                      {summaryText && (
+                        <SummaryText
+                          testName={test_name}
+                          testUrl={input}
+                          network={probe_asn}
+                          country={country}
+                          date={measurement_start_time}
+                          content={summaryText}
+                        />
+                      )}
+                      {details}
+                      <CommonDetails
+                        measurement={raw_measurement}
+                        reportId={report_id}
+                        measurementUid={measurement_uid}
+                        userFeedbackItems={userFeedbackItems}
+                      />
+                    </div>
+                  </>
+                )
+              }}
+            />
+          ) : (
+            <div className="flex-1 flex justify-center items-center bg-gray-100 border-t-[62px] border-blue-500">
+              <SpinLoader />
+            </div>
+          )}
         </>
       )}
     </EmbeddedViewContext.Provider>

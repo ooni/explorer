@@ -26,7 +26,7 @@ const Footer = () => {
     year: 'numeric',
   }).format(new Date())
   return (
-    <footer className="text-white mt-8 bg-blue-900">
+    <footer className="text-white bg-blue-900">
       <div className="container">
         <div className="flex flex-wrap">
           <div className="py-6 w-full md:w-2/5">
