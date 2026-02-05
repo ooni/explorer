@@ -48,8 +48,7 @@ export async function getServerSideProps({
     initialProps.isEmbeddedView &&
     locale === 'en' &&
     languageQuery &&
-    languageQuery !== 'en' &&
-    languageQuery !== 'en-US'
+    !languageQuery.startsWith(locale)
   ) {
     if (process.env.LOCALES.includes(languageQuery)) {
       return {
