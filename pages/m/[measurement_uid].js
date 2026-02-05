@@ -85,7 +85,7 @@ export async function getServerSideProps({
   }
 }
 
-const rawMeasurementFetcher = async (url) => {
+const measurementFetcher = async (url) => {
   const response = await fetch(url)
   if (!response.ok) {
     throw new Error(
@@ -109,10 +109,10 @@ const Measurement = ({
   const {
     data: measurementData,
     error,
-    isLoading: isLoadingRawMeasurement,
+    isValidating: isLoadingMeasurementData,
   } = useSWR(
     `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/measurement_meta?measurement_uid=${measurementUid}&full=true`,
-    rawMeasurementFetcher,
+    measurementFetcher,
     {
       revalidateOnFocus: false,
       shouldRetryOnError: false,
@@ -133,6 +133,7 @@ const Measurement = ({
     scores,
     input,
   } = measurementData ?? {}
+  notFound = raw_measurement === ''
   raw_measurement = raw_measurement ? JSON.parse(raw_measurement) : null
   scores = scores ? JSON.parse(scores) : null
 
@@ -181,7 +182,12 @@ const Measurement = ({
         </>
       ) : (
         <>
-          {measurementData && Object.keys(measurementData).length > 0 ? (
+          {isLoadingMeasurementData && (
+            <div className="flex-1 flex justify-center items-center bg-gray-100 border-t-[62px] border-blue-500">
+              <SpinLoader />
+            </div>
+          )}
+          {measurementData && Object.keys(measurementData).length > 0 && (
             <MeasurementContainer
               isConfirmed={confirmed}
               isAnomaly={anomaly}
@@ -273,10 +279,6 @@ const Measurement = ({
                 )
               }}
             />
-          ) : (
-            <div className="flex-1 flex justify-center items-center bg-gray-100 border-t-[62px] border-blue-500">
-              <SpinLoader />
-            </div>
           )}
         </>
       )}
