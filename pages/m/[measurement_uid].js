@@ -1,7 +1,5 @@
-import axios from 'axios'
 import Head from 'next/head'
 import { colors } from 'ooni-components'
-import PropTypes from 'prop-types'
 import { createContext, useMemo, useState } from 'react'
 import { useIntl } from 'react-intl'
 import useSWR from 'swr'
@@ -58,7 +56,7 @@ export async function getServerSideProps({
     languageQuery !== 'en' &&
     languageQuery !== 'en-US'
   ) {
-    if (process.env.LOCALES.includes(languageQuery)) {
+    if (process.env.LOCALES?.includes(languageQuery)) {
       return {
         redirect: {
           destination: `/${languageQuery}${req.url}`,
@@ -67,7 +65,7 @@ export async function getServerSideProps({
       }
     }
     const fallbackLang = languageQuery.split('-')[0]
-    if (process.env.LOCALES.includes(fallbackLang)) {
+    if (process.env.LOCALES?.includes(fallbackLang)) {
       return {
         redirect: {
           destination: `/${fallbackLang}${req.url}`,
@@ -103,7 +101,7 @@ const Measurement = ({
 }) => {
   const intl = useIntl()
 
-  const { user, setSubmitted } = useUser()
+  const { user } = useUser()
   const [showModal, setShowModal] = useState(false)
 
   const {
