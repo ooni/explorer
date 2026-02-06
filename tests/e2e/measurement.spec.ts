@@ -207,6 +207,45 @@ const tests = {
 }
 
 test.describe('Measurement Page Tests', () => {
+  test.afterEach(async ({ page }) => {
+    await page.unrouteAll({ behavior: 'ignoreErrors' })
+  })
+
+  test.beforeEach(async ({ page }) => {
+    await page.route('**/api/v1/measurement_meta*', async (route) => {
+      const request = route.request()
+
+      // Handle OPTIONS preflight requests
+      if (request.method() === 'OPTIONS') {
+        await route.fulfill({
+          status: 200,
+          headers: {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
+            'Access-Control-Max-Age': '86400',
+          },
+        })
+        return
+      }
+
+      // For actual requests, fetch and add CORS headers
+      const response = await route.fetch()
+      const body = await response.body()
+      const headers = response.headers()
+
+      await route.fulfill({
+        status: response.status(),
+        headers: {
+          ...headers,
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Credentials': 'true',
+        },
+        body: body,
+      })
+    })
+  })
+
   test.describe('Accessing old measurement path (/measurement) with report_id and input query', () => {
     test('redirects to the new path with measurement_uid query', async ({
       page,
@@ -230,6 +269,7 @@ test.describe('Measurement Page Tests', () => {
           page,
         }) => {
           await page.goto(url)
+          await page.waitForLoadState('networkidle')
 
           const hero = page.getByTestId('common-summary')
           await expect(hero).toHaveCSS('background-color', color)

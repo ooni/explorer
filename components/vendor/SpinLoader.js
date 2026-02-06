@@ -9,7 +9,7 @@ const getClassName = (classes) =>
     classes,
   )
 
-const SpinLoader = ({ className, props }) => (
+const SpinLoader = ({ className = '' }) => (
   <CgSpinner className={getClassName(className)} />
 )
 
