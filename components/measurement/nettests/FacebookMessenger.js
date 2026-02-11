@@ -61,6 +61,10 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
         id: 'Measurement.Details.SummaryText.FacebookMessenger.DNSSuccess',
       })
     }
+    const textValue = summaryText
+    summaryText = () => {
+      return textValue
+    } //function is called in the SummaryText component
   } else {
     summaryText = 'Measurement.Details.SummaryText.FacebookMessenger.Reachable'
   }
@@ -104,44 +108,46 @@ export const FacebookMessengerDetails = ({ measurement, render }) => {
             <FormattedMessage id="Measurement.Details.FacebookMessenger.Endpoint.Status.Heading" />
           }
           content={
-            <>
-              {Array.isArray(tcpConnections) && tcpConnections.length > 0 && (
-                <>
-                  {tcpConnections.map((connection, index) => (
-                    <div className="flex" key={index}>
-                      <div>
-                        {connection.status.failure && (
-                          <FormattedMessage
-                            id="Measurement.Details.FacebookMessenger.Endpoint.ConnectionTo.Failed"
-                            values={{
-                              destination: (
-                                <strong>
-                                  {' '}
-                                  {formatTwoTuple(connection.ip, connection.port)}{' '}
-                                </strong>
-                              ),
-                            }}
-                          />
-                        )}
-                        {connection.status.success && (
-                          <FormattedMessage
-                            id="Measurement.Details.FacebookMessenger.Endpoint.ConnectionTo.Successful"
-                            values={{
-                              destination: (
-                                <strong>
-                                  {' '}
-                                  {formatTwoTuple(connection.ip, connection.port)}{' '}
-                                </strong>
-                              ),
-                            }}
-                          />
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </>
-              )}
-            </>
+            Array.isArray(tcpConnections) &&
+            tcpConnections.length > 0 &&
+            tcpConnections.map((connection, index) => (
+              <div className="flex" key={index}>
+                <div>
+                  {connection.status.failure && (
+                    <FormattedMessage
+                      id="Measurement.Details.FacebookMessenger.Endpoint.ConnectionTo.Failed"
+                      values={{
+                        destination: (
+                          <strong>
+                            {' '}
+                            {formatTwoTuple(
+                              connection.ip,
+                              connection.port,
+                            )}{' '}
+                          </strong>
+                        ),
+                      }}
+                    />
+                  )}
+                  {connection.status.success && (
+                    <FormattedMessage
+                      id="Measurement.Details.FacebookMessenger.Endpoint.ConnectionTo.Successful"
+                      values={{
+                        destination: (
+                          <strong>
+                            {' '}
+                            {formatTwoTuple(
+                              connection.ip,
+                              connection.port,
+                            )}{' '}
+                          </strong>
+                        ),
+                      }}
+                    />
+                  )}
+                </div>
+              </div>
+            ))
           }
         />
       </>

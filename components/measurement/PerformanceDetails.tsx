@@ -1,6 +1,15 @@
-import PropTypes from 'prop-types'
 import { useIntl } from 'react-intl'
 import { DetailsBoxTable } from './DetailsBox'
+
+interface PerformanceDetailsProps {
+  isNdt7: boolean
+  averagePing: number
+  maxPing: number
+  mss: number
+  packetLoss: number
+  outOfOrder?: number
+  timeouts?: number
+}
 
 const PerformanceDetails = ({
   isNdt7,
@@ -10,7 +19,7 @@ const PerformanceDetails = ({
   packetLoss,
   outOfOrder,
   timeouts,
-}) => {
+}: PerformanceDetailsProps) => {
   const intl = useIntl()
   const items = []
   averagePing &&
@@ -74,16 +83,6 @@ const PerformanceDetails = ({
       className="bg-white"
     />
   )
-}
-
-PerformanceDetails.propTypes = {
-  isNdt7: PropTypes.bool.isRequired,
-  averagePing: PropTypes.number.isRequired,
-  maxPing: PropTypes.number.isRequired,
-  mss: PropTypes.number.isRequired,
-  packetLoss: PropTypes.number.isRequired,
-  outOfOrder: PropTypes.number.isRequired,
-  timeouts: PropTypes.number.isRequired,
 }
 
 export default PerformanceDetails

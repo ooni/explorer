@@ -56,7 +56,7 @@ const queryToParams = ({ query }) => {
 
   // Allow only `failure=false`. `true` results in showing only failures
   if ('failure' in query) {
-    if (query.failure === false) {
+    if (query.failure === 'false') {
       params.failure = false
     } else {
       params.failure = null
@@ -139,6 +139,8 @@ const NoResults = () => (
   </div>
 )
 
+const requiredParams = ['since', 'until']
+
 const Search = () => {
   const router = useRouter()
   const intl = useIntl()
@@ -146,34 +148,43 @@ const Search = () => {
 
   const [nextURL, setNextURL] = useState(null)
   const [accumulatedResults, setAccumulatedResults] = useState([])
-  const prevQueryRef = useRef()
+  const prevQueryRef = useRef('{}')
 
   useEffect(() => {
-    const queryParams = {
-      since: dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD'),
-      until: dayjs.utc().add(1, 'day').format('YYYY-MM-DD'),
-      failure: false,
-      ...query,
+    if (
+      router.isReady &&
+      !requiredParams.every((key) => Object.keys(query).includes(key))
+    ) {
+      const queryParams = {
+        since: dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD'),
+        until: dayjs.utc().add(1, 'day').format('YYYY-MM-DD'),
+        failure: false,
+        ...query,
+      }
+      const href = {
+        pathname: '/search',
+        query: queryParams,
+      }
+      replace(href, undefined, { shallow: true })
     }
-    const href = {
-      pathname: '/search',
-      query: queryParams,
-    }
-    replace(href, undefined, { shallow: true })
-  }, [])
+  }, [router.isReady])
 
   const {
     data: searchData,
     error: swrError,
     isLoading,
-  } = useSWR(query, measurementsFetcher, {
-    revalidateOnFocus: false,
-  })
+  } = useSWR(
+    Object.keys(query).length > 0 ? query : null,
+    measurementsFetcher,
+    {
+      revalidateOnFocus: false,
+    },
+  )
 
   // Reset accumulated results when query changes
   const queryKey = JSON.stringify(query)
   useEffect(() => {
-    if (prevQueryRef.current && prevQueryRef.current !== queryKey) {
+    if (prevQueryRef.current !== '{}' && prevQueryRef.current !== queryKey) {
       setAccumulatedResults([])
       setNextURL(null)
     }
@@ -188,7 +199,6 @@ const Search = () => {
     }
   }, [searchData])
 
-  // const results = accumulatedResults
   const error = swrError
     ? serializeError(
         swrError.isAxiosError
@@ -255,7 +265,7 @@ const Search = () => {
                       type="button"
                       className="btn btn-primary"
                       onClick={loadMore}
-                      data-test-id="load-more-button"
+                      data-testid="load-more-button"
                     >
                       <FormattedMessage id="Search.Button.LoadMore" />
                     </button>

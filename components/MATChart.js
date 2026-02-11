@@ -36,7 +36,12 @@ const getAPIEndpoint = (query) => {
           ? `&group_by=${axis_y}`
           : ''
 
-    const domainParam = domain ? `&hostname=${domain}` : ''
+    const domainParam = domain
+      ? domain
+          .split(',')
+          .map((d) => `&hostname=${d}`)
+          .join('')
+      : ''
 
     reqUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation/observations?group_by=failure${axisX}${axisY}${domainParam}&${new URLSearchParams(q).toString()}`
   }
@@ -131,7 +136,7 @@ const getAnalysisFailureTypes = (data) => {
 
 const MATChart = ({ query, showFilters = true }) => {
   const { data, error, isValidating } = useSWR(
-    query ? query : null,
+    Object.keys(query).length > 0 ? query : null,
     fetcher,
     swrOptions,
   )
@@ -164,29 +169,31 @@ const MATChart = ({ query, showFilters = true }) => {
           allFailureTypes={allFailureTypes}
           queryProps={query}
         >
-          {results.length > 0 || Object.keys(results).length ? (
-            <>
-              {((data && data.data.dimension_count === 1) ||
-                (data && query.axis_x && !query.axis_y)) && (
-                <StackedBarChart
-                  data={results}
-                  query={query}
-                  apiEndpoint={apiEndpoint}
-                />
-              )}
-              {((data && data.data.dimension_count > 1) ||
-                (data && query.axis_x && query.axis_y)) && (
-                <TableView
-                  data={results}
-                  query={query}
-                  showFilters={showFilters}
-                  apiEndpoint={apiEndpoint}
-                />
-              )}
-            </>
-          ) : (
-            <NoCharts />
-          )}
+          <div data-testid="mat-chart">
+            {results.length > 0 || Object.keys(results).length ? (
+              <>
+                {((data && data.data.dimension_count === 1) ||
+                  (data && query.axis_x && !query.axis_y)) && (
+                  <StackedBarChart
+                    data={results}
+                    query={query}
+                    apiEndpoint={apiEndpoint}
+                  />
+                )}
+                {((data && data.data.dimension_count > 1) ||
+                  (data && query.axis_x && query.axis_y)) && (
+                  <TableView
+                    data={results}
+                    query={query}
+                    showFilters={showFilters}
+                    apiEndpoint={apiEndpoint}
+                  />
+                )}
+              </>
+            ) : (
+              <NoCharts />
+            )}
+          </div>
         </MATContextProvider>
       )}
     </>
