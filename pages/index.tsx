@@ -10,8 +10,6 @@ import HighlightSection from '../components/landing/HighlightsSection'
 import CoverageChart from '../components/landing/Stats'
 import highlightContent from '../components/landing/highlights.json'
 import { toCompactNumberUnit } from '../utils'
-import { DonationBanner } from 'components/DonationBanner'
-
 interface StatsItemProps {
   label: React.ReactNode
   unit?: string
@@ -104,7 +102,6 @@ const LandingPage = ({
       <Head>
         <title>{intl.formatMessage({ id: 'General.OoniExplorer' })}</title>
       </Head>
-      <DonationBanner />
       <div
         className="pt-4 pb-12"
         style={{
