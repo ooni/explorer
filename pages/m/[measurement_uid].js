@@ -1,7 +1,5 @@
-import axios from 'axios'
 import Head from 'next/head'
 import { colors } from 'ooni-components'
-import PropTypes from 'prop-types'
 import { createContext, useMemo, useState } from 'react'
 import { useIntl } from 'react-intl'
 import useSWR from 'swr'
@@ -19,6 +17,7 @@ import ErrorPage from 'pages/_error'
 import NotFound from '../../components/NotFound'
 import { fetcher } from '/lib/api'
 import { getLocalisedRegionName } from '/utils/i18nCountries'
+import SpinLoader from 'components/vendor/SpinLoader'
 
 const pageColors = {
   default: colors.blue['500'],
@@ -37,20 +36,26 @@ export async function getServerSideProps({
   locale,
   defaultLocale,
 }) {
-  let initialProps = {
-    error: null,
-    userFeedback: null,
-    isEmbeddedView: !!req.headers['enable-embedded-view'] || !!query?.webview,
-  }
+  const measurement_uid = query?.measurement_uid
+  // If there is no measurement_uid to use, fail early with NotFound
+  if (typeof measurement_uid !== 'string' || measurement_uid.length < 10)
+    return {
+      props: {
+        notFound: true,
+      },
+    }
 
+  const isEmbeddedView =
+    !!req.headers['enable-embedded-view'] || !!query?.webview
   const languageQuery = query?.language
+
   if (
-    initialProps.isEmbeddedView &&
+    isEmbeddedView &&
     locale === 'en' &&
     languageQuery &&
     !languageQuery.startsWith(locale)
   ) {
-    if (process.env.LOCALES.includes(languageQuery)) {
+    if (process.env.LOCALES?.includes(languageQuery)) {
       return {
         redirect: {
           destination: `/${languageQuery}${req.url}`,
@@ -59,7 +64,7 @@ export async function getServerSideProps({
       }
     }
     const fallbackLang = languageQuery.split('-')[0]
-    if (process.env.LOCALES.includes(fallbackLang)) {
+    if (process.env.LOCALES?.includes(fallbackLang)) {
       return {
         redirect: {
           destination: `/${fallbackLang}${req.url}`,
@@ -69,101 +74,80 @@ export async function getServerSideProps({
     }
   }
 
-  const measurement_uid = query?.measurement_uid
-  // If there is no measurement_uid to use, fail early with NotFound
-  if (typeof measurement_uid !== 'string' || measurement_uid.length < 10) {
-    initialProps.notFound = true
-    return {
-      props: initialProps,
-    }
-  }
-
-  let response
-  let client
-  try {
-    client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
-    const params = {
-      measurement_uid,
-      full: true,
-    }
-    if (query.input) {
-      params.input = query.input
-    }
-
-    try {
-      response = await client.get('/api/v1/measurement_meta', {
-        params,
-      })
-    } catch (e) {
-      throw new Error(
-        `Failed to fetch measurement data. Server message: ${e.response.status}, ${e.response.statusText}`,
-      )
-    }
-
-    // If response `data` is an empty object, the measurement was
-    // probably not found
-    if (
-      Object.prototype.hasOwnProperty.call(response, 'data') &&
-      Object.keys(response.data).length !== 0
-    ) {
-      initialProps = { ...initialProps, ...response.data }
-
-      if (typeof initialProps.scores === 'string') {
-        try {
-          initialProps.scores = JSON.parse(initialProps.scores)
-        } catch (e) {
-          throw new Error(`Failed to parse JSON in scores: ${e.toString()}`)
-        }
-      }
-
-      initialProps.raw_measurement
-        ? // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
-          (initialProps.raw_measurement = JSON.parse(
-            initialProps.raw_measurement,
-          ))
-        : // biome-ignore lint/suspicious/noAssignInExpressions: <explanation>
-          (initialProps.notFound = true)
-    } else {
-      // Measurement not found
-      initialProps.notFound = true
-    }
-  } catch (e) {
-    initialProps.error = e.message
-  }
   return {
-    props: initialProps,
+    props: {
+      isEmbeddedView,
+      measurementUid: measurement_uid,
+    },
   }
 }
 
+const measurementFetcher = async (url) => {
+  const response = await fetch(url)
+  if (!response.ok) {
+    throw new Error(
+      `Failed to fetch: ${response.status} ${response.statusText}`,
+    )
+  }
+  return response.json()
+}
+
 const Measurement = ({
-  error,
-  confirmed,
-  anomaly,
-  failure,
-  test_name,
-  measurement_start_time,
-  probe_cc,
-  probe_asn,
-  notFound = false,
-  input,
-  raw_measurement,
-  measurement_uid,
-  report_id,
-  scores,
   isEmbeddedView,
+  measurementUid,
+  notFound = false,
   ...rest
 }) => {
   const intl = useIntl()
-  const country = getLocalisedRegionName(probe_cc, intl.locale)
 
-  const { user, setSubmitted } = useUser()
+  const { user } = useUser()
   const [showModal, setShowModal] = useState(false)
 
   const {
+    data: measurementData,
+    error,
+    isValidating: isLoadingMeasurementData,
+  } = useSWR(
+    `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/measurement_meta?measurement_uid=${measurementUid}&full=true`,
+    measurementFetcher,
+    {
+      revalidateOnFocus: false,
+      shouldRetryOnError: false,
+    },
+  )
+
+  let {
+    confirmed,
+    anomaly,
+    failure,
+    test_name,
+    measurement_start_time,
+    probe_cc,
+    probe_asn,
+    raw_measurement,
+    measurement_uid,
+    report_id,
+    scores,
+    input,
+  } = measurementData ?? {}
+  notFound = raw_measurement === ''
+  raw_measurement = raw_measurement ? JSON.parse(raw_measurement) : null
+  scores = scores ? JSON.parse(scores) : null
+
+  const country = probe_cc
+    ? getLocalisedRegionName(probe_cc, intl.locale)
+    : null
+
+  // Add the 'AS' prefix to probe_asn when API chooses to send just the number
+  const formattedProbeAsn = String(probe_asn).startsWith('AS')
+    ? probe_asn
+    : `AS${probe_asn}`
+
+  const {
     data: userFeedback,
-    error: userFeedbackError,
+    // error: userFeedbackError,
     mutate: mutateUserFeedback,
-  } = useSWR(`/api/_/measurement_feedback/${measurement_uid}`, fetcher, {
+  } = useSWR(`/api/_/measurement_feedback/${measurementUid}`, fetcher, {
     revalidateOnFocus: false,
     shouldRetryOnError: false,
   })
@@ -177,8 +161,6 @@ const Measurement = ({
       : []
   }, [userFeedback, intl])
 
-  // Add the 'AS' prefix to probe_asn when API chooses to send just the number
-  probe_asn = typeof probe_asn === 'number' ? `AS${probe_asn}` : probe_asn
   if (error) {
     return <ErrorPage statusCode={501} error={error} />
   }
@@ -197,117 +179,108 @@ const Measurement = ({
         </>
       ) : (
         <>
-          <MeasurementContainer
-            isConfirmed={confirmed}
-            isAnomaly={anomaly}
-            isFailure={failure}
-            testName={test_name}
-            country={country}
-            measurement={raw_measurement}
-            input={input}
-            measurement_start_time={measurement_start_time}
-            probe_asn={probe_asn}
-            scores={scores}
-            {...rest}
-            render={({
-              status = 'default',
-              statusIcon,
-              statusLabel,
-              statusInfo,
-              legacy = false,
-              summaryText,
-              headMetadata,
-              details,
-            }) => {
-              const color =
-                failure === true ? pageColors.error : pageColors[status]
-              const info = scores?.msg ?? statusInfo
-              return (
-                <>
-                  {headMetadata && (
-                    <HeadMetadata
-                      content={headMetadata}
-                      testName={test_name}
-                      testUrl={input}
-                      country={country}
-                      date={measurement_start_time}
-                    />
-                  )}
-                  {showModal && (
-                    <FeedbackBox
-                      user={user}
-                      measurement_uid={measurement_uid}
-                      setShowModal={setShowModal}
-                      previousFeedback={userFeedback?.user_feedback}
-                      mutateUserFeedback={mutateUserFeedback}
-                    />
-                  )}
-                  <CommonSummary
-                    measurement_start_time={measurement_start_time}
-                    probe_asn={probe_asn}
-                    probe_cc={probe_cc}
-                    networkName={raw_measurement?.probe_network_name}
-                    color={color}
-                    country={country}
-                    hero={
-                      <Hero
-                        status={status}
-                        icon={statusIcon}
-                        label={statusLabel}
-                        info={info}
-                      />
-                    }
-                    onVerifyClick={() => setShowModal(true)}
-                  />
-                  <div className="container">
-                    <DetailsHeader
-                      testName={test_name}
-                      runtime={raw_measurement?.test_runtime}
-                      notice={legacy}
-                      url={`measurement/${measurement_uid}`}
-                    />
-                    {summaryText && (
-                      <SummaryText
+          {isLoadingMeasurementData && (
+            <div className="flex-1 flex justify-center items-center bg-gray-100 border-t-[62px] border-blue-500">
+              <SpinLoader />
+            </div>
+          )}
+          {measurementData && Object.keys(measurementData).length > 0 && (
+            <MeasurementContainer
+              isConfirmed={confirmed}
+              isAnomaly={anomaly}
+              isFailure={failure}
+              testName={test_name}
+              country={country}
+              measurement={raw_measurement}
+              input={input}
+              measurement_start_time={measurement_start_time}
+              probe_asn={formattedProbeAsn}
+              scores={scores}
+              {...rest}
+              render={({
+                status = 'default',
+                statusIcon,
+                statusLabel,
+                statusInfo,
+                legacy = false,
+                summaryText,
+                headMetadata,
+                details,
+              }) => {
+                const color =
+                  failure === true ? pageColors.error : pageColors[status]
+                const info = scores?.msg ?? statusInfo
+                return (
+                  <>
+                    {headMetadata && (
+                      <HeadMetadata
+                        content={headMetadata}
                         testName={test_name}
                         testUrl={input}
-                        network={probe_asn}
                         country={country}
                         date={measurement_start_time}
-                        content={summaryText}
                       />
                     )}
-                    {details}
-                    <CommonDetails
-                      measurement={raw_measurement}
-                      reportId={report_id}
-                      measurementUid={measurement_uid}
-                      userFeedbackItems={userFeedbackItems}
+                    {showModal && (
+                      <FeedbackBox
+                        user={user}
+                        measurement_uid={measurement_uid}
+                        setShowModal={setShowModal}
+                        previousFeedback={userFeedback?.user_feedback}
+                        mutateUserFeedback={mutateUserFeedback}
+                      />
+                    )}
+                    <CommonSummary
+                      measurement_start_time={measurement_start_time}
+                      probe_asn={formattedProbeAsn}
+                      probe_cc={probe_cc}
+                      networkName={raw_measurement?.probe_network_name}
+                      color={color}
+                      country={country}
+                      hero={
+                        <Hero
+                          status={status}
+                          icon={statusIcon}
+                          label={statusLabel}
+                          info={info}
+                        />
+                      }
+                      onVerifyClick={() => setShowModal(true)}
                     />
-                  </div>
-                </>
-              )
-            }}
-          />
+                    <div className="container">
+                      <DetailsHeader
+                        testName={test_name}
+                        runtime={raw_measurement?.test_runtime}
+                        notice={legacy}
+                        url={`measurement/${measurement_uid}`}
+                      />
+                      {summaryText && (
+                        <SummaryText
+                          testName={test_name}
+                          testUrl={input}
+                          network={formattedProbeAsn}
+                          country={country}
+                          date={measurement_start_time}
+                          content={summaryText}
+                        />
+                      )}
+                      {details}
+                      <CommonDetails
+                        measurement={raw_measurement}
+                        reportId={report_id}
+                        measurementUid={measurement_uid}
+                        userFeedbackItems={userFeedbackItems}
+                      />
+                    </div>
+                  </>
+                )
+              }}
+            />
+          )}
         </>
       )}
     </EmbeddedViewContext.Provider>
   )
-}
-
-Measurement.propTypes = {
-  anomaly: PropTypes.bool,
-  confirmed: PropTypes.bool,
-  error: PropTypes.string,
-  failure: PropTypes.bool,
-  input: PropTypes.any,
-  notFound: PropTypes.bool,
-  probe_asn: PropTypes.any,
-  probe_cc: PropTypes.string,
-  raw_measurement: PropTypes.object,
-  report_id: PropTypes.string,
-  measurement_uid: PropTypes.string,
-  test_name: PropTypes.string,
-  measurement_start_time: PropTypes.string,
 }
 
 export default Measurement
