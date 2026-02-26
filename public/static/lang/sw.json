@@ -631,7 +631,7 @@
   "Networks.Title": "Mtandao",
   "Networks.SearchPlaceholder": "Tafuta kwa ASN",
   "Networks.SearchError": "Hakuna mitandao iliyopatikana",
-  "Findings.Index.Title": "Matokeo ya Udhibiti ({kiasi})",
+  "Findings.Index.Title": "Matokeo ya Udhibiti ({amount})",
   "Findings.Index.SearchPlaceholder": "Tafuta matokeo",
   "Findings.Index.SearchError": "Hakuna matokeo yaliyopatikana ",
   "Findings.Index.HighLightBox.ReadMore": "Soma Zaidi",
