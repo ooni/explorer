@@ -65,12 +65,13 @@ const fetcher = (query) => {
       }
     })
     .catch((e) => {
-      // throw new Error(e?.response?.data?.error ?? e.message)
-      const error = new Error('An error occurred while fetching the data.')
-      // Attach extra info to the error object.
-      error.info = e.response.data.error
-      error.status = e.response.status
-      throw error
+      if (!axios.isAxiosError(e)) throw e
+
+      const status = e.response?.status
+      const message = e.response?.data?.message ?? e.message
+      const data = e.response?.data
+
+      throw new Error(`${status}: ${message}\n${JSON.stringify(data)}`)
     })
 }
 
@@ -160,7 +161,7 @@ const MATChart = ({ query, showFilters = true }) => {
 
   return (
     <>
-      {error && <NoCharts message={error?.info ?? JSON.stringify(error)} />}
+      {error && <NoCharts message={error?.message ?? JSON.stringify(error)} />}
 
       {isValidating ? (
         <ChartSpinLoader height="500px" />

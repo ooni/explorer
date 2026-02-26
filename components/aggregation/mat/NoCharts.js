@@ -7,9 +7,11 @@ export const NoCharts = ({ message }) => {
         <FormattedMessage id="MAT.Charts.NoData.Title" />
       </div>
       <div className="p-8 text-center bg-gray-200 font-bold">
-        <FormattedMessage id="MAT.Charts.NoData.Description" />
+        <div className="mb-2">
+          <FormattedMessage id="MAT.Charts.NoData.Description" />
+        </div>
         {message && (
-          <div className="p-2 m-2">
+          <div className="p-2 m-2 text-sm">
             <FormattedMessage id="MAT.Charts.NoData.Details" />
             <pre className="my-2">{message}</pre>
           </div>
