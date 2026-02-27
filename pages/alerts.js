@@ -1,6 +1,8 @@
 import useSWR from 'swr'
 import AlertList from 'components/alerts/list'
 import SpinLoader from 'components/vendor/SpinLoader'
+import AlertsForm from 'components/alerts/Form'
+import { useRouter } from 'next/router'
 
 const ALERTS_ENDPOINT =
   'https://oonimeasurements.dev.ooni.io/api/v1/detector/changepoints'
@@ -19,23 +21,36 @@ const fetcher = async (url) => {
   return sortedResults
 }
 
+const getParams = ({ since, until, probe_cc, probe_asn, domain }) => {
+  return new URLSearchParams({
+    since,
+    until,
+    ...(probe_cc && { probe_cc }),
+    ...(probe_asn && { probe_asn }),
+    ...(domain && { domain }),
+  }).toString()
+}
 const Alerts = () => {
-  const SINCE = '2012-01-01'
-  const until = new Date().toISOString().slice(0, 10)
-  const params = new URLSearchParams({ since: SINCE, until }).toString()
-  const requestUrl = `${ALERTS_ENDPOINT}?${params}`
+  const router = useRouter()
+  const { since, until, probe_cc, probe_asn, domain } = router.query
+  const params =
+    since && until
+      ? getParams({ since, until, probe_cc, probe_asn, domain })
+      : null
+  const requestUrl = params ? `${ALERTS_ENDPOINT}?${params}` : null
 
   const {
     data: changepoints,
     error,
     isLoading,
-  } = useSWR(requestUrl, fetcher, {
+  } = useSWR(requestUrl ? requestUrl : null, fetcher, {
     revalidateOnFocus: false,
   })
 
   return (
     <div className="container mx-auto">
       <h1 className="my-8">Alerts</h1>
+      <AlertsForm />
       {isLoading && (
         <div className="container pt-32 flex justify-center items-center">
           <SpinLoader />
