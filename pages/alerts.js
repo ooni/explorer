@@ -8,12 +8,28 @@ const ALERTS_ENDPOINT =
   'https://oonimeasurements.dev.ooni.io/api/v1/detector/changepoints'
 
 const fetcher = async (url) => {
-  const response = await fetch(url)
+  let response
+  try {
+    response = await fetch(url)
+  } catch (e) {
+    throw new Error(`Network error: Unable to reach the server.\n${e.message}`)
+  }
+
+  let json
+  try {
+    json = await response.json()
+  } catch (e) {
+    throw new Error(
+      `Failed to parse response (status ${response.status}):\n${e.message}`,
+    )
+  }
 
   if (!response.ok) {
-    throw new Error(`Request failed with status ${response.status}`)
+    throw new Error(
+      `Request failed with status ${response.status}:\n${JSON.stringify(json, null, 2)}`,
+    )
   }
-  const json = await response.json()
+
   const sortedResults =
     json?.results?.sort((a, b) => {
       return new Date(b.start_time) - new Date(a.start_time)
@@ -56,7 +72,11 @@ const Alerts = () => {
           <SpinLoader />
         </div>
       )}
-      {error && <p>{error.message}</p>}
+      {error && (
+        <div className="bg-gray-200 px-6 py-2 rounded-md my-4 text-sm">
+          <pre>{error.message}</pre>
+        </div>
+      )}
       {changepoints && <AlertList changepoints={changepoints} />}
     </div>
   )
