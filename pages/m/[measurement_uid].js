@@ -84,13 +84,31 @@ export async function getServerSideProps({
 }
 
 const measurementFetcher = async (url) => {
-  const response = await fetch(url)
-  if (!response.ok) {
+  let response
+  try {
+    response = await fetch(url)
+  } catch (e) {
     throw new Error(
-      `Failed to fetch: ${response.status} ${response.statusText}`,
+      `Network error: Unable to reach the server.\nStatus: ${e.status}\nMessage: ${e.message}`,
     )
   }
-  return response.json()
+
+  let json
+  try {
+    json = await response.json()
+  } catch (e) {
+    throw new Error(
+      `Failed to parse response (status ${response.status}):\n${e.message}`,
+    )
+  }
+
+  if (!response.ok) {
+    throw new Error(
+      `Request failed with status ${response.status}:\n${JSON.stringify(json, null, 2)}`,
+    )
+  }
+
+  return json
 }
 
 const Measurement = ({
@@ -162,16 +180,13 @@ const Measurement = ({
       : []
   }, [userFeedback, intl])
 
-  if (error) {
-    return <ErrorPage statusCode={501} error={error} />
-  }
-
   return (
     <EmbeddedViewContext.Provider value={isEmbeddedView}>
       <Head>
         <title>{intl.formatMessage({ id: 'General.OoniExplorer' })}</title>
         <meta name="robots" content="noindex" />
       </Head>
+
       {notFound ? (
         <>
           <NotFound
@@ -180,6 +195,11 @@ const Measurement = ({
         </>
       ) : (
         <>
+          {error && (
+            <div className="flex-1 flex justify-center items-center bg-gray-100 border-t-[62px] border-blue-500">
+              <div className="bg-gray-100 p-4 my-6">{error.message}</div>
+            </div>
+          )}
           {isLoadingMeasurementData && (
             <div className="flex-1 flex justify-center items-center bg-gray-100 border-t-[62px] border-blue-500">
               <SpinLoader />
