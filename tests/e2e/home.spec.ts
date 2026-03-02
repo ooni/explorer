@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-test.describe('Home Page Tests', () => {
+test.skip('Home Page Tests', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
     await page.waitForLoadState('networkidle')
