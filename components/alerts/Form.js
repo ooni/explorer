@@ -98,7 +98,7 @@ const AlertsForm = () => {
 
   return (
     <form
-      className="flex flex-col md:flex-row flex-wrap gap-4"
+      className="flex flex-col md:flex-row flex-wrap gap-4 mb-6"
       onSubmit={handleSubmit(onSubmit)}
     >
       <div className="relative">
