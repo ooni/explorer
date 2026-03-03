@@ -36,8 +36,8 @@ const Layout = ({ children, isEmbeddedView }) => {
 
   return (
     <UserProvider>
-      <div className="site flex flex-col min-h-[100vh]">
-        <div className="flex-[1_0_auto]">
+      <div className="site">
+        <div className="flex flex-col min-h-screen">
           <Header />
           {!isEmbeddedView && (
             <ConditionalWrapper
@@ -49,7 +49,9 @@ const Layout = ({ children, isEmbeddedView }) => {
               <NavBar color={navbarColor} />
             </ConditionalWrapper>
           )}
-          <div className={`content ${!navbarColor ? 'mt-[-66px]' : ''}`}>
+          <div
+            className={`content flex-1 flex flex-col ${!navbarColor ? 'mt-[-66px]' : ''}`}
+          >
             {children}
           </div>
         </div>

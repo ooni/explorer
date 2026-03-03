@@ -8,6 +8,7 @@ import { useMemo, useState } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
 import { StickySubMenu } from '../components/SharedStyledComponents'
+import countries from 'data/countries.json'
 
 const Regions = ({ regions, countries }) => {
   return regions.map((regionCode, index) => {
@@ -19,7 +20,7 @@ const Regions = ({ regions, countries }) => {
 
     return (
       <RegionBlock
-        key={index}
+        key={regionCode}
         regionCode={regionCode}
         countries={countries.filter(
           (c) => measuredCountriesInRegion.indexOf(c.alpha_2) > -1,
@@ -72,19 +73,7 @@ const NoCountriesFound = ({ searchTerm }) => (
   </div>
 )
 
-export const getStaticProps = async () => {
-  const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
-  const result = await client.get('/api/_/countries')
-
-  return {
-    props: {
-      countries: result.data.countries,
-    },
-    revalidate: 60 * 60 * 12, // 12 hours
-  }
-}
-
-const Countries = ({ countries }) => {
+const Countries = () => {
   const intl = useIntl()
   const [searchInput, setSearchInput] = useState('')
 
@@ -101,7 +90,7 @@ const Countries = ({ countries }) => {
             b.localisedName,
           ),
         ),
-    [intl, countries],
+    [intl],
   )
 
   const filteredCountries = useMemo(

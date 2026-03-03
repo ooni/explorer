@@ -105,6 +105,7 @@ test.describe('Search Page Tests', () => {
     const dayButtons = page.locator('button[name="day"]')
 
     await dayButtons.first().click()
+    await dayButtons.first().click() // click twice to make sure calendar is reset
     await dayButtons.last().click()
 
     await page.locator('#apply-range').click()
