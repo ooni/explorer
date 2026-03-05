@@ -15,10 +15,10 @@ import dayjs from 'services/dayjs'
 import { fetcherWithPreprocessing } from 'services/fetchers'
 import useSWR from 'swr'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
-import { SectionText } from '../../components/ThirdPartyDataChart'
-import { toCompactNumberUnit } from '../../utils'
-import TestGroupBadge from '/components/Badge'
-import RecentMeasurements from '../../components/RecentMeasurements'
+import { SectionText } from 'components/ThirdPartyDataChart'
+import { toCompactNumberUnit } from 'utils'
+import TestGroupBadge from 'components/Badge'
+import RecentMeasurements from 'components/RecentMeasurements'
 
 const swrOptions = {
   revalidateOnFocus: false,
