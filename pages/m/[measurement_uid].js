@@ -14,9 +14,9 @@ import MeasurementContainer from 'components/measurement/MeasurementContainer'
 import SummaryText from 'components/measurement/SummaryText'
 import useUser from 'hooks/useUser'
 import ErrorPage from 'pages/_error'
-import NotFound from '../../components/NotFound'
-import { fetcher } from '/lib/api'
-import { getLocalisedRegionName } from '/utils/i18nCountries'
+import NotFound from 'components/NotFound'
+import { fetcher } from 'lib/api'
+import { getLocalisedRegionName } from 'utils/i18nCountries'
 import SpinLoader from 'components/vendor/SpinLoader'
 
 const pageColors = {
@@ -29,6 +29,8 @@ const pageColors = {
 }
 
 export const EmbeddedViewContext = createContext(false)
+
+const locales = JSON.parse(process.env.LOCALES || '["en"]')
 
 export async function getServerSideProps({
   query,
@@ -55,7 +57,7 @@ export async function getServerSideProps({
     languageQuery &&
     !languageQuery.startsWith(locale)
   ) {
-    if (process.env.LOCALES?.includes(languageQuery)) {
+    if (locales.includes(languageQuery)) {
       return {
         redirect: {
           destination: `/${languageQuery}${req.url}`,
@@ -64,7 +66,7 @@ export async function getServerSideProps({
       }
     }
     const fallbackLang = languageQuery.split('-')[0]
-    if (process.env.LOCALES?.includes(fallbackLang)) {
+    if (locales.includes(fallbackLang)) {
       return {
         redirect: {
           destination: `/${fallbackLang}${req.url}`,

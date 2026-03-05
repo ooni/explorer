@@ -8,11 +8,11 @@ import useSWR from 'swr'
 import dayjs from 'services/dayjs'
 import dynamic from 'next/dynamic'
 
-import FormattedMarkdown from '/components/FormattedMarkdown'
+import FormattedMarkdown from 'components/FormattedMarkdown'
 import FilterSidebar, {
   queryToFilterMap,
-} from '/components/search/FilterSidebar'
-import ResultsList from '/components/search/ResultsList'
+} from 'components/search/FilterSidebar'
+import ResultsList from 'components/search/ResultsList'
 
 const Loader = dynamic(() => import('/components/search/Loader'), {
   ssr: false,

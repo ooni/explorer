@@ -7,7 +7,7 @@ import { Input } from 'ooni-components'
 import { useMemo, useState } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
-import { StickySubMenu } from '../components/SharedStyledComponents'
+import { StickySubMenu } from 'components/SharedStyledComponents'
 
 const Regions = ({ regions, countries }) => {
   return regions.map((regionCode, index) => {

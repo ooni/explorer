@@ -8,6 +8,7 @@ import { FormattedMessage, useIntl } from 'react-intl'
 import { getLocalisedLanguageName } from 'utils/i18nCountries'
 import { getDirection } from './withIntl'
 import { twMerge } from 'tailwind-merge'
+import Image from 'next/image'
 
 const LanguageSelect = (props) => (
   <div className="flex items-center mb-2 opacity-60 hover:opacity-100">
@@ -153,7 +154,7 @@ const SubMenu = () => {
   )
 }
 
-const languages = process.env.LOCALES
+const languages = JSON.parse(process.env.LOCALES || '["en"]')
 
 export const NavBar = ({ color, className }) => {
   const { locale } = useIntl()
@@ -186,7 +187,14 @@ export const NavBar = ({ color, className }) => {
           <div className="flex flex-row justify-between items-end">
             <div className="z-[1] mb-1">
               <Link href="/" prefetch={false}>
-                <ExplorerLogo height="26px" />
+                <Image
+                  src={ExplorerLogo}
+                  alt="OONI Explorer"
+                  height={26}
+                  width={174}
+                  style={{ height: '26px', width: 'auto' }}
+                  unoptimized
+                />
               </Link>
             </div>
             <div className="StyledResponsiveMenu">

@@ -26,6 +26,9 @@ module.exports = withBundleAnalyzer(
   withSentryConfig(
     {
       output: 'standalone',
+      env: {
+        LOCALES: JSON.stringify(getSupportedLanguages()),
+      },
       async redirects() {
         return [
           {
@@ -95,28 +98,9 @@ module.exports = withBundleAnalyzer(
               gitCommitTags.toString(),
             ),
             'process.env.DEFAULT_LOCALE': DEFAULT_LOCALE,
-            'process.env.LOCALES': JSON.stringify(getSupportedLanguages()),
             'process.env.WDYR': JSON.stringify(process.env.WDYR),
           }),
         )
-
-        // SVG
-        // Grab the existing rule that handles SVG imports
-        const fileLoaderRule = config.module.rules.find((rule) =>
-          rule.test?.test?.('.svg'),
-        )
-
-        config.module.rules.push(
-          // Convert all *.svg imports to React components
-          {
-            test: /\.svg$/i,
-            issuer: /\.[jt]sx?$/,
-            use: ['@svgr/webpack'],
-          },
-        )
-
-        // Modify the file loader rule to ignore *.svg, since we have it handled
-        fileLoaderRule.exclude = /\.svg$/i
 
         // whyDidYouRender
         if (options.dev && !options.isServer) {
