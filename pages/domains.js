@@ -9,7 +9,7 @@ import { useMemo } from 'react'
 import { useIntl } from 'react-intl'
 import { simpleFetcher } from 'services/fetchers'
 import useSWR from 'swr'
-import VirtualizedGrid from '/components/VirtualizedGrid'
+import VirtualizedGrid from 'components/VirtualizedGrid'
 
 const categoryCodes = [...getCategoryCodesMap().keys()]
 

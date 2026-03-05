@@ -8,13 +8,15 @@ export const config = {
   ],
 }
 
+const locales = JSON.parse(process.env.LOCALES || '["en"]')
+
 export function middleware(request) {
   if (
     request.headers.get('accept-language') &&
     request.headers.get('enable-embedded-view')
   ) {
     const lang = request.headers.get('accept-language')
-    if (process.env.LOCALES.includes(lang)) {
+    if (locales.includes(lang)) {
       return NextResponse.rewrite(
         new URL(
           `/${lang}${request.nextUrl.pathname}${request.nextUrl.search}`,
@@ -23,7 +25,7 @@ export function middleware(request) {
       )
     }
     const fallbackLang = request.headers.get('accept-language').split('-')[0]
-    if (process.env.LOCALES.includes(fallbackLang)) {
+    if (locales.includes(fallbackLang)) {
       return NextResponse.rewrite(
         new URL(
           `/${fallbackLang}${request.nextUrl.pathname}${request.nextUrl.search}`,

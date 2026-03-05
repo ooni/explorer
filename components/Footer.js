@@ -1,4 +1,5 @@
-import ExplorerLogo from 'ooni-components/svgs/logos/OONI-HorizontalMonochromeInverted.svg'
+import Image from 'next/image'
+import ooniLogo from 'ooni-components/svgs/logos/OONI-HorizontalMonochromeInverted.svg'
 import PropTypes from 'prop-types'
 import { useIntl } from 'react-intl'
 
@@ -32,7 +33,14 @@ const Footer = () => {
           <div className="py-6 w-full md:w-2/5">
             <div className="flex flex-wrap items-center">
               <div className="p-1 md:mb-4 md:p-0 w-1/2 md:w-full">
-                <ExplorerLogo height="32px" />
+                <Image
+                  src={ooniLogo}
+                  alt="OONI"
+                  height={32}
+                  width={114}
+                  style={{ height: '32px', width: 'auto' }}
+                  unoptimized
+                />
               </div>
               <div className="w-1/2 md:w-2/3">
                 {' '}

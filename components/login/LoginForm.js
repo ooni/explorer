@@ -4,7 +4,7 @@ import { Controller, useForm } from 'react-hook-form'
 
 import SpinLoader from 'components/vendor/SpinLoader'
 import { FormattedMessage } from 'react-intl'
-import { registerUser } from '/lib/api'
+import { registerUser } from 'lib/api'
 
 export const LoginForm = ({ onLogin, redirectTo }) => {
   const [submitting, setSubmitting] = useState(false)
