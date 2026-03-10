@@ -2,8 +2,7 @@
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 const { withSentryConfig } = require('@sentry/nextjs')
 const glob = require('glob')
-const { basename, resolve } = require('path')
-const { execSync } = require('child_process')
+const { basename } = require('node:path')
 
 const withBundleAnalyzer = require('@next/bundle-analyzer')({
   enabled: process.env.ANALYZE === 'true',
@@ -28,6 +27,7 @@ module.exports = withBundleAnalyzer(
       output: 'standalone',
       env: {
         LOCALES: JSON.stringify(getSupportedLanguages()),
+        DEFAULT_LOCALE: DEFAULT_LOCALE,
       },
       async redirects() {
         return [
@@ -57,64 +57,7 @@ module.exports = withBundleAnalyzer(
         }
         return headers
       },
-      // async rewrites() {
-      //   return [
-      //     {
-      //       source: '/api/v1/:path*',
-      //       destination: 'https://api.ooni.org/api/v1/:path*',
-      //     },
-      //     {
-      //       source: '/api/_/:path*',
-      //       destination: 'https://api.ooni.org/api/_/:path*',
-      //     },
-      //   ]
-      // },
       webpack: (config, options) => {
-        const gitCommitSHAShort = process.env.RUN_GIT_COMMIT_SHA_SHORT
-          ? execSync(process.env.RUN_GIT_COMMIT_SHA_SHORT)
-          : ''
-        const gitCommitSHA = process.env.RUN_GIT_COMMIT_SHA
-          ? execSync(process.env.RUN_GIT_COMMIT_SHA)
-          : ''
-        const gitCommitRef = process.env.RUN_GIT_COMMIT_REF
-          ? execSync(process.env.RUN_GIT_COMMIT_REF)
-          : ''
-        const gitCommitTags = process.env.RUN_GIT_COMMIT_TAGS
-          ? execSync(process.env.RUN_GIT_COMMIT_TAGS)
-          : ''
-
-        config.plugins.push(
-          new options.webpack.DefinePlugin({
-            'process.env.GIT_COMMIT_SHA_SHORT': JSON.stringify(
-              gitCommitSHAShort.toString(),
-            ),
-            'process.env.GIT_COMMIT_SHA': JSON.stringify(
-              gitCommitSHA.toString(),
-            ),
-            'process.env.GIT_COMMIT_REF': JSON.stringify(
-              gitCommitRef.toString(),
-            ),
-            'process.env.GIT_COMMIT_TAGS': JSON.stringify(
-              gitCommitTags.toString(),
-            ),
-            'process.env.DEFAULT_LOCALE': DEFAULT_LOCALE,
-            'process.env.WDYR': JSON.stringify(process.env.WDYR),
-          }),
-        )
-
-        // whyDidYouRender
-        if (options.dev && !options.isServer) {
-          const originalEntry = config.entry
-          config.entry = async () => {
-            const wdrPath = resolve(__dirname, './scripts/wdyr.js')
-            const entries = await originalEntry()
-            if (entries['main.js'] && !entries['main.js'].includes(wdrPath)) {
-              entries['main.js'].unshift(wdrPath)
-            }
-            return entries
-          }
-        }
-
         if (!options.isServer) {
           config.resolve.fallback = {
             ...config.resolve.fallback,
