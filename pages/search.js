@@ -14,7 +14,7 @@ import FilterSidebar, {
 } from 'components/search/FilterSidebar'
 import ResultsList from 'components/search/ResultsList'
 
-const Loader = dynamic(() => import('/components/search/Loader'), {
+const Loader = dynamic(() => import('components/search/Loader'), {
   ssr: false,
 })
 

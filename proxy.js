@@ -10,7 +10,7 @@ export const config = {
 
 const locales = JSON.parse(process.env.LOCALES || '["en"]')
 
-export function middleware(request) {
+export function proxy(request) {
   if (
     request.headers.get('accept-language') &&
     request.headers.get('enable-embedded-view')
