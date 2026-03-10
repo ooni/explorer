@@ -7,14 +7,10 @@ import NProgress from 'nprogress'
 import { useEffect } from 'react'
 import 'scripts/wdyr'
 
-import dynamic from 'next/dynamic'
 import 'ooni-components/dist/tailwind.css'
 import 'public/static/nprogress.css'
-
-const Layout = dynamic(() => import('components/Layout'))
-const LocaleProvider = dynamic(() =>
-  import('components/withIntl').then((c) => c.LocaleProvider),
-)
+import Layout from 'components/Layout'
+import { LocaleProvider } from 'components/withIntl'
 
 export const firaSans = Fira_Sans({
   weight: ['300', '400', '600'],
@@ -43,7 +39,6 @@ export default function App({ Component, pageProps, err }) {
     }
   }, [router])
 
-  // Workaround for https://github.com/vercel/next.js/issues/8592
   return (
     <>
       <style jsx global>{`

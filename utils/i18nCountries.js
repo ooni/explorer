@@ -1,4 +1,4 @@
-import '@formatjs/intl-displaynames/polyfill'
+import '@formatjs/intl-displaynames/polyfill.js'
 
 import '@formatjs/intl-displaynames/locale-data/ar'
 import '@formatjs/intl-displaynames/locale-data/de'
@@ -6,6 +6,7 @@ import '@formatjs/intl-displaynames/locale-data/en'
 import '@formatjs/intl-displaynames/locale-data/es'
 import '@formatjs/intl-displaynames/locale-data/fa'
 import '@formatjs/intl-displaynames/locale-data/fr'
+import '@formatjs/intl-displaynames/locale-data/is'
 import '@formatjs/intl-displaynames/locale-data/my'
 import '@formatjs/intl-displaynames/locale-data/pt'
 import '@formatjs/intl-displaynames/locale-data/ru'
