@@ -8,7 +8,7 @@ import { useEffect } from 'react'
 import 'scripts/wdyr'
 
 import 'ooni-components/dist/tailwind.css'
-import 'public/static/nprogress.css'
+import 'styles/nprogress.css'
 import Layout from 'components/Layout'
 import { LocaleProvider } from 'components/withIntl'
 
