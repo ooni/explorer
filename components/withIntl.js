@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react'
 import { IntlProvider } from 'react-intl'
 
 // Statically imported so it is always available immediately (no dynamic bundling needed)
-import enMessages from '../public/static/lang/en.json'
+import enMessages from 'public/static/lang/en.json'
 
 export const getDirection = (locale) => {
   switch (locale) {
