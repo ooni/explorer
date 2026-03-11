@@ -3,14 +3,18 @@
 // Note that this config is unrelated to the Vercel Edge Runtime and is also required when running locally.
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 
-import * as Sentry from '@sentry/nextjs'
-
-const SENTRY_DSN = process.env.SENTRY_DSN || process.env.NEXT_PUBLIC_SENTRY_DSN
+import * as Sentry from "@sentry/nextjs";
 
 Sentry.init({
-  dsn: SENTRY_DSN,
+  dsn: "https://49af7fff247c445b9a7c98ee21ddfd2f@o155150.ingest.us.sentry.io/1427510",
+
   // Define how likely traces are sampled. Adjust this value in production, or use tracesSampler for greater control.
   tracesSampleRate: 1,
-  // Setting this option to true will print useful information to the console while you're setting up Sentry.
-  debug: false,
-})
+
+  // Enable logs to be sent to Sentry
+  enableLogs: true,
+
+  // Enable sending user PII (Personally Identifiable Information)
+  // https://docs.sentry.io/platforms/javascript/guides/nextjs/configuration/options/#sendDefaultPii
+  sendDefaultPii: true,
+});
