@@ -12,8 +12,7 @@ const NotFound = ({ title }) => {
             src="/static/images/OONI_404.svg"
             alt="404"
             height={200}
-            className="min-w-[200px]"
-            style={{ height: '200px', width: 'auto' }}
+            width={200}
             unoptimized
           />
           <div>

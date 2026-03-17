@@ -14,8 +14,8 @@ const Custom404 = () => {
         <title>{intl.formatMessage({ id: 'Error.404.PageNotFound' })}</title>
       </Head>
       <div className="container">
-        <div className="flex items-center justify-center">
-          <div>
+        <div className="flex items-center justify-center flex-col-reverse md:flex-row">
+          <div className="mb-4">
             <h4 className="text-blue-500">
               <FormattedMessage id="Error.404.Heading" />
             </h4>
@@ -58,7 +58,6 @@ const Custom404 = () => {
               src={OONI404}
               alt="404"
               height={500}
-              style={{ height: '500px', width: 'auto' }}
               unoptimized
             />
           </div>
