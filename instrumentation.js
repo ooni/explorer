@@ -4,7 +4,7 @@ export async function register() {
   if (process.env.NEXT_RUNTIME === 'nodejs') {
     // Load Intl.DisplayNames polyfill + locale data before any SSR.
     // Ensures server and client render identical country/language names (avoids hydration errors).
-    await import('./utils/intlDisplayNamesInit')
+    await import('./utils/intlDisplayNamesInitServer')
     await import('./sentry.server.config')
   }
 

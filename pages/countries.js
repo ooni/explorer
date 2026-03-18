@@ -45,16 +45,16 @@ const RegionBlock = ({ regionCode, countries }) => {
     <div className="my-4">
       <div
         className="h-[200px] mt-[-200px] md:h-[140px] md:mt-[-140px]"
-        id={regionName}
+        id={regionCode}
       />
-      <h2 className="py-2">{regionName}</h2>
+      <h2 className="py-2" suppressHydrationWarning>{regionName}</h2>
       <CountryList countries={countries} itemsPerRow={4} />
     </div>
   )
 }
 
 export const RegionLink = ({ href, label }) => (
-  <a className="px-2 md:px-4 block text-blue-500 underline" href={href}>
+  <a className="px-2 md:px-4 block text-blue-500 underline" href={href} suppressHydrationWarning>
     {label}
   </a>
 )
@@ -145,30 +145,13 @@ const Countries = ({ countries }) => {
               />
             </div>
             <div className="flex flex-row flex-wrap">
-              <RegionLink
-                href={`#${getLocalisedRegionName('002', intl.locale)}`}
-                label={getLocalisedRegionName('002', intl.locale)}
-              />
-              <RegionLink
-                href={`#${getLocalisedRegionName('019', intl.locale)}`}
-                label={getLocalisedRegionName('019', intl.locale)}
-              />
-              <RegionLink
-                href={`#${getLocalisedRegionName('142', intl.locale)}`}
-                label={getLocalisedRegionName('142', intl.locale)}
-              />
-              <RegionLink
-                href={`#${getLocalisedRegionName('150', intl.locale)}`}
-                label={getLocalisedRegionName('150', intl.locale)}
-              />
-              <RegionLink
-                href={`#${getLocalisedRegionName('009', intl.locale)}`}
-                label={getLocalisedRegionName('009', intl.locale)}
-              />
-              <RegionLink
-                href={`#${getLocalisedRegionName('AQ', intl.locale)}`}
-                label={getLocalisedRegionName('AQ', intl.locale)}
-              />
+              {regions.map((region) => (
+                <RegionLink
+                  key={region}
+                  href={`#${region}`}
+                  label={getLocalisedRegionName(region, intl.locale)}
+                />
+              ))}
             </div>
           </div>
         </StickySubMenu>

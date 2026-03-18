@@ -240,6 +240,7 @@ export const NavBar = ({ color, className }) => {
                         className="text-inherit opacity-100"
                         key={c}
                         value={c}
+                        suppressHydrationWarning
                       >
                         {getLocalisedLanguageName(c, c)}
                       </option>

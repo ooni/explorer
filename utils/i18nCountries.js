@@ -1,4 +1,3 @@
-import 'utils/intlDisplayNamesInit'
 import { countryList } from 'country-util'
 
 const getLocale = (locale) => {

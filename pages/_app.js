@@ -3,6 +3,7 @@ import { useRouter } from 'next/router'
 import NProgress from 'nprogress'
 import { useEffect } from 'react'
 import 'scripts/wdyr'
+import 'utils/intlDisplayNamesInitClient'
 
 import 'ooni-components/dist/tailwind.css'
 import Layout from 'components/Layout'

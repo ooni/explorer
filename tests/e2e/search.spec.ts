@@ -100,7 +100,7 @@ test.describe('Search Page Tests', () => {
     await page.getByRole('button', { name: /previous month/i }).click()
 
     // Click first and last day buttons
-    const dayButtons = page.locator('button[name="day"]')
+    const dayButtons = page.getByRole('gridcell').locator('button')
 
     await dayButtons.first().click()
     await dayButtons.last().click()
