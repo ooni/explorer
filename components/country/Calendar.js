@@ -1,7 +1,7 @@
 import { UTCDate } from '@date-fns/utc'
 import { ResponsiveCalendar } from '@nivo/calendar'
-import dynamic from 'next/dynamic'
 import SpinLoader from 'components/vendor/SpinLoader'
+import CTABox from 'components/CallToActionBox'
 import { add, compareDesc } from 'date-fns'
 import { colors } from 'ooni-components'
 import React, { useMemo, useState } from 'react'
@@ -25,7 +25,6 @@ const prepareDataForCalendar = (data) => {
   }))
 }
 
-const CTABox = dynamic(() => import('components/CallToActionBox'), { ssr: false })
 const CallToActionBox = () => {
   const { countryName } = useCountry()
   return (

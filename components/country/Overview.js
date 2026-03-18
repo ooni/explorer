@@ -6,10 +6,9 @@ import { BoxWithTitle } from './boxes'
 import ReportsSection from 'components/ReportsSection'
 import FindingsSection from 'components/FindingsSection'
 import useFindings from 'hooks/useFindings'
-import dynamic from 'next/dynamic'
-export const OONI_BLOG_BASE_URL = 'https://ooni.org'
+import BlockText from 'components/BlockText'
 
-const BlockText = dynamic(() => import('components/BlockText'), { ssr: false })
+export const OONI_BLOG_BASE_URL = 'https://ooni.org'
 
 export const FeaturedArticle = ({ link, title }) => (
   <div className="py-1">

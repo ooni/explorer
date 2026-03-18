@@ -305,7 +305,6 @@ export const Form = ({ onSubmit, query }) => {
                   <option
                     key={idx}
                     value={c.iso3166_alpha2}
-                    suppressHydrationWarning
                   >
                     {c.localisedCountryName}
                   </option>

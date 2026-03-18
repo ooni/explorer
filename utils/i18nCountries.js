@@ -1,3 +1,4 @@
+import 'utils/intlDisplayNamesInit'
 import { countryList } from 'country-util'
 
 const getLocale = (locale) => {
@@ -8,9 +9,7 @@ const getLocale = (locale) => {
 
 export const getLocalisedRegionName = (regionCode, locale) => {
   try {
-    return new Intl.DisplayNames([getLocale(locale)], { type: 'region' }).of(
-      String(regionCode),
-    )
+    return new Intl.DisplayNames([getLocale(locale)], { type: 'region' }).of(String(regionCode))
   } catch (e) {
     return regionCode
   }
@@ -18,9 +17,7 @@ export const getLocalisedRegionName = (regionCode, locale) => {
 
 export const getLocalisedLanguageName = (regionCode, locale) => {
   try {
-    return new Intl.DisplayNames([getLocale(locale)], { type: 'language' }).of(
-      String(regionCode),
-    )
+    return new Intl.DisplayNames([getLocale(locale)], { type: 'language' }).of(String(regionCode))
   } catch (e) {
     return regionCode
   }

@@ -2,7 +2,10 @@ import * as Sentry from '@sentry/nextjs'
 
 export async function register() {
   if (process.env.NEXT_RUNTIME === 'nodejs') {
-    await import('./sentry.server.config');
+    // Load Intl.DisplayNames polyfill + locale data before any SSR.
+    // Ensures server and client render identical country/language names (avoids hydration errors).
+    await import('./utils/intlDisplayNamesInit')
+    await import('./sentry.server.config')
   }
 
   if (process.env.NEXT_RUNTIME === 'edge') {

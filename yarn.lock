@@ -403,12 +403,26 @@
     decimal.js "^10.6.0"
     tslib "^2.8.1"
 
+"@formatjs/ecma402-abstract@3.1.2":
+  version "3.1.2"
+  resolved "https://registry.yarnpkg.com/@formatjs/ecma402-abstract/-/ecma402-abstract-3.1.2.tgz#03d26548b40071120cf616bb6e8a59dfce2050fe"
+  integrity sha512-ApPcse35dtr+snmBbDtnBkc9bvAZCxr9DDzgUR3nXiHZgpwU+85g1Mz0KRqjh7kIgJ6rgIQLQVqYx56rf58XZg==
+  dependencies:
+    "@formatjs/fast-memoize" "3.1.1"
+    "@formatjs/intl-localematcher" "0.8.2"
+    decimal.js "^10.6.0"
+
 "@formatjs/fast-memoize@3.1.0":
   version "3.1.0"
   resolved "https://registry.yarnpkg.com/@formatjs/fast-memoize/-/fast-memoize-3.1.0.tgz#f8643d44803df8f579506d40804f4faeba6f5da2"
   integrity sha512-b5mvSWCI+XVKiz5WhnBCY3RJ4ZwfjAidU0yVlKa3d3MSgKmH1hC3tBGEAtYyN5mqL7N0G5x0BOUYyO8CEupWgg==
   dependencies:
     tslib "^2.8.1"
+
+"@formatjs/fast-memoize@3.1.1":
+  version "3.1.1"
+  resolved "https://registry.yarnpkg.com/@formatjs/fast-memoize/-/fast-memoize-3.1.1.tgz#3fa0cf158869d9fa8a1af618b66a066ebcaf6051"
+  integrity sha512-CbNbf+tlJn1baRnPkNePnBqTLxGliG6DDgNa/UtV66abwIjwsliPMOt0172tzxABYzSuxZBZfcp//qI8AvBWPg==
 
 "@formatjs/icu-messageformat-parser@3.5.1":
   version "3.5.1"
@@ -427,14 +441,13 @@
     "@formatjs/ecma402-abstract" "3.1.1"
     tslib "^2.8.1"
 
-"@formatjs/intl-displaynames@^7.2.2":
-  version "7.2.2"
-  resolved "https://registry.yarnpkg.com/@formatjs/intl-displaynames/-/intl-displaynames-7.2.2.tgz#6d8bb68db77b18ad73deddb3105df01f994b07a9"
-  integrity sha512-GPff9ZmeHoKQOQMo/s/tX6h0pNRdpqNFZ9u1q3I/9LVdkgpd0j1kKvIPdj5lVIIrGmY22NGOx9s3O2iH5w1hrw==
+"@formatjs/intl-displaynames@^7.2.3":
+  version "7.2.3"
+  resolved "https://registry.yarnpkg.com/@formatjs/intl-displaynames/-/intl-displaynames-7.2.3.tgz#04cac8e57df6d9d3daa9ed905404ac4049a01da6"
+  integrity sha512-wrgaSLKbA+icq21YOn6fW8vFc3j2yH7ECx4rY5/Q6wm96+5JCxxtLTuaDrnBdYcqj+E+y/ctn891uq8kuOiyfw==
   dependencies:
-    "@formatjs/ecma402-abstract" "3.1.1"
-    "@formatjs/intl-localematcher" "0.8.1"
-    tslib "^2.8.1"
+    "@formatjs/ecma402-abstract" "3.1.2"
+    "@formatjs/intl-localematcher" "0.8.2"
 
 "@formatjs/intl-localematcher@0.8.1":
   version "0.8.1"
@@ -443,6 +456,13 @@
   dependencies:
     "@formatjs/fast-memoize" "3.1.0"
     tslib "^2.8.1"
+
+"@formatjs/intl-localematcher@0.8.2":
+  version "0.8.2"
+  resolved "https://registry.yarnpkg.com/@formatjs/intl-localematcher/-/intl-localematcher-0.8.2.tgz#062aa99dbccc89afde95b812e9f029721b4c6fef"
+  integrity sha512-q05KMYGJLyqFNFtIb8NhWLF5X3aK/k0wYt7dnRFuy6aLQL+vUwQ1cg5cO4qawEiINybeCPXAWlprY2mSBjSXAQ==
+  dependencies:
+    "@formatjs/fast-memoize" "3.1.1"
 
 "@formatjs/intl@4.1.2":
   version "4.1.2"

@@ -8,7 +8,7 @@
   "dependencies": {
     "@cassiozen/usestatemachine": "^1.0.1",
     "@date-fns/utc": "^2.1.1",
-    "@formatjs/intl-displaynames": "^7.2.2",
+    "@formatjs/intl-displaynames": "^7.2.3",
     "@hookform/resolvers": "^3.3.4",
     "@microlink/react-json-view": "^1.27.0",
     "@nivo/bar": "0.97.0",

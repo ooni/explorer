@@ -16,7 +16,7 @@ const HighlightBox = ({ countryCode, title, text, dates, footer }) => {
         {countryCode && (
           <div className="flex items-center">
             <Flag countryCode={countryCode} size={32} />
-            <h3 className="ml-2 my-0" suppressHydrationWarning>
+            <h3 className="ml-2 my-0">
               {getLocalisedRegionName(countryCode, intl.locale)}
             </h3>
           </div>

@@ -33,7 +33,7 @@ const FormattedMarkdown = ({ id, defaultMessage, values }) => {
   const intl = useIntl()
 
   return (
-    <FormattedMarkdownBase suppressHydrationWarning>
+    <FormattedMarkdownBase>
       {intl.formatMessage({ id, defaultMessage }, values)}
     </FormattedMarkdownBase>
   )
