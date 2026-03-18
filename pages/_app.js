@@ -1,6 +1,3 @@
-//FROM:
-// https://github.com/zeit/next.js/blob/master/examples/with-sentry
-// https://github.com/vercel/next.js/blob/canary/examples/with-loading/pages/_app.js
 import { Fira_Sans } from 'next/font/google'
 import { useRouter } from 'next/router'
 import NProgress from 'nprogress'

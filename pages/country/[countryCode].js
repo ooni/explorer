@@ -139,7 +139,7 @@ const Country = ({ countryCode, overviewStats, reports, error }) => {
           <div className="container">
             <StickySubMenu
               title={
-                <div className="flex flex-row items-center gap-3">
+                <div className="flex flex-row items-center gap-3" suppressHydrationWarning>
                   <Flag countryCode={countryCode} size={38} />
                   {countryName}
                 </div>

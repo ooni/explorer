@@ -1,4 +1,3 @@
-import BlockText from 'components/BlockText'
 import Calendar from 'components/country/Calendar'
 import { FormattedMessage, useIntl } from 'react-intl'
 import FormattedMarkdown from '../FormattedMarkdown'
@@ -7,8 +6,10 @@ import { BoxWithTitle } from './boxes'
 import ReportsSection from 'components/ReportsSection'
 import FindingsSection from 'components/FindingsSection'
 import useFindings from 'hooks/useFindings'
-
+import dynamic from 'next/dynamic'
 export const OONI_BLOG_BASE_URL = 'https://ooni.org'
+
+const BlockText = dynamic(() => import('components/BlockText'), { ssr: false })
 
 export const FeaturedArticle = ({ link, title }) => (
   <div className="py-1">
