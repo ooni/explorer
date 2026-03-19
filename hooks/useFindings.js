@@ -1,6 +1,6 @@
 import { useMemo } from 'react'
 import useSWR from 'swr'
-import { apiEndpoints, fetcher } from 'lib/api'
+import { apiEndpoints, fetcher } from '/lib/api'
 import { simpleFetcher } from 'services/fetchers'
 
 function normalizeString(str) {

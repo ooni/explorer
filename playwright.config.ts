@@ -74,7 +74,7 @@ export default defineConfig({
 
   /* Run your local dev server before starting the tests */
   webServer: {
-    command: 'NODE_ENV=test yarn run dev',
+    command: 'yarn run dev',
     url: 'http://localhost:3100',
     reuseExistingServer: !process.env.CI,
   },

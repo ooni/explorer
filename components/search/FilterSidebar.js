@@ -265,7 +265,7 @@ const FilterSidebar = () => {
           >
             {countryOptions.map((v, idx) => {
               return (
-                <option key={idx} value={v.alpha_2} suppressHydrationWarning>
+                <option key={idx} value={v.alpha_2}>
                   {v.name}
                 </option>
               )

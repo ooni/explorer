@@ -16,7 +16,7 @@ const CountryList = ({ countries, itemsPerRow = 6 }) => {
               <div className="self-start">
                 <Flag countryCode={c.alpha_2} size={22} border />
               </div>
-              <div className="font-bold ml-2" suppressHydrationWarning>{c.localisedName}</div>
+              <div className="font-bold ml-2">{c.localisedName}</div>
             </div>
           }
           count={c.count}

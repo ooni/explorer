@@ -7,7 +7,7 @@ import { Input } from 'ooni-components'
 import { useMemo, useState } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
-import { StickySubMenu } from 'components/SharedStyledComponents'
+import { StickySubMenu } from '../components/SharedStyledComponents'
 
 const Regions = ({ regions, countries }) => {
   return regions.map((regionCode, index) => {
@@ -45,16 +45,16 @@ const RegionBlock = ({ regionCode, countries }) => {
     <div className="my-4">
       <div
         className="h-[200px] mt-[-200px] md:h-[140px] md:mt-[-140px]"
-        id={regionCode}
+        id={regionName}
       />
-      <h2 className="py-2" suppressHydrationWarning>{regionName}</h2>
+      <h2 className="py-2">{regionName}</h2>
       <CountryList countries={countries} itemsPerRow={4} />
     </div>
   )
 }
 
 export const RegionLink = ({ href, label }) => (
-  <a className="px-2 md:px-4 block text-blue-500 underline" href={href} suppressHydrationWarning>
+  <a className="px-2 md:px-4 block text-blue-500 underline" href={href}>
     {label}
   </a>
 )
@@ -145,13 +145,30 @@ const Countries = ({ countries }) => {
               />
             </div>
             <div className="flex flex-row flex-wrap">
-              {regions.map((region) => (
-                <RegionLink
-                  key={region}
-                  href={`#${region}`}
-                  label={getLocalisedRegionName(region, intl.locale)}
-                />
-              ))}
+              <RegionLink
+                href={`#${getLocalisedRegionName('002', intl.locale)}`}
+                label={getLocalisedRegionName('002', intl.locale)}
+              />
+              <RegionLink
+                href={`#${getLocalisedRegionName('019', intl.locale)}`}
+                label={getLocalisedRegionName('019', intl.locale)}
+              />
+              <RegionLink
+                href={`#${getLocalisedRegionName('142', intl.locale)}`}
+                label={getLocalisedRegionName('142', intl.locale)}
+              />
+              <RegionLink
+                href={`#${getLocalisedRegionName('150', intl.locale)}`}
+                label={getLocalisedRegionName('150', intl.locale)}
+              />
+              <RegionLink
+                href={`#${getLocalisedRegionName('009', intl.locale)}`}
+                label={getLocalisedRegionName('009', intl.locale)}
+              />
+              <RegionLink
+                href={`#${getLocalisedRegionName('AQ', intl.locale)}`}
+                label={getLocalisedRegionName('AQ', intl.locale)}
+              />
             </div>
           </div>
         </StickySubMenu>

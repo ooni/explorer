@@ -8,15 +8,13 @@ export const config = {
   ],
 }
 
-const locales = JSON.parse(process.env.LOCALES || '["en"]')
-
-export function proxy(request) {
+export function middleware(request) {
   if (
     request.headers.get('accept-language') &&
     request.headers.get('enable-embedded-view')
   ) {
     const lang = request.headers.get('accept-language')
-    if (locales.includes(lang)) {
+    if (process.env.LOCALES.includes(lang)) {
       return NextResponse.rewrite(
         new URL(
           `/${lang}${request.nextUrl.pathname}${request.nextUrl.search}`,
@@ -25,7 +23,7 @@ export function proxy(request) {
       )
     }
     const fallbackLang = request.headers.get('accept-language').split('-')[0]
-    if (locales.includes(fallbackLang)) {
+    if (process.env.LOCALES.includes(fallbackLang)) {
       return NextResponse.rewrite(
         new URL(
           `/${fallbackLang}${request.nextUrl.pathname}${request.nextUrl.search}`,

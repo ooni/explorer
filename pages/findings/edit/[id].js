@@ -6,13 +6,9 @@ import { useEffect, useMemo } from 'react'
 import { useIntl } from 'react-intl'
 import useSWR from 'swr'
 import useSWRMutation from 'swr/mutation'
-import ButtonSpinner from 'components/ButtonSpinner'
-import {
-  apiEndpoints,
-  fetcher,
-  updateIncidentReport,
-  deleteIncidentReport,
-} from 'lib/api'
+import ButtonSpinner from '../../../components/ButtonSpinner'
+import { deleteIncidentReport } from '../../../lib/api'
+import { apiEndpoints, fetcher, updateIncidentReport } from '/lib/api'
 
 const EditReport = () => {
   const intl = useIntl()

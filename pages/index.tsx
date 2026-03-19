@@ -5,11 +5,11 @@ import Link from 'next/link'
 import { colors } from 'ooni-components'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { twMerge } from 'tailwind-merge'
-import FormattedMarkdown from 'components/FormattedMarkdown'
-import HighlightSection from 'components/landing/HighlightsSection'
-import CoverageChart from 'components/landing/Stats'
-import highlightContent from 'components/landing/highlights.json'
-import { toCompactNumberUnit } from 'utils'
+import FormattedMarkdown from '../components/FormattedMarkdown'
+import HighlightSection from '../components/landing/HighlightsSection'
+import CoverageChart from '../components/landing/Stats'
+import highlightContent from '../components/landing/highlights.json'
+import { toCompactNumberUnit } from '../utils'
 interface StatsItemProps {
   label: React.ReactNode
   unit?: string

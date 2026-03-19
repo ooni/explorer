@@ -1,7 +1,7 @@
 import { UTCDate } from '@date-fns/utc'
 import { ResponsiveCalendar } from '@nivo/calendar'
-import SpinLoader from 'components/vendor/SpinLoader'
 import CTABox from 'components/CallToActionBox'
+import SpinLoader from 'components/vendor/SpinLoader'
 import { add, compareDesc } from 'date-fns'
 import { colors } from 'ooni-components'
 import React, { useMemo, useState } from 'react'

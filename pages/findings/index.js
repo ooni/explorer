@@ -60,10 +60,14 @@ const Index = () => {
           </div>
         )}
         <StickySubMenu
-          title={intl.formatMessage(
-            { id: 'Findings.Index.Title' },
-            { amount: sortedAndFilteredData.length },
-          )}
+          title={
+            <>
+              {intl.formatMessage(
+                { id: 'Findings.Index.Title' },
+                { amount: sortedAndFilteredData.length },
+              )}
+            </>
+          }
         >
           <div className="flex gap-4 flex-col md:flex-row w-full md:w-auto">
             <Input
@@ -73,8 +77,11 @@ const Index = () => {
               })}
               error={
                 searchValue &&
-                sortedAndFilteredData?.length === 0 &&
-                intl.formatMessage({ id: 'Findings.Index.SearchError' })
+                sortedAndFilteredData?.length === 0 && (
+                  <>
+                    {intl.formatMessage({ id: 'Findings.Index.SearchError' })}
+                  </>
+                )
               }
             />
             <Select

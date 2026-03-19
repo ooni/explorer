@@ -24,7 +24,7 @@ const blockingTypeLabels = {
 }
 
 export const getRowLabel = (key, yAxis, locale = 'en') => {
-  const messages = require(`public/static/lang/${locale}.json`)
+  const messages = require(`/public/static/lang/${locale}.json`)
 
   switch (yAxis) {
     case 'probe_cc':

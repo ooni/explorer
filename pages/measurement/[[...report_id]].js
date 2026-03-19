@@ -1,7 +1,7 @@
 import axios from 'axios'
 import ErrorPage from 'pages/_error'
 import { useIntl } from 'react-intl'
-import NotFound from 'components/NotFound'
+import NotFound from '../../components/NotFound'
 import Head from 'next/head'
 
 export async function getServerSideProps({ query, req }) {
