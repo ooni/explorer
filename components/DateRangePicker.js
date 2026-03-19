@@ -163,8 +163,8 @@ const DateRangePicker = ({
             weekday: 'w-10 h-10 uppercase align-middle text-center',
             day: 'w-10 h-10 align-middle text-center border-0 px-0',
             day_button:
-              'rounded-full w-10 h-10 transition-colors hover:bg-blue-100 focus:outline-none focus-visible:ring focus-visible:ring-blue-300 focus-visible:ring-opacity-50 active:bg-blue-600 active:text-white',
-            selected: 'text-white bg-blue-500 hover:bg-blue-500',
+              'rounded-full w-10 h-10 transition-colors focus:outline-none focus-visible:ring focus-visible:ring-blue-300 focus-visible:ring-opacity-50 [.day-selected_&]:hover:bg-blue-500 hover:bg-blue-100',
+            selected: 'day-selected text-white bg-blue-500',
             today: 'font-bold',
             disabled:
               'opacity-25 hover:bg-white active:bg-white active:text-gray-800',
