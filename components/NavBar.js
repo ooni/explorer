@@ -8,31 +8,18 @@ import { FormattedMessage, useIntl } from 'react-intl'
 import { getLocalisedLanguageName } from 'utils/i18nCountries'
 import { getDirection } from './withIntl'
 import { twMerge } from 'tailwind-merge'
+import Image from 'next/image'
 
-const LanguageSelect = (props) => (
+const LanguageSelect = ({ onChange, value, children }) => (
   <div className="flex items-center mb-2 opacity-60 hover:opacity-100">
     <select
-      className="
-        appearance-none
-        bg-transparent
-        text-gray-50
-        cursor-pointer
-        capitalize
-        outline-none
-        border-none
-        p-0
-      "
-      {...props}
-    />
-    <span
-      className="
-      w-2
-      h-2
-      bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%3E%3Ctitle%3Edown-arrow%3C%2Ftitle%3E%3Cg%20fill%3D%22%23FFFFFF%22%3E%3Cpath%20d%3D%22M10.293%2C3.293%2C6%2C7.586%2C1.707%2C3.293A1%2C1%2C0%2C0%2C0%2C.293%2C4.707l5%2C5a1%2C1%2C0%2C0%2C0%2C1.414%2C0l5-5a1%2C1%2C0%2C1%2C0-1.414-1.414Z%22%20fill%3D%22%23FFFFFF%22%3E%3C%2Fpath%3E%3C%2Fg%3E%3C%2Fsvg%3E')]
-      bg-no-repeat
-      bg-contain
-    "
-    />
+      className="appearance-none bg-transparent text-gray-50 cursor-pointer capitalize outline-none border-none p-0"
+      value={value}
+      onChange={onChange}
+    >
+      {children}
+    </select>
+    <span className="w-2 h-2 bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%3E%3Ctitle%3Edown-arrow%3C%2Ftitle%3E%3Cg%20fill%3D%22%23FFFFFF%22%3E%3Cpath%20d%3D%22M10.293%2C3.293%2C6%2C7.586%2C1.707%2C3.293A1%2C1%2C0%2C0%2C0%2C.293%2C4.707l5%2C5a1%2C1%2C0%2C0%2C0%2C1.414%2C0l5-5a1%2C1%2C0%2C1%2C0-1.414-1.414Z%22%20fill%3D%22%23FFFFFF%22%3E%3C%2Fpath%3E%3C%2Fg%3E%3C%2Fsvg%3E')] bg-no-repeat bg-contain" />
   </div>
 )
 
@@ -153,12 +140,12 @@ const SubMenu = () => {
   )
 }
 
-const languages = process.env.LOCALES
+const languages = JSON.parse(process.env.LOCALES || '["en"]')
 
 export const NavBar = ({ color, className }) => {
   const { locale } = useIntl()
   const router = useRouter()
-  const { pathname, asPath, query } = router
+  const { pathname, query } = router
   const { user, logout } = useUser()
 
   const [showMenu, setShowMenu] = useState(false)
@@ -166,7 +153,7 @@ export const NavBar = ({ color, className }) => {
   const handleLocaleChange = (event) => {
     const htmlEl = document.documentElement
     htmlEl.setAttribute('dir', getDirection(event.target.value))
-    router.push({ pathname, query }, asPath, { locale: event.target.value })
+    router.push({ pathname, query }, undefined, { locale: event.target.value })
   }
 
   const logoutUser = (e) => {
@@ -186,7 +173,14 @@ export const NavBar = ({ color, className }) => {
           <div className="flex flex-row justify-between items-end">
             <div className="z-[1] mb-1">
               <Link href="/" prefetch={false}>
-                <ExplorerLogo height="26px" />
+                <Image
+                  src={ExplorerLogo}
+                  alt="OONI Explorer"
+                  height={26}
+                  width={174}
+                  style={{ height: '26px', width: 'auto' }}
+                  unoptimized
+                />
               </Link>
             </div>
             <div className="StyledResponsiveMenu">
@@ -243,10 +237,10 @@ export const NavBar = ({ color, className }) => {
                   <LanguageSelect onChange={handleLocaleChange} value={locale}>
                     {languages.map((c) => (
                       <option
-                        suppressHydrationWarning
                         className="text-inherit opacity-100"
                         key={c}
                         value={c}
+                        suppressHydrationWarning
                       >
                         {getLocalisedLanguageName(c, c)}
                       </option>

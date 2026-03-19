@@ -24,7 +24,7 @@ export const GridBox = ({
                   id="Network.Summary.Country.Measurements"
                   values={{
                     measurementsTotal: (
-                      <span className="font-bold text-blue-500">{count}</span>
+                      <span className="font-bold text-blue-500" suppressHydrationWarning>{count}</span>
                     ),
                   }}
                 />
@@ -36,7 +36,7 @@ export const GridBox = ({
             <>
               {Object.entries(multiCount).map(([key, value]) => (
                 <div className="mb-1" key={key}>
-                  <span className="font-bold text-blue-500">{value} </span>
+                  <span className="font-bold text-blue-500" suppressHydrationWarning>{value} </span>
                   <FormattedMessage
                     id={`Domain.CountriesBlocking.CountryList.${key}`}
                   />
