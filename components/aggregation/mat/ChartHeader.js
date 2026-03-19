@@ -1,8 +1,9 @@
+import Image from 'next/image'
 import OONILogo from 'ooni-components/svgs/logos/OONI-HorizontalMonochrome.svg'
 import { FaEdit } from 'react-icons/fa'
 import { useIntl } from 'react-intl'
 import CountryNameLabel from './CountryNameLabel'
-import { testGroups, testNames } from '/components/test-info'
+import { testGroups, testNames } from 'components/test-info'
 import { useState, useMemo } from 'react'
 import { useMATContext } from './MATContext'
 import FailureForm from './FailureForm'
@@ -161,7 +162,15 @@ export const ChartHeader = ({ options: opts }) => {
         {options.legend && <Legend />}
         {options.logo && (
           <div>
-            <OONILogo className="opacity-50" height="32px" />
+            <Image
+              src={OONILogo}
+              alt="OONI"
+              height={32}
+              width={100}
+              className="opacity-50"
+              style={{ height: '32px', width: 'auto' }}
+              unoptimized
+            />
           </div>
         )}
       </div>

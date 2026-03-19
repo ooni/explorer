@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { apiEndpoints, fetcher } from '/lib/api'
+import { apiEndpoints, fetcher } from 'lib/api'
 
 import NotFound from 'components/NotFound'
 import FindingDisplay from 'components/findings/FindingDisplay'

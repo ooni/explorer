@@ -1,7 +1,9 @@
-/* global require */
 import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import { useEffect, useState } from 'react'
 import { IntlProvider } from 'react-intl'
+
+// Statically imported so it is always available immediately (no dynamic bundling needed)
+import enMessages from 'public/static/lang/en.json'
 
 export const getDirection = (locale) => {
   switch (locale) {
@@ -15,22 +17,30 @@ export const getDirection = (locale) => {
 
 export const LocaleProvider = ({ children }) => {
   const { locale, defaultLocale } = useRouter()
+  const [messages, setMessages] = useState(enMessages)
 
-  const messages = useMemo(() => {
-    try {
-      const messages = require(`../public/static/lang/${locale}.json`)
-      const defaultMessages = require(
-        `../public/static/lang/${defaultLocale}.json`,
-      )
+  useEffect(() => {
+    let cancelled = false
 
-      const mergedMessages = Object.assign({}, defaultMessages, messages)
-      return mergedMessages
-    } catch (e) {
-      console.error(`Failed to load messages for ${locale}: ${e.message}`)
-      const defaultMessages = require(
-        `../public/static/lang/${defaultLocale}.json`,
-      )
-      return defaultMessages
+    const loadMessages = async () => {
+      if (locale === defaultLocale) {
+        if (!cancelled) setMessages(enMessages)
+        return
+      }
+      try {
+        const res = await fetch(`/static/lang/${locale}.json`)
+        if (!res.ok) throw new Error(`HTTP ${res.status}`)
+        const localeMessages = await res.json()
+        if (!cancelled) setMessages({ ...enMessages, ...localeMessages })
+      } catch (e) {
+        console.error(`Failed to load messages for ${locale}: ${e.message}`)
+        if (!cancelled) setMessages(enMessages)
+      }
+    }
+
+    loadMessages()
+    return () => {
+      cancelled = true
     }
   }, [locale, defaultLocale])
 

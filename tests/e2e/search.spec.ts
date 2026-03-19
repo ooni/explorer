@@ -96,16 +96,13 @@ test.describe('Search Page Tests', () => {
     // Click in the since date filter and select range from first to last day of the previous month
     await page.locator('#since-filter').click()
 
-    // Click previous month button (react-day-picker uses aria-label or button with class nav_button_previous)
-    await page
-      .locator('button.nav_button_previous, button[aria-label*="previous"]')
-      .click()
+    // Click previous month button (react-day-picker v9: aria-label "Go to the Previous Month")
+    await page.getByRole('button', { name: /previous month/i }).click()
 
     // Click first and last day buttons
-    const dayButtons = page.locator('button[name="day"]')
+    const dayButtons = page.getByRole('gridcell').locator('button')
 
     await dayButtons.first().click()
-    await dayButtons.first().click() // click twice to make sure calendar is reset
     await dayButtons.last().click()
 
     await page.locator('#apply-range').click()
