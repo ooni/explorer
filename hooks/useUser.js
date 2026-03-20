@@ -8,7 +8,7 @@ import {
   useState,
 } from 'react'
 
-import { apiEndpoints, getAPI, loginUser, refreshToken } from '/lib/api'
+import { apiEndpoints, getAPI, loginUser, refreshToken } from 'lib/api'
 
 const TWELVE_HOURS = 1000 * 60 * 60 * 12
 const TEN_MINUTES = 1000 * 60 * 10

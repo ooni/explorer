@@ -17,9 +17,9 @@ import { Controller, useForm } from 'react-hook-form'
 import { useIntl } from 'react-intl'
 import { localisedCountries } from 'utils/i18nCountries'
 import * as yup from 'yup'
-import useUser from '../../hooks/useUser'
+import useUser from 'hooks/useUser'
 import FindingDisplay from './FindingDisplay'
-import { testNames } from '/components/test-info'
+import { testNames } from 'components/test-info'
 
 const elements = [
   defineMetadata({

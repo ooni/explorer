@@ -1,20 +1,13 @@
-//FROM:
-// https://github.com/zeit/next.js/blob/master/examples/with-sentry
-// https://github.com/vercel/next.js/blob/canary/examples/with-loading/pages/_app.js
 import { Fira_Sans } from 'next/font/google'
 import { useRouter } from 'next/router'
 import NProgress from 'nprogress'
 import { useEffect } from 'react'
 import 'scripts/wdyr'
+import 'utils/intlDisplayNamesInitClient'
 
-import dynamic from 'next/dynamic'
 import 'ooni-components/dist/tailwind.css'
-import 'public/static/nprogress.css'
-
-const Layout = dynamic(() => import('components/Layout'))
-const LocaleProvider = dynamic(() =>
-  import('components/withIntl').then((c) => c.LocaleProvider),
-)
+import Layout from 'components/Layout'
+import { LocaleProvider } from 'components/withIntl'
 
 export const firaSans = Fira_Sans({
   weight: ['300', '400', '600'],
@@ -43,12 +36,55 @@ export default function App({ Component, pageProps, err }) {
     }
   }, [router])
 
-  // Workaround for https://github.com/vercel/next.js/issues/8592
   return (
     <>
       <style jsx global>{`
         html {
           font-family: ${firaSans.style.fontFamily};
+        }
+        #nprogress { pointer-events: none; }
+        #nprogress .bar {
+          background: #e67700;
+          position: fixed;
+          z-index: 1031;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 3px;
+        }
+        #nprogress .peg {
+          display: block;
+          position: absolute;
+          right: 0px;
+          width: 100px;
+          height: 100%;
+          box-shadow: 0 0 10px #e67700, 0 0 5px #e67700;
+          opacity: 1.0;
+          transform: rotate(3deg) translate(0px, -4px);
+        }
+        #nprogress .spinner {
+          display: block;
+          position: fixed;
+          z-index: 1031;
+          top: 15px;
+          right: 15px;
+        }
+        #nprogress .spinner-icon {
+          width: 18px;
+          height: 18px;
+          box-sizing: border-box;
+          border: solid 2px transparent;
+          border-top-color: #e67700;
+          border-left-color: #e67700;
+          border-radius: 50%;
+          animation: nprogress-spinner 400ms linear infinite;
+        }
+        .nprogress-custom-parent { overflow: hidden; position: relative; }
+        .nprogress-custom-parent #nprogress .spinner,
+        .nprogress-custom-parent #nprogress .bar { position: absolute; }
+        @keyframes nprogress-spinner {
+          0%   { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
         }
       `}</style>
       <LocaleProvider>

@@ -25,7 +25,7 @@ const Footer = ({ handleRangeSelect, range, close }) => {
   const intl = useIntl()
 
   return (
-    <div className="flex justify-end gap-1">
+    <div className="flex justify-end gap-1 mb-2 me-2">
       <button
         className="btn btn-primary"
         type="button"
@@ -145,32 +145,34 @@ const DateRangePicker = ({
           dir={getDirection(intl.locale)}
           locale={dateFnsLocale}
           mode="range"
-          toDate={tomorrow}
+          resetOnSelect={true}
+          endMonth={tomorrow}
+          hidden={[{ after: tomorrow }]}
           selected={range}
           onSelect={onSelect}
           classNames={{
-            vhidden: 'sr-only',
-            caption: 'flex justify-center items-center h-10',
+            month_caption: 'flex justify-center items-center h-10',
             root: 'text-gray-800',
-            months: 'flex gap-4 relative px-4',
+            months: 'relative px-2 mb-4 mt-2',
             caption_label: 'text-xl px-1',
-            nav_button:
-              'inline-flex justify-center items-center absolute top-0 w-10 h-10 rounded-full text-gray-600 hover:bg-gray-100',
-            nav_button_next: 'right-0',
-            nav_button_previous: 'left-0',
-            table: 'border-collapse border-spacing-0',
-            head_cell: 'w-10 h-10 uppercase align-middle text-center',
-            cell: 'w-10 h-10 align-middle text-center border-0 px-0',
-            day: 'rounded-full w-10 h-10 transition-colors hover:bg-blue-100 focus:outline-none focus-visible:ring focus-visible:ring-blue-300 focus-visible:ring-opacity-50 active:bg-blue-600 active:text-white',
-            day_selected: 'text-white bg-blue-500 hover:bg-blue-500',
-            day_today: 'font-bold',
-            day_disabled:
+            button_previous:
+              'inline-flex justify-center items-center absolute top-0 left-0 w-10 h-10 rounded-full text-gray-600 hover:bg-gray-100',
+            button_next:
+              'inline-flex justify-center items-center absolute top-0 right-0 w-10 h-10 rounded-full text-gray-600 hover:bg-gray-100',
+            month_grid: 'border-collapse border-spacing-0',
+            weekday: 'w-10 h-10 uppercase align-middle text-center',
+            day: 'w-10 h-10 align-middle text-center border-0 px-0',
+            day_button:
+              'rounded-full w-10 h-10 transition-colors focus:outline-none focus-visible:ring focus-visible:ring-blue-300 focus-visible:ring-opacity-50 [.day-selected_&]:hover:bg-blue-500 hover:bg-blue-100',
+            selected: 'day-selected text-white bg-blue-500',
+            today: 'font-bold',
+            disabled:
               'opacity-25 hover:bg-white active:bg-white active:text-gray-800',
-            day_outside: 'enabled:opacity-50',
-            day_range_middle: 'rounded-none',
-            day_range_end: 'rounded-l-none rounded-r-full',
-            day_range_start: 'rounded-r-none rounded-l-full',
-            day_hidden: 'hidden',
+            outside: 'enabled:opacity-50',
+            range_middle: 'rounded-none',
+            range_end: 'rounded-l-none rounded-r-full',
+            range_start: 'rounded-r-none rounded-l-full',
+            hidden: 'hidden',
           }}
           footer={
             <Footer

@@ -1,5 +1,5 @@
 import { useIntl } from 'react-intl'
-import { testGroups, testNames } from '../components/test-info'
+import { testGroups, testNames } from 'components/test-info'
 
 export const TestNameOptions = ({ includeAllOption = true }) => {
   const intl = useIntl()

@@ -11,7 +11,7 @@ import {
   colorError,
   colorNormal,
 } from '../colors'
-import { testNames } from '/components/test-info'
+import { testNames } from 'components/test-info'
 
 const testsWithStates = [
   'web_connectivity',
