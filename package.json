@@ -60,7 +60,7 @@
     "@types/nprogress": "^0.2.3",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
-    "@welldone-software/why-did-you-render": "^8.0.1",
+    "@welldone-software/why-did-you-render": "^10.0.1",
     "glob": "^10.5.0",
     "imap-simple": "^5.1.0",
     "jsdom": "^23.2.0",
