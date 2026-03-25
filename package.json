@@ -29,7 +29,7 @@
     "html-validate": "^10.11.1",
     "lodash.debounce": "^4.0.8",
     "lru-cache": "^10.1.0",
-    "markdown-to-jsx": "^7.7.4",
+    "markdown-to-jsx": "^9.7.13",
     "next": "^16.2.1",
     "nprogress": "^0.2.0",
     "ooni-components": "0.8.0-alpha.3",
