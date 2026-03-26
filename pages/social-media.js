@@ -37,7 +37,7 @@ export const SOCIAL_MEDIA_TESTS_STRINGS = {
 }
 
 export const domainsList = (domains) =>
-  `<ul className='grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 my-4'>${domains.map((d) => `<li><a href='#${d}'>${d}</a></li>`).join('')}</ul>`
+  `\n\n<ul class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 my-4">${domains.map((d) => `<li><a href="#${d}">${d}</a></li>`).join('')}</ul>`
 
 export const getServerSideProps = async () => {
   try {
@@ -104,9 +104,9 @@ const Page = (props) => {
           id="ThematicPage.SocialMedia.Text"
           values={{
             domainsList: domainsList(domains),
-            appsList: `<ul className="my-4">${SOCIAL_MEDIA_IM_TESTS.map(
+            appsList: `\n\n<ul class="my-4">${SOCIAL_MEDIA_IM_TESTS.map(
               (d) =>
-                `<li><a href='#${d}'>${intl.formatMessage({
+                `<li><a href="#${d}">${intl.formatMessage({
                   id: SOCIAL_MEDIA_TESTS_STRINGS[d],
                 })}</a></li>`,
             ).join('')}</ul>`,

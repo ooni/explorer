@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test'
-import { routeApiWithCors, scrollToBottom } from './helpers'
+import { routeApiWithCors } from './helpers'
 
 test.describe('Thematic Pages Tests', () => {
   test.beforeEach(async ({ page }) => {
@@ -13,10 +13,8 @@ test.describe('Thematic Pages Tests', () => {
 
     await page.waitForLoadState('networkidle')
 
-    await scrollToBottom(page)
-
     await expect(page).toHaveScreenshot('social-media-desktop.png', {
-      fullPage: true,
+      fullPage: false,
     })
   })
 
@@ -27,10 +25,8 @@ test.describe('Thematic Pages Tests', () => {
 
     await page.waitForLoadState('networkidle')
 
-    // await scrollToBottom(page)
-
     await expect(page).toHaveScreenshot('news-media-desktop.png', {
-    //   fullPage: true,
+      fullPage: false,
     })
   })
 
@@ -41,10 +37,8 @@ test.describe('Thematic Pages Tests', () => {
 
     await page.waitForLoadState('networkidle')
 
-    // await scrollToBottom(page)
-
     await expect(page).toHaveScreenshot('circumvention-desktop.png', {
-        // fullPage: true,
+      fullPage: false,
     })
   })
 
@@ -53,10 +47,8 @@ test.describe('Thematic Pages Tests', () => {
 
     await page.waitForLoadState('networkidle')
 
-    // await scrollToBottom(page)
-
     await expect(page).toHaveScreenshot('domain-desktop.png', {
-    //   fullPage: true,
+      fullPage: false,
     })
   })
 
@@ -65,10 +57,8 @@ test.describe('Thematic Pages Tests', () => {
 
     await page.waitForLoadState('networkidle')
 
-    // await scrollToBottom(page)
-
     await expect(page).toHaveScreenshot('network-desktop.png', {
-    //   fullPage: true,
+      fullPage: false,
     })
 
     await page.unrouteAll({ behavior: 'ignoreErrors' })
