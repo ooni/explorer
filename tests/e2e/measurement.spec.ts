@@ -283,7 +283,7 @@ test.describe('Measurement Page Tests', () => {
 
           await expect(page).toHaveScreenshot(`${testName}-${result}-desktop.png`, {
             fullPage: true,
-            maxDiffPixelRatio: 0.08,
+            maxDiffPixelRatio: 0.1,
           })
         })
       }

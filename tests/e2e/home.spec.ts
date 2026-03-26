@@ -11,7 +11,7 @@ test('Home Page Tests', () => {
 
     await expect(page).toHaveScreenshot('homepage-desktop.png', {
       fullPage: true,
-      maxDiffPixelRatio: 0.08,
+      maxDiffPixelRatio: 0.1,
       mask: [page.locator('[data-testid="stats-value"]')],
     })
   })

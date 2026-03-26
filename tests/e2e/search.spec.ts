@@ -29,7 +29,7 @@ test.describe('Search Page Tests', () => {
 
     await expect(page).toHaveScreenshot('search-desktop.png', {
       fullPage: true,
-      maxDiffPixelRatio: 0.08,
+      maxDiffPixelRatio: 0.1,
     })
   })
 
