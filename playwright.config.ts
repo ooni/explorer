@@ -14,6 +14,16 @@ import { defineConfig, devices } from '@playwright/test'
 export default defineConfig({
   timeout: 60000,
 
+  /* Same baseline on Linux (CI) and macOS (local); avoids *-linux vs *-darwin missing files */
+  snapshotPathTemplate: '{testDir}/{testFilePath}-snapshots/{arg}-{projectName}{ext}',
+
+  /* Allow minor font/AA differences between OSes when sharing one baseline */
+  expect: {
+    toHaveScreenshot: {
+      maxDiffPixelRatio: 0.02,
+    },
+  },
+
   testDir: './tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
