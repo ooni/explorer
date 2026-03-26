@@ -1,19 +1,17 @@
 import { test, expect } from '@playwright/test'
+import { scrollToBottom } from './helpers'
 
-test.skip('Home Page Tests', () => {
-  test.beforeEach(async ({ page }) => {
+test('Home Page Tests', () => {
+  test('matches the screenshot', async ({ page }) => {
     await page.goto('/')
+
     await page.waitForLoadState('networkidle')
-  })
 
-  // TODO: Check if stats appear
-  // TODO: Check if monthly coverage graph loads
-  // TODO: Check if Highlights cards are displayed
+    await scrollToBottom(page)
 
-  test('explore button works', async ({ page }) => {
-    const exploreLink = page.getByRole('link', { name: 'Explore' }).first()
-
-    await exploreLink.click()
-    await expect(page).toHaveURL(/\/chart\/mat/)
+    await expect(page).toHaveScreenshot('homepage-desktop.png', {
+      fullPage: true,
+      mask: [page.locator('[data-testid="stats-value"]')],
+    })
   })
 })

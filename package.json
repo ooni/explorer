@@ -56,7 +56,7 @@
     "@types/react": "18.3.18"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.6",
+    "@biomejs/biome": "^2.4.9",
     "@playwright/test": "^1.57.0",
     "@types/node": "^22.5.4",
     "@types/react": "^18.3.5",
