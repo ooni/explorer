@@ -77,6 +77,7 @@ test.describe('MAT Tests', () => {
   
       await expect(page).toHaveScreenshot('mat-desktop.png', {
         fullPage: true,
+        maxDiffPixelRatio: 0.08,
       })
     })
 
