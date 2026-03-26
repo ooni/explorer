@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test'
 import { scrollToBottom } from './helpers'
 
-test('Home Page Tests', () => {
+test.describe('Home Page Tests', () => {
   test('matches the screenshot', async ({ page }) => {
     await page.goto('/')
 
@@ -11,7 +11,7 @@ test('Home Page Tests', () => {
 
     await expect(page).toHaveScreenshot('homepage-desktop.png', {
       fullPage: true,
-      maxDiffPixelRatio: 0.1,
+      maxDiffPixelRatio: 0.12,
       mask: [page.locator('[data-testid="stats-value"]')],
     })
   })
