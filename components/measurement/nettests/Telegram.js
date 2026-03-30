@@ -5,7 +5,7 @@ import AccessPointStatus from '../AccessPointStatus'
 import { DetailsBox } from '../DetailsBox'
 import { formatTwoTuple } from 'utils'
 
-const TelegramDetails = ({ measurement, render }) => {
+const TelegramDetails = ({ measurement, render, isAnomaly }) => {
   const testKeys = measurement.test_keys
   const {
     telegram_web_status,
@@ -27,7 +27,6 @@ const TelegramDetails = ({ measurement, render }) => {
 
   let telegramWebOK = true
   let telegramDesktopOK = true
-  let anomaly = false
   let hint = (
     <FormattedMessage id="Measurement.Status.Hint.Telegram.Reachable" />
   )
@@ -46,8 +45,7 @@ const TelegramDetails = ({ measurement, render }) => {
     headMetadata = message.unReachable
   }
 
-  if (!telegramWebOK || !telegramDesktopOK) {
-    anomaly = true
+  if (isAnomaly || (!telegramWebOK || !telegramDesktopOK)) {
     hint = <FormattedMessage id="Measurement.Status.Hint.Telegram.Blocked" />
     summaryText =
       'Measurement.Details.SummaryText.Telegram.DesktopAndAppFailure'
@@ -55,7 +53,7 @@ const TelegramDetails = ({ measurement, render }) => {
   }
 
   return render({
-    status: anomaly ? 'anomaly' : 'reachable',
+    status: isAnomaly ? 'anomaly' : 'reachable',
     statusInfo: hint,
     summaryText: summaryText,
     headMetadata: {
