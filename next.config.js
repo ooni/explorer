@@ -1,27 +1,15 @@
 // https://nextjs.org/docs/api-reference/next.config.js/introduction
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
 const { withSentryConfig } = require('@sentry/nextjs')
-const glob = require('glob')
-const { basename } = require('node:path')
 
-const LANG_DIR = './public/static/lang/'
 const DEFAULT_LOCALE = 'en'
-
-function getSupportedLanguages() {
-  const supportedLanguages = new Set()
-  supportedLanguages.add(DEFAULT_LOCALE) // at least 1 supported language
-  const files = glob.sync(`${LANG_DIR}/**/*.json`)
-  for (const f of files) {
-    supportedLanguages.add(basename(f, '.json'))
-  }
-  return [...supportedLanguages]
-}
+const SUPPORTED_LANGUAGES = [ 'en', 'zh-hant', 'zh-CN', 'vi', 'tr', 'th', 'sw', 'ru', 'pt-BR', 'my', 'km', 'is', 'fr', 'fa', 'es', 'de', 'ar']
 
 module.exports = withSentryConfig(
   {
     output: 'standalone',
     env: {
-      LOCALES: JSON.stringify(getSupportedLanguages()),
+      LOCALES: JSON.stringify(SUPPORTED_LANGUAGES),
       DEFAULT_LOCALE: DEFAULT_LOCALE,
     },
     async redirects() {
@@ -34,7 +22,7 @@ module.exports = withSentryConfig(
       ]
     },
     i18n: {
-      locales: getSupportedLanguages(),
+      locales: SUPPORTED_LANGUAGES,
       defaultLocale: DEFAULT_LOCALE,
     },
     async headers() {
