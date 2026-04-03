@@ -7,5 +7,6 @@
   "General.NoData": "データがありません",
   "General.Submit": "送信",
   "General.Close": "閉じる",
-  "General.Cancel": "キャンセル"
+  "General.Cancel": "キャンセル",
+  "General.Error": "エラー"
 }
