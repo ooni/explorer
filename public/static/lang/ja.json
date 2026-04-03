@@ -1,1 +1,11 @@
-{}
+{
+  "General.OoniExplorer": "OONI Explorer",
+  "General.OK": "OK",
+  "General.Anomaly": "異常",
+  "General.Accessible": "アクセス可能",
+  "General.Failed": "失敗",
+  "General.NoData": "データがありません",
+  "General.Submit": "送信",
+  "General.Close": "閉じる",
+  "General.Cancel": "キャンセル"
+}
