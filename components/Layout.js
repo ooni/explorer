@@ -1,38 +1,39 @@
-import PropTypes from 'prop-types'
-import { useMemo } from 'react'
+import PropTypes from "prop-types";
+import { useMemo } from "react";
 
-import { StyledStickyNavBar } from 'components/SharedStyledComponents'
-import { UserProvider } from 'hooks/useUser'
-import { useRouter } from 'next/router'
-import ConditionalWrapper from './ConditionalWrapper'
-import Footer from './Footer'
-import Header from './Header'
-import NavBar from './NavBar'
+import { StyledStickyNavBar } from "components/SharedStyledComponents";
+import { UserProvider } from "hooks/useUser";
+import { useRouter } from "next/router";
+import ConditionalWrapper from "./ConditionalWrapper";
+import Footer from "./Footer";
+import Header from "./Header";
+import NavBar from "./NavBar";
+import Incident from "./Incident";
 
 const Layout = ({ children, isEmbeddedView }) => {
-  const { pathname } = useRouter()
+  const { pathname } = useRouter();
 
   const navbarColor = useMemo(() => {
-    return pathname === '/' ||
+    return pathname === "/" ||
       pathname.match(/^\/m\/\S+/) ||
       pathname.match(/^\/measurement\/\S+/)
       ? null
-      : 'bg-blue-500'
-  }, [pathname])
+      : "bg-blue-500";
+  }, [pathname]);
 
   const navbarSticky = useMemo(() => {
     return (
-      pathname === '/countries' ||
-      pathname === '/domains' ||
-      pathname === '/human-rights' ||
-      pathname === '/social-media' ||
-      pathname === '/news-media' ||
-      pathname === '/circumvention' ||
-      pathname === '/networks' ||
-      pathname === '/findings' ||
+      pathname === "/countries" ||
+      pathname === "/domains" ||
+      pathname === "/human-rights" ||
+      pathname === "/social-media" ||
+      pathname === "/news-media" ||
+      pathname === "/circumvention" ||
+      pathname === "/networks" ||
+      pathname === "/findings" ||
       pathname.match(/^\/country\/\S+/)
-    )
-  }, [pathname])
+    );
+  }, [pathname]);
 
   return (
     <UserProvider>
@@ -50,8 +51,9 @@ const Layout = ({ children, isEmbeddedView }) => {
             </ConditionalWrapper>
           )}
           <div
-            className={`content flex-1 flex flex-col ${!navbarColor ? 'mt-[-66px]' : ''}`}
+            className={`content flex-1 flex flex-col ${!navbarColor ? "mt-[-66px]" : ""}`}
           >
+            <Incident />
             {children}
           </div>
         </div>
@@ -62,11 +64,11 @@ const Layout = ({ children, isEmbeddedView }) => {
         )}
       </div>
     </UserProvider>
-  )
-}
+  );
+};
 
 Layout.propTypes = {
   children: PropTypes.object.isRequired,
-}
+};
 
-export default Layout
+export default Layout;
