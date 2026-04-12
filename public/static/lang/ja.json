@@ -12,5 +12,7 @@
   "General.Loading": "読み込み中…",
   "General.Apply": "適用",
   "General.Reset": "リセット",
-  "General.Login": "ログイン"
+  "General.Login": "ログイン",
+  "General.Logout": "ログアウト",
+  "General.Edit": "編集"
 }
