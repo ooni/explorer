@@ -692,5 +692,6 @@
   "MAT.Table.Header.tcp_ok": "TCP OK",
   "MAT.Table.Header.outcome_blocked": "Outcome Blockiert",
   "MAT.Table.Header.outcome_down": "Outcome Ausser Betrieb",
-  "MAT.Table.Header.outcome_ok": "Outcome OK"
+  "MAT.Table.Header.outcome_ok": "Outcome OK",
+  "MAT.Table.Header.blocked": "Blockiert"
 }
