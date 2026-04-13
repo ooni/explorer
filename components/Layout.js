@@ -8,7 +8,6 @@ import ConditionalWrapper from "./ConditionalWrapper";
 import Footer from "./Footer";
 import Header from "./Header";
 import NavBar from "./NavBar";
-import Incident from "./Incident";
 
 const Layout = ({ children, isEmbeddedView }) => {
   const { pathname } = useRouter();
@@ -53,7 +52,6 @@ const Layout = ({ children, isEmbeddedView }) => {
           <div
             className={`content flex-1 flex flex-col ${!navbarColor ? "mt-[-66px]" : ""}`}
           >
-            <Incident />
             {children}
           </div>
         </div>
