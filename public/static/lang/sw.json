@@ -1,5 +1,5 @@
 {
-  "General.OoniExplorer": "OONI Explorer ",
+  "General.OoniExplorer": "OONI Explorer",
   "General.OK": "Sawa",
   "General.Error": "Dosari",
   "General.Anomaly": "haipo sawa",
@@ -675,5 +675,23 @@
   "ThematicPage.Circumvention.ReportsTitle": "Research Reports: Blocking of Circumvention Tools",
   "ThematicPage.Circumvention.Text": "As circumvention tools (such as VPNs) enable users to bypass internet censorship, some governments have blocked access to them. Below we share reports that document the blocking of circumvention tool websites around the world based on OONI data. \n\nInterested in viewing the latest OONI data on the reachability of circumvention tools?\n\nView charts with OONI data for the following circumvention tool websites:\n{domainsList}\n\nView charts with OONI data for the following circumvention tools:\n{appsList}\n\nYou can change the countries and date range of OONI charts. We encourage you to refer to our [documentation on interpreting OONI data](https://ooni.org/support/interpreting-ooni-data/). \n\n**Important:** Please note that the presence of [anomalous measurements](https://ooni.org/support/interpreting-ooni-data/#anomalous-measurements) is not always indicative of blocking, as [false positives](https://ooni.org/support/interpreting-ooni-data/#false-positives) can occur. Moreover, circumvention tools often have built-in circumvention techniques for evading censorship. We therefore recommend referring to **[Tor Metrics](https://metrics.torproject.org/)** and to the **[Psiphon Data Engine](https://psix.ca/)** to view usage stats and gain a more comprehensive understanding of whether these tools work in each country.",
   "ThematicPage.Circumvention.MetaTags.Title": "Upatikanaji wa vifaa vya kukwepa udhibiti",
-  "ThematicPage.Circumvention.MetaTags.Description": "View the reachability of censorship circumvention tools around the world through OONI data."
+  "ThematicPage.Circumvention.MetaTags.Description": "View the reachability of censorship circumvention tools around the world through OONI data.",
+  "Tests.ECHCheck.Name": "angalia ECH",
+  "MAT.Table.Header.outcome_ok": "Matokeo OK",
+  "MAT.Table.Header.blocked": "Imezuliwa",
+  "MAT.Table.Header.down": "Chini",
+  "MAT.Table.Header.dns_isp_blocked": "DSN ISP Imezuiliwa",
+  "MAT.Table.Header.dns_isp_down": "DNS ISP Chini",
+  "MAT.Table.Header.dns_isp_ok": "DSN ISP sawa",
+  "MAT.Table.Header.dns_other_blocked": "DSN nyingine Imezuiliwa",
+  "MAT.Table.Header.dns_other_down": "DNS nyingine chini",
+  "MAT.Table.Header.dns_other_ok": "DNS nyingine OK",
+  "MAT.Table.Header.tls_blocked": "TLS Imezuiliwa",
+  "MAT.Table.Header.tls_down": "TLS Chini",
+  "MAT.Table.Header.tls_ok": "TLS sawa",
+  "MAT.Table.Header.tcp_blocked": "TCP imezuiliwa",
+  "MAT.Table.Header.tcp_down": "TCP Chini",
+  "MAT.Table.Header.tcp_ok": "TCP Sawa",
+  "MAT.Table.Header.outcome_blocked": "Matokeo yamezuiliwa",
+  "MAT.Table.Header.outcome_down": "Matokeo chini"
 }
