@@ -87,7 +87,7 @@
   "Measurement.Status.Hint.Websites.TCPBlock": "Uzuiaji wa TCP/IP",
   "Measurement.Status.Hint.Websites.Unavailable": "Tovuti haipo hewani",
   "Measurement.SummaryText.Websites.Accessible": "Katika{date},{WebsiteURL}ilifanikiwa ilipojaribiwa katika{network}ndani ya{country}.",
-  "Measurement.SummaryText.Websites.Anomaly": "Tarehe{date}, tovuti ya{WebsiteURL}ilionyesha alama ya {reason}zilizowasilishwa katika mtandao wa {network}nchini {country}.\n\nHii inaweza kumaanisha kuwa tovuti ya {WebsiteURL}ilikuwa imezuiliwa lakini<link-to-docs>majibu yasiyosahihi</link-to-docs>yanaweza kutokea\n\nTafadhali chunguza data za vipimo vifuatavyo.",
+  "Measurement.SummaryText.Websites.Anomaly": "juu {Tarehe}, tovuti ya{WebsiteURL}ilionyesha alama ya {sababu} zilizowasilishwa katika mtandao wa {network} {nchini}.\n\nHii inaweza kumaanisha kuwa tovuti ya {WebsiteURL} ilikuwa imezuiliwa, lakini <link-to-docs>majibu yasiyosahihi</link-to-docs>yanaweza kutokea\n\nTafadhali chunguza data za vipimo vifuatavyo.",
   "Measurement.SummaryText.Websites.Anomaly.BlockingReason.DNS": "Kuchezea DNS",
   "Measurement.SummaryText.Websites.Anomaly.BlockingReason.TCP": "Uzuiaji wa TCP/IP",
   "Measurement.SummaryText.Websites.Anomaly.BlockingReason.HTTP-failure": "Uzuiaji wa HTTP (maombi ya HTTP hayakufanikiwa)",
