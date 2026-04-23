@@ -1,0 +1,6 @@
+@import 'tailwindcss';
+
+/* Dynamic classes in CountryBox: `lg:grid-cols-${itemsPerRow}` — Tailwind cannot see 4/6 */
+@source inline('{lg:,}grid-cols-{4,6}');
+
+@import '../node_modules/ooni-components/dist/tailwind.css';

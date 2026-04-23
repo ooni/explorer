@@ -1,25 +1,29 @@
 // Documentation for markdown-to-jsx
 // https://github.com/probablyup/markdown-to-jsx
 import Markdown from 'markdown-to-jsx'
-import PropTypes from 'prop-types'
+import type { ComponentPropsWithoutRef } from 'react'
 import { useIntl } from 'react-intl'
+import type { MessageDescriptor, PrimitiveType } from 'react-intl'
 import { twMerge } from 'tailwind-merge'
 
-const MdH1 = ({ children, className, ...props }) => (
+type MdH1Props = ComponentPropsWithoutRef<'h3'>
+
+const MdH1 = ({ children, className, ...props }: MdH1Props) => (
   <h3 className={twMerge('my-2', className)} {...props}>
     {children}
   </h3>
 )
 
+type MdParagraphProps = ComponentPropsWithoutRef<'div'>
 // Use <div> so block HTML from intl placeholders (e.g. <ul>) is never nested
 // inside <p>, which is invalid and breaks hydration after browser HTML fixups.
-const MdParagraph = ({ children, className, ...props }) => (
+const MdParagraph = ({ children, className, ...props }: MdParagraphProps) => (
   <div className={twMerge('mb-4 last:mb-0', className)} {...props}>
     {children}
   </div>
 )
 
-export const FormattedMarkdownBase = ({ children }) => {
+export const FormattedMarkdownBase = ({ children }: { children: string }) => {
   return (
     <Markdown
       options={{
@@ -38,20 +42,24 @@ export const FormattedMarkdownBase = ({ children }) => {
   )
 }
 
-const FormattedMarkdown = ({ id, defaultMessage, values }) => {
+export type FormattedMarkdownProps = MessageDescriptor & {
+  values?: Record<string, PrimitiveType>
+}
+
+const FormattedMarkdown = ({
+  id,
+  defaultMessage,
+  values,
+  description,
+}: FormattedMarkdownProps) => {
   const intl = useIntl()
+  const descriptor: MessageDescriptor = { id, defaultMessage, description }
 
   return (
     <FormattedMarkdownBase>
-      {intl.formatMessage({ id, defaultMessage }, values)}
+      {intl.formatMessage(descriptor, values)}
     </FormattedMarkdownBase>
   )
-}
-
-FormattedMarkdown.propTypes = {
-  id: PropTypes.string.isRequired,
-  defaultMessage: PropTypes.string,
-  values: PropTypes.object,
 }
 
 export default FormattedMarkdown
