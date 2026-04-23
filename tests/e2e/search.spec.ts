@@ -1,40 +1,10 @@
 import dayjs from '../../services/dayjs'
 import { test, expect } from '@playwright/test'
+import { routeApiWithCors, scrollToBottom } from './helpers'
 
 test.describe('Search Page Tests', () => {
   test.beforeEach(async ({ page }) => {
-    await page.route('**/api/**', async (route) => {
-      const request = route.request()
-
-      // Handle OPTIONS preflight requests
-      if (request.method() === 'OPTIONS') {
-        await route.fulfill({
-          status: 200,
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-            'Access-Control-Max-Age': '86400',
-          },
-        })
-        return
-      }
-
-      // For actual requests, fetch and add CORS headers
-      const response = await route.fetch()
-      const body = await response.body()
-      const headers = response.headers()
-
-      await route.fulfill({
-        status: response.status(),
-        headers: {
-          ...headers,
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': 'true',
-        },
-        body: body,
-      })
-    })
+    await routeApiWithCors(page)
 
     await page.goto('/search')
     await page.waitForLoadState('networkidle')
@@ -52,6 +22,15 @@ test.describe('Search Page Tests', () => {
       const href = await links.nth(i).getAttribute('href')
       expect(href).toMatch(/\/m\//)
     }
+
+    await page.waitForLoadState('networkidle')
+
+    await scrollToBottom(page)
+
+    await expect(page).toHaveScreenshot('search-desktop.png', {
+      fullPage: true,
+      maxDiffPixelRatio: 0.12,
+    })
   })
 
   test('shows relevant search results when filter changes', async ({

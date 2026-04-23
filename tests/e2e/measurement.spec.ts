@@ -280,6 +280,11 @@ test.describe('Measurement Page Tests', () => {
               page.locator('head meta[property="og:description"]'),
             ).toHaveAttribute('content', og_description)
           }
+
+          await expect(page).toHaveScreenshot(`${testName}-${result}-desktop.png`, {
+            fullPage: true,
+            maxDiffPixelRatio: 0.12,
+          })
         })
       }
     })
