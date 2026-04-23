@@ -128,7 +128,7 @@ const Measurement = ({
     error,
     isValidating: isLoadingMeasurementData,
   } = useSWR(
-    `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/measurement_meta?measurement_uid=${measurementUid}&full=true`,
+    `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/measurement_meta?measurement_uid=${measurementUid}`,
     measurementFetcher,
     {
       revalidateOnFocus: false,

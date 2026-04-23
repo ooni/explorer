@@ -6,7 +6,7 @@ import { DetailsBox } from '../DetailsBox'
 import { formatTwoTuple } from 'utils'
 
 const WhatsAppDetails = ({ isAnomaly, scores, measurement, render }) => {
-  const testKeys = measurement.test_keys
+  const testKeys = measurement?.test_keys ?? {}
   const tcp_connect = testKeys.tcp_connect
   let registrationServerAccessible
   let webAccessible
