@@ -19,7 +19,7 @@
     "@sentry/nextjs": "^10.43.0",
     "@tanstack/react-table": "^8.21.3",
     "@tanstack/react-virtual": "^3.13.23",
-    "axios": "^1.13.5",
+    "axios": "^1.15.2",
     "buffer-from": "^1.1.2",
     "country-util": "^0.2.0",
     "date-fns": "^4.1.0",
