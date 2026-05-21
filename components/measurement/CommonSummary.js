@@ -2,10 +2,46 @@ import Link from 'next/link'
 import PropTypes from 'prop-types'
 import { useContext } from 'react'
 import { MdOutlineFactCheck } from 'react-icons/md'
+import {
+  PiShieldCheckBold,
+  PiShieldSlashBold,
+  PiShieldWarningBold,
+  PiShieldBold,
+} from 'react-icons/pi'
 import { useIntl } from 'react-intl'
 import { EmbeddedViewContext } from '../../pages/m/[measurement_uid]'
 import ConditionalWrapper from '../ConditionalWrapper'
 import Flag from '../Flag'
+
+const verificationStatusConfig = {
+  verified: {
+    Icon: PiShieldCheckBold,
+    iconClass: 'text-green-400',
+    label: 'Probe verified',
+  },
+  unverified: {
+    Icon: PiShieldBold,
+    iconClass: 'text-gray-400',
+    label: 'Probe unverified',
+  },
+  failed: {
+    Icon: PiShieldWarningBold,
+    iconClass: 'text-red-400',
+    label: 'Probe verification failed',
+  },
+}
+
+const VerificationStatusBadge = ({ status }) => {
+  const entry = verificationStatusConfig[status]
+  if (!entry) return null
+  const { Icon, iconClass, label } = entry
+  return (
+    <div className="inline-flex items-center gap-1.5 rounded-full bg-black/20 px-3 py-1.5">
+      <Icon className={`text-base shrink-0 ${iconClass}`} />
+      <span className="text-sm font-bold text-white">{label}</span>
+    </div>
+  )
+}
 
 const CommonSummary = ({
   color,
@@ -15,6 +51,7 @@ const CommonSummary = ({
   networkName,
   country,
   hero,
+  verification_status,
   onVerifyClick,
 }) => {
   const isEmbeddedView = useContext(EmbeddedViewContext)
@@ -38,18 +75,18 @@ const CommonSummary = ({
         <div className="flex justify-between">
           <div className="text-base w-1/2">{formattedDate}</div>
           {!isEmbeddedView && (
-            <div
-              className="flex flex-col items-center cursor-pointer"
-              onClick={onVerifyClick}
-            >
-              <div className="text-lg text-center">
-                <MdOutlineFactCheck />
-              </div>
-              <div className="text-xs font-bold text-center">
-                {intl
-                  .formatMessage({ id: 'Measurement.CommonSummary.Verify' })
-                  .toUpperCase()}
-              </div>
+            <div className="flex gap-4 items-start">
+              <VerificationStatusBadge status={verification_status} />
+              <button
+                type="button"
+                className="inline-flex items-center gap-1.5 rounded-lg border border-white/40 px-3 py-1.5 text-white cursor-pointer hover:bg-black/10 transition-colors"
+                onClick={onVerifyClick}
+              >
+                <MdOutlineFactCheck className="text-base shrink-0" />
+                <span className="text-sm font-bold">
+                  {intl.formatMessage({ id: 'Measurement.CommonSummary.Verify' })}
+                </span>
+              </button>
             </div>
           )}
         </div>

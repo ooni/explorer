@@ -89,23 +89,17 @@ const measurementFetcher = async (url) => {
   try {
     response = await fetch(url)
   } catch (e) {
-    throw new Error(
-      `Network error: Unable to reach the server.\nStatus: ${e.status}\nMessage: ${e.message}`,
-    )
+    throw new Error(`Network error: Unable to reach the server.\n${e.message}`)
   }
 
-  let json
-  try {
-    json = await response.json()
-  } catch (e) {
-    throw new Error(
-      `Failed to parse response (status ${response.status}):\n${e.message}`,
-    )
-  }
+  const json = await response.json().catch(() => null)
 
   if (!response.ok) {
+    const isServerError = response.status >= 500
     throw new Error(
-      `Request failed with status ${response.status}:\n${JSON.stringify(json, null, 2)}`,
+      isServerError || !json
+        ? `Request failed with status ${response.status}`
+        : `Request failed with status ${response.status}:\n${JSON.stringify(json, null, 2)}`,
     )
   }
 
@@ -149,6 +143,7 @@ const Measurement = ({
     report_id,
     scores,
     input,
+    verification_status,
   } = measurementData ?? {}
   notFound = raw_measurement === ''
   raw_measurement = raw_measurement ? JSON.parse(raw_measurement) : null
@@ -259,6 +254,7 @@ const Measurement = ({
                       networkName={raw_measurement?.probe_network_name}
                       color={color}
                       country={country}
+                      verification_status={verification_status}
                       hero={
                         <Hero
                           status={status}
