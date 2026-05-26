@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import { useContext } from 'react'
-import { MdOutlineFactCheck, MdOutlineFeedback } from 'react-icons/md'
+import { MdOutlineFactCheck, MdOutlineFeedback, MdOutlineOpenInNew } from 'react-icons/md'
 import {
   PiShieldCheckBold,
   PiShieldSlashBold,
@@ -52,7 +52,8 @@ const VerificationStatusBadge = ({ status }) => {
         className="text-xs leading-tight text-white/70 hover:text-white underline w-30"
       >
         via anonymous
-        credential
+        credentials
+        <MdOutlineOpenInNew className="inline shrink-0 ml-0.5 align-middle" />
       </a>
     </div>
   )
