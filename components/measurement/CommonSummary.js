@@ -1,11 +1,62 @@
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import { useContext } from 'react'
-import { MdOutlineFactCheck } from 'react-icons/md'
+import { MdOutlineFactCheck, MdOutlineFeedback, MdOutlineOpenInNew } from 'react-icons/md'
+import {
+  PiShieldCheckBold,
+  PiShieldWarningBold,
+  PiShieldBold,
+} from 'react-icons/pi'
 import { useIntl } from 'react-intl'
 import { EmbeddedViewContext } from '../../pages/m/[measurement_uid]'
 import ConditionalWrapper from '../ConditionalWrapper'
 import Flag from '../Flag'
+
+const ANON_CREDENTIALS_URL =
+  'https://ooni.org/post/2025-announcing-ooni-new-anonymous-credential-system/'
+
+const verificationStatusConfig = {
+  verified: {
+    Icon: PiShieldCheckBold,
+    iconClass: 'text-green-400',
+    label: 'Measurement.CommonSummary.ProbeAuthenticated',
+  },
+  unverified: {
+    Icon: PiShieldBold,
+    iconClass: 'text-gray-400',
+    label: 'Measurement.CommonSummary.ProbeUnauthenticated',
+  },
+  failed: {
+    Icon: PiShieldWarningBold,
+    iconClass: 'text-red-400',
+    label: 'Measurement.CommonSummary.ProbeAuthenticationFailed',
+  },
+}
+
+const VerificationStatusBadge = ({ status }) => {
+  const intl = useIntl()
+  const entry = verificationStatusConfig[status]
+  if (!entry) return null
+  const { Icon, iconClass, label } = entry
+  return (
+    <div className="inline-flex gap-1.5 items-center mt-3">
+      <div className="inline-flex items-center gap-1.5 rounded-full bg-black/20 px-3 py-1.5">
+        <Icon className={`text-base shrink-0 ${iconClass}`} />
+        <span className="text-sm font-bold text-white">{intl.formatMessage({ id: label })}</span>
+        
+      </div>
+      <a
+        href={ANON_CREDENTIALS_URL}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="text-xs leading-tight text-white/70 hover:text-white underline w-30"
+      >
+        {intl.formatMessage({ id: 'Measurement.CommonSummary.ViaAnonymousCredentials' })}
+        <MdOutlineOpenInNew className="inline shrink-0 ml-0.5 align-middle" />
+      </a>
+    </div>
+  )
+}
 
 const CommonSummary = ({
   color,
@@ -15,6 +66,7 @@ const CommonSummary = ({
   networkName,
   country,
   hero,
+  verification_status,
   onVerifyClick,
 }) => {
   const isEmbeddedView = useContext(EmbeddedViewContext)
@@ -38,19 +90,16 @@ const CommonSummary = ({
         <div className="flex justify-between">
           <div className="text-base w-1/2">{formattedDate}</div>
           {!isEmbeddedView && (
-            <div
-              className="flex flex-col items-center cursor-pointer"
+            <button
+              type="button"
+              className="inline-flex items-center gap-1.5 rounded-lg border border-white/40 px-3 py-1.5 text-white cursor-pointer hover:bg-black/10 transition-colors"
               onClick={onVerifyClick}
             >
-              <div className="text-lg text-center">
-                <MdOutlineFactCheck />
-              </div>
-              <div className="text-xs font-bold text-center">
-                {intl
-                  .formatMessage({ id: 'Measurement.CommonSummary.Verify' })
-                  .toUpperCase()}
-              </div>
-            </div>
+              <MdOutlineFeedback className="text-base shrink-0" />
+              <span className="text-sm font-bold">
+                {intl.formatMessage({ id: 'Measurement.CommonSummary.Verify' })}
+              </span>
+            </button>
           )}
         </div>
         {hero}
@@ -89,6 +138,7 @@ const CommonSummary = ({
                 {network} {networkName}
               </div>
             </ConditionalWrapper>
+            <VerificationStatusBadge status={verification_status} />
           </div>
         </div>
       </div>
