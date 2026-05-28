@@ -4,7 +4,6 @@ import { useContext } from 'react'
 import { MdOutlineFactCheck, MdOutlineFeedback, MdOutlineOpenInNew } from 'react-icons/md'
 import {
   PiShieldCheckBold,
-  PiShieldSlashBold,
   PiShieldWarningBold,
   PiShieldBold,
 } from 'react-icons/pi'
@@ -20,21 +19,22 @@ const verificationStatusConfig = {
   verified: {
     Icon: PiShieldCheckBold,
     iconClass: 'text-green-400',
-    label: 'Probe authenticated',
+    label: 'Measurement.CommonSummary.ProbeAuthenticated',
   },
   unverified: {
     Icon: PiShieldBold,
     iconClass: 'text-gray-400',
-    label: 'Probe unauthenticated',
+    label: 'Measurement.CommonSummary.ProbeUnauthenticated',
   },
   failed: {
     Icon: PiShieldWarningBold,
     iconClass: 'text-red-400',
-    label: 'Probe authentication failed',
+    label: 'Measurement.CommonSummary.ProbeAuthenticationFailed',
   },
 }
 
 const VerificationStatusBadge = ({ status }) => {
+  const intl = useIntl()
   const entry = verificationStatusConfig[status]
   if (!entry) return null
   const { Icon, iconClass, label } = entry
@@ -42,7 +42,7 @@ const VerificationStatusBadge = ({ status }) => {
     <div className="inline-flex gap-1.5 items-center mt-3">
       <div className="inline-flex items-center gap-1.5 rounded-full bg-black/20 px-3 py-1.5">
         <Icon className={`text-base shrink-0 ${iconClass}`} />
-        <span className="text-sm font-bold text-white">{label}</span>
+        <span className="text-sm font-bold text-white">{intl.formatMessage({ id: label })}</span>
         
       </div>
       <a
@@ -51,8 +51,7 @@ const VerificationStatusBadge = ({ status }) => {
         rel="noopener noreferrer"
         className="text-xs leading-tight text-white/70 hover:text-white underline w-30"
       >
-        via anonymous
-        credentials
+        {intl.formatMessage({ id: 'Measurement.CommonSummary.ViaAnonymousCredentials' })}
         <MdOutlineOpenInNew className="inline shrink-0 ml-0.5 align-middle" />
       </a>
     </div>
