@@ -75,7 +75,7 @@ const MeasurementAggregationToolkit = () => {
   return (
     <>
       <Head>
-        <title>{intl.formatMessage({ id: 'MAT.Title' })}</title>
+        <title>{intl.formatMessage({ id: 'MAT.Title' })} | {intl.formatMessage({ id: 'General.OoniExplorer' })}</title>
       </Head>
       <div className="container">
         <div className="flex flex-col">

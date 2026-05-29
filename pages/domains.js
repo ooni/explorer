@@ -106,8 +106,7 @@ const Domains = () => {
     <>
       <Head>
         <title>
-          {intl.formatMessage({ id: 'General.OoniExplorer' })} |{' '}
-          {intl.formatMessage({ id: 'Domains.Title' })}
+          {intl.formatMessage({ id: 'Domains.Title' })} | {intl.formatMessage({ id: 'General.OoniExplorer' })}
         </title>
       </Head>
       <div className="container">

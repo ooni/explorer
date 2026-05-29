@@ -237,7 +237,7 @@ const Search = () => {
   return (
     <>
       <Head>
-        <title>{intl.formatMessage({ id: 'Search.PageTitle' })}</title>
+        <title>{intl.formatMessage({ id: 'Search.PageTitle' })} | {intl.formatMessage({ id: 'General.OoniExplorer' })}</title>
       </Head>
       <div className="container">
         <div className="flex pt-4 flex-wrap">

@@ -225,8 +225,7 @@ const NetworkDashboard = ({ probe_asn, networkName, countriesData }) => {
     <>
       <Head>
         <title>
-          {intl.formatMessage({ id: 'General.OoniExplorer' })} | {probe_asn}{' '}
-          {networkName}
+          {probe_asn} {networkName} | {intl.formatMessage({ id: 'General.OoniExplorer' })}
         </title>
       </Head>
       <div className="container">

@@ -4,6 +4,7 @@ import useFilterWithSort from 'hooks/useFilterWithSort'
 import { getSortedAndFilteredFindings } from 'hooks/useFindings'
 import useUser from 'hooks/useUser'
 import { getFindings } from 'lib/api'
+import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Input, Select } from 'ooni-components'
@@ -64,6 +65,9 @@ const Index = ({ incidents }) => {
 
   return (
     <>
+      <Head>
+        <title>{intl.formatMessage({ id: 'Findings.Index.Title' })} | {intl.formatMessage({ id: 'General.OoniExplorer' })}</title>
+      </Head>
       <div className="container">
         {user?.role === 'admin' && (
           <div className="mt-4 flex justify-end">
@@ -75,10 +79,7 @@ const Index = ({ incidents }) => {
           </div>
         )}
         <StickySubMenu
-          title={intl.formatMessage(
-            { id: 'Findings.Index.Title' },
-            { amount: sortedAndFilteredData.length },
-          )}
+          title={`${intl.formatMessage({ id: 'Findings.Index.Title' })} (${sortedAndFilteredData.length})`}
         >
           <div className="flex gap-4 flex-col md:flex-row w-full md:w-auto">
             <Input

@@ -72,8 +72,7 @@ const Networks = () => {
     <>
       <Head>
         <title>
-          {intl.formatMessage({ id: 'General.OoniExplorer' })} |{' '}
-          {intl.formatMessage({ id: 'Networks.Title' })}
+          {intl.formatMessage({ id: 'Networks.Title' })} | {intl.formatMessage({ id: 'General.OoniExplorer' })}
         </title>
       </Head>
       <div className="container">

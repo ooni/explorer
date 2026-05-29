@@ -139,7 +139,7 @@ const DomainDashboard = ({ domain, categoryCode, canonicalDomain }) => {
   const { query } = router
   const [testedCountries, setTestedCountries] = useState(null)
   const intl = useIntl()
-  const title = `${intl.formatMessage({ id: 'General.OoniExplorer' })} | ${domain}`
+  const title = `${domain} | ${intl.formatMessage({ id: 'General.OoniExplorer' })}`
   const hasCanonical = domain !== canonicalDomain
 
   const blockedCountries = useMemo(() => {

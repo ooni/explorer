@@ -653,7 +653,7 @@
   "Networks.Title": "Networks",
   "Networks.SearchPlaceholder": "Search by ASN",
   "Networks.SearchError": "No networks found",
-  "Findings.Index.Title": "Censorship Findings ({amount})",
+  "Findings.Index.Title": "Censorship Findings",
   "Findings.Index.SearchPlaceholder": "Search for findings",
   "Findings.Index.SearchError": "No findings found",
   "Findings.Index.HighLightBox.ReadMore": "Read More",
