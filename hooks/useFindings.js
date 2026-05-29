@@ -37,6 +37,18 @@ export const sortData = (data, sortValue) =>
       return b.sort_end_time - a.sort_end_time
     })
 
+export const getSortedAndFilteredFindings = (data, { sortValue = 'end_desc', searchValue = '', themeValue = null } = {}) => {
+  if (!data) return []
+  let result = sortData(convertDatesData(data), sortValue)
+  if (searchValue.length) {
+    result = filterData(result, searchValue)
+  }
+  if (themeValue?.length) {
+    result = result.filter((f) => f.themes.includes(themeValue))
+  }
+  return result
+}
+
 export const filterData = (data, searchValue) =>
   data.filter((incident) => {
     const normalizedSearchValue = normalizeString(searchValue).toLowerCase()
@@ -57,33 +69,15 @@ const useFindings = ({
   params = {},
 }) => {
   const { data, isLoading, error } = useSWR(
-    // apiEndpoints.SEARCH_INCIDENTS,
     [apiEndpoints.SEARCH_INCIDENTS, params],
-    // fetcher,
     simpleFetcher,
     { shouldRetryOnError: false },
   )
 
-  const displayData = useMemo(() => {
-    if (data) {
-      return convertDatesData(data)
-    }
-    return []
-  }, [data])
-
-  const sortedAndFilteredData = useMemo(() => {
-    let data = sortData(displayData, sortValue)
-
-    if (searchValue.length) {
-      data = filterData(data, searchValue)
-    }
-
-    if (themeValue?.length) {
-      data = data.filter((f) => f.themes.includes(themeValue))
-    }
-
-    return data
-  }, [displayData, sortValue, searchValue, themeValue])
+  const sortedAndFilteredData = useMemo(
+    () => getSortedAndFilteredFindings(data, { sortValue, searchValue, themeValue }),
+    [data, sortValue, searchValue, themeValue],
+  )
 
   return {
     sortedAndFilteredData,

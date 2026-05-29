@@ -1,7 +1,7 @@
 import { FindingBox } from 'components/landing/HighlightBox'
 import { StickySubMenu } from 'components/SharedStyledComponents'
 import useFilterWithSort from 'hooks/useFilterWithSort'
-import { convertDatesData, filterData, sortData } from 'hooks/useFindings'
+import { getSortedAndFilteredFindings } from 'hooks/useFindings'
 import useUser from 'hooks/useUser'
 import { getFindings } from 'lib/api'
 import Link from 'next/link'
@@ -57,12 +57,10 @@ const Index = ({ incidents }) => {
     initialCategoryValue: theme,
   })
 
-  const sortedAndFilteredData = useMemo(() => {
-    let data = sortData(convertDatesData(incidents), sortValue)
-    if (searchValue.length) data = filterData(data, searchValue)
-    if (categoryValue?.length) data = data.filter((f) => f.themes.includes(categoryValue))
-    return data
-  }, [sortValue, searchValue, categoryValue])
+  const sortedAndFilteredData = useMemo(
+    () => getSortedAndFilteredFindings(incidents, { sortValue, searchValue, themeValue: categoryValue }),
+    [incidents, sortValue, searchValue, categoryValue],
+  )
 
   return (
     <>
