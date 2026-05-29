@@ -53,8 +53,8 @@ const Header = () => {
         href="/static/images/favicons/favicon-16x16.png"
       />
 
-      <link rel="canonical" href={canonical} />
-      <meta property="og:url" content={canonical} />
+      <link rel="canonical" key="canonical" href={canonical} />
+      <meta property="og:url" key="og:url" content={canonical} />
 
       <meta name="twitter:card" content="summary_large_image" />
       <meta key="twitter:title" name="twitter:title" content="OONI Explorer" />

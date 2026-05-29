@@ -14,12 +14,13 @@ export const getServerSideProps = async ({ query, req }) => {
   return {
     props: {
       data,
+      canonicalUrl: `${process.env.NEXT_PUBLIC_EXPLORER_URL}/findings/${query.id}`,
       isEmbeddedView: !!req.headers['enable-embedded-view'] || !!query?.webview,
     },
   }
 }
 
-const ReportView = ({ data }) => {
+const ReportView = ({ data, canonicalUrl }) => {
   const intl = useIntl()
 
   const metaTitle = useMemo(
@@ -49,6 +50,7 @@ const ReportView = ({ data }) => {
           name="twitter:description"
           content={metaDescription}
         />
+        <link rel="canonical" key="canonical" href={canonicalUrl} />
       </Head>
       <div className="container">
         {data ? (
