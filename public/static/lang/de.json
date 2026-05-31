@@ -76,7 +76,7 @@
   "Measurement.CommonSummary.Label.ASN": "Netzwerk",
   "Measurement.CommonSummary.Label.Country": "Land",
   "Measurement.CommonSummary.Label.DateTime": "Datum & Zeit",
-  "Measurement.CommonSummary.Verify": "Überprüfen",
+  "Measurement.CommonSummary.Verify": "Messung überprüfen",
   "Measurement.DetailsHeader.Runtime": "Laufzeit",
   "Measurement.Status.Hint.Websites.Censorship": " ",
   "Measurement.Status.Hint.Websites.DNS": "DNS-Manipulationen",
@@ -631,7 +631,7 @@
   "Networks.Title": "Netzwerke",
   "Networks.SearchPlaceholder": "Suche nach ASN",
   "Networks.SearchError": "Keine Netzwerke gefunden",
-  "Findings.Index.Title": "Zensur-Ergebnisse ({amount})",
+  "Findings.Index.Title": "Zensur-Ergebnisse",
   "Findings.Index.SearchPlaceholder": "Suche nach Ergebnissen",
   "Findings.Index.SearchError": "Keine Ergebnisse gefunden",
   "Findings.Index.HighLightBox.ReadMore": "Mehr lesen",
@@ -693,5 +693,9 @@
   "MAT.Table.Header.outcome_blocked": "Outcome Blockiert",
   "MAT.Table.Header.outcome_down": "Outcome Ausser Betrieb",
   "MAT.Table.Header.outcome_ok": "Outcome OK",
-  "MAT.Table.Header.blocked": "Blockiert"
+  "MAT.Table.Header.blocked": "Blockiert",
+  "Measurement.CommonSummary.ViaAnonymousCredentials": "über anonyme Anmeldedaten",
+  "Measurement.CommonSummary.ProbeAuthenticated": "Messung authentifiziert",
+  "Measurement.CommonSummary.ProbeUnauthenticated": "Messung nicht authentifiziert",
+  "Measurement.CommonSummary.ProbeAuthenticationFailed": "Authentifizierung der Messung fehlgeschlagen"
 }
