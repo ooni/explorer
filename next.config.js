@@ -3,7 +3,7 @@
 const { withSentryConfig } = require('@sentry/nextjs')
 
 const DEFAULT_LOCALE = 'en'
-const SUPPORTED_LANGUAGES = [ 'en', 'zh-hant', 'zh-CN', 'vi', 'tr', 'th', 'sw', 'ru', 'pt-BR', 'my', 'km', 'is', 'fr', 'fa', 'es', 'de', 'ar']
+const SUPPORTED_LANGUAGES = [ 'en', 'zh-Hant', 'zh-CN', 'vi', 'tr', 'th', 'sw', 'ru', 'pt-BR', 'my', 'km', 'is', 'fr', 'fa', 'es', 'de', 'ar']
 
 module.exports = withSentryConfig(
   {
