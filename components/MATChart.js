@@ -171,7 +171,7 @@ const MATChart = ({ query, showFilters = true }) => {
           queryProps={query}
         >
           <div data-testid="mat-chart">
-            {results.length > 0 || Object.keys(results).length ? (
+            {((results.length > 0) || !!Object.keys(results).length) && (
               <>
                 {((data && data.data.dimension_count === 1) ||
                   (data && query.axis_x && !query.axis_y)) && (
@@ -191,8 +191,6 @@ const MATChart = ({ query, showFilters = true }) => {
                   />
                 )}
               </>
-            ) : (
-              <NoCharts />
             )}
           </div>
         </MATContextProvider>
