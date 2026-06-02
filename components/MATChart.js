@@ -100,14 +100,14 @@ export const MATChartWrapper = ({ link, caption }) => {
 
   return (
     !!searchParams && (
-      <div className="my-8">
+      <figure className="my-8">
         <MATChart query={query} showFilters={false} />
         {caption && (
-          <div className="mt-2">
+          <figcaption className="mt-2">
             <FormattedMarkdownBase>{captionText}</FormattedMarkdownBase>
-          </div>
+          </figcaption>
         )}
-      </div>
+      </figure>
     )
   )
 }
