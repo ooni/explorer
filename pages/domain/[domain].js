@@ -179,7 +179,7 @@ const DomainDashboard = ({ domain, categoryCode, canonicalDomain }) => {
     swrOptions,
   )
 
-  const noIndexCategoryCodes = ['PORN', 'PROV', 'GMB']
+  const noIndexCategoryCodes = ['PORN', 'PROV', 'GMB', 'MISC', 'HATE', 'MILX', 'ALDR']
 
   return (
     <>
