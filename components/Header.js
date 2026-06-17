@@ -2,11 +2,15 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useIntl } from 'react-intl'
 
+const BASE_URL = 'https://explorer.ooni.org'
+const LOCALES = JSON.parse(process.env.LOCALES || '["en"]')
+
 const Header = () => {
   const { asPath, locale, defaultLocale } = useRouter()
 
+  const path = asPath.split('?')[0]
   const lang = locale === defaultLocale ? '' : `/${locale}`
-  const canonical = `https://explorer.ooni.org${lang}${asPath.split('?')[0]}`
+  const canonical = `${BASE_URL}${lang}${path}`
 
   const intl = useIntl()
   const description = intl.formatMessage({ id: 'Home.Meta.Description' })
@@ -49,6 +53,19 @@ const Header = () => {
 
       <link rel="canonical" key="canonical" href={canonical} />
       <meta property="og:url" key="og:url" content={canonical} />
+
+      {LOCALES.map((loc) => {
+        const prefix = loc === defaultLocale ? '' : `/${loc}`
+        return (
+          <link
+            key={`hreflang-${loc}`}
+            rel="alternate"
+            hrefLang={loc}
+            href={`${BASE_URL}${prefix}${path}`}
+          />
+        )
+      })}
+      <link rel="alternate" hrefLang="x-default" href={`${BASE_URL}${path}`} />
 
       <meta name="twitter:card" content="summary_large_image" />
       <meta key="twitter:title" name="twitter:title" content="OONI Explorer" />
