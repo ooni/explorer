@@ -238,6 +238,7 @@ const Search = () => {
     <>
       <Head>
         <title>{intl.formatMessage({ id: 'Search.PageTitle' })} | {intl.formatMessage({ id: 'General.OoniExplorer' })}</title>
+        <meta name="robots" content="noindex, nofollow" />
       </Head>
       <div className="container">
         <div className="flex pt-4 flex-wrap">
