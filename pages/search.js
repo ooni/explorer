@@ -237,7 +237,7 @@ const Search = () => {
   return (
     <>
       <Head>
-        <title>{intl.formatMessage({ id: 'Search.PageTitle' })} | {intl.formatMessage({ id: 'General.OoniExplorer' })}</title>
+        <title>{`${intl.formatMessage({ id: 'Search.PageTitle' })} | ${intl.formatMessage({ id: 'General.OoniExplorer' })}`}</title>
         <meta name="robots" content="noindex, nofollow" />
       </Head>
       <div className="container">
