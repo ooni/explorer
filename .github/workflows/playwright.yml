@@ -48,7 +48,14 @@ jobs:
       timeout-minutes: 15
       run: yarn playwright install-deps
 
+    - name: Build app
+      run: yarn build:test
+
     - name: Run Playwright tests
+      # Run the full cross-browser matrix only on pushes to main/master.
+      # Pull requests run chromium only to keep CI fast.
+      env:
+        FULL_BROWSERS: ${{ github.event_name == 'push' && '1' || '' }}
       run: yarn playwright test
     - uses: actions/upload-artifact@v4
       if: ${{ !cancelled() }}
