@@ -6,17 +6,48 @@ on:
     branches: [ main, master ]
 jobs:
   test:
-    timeout-minutes: 90
+    timeout-minutes: 60
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v5
     - uses: actions/setup-node@v5
       with:
         node-version: lts/*
+        cache: 'yarn'
     - name: Install dependencies
-      run: yarn install
-    - name: Install Playwright Browsers
+      run: yarn install --frozen-lockfile
+
+    - name: Get installed Playwright version
+      id: playwright-version
+      run: echo "version=$(yarn --silent playwright --version | sed 's/Version //')" >> "$GITHUB_OUTPUT"
+
+    - name: Cache Playwright browsers
+      id: playwright-cache
+      uses: actions/cache@v4
+      with:
+        path: ~/.cache/ms-playwright
+        key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
+
+    # `playwright install --with-deps` shells out to apt-get. On GitHub runners the
+    # dpkg lock is often held by background services (unattended-upgrades / apt-daily),
+    # which makes the install step hang indefinitely until the job times out.
+    # Stop those services first so apt can acquire the lock immediately.
+    - name: Free up the apt/dpkg lock
+      run: |
+        sudo systemctl stop apt-daily.service apt-daily-upgrade.service unattended-upgrades.service || true
+        sudo systemctl stop apt-daily.timer apt-daily-upgrade.timer || true
+        sudo flock --wait 60 /var/lib/dpkg/lock-frontend true || true
+
+    - name: Install Playwright browsers and system deps
+      if: steps.playwright-cache.outputs.cache-hit != 'true'
+      timeout-minutes: 15
       run: yarn playwright install --with-deps
+
+    - name: Install Playwright system deps (cached browsers)
+      if: steps.playwright-cache.outputs.cache-hit == 'true'
+      timeout-minutes: 15
+      run: yarn playwright install-deps
+
     - name: Run Playwright tests
       run: yarn playwright test
     - uses: actions/upload-artifact@v4
