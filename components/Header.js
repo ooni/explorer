@@ -2,6 +2,8 @@ import Head from 'next/head'
 import { useRouter } from 'next/router'
 import { useIntl } from 'react-intl'
 
+import StructuredData from 'components/StructuredData'
+
 const BASE_URL = 'https://explorer.ooni.org'
 const LOCALES = JSON.parse(process.env.LOCALES || '["en"]')
 
@@ -79,6 +81,7 @@ const Header = () => {
         content={description}
       />
       <meta property="og:type" content="website" />
+      <StructuredData />
     </Head>
   )
 }
