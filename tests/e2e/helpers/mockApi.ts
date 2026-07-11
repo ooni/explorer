@@ -23,6 +23,11 @@ import type { APIResponse, Page } from '@playwright/test'
 const FIXTURES_ROOT = path.join(__dirname, '..', 'fixtures')
 const UPDATE = !!process.env.UPDATE_FIXTURES
 
+const MOCK_API_HOSTS = new Set([
+  new URL(process.env.NEXT_PUBLIC_OONI_API ?? 'https://api.ooni.org').host,
+  'api.ooni.io',
+])
+
 const RATE_LIMIT_RETRIES = 3
 const RATE_LIMIT_BACKOFF_MS = [2000, 5000, 10000]
 
@@ -97,6 +102,14 @@ function fixturePath(namespace: string, method: string, urlString: string): stri
   return path.join(FIXTURES_ROOT, namespace, fixtureFileName(method, urlString))
 }
 
+function shouldMockRequest(urlString: string): boolean {
+  try {
+    return MOCK_API_HOSTS.has(new URL(urlString).host)
+  } catch {
+    return false
+  }
+}
+
 /** Fetch from the live API, retrying past transient 429 rate limits. */
 async function fetchWithRateLimitRetry(
   route: Parameters<Parameters<Page['route']>[1]>[0],
@@ -123,6 +136,11 @@ export async function mockApi(
 ): Promise<void> {
   await page.route(urlPattern, async (route) => {
     const request = route.request()
+
+    if (!shouldMockRequest(request.url())) {
+      await route.continue()
+      return
+    }
 
     if (request.method() === 'OPTIONS') {
       await route.fulfill({ status: 200, headers: preflightHeaders })

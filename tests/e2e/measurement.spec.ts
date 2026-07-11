@@ -216,7 +216,7 @@ test.describe('Measurement Page Tests', () => {
     await mockApi(page, '**/api/v1/measurement_meta*', 'measurement_meta')
   })
 
-  test.describe.skip('Accessing old measurement path (/measurement) with report_id and input query', () => {
+  test.describe('Accessing old measurement path (/measurement) with report_id and input query', () => {
     test('redirects to the new path with measurement_uid query', async ({
       page,
     }) => {

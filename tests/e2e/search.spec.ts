@@ -8,7 +8,7 @@ test.describe('Search Page Tests', () => {
   })
 
   test.beforeEach(async ({ page }) => {
-    await mockApi(page, '**/api/**', 'search')
+    await mockApi(page, '**/api.ooni.org/**', 'search')
 
     await page.goto('/search')
   })
