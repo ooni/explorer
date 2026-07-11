@@ -3,6 +3,8 @@ import { apiEndpoints, fetcher } from 'lib/api'
 
 import NotFound from 'components/NotFound'
 import FindingDisplay from 'components/findings/FindingDisplay'
+import StructuredData from 'components/StructuredData'
+import { getFindingStructuredData } from 'lib/findingStructuredData'
 import { useMemo } from 'react'
 import { useIntl } from 'react-intl'
 
@@ -26,6 +28,14 @@ const ReportView = ({ data, canonicalUrl }) => {
   const metaTitle = `${!!data?.incident?.title && `${data?.incident?.title} | `}${intl.formatMessage({ id: 'General.OoniExplorer' })}`
   const metaDescription = data?.incident?.short_description
 
+  const findingStructuredData = useMemo(() => {
+    if (!data?.incident) {
+      return null
+    }
+
+    return getFindingStructuredData(data.incident, canonicalUrl)
+  }, [canonicalUrl, data?.incident])
+
   return (
     <>
       <Head>
@@ -44,6 +54,9 @@ const ReportView = ({ data, canonicalUrl }) => {
           content={metaDescription}
         />
         <link rel="canonical" key="canonical" href={canonicalUrl} />
+        {findingStructuredData && (
+          <StructuredData data={findingStructuredData} />
+        )}
       </Head>
       <div className="container">
         {data ? (

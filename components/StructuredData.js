@@ -1,10 +1,10 @@
 import { structuredData } from 'lib/structuredData'
 
-const StructuredData = () => (
+const StructuredData = ({ data = structuredData }) => (
   <script
     type="application/ld+json"
     dangerouslySetInnerHTML={{
-      __html: JSON.stringify(structuredData),
+      __html: JSON.stringify(data).replace(/</g, '\\u003c'),
     }}
   />
 )
