@@ -7,7 +7,6 @@ const SUPPORTED_LANGUAGES = [ 'en', 'zh-Hant', 'zh-CN', 'vi', 'tr', 'th', 'sw', 
 
 module.exports = withSentryConfig(
   {
-    output: 'standalone',
     env: {
       LOCALES: JSON.stringify(SUPPORTED_LANGUAGES),
       DEFAULT_LOCALE: DEFAULT_LOCALE,

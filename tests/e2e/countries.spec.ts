@@ -3,7 +3,6 @@ import { test, expect } from '@playwright/test'
 test.describe('Countries Page Tests', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/countries')
-    await page.waitForLoadState('networkidle')
   })
 
   test('first region (Africa) is visible', async ({ page }) => {

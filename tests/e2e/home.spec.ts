@@ -3,7 +3,6 @@ import { test, expect } from '@playwright/test'
 test.skip('Home Page Tests', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
-    await page.waitForLoadState('networkidle')
   })
 
   // TODO: Check if stats appear
