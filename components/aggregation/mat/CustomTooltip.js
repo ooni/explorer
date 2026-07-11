@@ -69,6 +69,7 @@ export const generateSearchQuery = (data, query) => {
     'probe_asn',
     'input',
     'domain',
+    'ooni_run_link_id',
   ].reduce((q, k) => {
     if (k in data) q[k] = data[k]
     else if (query[k]) q[k] = query[k]
