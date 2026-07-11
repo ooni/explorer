@@ -179,6 +179,7 @@ export const NavBar = ({ color, className }) => {
                   height={26}
                   width={174}
                   style={{ height: "26px", width: "auto" }}
+                  priority
                   unoptimized
                 />
               </Link>

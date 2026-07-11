@@ -1,39 +1,13 @@
 import { test, expect } from '@playwright/test'
+import { mockApi } from './helpers/mockApi'
 
 test.describe('Search Page Tests', () => {
+  test.afterEach(async ({ page }) => {
+    await page.unrouteAll({ behavior: 'ignoreErrors' })
+  })
+
   test.beforeEach(async ({ page }) => {
-    await page.route('**/api/**', async (route) => {
-      const request = route.request()
-
-      // Handle OPTIONS preflight requests
-      if (request.method() === 'OPTIONS') {
-        await route.fulfill({
-          status: 200,
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-            'Access-Control-Max-Age': '86400',
-          },
-        })
-        return
-      }
-
-      // For actual requests, fetch and add CORS headers
-      const response = await route.fetch()
-      const body = await response.body()
-      const headers = response.headers()
-
-      await route.fulfill({
-        status: response.status(),
-        headers: {
-          ...headers,
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': 'true',
-        },
-        body: body,
-      })
-    })
+    await mockApi(page, '**/api/v1/measurement_meta*', 'measurement_meta')
   })
 
   // test('can access "HTTP Hosts" measurements', async ({ page }) => {
@@ -52,7 +26,6 @@ test.describe('Search Page Tests', () => {
 
   test('legacy measurement page shows enough information', async ({ page }) => {
     await page.goto('/m/01201503307dd8855f39f3d8f78be05f0c67770d')
-    await page.waitForLoadState('networkidle')
 
     await expect(page.getByTestId('common-summary')).toContainText('Canada')
     await expect(page.getByTestId('common-summary')).toContainText('AS812')

@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { mockApi } from './helpers/mockApi'
 
 const normalColor = 'rgb(47, 158, 68)'
 const anomalyColor = 'rgb(230, 119, 0)'
@@ -212,38 +213,7 @@ test.describe('Measurement Page Tests', () => {
   })
 
   test.beforeEach(async ({ page }) => {
-    await page.route('**/api/v1/measurement_meta*', async (route) => {
-      const request = route.request()
-
-      // Handle OPTIONS preflight requests
-      if (request.method() === 'OPTIONS') {
-        await route.fulfill({
-          status: 200,
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-            'Access-Control-Max-Age': '86400',
-          },
-        })
-        return
-      }
-
-      // For actual requests, fetch and add CORS headers
-      const response = await route.fetch()
-      const body = await response.body()
-      const headers = response.headers()
-
-      await route.fulfill({
-        status: response.status(),
-        headers: {
-          ...headers,
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': 'true',
-        },
-        body: body,
-      })
-    })
+    await mockApi(page, '**/api/v1/measurement_meta*', 'measurement_meta')
   })
 
   test.describe('Accessing old measurement path (/measurement) with report_id and input query', () => {
@@ -269,7 +239,6 @@ test.describe('Measurement Page Tests', () => {
           page,
         }) => {
           await page.goto(url)
-          await page.waitForLoadState('networkidle')
 
           const hero = page.getByTestId('common-summary')
           await expect(hero).toHaveCSS('background-color', color)
@@ -291,7 +260,6 @@ test.describe('Measurement Page Tests', () => {
     }) => {
       const reportIdNotInDB = 'this-measurement-does-not-exist'
       await page.goto(`/m/${reportIdNotInDB}`)
-      await page.waitForLoadState('networkidle')
 
       // The NotFound component shows a heading with the title
       const heading = page.locator('h4')
@@ -327,7 +295,6 @@ test.describe('Measurement Page Tests', () => {
       const measurementUrl =
         '/m/20230307142542.625294_US_webconnectivity_9215f30cf2412f49'
       await page.goto(measurementUrl)
-      await page.waitForLoadState('networkidle')
 
       await page.getByText('VERIFY').click()
 
@@ -353,7 +320,6 @@ test.describe('Measurement Page Tests', () => {
         '/m/20230307142542.625294_US_webconnectivity_9215f30cf2412f49'
 
       await page.goto(measurementUrl)
-      await page.waitForLoadState('networkidle')
 
       await page.getByText('VERIFY').click()
 

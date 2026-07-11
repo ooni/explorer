@@ -71,9 +71,7 @@ const Networks = () => {
   return (
     <>
       <Head>
-        <title>
-          {intl.formatMessage({ id: 'Networks.Title' })} | {intl.formatMessage({ id: 'General.OoniExplorer' })}
-        </title>
+        <title>{`${intl.formatMessage({ id: 'Networks.Title' })} | ${intl.formatMessage({ id: 'General.OoniExplorer' })}`}</title>
       </Head>
       <div className="container">
         <StickySubMenu

@@ -27,7 +27,7 @@ export const MetaTags = ({ theme }) => {
 
   return (
     <Head>
-      <title>{title} | {intl.formatMessage({ id: 'General.OoniExplorer' })}</title>
+      <title>{`${title} | ${intl.formatMessage({ id: 'General.OoniExplorer' })}`}</title>
       <meta key="og:title" property="og:title" content={title} />
       <meta
         key="og:description"

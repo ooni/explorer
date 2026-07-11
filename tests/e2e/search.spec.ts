@@ -1,43 +1,16 @@
 import dayjs from '../../services/dayjs'
 import { test, expect } from '@playwright/test'
+import { mockApi } from './helpers/mockApi'
 
 test.describe('Search Page Tests', () => {
+  test.afterEach(async ({ page }) => {
+    await page.unrouteAll({ behavior: 'ignoreErrors' })
+  })
+
   test.beforeEach(async ({ page }) => {
-    await page.route('**/api/**', async (route) => {
-      const request = route.request()
-
-      // Handle OPTIONS preflight requests
-      if (request.method() === 'OPTIONS') {
-        await route.fulfill({
-          status: 200,
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-            'Access-Control-Max-Age': '86400',
-          },
-        })
-        return
-      }
-
-      // For actual requests, fetch and add CORS headers
-      const response = await route.fetch()
-      const body = await response.body()
-      const headers = response.headers()
-
-      await route.fulfill({
-        status: response.status(),
-        headers: {
-          ...headers,
-          'Access-Control-Allow-Origin': '*',
-          'Access-Control-Allow-Credentials': 'true',
-        },
-        body: body,
-      })
-    })
+    await mockApi(page, '**/api.ooni.org/**', 'search')
 
     await page.goto('/search')
-    await page.waitForLoadState('networkidle')
   })
 
   test('default filter shows 50 results', async ({ page }) => {
@@ -80,12 +53,10 @@ test.describe('Search Page Tests', () => {
   test('fetches more results when "Load More" button is clicked', async ({
     page,
   }) => {
-    await page.getByTestId('load-more-button').click()
-
-    // Wait for API call and results to update
-    await page.waitForResponse('**/api/v1/measurements*')
-
     const resultsList = page.getByTestId('results-list').getByRole('link')
+    await expect(resultsList).toHaveCount(50)
+
+    await page.getByTestId('load-more-button').click()
     await expect(resultsList).toHaveCount(100)
   })
 

@@ -3,7 +3,6 @@ import { test, expect } from '@playwright/test'
 test.describe('Country Page Tests', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/country/CA')
-    await page.waitForLoadState('networkidle')
   })
 
   // TODO: is overview text is populated

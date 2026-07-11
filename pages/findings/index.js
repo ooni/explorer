@@ -66,7 +66,7 @@ const Index = ({ incidents }) => {
   return (
     <>
       <Head>
-        <title>{intl.formatMessage({ id: 'Findings.Index.Title' })} | {intl.formatMessage({ id: 'General.OoniExplorer' })}</title>
+        <title>{`${intl.formatMessage({ id: 'Findings.Index.Title' })} | ${intl.formatMessage({ id: 'General.OoniExplorer' })}`}</title>
       </Head>
       <div className="container">
         {user?.role === 'admin' && (

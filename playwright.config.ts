@@ -34,22 +34,27 @@ export default defineConfig({
     trace: 'on-first-retry',
   },
 
-  /* Configure projects for major browsers */
+  /* Configure projects for major browsers.
+   * On PRs we only run chromium to keep CI fast; the full cross-browser
+   * matrix runs on pushes to main/master (FULL_BROWSERS=1). */
   projects: [
     {
       name: 'chromium',
       use: { ...devices['Desktop Chrome'] },
     },
 
-    {
-      name: 'firefox',
-      use: { ...devices['Desktop Firefox'] },
-    },
-
-    {
-      name: 'webkit',
-      use: { ...devices['Desktop Safari'] },
-    },
+    ...(process.env.FULL_BROWSERS
+      ? [
+          {
+            name: 'firefox',
+            use: { ...devices['Desktop Firefox'] },
+          },
+          {
+            name: 'webkit',
+            use: { ...devices['Desktop Safari'] },
+          },
+        ]
+      : []),
 
     /* Test against mobile viewports. */
     // {
@@ -72,10 +77,16 @@ export default defineConfig({
     // },
   ],
 
-  /* Run your local dev server before starting the tests */
+  /* Serve the app before starting the tests.
+   * On CI we run the optimized production build (`yarn start`) which is much
+   * faster and more stable than `next dev` (no on-demand route compilation).
+   * The build itself is produced by a separate CI step (`yarn build:test`). */
   webServer: {
-    command: 'NODE_ENV=test yarn run dev',
+    command: process.env.CI
+      ? 'NODE_ENV=test yarn start'
+      : 'NODE_ENV=test yarn run dev',
     url: 'http://localhost:3100',
     reuseExistingServer: !process.env.CI,
+    timeout: 120_000,
   },
 })

@@ -34,8 +34,6 @@ test.describe('Findings Dashboard', () => {
     )
 
     await page.goto('/findings/dashboard')
-    await page.waitForLoadState('networkidle')
-
     await expect(page.getByText('Findings Dashboard')).toBeVisible()
   })
 
@@ -45,8 +43,6 @@ test.describe('Findings Dashboard', () => {
     )
 
     await page.goto('/findings/dashboard')
-    await page.waitForLoadState('networkidle')
-
     await expect(page.getByText('Findings Dashboard')).not.toBeVisible()
     await expect(page).toHaveURL('http://localhost:3100/findings', {
       timeout: 6000,
@@ -62,8 +58,6 @@ test.describe('Findings Dashboard', () => {
     )
 
     await page.goto('/findings/dashboard')
-    await page.waitForLoadState('networkidle')
-
     await expect(page.getByText('Findings Dashboard')).not.toBeVisible()
     await expect(page).toHaveURL('http://localhost:3100/findings', {
       timeout: 6000,
@@ -87,8 +81,6 @@ test.describe('Findings Edit', () => {
     )
 
     await page.goto('/findings/edit/1234')
-    await page.waitForLoadState('networkidle')
-
     await expect(
       page.getByRole('heading', { name: 'Edit Censorship Finding' }),
     ).toBeVisible()
@@ -116,8 +108,6 @@ test.describe('Findings Edit', () => {
     )
 
     await page.goto('/findings/edit/1234')
-    await page.waitForLoadState('networkidle')
-
     await expect(
       page.getByRole('heading', { name: 'Edit Censorship Finding' }),
     ).toBeVisible()
@@ -129,8 +119,6 @@ test.describe('Findings Edit', () => {
     )
 
     await page.goto('/findings/edit/1234')
-    await page.waitForLoadState('networkidle')
-
     await expect(
       page.getByRole('heading', { name: 'Edit Censorship Finding' }),
     ).not.toBeVisible()
@@ -154,8 +142,6 @@ test.describe('Findings Edit', () => {
     )
 
     await page.goto('/findings/edit/1234')
-    await page.waitForLoadState('networkidle')
-
     await expect(
       page.getByRole('heading', { name: 'Edit Censorship Finding' }),
     ).not.toBeVisible()

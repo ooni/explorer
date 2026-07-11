@@ -1,0 +1,5 @@
+{
+  "status": 200,
+  "contentType": "application/json",
+  "body": "{\"v\":0,\"dimension_count\":1,\"db_stats\":{\"row_count\":3979248,\"bytes\":138133717,\"total_row_count\":3979248,\"elapsed_seconds\":0.047969818115234375},\"result\":[{\"anomaly_count\":53651,\"confirmed_count\":6739,\"failure_count\":16283,\"ok_count\":1036684,\"measurement_count\":1113357,\"measurement_start_day\":\"2022-03-01\"},{\"anomaly_count\":57942,\"confirmed_count\":8782,\"failure_count\":13819,\"ok_count\":1131672,\"measurement_count\":1212215,\"measurement_start_day\":\"2022-03-02\"},{\"anomaly_count\":54710,\"confirmed_count\":7051,\"failure_count\":13346,\"ok_count\":1086791,\"measurement_count\":1161898,\"measurement_start_day\":\"2022-03-03\"}]}"
+}

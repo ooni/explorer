@@ -54,7 +54,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^2.4.6",
-    "@playwright/test": "^1.57.0",
+    "@playwright/test": "^1.61.1",
     "@tailwindcss/postcss": "^4.2.2",
     "@types/node": "^22.5.4",
     "@types/nprogress": "^0.2.3",
@@ -64,7 +64,6 @@
     "glob": "^10.5.0",
     "imap-simple": "^5.1.0",
     "jsdom": "^23.2.0",
-    "msw": "^2.1.0",
     "mustache": "^4.2.0",
     "postcss": "^8.5.10",
     "start-server-and-test": "^2.0.3",
@@ -88,8 +87,5 @@
     "git:getCommitSHA": "git rev-parse HEAD",
     "git:getCommitSHA:short": "git rev-parse --short HEAD",
     "git:getCommitRef": "git symbolic-ref HEAD"
-  },
-  "msw": {
-    "workerDirectory": "public"
   }
 }
