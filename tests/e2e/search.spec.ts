@@ -2,6 +2,12 @@ import dayjs from '../../services/dayjs'
 import { test, expect } from '@playwright/test'
 import { mockApi } from './helpers/mockApi'
 
+// Match the date range used in tests/e2e/fixtures/search/ so CI does not depend
+// on the app's rolling default (last 30 days through tomorrow).
+const FIXTURE_SINCE = '2026-06-11'
+const FIXTURE_UNTIL = '2026-07-12'
+const searchPath = `/search?since=${FIXTURE_SINCE}&until=${FIXTURE_UNTIL}&failure=false`
+
 test.describe('Search Page Tests', () => {
   test.afterEach(async ({ page }) => {
     await page.unrouteAll({ behavior: 'ignoreErrors' })
@@ -10,7 +16,7 @@ test.describe('Search Page Tests', () => {
   test.beforeEach(async ({ page }) => {
     await mockApi(page, '**/api.ooni.org/**', 'search')
 
-    await page.goto('/search')
+    await page.goto(searchPath)
   })
 
   test('default filter shows 50 results', async ({ page }) => {
