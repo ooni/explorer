@@ -72,7 +72,6 @@
   },
   "scripts": {
     "dev": "next dev -p 3100",
-    "debug": "WDYR=1 NODE_OPTIONS='--inspect' next dev -p 3100",
     "start": "next start -p 3100",
     "build": "next build",
     "export": "next export",
@@ -82,7 +81,6 @@
     "test": "playwright test",
     "script:build-countries": "node scripts/build-countries.js",
     "script:build-translations": "node ./scripts/build-translations.js",
-    "script:extract-i18n-keys": "yarn build && node ./scripts/extract-react-intl-keys.js",
     "git:getReleasesAndTags": "git tag --points-at HEAD",
     "git:getCommitSHA": "git rev-parse HEAD",
     "git:getCommitSHA:short": "git rev-parse --short HEAD",
