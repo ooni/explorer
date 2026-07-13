@@ -1,9 +1,8 @@
 /* global process */
 import axios from 'axios'
-import Head from 'next/head'
 import Link from 'next/link'
 import { colors } from 'ooni-components'
-import { FormattedMessage, useIntl } from 'react-intl'
+import { FormattedMessage } from 'react-intl'
 import { twMerge } from 'tailwind-merge'
 import FormattedMarkdown from 'components/FormattedMarkdown'
 import HighlightSection from 'components/landing/HighlightsSection'
@@ -93,15 +92,11 @@ const LandingPage = ({
   asnCount,
   countryCount,
 }: LandingPageProps) => {
-  const intl = useIntl()
   const compactMeasurementCount = toCompactNumberUnit(measurementCount)
   const compactAsnCount = toCompactNumberUnit(asnCount)
 
   return (
     <>
-      <Head>
-        <title>{intl.formatMessage({ id: 'General.OoniExplorer' })}</title>
-      </Head>
       <div
         className="pt-4 pb-12"
         style={{

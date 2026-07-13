@@ -20,6 +20,7 @@ const Header = () => {
 
   return (
     <Head>
+      <title>{title}</title>
       <meta charSet="utf-8" />
       <meta name="viewport" content="initial-scale=1.0, width=device-width" />
       <meta name="description" content={description} />
@@ -70,7 +71,7 @@ const Header = () => {
       <link rel="alternate" hrefLang="x-default" href={`${BASE_URL}${path}`} />
 
       <meta name="twitter:card" content="summary_large_image" />
-      <meta key="twitter:title" name="twitter:title" content="OONI Explorer" />
+      <meta key="twitter:title" name="twitter:title" content={title} />
       <meta name="twitter:site" content="@openobservatory" />
       <meta name="twitter:creator" content="@openobservatory" />
 
