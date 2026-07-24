@@ -125,14 +125,17 @@ const ExploreBar = () => {
   // (localized) countries and themes, since the API pool is domains/networks.
   const defaultSuggestions = useMemo(() => {
     if (!defaultPool) return []
-    const specials = localOptions.filter((o) => o.type === 'special')
-    const countryOptions = localOptions.filter((o) => o.type === 'country')
-    const seed = [
-      ...shuffle(specials).slice(0, 2),
-      ...shuffle(countryOptions).slice(0, 3),
-      ...defaultPool,
-    ]
-    return shuffle(seed).slice(0, DEFAULT_SUGGESTIONS_COUNT)
+    const specials = shuffle(localOptions.filter((o) => o.type === 'special'))
+    const countryOptions = shuffle(
+      localOptions.filter((o) => o.type === 'country'),
+    )
+    // Exactly two countries and one theme, plus domains/networks to fill
+    const required = [...countryOptions.slice(0, 2), ...specials.slice(0, 1)]
+    const rest = shuffle(defaultPool).slice(
+      0,
+      Math.max(0, DEFAULT_SUGGESTIONS_COUNT - required.length),
+    )
+    return shuffle([...required, ...rest])
   }, [defaultPool, localOptions])
 
   // Instant, locale-aware matches for countries and themes; no request needed
