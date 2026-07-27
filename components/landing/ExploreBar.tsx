@@ -224,7 +224,7 @@ const ExploreBar = () => {
       case 'network':
         return (
           <>
-            <span className="font-semibold">AS{option.key}</span>
+            <span>AS{option.key}</span>
             {option.name && <span> · {option.name}</span>}
           </>
         )
