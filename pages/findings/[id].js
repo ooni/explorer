@@ -1,7 +1,6 @@
 import Head from 'next/head'
 import { apiEndpoints, fetcher } from 'lib/api'
 
-import NotFound from 'components/NotFound'
 import FindingDisplay from 'components/findings/FindingDisplay'
 import StructuredData from 'components/StructuredData'
 import { getFindingStructuredData } from 'lib/findingStructuredData'
@@ -12,6 +11,11 @@ export const getServerSideProps = async ({ query, req, res }) => {
     const data = await fetcher(
       apiEndpoints.SHOW_INCIDENT.replace(':id', query.id),
     )
+
+    if (!data?.incident) {
+      res.setHeader('Cache-Control', 'no-store')
+      return { notFound: true }
+    }
 
     const canonicalUrl = `${process.env.NEXT_PUBLIC_EXPLORER_URL}/findings/${query.id}`
 
@@ -24,15 +28,14 @@ export const getServerSideProps = async ({ query, req, res }) => {
       props: {
         data,
         canonicalUrl,
-        structuredData: data?.incident
-          ? getFindingStructuredData(data.incident, canonicalUrl)
-          : null,
-        isEmbeddedView: !!req.headers['enable-embedded-view'] || !!query?.webview,
+        structuredData: getFindingStructuredData(data.incident, canonicalUrl),
+        isEmbeddedView:
+          !!req.headers['enable-embedded-view'] || !!query?.webview,
       },
     }
   } catch (error) {
     res.setHeader('Cache-Control', 'no-store')
-    return { props: { data: null} }
+    return { notFound: true }
   }
 }
 
@@ -65,13 +68,7 @@ const ReportView = ({ data, canonicalUrl, structuredData }) => {
         )}
       </Head>
       <div className="container">
-        {data ? (
-          <FindingDisplay incident={data.incident} />
-        ) : (
-          <NotFound
-            title={intl.formatMessage({ id: 'Findings.Display.NotFound' })}
-          />
-        )}
+        <FindingDisplay incident={data.incident} />
       </div>
     </>
   )
