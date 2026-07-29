@@ -1,11 +1,21 @@
 import { Badge } from 'components/Badge'
 import Flag from 'components/Flag'
-import { MATChartWrapper } from 'components/MATChart'
 import Markdown from 'markdown-to-jsx'
+import dynamic from 'next/dynamic'
 import Link from 'next/link'
 import { useIntl } from 'react-intl'
 import { formatLongDateUTC } from 'utils'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
+
+const MATChartWrapper = dynamic(
+  () => import('components/MATChart').then((mod) => mod.MATChartWrapper),
+  {
+    ssr: false,
+    loading: () => (
+      <div className="my-8 h-64 animate-pulse rounded bg-gray-100" />
+    ),
+  },
+)
 
 const FormattedMarkdown = ({ children }) => {
   return (
