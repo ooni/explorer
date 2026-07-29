@@ -5,7 +5,6 @@ import NotFound from 'components/NotFound'
 import FindingDisplay from 'components/findings/FindingDisplay'
 import StructuredData from 'components/StructuredData'
 import { getFindingStructuredData } from 'lib/findingStructuredData'
-import { useMemo } from 'react'
 import { useIntl } from 'react-intl'
 
 export const getServerSideProps = async ({ query, req }) => {
@@ -13,28 +12,25 @@ export const getServerSideProps = async ({ query, req }) => {
     apiEndpoints.SHOW_INCIDENT.replace(':id', query.id),
   ).catch(() => null)
 
+  const canonicalUrl = `${process.env.NEXT_PUBLIC_EXPLORER_URL}/findings/${query.id}`
+
   return {
     props: {
       data,
-      canonicalUrl: `${process.env.NEXT_PUBLIC_EXPLORER_URL}/findings/${query.id}`,
+      canonicalUrl,
+      structuredData: data?.incident
+        ? getFindingStructuredData(data.incident, canonicalUrl)
+        : null,
       isEmbeddedView: !!req.headers['enable-embedded-view'] || !!query?.webview,
     },
   }
 }
 
-const ReportView = ({ data, canonicalUrl }) => {
+const ReportView = ({ data, canonicalUrl, structuredData }) => {
   const intl = useIntl()
 
   const metaTitle = `${!!data?.incident?.title && `${data?.incident?.title} | `}${intl.formatMessage({ id: 'General.OoniExplorer' })}`
   const metaDescription = data?.incident?.short_description
-
-  const findingStructuredData = useMemo(() => {
-    if (!data?.incident) {
-      return null
-    }
-
-    return getFindingStructuredData(data.incident, canonicalUrl)
-  }, [canonicalUrl, data?.incident])
 
   return (
     <>
@@ -54,8 +50,8 @@ const ReportView = ({ data, canonicalUrl }) => {
           content={metaDescription}
         />
         <link rel="canonical" key="canonical" href={canonicalUrl} />
-        {findingStructuredData && (
-          <StructuredData data={findingStructuredData} />
+        {structuredData && (
+          <StructuredData data={structuredData} />
         )}
       </Head>
       <div className="container">
