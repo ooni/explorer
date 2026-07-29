@@ -7,22 +7,32 @@ import StructuredData from 'components/StructuredData'
 import { getFindingStructuredData } from 'lib/findingStructuredData'
 import { useIntl } from 'react-intl'
 
-export const getServerSideProps = async ({ query, req }) => {
-  const data = await fetcher(
-    apiEndpoints.SHOW_INCIDENT.replace(':id', query.id),
-  ).catch(() => null)
+export const getServerSideProps = async ({ query, req, res }) => {
+  try {
+    const data = await fetcher(
+      apiEndpoints.SHOW_INCIDENT.replace(':id', query.id),
+    )
 
-  const canonicalUrl = `${process.env.NEXT_PUBLIC_EXPLORER_URL}/findings/${query.id}`
+    const canonicalUrl = `${process.env.NEXT_PUBLIC_EXPLORER_URL}/findings/${query.id}`
 
-  return {
-    props: {
-      data,
-      canonicalUrl,
-      structuredData: data?.incident
-        ? getFindingStructuredData(data.incident, canonicalUrl)
-        : null,
-      isEmbeddedView: !!req.headers['enable-embedded-view'] || !!query?.webview,
-    },
+    res.setHeader(
+      'Cache-Control',
+      'public, s-maxage=600, stale-while-revalidate=60',
+    )
+
+    return {
+      props: {
+        data,
+        canonicalUrl,
+        structuredData: data?.incident
+          ? getFindingStructuredData(data.incident, canonicalUrl)
+          : null,
+        isEmbeddedView: !!req.headers['enable-embedded-view'] || !!query?.webview,
+      },
+    }
+  } catch (error) {
+    res.setHeader('Cache-Control', 'no-store')
+    return { props: { data: null} }
   }
 }
 
