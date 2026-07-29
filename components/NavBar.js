@@ -5,7 +5,7 @@ import ExplorerLogo from "ooni-components/svgs/logos/Explorer-HorizontalMonochro
 import { useEffect, useState } from "react";
 import { MdClose, MdMenu } from "react-icons/md";
 import { FormattedMessage, useIntl } from "react-intl";
-import { getLocalisedLanguageName } from "utils/i18nCountries";
+import { LANGUAGE_NATIVE_NAMES } from "utils/i18nCountries";
 import { getDirection } from "./withIntl";
 import { twMerge } from "tailwind-merge";
 import Image from "next/image";
@@ -252,9 +252,8 @@ export const NavBar = ({ color, className }) => {
                         className="text-inherit opacity-100"
                         key={c}
                         value={c}
-                        suppressHydrationWarning
                       >
-                        {getLocalisedLanguageName(c, c)}
+                        {LANGUAGE_NATIVE_NAMES[c] || c}
                       </option>
                     ))}
                   </LanguageSelect>
