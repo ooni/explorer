@@ -11,7 +11,7 @@ const HighlightBox = ({ countryCode, title, text, dates, footer }) => {
   const intl = useIntl()
 
   return (
-    <div className="flex py-8 px-6 flex-col justify-between border border-gray-300 border-l-[10px] border-l-blue-500">
+    <div className="flex py-8 px-6 flex-col justify-between border border-gray-300 border-l-10` border-l-blue-500">
       <div>
         {countryCode && (
           <div className="flex items-center">
@@ -38,7 +38,7 @@ const HighlightBox = ({ countryCode, title, text, dates, footer }) => {
           </Markdown>
         </div>
       </div>
-      <div className="mt-6">{footer}</div>
+      {footer && <div className="mt-6">{footer}</div>}
     </div>
   )
 }

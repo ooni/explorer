@@ -2,13 +2,76 @@
 import axios from 'axios'
 import Link from 'next/link'
 import { colors } from 'ooni-components'
-import { FormattedMessage } from 'react-intl'
+import { FormattedMessage, useIntl } from 'react-intl'
 import { twMerge } from 'tailwind-merge'
+import FindingsSection from 'components/FindingsSection'
 import FormattedMarkdown from 'components/FormattedMarkdown'
-import HighlightSection from 'components/landing/HighlightsSection'
 import CoverageChart from 'components/landing/Stats'
-import highlightContent from 'components/landing/highlights.json'
+import { convertDatesData, sortData } from 'hooks/useFindings'
+import { getFindings } from 'lib/api'
 import { toCompactNumberUnit } from 'utils'
+
+const FINDINGS_THEMES = [
+  'social_media',
+  'news_media',
+  'human_rights',
+  'circumvention',
+] as const
+
+type FindingTheme = (typeof FINDINGS_THEMES)[number]
+
+type FindingSummary = {
+  id: string
+  title: string
+  author: string
+  start_time: string
+  end_time?: string
+  short_description: string
+  CCs: string[]
+}
+
+const toFindingSummary = (finding: {
+  id: string
+  title: string
+  reported_by?: string
+  start_time: Date | string
+  end_time?: Date | string
+  short_description: string
+  CCs: string[]
+}): FindingSummary => ({
+  id: finding.id,
+  title: finding.title,
+  author: finding.reported_by ?? '',
+  start_time:
+    finding.start_time instanceof Date
+      ? finding.start_time.toISOString()
+      : finding.start_time,
+  ...(finding.end_time && {
+    end_time:
+      finding.end_time instanceof Date
+        ? finding.end_time.toISOString()
+        : finding.end_time,
+  }),
+  short_description: finding.short_description,
+  CCs: finding.CCs ?? [finding.CCs?.[0]],
+})
+
+const groupFindingsByTheme = (
+  incidents: { id: string; themes?: string[] }[],
+): Record<FindingTheme, FindingSummary[]> => {
+  const sorted = sortData(convertDatesData(incidents))
+
+  return FINDINGS_THEMES.reduce(
+    (acc, theme) => {
+      acc[theme] = sorted
+        .filter((f: { themes?: string[] }) => f.themes?.includes(theme))
+        .slice(0, 5)
+        .map(toFindingSummary)
+      return acc
+    },
+    {} as Record<FindingTheme, FindingSummary[]>,
+  )
+}
 interface StatsItemProps {
   label: React.ReactNode
   unit?: string
@@ -69,15 +132,19 @@ const FeatureBoxTitle = ({
 
 export async function getStaticProps() {
   const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
-  const result = await client.get('/api/_/global_overview')
+  const [result, incidents] = await Promise.all([
+    client.get('/api/_/global_overview'),
+    getFindings().catch(() => []),
+  ])
 
   return {
     props: {
       measurementCount: result.data.measurement_count,
       asnCount: result.data.network_count,
       countryCount: result.data.country_count,
+      findings: groupFindingsByTheme(incidents),
     },
-    revalidate: 60 * 60 * 12, // 12 hours
+    revalidate: 60 * 60 * 1, // 1 hours
   }
 }
 
@@ -85,13 +152,16 @@ interface LandingPageProps {
   measurementCount: number
   asnCount: number
   countryCount: number
+  findings: Record<FindingTheme, FindingSummary[]>
 }
 
 const LandingPage = ({
   measurementCount,
   asnCount,
   countryCount,
+  findings,
 }: LandingPageProps) => {
+  const intl = useIntl()
   const compactMeasurementCount = toCompactNumberUnit(measurementCount)
   const compactAsnCount = toCompactNumberUnit(asnCount)
 
@@ -114,7 +184,7 @@ const LandingPage = ({
             <div className="inline-block">
               <Link
                 href="/chart/mat"
-                className="btn btn-white-hollow hover:!text-white btn-xl mt-12 mx-auto"
+                className="btn btn-white-hollow hover:text-white! btn-xl mt-12 mx-auto"
               >
                 <FormattedMessage id="Home.Banner.Button.Explore" />
               </Link>
@@ -220,37 +290,31 @@ const LandingPage = ({
             </div>
           </div>
 
-          {/* Political Events */}
-          <HighlightSection
-            title={<FormattedMessage id="Home.Highlights.Political" />}
-            description={
-              <FormattedMessage id="Home.Highlights.Political.Description" />
-            }
-            highlights={highlightContent.political}
+          <FindingsSection
+            title={intl.formatMessage({
+              id: 'ThematicPage.SocialMedia.FindingsTitle',
+            })}
+            theme="social_media"
+            findings={findings.social_media}
           />
-          {/* Media */}
-          <HighlightSection
-            title={<FormattedMessage id="Home.Highlights.Media" />}
-            description={
-              <FormattedMessage id="Home.Highlights.Media.Description" />
-            }
-            highlights={highlightContent.media}
+          <FindingsSection
+            title={intl.formatMessage({
+              id: 'ThematicPage.NewsMedia.FindingsTitle',
+            })}
+            theme="news_media"
+            findings={findings.news_media}
           />
-          {/* LGBTQI sites */}
-          <HighlightSection
-            title={<FormattedMessage id="Home.Highlights.LGBTQI" />}
-            description={
-              <FormattedMessage id="Home.Highlights.LGBTQI.Description" />
-            }
-            highlights={highlightContent.lgbtqi}
+          <FindingsSection
+            title="Findings on blocking Human Rights Websites"
+            theme="human_rights"
+            findings={findings.human_rights}
           />
-          {/* Censorship changes */}
-          <HighlightSection
-            title={<FormattedMessage id="Home.Highlights.Changes" />}
-            description={
-              <FormattedMessage id="Home.Highlights.Changes.Description" />
-            }
-            highlights={highlightContent.changes}
+          <FindingsSection
+            title={intl.formatMessage({
+              id: 'ThematicPage.Circumvention.FindingsTitle',
+            })}
+            theme="circumvention"
+            findings={findings.circumvention}
           />
           <div className="my-4 text-xl">
             <FormattedMessage
