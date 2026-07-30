@@ -179,15 +179,10 @@ const DomainDashboard = ({ domain, categoryCode, canonicalDomain }) => {
     swrOptions,
   )
 
-  const noIndexCategoryCodes = ['PORN', 'PROV', 'GMB', 'MISC', 'HATE', 'MILX', 'ALDR']
-
   return (
     <>
       <Head>
         <title>{title}</title>
-        {noIndexCategoryCodes.includes(categoryCode) && (
-          <meta name="robots" content="noindex" />
-        )}
       </Head>
       <div className="container mt-16">
         <h1 className="mb-0">{domain}</h1>
@@ -231,6 +226,8 @@ export const getServerSideProps = async (context) => {
       await client
         .get(path, { params: { domain } })
         .then((response) => response.data)
+
+    context.res.setHeader('X-Robots-Tag', 'noindex')
 
     return {
       props: {
