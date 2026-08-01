@@ -250,8 +250,8 @@
   "Measurement.Metadata.WebConnectivity.Down": "{hostname} 在{country}发生宕机事故",
   "Measurement.Metadata.WebConnectivity.Failed": "{hostname} 在{country}测量失败",
   "Measurement.Hero.Status.Default": "测量报告",
-  "Measurement.Feedback.Title": "验证测量数据",
-  "Measurement.Feedback.Description": "请根据测量数据中的所见情况共享反馈。",
+  "Measurement.Feedback.Title": "验证该测量",
+  "Measurement.Feedback.Description": "请根据您在测量数据中的所见情况分享反馈。",
   "Measurement.Feedback.ok": "是正常的",
   "Measurement.Feedback.down": "已宕机",
   "Measurement.Feedback.down.unreachable": "无法访问",
@@ -695,7 +695,7 @@
   "MAT.Table.Header.outcome_down": "结果不可用",
   "MAT.Table.Header.outcome_ok": "结果正常",
   "Measurement.CommonSummary.ViaAnonymousCredentials": "通过匿名凭据",
-  "Measurement.CommonSummary.ProbeAuthenticated": "Probe 已通过身份验证",
-  "Measurement.CommonSummary.ProbeUnauthenticated": "Probe 未通过身份验证",
-  "Measurement.CommonSummary.ProbeAuthenticationFailed": "Probe 身份验证失败"
+  "Measurement.CommonSummary.ProbeAuthenticated": "Probe 已验证",
+  "Measurement.CommonSummary.ProbeUnauthenticated": "Probe 未验证",
+  "Measurement.CommonSummary.ProbeAuthenticationFailed": "Probe 验证失败"
 }
