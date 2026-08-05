@@ -8,44 +8,50 @@ import { useIntl } from 'react-intl'
 import useSWR from 'swr'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
 
-const DEFAULT_SUGGESTIONS_COUNT = 10
 const MAX_LOCAL_MATCHES = 5
 const MAX_TOTAL_RESULTS = 15
+const DEFAULT_COUNTRY_COUNT = 2
+const DEFAULT_NETWORK_COUNT = 3
+const DEFAULT_DOMAIN_COUNT = 3
+const TOP_COUNTRY_POOL = 20
+
+const TOP_COUNTRIES = [...countries]
+  .sort((a, b) => (b.count ?? 0) - (a.count ?? 0))
+  .slice(0, TOP_COUNTRY_POOL)
 
 interface SearchResult {
-  type: 'country' | 'network' | 'domain' | 'special'
+  type: 'country' | 'network' | 'domain' | 'theme'
   key: string | number
   name: string
   href: string
+  intlId?: string
 }
 
 interface LocalOption extends SearchResult {
   haystack: string
 }
 
-// Countries and themes are filtered client-side against their localized
-// names (the API only searches domains and networks for text queries).
-// English aliases keep English queries working in every locale.
-const SPECIAL_OPTIONS = [
-  {
-    key: 'circumvention',
-    name: 'Circumvention tools',
-    aliases: 'circumvention tools vpn tor psiphon proxy',
-  },
+// Countries and themes are matched client-side against localized names
+// (the API only searches domains and networks). English aliases keep
+// English queries working in every locale.
+const THEME_OPTIONS = [
   {
     key: 'social-media',
+    intlId: 'Navbar.SocialMedia',
     name: 'Social media',
     aliases: 'social media facebook twitter instagram whatsapp telegram',
   },
   {
     key: 'news-media',
+    intlId: 'Navbar.NewsMedia',
     name: 'News media',
     aliases: 'news media press journalism',
   },
   {
-    key: 'human-rights',
-    name: 'Human rights',
-    aliases: 'human rights ngo advocacy',
+    key: 'circumvention',
+    intlId: 'Navbar.Circumvention',
+    name: 'Circumvention tools',
+    aliases: 'circumvention tools vpn tor psiphon proxy',
   },
 ]
 
@@ -65,6 +71,9 @@ const shuffle = <T,>(items: T[]): T[] => {
   return shuffled
 }
 
+const pickRandom = <T,>(items: T[], count: number): T[] =>
+  shuffle(items).slice(0, count)
+
 const ExploreBar = () => {
   const intl = useIntl()
   const router = useRouter()
@@ -81,35 +90,36 @@ const ExploreBar = () => {
   const debouncedSetQuery = useMemo(() => debounce(setQuery, 200), [])
   useEffect(() => () => debouncedSetQuery.cancel(), [debouncedSetQuery])
 
-  const { data: defaultPool } = useSWR<SearchResult[]>(
-    hasOpened ? '/api/search' : null,
-    fetcher,
-    { revalidateOnFocus: false },
-  )
+  const { data: defaultPool, isLoading: isDefaultLoading } =
+    useSWR<SearchResult[]>(hasOpened ? '/api/search' : null, fetcher, {
+      revalidateOnFocus: false,
+    })
 
   const trimmedQuery = query.trim()
-  const { data: searchResults } = useSWR<SearchResult[]>(
-    hasOpened && trimmedQuery ? ['/api/search', { q: trimmedQuery }] : null,
-    fetcher,
-    { revalidateOnFocus: false, keepPreviousData: true },
-  )
+  const { data: searchResults, isLoading: isSearchLoading } =
+    useSWR<SearchResult[]>(
+      hasOpened && trimmedQuery ? ['/api/search', { q: trimmedQuery }] : null,
+      fetcher,
+      { revalidateOnFocus: false, keepPreviousData: true },
+    )
 
-  const localOptions = useMemo<LocalOption[]>(() => {
+  const { themeOptions, countryOptions, localOptions } = useMemo(() => {
     const lower = (value: string) => value.toLocaleLowerCase(intl.locale)
-    const specials = SPECIAL_OPTIONS.map(({ key, name, aliases }) => {
+    const themeOptions = THEME_OPTIONS.map(({ key, intlId, name, aliases }) => {
       const localizedLabel = intl.formatMessage({
-        id: `Home.ExploreBar.Special.${key}`,
+        id: intlId,
         defaultMessage: name,
       })
       return {
-        type: 'special' as const,
+        type: 'theme' as const,
         key,
         name,
+        intlId,
         href: `/${key}`,
         haystack: `${lower(localizedLabel)} ${aliases}`,
       }
     })
-    const countryOptions = countries.map(({ alpha_2, name }) => ({
+    const toCountryOption = ({ alpha_2, name }: { alpha_2: string; name: string }) => ({
       type: 'country' as const,
       key: alpha_2,
       name,
@@ -117,26 +127,28 @@ const ExploreBar = () => {
       haystack: lower(
         `${getLocalisedRegionName(alpha_2, intl.locale)} ${name} ${alpha_2}`,
       ),
-    }))
-    return [...specials, ...countryOptions]
+    })
+    const countryOptions = TOP_COUNTRIES.map(toCountryOption)
+    return {
+      themeOptions,
+      countryOptions,
+      localOptions: [...themeOptions, ...countries.map(toCountryOption)],
+    }
   }, [intl])
 
-  // One random mix per visit: server domains/networks plus locally sourced
-  // (localized) countries and themes, since the API pool is domains/networks.
   const defaultSuggestions = useMemo(() => {
     if (!defaultPool) return []
-    const specials = shuffle(localOptions.filter((o) => o.type === 'special'))
-    const countryOptions = shuffle(
-      localOptions.filter((o) => o.type === 'country'),
-    )
-    // Exactly two countries and one theme, plus domains/networks to fill
-    const required = [...countryOptions.slice(0, 2), ...specials.slice(0, 1)]
-    const rest = shuffle(defaultPool).slice(
-      0,
-      Math.max(0, DEFAULT_SUGGESTIONS_COUNT - required.length),
-    )
-    return shuffle([...required, ...rest])
-  }, [defaultPool, localOptions])
+
+    const networks = defaultPool.filter((o) => o.type === 'network')
+    const domains = defaultPool.filter((o) => o.type === 'domain')
+
+    return [
+      ...themeOptions,
+      ...pickRandom(countryOptions, DEFAULT_COUNTRY_COUNT),
+      ...pickRandom(networks, DEFAULT_NETWORK_COUNT),
+      ...pickRandom(domains, DEFAULT_DOMAIN_COUNT),
+    ]
+  }, [defaultPool, themeOptions, countryOptions])
 
   // Instant, locale-aware matches for countries and themes; no request needed
   const trimmedInput = inputValue.trim()
@@ -169,6 +181,12 @@ const ExploreBar = () => {
         : defaultSuggestions,
     [trimmedInput, localMatches, searchResults, defaultSuggestions],
   )
+
+  // Show a loader only when there is nothing to display yet and a request
+  // is in flight (initial default load, or a first search with no matches)
+  const isLoading =
+    options.length === 0 &&
+    (trimmedInput ? isSearchLoading : isDefaultLoading)
 
   // biome-ignore lint/correctness/useExhaustiveDependencies: reset highlight when the visible list changes
   useEffect(() => {
@@ -228,9 +246,9 @@ const ExploreBar = () => {
             {option.name && <span> · {option.name}</span>}
           </>
         )
-      case 'special':
+      case 'theme':
         return intl.formatMessage({
-          id: `Home.ExploreBar.Special.${option.key}`,
+          id: option.intlId ?? option.name,
           defaultMessage: option.name,
         })
       default:
@@ -268,43 +286,64 @@ const ExploreBar = () => {
             openDropdown()
           }}
           onKeyDown={onKeyDown}
+          onBlur={() => setIsOpen(false)}
         />
       </div>
       {isOpen && (
         <ul
           id={listboxId}
           role="listbox"
-          className="absolute z-10 mt-2 w-full max-h-100 overflow-y-auto rounded-lg bg-white py-2 text-left text-blue-900 shadow-lg px-2"
+          className="absolute z-10 mt-2 w-full max-h-100 overflow-y-auto rounded-lg bg-white my-2 text-left text-blue-900 shadow-lg px-0"
         >
-          {options.map((option, index) => (
-            <li
-              key={`${option.type}-${option.key}`}
-              id={`${listboxId}-option-${index}`}
-              role="option"
-              aria-selected={index === activeIndex}
-              className={`flex items-center gap-3 px-2 py-2 cursor-pointer ${
-                index === activeIndex ? 'bg-blue-100' : 'hover:bg-blue-50'
-              }`}
-              onMouseEnter={() => setActiveIndex(index)}
-              onMouseDown={(e) => {
-                e.preventDefault()
-                selectOption(option)
-              }}
-            >
-              <MdSearch
-                aria-hidden="true"
-                className="shrink-0 text-xl text-gray-400"
-              />
-              <span className="truncate">{optionLabel(option)}</span>
-              <span className="ml-auto shrink-0 text-xs uppercase tracking-wide text-gray-500">
-                {intl.formatMessage({
-                  id: `Home.ExploreBar.Type.${option.type}`,
-                })}
-              </span>
-            </li>
-          ))}
-          {options.length === 0 && (
-            <li className="px-5 py-2 text-gray-500">
+          {isLoading && (
+            <>
+              <li className="sr-only" role="status">
+                {intl.formatMessage({ id: 'Home.ExploreBar.Loading' })}
+              </li>
+              {Array.from({ length: 4 }).map((_, i) => (
+                <li
+                  // biome-ignore lint/suspicious/noArrayIndexKey: static placeholder rows
+                  key={`skeleton-${i}`}
+                  aria-hidden="true"
+                  className="flex items-center gap-3 px-2 py-2"
+                >
+                  <div className="h-5 w-5 shrink-0 animate-pulse rounded-full bg-gray-200" />
+                  <div className="h-4 w-40 animate-pulse rounded bg-gray-200" />
+                  <div className="ml-auto h-3 w-14 animate-pulse rounded bg-gray-200" />
+                </li>
+              ))}
+            </>
+          )}
+          {!isLoading &&
+            options.map((option, index) => (
+              <li
+                key={`${option.type}-${option.key}`}
+                id={`${listboxId}-option-${index}`}
+                role="option"
+                aria-selected={index === activeIndex}
+                className={`flex items-center gap-3 px-2 py-2 cursor-pointer ${
+                  index === activeIndex ? 'bg-blue-100' : 'hover:bg-blue-50'
+                }`}
+                onMouseEnter={() => setActiveIndex(index)}
+                onMouseDown={(e) => {
+                  e.preventDefault()
+                  selectOption(option)
+                }}
+              >
+                <MdSearch
+                  aria-hidden="true"
+                  className="shrink-0 text-xl text-gray-400"
+                />
+                <span className="truncate">{optionLabel(option)}</span>
+                <span className="ml-auto shrink-0 text-xs uppercase tracking-wide text-gray-500">
+                  {intl.formatMessage({
+                    id: `Home.ExploreBar.Type.${option.type}`,
+                  })}
+                </span>
+              </li>
+            ))}
+          {!isLoading && options.length === 0 && (
+            <li className="px-5 py-2 text-gray-500" aria-hidden="true">
               {intl.formatMessage({ id: 'Home.ExploreBar.NoResults' })}
             </li>
           )}

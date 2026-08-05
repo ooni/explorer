@@ -33,8 +33,7 @@ const index = rawIndex.map((entry) => {
 const serialize = ({ t, k, n, href }) => ({ type: t, key: k, name: n, href })
 
 // Default pool for the empty-query response: the most measured domains and
-// networks. The client adds localized countries and themes and randomizes
-// its picks, so this response stays CDN-cacheable.
+// networks. The client shuffles picks from this pool and adds themes/countries.
 const buildDefaultPool = () => {
   const byType = { domain: [], network: [] }
   for (const entry of index) byType[entry.t]?.push(entry)
