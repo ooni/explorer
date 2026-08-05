@@ -7,6 +7,10 @@ function normalizeString(str) {
   return str.normalize('NFD').replace(/\p{Diacritic}/gu, '')
 }
 
+// Ongoing findings have no end_time. Use one shared sentinel so they tie on
+// end-date sorts and fall through to start_time
+const ONGOING_SORT_END = new Date(8640000000000000)
+
 export const convertDatesData = (data) => {
   return data
     .filter((incident) => incident.published)
@@ -16,26 +20,26 @@ export const convertDatesData = (data) => {
       ...(incident.end_time && { end_time: new Date(incident.end_time) }),
       sort_end_time: incident.end_time
         ? new Date(incident.end_time)
-        : new Date(),
+        : ONGOING_SORT_END,
     }))
 }
 
 export const sortData = (data, sortValue) =>
-  data
-    .sort((a, b) => b.start_time - a.start_time) // make sure ongoing events are always chronologically sorted
-    .sort((a, b) => {
-      if (sortValue === 'start_asc') {
-        return a.start_time - b.start_time
-      }
-      if (sortValue === 'start_desc') {
-        return b.start_time - a.start_time
-      }
-      if (sortValue === 'end_asc') {
-        return a.sort_end_time - b.sort_end_time
-      }
-      // default to 'end_desc' sort
-      return b.sort_end_time - a.sort_end_time
-    })
+  [...data].sort((a, b) => {
+    if (sortValue === 'start_asc') {
+      return a.start_time - b.start_time
+    }
+    if (sortValue === 'start_desc') {
+      return b.start_time - a.start_time
+    }
+    if (sortValue === 'end_asc') {
+      const byEnd = a.sort_end_time - b.sort_end_time
+      return byEnd !== 0 ? byEnd : a.start_time - b.start_time
+    }
+    // default to 'end_desc': ongoing first, then by start_time among ties
+    const byEnd = b.sort_end_time - a.sort_end_time
+    return byEnd !== 0 ? byEnd : b.start_time - a.start_time
+  })
 
 export const getSortedAndFilteredFindings = (data, { sortValue = 'end_desc', searchValue = '', themeValue = null } = {}) => {
   if (!data) return []

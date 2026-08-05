@@ -87,7 +87,7 @@ export const FindingBox = ({ incident }) => {
       }
       footer={
         <div className="mx-auto mt-4">
-          <Link href={`/findings/${incident.id}`} prefetch={false}>
+          <Link href={`/findings/${incident.slug || incident.id}`} prefetch={false}>
             <button className="btn btn-primary-hollow btn-sm" type="button">
               {intl.formatMessage({
                 id: 'Findings.Index.HighLightBox.ReadMore',
