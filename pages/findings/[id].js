@@ -17,7 +17,23 @@ export const getServerSideProps = async ({ query, req, res }) => {
       return { notFound: true }
     }
 
-    const canonicalUrl = `${process.env.NEXT_PUBLIC_EXPLORER_URL}/findings/${query.id}`
+    const { incident } = data
+    const paramId = String(query.id) 
+
+    if (
+      String(incident.id) === paramId &&
+      incident.slug
+    ) {
+      return {
+        redirect: {
+          destination: `/findings/${incident.slug}`,
+          permanent: true,
+        },
+      }
+    }
+
+    const pathId = incident.slug || paramId
+    const canonicalUrl = `${process.env.NEXT_PUBLIC_EXPLORER_URL}/findings/${pathId}`
 
     res.setHeader(
       'Cache-Control',
@@ -28,7 +44,7 @@ export const getServerSideProps = async ({ query, req, res }) => {
       props: {
         data,
         canonicalUrl,
-        structuredData: getFindingStructuredData(data.incident, canonicalUrl),
+        structuredData: getFindingStructuredData(incident, canonicalUrl),
         isEmbeddedView:
           !!req.headers['enable-embedded-view'] || !!query?.webview,
       },
