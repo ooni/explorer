@@ -1,4 +1,3 @@
-import PropTypes from 'prop-types'
 import { defineMessages, useIntl } from 'react-intl'
 
 const messages = defineMessages({
@@ -16,11 +15,9 @@ const messages = defineMessages({
   },
 })
 
-const SignalDetails = ({ measurement, render }) => {
+const SignalDetails = ({ measurement, render, isAnomaly, isFailure, isConfirmed, scores }) => {
   const intl = useIntl()
-  const testKeys = measurement.test_keys
-  const { signal_backend_status, signal_backend_failure } = testKeys
-  const anomaly = signal_backend_status === 'blocked'
+  const anomaly = isAnomaly
 
   let hint = intl.formatMessage({
     id: 'Measurement.Status.Hint.Signal.Reachable',
@@ -43,11 +40,6 @@ const SignalDetails = ({ measurement, render }) => {
       formatted: false,
     },
   })
-}
-
-SignalDetails.propTypes = {
-  measurement: PropTypes.object.isRequired,
-  render: PropTypes.func,
 }
 
 export default SignalDetails

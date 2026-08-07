@@ -4,10 +4,8 @@ import { FormattedMessage, defineMessages } from 'react-intl'
 
 import AccessPointStatus from '../AccessPointStatus'
 
-const PsiphonDetails = ({ measurement, render }) => {
-  const {
-    test_keys: { failure, bootstrap_time },
-  } = measurement
+const PsiphonDetails = ({ measurement, isAnomaly, render }) => {
+  const { bootstrap_time } = measurement?.test_keys ?? {}
 
   const messages = defineMessages({
     reachable: {
@@ -27,7 +25,7 @@ const PsiphonDetails = ({ measurement, render }) => {
 
   // https://github.com/ooni/spec/blob/master/nettests/ts-015-psiphon.md#possible-conclusions
   // Determine if psiphon is blocked and if the probe could bootstrap psiphon
-  if (failure) {
+  if (isAnomaly) {
     status = 'anomaly'
     metaText = messages.unReachable
     if (bootstrap_time === 0) {

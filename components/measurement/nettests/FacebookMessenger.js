@@ -5,13 +5,15 @@ import { DetailsBox } from '../DetailsBox'
 import StatusInfo from '../StatusInfo'
 import { formatTwoTuple } from 'utils'
 
-export const FacebookMessengerDetails = ({ measurement, render }) => {
+export const FacebookMessengerDetails = ({ measurement, render, isAnomaly, isFailure, isConfirmed, scores }) => {
   const intl = useIntl()
-  const testKeys = measurement.test_keys
-  const isWorking =
-    testKeys.facebook_dns_blocking === false &&
-    testKeys.facebook_tcp_blocking === false
-  const dnsBlocking = testKeys.facebook_dns_blocking === true
+  console.log("scores", scores)
+  const testKeys = measurement?.test_keys ?? {}
+  const isWorking = !isAnomaly && !isFailure && !isConfirmed
+    // testKeys.facebook_dns_blocking === false &&
+    // testKeys.facebook_tcp_blocking === false
+  const dnsBlocking = scores?.facebook_dns_blocking === true
+  // testKeys.facebook_dns_blocking === true
   const tcpBlocking = testKeys.facebook_tcp_blocking === true
   const tcpConnections = testKeys.tcp_connect
 
