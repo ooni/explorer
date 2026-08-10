@@ -1,19 +1,7 @@
 import { defineMessages, useIntl } from 'react-intl'
 
-export const HttpHeaderFieldManipulationDetails = ({ measurement, render }) => {
+export const HttpHeaderFieldManipulationDetails = ({ measurement, render, isAnomaly }) => {
   const intl = useIntl()
-  const testKeys = measurement.test_keys
-  let isAnomaly = false
-  let isFailed = true
-  const tampering = testKeys?.tampering || {}
-  for (const key of Object.keys(tampering)) {
-    if (tampering[key] === true) {
-      isAnomaly = true
-    }
-    if (tampering[key] !== null) {
-      isFailed = false
-    }
-  }
 
   const messages = defineMessages({
     middleboxes: {

@@ -247,8 +247,8 @@ const validateMeasurement = (measurement) => {
       },
     },
     test_keys: {
-      accessible: undefined,
-      blocking: undefined,
+      // accessible: undefined,
+      // blocking: undefined,
       queries: undefined,
       tcp_connect: undefined,
       requests: undefined,
@@ -368,7 +368,7 @@ const WebConnectivityDetails = ({
     )
   } else if (isAnomaly) {
     status = 'anomaly'
-    const blockingReason = blocking ?? scores?.analysis?.blocking_type ?? null
+    const blockingReason = scores?.analysis?.blocking_type ?? null
     reason =
       messages[`blockingReason.${blockingReason}`] &&
       intl.formatMessage(messages[`blockingReason.${blockingReason}`])
@@ -404,7 +404,7 @@ const WebConnectivityDetails = ({
         reason,
       },
     )
-  } else if (accessible) {
+  } else {
     status = 'reachable'
     summaryText = (
       <FormattedMessage
@@ -428,58 +428,59 @@ const WebConnectivityDetails = ({
         country,
       },
     )
-  } else if (blocking === false) {
-    // When not accessible, but also not blocking, it must be down
-    status = 'down'
-    summaryText = (
-      <FormattedMessage
-        id="Measurement.SummaryText.Websites.Down"
-        values={{
-          date,
-          WebsiteURL: <UrlWrapper href={input} />,
-          network: probe_asn,
-          country,
-        }}
-      />
-    )
-    headMetadata.message = intl.formatMessage(
-      {
-        id: 'Measurement.Metadata.WebConnectivity.Down',
-        defaultMessage: '{hostname} was down in {country}',
-      },
-      {
-        date,
-        hostname,
-        country,
-      },
-    )
-  } else {
-    // Fallback condition to handle older measurements not present in fastpath
-    // See: https://github.com/ooni/explorer/issues/426#issuecomment-612094244
-    status = 'error'
-    summaryText = (
-      <FormattedMessage
-        id="Measurement.SummaryText.Websites.Failed"
-        values={{
-          date,
-          WebsiteURL: <UrlWrapper href={input} />,
-          network: probe_asn,
-          country,
-        }}
-      />
-    )
-    headMetadata.message = intl.formatMessage(
-      {
-        id: 'Measurement.Metadata.WebConnectivity.Failed',
-        defaultMessage: '{hostname} failed to be measured in {country}',
-      },
-      {
-        date,
-        hostname,
-        country,
-      },
-    )
   }
+  // else if (blocking === false) {
+  //   // When not accessible, but also not blocking, it must be down
+  //   status = 'down'
+  //   summaryText = (
+  //     <FormattedMessage
+  //       id="Measurement.SummaryText.Websites.Down"
+  //       values={{
+  //         date,
+  //         WebsiteURL: <UrlWrapper href={input} />,
+  //         network: probe_asn,
+  //         country,
+  //       }}
+  //     />
+  //   )
+  //   headMetadata.message = intl.formatMessage(
+  //     {
+  //       id: 'Measurement.Metadata.WebConnectivity.Down',
+  //       defaultMessage: '{hostname} was down in {country}',
+  //     },
+  //     {
+  //       date,
+  //       hostname,
+  //       country,
+  //     },
+  //   )
+  // } else {
+  //   // Fallback condition to handle older measurements not present in fastpath
+  //   // See: https://github.com/ooni/explorer/issues/426#issuecomment-612094244
+  //   status = 'error'
+  //   summaryText = (
+  //     <FormattedMessage
+  //       id="Measurement.SummaryText.Websites.Failed"
+  //       values={{
+  //         date,
+  //         WebsiteURL: <UrlWrapper href={input} />,
+  //         network: probe_asn,
+  //         country,
+  //       }}
+  //     />
+  //   )
+  //   headMetadata.message = intl.formatMessage(
+  //     {
+  //       id: 'Measurement.Metadata.WebConnectivity.Failed',
+  //       defaultMessage: '{hostname} failed to be measured in {country}',
+  //     },
+  //     {
+  //       date,
+  //       hostname,
+  //       country,
+  //     },
+  //   )
+  // }
 
   const tcpConnections = Array.isArray(tcp_connect)
     ? tcp_connect.map((connection) => {
