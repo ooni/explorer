@@ -17,7 +17,9 @@ import ErrorPage from 'pages/_error'
 import NotFound from 'components/NotFound'
 import { fetcher } from 'lib/api'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
+import dayjs from 'services/dayjs'
 import SpinLoader from 'components/vendor/SpinLoader'
+import { LazyDetailsBox } from 'components/measurement/DetailsBox'
 
 const pageColors = {
   default: colors.blue['500'],
@@ -176,6 +178,15 @@ const Measurement = ({
       : []
   }, [userFeedback, intl])
 
+  const analysisSwrKey = useMemo(() => {
+    if (!measurementUid || !measurement_start_time) return null
+    const day = dayjs.utc(measurement_start_time)
+    if (!day.isValid()) return null
+    const since = day.subtract(1, 'day').format('YYYY-MM-DD')
+    const until = day.add(1, 'day').format('YYYY-MM-DD')
+    return `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/analysis?measurement_uid=${encodeURIComponent(measurementUid)}&since=${since}&until=${until}`
+  }, [measurementUid, measurement_start_time])
+
   return (
     <EmbeddedViewContext.Provider value={isEmbeddedView}>
       <Head>
@@ -289,6 +300,19 @@ const Measurement = ({
                         measurementUid={measurement_uid}
                         userFeedbackItems={userFeedbackItems}
                       />
+                      {analysisSwrKey && (
+                        <LazyDetailsBox
+                          title="Analysis"
+                          swrKey={analysisSwrKey}
+                          fetcher={measurementFetcher}
+                        >
+                          {(data) => (
+                            <pre className="whitespace-pre-wrap break-all m-0">
+                              {JSON.stringify(data.results, null, 2)}
+                            </pre>
+                          )}
+                        </LazyDetailsBox>
+                      )}
                     </div>
                   </>
                 )

@@ -158,7 +158,7 @@ const CommonDetails = ({
       <DetailsBox
         title={
           <div className="flex flex-1 justify-between flex-col md:flex-row items-center bg-gray-200">
-            <div className="self-start">
+            <div>
               {intl.formatMessage({
                 id: 'Measurement.CommonDetails.RawMeasurement.Heading',
               })}
