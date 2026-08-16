@@ -76,7 +76,7 @@
   "Measurement.CommonSummary.Label.ASN": "Ağ",
   "Measurement.CommonSummary.Label.Country": "Ülke",
   "Measurement.CommonSummary.Label.DateTime": "Tarih ve saat",
-  "Measurement.CommonSummary.Verify": "Doğrula",
+  "Measurement.CommonSummary.Verify": "Ölçümü doğrula",
   "Measurement.DetailsHeader.Runtime": "Çalışan dosya",
   "Measurement.Status.Hint.Websites.Censorship": "",
   "Measurement.Status.Hint.Websites.DNS": "DNS müdahalesi",
@@ -631,7 +631,7 @@
   "Networks.Title": "Ağlar",
   "Networks.SearchPlaceholder": "ASN koduna göre ara",
   "Networks.SearchError": "Herhangi bir ağ bulunamadı",
-  "Findings.Index.Title": "Sansür bulguları ({amount})",
+  "Findings.Index.Title": "Sansür bulguları",
   "Findings.Index.SearchPlaceholder": "Bulgu arama",
   "Findings.Index.SearchError": "Herhangi bir bulgu bulunamadı",
   "Findings.Index.HighLightBox.ReadMore": "Ayrıntılı bilgi",
@@ -693,5 +693,9 @@
   "MAT.Table.Header.dns_other_ok": "DNS diğer tamam",
   "MAT.Table.Header.outcome_blocked": "Sonuç engelleniyor",
   "MAT.Table.Header.outcome_down": "Sonuç çalışmıyor",
-  "MAT.Table.Header.outcome_ok": "Sonuç tamam"
+  "MAT.Table.Header.outcome_ok": "Sonuç tamam",
+  "Measurement.CommonSummary.ViaAnonymousCredentials": "anonim kimlik bilgileriyle",
+  "Measurement.CommonSummary.ProbeAuthenticated": "Probe kimliği doğrulandı",
+  "Measurement.CommonSummary.ProbeUnauthenticated": "Probe kimliği doğrulanamadı",
+  "Measurement.CommonSummary.ProbeAuthenticationFailed": "Probe kimlik doğrulaması başarısız oldu"
 }
