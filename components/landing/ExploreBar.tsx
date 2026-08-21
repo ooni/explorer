@@ -263,7 +263,11 @@ const ExploreBar = () => {
           aria-hidden="true"
           className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-2xl text-gray-500"
         />
+        <label htmlFor="search-input" className="sr-only">
+          {intl.formatMessage({ id: 'Home.ExploreBar.Placeholder' })}
+        </label>
         <input
+          id="search-input"
           type="text"
           role="combobox"
           aria-expanded={isOpen}
@@ -272,8 +276,8 @@ const ExploreBar = () => {
             activeIndex >= 0 ? `${listboxId}-option-${activeIndex}` : undefined
           }
           aria-autocomplete="list"
-          aria-label={intl.formatMessage({ id: 'Home.ExploreBar.Placeholder' })}
           autoComplete="off"
+          autoCorrect="off"
           spellCheck={false}
           className="w-full rounded-full bg-white pl-12 pr-5 py-3 text-lg text-blue-900 placeholder:text-gray-500 outline-none focus:ring-2 focus:ring-blue-300"
           placeholder={intl.formatMessage({ id: 'Home.ExploreBar.Placeholder' })}
