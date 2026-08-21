@@ -8,12 +8,12 @@ import { useIntl } from 'react-intl'
 import useSWR from 'swr'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
 
-const MAX_LOCAL_MATCHES = 5
-const MAX_TOTAL_RESULTS = 15
-const DEFAULT_COUNTRY_COUNT = 2
-const DEFAULT_NETWORK_COUNT = 3
-const DEFAULT_DOMAIN_COUNT = 3
-const TOP_COUNTRY_POOL = 20
+const MAX_LOCAL_MATCHES = 5 // max country/theme hits from client-side matching
+const MAX_TOTAL_RESULTS = 15 // max items in the open list (local matches + API domain/network results)
+const DEFAULT_COUNTRY_COUNT = 2 // number of countries shown before user types
+const DEFAULT_NETWORK_COUNT = 3 // number of networks shown before user types
+const DEFAULT_DOMAIN_COUNT = 3 // number of domains shown before user types
+const TOP_COUNTRY_POOL = 20 // how many high-measurement countries default countries are sampled from
 
 const TOP_COUNTRIES = [...countries]
   .sort((a, b) => (b.count ?? 0) - (a.count ?? 0))
@@ -86,23 +86,27 @@ const ExploreBar = () => {
   const [hasOpened, setHasOpened] = useState(false)
   const [activeIndex, setActiveIndex] = useState(-1)
 
+  // debounces the query to prevent excessive API requests
   // biome-ignore lint/correctness/useExhaustiveDependencies: debounce identity must be stable
   const debouncedSetQuery = useMemo(() => debounce(setQuery, 200), [])
   useEffect(() => () => debouncedSetQuery.cancel(), [debouncedSetQuery])
 
+  // fetches the default pool of results when the list is opened
   const { data: defaultPool, isLoading: isDefaultLoading } =
     useSWR<SearchResult[]>(hasOpened ? '/api/search' : null, fetcher, {
       revalidateOnFocus: false,
     })
 
+  
+  // fetches the search results when the user types
   const trimmedQuery = query.trim()
-  const { data: searchResults, isLoading: isSearchLoading } =
-    useSWR<SearchResult[]>(
-      hasOpened && trimmedQuery ? ['/api/search', { q: trimmedQuery }] : null,
-      fetcher,
-      { revalidateOnFocus: false, keepPreviousData: true },
-    )
+  const { data: searchResults, isLoading: isSearchLoading } = useSWR<SearchResult[]>(
+    hasOpened && trimmedQuery ? ['/api/search', { q: trimmedQuery }] : null,
+    fetcher,
+    { revalidateOnFocus: false, keepPreviousData: true },
+  )
 
+  // memoizes the theme, country, and local options
   const { themeOptions, countryOptions, localOptions } = useMemo(() => {
     const lower = (value: string) => value.toLocaleLowerCase(intl.locale)
     const themeOptions = THEME_OPTIONS.map(({ key, intlId, name, aliases }) => {
@@ -136,6 +140,7 @@ const ExploreBar = () => {
     }
   }, [intl])
 
+  // memoizes the default suggestions
   const defaultSuggestions = useMemo(() => {
     if (!defaultPool) return []
 
@@ -171,6 +176,7 @@ const ExploreBar = () => {
     return [...prefixMatches, ...containsMatches].slice(0, MAX_LOCAL_MATCHES)
   }, [trimmedInput, localOptions, intl.locale])
 
+  // memoizes the options for the dropdown
   const options = useMemo(
     () =>
       trimmedInput
@@ -188,11 +194,13 @@ const ExploreBar = () => {
     options.length === 0 &&
     (trimmedInput ? isSearchLoading : isDefaultLoading)
 
+  // resets the active index when the visible list changes
   // biome-ignore lint/correctness/useExhaustiveDependencies: reset highlight when the visible list changes
   useEffect(() => {
     setActiveIndex(-1)
   }, [options])
 
+  // closes the list when user clicks outside the search field and its dropdown
   useEffect(() => {
     const onMouseDown = (e: MouseEvent) => {
       if (!containerRef.current?.contains(e.target as Node)) setIsOpen(false)
@@ -201,16 +209,19 @@ const ExploreBar = () => {
     return () => document.removeEventListener('mousedown', onMouseDown)
   }, [])
 
+  // opens the list when user focuses the search field or clicks it
   const openDropdown = () => {
     setIsOpen(true)
     setHasOpened(true)
   }
 
+  // selects an option and closes the list
   const selectOption = (option: SearchResult) => {
     setIsOpen(false)
     router.push(option.href)
   }
 
+  // handles keyboard navigation and selection of options
   const onKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Escape') {
       setIsOpen(false)
@@ -235,6 +246,7 @@ const ExploreBar = () => {
     }
   }
 
+  // formats the label for an option
   const optionLabel = (option: SearchResult) => {
     switch (option.type) {
       case 'country':
