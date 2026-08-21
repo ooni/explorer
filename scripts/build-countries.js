@@ -20,10 +20,12 @@ async function buildCountries() {
       fs.mkdirSync(dataDir, { recursive: true })
     }
 
-    // Write the countries data to JSON file
+    // Write the countries data to JSON file. `count` is the measurement
+    // count is the measurement count used for default suggestions in ExploreBar.
     fs.writeFileSync(outputPath, JSON.stringify(response.data.countries.map(c => ({
       alpha_2: c.alpha_2,
       name: c.name,
+      count: c.count || 0,
     })), null, 2))
     console.log(`✓ Countries data saved to ${outputPath}`)
   } catch (error) {
