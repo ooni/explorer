@@ -697,5 +697,12 @@
   "Measurement.CommonSummary.ViaAnonymousCredentials": "über anonyme Anmeldedaten",
   "Measurement.CommonSummary.ProbeAuthenticated": "Messung authentifiziert",
   "Measurement.CommonSummary.ProbeUnauthenticated": "Messung nicht authentifiziert",
-  "Measurement.CommonSummary.ProbeAuthenticationFailed": "Authentifizierung der Messung fehlgeschlagen"
+  "Measurement.CommonSummary.ProbeAuthenticationFailed": "Authentifizierung der Messung fehlgeschlagen",
+  "Home.ExploreBar.Placeholder": "Suche nach einem Land, einem Netzwerk oder einer Website",
+  "Home.ExploreBar.NoResults": "Es wurden keine Ergebnisse gefunden",
+  "Home.ExploreBar.Loading": "Vorschläge werden geladen…",
+  "Home.ExploreBar.Type.country": "Land",
+  "Home.ExploreBar.Type.network": "Netzwerk",
+  "Home.ExploreBar.Type.domain": "Domain",
+  "Home.ExploreBar.Type.theme": "Aufmachung"
 }
