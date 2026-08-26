@@ -1,30 +1,7 @@
-import dynamic from 'next/dynamic'
-import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
-import { useContext, useState } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
 
-import { EmbeddedViewContext } from '../../pages/m/[measurement_uid]'
-import { DetailsBox, DetailsBoxTable } from './DetailsBox'
-
-const LoadingRawData = () => {
-  return <FormattedMessage id="General.Loading" />
-}
-
-const ReactJson = dynamic(() => import('@microlink/react-json-view'), {
-  ssr: false,
-  loading: LoadingRawData,
-})
-
-const JsonViewer = ({ src, collapsed }) => (
-  <div className="text-xs md:text-sm [&_.string-value]:overflow-ellipsis [&_.string-value]:max-w-[800px] [&_.string-value]:overflow-hidden [&_.string-value]:inline-block">
-    <ReactJson collapsed={collapsed} src={src} name={null} indentWidth={2} />
-  </div>
-)
-
-JsonViewer.propTypes = {
-  src: PropTypes.object.isRequired,
-}
+import { DetailsBoxTable } from './DetailsBox'
 
 const CommonDetails = ({
   measurement,
@@ -40,13 +17,6 @@ const CommonDetails = ({
     resolver_ip,
     resolver_network_name,
   } = measurement ?? {}
-
-  const isEmbeddedView = useContext(EmbeddedViewContext)
-
-  const { query } = useRouter()
-  const queryString = new URLSearchParams(query)
-  const rawMsmtDownloadURL = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/raw_measurement?${queryString}`
-  const [collapsed, setCollapsed] = useState(1)
 
   const intl = useIntl()
   const unavailable = intl.formatMessage({
@@ -71,7 +41,6 @@ const CommonDetails = ({
   let software = software_name ?? unavailable
   software += software_version ? ` (${software_version})` : ''
 
-  const downloadFilename = `ooni-measurement-${measurementUid}.json`
   const items = [
     {
       label: intl.formatMessage({
@@ -127,11 +96,6 @@ const CommonDetails = ({
     },
   ]
 
-  const expandAllBtn = (e) => {
-    e.stopPropagation()
-    setCollapsed(50)
-  }
-
   return (
     <>
       {showResolverItems && (
@@ -154,57 +118,6 @@ const CommonDetails = ({
           items={userFeedbackItems}
         />
       )}
-      {/* Raw Measurement */}
-      <DetailsBox
-        title={
-          <div className="flex flex-1 justify-between flex-col md:flex-row items-center bg-gray-200">
-            <div>
-              {intl.formatMessage({
-                id: 'Measurement.CommonDetails.RawMeasurement.Heading',
-              })}
-            </div>
-            {!isEmbeddedView && (
-              <div className="flex">
-                <a
-                  className="text-blue-700"
-                  href={rawMsmtDownloadURL}
-                  download={downloadFilename}
-                >
-                  <button
-                    type="button"
-                    className="btn btn-primary px-8 mx-4 text-sm"
-                    onClick={(e) => e.stopPropagation()}
-                  >
-                    {intl.formatMessage({
-                      id: 'Measurement.CommonDetails.RawMeasurement.Download',
-                    })}
-                  </button>
-                </a>
-                <button
-                  type="button"
-                  className="btn btn-primary px-8 mx-4 text-sm"
-                  onClick={(e) => {
-                    expandAllBtn(e)
-                  }}
-                >
-                  {intl.formatMessage({
-                    id: 'Measurement.CommonDetails.RawMeasurement.Expand',
-                  })}
-                </button>
-              </div>
-            )}
-          </div>
-        }
-        content={
-          measurement && typeof measurement === 'object' ? (
-            <div className="flex bg-white" style={{ direction: 'ltr' }}>
-              <JsonViewer src={measurement} collapsed={collapsed} />
-            </div>
-          ) : (
-            <FormattedMessage id="Measurement.CommonDetails.RawMeasurement.Unavailable" />
-          )
-        }
-      />
     </>
   )
 }

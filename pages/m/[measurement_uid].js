@@ -1,25 +1,26 @@
-import Head from 'next/head'
-import { colors } from 'ooni-components'
-import { createContext, useMemo, useState } from 'react'
-import { useIntl } from 'react-intl'
-import useSWR from 'swr'
-
 import CommonDetails from 'components/measurement/CommonDetails'
 import CommonSummary from 'components/measurement/CommonSummary'
+import { LazyDetailsBox } from 'components/measurement/DetailsBox'
 import DetailsHeader from 'components/measurement/DetailsHeader'
 import FeedbackBox from 'components/measurement/FeedbackBox'
 import HeadMetadata from 'components/measurement/HeadMetadata'
 import Hero from 'components/measurement/Hero'
 import MeasurementContainer from 'components/measurement/MeasurementContainer'
+import { getMeasurementHeroProps } from 'components/measurement/measurementHero'
+import { getMeasurementSummary } from 'components/measurement/measurementSummary'
+import RawMeasurement from 'components/measurement/RawMeasurement'
 import SummaryText from 'components/measurement/SummaryText'
-import useUser from 'hooks/useUser'
-import ErrorPage from 'pages/_error'
 import NotFound from 'components/NotFound'
-import { fetcher } from 'lib/api'
-import { getLocalisedRegionName } from 'utils/i18nCountries'
-import dayjs from 'services/dayjs'
 import SpinLoader from 'components/vendor/SpinLoader'
-import { LazyDetailsBox } from 'components/measurement/DetailsBox'
+import useUser from 'hooks/useUser'
+import { fetcher } from 'lib/api'
+import Head from 'next/head'
+import { colors } from 'ooni-components'
+import { createContext, useMemo, useState } from 'react'
+import { useIntl } from 'react-intl'
+import dayjs from 'services/dayjs'
+import useSWR from 'swr'
+import { getLocalisedRegionName } from 'utils/i18nCountries'
 
 const pageColors = {
   default: colors.blue['500'],
@@ -34,12 +35,7 @@ export const EmbeddedViewContext = createContext(false)
 
 const locales = JSON.parse(process.env.LOCALES || '["en"]')
 
-export async function getServerSideProps({
-  query,
-  req,
-  locale,
-  defaultLocale,
-}) {
+export async function getServerSideProps({ query, req, locale }) {
   const measurement_uid = query?.measurement_uid
   // If there is no measurement_uid to use, fail early with NotFound
   if (typeof measurement_uid !== 'string' || measurement_uid.length < 10)
@@ -108,12 +104,7 @@ const measurementFetcher = async (url) => {
   return json
 }
 
-const Measurement = ({
-  isEmbeddedView,
-  measurementUid,
-  notFound = false,
-  ...rest
-}) => {
+const Measurement = ({ isEmbeddedView, measurementUid, notFound = false }) => {
   const intl = useIntl()
 
   const { user } = useUser()
@@ -124,7 +115,7 @@ const Measurement = ({
     error,
     isValidating: isLoadingMeasurementData,
   } = useSWR(
-    `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/measurement_meta?measurement_uid=${measurementUid}&full=true`,
+    `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/measurement_meta?measurement_uid=${measurementUid}`,
     measurementFetcher,
     {
       revalidateOnFocus: false,
@@ -140,15 +131,15 @@ const Measurement = ({
     measurement_start_time,
     probe_cc,
     probe_asn,
-    raw_measurement,
+    // raw_measurement,
     measurement_uid,
     report_id,
     scores,
     input,
     verification_status,
   } = measurementData ?? {}
-  notFound = raw_measurement === ''
-  raw_measurement = raw_measurement ? JSON.parse(raw_measurement) : null
+  // notFound = raw_measurement === ''
+  // raw_measurement = raw_measurement ? JSON.parse(raw_measurement) : null
   scores = scores ? JSON.parse(scores) : null
 
   const country = probe_cc
@@ -178,6 +169,8 @@ const Measurement = ({
       : []
   }, [userFeedback, intl])
 
+  const raw_measurement = null
+
   const analysisSwrKey = useMemo(() => {
     if (!measurementUid || !measurement_start_time) return null
     const day = dayjs.utc(measurement_start_time)
@@ -187,6 +180,81 @@ const Measurement = ({
     return `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/analysis?measurement_uid=${encodeURIComponent(measurementUid)}&since=${since}&until=${until}`
   }, [measurementUid, measurement_start_time])
 
+  const { status, statusIcon, statusLabel, info } = useMemo(
+    () =>
+      getMeasurementHeroProps({
+        testName: test_name,
+        // measurement: raw_measurement,
+        scores,
+        isConfirmed: confirmed,
+        isAnomaly: anomaly,
+        isFailure: failure,
+        input,
+        intl,
+        isEmbeddedView,
+      }),
+    [
+      test_name,
+      // raw_measurement,
+      scores,
+      confirmed,
+      anomaly,
+      failure,
+      input,
+      intl,
+      isEmbeddedView,
+    ],
+  )
+
+  const color =
+    failure === true
+      ? pageColors.error
+      : (pageColors[status] ?? pageColors.default)
+
+  const formattedDate = useMemo(
+    () =>
+      measurement_start_time
+        ? new Intl.DateTimeFormat(intl.locale, {
+            dateStyle: 'long',
+            timeStyle: 'long',
+            timeZone: 'UTC',
+          }).format(new Date(measurement_start_time))
+        : null,
+    [measurement_start_time, intl.locale],
+  )
+
+  const { summaryText, headMetadata } = useMemo(
+    () =>
+      getMeasurementSummary({
+        testName: test_name,
+        // measurement: raw_measurement,
+        scores,
+        isConfirmed: confirmed,
+        isAnomaly: anomaly,
+        isFailure: failure,
+        input,
+        country,
+        date: formattedDate,
+        probe_asn: formattedProbeAsn,
+        intl,
+        isEmbeddedView,
+      }),
+    [
+      test_name,
+      // raw_measurement,
+      scores,
+      confirmed,
+      anomaly,
+      failure,
+      input,
+      country,
+      formattedDate,
+      formattedProbeAsn,
+      intl,
+      isEmbeddedView,
+    ],
+  )
+
   return (
     <EmbeddedViewContext.Provider value={isEmbeddedView}>
       <Head>
@@ -195,11 +263,7 @@ const Measurement = ({
       </Head>
 
       {notFound ? (
-        <>
-          <NotFound
-            title={intl.formatMessage({ id: 'Measurement.NotFound' })}
-          />
-        </>
+        <NotFound title={intl.formatMessage({ id: 'Measurement.NotFound' })} />
       ) : (
         <>
           {error && (
@@ -213,111 +277,88 @@ const Measurement = ({
             </div>
           )}
           {measurementData && Object.keys(measurementData).length > 0 && (
-            <MeasurementContainer
-              isConfirmed={confirmed}
-              isAnomaly={anomaly}
-              isFailure={failure}
-              testName={test_name}
-              country={country}
-              measurement={raw_measurement}
-              input={input}
-              measurement_start_time={measurement_start_time}
-              probe_asn={formattedProbeAsn}
-              scores={scores}
-              {...rest}
-              render={({
-                status = 'default',
-                statusIcon,
-                statusLabel,
-                statusInfo,
-                legacy = false,
-                summaryText,
-                headMetadata,
-                details,
-              }) => {
-                const color =
-                  failure === true ? pageColors.error : pageColors[status]
-                const info = scores?.msg ?? statusInfo
-                return (
-                  <>
-                    {headMetadata && (
-                      <HeadMetadata
-                        content={headMetadata}
-                        testName={test_name}
-                        testUrl={input}
-                        country={country}
-                        date={measurement_start_time}
-                      />
+            <>
+              <CommonSummary
+                measurement_start_time={measurement_start_time}
+                probe_asn={formattedProbeAsn}
+                probe_cc={probe_cc}
+                networkName={raw_measurement?.probe_network_name}
+                color={color}
+                country={country}
+                verification_status={verification_status}
+                hero={
+                  <Hero
+                    status={status}
+                    icon={statusIcon}
+                    label={statusLabel}
+                    info={info}
+                  />
+                }
+                onVerifyClick={() => setShowModal(true)}
+              />
+              {headMetadata && (
+                <HeadMetadata
+                  content={headMetadata}
+                  testName={test_name}
+                  testUrl={input}
+                  country={country}
+                  date={measurement_start_time}
+                />
+              )}
+              {showModal && (
+                <FeedbackBox
+                  user={user}
+                  measurement_uid={measurement_uid}
+                  setShowModal={setShowModal}
+                  previousFeedback={userFeedback?.user_feedback}
+                  mutateUserFeedback={mutateUserFeedback}
+                />
+              )}
+              <div className="container">
+                <DetailsHeader
+                  testName={test_name}
+                  runtime={raw_measurement?.test_runtime}
+                  url={`measurement/${measurement_uid}`}
+                />
+                {summaryText && (
+                  <SummaryText
+                    testName={test_name}
+                    testUrl={input}
+                    network={formattedProbeAsn}
+                    country={country}
+                    date={measurement_start_time}
+                    content={summaryText}
+                  />
+                )}
+                <MeasurementContainer
+                  measurementUid={measurement_uid}
+                  measurementStartTime={measurement_start_time}
+                  probeAsn={probe_asn}
+                />
+                <CommonDetails
+                  reportId={report_id}
+                  measurementUid={measurement_uid}
+                  userFeedbackItems={userFeedbackItems}
+                />
+                <RawMeasurement
+                  measurementUid={measurement_uid}
+                  fetcher={measurementFetcher}
+                />
+                {analysisSwrKey && (
+                  <LazyDetailsBox
+                    title="Analysis"
+                    swrKey={analysisSwrKey}
+                    fetcher={measurementFetcher}
+                  >
+                    {(data) => (
+                      <pre className="whitespace-pre-wrap break-all m-0">
+                        {JSON.stringify(data.results, null, 2)}
+                      </pre>
                     )}
-                    {showModal && (
-                      <FeedbackBox
-                        user={user}
-                        measurement_uid={measurement_uid}
-                        setShowModal={setShowModal}
-                        previousFeedback={userFeedback?.user_feedback}
-                        mutateUserFeedback={mutateUserFeedback}
-                      />
-                    )}
-                    <CommonSummary
-                      measurement_start_time={measurement_start_time}
-                      probe_asn={formattedProbeAsn}
-                      probe_cc={probe_cc}
-                      networkName={raw_measurement?.probe_network_name}
-                      color={color}
-                      country={country}
-                      verification_status={verification_status}
-                      hero={
-                        <Hero
-                          status={status}
-                          icon={statusIcon}
-                          label={statusLabel}
-                          info={info}
-                        />
-                      }
-                      onVerifyClick={() => setShowModal(true)}
-                    />
-                    <div className="container">
-                      <DetailsHeader
-                        testName={test_name}
-                        runtime={raw_measurement?.test_runtime}
-                        notice={legacy}
-                        url={`measurement/${measurement_uid}`}
-                      />
-                      {summaryText && (
-                        <SummaryText
-                          testName={test_name}
-                          testUrl={input}
-                          network={formattedProbeAsn}
-                          country={country}
-                          date={measurement_start_time}
-                          content={summaryText}
-                        />
-                      )}
-                      {details}
-                      <CommonDetails
-                        measurement={raw_measurement}
-                        reportId={report_id}
-                        measurementUid={measurement_uid}
-                        userFeedbackItems={userFeedbackItems}
-                      />
-                      {analysisSwrKey && (
-                        <LazyDetailsBox
-                          title="Analysis"
-                          swrKey={analysisSwrKey}
-                          fetcher={measurementFetcher}
-                        >
-                          {(data) => (
-                            <pre className="whitespace-pre-wrap break-all m-0">
-                              {JSON.stringify(data.results, null, 2)}
-                            </pre>
-                          )}
-                        </LazyDetailsBox>
-                      )}
-                    </div>
-                  </>
-                )
-              }}
-            />
+                  </LazyDetailsBox>
+                )}
+              </div>
+            </>
           )}
         </>
       )}
