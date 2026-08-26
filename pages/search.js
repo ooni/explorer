@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { apiFetch, toApiPath } from 'lib/api'
 import Head from 'next/head'
 import { useRouter } from 'next/router'
 import PropTypes from 'prop-types'
@@ -67,31 +67,24 @@ const queryToParams = ({ query }) => {
 }
 
 const measurementsFetcher = async (queryParams) => {
-  const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
   const params = queryToParams({ query: queryParams })
-  const response = await client.get('/api/v1/measurements', {
+  const data = await apiFetch('/api/v1/measurements', {
     params: { ...params, order: 'desc' },
   })
   return {
-    results: response.data.results,
-    next_url: response.data.metadata?.next_url,
+    results: data.results,
+    next_url: data.metadata?.next_url,
   }
 }
 
 const serializeError = (err) => {
-  const { name, message, stack, config = {} } = err.toJSON()
-  const { baseURL, url, params } = config
-  const { data, status, statusText } = err.response ?? {}
   return {
-    name,
-    message,
-    data,
-    status,
-    statusText,
-    baseURL,
-    url,
-    params,
-    stack,
+    name: err.name,
+    message: err.message,
+    data: err.data,
+    status: err.status,
+    statusText: err.info,
+    stack: err.stack,
   }
 }
 
@@ -199,36 +192,14 @@ const Search = () => {
     }
   }, [searchData])
 
-  const error = swrError
-    ? serializeError(
-        swrError.isAxiosError
-          ? swrError
-          : Object.assign(new Error(swrError.message), {
-              toJSON: () => ({
-                name: swrError.name || 'Error',
-                message: swrError.message,
-                stack: swrError.stack,
-                config: {},
-              }),
-              response: swrError.response,
-            }),
-      )
-    : null
+  const error = swrError ? serializeError(swrError) : null
 
   const loadMore = () => {
-    axios
-      .get(nextURL)
-      .then(
-        ({
-          data: {
-            results: nextPageResults,
-            metadata: { next_url },
-          },
-        }) => {
-          setAccumulatedResults((prev) => prev.concat(nextPageResults))
-          setNextURL(next_url)
-        },
-      )
+    apiFetch(toApiPath(nextURL))
+      .then((data) => {
+        setAccumulatedResults((prev) => prev.concat(data.results))
+        setNextURL(data.metadata?.next_url)
+      })
       .catch((err) => {
         console.error(err)
       })

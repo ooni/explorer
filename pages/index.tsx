@@ -1,5 +1,5 @@
 /* global process */
-import axios from 'axios'
+import { apiFetch } from 'lib/api'
 import Link from 'next/link'
 import { colors } from 'ooni-components'
 import { FormattedMessage } from 'react-intl'
@@ -69,14 +69,13 @@ const FeatureBoxTitle = ({
 )
 
 export async function getStaticProps() {
-  const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
-  const result = await client.get('/api/_/global_overview')
+  const result = await apiFetch('/api/_/global_overview')
 
   return {
     props: {
-      measurementCount: result.data.measurement_count,
-      asnCount: result.data.network_count,
-      countryCount: result.data.country_count,
+      measurementCount: result.measurement_count,
+      asnCount: result.network_count,
+      countryCount: result.country_count,
     },
     revalidate: 60 * 60 * 12, // 12 hours
   }

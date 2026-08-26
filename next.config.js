@@ -20,6 +20,19 @@ module.exports = withSentryConfig(
         },
       ]
     },
+    async rewrites() {
+      if (!process.env.NEXT_PUBLIC_PROXY_API) return []
+      return [
+        {
+          source: '/proxy/ooni/:path*',
+          destination: `${process.env.NEXT_PUBLIC_OONI_API}/:path*`,
+        },
+        {
+          source: '/proxy/feedback/:path*',
+          destination: `${process.env.NEXT_PUBLIC_USER_FEEDBACK_API}/:path*`,
+        },
+      ]
+    },
     i18n: {
       locales: SUPPORTED_LANGUAGES,
       defaultLocale: DEFAULT_LOCALE,

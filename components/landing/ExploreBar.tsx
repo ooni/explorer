@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { apiFetch } from 'lib/api'
 import countries from 'data/countries.json'
 import debounce from 'lodash.debounce'
 import { useRouter } from 'next/router'
@@ -59,7 +59,9 @@ const fetcher = (
   args: string | [string, Record<string, string>],
 ): Promise<SearchResult[]> => {
   const [url, params] = Array.isArray(args) ? args : [args, undefined]
-  return axios.get(url, { params }).then((res) => res.data?.results ?? [])
+  return apiFetch(url, { backend: null, params }).then(
+    (data) => data?.results ?? [],
+  )
 }
 
 const shuffle = <T,>(items: T[]): T[] => {

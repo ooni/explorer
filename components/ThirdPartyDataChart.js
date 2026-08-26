@@ -1,5 +1,4 @@
 import { ResponsiveLine } from '@nivo/line'
-import axios from 'axios'
 import Slices from 'components/chart/Slices'
 import { colors } from 'ooni-components'
 import { memo, useEffect, useMemo, useState } from 'react'
@@ -63,13 +62,11 @@ const Chart = ({ since, until, country, asn }) => {
     setError(null)
     setLoading(true)
 
+    const query = `from=${from}&to=${to}&${asn ? `asn=${asn}` : `country=${country}`}`
+
     Promise.allSettled([
-      axios.get(
-        `/api/cloudflare?from=${from}&to=${to}&${asn ? `asn=${asn}` : `country=${country}`}`,
-      ),
-      axios.get(
-        `/api/ioda?from=${from}&to=${to}&${asn ? `asn=${asn}` : `country=${country}`}`,
-      ),
+      fetch(`/api/cloudflare?${query}`).then((res) => res.json()),
+      fetch(`/api/ioda?${query}`).then((res) => res.json()),
     ])
       .then((results) => {
         const cloudflareData = results[0]
@@ -83,14 +80,14 @@ const Chart = ({ since, until, country, asn }) => {
                     id: 'ThirdPartyChart.Label.cloudflare',
                   }),
                   color: colors.yellow['500'],
-                  data: cloudflareData.value.data,
+                  data: cloudflareData.value,
                 },
               ]
             : []
 
         const iodaChartData =
           iodaData.status === 'fulfilled'
-            ? iodaData.value.data.map((item) => {
+            ? iodaData.value.map((item) => {
                 return {
                   id: intl.formatMessage({
                     id: `ThirdPartyChart.Label.${item.datasource}`,
