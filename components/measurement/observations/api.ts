@@ -4,8 +4,7 @@ import type {
   WebObservation,
 } from './types'
 
-const apiUrl = (path: string): string =>
-  `${process.env.NEXT_PUBLIC_OONI_API}/api${path}`
+const apiUrl = (path: string): string => `/api/ooni${path}`
 
 async function getJSON<T>(fullUrl: string): Promise<T> {
   const r = await fetch(fullUrl)

@@ -24,7 +24,7 @@ const RawMeasurement = ({ measurementUid, fetcher }: RawMeasurementProps) => {
   const isEmbeddedView = useContext(EmbeddedViewContext)
   const [collapsed, setCollapsed] = useState<number>(1)
 
-  const rawMsmtUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/raw_measurement?measurement_uid=${encodeURIComponent(measurementUid)}`
+  const rawMsmtUrl = `/api/ooni/v1/raw_measurement?measurement_uid=${encodeURIComponent(measurementUid)}`
 
   return (
     <LazyDetailsBox

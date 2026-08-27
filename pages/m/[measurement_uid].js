@@ -115,7 +115,7 @@ const Measurement = ({ isEmbeddedView, measurementUid, notFound = false }) => {
     error,
     isValidating: isLoadingMeasurementData,
   } = useSWR(
-    `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/measurement_meta?measurement_uid=${measurementUid}`,
+    `/api/ooni/v1/measurement_meta?measurement_uid=${measurementUid}`,
     measurementFetcher,
     {
       revalidateOnFocus: false,
@@ -177,7 +177,7 @@ const Measurement = ({ isEmbeddedView, measurementUid, notFound = false }) => {
     if (!day.isValid()) return null
     const since = day.subtract(1, 'day').format('YYYY-MM-DD')
     const until = day.add(1, 'day').format('YYYY-MM-DD')
-    return `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/analysis?measurement_uid=${encodeURIComponent(measurementUid)}&since=${since}&until=${until}`
+    return `/api/ooni/v1/analysis?measurement_uid=${encodeURIComponent(measurementUid)}&since=${since}&until=${until}`
   }, [measurementUid, measurement_start_time])
 
   const { status, statusIcon, statusLabel, info } = useMemo(
