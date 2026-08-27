@@ -1,4 +1,3 @@
-const axios = require('axios')
 const fs = require('fs')
 const path = require('path')
 
@@ -21,15 +20,24 @@ async function buildSearchIndex() {
 
   try {
     console.log(`Fetching domains and networks from ${apiUrl}...`)
-    const client = axios.create({ baseURL: apiUrl })
     const [domainsRes, networksRes] = await Promise.all([
-      client.get('/api/_/domains'),
-      client.get('/api/_/networks'),
+      fetch(`${apiUrl}/api/_/domains`),
+      fetch(`${apiUrl}/api/_/networks`),
     ])
+
+    if (!domainsRes.ok) {
+      throw new Error(`Domains request failed: HTTP ${domainsRes.status}`)
+    }
+    if (!networksRes.ok) {
+      throw new Error(`Networks request failed: HTTP ${networksRes.status}`)
+    }
+
+    const domainsData = await domainsRes.json()
+    const networksData = await networksRes.json()
 
     const seenDomains = new Set()
     const domains = []
-    for (const d of domainsRes.data.results) {
+    for (const d of domainsData.results) {
       if (!d.domain_name || seenDomains.has(d.domain_name)) continue
       seenDomains.add(d.domain_name)
       domains.push({
@@ -39,7 +47,7 @@ async function buildSearchIndex() {
       })
     }
 
-    const networks = networksRes.data.results
+    const networks = networksData.results
       .filter((a) => a.probe_asn)
       .map((a) => ({
         t: 'network',
