@@ -102,7 +102,7 @@ const Measurement = ({
     error,
     isValidating: isLoadingMeasurementData,
   } = useSWR(
-    `${getBaseUrl('ooni')}/api/v1/measurement_meta?measurement_uid=${measurementUid}&full=true`,
+    `${getBaseUrl()}/api/v1/measurement_meta?measurement_uid=${measurementUid}&full=true`,
     ooniFetcher,
     {
       revalidateOnFocus: false,
@@ -162,7 +162,7 @@ const Measurement = ({
     if (!day.isValid()) return null
     const since = day.subtract(1, 'day').format('YYYY-MM-DD')
     const until = day.add(1, 'day').format('YYYY-MM-DD')
-    return `${getBaseUrl('ooni')}/api/v1/analysis?measurement_uid=${encodeURIComponent(measurementUid)}&since=${since}&until=${until}`
+    return `${getBaseUrl()}/api/v1/analysis?measurement_uid=${encodeURIComponent(measurementUid)}&since=${since}&until=${until}`
   }, [measurementUid, measurement_start_time])
 
   return (

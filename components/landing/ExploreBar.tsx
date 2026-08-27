@@ -59,7 +59,7 @@ const fetcher = (
   args: string | [string, Record<string, string>],
 ): Promise<SearchResult[]> => {
   const [url, params] = Array.isArray(args) ? args : [args, undefined]
-  return apiFetch(url, { backend: null, params }).then(
+  return apiFetch(url, { local: true, params }).then(
     (data) => data?.results ?? [],
   )
 }

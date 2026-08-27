@@ -51,7 +51,7 @@ const getAPIPath = (query) => {
 
 const fetcher = async (query) => {
   const path = getAPIPath(query)
-  const reqUrl = buildUrl(path, {}, getBaseUrl('ooni'))
+  const reqUrl = buildUrl(path, {}, getBaseUrl())
   console.debug(`API Query: ${reqUrl}`)
   const startTime = performance.now()
 
@@ -138,7 +138,7 @@ const MATChart = ({ query, showFilters = true }) => {
     swrOptions,
   )
 
-  const apiEndpoint = buildUrl(getAPIPath(query), {}, getBaseUrl('ooni'))
+  const apiEndpoint = buildUrl(getAPIPath(query), {}, getBaseUrl())
 
   const results = useMemo(
     () => data?.data?.result || data?.data?.results || [],

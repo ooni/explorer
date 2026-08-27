@@ -27,10 +27,6 @@ module.exports = withSentryConfig(
           source: '/proxy/ooni/:path*',
           destination: `${process.env.NEXT_PUBLIC_OONI_API}/:path*`,
         },
-        {
-          source: '/proxy/feedback/:path*',
-          destination: `${process.env.NEXT_PUBLIC_USER_FEEDBACK_API}/:path*`,
-        },
       ]
     },
     i18n: {
