@@ -3520,9 +3520,9 @@ jiti@^2.6.1:
   integrity sha512-ekilCSN1jwRvIbgeg/57YFh8qQDNbwDb9xT/qu2DAHbFFZUicIl4ygVaAvzveMhMVr3LnpSKTNnwt8PoOfmKhQ==
 
 joi@^18.0.2:
-  version "18.1.1"
-  resolved "https://registry.yarnpkg.com/joi/-/joi-18.1.1.tgz#d9e2526271c07109065307002b3db4364d6be5ea"
-  integrity sha512-pJkBiPtNo+o0h19LfSvUN46Y5zY+ck99AtHwch9n2HqVLNRgP0ZMyIH8FRMoP+HV8hy/+AG99dXFfwpf83iZfQ==
+  version "18.2.8"
+  resolved "https://registry.yarnpkg.com/joi/-/joi-18.2.8.tgz#855dae219ef3bb48bb26c35f02fdb521f88b9c03"
+  integrity sha512-G2TX62h58ZHuwqetJgP2F4ualakqAmZtBYe3jWen7gxQRw5xApX6crnFtuB91WC0c3ESBnva+kGSnb3+6pIQDQ==
   dependencies:
     "@hapi/address" "^5.1.1"
     "@hapi/formula" "^3.0.2"
