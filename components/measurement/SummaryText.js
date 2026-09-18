@@ -1,3 +1,4 @@
+import useTimezone from 'hooks/useTimezone'
 import Markdown from 'markdown-to-jsx'
 import PropTypes from 'prop-types'
 import { useContext } from 'react'
@@ -9,11 +10,13 @@ import { getTestMetadata } from '../utils'
 
 const SummaryText = ({ testName, network, country, date, content }) => {
   const { locale, formatMessage } = useIntl()
+  const { timezone } = useTimezone()
   const metadata = getTestMetadata(testName)
-  const formattedDateTime = dayjs(date)
+  const formattedDateTime = dayjs
+    .utc(date)
     .locale(locale)
-    .utc()
-    .format('MMMM DD, YYYY, hh:mm A [UTC]')
+    .tz(timezone)
+    .format('MMMM DD, YYYY, hh:mm A z')
   const isEmbeddedView = useContext(EmbeddedViewContext)
 
   let textToRender = null
