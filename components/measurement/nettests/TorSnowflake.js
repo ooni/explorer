@@ -20,9 +20,7 @@ const messages = defineMessages({
 })
 
 const TorSnowflakeDetails = ({ isAnomaly, isFailure, measurement, render }) => {
-  const {
-    test_keys: { bootstrap_time, failure },
-  } = measurement
+  const { bootstrap_time, failure } = measurement?.test_keys ?? {}
 
   let status
   let hint

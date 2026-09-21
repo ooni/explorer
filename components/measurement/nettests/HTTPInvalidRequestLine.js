@@ -1,11 +1,10 @@
 import PropTypes from 'prop-types'
 import { FormattedMessage, defineMessages } from 'react-intl'
 
-const HttpInvalidRequestLineDetails = ({ measurement, render }) => {
-  const testKeys = measurement.test_keys
-  const isAnomaly = testKeys.tampering === true
-  const isOK = testKeys.tampering === false
-  const isFailed = testKeys.tampering === null
+const HttpInvalidRequestLineDetails = ({ measurement, render, isAnomaly, isFailure, isConfirmed, scores }) => {
+  const testKeys = measurement?.test_keys ?? {}
+  const isOK = !isAnomaly && !isFailure && !isConfirmed
+  const isFailed = isFailure
   const sentMessages = testKeys.sent
   const receivedMessages = testKeys.received
 
