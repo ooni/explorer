@@ -465,9 +465,9 @@
   "Search.HTTPRequests.Results.Error": "",
   "Search.HTTPRequests.Results.Reachable": "",
   "Search.NDT.Results": "",
-  "Search.DASH.Results": "",
-  "Search.VanillaTor.Results": "",
-  "Search.BridgeReachability.Results": "",
+  "Search.DASH.Results": " ",
+  "Search.VanillaTor.Results": " ",
+  "Search.BridgeReachability.Results": " ",
   "Search.LegacyTests.Results": "",
   "Search.Results.Empty.Heading": "Sonuç bulunamadı",
   "Search.Results.Empty.Description": "Daha iyi sonuçlar almak için lütfen süzgeçleri değiştirmeyi deneyin.",
@@ -697,5 +697,12 @@
   "Measurement.CommonSummary.ViaAnonymousCredentials": "anonim kimlik bilgileriyle",
   "Measurement.CommonSummary.ProbeAuthenticated": "Probe kimliği doğrulandı",
   "Measurement.CommonSummary.ProbeUnauthenticated": "Probe kimliği doğrulanamadı",
-  "Measurement.CommonSummary.ProbeAuthenticationFailed": "Probe kimlik doğrulaması başarısız oldu"
+  "Measurement.CommonSummary.ProbeAuthenticationFailed": "Probe kimlik doğrulaması başarısız oldu",
+  "Home.ExploreBar.Placeholder": "Ülke, ağ veya website arayın",
+  "Home.ExploreBar.NoResults": "Sonuç bulunamadı",
+  "Home.ExploreBar.Loading": "Öneriler yükleniyor…",
+  "Home.ExploreBar.Type.country": "Ülke",
+  "Home.ExploreBar.Type.network": "Ağ",
+  "Home.ExploreBar.Type.domain": "Etki alanı",
+  "Home.ExploreBar.Type.theme": "Tema"
 }
