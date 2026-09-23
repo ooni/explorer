@@ -8,6 +8,7 @@ import ConditionalWrapper from "./ConditionalWrapper";
 import Footer from "./Footer";
 import Header from "./Header";
 import NavBar from "./NavBar";
+import ProductionApiNotice from "./ProductionApiNotice";
 
 const Layout = ({ children, isEmbeddedView }) => {
   const { pathname } = useRouter();
@@ -38,6 +39,7 @@ const Layout = ({ children, isEmbeddedView }) => {
     <UserProvider>
       <div className="site">
         <div className="flex flex-col min-h-screen">
+          <ProductionApiNotice />
           <Header />
           {!isEmbeddedView && (
             <ConditionalWrapper

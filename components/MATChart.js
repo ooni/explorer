@@ -1,25 +1,22 @@
-import axios from 'axios'
 import { MATContextProvider } from 'components/aggregation/mat/MATContext'
 import { NoCharts } from 'components/aggregation/mat/NoCharts'
 import { StackedBarChart } from 'components/aggregation/mat/StackedBarChart'
 import TableView from 'components/aggregation/mat/TableView'
-import { axiosResponseTime } from 'components/axios-plugins'
+import { apiFetch, buildUrl, getBaseUrl } from 'lib/api'
 import dayjs from 'services/dayjs'
 import useSWR from 'swr'
 import { ChartSpinLoader } from './Chart'
 import { FormattedMarkdownBase } from './FormattedMarkdown'
 import { useMemo } from 'react'
 
-axiosResponseTime(axios)
-
 const swrOptions = {
   revalidateOnFocus: false,
   dedupingInterval: 10 * 60 * 1000,
 }
 
-const getAPIEndpoint = (query) => {
+const getAPIPath = (query) => {
   const qs = new URLSearchParams(query).toString()
-  let reqUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation?${qs}`
+  let path = `/api/v1/aggregation?${qs}`
   const { data, ...q } = query
 
   if (data === 'observations') {
@@ -43,36 +40,35 @@ const getAPIEndpoint = (query) => {
           .join('')
       : ''
 
-    reqUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation/observations?group_by=failure${axisX}${axisY}${domainParam}&${new URLSearchParams(q).toString()}`
+    path = `/api/v1/aggregation/observations?group_by=failure${axisX}${axisY}${domainParam}&${new URLSearchParams(q).toString()}`
   }
   if (data === 'analysis') {
-    reqUrl = `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/aggregation/analysis?${new URLSearchParams(q).toString()}`
+    path = `/api/v1/aggregation/analysis?${new URLSearchParams(q).toString()}`
   }
 
-  return reqUrl
+  return path
 }
 
-const fetcher = (query) => {
-  const reqUrl = getAPIEndpoint(query)
+const fetcher = async (query) => {
+  const path = getAPIPath(query)
+  const reqUrl = buildUrl(path, {}, getBaseUrl())
   console.debug(`API Query: ${reqUrl}`)
-  return axios
-    .get(reqUrl)
-    .then((r) => {
-      return {
-        data: r.data,
-        loadTime: r.loadTime,
-        url: r.config.url,
-      }
-    })
-    .catch((e) => {
-      if (!axios.isAxiosError(e)) throw e
+  const startTime = performance.now()
 
-      const status = e.response?.status
-      const message = e.response?.data?.message ?? e.message
-      const data = e.response?.data
+  try {
+    const data = await apiFetch(path)
+    return {
+      data,
+      loadTime: performance.now() - startTime,
+      url: reqUrl,
+    }
+  } catch (e) {
+    const status = e.status
+    const message = e.data?.message ?? e.message
+    const data = e.data
 
-      throw new Error(`${status}: ${message}\n${JSON.stringify(data)}`)
-    })
+    throw new Error(`${status}: ${message}\n${JSON.stringify(data)}`)
+  }
 }
 
 export const MATChartWrapper = ({ link, caption }) => {
@@ -142,7 +138,7 @@ const MATChart = ({ query, showFilters = true }) => {
     swrOptions,
   )
 
-  const apiEndpoint = getAPIEndpoint(query)
+  const apiEndpoint = buildUrl(getAPIPath(query), {}, getBaseUrl())
 
   const results = useMemo(
     () => data?.data?.result || data?.data?.results || [],
