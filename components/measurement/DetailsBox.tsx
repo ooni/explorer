@@ -10,7 +10,11 @@ type DetailsBoxProps = {
   collapsed?: boolean
   children?: ReactNode
   className?: string
-} & Omit<React.HTMLAttributes<HTMLDivElement>, 'title' | 'content' | 'children'>
+  onOpen?: () => void
+} & Omit<
+  React.HTMLAttributes<HTMLDivElement>,
+  'title' | 'content' | 'children' | 'onOpen'
+>
 
 export const DetailsBox = ({
   title,
@@ -18,13 +22,15 @@ export const DetailsBox = ({
   collapsed = false,
   children,
   className,
+  onOpen,
   ...rest
 }: DetailsBoxProps) => {
   const [isOpen, setIsOpen] = useState(!collapsed)
 
   const onToggle = useCallback(() => {
+    if (!isOpen) onOpen?.()
     setIsOpen(!isOpen)
-  }, [isOpen])
+  }, [isOpen, onOpen])
 
   return (
     <div

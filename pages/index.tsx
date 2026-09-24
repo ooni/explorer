@@ -69,16 +69,29 @@ const FeatureBoxTitle = ({
 )
 
 export async function getStaticProps() {
-  const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
-  const result = await client.get('/api/_/global_overview')
-
-  return {
-    props: {
-      measurementCount: result.data.measurement_count,
-      asnCount: result.data.network_count,
-      countryCount: result.data.country_count,
-    },
-    revalidate: 60 * 60 * 12, // 12 hours
+  try {
+    const client = axios.create({
+      baseURL: process.env.NEXT_PUBLIC_OONI_API,
+      timeout: 2000,
+    })
+    const result = await client.get('/api/_/global_overview')
+    return {
+      props: {
+        measurementCount: result.data.measurement_count,
+        asnCount: result.data.network_count,
+        countryCount: result.data.country_count,
+      },
+      revalidate: 60 * 60 * 12, // 12 hours
+    }
+  } catch {
+    return {
+      props: {
+        measurementCount: 0,
+        asnCount: 0,
+        countryCount: 0,
+      },
+      revalidate: 60 * 60 * 12, // 12 hours
+    }
   }
 }
 

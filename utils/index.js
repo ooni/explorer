@@ -64,9 +64,16 @@ export const formatMediumDateUTC = (date, locale) =>
     timeZone: 'UTC',
   }).format(new Date(date))} UTC`
 
+// Host (including port) of a URL, or null when it has no parseable origin
+export const hostnameFromUrl = (input) => {
+  try {
+    return new URL(input).host
+  } catch {
+    return null
+  }
+}
+
 export const formatTwoTuple = (ip, port) => {
-  if (ip.indexOf(':')===-1)
-    return `${ip}:${port}`;
-  else
-    return `[${ip}]:${port}`;
+  if (ip.indexOf(':') === -1) return `${ip}:${port}`
+  else return `[${ip}]:${port}`
 }
