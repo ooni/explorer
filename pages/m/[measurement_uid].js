@@ -1,13 +1,19 @@
-import CommonDetails from 'components/measurement/CommonDetails'
+import CommonDetails, {
+  commonDetailsFromObservation,
+  commonDetailsFromRaw,
+} from 'components/measurement/CommonDetails'
 import CommonSummary from 'components/measurement/CommonSummary'
 import { LazyDetailsBox } from 'components/measurement/DetailsBox'
 import DetailsHeader from 'components/measurement/DetailsHeader'
 import FeedbackBox from 'components/measurement/FeedbackBox'
 import HeadMetadata from 'components/measurement/HeadMetadata'
 import Hero from 'components/measurement/Hero'
-import MeasurementContainer from 'components/measurement/MeasurementContainer'
+import LegacyDetails from 'components/measurement/LegacyDetails'
 import { getMeasurementHeroProps } from 'components/measurement/measurementHero'
 import { getMeasurementSummary } from 'components/measurement/measurementSummary'
+import { usesObservations } from 'components/measurement/nettests'
+import ObservationsDetails from 'components/measurement/ObservationsDetails'
+import { fetchObservations } from 'components/measurement/observations/api'
 import RawMeasurement from 'components/measurement/RawMeasurement'
 import SummaryText from 'components/measurement/SummaryText'
 import NotFound from 'components/NotFound'
@@ -104,6 +110,8 @@ const measurementFetcher = async (url) => {
   return json
 }
 
+const observationsFetcher = ([, uid]) => fetchObservations(uid)
+
 const Measurement = ({ isEmbeddedView, measurementUid, notFound = false }) => {
   const intl = useIntl()
 
@@ -169,7 +177,48 @@ const Measurement = ({ isEmbeddedView, measurementUid, notFound = false }) => {
       : []
   }, [userFeedback, intl])
 
-  const raw_measurement = null
+  const showObservations = usesObservations(test_name)
+
+  const {
+    data: observations,
+    error: observationsError,
+    isLoading: isLoadingObservations,
+  } = useSWR(
+    showObservations && measurementUid
+      ? ['observations', measurementUid]
+      : null,
+    observationsFetcher,
+    {
+      revalidateOnFocus: false,
+      shouldRetryOnError: false,
+    },
+  )
+
+  const {
+    data: rawMeasurement,
+    error: rawError,
+    isLoading: isLoadingRaw,
+  } = useSWR(
+    test_name && !showObservations
+      ? `/api/ooni/v1/raw_measurement?measurement_uid=${encodeURIComponent(measurementUid)}`
+      : null,
+    measurementFetcher,
+    {
+      revalidateOnFocus: false,
+      shouldRetryOnError: false,
+    },
+  )
+
+  const hasMeasurementData =
+    !!measurementData && Object.keys(measurementData).length > 0
+  const detailsSettled = !test_name
+    ? true
+    : showObservations
+      ? observations !== undefined || !!observationsError
+      : rawMeasurement !== undefined || !!rawError
+  const isPageLoading =
+    !error &&
+    (isLoadingMeasurementData || (hasMeasurementData && !detailsSettled))
 
   const analysisSwrKey = useMemo(() => {
     if (!measurementUid || !measurement_start_time) return null
@@ -184,7 +233,7 @@ const Measurement = ({ isEmbeddedView, measurementUid, notFound = false }) => {
     () =>
       getMeasurementHeroProps({
         testName: test_name,
-        // measurement: raw_measurement,
+        measurement: rawMeasurement,
         scores,
         isConfirmed: confirmed,
         isAnomaly: anomaly,
@@ -195,7 +244,7 @@ const Measurement = ({ isEmbeddedView, measurementUid, notFound = false }) => {
       }),
     [
       test_name,
-      // raw_measurement,
+      rawMeasurement,
       scores,
       confirmed,
       anomaly,
@@ -227,7 +276,7 @@ const Measurement = ({ isEmbeddedView, measurementUid, notFound = false }) => {
     () =>
       getMeasurementSummary({
         testName: test_name,
-        // measurement: raw_measurement,
+        measurement: rawMeasurement,
         scores,
         isConfirmed: confirmed,
         isAnomaly: anomaly,
@@ -241,7 +290,7 @@ const Measurement = ({ isEmbeddedView, measurementUid, notFound = false }) => {
       }),
     [
       test_name,
-      // raw_measurement,
+      rawMeasurement,
       scores,
       confirmed,
       anomaly,
@@ -271,18 +320,23 @@ const Measurement = ({ isEmbeddedView, measurementUid, notFound = false }) => {
               <div className="bg-gray-100 p-4 my-6">{error.message}</div>
             </div>
           )}
-          {isLoadingMeasurementData && (
-            <div className="flex-1 flex justify-center items-center bg-gray-100 border-t-[62px] border-blue-500">
-              <SpinLoader />
+          {isPageLoading && (
+            <div className="flex-1 flex justify-center items-center bg-gray-100 border-t-[62px] border-blue-500 min-h-screen">
+              <div className="flex flex-col items-center gap-4">
+                <SpinLoader />
+                <div className="text-gray-500">
+                  {intl.formatMessage({ id: 'General.Loading' })}
+                </div>
+              </div>
             </div>
           )}
-          {measurementData && Object.keys(measurementData).length > 0 && (
+          {hasMeasurementData && !isPageLoading && (
             <>
               <CommonSummary
                 measurement_start_time={measurement_start_time}
                 probe_asn={formattedProbeAsn}
                 probe_cc={probe_cc}
-                networkName={raw_measurement?.probe_network_name}
+                networkName={rawMeasurement?.probe_network_name}
                 color={color}
                 country={country}
                 verification_status={verification_status}
@@ -317,7 +371,7 @@ const Measurement = ({ isEmbeddedView, measurementUid, notFound = false }) => {
               <div className="container">
                 <DetailsHeader
                   testName={test_name}
-                  runtime={raw_measurement?.test_runtime}
+                  runtime={rawMeasurement?.test_runtime}
                   url={`measurement/${measurement_uid}`}
                 />
                 {summaryText && (
@@ -330,15 +384,33 @@ const Measurement = ({ isEmbeddedView, measurementUid, notFound = false }) => {
                     content={summaryText}
                   />
                 )}
-                <MeasurementContainer
-                  measurementUid={measurement_uid}
-                  measurementStartTime={measurement_start_time}
-                  probeAsn={probe_asn}
-                />
+                {showObservations ? (
+                  <ObservationsDetails
+                    observations={observations}
+                    isLoading={isLoadingObservations}
+                    error={observationsError}
+                    measurementUid={measurement_uid}
+                    measurementStartTime={measurement_start_time}
+                    probeAsn={probe_asn}
+                  />
+                ) : (
+                  <LegacyDetails
+                    testName={test_name}
+                    measurement={rawMeasurement}
+                    isAnomaly={anomaly}
+                    isFailure={failure}
+                    isLoading={isLoadingRaw}
+                  />
+                )}
                 <CommonDetails
                   reportId={report_id}
                   measurementUid={measurement_uid}
                   userFeedbackItems={userFeedbackItems}
+                  details={
+                    showObservations
+                      ? commonDetailsFromObservation(observations?.[0])
+                      : commonDetailsFromRaw(rawMeasurement)
+                  }
                 />
                 <RawMeasurement
                   measurementUid={measurement_uid}

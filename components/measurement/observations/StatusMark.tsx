@@ -63,9 +63,9 @@ export const AsnLabel = ({
 }) => {
   if (asn == null) return null
   return (
-    <span className="text-xs text-gray-600">
+    <span className="text-xs">
       AS{asn}
-      {orgName ? ` · ${orgName}` : ''}
+      {orgName ? ` • ${orgName}` : ''}
     </span>
   )
 }

@@ -24,6 +24,12 @@ export interface WebObservation {
   probe_cc: string
   probe_as_org_name: string
 
+  software_name: string
+  software_version: string
+  engine_name: string
+  engine_version: string
+  platform: string
+
   resolver_ip: string
   resolver_asn: number
   resolver_as_org_name: string

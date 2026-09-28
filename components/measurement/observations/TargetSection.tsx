@@ -4,7 +4,7 @@ import { FormattedMessage, useIntl } from 'react-intl'
 import useSWR from 'swr'
 import { DetailsBox } from '../DetailsBox'
 import { fetchAggregatedObservations } from './api'
-import type { TargetGroup } from './derive'
+import type { ResolverGroup, TargetGroup } from './derive'
 import {
   ctrlForEndpoint,
   hasHTTP,
@@ -49,13 +49,13 @@ const CtrlCounts = ({
   const fmt = useNumberFormat()
   if (missing) {
     return (
-      <div className="text-xs text-gray-600 mt-0.5">
+      <div className="text-xs mt-0.5">
         <FormattedMessage id="Measurement.Observations.Control.NoData" />
       </div>
     )
   }
   return (
-    <div className="text-xs text-gray-600 mt-0.5">
+    <div className="text-xs mt-0.5">
       <FormattedMessage
         id="Measurement.Observations.Control.Counts"
         values={{
@@ -177,7 +177,7 @@ const CtrlResolutionBlock = ({
         <div className="text-xs font-mono font-semibold mb-1">{hostname}</div>
       )}
       {counts && (
-        <p className="text-xs text-gray-600 mb-1">
+        <p className="text-xs mb-1">
           <FormattedMessage
             id="Measurement.Observations.Control.DnsCounts"
             values={{
@@ -206,7 +206,8 @@ const CtrlResolutionBlock = ({
               key={c.ip + String(c.port)}
               className={`text-xs ${common ? 'font-medium' : ''}`}
             >
-              <span className="font-mono">{c.ip}</span>{' '}
+              <span className="font-mono">{c.ip}</span>
+              {' • '}
               <AsnLabel asn={c.asn} orgName={c.as_org_name} />
               <span className="ms-1 space-x-1">
                 {common && (
@@ -224,13 +225,21 @@ const CtrlResolutionBlock = ({
           )
         })}
         {answerIPs.length === 0 && (
-          <li className="text-xs text-gray-600">
+          <li className="text-xs">
             <FormattedMessage id="Measurement.Observations.Control.NoDnsAnswers" />
           </li>
         )}
       </ul>
     </div>
   )
+}
+
+const SYSTEM_RESOLVER_ENGINES = new Set(['system', 'getaddrinfo'])
+
+const resolverIpLabel = (rg: ResolverGroup) => {
+  if (!SYSTEM_RESOLVER_ENGINES.has(rg.engine.toLowerCase())) return ''
+  const ip = rg.queries.find((q) => q.resolver_ip)?.resolver_ip
+  return ip ? ` (${ip})` : ''
 }
 
 const DnsSection = ({ group }: { group: TargetGroup }) => {
@@ -266,14 +275,14 @@ const DnsSection = ({ group }: { group: TargetGroup }) => {
           )}
           {group.dnsByResolver.map((rg) => (
             <div key={rg.engine + rg.resolverAddress}>
-              <div className="text-xs uppercase tracking-wide text-gray-600 mb-1">
+              <div className="text-xs uppercase tracking-wide mb-1">
                 <FormattedMessage
                   id="Measurement.Observations.Resolver"
                   values={{
                     engine: (
                       <span className="font-semibold text-gray-900">
                         {rg.engine}
-                        {rg.resolverAddress ? ` (${rg.resolverAddress})` : ''}
+                        {resolverIpLabel(rg)}
                       </span>
                     ),
                   }}
@@ -342,7 +351,7 @@ const DnsSection = ({ group }: { group: TargetGroup }) => {
                             />
                           </td>
                           <td
-                            className={`${tdClass} text-end text-xs text-gray-600 tabular-nums`}
+                            className={`${tdClass} text-end text-xs tabular-nums`}
                           >
                             {q.dns_t != null
                               ? `${(q.dns_t * 1000).toFixed(0)}ms`
@@ -358,11 +367,11 @@ const DnsSection = ({ group }: { group: TargetGroup }) => {
           ))}
         </div>
         <aside className="border-t md:border-t-0 md:border-s border-gray-300 pt-3 md:pt-0 md:ps-4">
-          <h4 className="text-xs font-semibold uppercase tracking-wide text-gray-600 mb-2">
+          <h4 className="text-xs font-semibold uppercase tracking-wide mb-2">
             <FormattedMessage id="Measurement.Observations.ControlResolution" />
           </h4>
           {ctrlHostnames.length === 0 ? (
-            <p className="text-gray-600">
+            <p className="">
               <FormattedMessage id="Measurement.Observations.Control.NoHostnames" />
             </p>
           ) : (
@@ -401,7 +410,7 @@ const HttpCell = ({ o }: { o: WebObservation }) => {
       )}
       {o.http_request_url && (
         <div
-          className="text-xs text-gray-600 font-mono truncate max-w-[220px]"
+          className="text-xs font-mono truncate max-w-[220px]"
           title={o.http_request_url}
         >
           {o.http_request_method ? `${o.http_request_method} ` : ''}
@@ -409,7 +418,7 @@ const HttpCell = ({ o }: { o: WebObservation }) => {
         </div>
       )}
       {o.http_response_body_length != null && !o.http_failure && (
-        <div className="text-xs text-gray-600">
+        <div className="text-xs">
           <FormattedMessage
             id="Measurement.Observations.Bytes"
             values={{ bytes: fmt(o.http_response_body_length) }}
@@ -457,9 +466,7 @@ const EndpointsSection = ({ group }: { group: TargetGroup }) => {
                       {o.port != null ? `:${o.port}` : ''}
                     </div>
                     {multiHost && o.hostname && o.hostname !== o.ip && (
-                      <div className="text-xs text-gray-600 font-mono">
-                        {o.hostname}
-                      </div>
+                      <div className="text-xs font-mono">{o.hostname}</div>
                     )}
                     <AsnLabel asn={o.ip_asn} orgName={o.ip_as_org_name} />
                     <div className="mt-0.5 space-x-1">
@@ -527,10 +534,10 @@ const EndpointsSection = ({ group }: { group: TargetGroup }) => {
                           <StatusMark tone="fail">{o.tls_failure}</StatusMark>
                         )}
                         {o.tls_version && (
-                          <div className="text-xs text-gray-600">
+                          <div className="text-xs">
                             {o.tls_version}
                             {o.tls_server_name
-                              ? ` · SNI ${o.tls_server_name}`
+                              ? ` • SNI ${o.tls_server_name}`
                               : ''}
                           </div>
                         )}
@@ -544,7 +551,7 @@ const EndpointsSection = ({ group }: { group: TargetGroup }) => {
                       failure={ctrl?.tls_failure_count}
                     />
                     {ctrl?.tls_consistent && hasTLS(o) && (
-                      <div className="text-xs text-gray-600">
+                      <div className="text-xs">
                         <FormattedMessage id="Measurement.Observations.Tls.ConsistentInControl" />
                       </div>
                     )}
@@ -603,7 +610,7 @@ const StandaloneHttpSection = ({ group }: { group: TargetGroup }) => {
                       />
                       {o.http_response_body_length != null && (
                         <>
-                          {' · '}
+                          {' • '}
                           <FormattedMessage
                             id="Measurement.Observations.Bytes"
                             values={{
@@ -615,9 +622,7 @@ const StandaloneHttpSection = ({ group }: { group: TargetGroup }) => {
                     </StatusMark>
                   )}
                 </td>
-                <td
-                  className={`${tdClass} text-end text-xs text-gray-600 tabular-nums`}
-                >
+                <td className={`${tdClass} text-end text-xs tabular-nums`}>
                   {o.http_runtime != null
                     ? `${(o.http_runtime * 1000).toFixed(0)}ms`
                     : ''}
@@ -702,7 +707,7 @@ const FailurePanel = ({
       onOpen={() => setHasOpened(true)}
       title={<FormattedMessage id="Measurement.Observations.OverTime" />}
     >
-      <p className="text-gray-600 mb-3">
+      <p className="mb-3 mt-0">
         <FormattedMessage
           id="Measurement.Observations.OverTime.Description"
           values={{ asn: probeASN, hostnames: hostnames.length }}
@@ -793,7 +798,7 @@ const TargetSection = ({
         <span className="text-sm font-normal text-gray-600">
           {hostnamesLabel && (
             <>
-              <span className="font-mono">{hostnamesLabel}</span> ·{' '}
+              <span className="font-mono">{hostnamesLabel}</span> •{' '}
             </>
           )}
           <FormattedMessage

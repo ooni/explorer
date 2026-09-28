@@ -1,22 +1,97 @@
-import PropTypes from 'prop-types'
+import type { ReactNode } from 'react'
 import { FormattedMessage, useIntl } from 'react-intl'
-
 import { DetailsBoxTable } from './DetailsBox'
+import type { WebObservation } from './observations/types'
+
+export type CommonDetailsFields = {
+  software_name?: string | null
+  software_version?: string | null
+  engine_name?: string | null
+  engine_version?: string | null
+  platform?: string | null
+  resolver_asn?: string | number | null
+  resolver_ip?: string | null
+  resolver_network_name?: string | null
+}
+
+export type RawMeasurement = {
+  software_name?: string | null
+  software_version?: string | null
+  annotations?: {
+    engine_name?: string | null
+    engine_version?: string | null
+    platform?: string | null
+    [key: string]: unknown
+  } | null
+  resolver_asn?: string | number | null
+  resolver_ip?: string | null
+  resolver_network_name?: string | null
+  probe_network_name?: string | null
+  test_runtime?: number | null
+  test_name?: string
+  test_keys?: Record<string, unknown> | null
+}
+
+export function commonDetailsFromObservation(
+  o?: WebObservation | null,
+): CommonDetailsFields {
+  if (!o) return {}
+  return {
+    software_name: o.software_name,
+    software_version: o.software_version,
+    engine_name: o.engine_name,
+    engine_version: o.engine_version,
+    platform: o.platform,
+    resolver_asn: o.resolver_asn,
+    resolver_ip: o.resolver_ip,
+    resolver_network_name: o.resolver_as_org_name,
+  }
+}
+
+export function commonDetailsFromRaw(
+  m?: RawMeasurement | null,
+): CommonDetailsFields {
+  if (!m) return {}
+  return {
+    software_name: m.software_name,
+    software_version: m.software_version,
+    engine_name: m.annotations?.engine_name,
+    engine_version: m.annotations?.engine_version,
+    platform: m.annotations?.platform,
+    resolver_asn: m.resolver_asn,
+    resolver_ip: m.resolver_ip,
+    resolver_network_name: m.resolver_network_name,
+  }
+}
+
+type UserFeedbackItem = {
+  label: string
+  value?: ReactNode
+}
+
+type CommonDetailsProps = {
+  details?: CommonDetailsFields
+  reportId?: string
+  measurementUid?: string
+  userFeedbackItems?: UserFeedbackItem[]
+}
 
 const CommonDetails = ({
-  measurement,
+  details = {},
   reportId,
   measurementUid,
   userFeedbackItems = [],
-}) => {
+}: CommonDetailsProps) => {
   const {
     software_name,
     software_version,
-    annotations,
+    engine_name,
+    engine_version,
+    platform: platformValue,
     resolver_asn,
     resolver_ip,
     resolver_network_name,
-  } = measurement ?? {}
+  } = details
 
   const intl = useIntl()
   const unavailable = intl.formatMessage({
@@ -26,16 +101,16 @@ const CommonDetails = ({
   let engine = unavailable
   let platform = unavailable
 
-  if (annotations?.engine_name) {
-    engine = annotations.engine_name
+  if (engine_name) {
+    engine = engine_name
 
-    if (annotations.engine_version) {
-      engine = `${engine} (${annotations.engine_version})`
+    if (engine_version) {
+      engine = `${engine} (${engine_version})`
     }
   }
 
-  if (annotations?.platform) {
-    platform = annotations.platform
+  if (platformValue) {
+    platform = platformValue
   }
 
   let software = software_name ?? unavailable
@@ -98,8 +173,7 @@ const CommonDetails = ({
 
   return (
     <>
-      {showResolverItems && (
-        // Resolver data
+      {!!showResolverItems && (
         <DetailsBoxTable
           title={
             <FormattedMessage id="Measurement.CommonDetails.Label.Resolver" />
@@ -107,9 +181,7 @@ const CommonDetails = ({
           items={resolverItems}
         />
       )}
-      {/* Metadata: platform, probe, MK version etc. */}
       <DetailsBoxTable items={items} className="bg-gray-200" />
-      {/* User Feedback */}
       {!!userFeedbackItems.length && (
         <DetailsBoxTable
           title={
@@ -120,12 +192,6 @@ const CommonDetails = ({
       )}
     </>
   )
-}
-
-CommonDetails.propTypes = {
-  measurement: PropTypes.object,
-  reportId: PropTypes.string,
-  measurementUid: PropTypes.string,
 }
 
 export default CommonDetails

@@ -87,20 +87,21 @@ const ExploreBar = () => {
   const [activeIndex, setActiveIndex] = useState(-1)
 
   // debounces the query to prevent excessive API requests
-  // biome-ignore lint/correctness/useExhaustiveDependencies: debounce identity must be stable
   const debouncedSetQuery = useMemo(() => debounce(setQuery, 200), [])
   useEffect(() => () => debouncedSetQuery.cancel(), [debouncedSetQuery])
 
   // fetches the default pool of results when the list is opened
-  const { data: defaultPool, isLoading: isDefaultLoading } =
-    useSWR<SearchResult[]>(hasOpened ? '/api/search' : null, fetcher, {
-      revalidateOnFocus: false,
-    })
+  const { data: defaultPool, isLoading: isDefaultLoading } = useSWR<
+    SearchResult[]
+  >(hasOpened ? '/api/search' : null, fetcher, {
+    revalidateOnFocus: false,
+  })
 
-  
   // fetches the search results when the user types
   const trimmedQuery = query.trim()
-  const { data: searchResults, isLoading: isSearchLoading } = useSWR<SearchResult[]>(
+  const { data: searchResults, isLoading: isSearchLoading } = useSWR<
+    SearchResult[]
+  >(
     hasOpened && trimmedQuery ? ['/api/search', { q: trimmedQuery }] : null,
     fetcher,
     { revalidateOnFocus: false, keepPreviousData: true },
@@ -123,7 +124,13 @@ const ExploreBar = () => {
         haystack: `${lower(localizedLabel)} ${aliases}`,
       }
     })
-    const toCountryOption = ({ alpha_2, name }: { alpha_2: string; name: string }) => ({
+    const toCountryOption = ({
+      alpha_2,
+      name,
+    }: {
+      alpha_2: string
+      name: string
+    }) => ({
       type: 'country' as const,
       key: alpha_2,
       name,
@@ -191,8 +198,7 @@ const ExploreBar = () => {
   // Show a loader only when there is nothing to display yet and a request
   // is in flight (initial default load, or a first search with no matches)
   const isLoading =
-    options.length === 0 &&
-    (trimmedInput ? isSearchLoading : isDefaultLoading)
+    options.length === 0 && (trimmedInput ? isSearchLoading : isDefaultLoading)
 
   // resets the active index when the visible list changes
   // biome-ignore lint/correctness/useExhaustiveDependencies: reset highlight when the visible list changes
@@ -255,7 +261,7 @@ const ExploreBar = () => {
         return (
           <>
             <span>AS{option.key}</span>
-            {option.name && <span> · {option.name}</span>}
+            {option.name && <span> • {option.name}</span>}
           </>
         )
       case 'theme':
@@ -269,7 +275,10 @@ const ExploreBar = () => {
   }
 
   return (
-    <div className="relative max-w-125 mx-auto mt-12 md:mt-20" ref={containerRef}>
+    <div
+      className="relative max-w-125 mx-auto mt-12 md:mt-20"
+      ref={containerRef}
+    >
       <div className="relative">
         <MdSearch
           aria-hidden="true"
@@ -292,7 +301,9 @@ const ExploreBar = () => {
           autoCorrect="off"
           spellCheck={false}
           className="w-full rounded-full bg-white pl-12 pr-5 py-3 text-lg text-blue-900 placeholder:text-gray-500 outline-none focus:ring-2 focus:ring-blue-300"
-          placeholder={intl.formatMessage({ id: 'Home.ExploreBar.Placeholder' })}
+          placeholder={intl.formatMessage({
+            id: 'Home.ExploreBar.Placeholder',
+          })}
           value={inputValue}
           onFocus={openDropdown}
           onClick={openDropdown}

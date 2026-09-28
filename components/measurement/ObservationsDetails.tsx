@@ -2,18 +2,19 @@ import SpinLoader from 'components/vendor/SpinLoader'
 import { useMemo } from 'react'
 import { FormattedMessage } from 'react-intl'
 import useSWR from 'swr'
-import { fetchCtrlGroundTruth, fetchObservations } from './observations/api'
+import { fetchCtrlGroundTruth } from './observations/api'
 import { chartWindow, ctrlWindow, groupByTarget } from './observations/derive'
 import TargetSection from './observations/TargetSection'
+import type { WebObservation } from './observations/types'
 
-type MeasurementContainerProps = {
+type ObservationsDetailsProps = {
+  observations?: WebObservation[]
+  isLoading: boolean
+  error?: Error | null
   measurementUid: string
   measurementStartTime: string
   probeAsn: number | string
 }
-
-const observationsFetcher = ([, measurementUid]: [string, string]) =>
-  fetchObservations(measurementUid)
 
 const ctrlFetcher = ([, hostKey, since, until]: [
   string,
@@ -28,21 +29,14 @@ const Message = ({ id }: { id: string }) => (
   </div>
 )
 
-const MeasurementContainer = ({
+const ObservationsDetails = ({
+  observations,
+  isLoading,
+  error,
   measurementUid,
   measurementStartTime,
   probeAsn,
-}: MeasurementContainerProps) => {
-  const {
-    data: observations,
-    error,
-    isLoading,
-  } = useSWR(
-    measurementUid ? ['observations', measurementUid] : null,
-    observationsFetcher,
-    { revalidateOnFocus: false, shouldRetryOnError: false },
-  )
-
+}: ObservationsDetailsProps) => {
   const hostnames = useMemo(
     () =>
       [
@@ -110,7 +104,7 @@ const MeasurementContainer = ({
 
   return (
     <div>
-      <p className="text-gray-600">
+      <p>
         <FormattedMessage
           id="Measurement.Observations.Summary"
           values={{
@@ -132,4 +126,4 @@ const MeasurementContainer = ({
   )
 }
 
-export default MeasurementContainer
+export default ObservationsDetails
