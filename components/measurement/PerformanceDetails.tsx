@@ -3,12 +3,12 @@ import { DetailsBoxTable } from './DetailsBox'
 
 interface PerformanceDetailsProps {
   isNdt7: boolean
-  averagePing: number
-  maxPing: number
-  mss: number
-  packetLoss: number
-  outOfOrder?: number
-  timeouts?: number
+  averagePing?: number | string
+  maxPing?: number | string
+  mss?: number | string
+  packetLoss?: number | string
+  outOfOrder?: number | string | null
+  timeouts?: number | string
 }
 
 const PerformanceDetails = ({
@@ -21,7 +21,7 @@ const PerformanceDetails = ({
   timeouts,
 }: PerformanceDetailsProps) => {
   const intl = useIntl()
-  const items = []
+  const items: { label: string; value: string }[] = []
   averagePing &&
     items.push({
       label: intl.formatMessage({
@@ -58,7 +58,7 @@ const PerformanceDetails = ({
 
   //Only add outOfOrder and timeouts if NDT4/5 measurement
   if (!isNdt7) {
-    outOfOrder !== undefined &&
+    outOfOrder != null &&
       items.push({
         label: intl.formatMessage({
           id: 'Measurement.Details.Performance.Label.OutOfOrder',
