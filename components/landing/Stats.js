@@ -1,5 +1,5 @@
 /* global process */
-import axios from 'axios'
+import { apiFetch } from 'lib/api'
 import { colors } from 'ooni-components'
 import { useIntl } from 'react-intl'
 import useSWR from 'swr'
@@ -103,9 +103,7 @@ export const MultiAxisLayer = ({ innerWidth, innerHeight, data }) => {
   )
 }
 
-const BASE_URL = `${process.env.NEXT_PUBLIC_OONI_API}`
-
-const dataFetcher = (query) => axios.get(BASE_URL + query).then((r) => r.data)
+const dataFetcher = (query) => apiFetch(query)
 
 const swrOptions = {
   revalidateOnFocus: false,

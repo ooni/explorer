@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { LRUCache } from 'lru-cache'
 import dayjs from 'services/dayjs'
 
@@ -54,14 +53,21 @@ const cloudflareHandler = (req, res) => {
   const formattedFrom = dateStart.split('.')[0] + 'Z'
   const formattedTo = dateEnd.split('.')[0] + 'Z'
 
-  return axios({
-    method: 'get',
-    url: `https://api.cloudflare.com/client/v4/radar/netflows/timeseries?name=all&product=all&dateStart=${formattedFrom}&dateEnd=${formattedTo}&${targetParam}&aggInterval=${aggInterval}&normalization=MIN0_MAX`,
+  const url = `https://api.cloudflare.com/client/v4/radar/netflows/timeseries?name=all&product=all&dateStart=${formattedFrom}&dateEnd=${formattedTo}&${targetParam}&aggInterval=${aggInterval}&normalization=MIN0_MAX`
+
+  return fetch(url, {
     headers: {
       Authorization: `Bearer ${process.env.CLOUDFLARE_TOKEN}`,
     },
   })
-    .then(({ data, headers }) => {
+    .then(async (response) => {
+      const data = await response.json()
+      if (!response.ok) {
+        throw new Error(
+          data?.errors?.[0]?.message || response.statusText || 'Request failed',
+        )
+      }
+
       const timestamps = data.result.all.timestamps
       const values = data.result.all.values
       const chartData = timestamps.map((st, i) => {
@@ -73,7 +79,7 @@ const cloudflareHandler = (req, res) => {
 
       if (req.cache) {
         req.cache.set(cacheKey, {
-          headers,
+          headers: response.headers,
           data: chartData,
         })
       }
@@ -81,8 +87,7 @@ const cloudflareHandler = (req, res) => {
       return res.status(200).json(chartData)
     })
     .catch((err) => {
-      const responseError =
-        err?.response?.data?.errors[0]?.message || err.message
+      const responseError = err.message
       return res.status(400).json(responseError)
     })
 }

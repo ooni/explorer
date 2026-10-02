@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { apiFetch } from 'lib/api'
 import CallToActionBox from 'components/CallToActionBox'
 import Chart from 'components/Chart'
 import CountryList from 'components/CountryBox'
@@ -287,27 +287,23 @@ export const getServerSideProps = async (context) => {
   const { probe_asn } = context.query
 
   if (/^AS[0-9]+$/.test(probe_asn)) {
-    const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
-    const path = '/api/v1/aggregation'
-
-    const countriesData = await client
-      .get(path, {
-        params: {
-          probe_asn,
-          axis_x: 'probe_cc',
-        },
-      })
-      .then((response) =>
-        response.data.result.map((res) => ({
+    const countriesData = await apiFetch('/api/v1/aggregation', {
+      params: {
+        probe_asn,
+        axis_x: 'probe_cc',
+      },
+    })
+      .then((data) =>
+        data.result.map((res) => ({
           alpha_2: res.probe_cc,
           count: res.measurement_count,
         })),
       )
       .catch(() => {})
 
-    const networkName = await client
-      .get('/api/_/asnmeta', { params: { asn: probe_asn.replace('AS', '') } })
-      .then((response) => response?.data?.org_name)
+    const networkName = await apiFetch('/api/_/asnmeta', {
+      params: { asn: probe_asn.replace('AS', '') },
+    }).then((data) => data?.org_name)
 
     return {
       props: {

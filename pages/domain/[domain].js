@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { apiFetch } from 'lib/api'
 import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
@@ -219,13 +219,10 @@ export const getServerSideProps = async (context) => {
   const { domain } = context.query
 
   if (/^((xn--)?[a-z0-9\-]*\.)+((xn--)?[a-z0-9]*)$/.test(domain)) {
-    const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
-    const path = '/api/_/domain_metadata'
-
     const { canonical_domain: canonicalDomain, category_code: categoryCode } =
-      await client
-        .get(path, { params: { domain } })
-        .then((response) => response.data)
+      await apiFetch('/api/_/domain_metadata', {
+        params: { domain },
+      })
 
     context.res.setHeader('X-Robots-Tag', 'noindex')
 

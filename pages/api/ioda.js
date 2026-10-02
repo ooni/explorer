@@ -1,4 +1,3 @@
-import axios from 'axios'
 import dayjs from 'services/dayjs'
 
 const iodaHandler = (req, res) => {
@@ -31,11 +30,11 @@ const iodaHandler = (req, res) => {
 
   const datasources = ['gtr', 'merit-nt', 'bgp', 'ping-slash24']
 
-  return axios({
-    method: 'get',
-    url: `http://api.ioda.inetintel.cc.gatech.edu/v2/signals/raw/${country ? 'country' : 'asn'}/${location}?from=${formattedFrom}&until=${formattedTo}&sourceParams=WEB_SEARCH`,
-  })
-    .then(({ data }) => {
+  const url = `http://api.ioda.inetintel.cc.gatech.edu/v2/signals/raw/${country ? 'country' : 'asn'}/${location}?from=${formattedFrom}&until=${formattedTo}&sourceParams=WEB_SEARCH`
+
+  return fetch(url)
+    .then((response) => response.json())
+    .then((data) => {
       const result = data.data[0]
         .filter((item) => datasources.includes(item.datasource))
         .map((item, i) => {

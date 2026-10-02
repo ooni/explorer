@@ -15,7 +15,7 @@ import SummaryText from 'components/measurement/SummaryText'
 import useUser from 'hooks/useUser'
 import ErrorPage from 'pages/_error'
 import NotFound from 'components/NotFound'
-import { fetcher } from 'lib/api'
+import { fetcher, getBaseUrl, ooniFetcher } from 'lib/api'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
 import dayjs from 'services/dayjs'
 import SpinLoader from 'components/vendor/SpinLoader'
@@ -86,28 +86,6 @@ export async function getServerSideProps({
   }
 }
 
-const measurementFetcher = async (url) => {
-  let response
-  try {
-    response = await fetch(url)
-  } catch (e) {
-    throw new Error(`Network error: Unable to reach the server.\n${e.message}`)
-  }
-
-  const json = await response.json().catch(() => null)
-
-  if (!response.ok) {
-    const isServerError = response.status >= 500
-    throw new Error(
-      isServerError || !json
-        ? `Request failed with status ${response.status}`
-        : `Request failed with status ${response.status}:\n${JSON.stringify(json, null, 2)}`,
-    )
-  }
-
-  return json
-}
-
 const Measurement = ({
   isEmbeddedView,
   measurementUid,
@@ -124,8 +102,8 @@ const Measurement = ({
     error,
     isValidating: isLoadingMeasurementData,
   } = useSWR(
-    `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/measurement_meta?measurement_uid=${measurementUid}&full=true`,
-    measurementFetcher,
+    `${getBaseUrl()}/api/v1/measurement_meta?measurement_uid=${measurementUid}&full=true`,
+    ooniFetcher,
     {
       revalidateOnFocus: false,
       shouldRetryOnError: false,
@@ -184,7 +162,7 @@ const Measurement = ({
     if (!day.isValid()) return null
     const since = day.subtract(1, 'day').format('YYYY-MM-DD')
     const until = day.add(1, 'day').format('YYYY-MM-DD')
-    return `${process.env.NEXT_PUBLIC_OONI_API}/api/v1/analysis?measurement_uid=${encodeURIComponent(measurementUid)}&since=${since}&until=${until}`
+    return `${getBaseUrl()}/api/v1/analysis?measurement_uid=${encodeURIComponent(measurementUid)}&since=${since}&until=${until}`
   }, [measurementUid, measurement_start_time])
 
   return (
@@ -304,7 +282,7 @@ const Measurement = ({
                         <LazyDetailsBox
                           title="Analysis"
                           swrKey={analysisSwrKey}
-                          fetcher={measurementFetcher}
+                          fetcher={ooniFetcher}
                         >
                           {(data) => (
                             <pre className="whitespace-pre-wrap break-all m-0">

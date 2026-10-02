@@ -1,32 +1,29 @@
-import axios from 'axios'
+import { apiFetch, buildUrl, getBaseUrl } from '../lib/api'
 
-// const baseURL = process.env.NEXT_PUBLIC_OONI_API
-const baseURL = process.env.NEXT_PUBLIC_USER_FEEDBACK_API
-export const client = axios.create({ baseURL })
+export const MATFetcher = async (query) => {
+  const path = `/api/v1/aggregation?${query}`
+  const reqUrl = buildUrl(path, {}, getBaseUrl())
+  const startTime = performance.now()
 
-export const MATFetcher = (query) => {
-  const reqUrl = `${baseURL}/api/v1/aggregation?${query}`
-  return axios
-    .get(reqUrl)
-    .then((r) => {
-      if (!r?.data?.result) {
-        const error = new Error(
-          `Request ${reqUrl} did not contain expected result`,
-        )
-        error.data = r
-        throw error
-      }
-      return {
-        data: r.data.result,
-        loadTime: r.loadTime,
-        url: r.config.url,
-      }
-    })
-    .catch((e) => {
-      console.log(e)
-      e.message = e?.request?.response ?? e.message
-      throw e
-    })
+  try {
+    const data = await apiFetch(path)
+    if (!data?.result) {
+      const error = new Error(
+        `Request ${reqUrl} did not contain expected result`,
+      )
+      error.data = data
+      throw error
+    }
+    return {
+      data: data.result,
+      loadTime: performance.now() - startTime,
+      url: reqUrl,
+    }
+  } catch (e) {
+    console.log(e)
+    e.message = e?.data ?? e.message
+    throw e
+  }
 }
 
 export const simpleFetcher = (args) => {
@@ -39,17 +36,17 @@ export const simpleFetcher = (args) => {
     url = args
   }
 
-  return client.get(url, { params }).then((res) => {
-    return res.data?.results || res.data?.incidents
-  })
+  return apiFetch(url, { params }).then(
+    (data) => data?.results || data?.incidents,
+  )
 }
 
 export const fetcherWithPreprocessing = ([
   url,
   { params, resultKey = 'results', preprocessFn },
 ]) => {
-  return client.get(url, { params }).then((res) => {
-    if (preprocessFn) return preprocessFn(res.data[resultKey])
-    return res.data[resultKey]
+  return apiFetch(url, { params }).then((data) => {
+    if (preprocessFn) return preprocessFn(data[resultKey])
+    return data[resultKey]
   })
 }

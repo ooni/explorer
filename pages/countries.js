@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { apiFetch } from 'lib/api'
 import CountryList from 'components/CountryBox'
 import countryUtil from 'country-util'
 import debounce from 'lodash.debounce'
@@ -73,12 +73,11 @@ const NoCountriesFound = ({ searchTerm }) => (
 )
 
 export const getStaticProps = async () => {
-  const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
-  const result = await client.get('/api/_/countries')
+  const result = await apiFetch('/api/_/countries')
 
   return {
     props: {
-      countries: result.data.countries,
+      countries: result.countries,
     },
     revalidate: 60 * 60 * 12, // 12 hours
   }

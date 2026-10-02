@@ -1,4 +1,4 @@
-import axios from 'axios'
+import { apiFetch } from 'lib/api'
 import ErrorPage from 'pages/_error'
 import { useIntl } from 'react-intl'
 import NotFound from 'components/NotFound'
@@ -23,7 +23,6 @@ export async function getServerSideProps({ query, req }) {
     }
   }
 
-  const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
   const params = {
     report_id,
     full: true,
@@ -34,15 +33,17 @@ export async function getServerSideProps({ query, req }) {
 
   let response
   try {
-    response = await client.get('/api/v1/measurement_meta', { params })
+    response = await apiFetch('/api/v1/measurement_meta', {
+      params,
+    })
   } catch (e) {
-    error = `Failed to fetch measurement data. Server message: ${e.response.status}, ${e.response.statusText}`
+    error = `Failed to fetch measurement data. Server message: ${e.status}, ${e.info}`
   }
 
-  if (response?.data?.measurement_uid) {
+  if (response?.measurement_uid) {
     return {
       redirect: {
-        destination: `/m/${response.data.measurement_uid}`,
+        destination: `/m/${response.measurement_uid}`,
         statusCode: 301,
       },
     }
