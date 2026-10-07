@@ -381,4 +381,25 @@ test.describe('Measurement Page Tests', () => {
       )
     })
   })
+
+  test.describe('Timezone selector', () => {
+    test.use({ timezoneId: 'America/New_York' })
+
+    test('changes the displayed measurement time when a timezone is selected', async ({
+      page,
+    }) => {
+      await page.goto('/m/01202003026e2b60ffaa8e1b2bc7865d0bc26659')
+
+      const hero = page.getByTestId('common-summary')
+      await expect(hero).toContainText('8:17:40 PM UTC')
+
+      await page.selectOption(
+        '#navbar-timezone-select',
+        'America/New_York',
+      )
+
+      await expect(hero).toContainText('3:17:40 PM EST')
+      await expect(hero).not.toContainText('8:17:40 PM UTC')
+    })
+  })
 })

@@ -1,7 +1,9 @@
 import dayjs from 'dayjs'
+import advancedFormat from 'dayjs/plugin/advancedFormat'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import isSameOrBefore from 'dayjs/plugin/isSameOrBefore'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import timezone from 'dayjs/plugin/timezone'
 import utc from 'dayjs/plugin/utc'
 import('dayjs/locale/de.js')
 import('dayjs/locale/es.js')
@@ -14,6 +16,8 @@ import('dayjs/locale/zh.js')
 
 dayjs
   .extend(utc)
+  .extend(timezone)
+  .extend(advancedFormat)
   .extend(relativeTime)
   .extend(isSameOrBefore)
   .extend(customParseFormat)
