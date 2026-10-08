@@ -1,5 +1,6 @@
 import { format } from 'date-fns'
 import { useRouter } from 'next/router'
+import { websitesTimeGrain } from 'utils'
 import { Input, Select } from 'ooni-components'
 import PropTypes from 'prop-types'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -169,11 +170,19 @@ export const Form = ({ onSubmit, query }) => {
     const subscription = watch((value, { name }) => {
       if (name === 'since') setSince(value.since)
       if (name === 'until') setUntil(value.until)
+      // Picking dates picks the matching time grain; it can still be changed
+      const isDate = (d) => /^\d{4}-\d{2}-\d{2}$/.test(d ?? '')
+      if (
+        (name === 'since' || name === 'until') &&
+        isDate(value.since) &&
+        isDate(value.until)
+      )
+        setValue('time_grain', websitesTimeGrain(value.since, value.until))
       if (name === 'probe_cc') setCountryValue(value.probe_cc)
       if (name === 'test_name') setTestNameValue(value.test_name)
     })
     return () => subscription.unsubscribe()
-  }, [watch])
+  }, [watch, setValue])
 
   const sortedCountries = useMemo(
     () =>
