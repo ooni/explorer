@@ -4,6 +4,19 @@ const isGreater = (key, x, y) => {
   return a < b ? -1 : a > b ? 1 : 0
 }
 
+// Time grain for the charts with a row per domain. A row per domain and day
+// over years runs to millions of rows, more than the API can return. Most
+// countries test ~2,500-2,800 domains a month (2026-10), so beyond the default
+// 30-day daily view this keeps to at most ~19 buckets, about half the API's
+// 100,000-row limit, leaving room for more domains and measurements.
+export const websitesTimeGrain = (since, until) => {
+  const days = (Date.parse(until) - Date.parse(since)) / (24 * 60 * 60 * 1000)
+  if (!(days > 31)) return 'day'
+  if (days <= 13 * 7) return 'week'
+  if (days <= 18 * 31) return 'month'
+  return 'year'
+}
+
 export const sortByKey = (key, secondaryKey) => {
   return (a, b) => {
     const r = isGreater(key, a, b)
