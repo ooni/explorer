@@ -56,6 +56,10 @@ const messages = defineMessages({
     id: 'MAT.Form.TimeGrainOption.month',
     defaultMessage: '',
   },
+  year: {
+    id: 'MAT.Form.TimeGrainOption.year',
+    defaultMessage: '',
+  },
 })
 
 const xAxisOptions = [
@@ -152,6 +156,15 @@ export const Form = ({ onSubmit, query }) => {
   const [countryValue, setCountryValue] = useState(defaultValues.probe_cc)
   const [testNameValue, setTestNameValue] = useState(defaultValues.test_name)
 
+  // The form is reset to the URL's values once the router is ready, but reset()
+  // doesn't name a field for the watch below, so update the range here too
+  useEffect(() => {
+    if (router.isReady) {
+      setSince(defaultValues.since)
+      setUntil(defaultValues.until)
+    }
+  }, [defaultValues, router.isReady])
+
   useEffect(() => {
     const subscription = watch((value, { name }) => {
       if (name === 'since') setSince(value.since)
@@ -223,7 +236,7 @@ export const Form = ({ onSubmit, query }) => {
         'time_grain',
       ])
       const shouldShowConfirmationModal = () => {
-        if (timeGrain === 'month') return false
+        if (timeGrain === 'month' || timeGrain === 'year') return false
         const diff = dayjs(until).diff(dayjs(since), 'month')
         if (timeGrain === 'week') return diff > WEEK_GRAIN_THRESHOLD_IN_MONTHS
         return diff > DAY_GRAIN_THRESHOLD_IN_MONTHS
@@ -260,7 +273,7 @@ export const Form = ({ onSubmit, query }) => {
   const timeGrainOptions = useMemo(() => {
     const dateRegex = /^\d{4}-\d{2}-\d{2}$/
     if (!until?.match(dateRegex) || !since?.match(dateRegex))
-      return ['hour', 'day', 'week', 'month']
+      return ['hour', 'day', 'week', 'month', 'year']
     const diff = dayjs(until).diff(dayjs(since), 'day')
     if (diff < 8) {
       const availableValues = ['hour', 'day']
@@ -275,7 +288,9 @@ export const Form = ({ onSubmit, query }) => {
       return availableValues
     }
     if (diff >= 31) {
-      const availableValues = ['day', 'week', 'month']
+      // The API only accepts year for ranges longer than a year
+      const availableValues =
+        diff > 365 ? ['day', 'week', 'month', 'year'] : ['day', 'week', 'month']
       if (!availableValues.includes(getValues('time_grain')))
         setValue('time_grain', 'day')
       return availableValues
