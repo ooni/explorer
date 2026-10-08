@@ -40,3 +40,14 @@ test.describe('Country Page Handles Case Mistakes In URL', () => {
     await expect(page).toHaveURL(/\/country\/CA/)
   })
 })
+
+test('Country page charts websites by year over several years', async ({
+  page,
+}) => {
+  const websites = page.waitForRequest(
+    (r) => new URL(r.url()).searchParams.get('axis_y') === 'domain',
+  )
+  await page.goto('/country/CA?since=2023-01-01&until=2026-10-09')
+  const url = new URL((await websites).url())
+  expect(url.searchParams.get('time_grain')).toBe('year')
+})
