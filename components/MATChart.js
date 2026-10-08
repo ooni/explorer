@@ -100,14 +100,14 @@ export const MATChartWrapper = ({ link, caption }) => {
 
   return (
     !!searchParams && (
-      <div className="my-8">
+      <figure className="my-8">
         <MATChart query={query} showFilters={false} />
         {caption && (
-          <div className="mt-2">
+          <figcaption className="mt-2">
             <FormattedMarkdownBase>{captionText}</FormattedMarkdownBase>
-          </div>
+          </figcaption>
         )}
-      </div>
+      </figure>
     )
   )
 }
@@ -171,7 +171,7 @@ const MATChart = ({ query, showFilters = true }) => {
           queryProps={query}
         >
           <div data-testid="mat-chart">
-            {results.length > 0 || Object.keys(results).length ? (
+            {((results.length > 0) || !!Object.keys(results).length) && (
               <>
                 {((data && data.data.dimension_count === 1) ||
                   (data && query.axis_x && !query.axis_y)) && (
@@ -191,8 +191,6 @@ const MATChart = ({ query, showFilters = true }) => {
                   />
                 )}
               </>
-            ) : (
-              <NoCharts />
             )}
           </div>
         </MATContextProvider>

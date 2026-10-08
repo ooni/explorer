@@ -6,7 +6,6 @@ import { firaSans } from 'lib/firaSans'
 
 import 'styles/globals.css'
 import 'styles/nprogress.css'
-import 'utils/intlDisplayNamesInitClient'
 import Layout from 'components/Layout'
 import { LocaleProvider } from 'components/withIntl'
 

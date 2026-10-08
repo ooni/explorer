@@ -1,36 +1,65 @@
 import Head from 'next/head'
 import { apiEndpoints, fetcher } from 'lib/api'
 
-import NotFound from 'components/NotFound'
 import FindingDisplay from 'components/findings/FindingDisplay'
-import { useMemo } from 'react'
+import StructuredData from 'components/StructuredData'
+import { getFindingStructuredData } from 'lib/findingStructuredData'
 import { useIntl } from 'react-intl'
 
-export const getServerSideProps = async ({ query, req }) => {
-  const data = await fetcher(
-    apiEndpoints.SHOW_INCIDENT.replace(':id', query.id),
-  ).catch(() => null)
+export const getServerSideProps = async ({ query, req, res }) => {
+  try {
+    const data = await fetcher(
+      apiEndpoints.SHOW_INCIDENT.replace(':id', query.id),
+    )
 
-  return {
-    props: {
-      data,
-      isEmbeddedView: !!req.headers['enable-embedded-view'] || !!query?.webview,
-    },
+    if (!data?.incident) {
+      res.setHeader('Cache-Control', 'no-store')
+      return { notFound: true }
+    }
+
+    const { incident } = data
+    const paramId = String(query.id) 
+
+    if (
+      String(incident.id) === paramId &&
+      incident.slug
+    ) {
+      return {
+        redirect: {
+          destination: `/findings/${incident.slug}`,
+          permanent: true,
+        },
+      }
+    }
+
+    const pathId = incident.slug || paramId
+    const canonicalUrl = `${process.env.NEXT_PUBLIC_EXPLORER_URL}/findings/${pathId}`
+
+    res.setHeader(
+      'Cache-Control',
+      'public, s-maxage=600, stale-while-revalidate=60',
+    )
+
+    return {
+      props: {
+        data,
+        canonicalUrl,
+        structuredData: getFindingStructuredData(incident, canonicalUrl),
+        isEmbeddedView:
+          !!req.headers['enable-embedded-view'] || !!query?.webview,
+      },
+    }
+  } catch (error) {
+    res.setHeader('Cache-Control', 'no-store')
+    return { notFound: true }
   }
 }
 
-const ReportView = ({ data }) => {
+const ReportView = ({ data, canonicalUrl, structuredData }) => {
   const intl = useIntl()
 
-  const metaTitle = useMemo(
-    () =>
-      `${intl.formatMessage({ id: 'General.OoniExplorer' })}${!!data?.incident?.title && ` - ${data?.incident?.title}`}`,
-    [data, intl],
-  )
-  const metaDescription = useMemo(
-    () => data?.incident?.short_description || '',
-    [data],
-  )
+  const metaTitle = `${!!data?.incident?.title && `${data?.incident?.title} | `}${intl.formatMessage({ id: 'General.OoniExplorer' })}`
+  const metaDescription = data?.incident?.short_description
 
   return (
     <>
@@ -49,15 +78,13 @@ const ReportView = ({ data }) => {
           name="twitter:description"
           content={metaDescription}
         />
+        <link rel="canonical" key="canonical" href={canonicalUrl} />
+        {structuredData && (
+          <StructuredData data={structuredData} />
+        )}
       </Head>
       <div className="container">
-        {data ? (
-          <FindingDisplay incident={data.incident} />
-        ) : (
-          <NotFound
-            title={intl.formatMessage({ id: 'Findings.Display.NotFound' })}
-          />
-        )}
+        <FindingDisplay incident={data.incident} />
       </div>
     </>
   )

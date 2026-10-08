@@ -105,10 +105,7 @@ const Domains = () => {
   return (
     <>
       <Head>
-        <title>
-          {intl.formatMessage({ id: 'General.OoniExplorer' })} |{' '}
-          {intl.formatMessage({ id: 'Domains.Title' })}
-        </title>
+        <title>{`${intl.formatMessage({ id: 'Domains.Title' })} | ${intl.formatMessage({ id: 'General.OoniExplorer' })}`}</title>
       </Head>
       <div className="container">
         <StickySubMenu

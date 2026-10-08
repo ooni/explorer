@@ -11,7 +11,7 @@ const HighlightBox = ({ countryCode, title, text, dates, footer }) => {
   const intl = useIntl()
 
   return (
-    <div className="flex py-8 px-6 flex-col justify-between border border-gray-300 border-l-[10px] border-l-blue-500">
+    <div className="flex py-8 px-6 flex-col justify-between border border-gray-300 border-l-10 border-l-blue-500">
       <div>
         {countryCode && (
           <div className="flex items-center">
@@ -87,7 +87,7 @@ export const FindingBox = ({ incident }) => {
       }
       footer={
         <div className="mx-auto mt-4">
-          <Link href={`/findings/${incident.id}`} prefetch={false}>
+          <Link href={`/findings/${incident.slug || incident.id}`} prefetch={false}>
             <button className="btn btn-primary-hollow btn-sm" type="button">
               {intl.formatMessage({
                 id: 'Findings.Index.HighLightBox.ReadMore',
@@ -105,7 +105,7 @@ export const FindingBoxSmall = ({ incident, displayCountry = true }) => {
 
   return (
     <Link
-      href={`/findings/${incident.id}`}
+      href={`/findings/${incident.slug || incident.id}`}
       className="flex text-black"
       prefetch={false}
     >

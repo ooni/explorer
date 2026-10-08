@@ -1,9 +1,13 @@
 import { test, expect } from '@playwright/test'
-import { routeApiWithCors } from './helpers'
+import { mockApi } from './helpers/mockApi'
 
 test.describe('Search Page Tests', () => {
+  test.afterEach(async ({ page }) => {
+    await page.unrouteAll({ behavior: 'ignoreErrors' })
+  })
+
   test.beforeEach(async ({ page }) => {
-    await routeApiWithCors(page)
+    await mockApi(page, '**/api/v1/measurement_meta*', 'measurement_meta')
   })
 
   // test('can access "HTTP Hosts" measurements', async ({ page }) => {
@@ -22,7 +26,6 @@ test.describe('Search Page Tests', () => {
 
   test('legacy measurement page shows enough information', async ({ page }) => {
     await page.goto('/m/01201503307dd8855f39f3d8f78be05f0c67770d')
-    await page.waitForLoadState('networkidle')
 
     await expect(page.getByTestId('common-summary')).toContainText('Canada')
     await expect(page.getByTestId('common-summary')).toContainText('AS812')

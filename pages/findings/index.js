@@ -1,12 +1,14 @@
 import { FindingBox } from 'components/landing/HighlightBox'
 import { StickySubMenu } from 'components/SharedStyledComponents'
-import SpinLoader from 'components/vendor/SpinLoader'
 import useFilterWithSort from 'hooks/useFilterWithSort'
-import useFindings from 'hooks/useFindings'
+import { getSortedAndFilteredFindings } from 'hooks/useFindings'
 import useUser from 'hooks/useUser'
+import { getFindings } from 'lib/api'
+import Head from 'next/head'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Input, Select } from 'ooni-components'
+import { useMemo } from 'react'
 import { useIntl } from 'react-intl'
 
 const sortOptions = [
@@ -23,7 +25,22 @@ const themeOptions = [
   { key: 'news_media', intlKey: 'Findings.Themes.Options.NewsMedia' },
 ]
 
-const Index = () => {
+export async function getServerSideProps({ res }) {
+  try {
+    const incidents = await getFindings()
+    res.setHeader(
+      'Cache-Control',
+      'public, s-maxage=600, stale-while-revalidate=60',
+    )
+    return { props: { incidents } }
+  } catch (e) {
+    console.error(e)
+    res.setHeader('Cache-Control', 'no-store')
+    return { props: { incidents: [] } }
+  }
+}
+
+const Index = ({ incidents }) => {
   const intl = useIntl()
   const { user } = useUser()
   const { query } = useRouter()
@@ -41,14 +58,16 @@ const Index = () => {
     initialCategoryValue: theme,
   })
 
-  const { sortedAndFilteredData, isLoading, error } = useFindings({
-    sortValue,
-    searchValue,
-    themeValue: categoryValue,
-  })
+  const sortedAndFilteredData = useMemo(
+    () => getSortedAndFilteredFindings(incidents, { sortValue, searchValue, themeValue: categoryValue }),
+    [incidents, sortValue, searchValue, categoryValue],
+  )
 
   return (
     <>
+      <Head>
+        <title>{`${intl.formatMessage({ id: 'Findings.Index.Title' })} | ${intl.formatMessage({ id: 'General.OoniExplorer' })}`}</title>
+      </Head>
       <div className="container">
         {user?.role === 'admin' && (
           <div className="mt-4 flex justify-end">
@@ -60,10 +79,7 @@ const Index = () => {
           </div>
         )}
         <StickySubMenu
-          title={intl.formatMessage(
-            { id: 'Findings.Index.Title' },
-            { amount: sortedAndFilteredData.length },
-          )}
+          title={`${intl.formatMessage({ id: 'Findings.Index.Title' })} (${sortedAndFilteredData.length})`}
         >
           <div className="flex gap-4 flex-col md:flex-row w-full md:w-auto">
             <Input
@@ -99,11 +115,6 @@ const Index = () => {
             </Select>
           </div>
         </StickySubMenu>
-        {isLoading && (
-          <div className="container pt-32">
-            <SpinLoader />
-          </div>
-        )}
         {!!sortedAndFilteredData?.length && (
           <div className="grid my-8 gap-6 grid-cols-1 md:grid-cols-2">
             {sortedAndFilteredData.map((incident) => (

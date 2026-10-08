@@ -5,8 +5,6 @@ test.describe('Home Page Tests', () => {
   test('matches the screenshot', async ({ page }) => {
     await page.goto('/')
 
-    await page.waitForLoadState('networkidle')
-
     await scrollToBottom(page)
 
     await expect(page).toHaveScreenshot('homepage-desktop.png', {

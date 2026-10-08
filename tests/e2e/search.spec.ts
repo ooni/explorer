@@ -1,13 +1,23 @@
 import dayjs from '../../services/dayjs'
 import { test, expect } from '@playwright/test'
-import { routeApiWithCors, scrollToBottom } from './helpers'
+import { mockApi } from './helpers/mockApi'
+import { scrollToBottom } from './helpers'
+
+// Match the date range used in tests/e2e/fixtures/search/ so CI does not depend
+// on the app's rolling default (last 30 days through tomorrow).
+const FIXTURE_SINCE = '2026-06-11'
+const FIXTURE_UNTIL = '2026-07-12'
+const searchPath = `/search?since=${FIXTURE_SINCE}&until=${FIXTURE_UNTIL}&failure=false`
 
 test.describe('Search Page Tests', () => {
-  test.beforeEach(async ({ page }) => {
-    await routeApiWithCors(page)
+  test.afterEach(async ({ page }) => {
+    await page.unrouteAll({ behavior: 'ignoreErrors' })
+  })
 
-    await page.goto('/search')
-    await page.waitForLoadState('networkidle')
+  test.beforeEach(async ({ page }) => {
+    await mockApi(page, '**/api.ooni.org/**', 'search')
+
+    await page.goto(searchPath)
   })
 
   test('default filter shows 50 results', async ({ page }) => {
@@ -59,12 +69,10 @@ test.describe('Search Page Tests', () => {
   test('fetches more results when "Load More" button is clicked', async ({
     page,
   }) => {
-    await page.getByTestId('load-more-button').click()
-
-    // Wait for API call and results to update
-    await page.waitForResponse('**/api/v1/measurements*')
-
     const resultsList = page.getByTestId('results-list').getByRole('link')
+    await expect(resultsList).toHaveCount(50)
+
+    await page.getByTestId('load-more-button').click()
     await expect(resultsList).toHaveCount(100)
   })
 

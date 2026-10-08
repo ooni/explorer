@@ -9,7 +9,7 @@ const FooterHead = ({ ...props }) => (
 
 const FooterLink = ({ label, ...props }) => (
   <a
-    className="block mb-1 opacity-50 text-white hover:opacity-100 hover:text-white"
+    className="block mb-1 text-white hover:text-white"
     {...props}
   >
     {label}
@@ -131,10 +131,6 @@ const Footer = () => {
                 href="https://github.com/ooni/license"
                 label={intl.formatMessage({ id: 'Footer.Text.CCommons' })}
               />
-              <div className="mt-0">
-                {intl.formatMessage({ id: 'Footer.Text.Version' })}:{' '}
-                {process.env.GIT_COMMIT_SHA_SHORT}
-              </div>
             </small>
           </div>
         </div>

@@ -1,15 +1,15 @@
 /* global process */
 import axios from 'axios'
-import Head from 'next/head'
 import Link from 'next/link'
 import { colors } from 'ooni-components'
-import { FormattedMessage, useIntl } from 'react-intl'
+import { FormattedMessage } from 'react-intl'
 import { twMerge } from 'tailwind-merge'
 import FormattedMarkdown from 'components/FormattedMarkdown'
 import HighlightSection from 'components/landing/HighlightsSection'
 import CoverageChart from 'components/landing/Stats'
 import highlightContent from 'components/landing/highlights.json'
 import { toCompactNumberUnit } from 'utils'
+import ExploreBar from 'components/landing/ExploreBar'
 interface StatsItemProps {
   label: React.ReactNode
   unit?: string
@@ -93,22 +93,18 @@ const LandingPage = ({
   asnCount,
   countryCount,
 }: LandingPageProps) => {
-  const intl = useIntl()
   const compactMeasurementCount = toCompactNumberUnit(measurementCount)
   const compactAsnCount = toCompactNumberUnit(asnCount)
 
   return (
     <>
-      <Head>
-        <title>{intl.formatMessage({ id: 'General.OoniExplorer' })}</title>
-      </Head>
       <div
         className="pt-4 pb-12"
         style={{
           background: `linear-gradient(319.33deg, ${colors.blue['900']} 39.35%, ${colors.blue['500']} 82.69%), ${colors.blue['500']}`,
         }}
       >
-        <div className="container bg-no-repeat bg-center bg-[url('/static/images/world-dots.svg')] pt-16 md:pb-[120px] md:mb-[90px] md:mt-[110px] md:pt-0">
+        <div className="container bg-no-repeat bg-center bg-[url('/static/images/world-dots.svg')] pt-16 md:pb-20 md:mb-[90px] md:mt-[110px] md:pt-0">
           <div className="text-center">
             <h1 className="text-4xl md:text-6xl text-white md:leading-normal leading-normal">
               <FormattedMessage id="Home.Banner.Title.UncoverEvidence" />
@@ -116,19 +112,12 @@ const LandingPage = ({
             <div className="text-lg md:text-2xl text-blue-100">
               <FormattedMessage id="Home.Banner.Subtitle.ExploreCensorshipEvents" />
             </div>
-            <div className="inline-block">
-              <Link
-                href="/chart/mat"
-                className="btn btn-white-hollow hover:!text-white btn-xl mt-12 mx-auto"
-              >
-                <FormattedMessage id="Home.Banner.Button.Explore" />
-              </Link>
-            </div>
+            <ExploreBar />
           </div>
         </div>
       </div>
       <div className="container">
-        <div className="flex flex-wrap rounded-2xl bg-white md:px-8 md:py-4 lg:mx-[25%] md:mt-[-118px] md:mb-12">
+        <div className="flex flex-wrap rounded-2xl bg-white md:px-8 md:py-4 lg:mx-[25%] md:-mt-29.5 md:mb-12">
           <StatsItem
             label={<FormattedMessage id="Home.Banner.Stats.Measurements" />}
             unit={compactMeasurementCount.unit}

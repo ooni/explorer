@@ -1,6 +1,7 @@
 import { useRouter } from 'next/router'
 import { useEffect, useState } from 'react'
 import { IntlProvider } from 'react-intl'
+import { loadDisplayNamesLocale } from 'utils/intlDisplayNamesInitClient'
 
 // Statically imported so it is always available immediately (no dynamic bundling needed)
 import enMessages from 'public/static/lang/en.json'
@@ -22,7 +23,9 @@ export const LocaleProvider = ({ children }) => {
   useEffect(() => {
     let cancelled = false
 
-    const loadMessages = async () => {
+    const loadLocale = async () => {
+      await loadDisplayNamesLocale(locale)
+
       if (locale === defaultLocale) {
         if (!cancelled) setMessages(enMessages)
         return
@@ -38,7 +41,7 @@ export const LocaleProvider = ({ children }) => {
       }
     }
 
-    loadMessages()
+    loadLocale()
     return () => {
       cancelled = true
     }
