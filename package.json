@@ -16,21 +16,21 @@
     "@nivo/core": "^0.99.0",
     "@nivo/line": "^0.99.0",
     "@nivo/tooltip": "^0.99.0",
-    "@sentry/nextjs": "^10.43.0",
+    "@sentry/nextjs": "^10.75.3",
     "@tanstack/react-table": "^8.21.3",
     "@tanstack/react-virtual": "^3.13.23",
-    "axios": "^1.16.0",
+    "axios": "^1.20.0",
     "buffer-from": "^1.1.2",
     "country-util": "^0.2.0",
     "date-fns": "^4.1.0",
     "dayjs": "^1.11.20",
     "deepmerge": "^4.3.1",
     "flag-icons": "^7.5.0",
-    "html-validate": "^10.11.2",
+    "html-validate": "^10.17.0",
     "lodash.debounce": "^4.0.8",
     "lru-cache": "^11.2.7",
     "markdown-to-jsx": "^9.7.13",
-    "next": "^16.3.3",
+    "next": "^16.3.8",
     "nprogress": "^0.2.0",
     "ooni-components": "0.8.0-alpha.3",
     "pretty-ms": "^9.3.0",
@@ -67,7 +67,7 @@
     "jsdom": "^23.2.0",
     "mustache": "^4.2.0",
     "postcss": "^8.5.23",
-    "start-server-and-test": "^2.0.3",
+    "start-server-and-test": "^2.1.5",
     "tailwindcss": "^4.2.2",
     "typescript": "^5.9.3"
   },
@@ -87,5 +87,8 @@
     "git:getCommitSHA": "git rev-parse HEAD",
     "git:getCommitSHA:short": "git rev-parse --short HEAD",
     "git:getCommitRef": "git symbolic-ref HEAD"
+  },
+  "resolutions": {
+    "**/utf7/semver": "^5.7.2"
   }
 }
