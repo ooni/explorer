@@ -62,9 +62,6 @@
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@welldone-software/why-did-you-render": "^10.0.1",
-    "glob": "^10.5.0",
-    "imap-simple": "^5.1.0",
-    "jsdom": "^23.2.0",
     "mustache": "^4.2.0",
     "postcss": "^8.5.23",
     "start-server-and-test": "^2.1.5",
@@ -87,8 +84,5 @@
     "git:getCommitSHA": "git rev-parse HEAD",
     "git:getCommitSHA:short": "git rev-parse --short HEAD",
     "git:getCommitRef": "git symbolic-ref HEAD"
-  },
-  "resolutions": {
-    "**/utf7/semver": "^5.7.2"
   }
 }
