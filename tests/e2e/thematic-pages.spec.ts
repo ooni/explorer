@@ -32,7 +32,7 @@ test.describe('Thematic Pages Tests', () => {
     await prepareForScreenshot(page)
 
     await expect(page).toHaveScreenshot('social-media-desktop.png', {
-      fullPage: false,
+      fullPage: true,
     })
   })
 
@@ -45,7 +45,7 @@ test.describe('Thematic Pages Tests', () => {
     await prepareForScreenshot(page)
 
     await expect(page).toHaveScreenshot('news-media-desktop.png', {
-      fullPage: false,
+      fullPage: true,
     })
   })
 
@@ -58,7 +58,7 @@ test.describe('Thematic Pages Tests', () => {
     await prepareForScreenshot(page)
 
     await expect(page).toHaveScreenshot('circumvention-desktop.png', {
-      fullPage: false,
+      fullPage: true,
     })
   })
 
@@ -69,7 +69,7 @@ test.describe('Thematic Pages Tests', () => {
     await prepareForScreenshot(page)
 
     await expect(page).toHaveScreenshot('domain-desktop.png', {
-      fullPage: false,
+      fullPage: true,
     })
   })
 
@@ -87,7 +87,7 @@ test.describe('Thematic Pages Tests', () => {
     await prepareForScreenshot(page)
 
     await expect(page).toHaveScreenshot('network-desktop.png', {
-      fullPage: false,
+      fullPage: true,
     })
   })
 })
