@@ -47,21 +47,15 @@ test.describe('Search Page Tests', () => {
   }) => {
     await page.getByTestId('testname-filter').selectOption('web_connectivity')
 
-    const filterButton = page.getByRole('button', { name: 'Filter Results' })
-    await expect(filterButton).toBeEnabled()
-    await filterButton.click()
+    await page.getByRole('button', { name: 'Filter Results' }).click()
 
-    await page.waitForResponse('**/api/v1/measurements*')
+    await expect(page).toHaveURL(/test_name=web_connectivity/)
 
-    // Wait for results to update
     const resultsList = page.getByTestId('results-list').getByRole('link')
-    const count = await resultsList.count()
     await expect(resultsList).toHaveCount(50)
 
-    // Verify all results contain 'Web Connectivity'
-    for (let i = 0; i < count; i++) {
-      const text = await resultsList.nth(i).textContent()
-      expect(text).toContain('Web Connectivity')
+    for (let i = 0; i < 50; i++) {
+      await expect(resultsList.nth(i)).toContainText('Web Connectivity')
     }
   })
 
