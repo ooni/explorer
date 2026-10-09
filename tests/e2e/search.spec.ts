@@ -45,13 +45,18 @@ test.describe('Search Page Tests', () => {
   test('shows relevant search results when filter changes', async ({
     page,
   }) => {
-    await page.getByTestId('testname-filter').selectOption('web_connectivity')
+    const resultsList = page.getByTestId('results-list').getByRole('link')
+    // Wait until router + react-hook-form have finished their initial reset
+    // (FilterSidebar resets when router.isReady) before changing filters.
+    await expect(resultsList).toHaveCount(50)
+
+    const testNameFilter = page.getByTestId('testname-filter')
+    await testNameFilter.selectOption('web_connectivity')
+    await expect(testNameFilter).toHaveValue('web_connectivity')
 
     await page.getByRole('button', { name: 'Filter Results' }).click()
 
     await expect(page).toHaveURL(/test_name=web_connectivity/)
-
-    const resultsList = page.getByTestId('results-list').getByRole('link')
     await expect(resultsList).toHaveCount(50)
 
     for (let i = 0; i < 50; i++) {
@@ -109,12 +114,17 @@ test.describe('Search Page Tests', () => {
   test('conditional filters are hidden and shown depending on selections', async ({
     page,
   }) => {
-    await page.getByTestId('testname-filter').selectOption('Signal Test')
+    await expect(page.getByTestId('results-list').getByRole('link')).toHaveCount(
+      50,
+    )
+
+    const testNameFilter = page.getByTestId('testname-filter')
+    await testNameFilter.selectOption('signal')
+    await expect(testNameFilter).toHaveValue('signal')
     await expect(page.getByTestId('domain-filter')).not.toBeVisible()
 
-    await page
-      .getByTestId('testname-filter')
-      .selectOption('Web Connectivity Test')
+    await testNameFilter.selectOption('web_connectivity')
+    await expect(testNameFilter).toHaveValue('web_connectivity')
     await expect(page.getByTestId('domain-filter')).toBeVisible()
   })
 })
