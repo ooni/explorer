@@ -105,11 +105,11 @@ const tests = {
         'OONI data suggests Facebook Messenger was reachable in Italy on April 7, 2020 at 9:52:13 PM UTC, find more open data on internet censorship on OONI Explorer.',
     },
     {
-      url: '/m/01202003044cadd4e9b30806be0e72a6e05e161a',
+      url: '/m/20261009143530.184733_RU_facebookmessenger_512d74d395214a95',
       result: 'Anomaly',
       color: anomalyColor,
       og_description:
-        'OONI data suggests Facebook Messenger was NOT reachable in Russia on March 4, 2020 at 5:37:43 PM UTC, find more open data on internet censorship on OONI Explorer.',
+        'OONI data suggests Facebook Messenger was NOT reachable in Russia on October 9, 2026 at 2:35:29 PM UTC, find more open data on internet censorship on OONI Explorer.'
     },
   ],
   tor: [
