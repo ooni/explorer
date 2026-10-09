@@ -1,6 +1,6 @@
 // https://nextjs.org/docs/api-reference/next.config.js/introduction
 // https://docs.sentry.io/platforms/javascript/guides/nextjs/
-const { withSentryConfig } = require('@sentry/nextjs')
+const { withSentryConfig } = require('@sentry/nextjs/config')
 
 const DEFAULT_LOCALE = 'en'
 const SUPPORTED_LANGUAGES = [ 'en', 'zh-Hant', 'zh-CN', 'vi', 'tr', 'th', 'sw', 'ru', 'pt-BR', 'my', 'km', 'is', 'fr', 'fa', 'es', 'de', 'ar']
