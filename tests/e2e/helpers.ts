@@ -50,6 +50,13 @@ export const scrollToBottom = async (page: Page) => {
   })
 }
 
+/** Wait for fonts and lazy content before taking a visual snapshot. */
+export const prepareForScreenshot = async (page: Page) => {
+  await scrollToBottom(page)
+  await page.evaluate(() => document.fonts.ready)
+  await page.evaluate(() => window.scrollTo(0, 0))
+}
+
 // Wait for all network requests to complete
 export const waitForAllRequests = async (page: Page) => {
   await page.waitForLoadState('networkidle', { timeout: 30000 })

@@ -25,7 +25,12 @@ const UPDATE = !!process.env.UPDATE_FIXTURES
 
 const MOCK_API_HOSTS = new Set([
   new URL(process.env.NEXT_PUBLIC_OONI_API ?? 'https://api.ooni.org').host,
+  new URL(
+    process.env.NEXT_PUBLIC_USER_FEEDBACK_API ?? 'https://api.dev.ooni.io',
+  ).host,
+  'api.ooni.org',
   'api.ooni.io',
+  'api.dev.ooni.io',
 ])
 
 const RATE_LIMIT_RETRIES = 3
@@ -57,10 +62,14 @@ function normalizeFixtureBody(body: string): string {
 }
 
 /** Normalize query encoding so browser and SSR requests resolve the same fixture. */
-function canonicalFixtureUrl(urlString: string): string {
+function canonicalFixtureUrl(
+  urlString: string,
+  ignoreParams: string[] = [],
+): string {
   const url = new URL(urlString)
   const canonical = new URL(`${url.origin}${url.pathname}`)
   for (const [key, value] of url.searchParams.entries()) {
+    if (ignoreParams.includes(key)) continue
     canonical.searchParams.append(key, value)
   }
   return canonical.toString()
@@ -73,8 +82,12 @@ function canonicalFixtureUrl(urlString: string): string {
  * A short hash suffix is added only when the name is truncated, to keep
  * uniqueness without sacrificing readability for the common case.
  */
-function fixtureFileName(method: string, urlString: string): string {
-  const url = new URL(canonicalFixtureUrl(urlString))
+function fixtureFileName(
+  method: string,
+  urlString: string,
+  ignoreParams: string[] = [],
+): string {
+  const url = new URL(canonicalFixtureUrl(urlString, ignoreParams))
   const lastSegment = url.pathname.split('/').filter(Boolean).pop() || 'root'
   const params = [...url.searchParams.entries()]
     .map(([key, value]) => `${key}-${value}`)
@@ -98,8 +111,17 @@ function fixtureFileName(method: string, urlString: string): string {
   return `${name}.json`
 }
 
-function fixturePath(namespace: string, method: string, urlString: string): string {
-  return path.join(FIXTURES_ROOT, namespace, fixtureFileName(method, urlString))
+function fixturePath(
+  namespace: string,
+  method: string,
+  urlString: string,
+  ignoreParams: string[] = [],
+): string {
+  return path.join(
+    FIXTURES_ROOT,
+    namespace,
+    fixtureFileName(method, urlString, ignoreParams),
+  )
 }
 
 function shouldMockRequest(urlString: string): boolean {
@@ -126,6 +148,15 @@ async function fetchWithRateLimitRetry(
   return response
 }
 
+type MockApiOptions = {
+  /**
+   * Query params to drop when resolving a fixture, e.g. ['domain'].
+   * Requests differing only in these params share one fixture file, which
+   * keeps high-cardinality pages (one request per domain) down to a few files.
+   */
+  ignoreParams?: string[]
+}
+
 /**
  * Intercept `urlPattern` on `page` and serve fixtures from `namespace`.
  */
@@ -133,6 +164,7 @@ export async function mockApi(
   page: Page,
   urlPattern: string,
   namespace: string,
+  { ignoreParams = [] }: MockApiOptions = {},
 ): Promise<void> {
   await page.route(urlPattern, async (route) => {
     const request = route.request()
@@ -147,7 +179,12 @@ export async function mockApi(
       return
     }
 
-    const file = fixturePath(namespace, request.method(), request.url())
+    const file = fixturePath(
+      namespace,
+      request.method(),
+      request.url(),
+      ignoreParams,
+    )
 
     if (fs.existsSync(file)) {
       const saved: SavedResponse = JSON.parse(fs.readFileSync(file, 'utf-8'))

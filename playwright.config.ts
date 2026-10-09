@@ -14,13 +14,15 @@ import { defineConfig, devices } from '@playwright/test'
 export default defineConfig({
   timeout: 60000,
 
-  /* Same baseline on Linux (CI) and macOS (local); avoids *-linux vs *-darwin missing files */
-  snapshotPathTemplate: '{testDir}/{testFilePath}-snapshots/{arg}-{projectName}{ext}',
+  /* Baselines are generated on Linux CI (production build). Local macOS runs
+   * skip snapshot assertions so font/AA diffs never fail functional tests. */
+  snapshotPathTemplate:
+    '{testDir}/{testFilePath}-snapshots/{arg}-{projectName}{ext}',
+  ignoreSnapshots: !process.env.CI,
 
-  /* Allow minor font/AA differences between OSes when sharing one baseline */
   expect: {
     toHaveScreenshot: {
-      maxDiffPixelRatio: 0.05,
+      maxDiffPixels: 100,
     },
   },
 
@@ -58,10 +60,13 @@ export default defineConfig({
           {
             name: 'firefox',
             use: { ...devices['Desktop Firefox'] },
+            /* Chromium-only baselines; keep these projects functional-only. */
+            ignoreSnapshots: true,
           },
           {
             name: 'webkit',
             use: { ...devices['Desktop Safari'] },
+            ignoreSnapshots: true,
           },
         ]
       : []),

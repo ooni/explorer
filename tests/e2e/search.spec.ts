@@ -1,7 +1,7 @@
 import dayjs from '../../services/dayjs'
 import { test, expect } from '@playwright/test'
 import { mockApi } from './helpers/mockApi'
-import { scrollToBottom } from './helpers'
+import { prepareForScreenshot } from './helpers'
 
 // Match the date range used in tests/e2e/fixtures/search/ so CI does not depend
 // on the app's rolling default (last 30 days through tomorrow).
@@ -35,11 +35,10 @@ test.describe('Search Page Tests', () => {
 
     await page.waitForLoadState('networkidle')
 
-    await scrollToBottom(page)
+    await prepareForScreenshot(page)
 
     await expect(page).toHaveScreenshot('search-desktop.png', {
       fullPage: true,
-      maxDiffPixelRatio: 0.12,
     })
   })
 

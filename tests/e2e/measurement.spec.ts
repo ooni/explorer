@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { mockApi } from './helpers/mockApi'
+import { prepareForScreenshot } from './helpers'
 
 const normalColor = 'rgb(47, 158, 68)'
 const anomalyColor = 'rgb(230, 119, 0)'
@@ -250,9 +251,10 @@ test.describe('Measurement Page Tests', () => {
             ).toHaveAttribute('content', og_description)
           }
 
+          await prepareForScreenshot(page)
+
           await expect(page).toHaveScreenshot(`${testName}-${result}-desktop.png`, {
             fullPage: true,
-            maxDiffPixelRatio: 0.12,
           })
         })
       }

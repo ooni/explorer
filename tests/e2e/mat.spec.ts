@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { mockApi } from './helpers/mockApi'
-import { scrollToBottom } from './helpers'
+import { prepareForScreenshot } from './helpers'
 
 test.describe('MAT Tests', () => {
   test.describe('MAT redirections', () => {
@@ -46,11 +46,10 @@ test.describe('MAT Tests', () => {
         'Measurement Aggregation Toolkit',
       )
 
-      await scrollToBottom(page)
-  
+      await prepareForScreenshot(page)
+
       await expect(page).toHaveScreenshot('mat-desktop.png', {
         fullPage: true,
-        maxDiffPixelRatio: 0.12,
       })
     })
 
