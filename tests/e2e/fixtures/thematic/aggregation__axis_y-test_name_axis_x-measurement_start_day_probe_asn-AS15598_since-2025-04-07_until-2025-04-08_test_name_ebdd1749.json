@@ -1,0 +1,5 @@
+{
+  "status": 200,
+  "contentType": "application/json",
+  "body": "{\"v\":0,\"dimension_count\":2,\"db_stats\":{\"row_count\":1405045,\"bytes\":6348960,\"total_row_count\":1405045,\"elapsed_seconds\":0.05534029006958008},\"result\":[{\"anomaly_count\":0,\"confirmed_count\":0,\"failure_count\":0,\"ok_count\":3,\"measurement_count\":3,\"measurement_start_day\":\"2025-04-07\",\"test_name\":\"psiphon\"},{\"anomaly_count\":0,\"confirmed_count\":0,\"failure_count\":0,\"ok_count\":3,\"measurement_count\":3,\"measurement_start_day\":\"2025-04-07\",\"test_name\":\"tor\"},{\"anomaly_count\":3,\"confirmed_count\":0,\"failure_count\":0,\"ok_count\":0,\"measurement_count\":3,\"measurement_start_day\":\"2025-04-07\",\"test_name\":\"torsf\"}]}"
+}

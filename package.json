@@ -53,7 +53,7 @@
     "yup": "^1.7.1"
   },
   "devDependencies": {
-    "@biomejs/biome": "^2.4.6",
+    "@biomejs/biome": "^2.4.9",
     "@playwright/test": "^1.61.1",
     "@tailwindcss/postcss": "^4.2.2",
     "@types/lodash.debounce": "^4.0.9",
