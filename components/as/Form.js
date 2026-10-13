@@ -26,9 +26,10 @@ const Form = ({ onSubmit, since, until }) => {
     }
     if (range?.to) {
       setValue('until', format(range.to, 'y-MM-dd'))
-    } else {
+    } else if (!range?.from) {
       setValue('until', '')
     }
+    // Picking only a start day keeps the current until
     setShowDatePicker(false)
   }
 
