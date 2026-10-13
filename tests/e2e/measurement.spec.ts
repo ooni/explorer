@@ -219,13 +219,15 @@ test.describe('Measurement Page Tests', () => {
 
   test.describe('Accessing old measurement path (/measurement) with report_id and input query', () => {
     test('redirects to the new path with measurement_uid query', async ({
-      page,
+      request,
     }) => {
-      await page.goto(
-        '/measurement/20221110T100756Z_webconnectivity_US_13335_n1_KWJqHUAPqMdtf2Up?input=https%3A%2F%2Fwww.theguardian.com%2F',
-      )
+      const legacyPath =
+        '/measurement/20221110T100756Z_webconnectivity_US_13335_n1_KWJqHUAPqMdtf2Up?input=https%3A%2F%2Fwww.theguardian.com%2F'
 
-      await expect(page).toHaveURL(
+      const response = await request.get(legacyPath, { maxRedirects: 0 })
+
+      expect(response.status()).toBe(301)
+      expect(response.headers().location).toMatch(
         /\/m\/20221110100919\.165568_US_webconnectivity_782abf479bf32868/,
       )
     })
