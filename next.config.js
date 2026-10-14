@@ -20,6 +20,14 @@ module.exports = withSentryConfig(
         },
       ]
     },
+    async rewrites() {
+      return [
+        {
+          source: '/api/ooni/v1/:path*',
+          destination: 'https://api.ooni.io/api/v1/:path*',
+        },
+      ]
+    },
     i18n: {
       locales: SUPPORTED_LANGUAGES,
       defaultLocale: DEFAULT_LOCALE,
