@@ -18,6 +18,11 @@ module.exports = withSentryConfig(
           destination: '/chart/mat',
           permanent: true,
         },
+        {
+          source: '/llms.txt',
+          destination: 'https://docs.ooni.org/llms.txt',
+          statusCode: 302,
+        },
       ]
     },
     i18n: {
