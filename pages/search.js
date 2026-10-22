@@ -67,14 +67,14 @@ const queryToParams = ({ query }) => {
 }
 
 const measurementsFetcher = async (queryParams) => {
-  const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
   const params = queryToParams({ query: queryParams })
-  const response = await client.get('/api/v1/measurements', {
+  const response = await axios.get('/api/ooni/v1/measurements', {
     params: { ...params, order: 'desc' },
   })
+  const nextUrl = response.data.metadata?.next_url
   return {
     results: response.data.results,
-    next_url: response.data.metadata?.next_url,
+    next_url: nextUrl?.replace(/^https?:\/\/[^/]+\/api\/v1/, '/api/ooni/v1'),
   }
 }
 
@@ -226,7 +226,9 @@ const Search = () => {
           },
         }) => {
           setAccumulatedResults((prev) => prev.concat(nextPageResults))
-          setNextURL(next_url)
+          setNextURL(
+            next_url?.replace(/^https?:\/\/[^/]+\/api\/v1/, '/api/ooni/v1'),
+          )
         },
       )
       .catch((err) => {
