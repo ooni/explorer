@@ -543,6 +543,7 @@
   "MAT.Form.TimeGrainOption.day": "Day",
   "MAT.Form.TimeGrainOption.week": "Week",
   "MAT.Form.TimeGrainOption.month": "Month",
+  "MAT.Form.TimeGrainOption.year": "Year",
   "MAT.Form.ConfirmationModal.Title": "Are you sure?",
   "MAT.Form.ConfirmationModal.Message": "Duration too long. This can potentially slow down the page",
   "MAT.Form.ConfirmationModal.No": "No",
