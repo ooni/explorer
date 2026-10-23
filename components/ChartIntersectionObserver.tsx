@@ -7,12 +7,14 @@ type ChartIntersectionObserverProps = {
   domain?: string
   testName?: string
   headerOptions?: object
+  queryParams?: Record<string, unknown>
 }
 
 const ChartIntersectionObserver = ({
   domain,
   testName = 'web_connectivity',
   headerOptions,
+  queryParams,
 }: ChartIntersectionObserverProps) => {
   const router = useRouter()
 
@@ -20,7 +22,7 @@ const ChartIntersectionObserver = ({
     query: { since, until, probe_cc },
   } = router
 
-  const query = useMemo(
+  const defaultQuery = useMemo(
     () => ({
       axis_x: 'measurement_start_day',
       axis_y: 'probe_cc',
@@ -44,7 +46,10 @@ const ChartIntersectionObserver = ({
   return (
     <div ref={ref}>
       {inView ? (
-        <Chart queryParams={query} headerOptions={headerOptions} />
+        <Chart
+          queryParams={queryParams ?? defaultQuery}
+          headerOptions={headerOptions}
+        />
       ) : (
         <ChartSpinLoader />
       )}
