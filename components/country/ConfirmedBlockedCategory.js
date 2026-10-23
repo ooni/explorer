@@ -2,6 +2,7 @@ import { CategoryBadge } from 'components/Badge'
 import { DetailsBox } from 'components/measurement/DetailsBox'
 import { useRouter } from 'next/router'
 import { memo, useMemo } from 'react'
+import { useInView } from 'react-intersection-observer'
 import { FormattedMessage, useIntl } from 'react-intl'
 import { MATFetcher } from 'services/fetchers'
 import useSWR from 'swr'
@@ -33,8 +34,15 @@ const ConfirmedBlockedCategory = () => {
     return categoriesData.filter((category) => category.confirmed_count > 0)
   }
 
+  const { ref, inView } = useInView({
+    triggerOnce: true,
+    rootMargin: '-300px 0px 0px 0px',
+    threshold: 0.5,
+    initialInView: false,
+  })
+
   const { data, error } = useSWR(
-    since && until ? new URLSearchParams(query).toString() : null,
+    inView && since && until ? new URLSearchParams(query).toString() : null,
     MATFetcher,
     swrOptions,
   )
@@ -50,7 +58,7 @@ const ConfirmedBlockedCategory = () => {
   }, [data])
 
   return (
-    <div className="flex flex-col mb-[60px]">
+    <div ref={ref} className="flex flex-col mb-[60px]">
       <h3 className="mt-[40px] mb-[20px]">
         {intl.formatMessage({
           id: 'Country.Websites.ConfirmedBlockedCategories',
