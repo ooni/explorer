@@ -45,6 +45,9 @@ module.exports = withSentryConfig(
       return headers
     },
     productionBrowserSourceMaps: true,
+    experimental: {
+      agentUpgrade: 'security',
+    },
   },
   {
     // For all available options, see:
