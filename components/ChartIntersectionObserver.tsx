@@ -1,4 +1,5 @@
 import Chart, { ChartSpinLoader } from 'components/Chart'
+import { timeGrainForDateRange } from 'utils'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { useInView } from 'react-intersection-observer'
@@ -31,7 +32,7 @@ const ChartIntersectionObserver = ({
       test_name: testName,
       ...(domain && { domain }),
       ...(probe_cc && { probe_cc }),
-      time_grain: 'day',
+      time_grain: timeGrainForDateRange(since, until),
     }),
     [domain, since, until, probe_cc, testName],
   )
