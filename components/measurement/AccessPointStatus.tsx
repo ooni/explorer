@@ -1,7 +1,20 @@
-import PropTypes from 'prop-types'
 import { FormattedMessage } from 'react-intl'
 
-const AccessPointStatus = ({ icon, label, ok, content, color, ...props }) => {
+type AccessPointStatusProps = {
+  icon?: React.ReactNode
+  label: React.ReactNode
+  ok?: boolean
+  content?: React.ReactNode
+  width?: number
+} & Omit<React.HTMLAttributes<HTMLDivElement>, 'content'>
+
+const AccessPointStatus = ({
+  icon,
+  label,
+  ok,
+  content,
+  ...props
+}: AccessPointStatusProps) => {
   if (content === undefined) {
     if (ok === true) {
       content = <FormattedMessage id="General.OK" />
@@ -18,21 +31,11 @@ const AccessPointStatus = ({ icon, label, ok, content, color, ...props }) => {
     <div {...props}>
       {icon}
       <div className="font-bold text-xs">{label}</div>
-      <div
-        className={`${!ok && 'text-yellow-1000'} text-2xl font-extralight`}
-        color={color}
-      >
+      <div className={`${!ok && 'text-yellow-1000'} text-2xl font-extralight`}>
         {content}
       </div>
     </div>
   )
-}
-
-AccessPointStatus.propTypes = {
-  icon: PropTypes.element,
-  label: PropTypes.oneOfType([PropTypes.string, PropTypes.element]).isRequired,
-  ok: PropTypes.oneOf([true, false, undefined]),
-  content: PropTypes.any,
 }
 
 export default AccessPointStatus
