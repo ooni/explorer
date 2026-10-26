@@ -1,4 +1,5 @@
 import { test, expect } from '@playwright/test'
+import { scrollToBottom } from './helpers'
 
 test.describe('Country Page Tests', () => {
   test.beforeEach(async ({ page }) => {
@@ -44,11 +45,12 @@ test.describe('Country Page Handles Case Mistakes In URL', () => {
 test('Country page charts websites by year over several years', async ({
   page,
 }) => {
+  await page.goto('/country/CA?since=2023-01-01&until=2026-10-09')
+  await scrollToBottom(page)
+
   const websites = page.waitForRequest(
     (r) => new URL(r.url()).searchParams.get('axis_y') === 'domain',
   )
-  await page.goto('/country/CA?since=2023-01-01&until=2026-10-09')
-  await page.evaluate(() => window.scrollTo(0, 1240))
   const url = new URL((await websites).url())
   expect(url.searchParams.get('time_grain')).toBe('year')
 })
