@@ -19,7 +19,7 @@ interface StatsItemProps {
 const StatsItem = ({ label, unit, value }: StatsItemProps) => (
   <div className="text-center w-1/3 p-4 text-blue-900">
     <div className="text-4xl md:text-5xl font-light">
-      <span data-testid="stats-value">{value}</span>
+      <span>{value}</span>
       <span className="text-3xl">{unit}</span>
     </div>
     <div className="text-gray-700">{label}</div>
@@ -69,6 +69,16 @@ const FeatureBoxTitle = ({
 )
 
 export async function getStaticProps() {
+  if (process.env.NEXT_PUBLIC_IS_TEST_ENV) {
+    return {
+      props: {
+        measurementCount: 55_000_000,
+        asnCount: 11_500,
+        countryCount: 196,
+      }
+    }
+  }
+
   const client = axios.create({ baseURL: process.env.NEXT_PUBLIC_OONI_API })
   const result = await client.get('/api/_/global_overview')
 
