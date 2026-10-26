@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { mockApi } from './helpers/mockApi'
+import { prepareForScreenshot } from './helpers'
 
 test.describe('MAT Tests', () => {
   test.describe('MAT redirections', () => {
@@ -44,6 +45,12 @@ test.describe('MAT Tests', () => {
       await expect(page.getByRole('heading', { level: 1 })).toContainText(
         'Measurement Aggregation Toolkit',
       )
+
+      await prepareForScreenshot(page)
+
+      await expect(page).toHaveScreenshot('mat-desktop.png', {
+        fullPage: true,
+      })
     })
 
     test('Clicking Submit button loads table and charts', async ({ page }) => {

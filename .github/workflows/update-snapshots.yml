@@ -1,0 +1,73 @@
+name: Update Playwright snapshots
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  update-snapshots:
+    timeout-minutes: 60
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v5
+      with:
+        ref: ${{ github.ref }}
+
+    - uses: actions/setup-node@v5
+      with:
+        node-version: 24
+        cache: 'yarn'
+
+    - name: Install dependencies
+      run: yarn install --frozen-lockfile
+
+    - name: Get installed Playwright version
+      id: playwright-version
+      run: echo "version=$(yarn --silent playwright --version | sed 's/Version //')" >> "$GITHUB_OUTPUT"
+
+    - name: Cache Playwright browsers
+      id: playwright-cache
+      uses: actions/cache@v5
+      with:
+        path: ~/.cache/ms-playwright
+        key: playwright-${{ runner.os }}-${{ steps.playwright-version.outputs.version }}
+
+    # `playwright install --with-deps` shells out to apt-get. On GitHub runners the
+    # dpkg lock is often held by background services (unattended-upgrades / apt-daily),
+    # which makes the install step hang indefinitely until the job times out.
+    # Stop those services first so apt can acquire the lock immediately.
+    - name: Free up the apt/dpkg lock
+      run: |
+        sudo systemctl stop apt-daily.service apt-daily-upgrade.service unattended-upgrades.service || true
+        sudo systemctl stop apt-daily.timer apt-daily-upgrade.timer || true
+        sudo flock --wait 60 /var/lib/dpkg/lock-frontend true || true
+
+    - name: Install Playwright browsers and system deps
+      if: steps.playwright-cache.outputs.cache-hit != 'true'
+      timeout-minutes: 15
+      run: yarn playwright install --with-deps chromium
+
+    - name: Install Playwright system deps (cached browsers)
+      if: steps.playwright-cache.outputs.cache-hit == 'true'
+      timeout-minutes: 15
+      run: yarn playwright install-deps chromium
+
+    - name: Build app
+      run: yarn build:test
+
+    - name: Update snapshots
+      run: yarn playwright test --update-snapshots --project=chromium
+
+    - name: Commit updated snapshots
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+        git add tests/e2e
+        if git diff --cached --quiet; then
+          echo "No snapshot changes"
+        else
+          git commit -m "Update Playwright visual snapshots"
+          git push
+        fi
