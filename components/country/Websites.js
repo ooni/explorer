@@ -2,7 +2,7 @@ import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { FormattedMessage } from 'react-intl'
 
-import Chart from 'components/Chart'
+import ChartIntersectionObserver from 'components/ChartIntersectionObserver'
 import { timeGrainForDateRange } from 'utils'
 import FormattedMarkdown from '../FormattedMarkdown'
 import ConfirmedBlockedCategory from './ConfirmedBlockedCategory'
@@ -40,7 +40,7 @@ const WebsitesSection = ({ countryCode }) => {
       </div>
       <ConfirmedBlockedCategory />
       <div className="my-8">
-        <Chart testName="web_connectivity" queryParams={query} />
+        <ChartIntersectionObserver queryParams={query} />
       </div>
     </>
   )
