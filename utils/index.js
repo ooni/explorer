@@ -10,7 +10,7 @@ const isGreater = (key, x, y) => {
 // ~2,500-2,800 domains a month (2026-10), so beyond the default 30-day daily
 // view this keeps to at most 13 buckets. The API accepts year only for ranges
 // over a year.
-export const websitesTimeGrain = (since, until) => {
+export const timeGrainForDateRange = (since, until) => {
   const days = (Date.parse(until) - Date.parse(since)) / (24 * 60 * 60 * 1000)
   if (!(days > 31)) return 'day'
   if (days <= 13 * 7) return 'week'

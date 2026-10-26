@@ -3,7 +3,7 @@ import { useMemo } from 'react'
 import { FormattedMessage } from 'react-intl'
 
 import Chart from 'components/Chart'
-import { websitesTimeGrain } from 'utils'
+import { timeGrainForDateRange } from 'utils'
 import FormattedMarkdown from '../FormattedMarkdown'
 import ConfirmedBlockedCategory from './ConfirmedBlockedCategory'
 
@@ -21,7 +21,7 @@ const WebsitesSection = ({ countryCode }) => {
       since,
       until,
       test_name: 'web_connectivity',
-      time_grain: websitesTimeGrain(since, until),
+      time_grain: timeGrainForDateRange(since, until),
     }),
     [countryCode, since, until],
   )

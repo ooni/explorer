@@ -1,6 +1,6 @@
 import { format } from 'date-fns'
 import { useRouter } from 'next/router'
-import { websitesTimeGrain } from 'utils'
+import { timeGrainForDateRange } from 'utils'
 import { Input, Select } from 'ooni-components'
 import PropTypes from 'prop-types'
 import { useCallback, useEffect, useMemo, useState } from 'react'
@@ -177,7 +177,7 @@ export const Form = ({ onSubmit, query }) => {
         isDate(value.since) &&
         isDate(value.until)
       )
-        setValue('time_grain', websitesTimeGrain(value.since, value.until))
+        setValue('time_grain', timeGrainForDateRange(value.since, value.until))
       if (name === 'probe_cc') setCountryValue(value.probe_cc)
       if (name === 'test_name') setTestNameValue(value.test_name)
     })
@@ -216,10 +216,10 @@ export const Form = ({ onSubmit, query }) => {
     }
     if (range?.to) {
       setValue('until', format(range.to, 'y-MM-dd'))
-    } else if (!range?.from) {
+    } else {
       setValue('until', '')
     }
-    // Picking only a start day keeps the current until
+
     setShowDatePicker(false)
   }
 
