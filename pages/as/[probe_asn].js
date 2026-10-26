@@ -69,7 +69,7 @@ const ChartsContainer = () => {
       until,
       test_name: messagingTestNames,
       ...(probe_cc && { probe_cc }),
-      time_grain: 'day',
+      time_grain: timeGrainForDateRange(since, until),
     }),
     [probe_asn, since, until, probe_cc],
   )
@@ -83,7 +83,7 @@ const ChartsContainer = () => {
       until,
       test_name: circumventionTestNames,
       ...(probe_cc && { probe_cc }),
-      time_grain: 'day',
+      time_grain: timeGrainForDateRange(since, until),
     }),
     [probe_asn, since, until, probe_cc],
   )
@@ -303,7 +303,7 @@ export const getServerSideProps = async (context) => {
           count: res.measurement_count,
         })),
       )
-      .catch(() => {})
+      .catch(() => [])
 
     const networkName = await client
       .get('/api/_/asnmeta', { params: { asn: probe_asn.replace('AS', '') } })
