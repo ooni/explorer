@@ -72,9 +72,9 @@ export async function getStaticProps() {
   if (process.env.NEXT_PUBLIC_IS_TEST_ENV) {
     return {
       props: {
-        measurementCount: 55_000_000,
-        asnCount: 11_500,
-        countryCount: 196,
+        measurementCount: 3_721_800_000,
+        asnCount: 31_400,
+        countryCount: 245,
       }
     }
   }
