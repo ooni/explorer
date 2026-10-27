@@ -18,6 +18,18 @@ export const timeGrainForDateRange = (since, until) => {
   return 'year'
 }
 
+// Time grains MAT offers for a date range
+export const timeGrainOptionsForRange = (since, until) => {
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/
+  if (!until?.match(dateRegex) || !since?.match(dateRegex))
+    return ['hour', 'day', 'week', 'month', 'year']
+  const days = (Date.parse(until) - Date.parse(since)) / (24 * 60 * 60 * 1000)
+  if (days < 8) return ['hour', 'day']
+  if (days < 31) return ['day', 'week']
+  if (days < 365) return ['day', 'week', 'month']
+  return ['day', 'week', 'month', 'year']
+}
+
 export const sortByKey = (key, secondaryKey) => {
   return (a, b) => {
     const r = isGreater(key, a, b)

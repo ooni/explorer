@@ -1,10 +1,10 @@
 import { format } from 'date-fns'
 import { useRouter } from 'next/router'
-import { timeGrainForDateRange } from 'utils'
+import { timeGrainForDateRange, timeGrainOptionsForRange } from 'utils'
 import { Input, Select } from 'ooni-components'
 import PropTypes from 'prop-types'
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { Controller, useForm } from 'react-hook-form'
+import { Controller, useForm, useWatch } from 'react-hook-form'
 import { FormattedMessage, defineMessages, useIntl } from 'react-intl'
 import dayjs from 'services/dayjs'
 import { localisedCountries } from 'utils/i18nCountries'
@@ -152,25 +152,15 @@ export const Form = ({ onSubmit, query }) => {
     }
   }, [defaultValues, reset, router.isReady])
 
-  const [since, setSince] = useState(defaultValues.since)
-  const [until, setUntil] = useState(defaultValues.until)
-  const [countryValue, setCountryValue] = useState(defaultValues.probe_cc)
-  const [testNameValue, setTestNameValue] = useState(defaultValues.test_name)
-
-  // The form is reset to the URL's values once the router is ready, but reset()
-  // doesn't name a field for the watch below, so update the range here too
-  useEffect(() => {
-    if (router.isReady) {
-      setSince(defaultValues.since)
-      setUntil(defaultValues.until)
-    }
-  }, [defaultValues, router.isReady])
+  const [since, until, countryValue, testNameValue] = useWatch({
+    control,
+    name: ['since', 'until', 'probe_cc', 'test_name'],
+  })
 
   useEffect(() => {
     const subscription = watch((value, { name }) => {
-      if (name === 'since') setSince(value.since)
-      if (name === 'until') setUntil(value.until)
-      // Picking dates picks the matching time grain; it can still be changed
+      // Picking dates picks the matching time grain; it can still be changed.
+      // reset() reports no field name, so a time_grain from the URL is kept.
       const isDate = (d) => /^\d{4}-\d{2}-\d{2}$/.test(d ?? '')
       if (
         (name === 'since' || name === 'until') &&
@@ -178,8 +168,6 @@ export const Form = ({ onSubmit, query }) => {
         isDate(value.until)
       )
         setValue('time_grain', timeGrainForDateRange(value.since, value.until))
-      if (name === 'probe_cc') setCountryValue(value.probe_cc)
-      if (name === 'test_name') setTestNameValue(value.test_name)
     })
     return () => subscription.unsubscribe()
   }, [watch, setValue])
@@ -280,32 +268,10 @@ export const Form = ({ onSubmit, query }) => {
       setValue('axis_y', '')
   }, [setValue, getValues, yAxisOptionsFiltered])
 
-  const timeGrainOptions = useMemo(() => {
-    const dateRegex = /^\d{4}-\d{2}-\d{2}$/
-    if (!until?.match(dateRegex) || !since?.match(dateRegex))
-      return ['hour', 'day', 'week', 'month', 'year']
-    const diff = dayjs(until).diff(dayjs(since), 'day')
-    if (diff < 8) {
-      const availableValues = ['hour', 'day']
-      if (!availableValues.includes(getValues('time_grain')))
-        setValue('time_grain', 'hour')
-      return availableValues
-    }
-    if (diff >= 8 && diff < 31) {
-      const availableValues = ['day', 'week']
-      if (!availableValues.includes(getValues('time_grain')))
-        setValue('time_grain', 'day')
-      return availableValues
-    }
-    if (diff >= 31) {
-      // The API only accepts year for ranges longer than a year
-      const availableValues =
-        diff > 365 ? ['day', 'week', 'month', 'year'] : ['day', 'week', 'month']
-      if (!availableValues.includes(getValues('time_grain')))
-        setValue('time_grain', 'day')
-      return availableValues
-    }
-  }, [setValue, getValues, since, until])
+  const timeGrainOptions = useMemo(
+    () => timeGrainOptionsForRange(since, until),
+    [since, until],
+  )
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
