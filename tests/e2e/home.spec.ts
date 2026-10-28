@@ -23,8 +23,6 @@ test.describe('Home Page Tests', () => {
 
     await expect(page).toHaveScreenshot('homepage-desktop.png', {
       fullPage: true,
-      // Banner totals come from getStaticProps (server); monthly summary uses live dates.
-      mask: [page.locator('[data-testid="stats-value"]')],
     })
   })
 })

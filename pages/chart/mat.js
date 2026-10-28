@@ -7,6 +7,7 @@ import MATChart from 'components/MATChart'
 import { Form } from 'components/aggregation/mat/Form'
 import Help from 'components/aggregation/mat/Help'
 import dayjs from 'services/dayjs'
+import { timeGrainForDateRange, timeGrainOptionsForRange } from 'utils'
 
 const MeasurementAggregationToolkit = () => {
   const intl = useIntl()
@@ -48,15 +49,22 @@ const MeasurementAggregationToolkit = () => {
     if (router.isReady) {
       const today = dayjs.utc().add(1, 'day')
       const monthAgo = dayjs.utc(today).subtract(1, 'month')
+      const since = queryWithoutSpaces.since ?? monthAgo.format('YYYY-MM-DD')
+      const until = queryWithoutSpaces.until ?? today.format('YYYY-MM-DD')
+      const time_grain = timeGrainOptionsForRange(since, until).includes(
+        queryWithoutSpaces.time_grain,
+      )
+        ? queryWithoutSpaces.time_grain
+        : timeGrainForDateRange(since, until)
 
       const href = {
         query: {
           test_name: 'web_connectivity',
           axis_x: 'measurement_start_day',
-          since: monthAgo.format('YYYY-MM-DD'),
-          until: today.format('YYYY-MM-DD'),
-          time_grain: 'day',
+          since,
+          until,
           ...queryWithoutSpaces,
+          time_grain,
         },
       }
       router.replace(href, undefined, { shallow: true })

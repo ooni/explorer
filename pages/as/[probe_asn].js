@@ -16,7 +16,7 @@ import { fetcherWithPreprocessing } from 'services/fetchers'
 import useSWR from 'swr'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
 import { SectionText } from 'components/ThirdPartyDataChart'
-import { toCompactNumberUnit } from 'utils'
+import { toCompactNumberUnit, timeGrainForDateRange } from 'utils'
 import TestGroupBadge from 'components/Badge'
 import RecentMeasurements from 'components/RecentMeasurements'
 
@@ -55,7 +55,7 @@ const ChartsContainer = () => {
       until,
       ...(probe_cc && { probe_cc }),
       test_name: 'web_connectivity',
-      time_grain: 'day',
+      time_grain: timeGrainForDateRange(since, until),
     }),
     [probe_asn, since, until, probe_cc],
   )
@@ -69,7 +69,7 @@ const ChartsContainer = () => {
       until,
       test_name: messagingTestNames,
       ...(probe_cc && { probe_cc }),
-      time_grain: 'day',
+      time_grain: timeGrainForDateRange(since, until),
     }),
     [probe_asn, since, until, probe_cc],
   )
@@ -83,7 +83,7 @@ const ChartsContainer = () => {
       until,
       test_name: circumventionTestNames,
       ...(probe_cc && { probe_cc }),
-      time_grain: 'day',
+      time_grain: timeGrainForDateRange(since, until),
     }),
     [probe_asn, since, until, probe_cc],
   )
@@ -303,7 +303,7 @@ export const getServerSideProps = async (context) => {
           count: res.measurement_count,
         })),
       )
-      .catch(() => {})
+      .catch(() => [])
 
     const networkName = await client
       .get('/api/_/asnmeta', { params: { asn: probe_asn.replace('AS', '') } })

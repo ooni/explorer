@@ -69,7 +69,7 @@ const Form = () => {
     const params = {
       since,
       until,
-      probe_cc,
+      ...(probe_cc && { probe_cc }),
     }
     const [replaceKey, replaceValue] = query.domain
       ? ['[domain]', query.domain]

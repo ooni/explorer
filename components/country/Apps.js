@@ -3,6 +3,7 @@ import { useMemo } from 'react'
 import { FormattedMessage } from 'react-intl'
 
 import ChartIntersectionObserver from 'components/ChartIntersectionObserver'
+import { timeGrainForDateRange } from 'utils'
 import FormattedMarkdown from '../FormattedMarkdown'
 
 const messagingTestNames = [
@@ -26,7 +27,7 @@ const ChartsContainer = () => {
       probe_cc: countryCode,
       since,
       until,
-      time_grain: 'day',
+      time_grain: timeGrainForDateRange(since, until),
       test_name: messagingTestNames,
     }),
     [countryCode, since, until],
@@ -39,7 +40,7 @@ const ChartsContainer = () => {
       probe_cc: countryCode,
       since,
       until,
-      time_grain: 'day',
+      time_grain: timeGrainForDateRange(since, until),
       test_name: circumventionTestNames,
     }),
     [countryCode, since, until],

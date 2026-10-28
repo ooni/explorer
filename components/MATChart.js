@@ -3,14 +3,11 @@ import { MATContextProvider } from 'components/aggregation/mat/MATContext'
 import { NoCharts } from 'components/aggregation/mat/NoCharts'
 import { StackedBarChart } from 'components/aggregation/mat/StackedBarChart'
 import TableView from 'components/aggregation/mat/TableView'
-import { axiosResponseTime } from 'components/axios-plugins'
 import dayjs from 'services/dayjs'
 import useSWR from 'swr'
 import { ChartSpinLoader } from './Chart'
 import { FormattedMarkdownBase } from './FormattedMarkdown'
 import { useMemo } from 'react'
-
-axiosResponseTime(axios)
 
 const swrOptions = {
   revalidateOnFocus: false,
