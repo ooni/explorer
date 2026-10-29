@@ -1,6 +1,6 @@
 import axios from 'axios'
 import CallToActionBox from 'components/CallToActionBox'
-import Chart from 'components/Chart'
+import ChartIntersectionObserver from 'components/ChartIntersectionObserver'
 import CountryList from 'components/CountryBox'
 import { StyledSticky } from 'components/SharedStyledComponents'
 import ThirdPartyDataChart from 'components/ThirdPartyDataChart'
@@ -94,19 +94,19 @@ const ChartsContainer = () => {
         <div className="mb-4">
           <TestGroupBadge testName="web_connectivity" />
         </div>
-        <Chart queryParams={queryWebsites} />
+        <ChartIntersectionObserver queryParams={queryWebsites} />
       </section>
       <section className="my-8">
         <div className="mb-4">
           <TestGroupBadge testName="signal" />
         </div>
-        <Chart queryParams={queryMessagingApps} />
+        <ChartIntersectionObserver queryParams={queryMessagingApps} />
       </section>
       <section className="my-8">
         <div className="mb-4">
           <TestGroupBadge testName="tor" />
         </div>
-        <Chart queryParams={queryCircumventionTools} />
+        <ChartIntersectionObserver queryParams={queryCircumventionTools} />
       </section>
     </>
   )
