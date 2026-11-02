@@ -704,5 +704,6 @@
   "Home.ExploreBar.Type.country": "Ülke",
   "Home.ExploreBar.Type.network": "Ağ",
   "Home.ExploreBar.Type.domain": "Etki alanı",
-  "Home.ExploreBar.Type.theme": "Tema"
+  "Home.ExploreBar.Type.theme": "Tema",
+  "MAT.Form.TimeGrainOption.year": "Yıl"
 }
