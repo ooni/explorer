@@ -67,6 +67,7 @@ const Index = ({ incidents }) => {
     <>
       <Head>
         <title>{`${intl.formatMessage({ id: 'Findings.Index.Title' })} | ${intl.formatMessage({ id: 'General.OoniExplorer' })}`}</title>
+        <link rel="alternate" type="application/rss+xml" title={intl.formatMessage({ id: 'Findings.Index.Title' })} href="/api/findings-rss" />
       </Head>
       <div className="container">
         {user?.role === 'admin' && (
@@ -82,6 +83,7 @@ const Index = ({ incidents }) => {
           title={`${intl.formatMessage({ id: 'Findings.Index.Title' })} (${sortedAndFilteredData.length})`}
         >
           <div className="flex gap-4 flex-col md:flex-row w-full md:w-auto">
+            <a href="/api/findings-rss" className="self-center">RSS</a>
             <Input
               onChange={(e) => debouncedSearchHandler(e.target.value)}
               placeholder={intl.formatMessage({
