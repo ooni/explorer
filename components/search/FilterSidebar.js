@@ -226,9 +226,10 @@ const FilterSidebar = () => {
       }
       if (range?.to) {
         setValue('untilFilter', format(range.to, 'y-MM-dd'))
-      } else {
+      } else if (!range?.from) {
         setValue('untilFilter', '')
       }
+      // Picking only a start day keeps the current untilFilter
       setShowDatePicker(false)
     },
     [setValue],
