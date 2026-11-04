@@ -156,7 +156,7 @@ const CoverageChart = () => {
 
     return (
       <>
-        <div className="flex justify-center text-lg" data-testid="stats-value">
+        <div className="flex justify-center text-lg">
           <FormattedMarkdown
             id={'Home.MonthlyStats.SummaryText'}
             values={{

@@ -1,6 +1,7 @@
 import dayjs from '../../services/dayjs'
 import { test, expect } from '@playwright/test'
 import { mockApi } from './helpers/mockApi'
+import { prepareForScreenshot } from './helpers'
 
 // Match the date range used in tests/e2e/fixtures/search/ so CI does not depend
 // on the app's rolling default (last 30 days through tomorrow).
@@ -31,28 +32,35 @@ test.describe('Search Page Tests', () => {
       const href = await links.nth(i).getAttribute('href')
       expect(href).toMatch(/\/m\//)
     }
+
+    await page.waitForLoadState('networkidle')
+
+    await prepareForScreenshot(page)
+
+    await expect(page).toHaveScreenshot('search-desktop.png', {
+      fullPage: true,
+    })
   })
 
   test('shows relevant search results when filter changes', async ({
     page,
   }) => {
-    await page.getByTestId('testname-filter').selectOption('web_connectivity')
-
-    const filterButton = page.getByRole('button', { name: 'Filter Results' })
-    await expect(filterButton).toBeEnabled()
-    await filterButton.click()
-
-    await page.waitForResponse('**/api/v1/measurements*')
-
-    // Wait for results to update
     const resultsList = page.getByTestId('results-list').getByRole('link')
-    const count = await resultsList.count()
+    // Wait until router + react-hook-form have finished their initial reset
+    // (FilterSidebar resets when router.isReady) before changing filters.
     await expect(resultsList).toHaveCount(50)
 
-    // Verify all results contain 'Web Connectivity'
-    for (let i = 0; i < count; i++) {
-      const text = await resultsList.nth(i).textContent()
-      expect(text).toContain('Web Connectivity')
+    const testNameFilter = page.getByTestId('testname-filter')
+    await testNameFilter.selectOption('web_connectivity')
+    await expect(testNameFilter).toHaveValue('web_connectivity')
+
+    await page.getByRole('button', { name: 'Filter Results' }).click()
+
+    await expect(page).toHaveURL(/test_name=web_connectivity/)
+    await expect(resultsList).toHaveCount(50)
+
+    for (let i = 0; i < 50; i++) {
+      await expect(resultsList.nth(i)).toContainText('Web Connectivity')
     }
   })
 
@@ -106,12 +114,17 @@ test.describe('Search Page Tests', () => {
   test('conditional filters are hidden and shown depending on selections', async ({
     page,
   }) => {
-    await page.getByTestId('testname-filter').selectOption('Signal Test')
+    await expect(page.getByTestId('results-list').getByRole('link')).toHaveCount(
+      50,
+    )
+
+    const testNameFilter = page.getByTestId('testname-filter')
+    await testNameFilter.selectOption('signal')
+    await expect(testNameFilter).toHaveValue('signal')
     await expect(page.getByTestId('domain-filter')).not.toBeVisible()
 
-    await page
-      .getByTestId('testname-filter')
-      .selectOption('Web Connectivity Test')
+    await testNameFilter.selectOption('web_connectivity')
+    await expect(testNameFilter).toHaveValue('web_connectivity')
     await expect(page.getByTestId('domain-filter')).toBeVisible()
   })
 })

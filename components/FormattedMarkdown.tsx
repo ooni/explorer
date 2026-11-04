@@ -14,12 +14,22 @@ const MdH1 = ({ children, className, ...props }: MdH1Props) => (
   </h3>
 )
 
-export function FormattedMarkdownBase({ children }: { children: string }) {
+type MdParagraphProps = ComponentPropsWithoutRef<'div'>
+// Use <div> so block HTML from intl placeholders (e.g. <ul>) is never nested
+// inside <p>, which is invalid and breaks hydration after browser HTML fixups.
+const MdParagraph = ({ children, className, ...props }: MdParagraphProps) => (
+  <div className={twMerge('mb-4 last:mb-0', className)} {...props}>
+    {children}
+  </div>
+)
+
+export const FormattedMarkdownBase = ({ children }: { children: string }) => {
   return (
     <Markdown
       options={{
         overrides: {
           h1: { component: MdH1 },
+          p: { component: MdParagraph },
           iframe: () => null,
           script: () => null,
           style: () => null,

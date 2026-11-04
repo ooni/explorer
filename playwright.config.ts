@@ -14,6 +14,18 @@ import { defineConfig, devices } from '@playwright/test'
 export default defineConfig({
   timeout: 60000,
 
+  /* Baselines are generated on Linux CI (production build). Local macOS runs
+   * skip snapshot assertions so font/AA diffs never fail functional tests. */
+  snapshotPathTemplate:
+    '{testDir}/{testFilePath}-snapshots/{arg}-{projectName}{ext}',
+  ignoreSnapshots: !process.env.CI,
+
+  expect: {
+    toHaveScreenshot: {
+      maxDiffPixels: 100,
+    },
+  },
+
   testDir: './tests',
   /* Run tests in files in parallel */
   fullyParallel: true,
@@ -48,10 +60,13 @@ export default defineConfig({
           {
             name: 'firefox',
             use: { ...devices['Desktop Firefox'] },
+            /* Chromium-only baselines; keep these projects functional-only. */
+            ignoreSnapshots: true,
           },
           {
             name: 'webkit',
             use: { ...devices['Desktop Safari'] },
+            ignoreSnapshots: true,
           },
         ]
       : []),

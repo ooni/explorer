@@ -1,8 +1,9 @@
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
-import { FormattedMessage, useIntl } from 'react-intl'
+import { FormattedMessage } from 'react-intl'
 
-import Chart from 'components/Chart'
+import ChartIntersectionObserver from 'components/ChartIntersectionObserver'
+import { timeGrainForDateRange } from 'utils'
 import FormattedMarkdown from '../FormattedMarkdown'
 
 const messagingTestNames = [
@@ -14,7 +15,6 @@ const messagingTestNames = [
 const circumventionTestNames = ['psiphon', 'tor', 'torsf']
 
 const ChartsContainer = () => {
-  const intl = useIntl()
   const router = useRouter()
   const {
     query: { since, until, countryCode },
@@ -27,7 +27,7 @@ const ChartsContainer = () => {
       probe_cc: countryCode,
       since,
       until,
-      time_grain: 'day',
+      time_grain: timeGrainForDateRange(since, until),
       test_name: messagingTestNames,
     }),
     [countryCode, since, until],
@@ -40,7 +40,7 @@ const ChartsContainer = () => {
       probe_cc: countryCode,
       since,
       until,
-      time_grain: 'day',
+      time_grain: timeGrainForDateRange(since, until),
       test_name: circumventionTestNames,
     }),
     [countryCode, since, until],
@@ -49,18 +49,10 @@ const ChartsContainer = () => {
   return (
     <>
       <div className="mt-4">
-        <Chart
-          title={intl.formatMessage({
-            id: 'Tests.Groups.Instant Messagging.Name',
-          })}
-          queryParams={queryMessagingApps}
-        />
+        <ChartIntersectionObserver queryParams={queryMessagingApps} />
       </div>
       <div className="mt-4">
-        <Chart
-          title={intl.formatMessage({ id: 'Tests.Groups.Circumvention.Name' })}
-          queryParams={queryCircumventionTools}
-        />
+        <ChartIntersectionObserver queryParams={queryCircumventionTools} />
       </div>
     </>
   )

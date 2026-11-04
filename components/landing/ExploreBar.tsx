@@ -223,6 +223,13 @@ const ExploreBar = () => {
 
   // selects an option and closes the list
   const selectOption = (option: SearchResult) => {
+    if (window.umami) {
+      window.umami?.track('explore-bar-select', {
+        type: option.type,
+        key: option.key,
+        query: trimmedInput,
+      })
+    }
     setIsOpen(false)
     router.push(option.href)
   }

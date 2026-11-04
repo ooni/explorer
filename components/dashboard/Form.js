@@ -46,6 +46,7 @@ export const Form = ({
   // initial placement of query params when they are not defined
   // biome-ignore lint/correctness/useExhaustiveDependencies: <explanation>
   useEffect(() => {
+    if (!router.isReady) return
     const tomorrow = dayjs.utc().add(1, 'day').format('YYYY-MM-DD')
     const monthAgo = dayjs.utc().subtract(30, 'day').format('YYYY-MM-DD')
     const probe_cc = selectedCountries.join(',')
@@ -58,7 +59,7 @@ export const Form = ({
       },
     }
     router.replace(href, undefined, { shallow: true })
-  }, [])
+  }, [router.isReady])
 
   // Sync page URL params with changes from form values
   const onChange = useCallback(

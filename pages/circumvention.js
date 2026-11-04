@@ -99,9 +99,9 @@ const Page = (props) => {
           id="ThematicPage.Circumvention.Text"
           values={{
             domainsList: domainsList(domains),
-            appsList: `<ul className="my-4">${CIRCUMVENTION_TESTS.map(
+            appsList: `\n\n<ul class="my-4">${CIRCUMVENTION_TESTS.map(
               (d) =>
-                `<li><a href='#${d}'>${intl.formatMessage({
+                `<li><a href="#${d}">${intl.formatMessage({
                   id: CIRCUMVENTION_TESTS_STRINGS[d],
                 })}</a></li>`,
             ).join('')}</ul>`,

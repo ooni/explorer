@@ -50,6 +50,9 @@ export const generateSearchQuery = (data, query) => {
       case 'month':
         untilDateObj.setUTCMonth(untilDateObj.getUTCMonth() + 1)
         break
+      case 'year':
+        untilDateObj.setUTCFullYear(untilDateObj.getUTCFullYear() + 1)
+        break
       default:
         untilDateObj.setUTCDate(untilDateObj.getUTCDate() + 1)
         break

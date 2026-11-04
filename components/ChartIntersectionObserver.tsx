@@ -1,4 +1,5 @@
 import Chart, { ChartSpinLoader } from 'components/Chart'
+import { timeGrainForDateRange } from 'utils'
 import { useRouter } from 'next/router'
 import { useMemo } from 'react'
 import { useInView } from 'react-intersection-observer'
@@ -7,12 +8,14 @@ type ChartIntersectionObserverProps = {
   domain?: string
   testName?: string
   headerOptions?: object
+  queryParams?: Record<string, unknown>
 }
 
 const ChartIntersectionObserver = ({
   domain,
   testName = 'web_connectivity',
   headerOptions,
+  queryParams,
 }: ChartIntersectionObserverProps) => {
   const router = useRouter()
 
@@ -20,7 +23,7 @@ const ChartIntersectionObserver = ({
     query: { since, until, probe_cc },
   } = router
 
-  const query = useMemo(
+  const defaultQuery = useMemo(
     () => ({
       axis_x: 'measurement_start_day',
       axis_y: 'probe_cc',
@@ -29,7 +32,7 @@ const ChartIntersectionObserver = ({
       test_name: testName,
       ...(domain && { domain }),
       ...(probe_cc && { probe_cc }),
-      time_grain: 'day',
+      time_grain: timeGrainForDateRange(since, until),
     }),
     [domain, since, until, probe_cc, testName],
   )
@@ -44,7 +47,10 @@ const ChartIntersectionObserver = ({
   return (
     <div ref={ref}>
       {inView ? (
-        <Chart queryParams={query} headerOptions={headerOptions} />
+        <Chart
+          queryParams={queryParams ?? defaultQuery}
+          headerOptions={headerOptions}
+        />
       ) : (
         <ChartSpinLoader />
       )}

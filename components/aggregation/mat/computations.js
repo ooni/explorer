@@ -14,6 +14,10 @@ export function getDatesBetween(startDate, endDate, timeGrain) {
         startOfDay = startOfDay.utc().add(1, 'hours')
       }
       currentDate = dayjs(currentDate).utc().add(1, 'day')
+    } else if (timeGrain === 'year') {
+      const yearStart = dayjs(currentDate).utc().startOf('year')
+      dateSet.add(yearStart.toISOString().slice(0, 10))
+      currentDate = yearStart.add(1, 'year').toDate()
     } else if (timeGrain === 'month') {
       const monthStart = dayjs(currentDate).utc().startOf('month')
       dateSet.add(monthStart.toISOString().slice(0, 10))

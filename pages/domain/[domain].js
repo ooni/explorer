@@ -14,6 +14,7 @@ import Flag from 'components/Flag'
 import { StyledSticky } from 'components/SharedStyledComponents'
 import { GridBox } from 'components/VirtualizedGrid'
 import { simpleFetcher } from 'services/fetchers'
+import { timeGrainForDateRange } from 'utils'
 import { getLocalisedRegionName } from 'utils/i18nCountries'
 import RecentMeasurements from 'components/RecentMeasurements'
 
@@ -64,7 +65,7 @@ const ChartContainer = ({ domain, ...props }) => {
       since,
       until,
       ...(probe_cc && { probe_cc }),
-      time_grain: 'day',
+      time_grain: timeGrainForDateRange(since, until),
     }),
     [domain, since, until, probe_cc],
   )

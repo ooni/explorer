@@ -4,6 +4,32 @@ const isGreater = (key, x, y) => {
   return a < b ? -1 : a > b ? 1 : 0
 }
 
+// Time grain for a date range, used by the charts with a row per domain and
+// when picking dates in MAT. A row per domain and day over years runs to
+// millions of rows, more than the API can return. Most countries test
+// ~2,500-2,800 domains a month (2026-10), so beyond the default 30-day daily
+// view this keeps to at most 13 buckets. The API accepts year only for ranges
+// over a year.
+export const timeGrainForDateRange = (since, until) => {
+  const days = (Date.parse(until) - Date.parse(since)) / (24 * 60 * 60 * 1000)
+  if (!(days > 31)) return 'day'
+  if (days <= 13 * 7) return 'week'
+  if (days <= 365) return 'month'
+  return 'year'
+}
+
+// Time grains MAT offers for a date range
+export const timeGrainOptionsForRange = (since, until) => {
+  const dateRegex = /^\d{4}-\d{2}-\d{2}$/
+  if (!until?.match(dateRegex) || !since?.match(dateRegex))
+    return ['hour', 'day', 'week', 'month', 'year']
+  const days = (Date.parse(until) - Date.parse(since)) / (24 * 60 * 60 * 1000)
+  if (days < 8) return ['hour', 'day']
+  if (days < 31) return ['day', 'week']
+  if (days < 365) return ['day', 'week', 'month']
+  return ['day', 'week', 'month', 'year']
+}
+
 export const sortByKey = (key, secondaryKey) => {
   return (a, b) => {
     const r = isGreater(key, a, b)
