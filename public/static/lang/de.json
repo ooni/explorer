@@ -704,5 +704,6 @@
   "Home.ExploreBar.Type.country": "Land",
   "Home.ExploreBar.Type.network": "Netzwerk",
   "Home.ExploreBar.Type.domain": "Domain",
-  "Home.ExploreBar.Type.theme": "Aufmachung"
+  "Home.ExploreBar.Type.theme": "Aufmachung",
+  "MAT.Form.TimeGrainOption.year": "Jahr"
 }
