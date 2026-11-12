@@ -197,6 +197,12 @@ export const testNames = {
   },
 
   /* Experimental tests */
+  tlsmiddlebox: {
+    group: 'experimental',
+    name: <FormattedMessage id="Tests.TLSMiddlebox.Name" />,
+    id: 'Tests.TLSMiddlebox.Name',
+    info: 'https://github.com/ooni/spec/blob/master/nettests/ts-037-tlsmiddlebox.md',
+  },
   vanilla_tor: {
     group: 'experimental',
     name: <FormattedMessage id="Tests.TorVanilla.Name" />,
