@@ -1,3 +1,4 @@
+import useTimezone from 'hooks/useTimezone'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import { defineMessages, useIntl } from 'react-intl'
@@ -262,6 +263,7 @@ const ResultItem = ({
   failure,
 }) => {
   const intl = useIntl()
+  const { timezone } = useTimezone()
   const pathMaxLen = 10
   let inputLabel = input
   if (input) {
@@ -326,7 +328,8 @@ const ResultItem = ({
                 <div className="w-4/12">
                   {dayjs
                     .utc(measurement_start_time)
-                    .format('YYYY-MM-DD HH:mm [UTC]')}
+                    .tz(timezone)
+                    .format('YYYY-MM-DD HH:mm z')}
                 </div>
                 <div className="w-4/12 bbbbb">{testName}</div>
               </div>

@@ -1,3 +1,4 @@
+import useTimezone from 'hooks/useTimezone'
 import Link from 'next/link'
 import PropTypes from 'prop-types'
 import { useContext } from 'react'
@@ -71,13 +72,14 @@ const CommonSummary = ({
 }) => {
   const isEmbeddedView = useContext(EmbeddedViewContext)
   const intl = useIntl()
+  const { timezone } = useTimezone()
   const startTime = measurement_start_time
   const network = probe_asn
   const countryCode = probe_cc
   const formattedDate = new Intl.DateTimeFormat(intl.locale, {
     dateStyle: 'long',
     timeStyle: 'long',
-    timeZone: 'UTC',
+    timeZone: timezone,
   }).format(new Date(startTime))
 
   return (
