@@ -25,12 +25,11 @@ export async function fetchObservations(
   const rows: WebObservation[] = []
   for (let page = 0; page < maxPages; page++) {
     const q = new URLSearchParams({
-      measurement_uid: measurementUid,
       limit: String(limit),
       offset: String(page * limit),
     })
     const data = await getJSON<{ results: WebObservation[] }>(
-      apiUrl(`/v1/observations?${q}`),
+      apiUrl(`/v1/observations/${measurementUid}?${q}`),
     )
     rows.push(
       ...data.results.filter((r) => r.measurement_uid === measurementUid),

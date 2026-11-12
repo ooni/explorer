@@ -121,7 +121,7 @@ const Measurement = ({ isEmbeddedView, measurementUid, notFound = false }) => {
   const {
     data: measurementData,
     error,
-    isValidating: isLoadingMeasurementData,
+    isLoading: isLoadingMeasurementData,
   } = useSWR(
     `/api/ooni/v1/measurement_meta?measurement_uid=${measurementUid}`,
     measurementFetcher,
@@ -139,15 +139,12 @@ const Measurement = ({ isEmbeddedView, measurementUid, notFound = false }) => {
     measurement_start_time,
     probe_cc,
     probe_asn,
-    // raw_measurement,
     measurement_uid,
     report_id,
     scores,
     input,
     verification_status,
   } = measurementData ?? {}
-  // notFound = raw_measurement === ''
-  // raw_measurement = raw_measurement ? JSON.parse(raw_measurement) : null
   scores = scores ? JSON.parse(scores) : null
 
   const country = probe_cc
@@ -211,14 +208,7 @@ const Measurement = ({ isEmbeddedView, measurementUid, notFound = false }) => {
 
   const hasMeasurementData =
     !!measurementData && Object.keys(measurementData).length > 0
-  const detailsSettled = !test_name
-    ? true
-    : showObservations
-      ? observations !== undefined || !!observationsError
-      : rawMeasurement !== undefined || !!rawError
-  const isPageLoading =
-    !error &&
-    (isLoadingMeasurementData || (hasMeasurementData && !detailsSettled))
+  const isPageLoading = !error && isLoadingMeasurementData
 
   const analysisSwrKey = useMemo(() => {
     if (!measurementUid || !measurement_start_time) return null
