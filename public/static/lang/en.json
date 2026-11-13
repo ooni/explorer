@@ -67,6 +67,7 @@
   "Tests.HTTPHost.Name": "HTTP Host",
   "Tests.MeekFrontendRequests.Name": "Meek Fronted Requests",
   "Tests.MultiProtocolTraceroute.Name": "Multi Protocol Traceroute",
+  "Tests.TLSMiddlebox.Name": "TLS Middlebox Test",
   "Measurement.MetaDescription": "OONI data suggests {description} on {formattedDate}, find more open data on internet censorship on OONI Explorer.",
   "Measurement.NotFound": "Measurement not found",
   "Measurement.Hero.Status.Confirmed": "Confirmed Blocked",
