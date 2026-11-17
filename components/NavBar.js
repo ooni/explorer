@@ -1,3 +1,4 @@
+import useTimezone from "hooks/useTimezone";
 import useUser from "hooks/useUser";
 import Link from "next/link";
 import { useRouter } from "next/router";
@@ -22,6 +23,29 @@ const LanguageSelect = ({ onChange, value, children }) => {
         id='navbar-language-select'
         name="language"
         className="appearance-none bg-transparent text-gray-50 cursor-pointer capitalize outline-none border-none p-0 rounded-sm focus-visible:ring-2 focus-visible:ring-white"
+        value={value}
+        onChange={onChange}
+      >
+        {children}
+      </select>
+      <span
+        aria-hidden="true"
+        className="w-2 h-2 bg-[url('data:image/svg+xml;charset=UTF-8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2212%22%20height%3D%2212%22%20viewBox%3D%220%200%2012%2012%22%3E%3Ctitle%3Edown-arrow%3C%2Ftitle%3E%3Cg%20fill%3D%22%23FFFFFF%22%3E%3Cpath%20d%3D%22M10.293%2C3.293%2C6%2C7.586%2C1.707%2C3.293A1%2C1%2C0%2C0%2C0%2C.293%2C4.707l5%2C5a1%2C1%2C0%2C0%2C0%2C1.414%2C0l5-5a1%2C1%2C0%2C1%2C0-1.414-1.414Z%22%20fill%3D%22%23FFFFFF%22%3E%3C%2Fpath%3E%3C%2Fg%3E%3C%2Fsvg%3E')] bg-no-repeat bg-contain"
+      />
+    </div>
+  );
+};
+
+const TimezoneSelect = ({ onChange, value, children }) => {
+  return (
+    <div className="flex items-center mb-2">
+      <label htmlFor='navbar-timezone-select' className="sr-only">
+        Select timezone
+      </label>
+      <select
+        id='navbar-timezone-select'
+        name="timezone"
+        className="appearance-none bg-transparent text-gray-50 cursor-pointer outline-none border-none p-0 rounded-sm focus-visible:ring-2 focus-visible:ring-white"
         value={value}
         onChange={onChange}
       >
@@ -158,6 +182,7 @@ export const NavBar = ({ color, className }) => {
   const router = useRouter();
   const { pathname, query } = router;
   const { user, logout } = useUser();
+  const { timezone, localTimezone, setTimezone } = useTimezone();
 
   const [showMenu, setShowMenu] = useState(false);
 
@@ -165,6 +190,10 @@ export const NavBar = ({ color, className }) => {
     const htmlEl = document.documentElement;
     htmlEl.setAttribute("dir", getDirection(event.target.value));
     router.push({ pathname, query }, undefined, { locale: event.target.value });
+  };
+
+  const handleTimezoneChange = (event) => {
+    setTimezone(event.target.value);
   };
 
   const logoutUser = (e) => {
@@ -257,6 +286,27 @@ export const NavBar = ({ color, className }) => {
                       </option>
                     ))}
                   </LanguageSelect>
+                  <TimezoneSelect onChange={handleTimezoneChange} value={timezone}>
+                    <option className="text-inherit opacity-100" value="UTC">
+                      UTC
+                    </option>
+                    {localTimezone !== "UTC" && (
+                      <option
+                        className="text-inherit opacity-100"
+                        value={localTimezone}
+                      >
+                        {`Local (${localTimezone})`}
+                      </option>
+                    )}
+                    {timezone !== "UTC" && timezone !== localTimezone && (
+                      <option
+                        className="text-inherit opacity-100"
+                        value={timezone}
+                      >
+                        {timezone}
+                      </option>
+                    )}
+                  </TimezoneSelect>
                 </div>
               </div>
             </div>
