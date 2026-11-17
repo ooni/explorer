@@ -705,5 +705,6 @@
   "Home.ExploreBar.Type.network": "Ağ",
   "Home.ExploreBar.Type.domain": "Etki alanı",
   "Home.ExploreBar.Type.theme": "Tema",
-  "MAT.Form.TimeGrainOption.year": "Yıl"
+  "MAT.Form.TimeGrainOption.year": "Yıl",
+  "Tests.TLSMiddlebox.Name": "TLS Orta Katman Testi"
 }

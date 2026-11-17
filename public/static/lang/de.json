@@ -705,5 +705,6 @@
   "Home.ExploreBar.Type.network": "Netzwerk",
   "Home.ExploreBar.Type.domain": "Domain",
   "Home.ExploreBar.Type.theme": "Aufmachung",
-  "MAT.Form.TimeGrainOption.year": "Jahr"
+  "MAT.Form.TimeGrainOption.year": "Jahr",
+  "Tests.TLSMiddlebox.Name": "TLS Middlebox Test"
 }
