@@ -9,9 +9,10 @@ interface HeroProps {
   icon: React.ReactNode
   label: string
   info: React.ReactNode
+  isPreliminary?: boolean
 }
 
-const Hero = ({ status, icon, label, info }: HeroProps) => {
+const Hero = ({ status, icon, label, info, isPreliminary }: HeroProps) => {
   const intl = useIntl()
   let computedLabel = ''
 
@@ -56,6 +57,11 @@ const Hero = ({ status, icon, label, info }: HeroProps) => {
         <div className="flex my-2 justify-center items-center">
           {icon} <div>{label}</div>
         </div>
+        {isPreliminary && (
+          <div className="text-sm text-center opacity-80">
+            {intl.formatMessage({ id: 'Measurement.Hero.PreliminaryAnalysis' })}
+          </div>
+        )}
       </div>
       {info && <div className="text-3xl font-light text-center">{info}</div>}
     </div>

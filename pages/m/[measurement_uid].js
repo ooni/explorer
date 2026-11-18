@@ -1,3 +1,4 @@
+import { getAnalysisOutcome } from 'components/measurement/analysisOutcome'
 import CommonDetails, {
   commonDetailsFromObservation,
   commonDetailsFromRaw,
@@ -144,8 +145,19 @@ const Measurement = ({ isEmbeddedView, measurementUid, notFound = false }) => {
     scores,
     input,
     verification_status,
+    analysis,
   } = measurementData ?? {}
   scores = scores ? JSON.parse(scores) : null
+
+  const showObservations = usesObservations(test_name)
+
+  const analysisOutcome = useMemo(
+    () => (showObservations ? getAnalysisOutcome(analysis) : null),
+    [showObservations, analysis],
+  )
+  const isConfirmed = analysisOutcome ? analysisOutcome.isConfirmed : confirmed
+  const isAnomaly = analysisOutcome ? analysisOutcome.isAnomaly : anomaly
+  const isFailure = analysisOutcome ? analysisOutcome.isFailure : failure
 
   const country = probe_cc
     ? getLocalisedRegionName(probe_cc, intl.locale)
@@ -173,8 +185,6 @@ const Measurement = ({ isEmbeddedView, measurementUid, notFound = false }) => {
         }))
       : []
   }, [userFeedback, intl])
-
-  const showObservations = usesObservations(test_name)
 
   const {
     data: observations,
@@ -225,9 +235,11 @@ const Measurement = ({ isEmbeddedView, measurementUid, notFound = false }) => {
         testName: test_name,
         measurement: rawMeasurement,
         scores,
-        isConfirmed: confirmed,
-        isAnomaly: anomaly,
-        isFailure: failure,
+        status: analysisOutcome?.status,
+        blockingType: analysisOutcome?.blockingType,
+        isConfirmed,
+        isAnomaly,
+        isFailure,
         input,
         intl,
         isEmbeddedView,
@@ -236,9 +248,10 @@ const Measurement = ({ isEmbeddedView, measurementUid, notFound = false }) => {
       test_name,
       rawMeasurement,
       scores,
-      confirmed,
-      anomaly,
-      failure,
+      analysisOutcome,
+      isConfirmed,
+      isAnomaly,
+      isFailure,
       input,
       intl,
       isEmbeddedView,
@@ -246,7 +259,7 @@ const Measurement = ({ isEmbeddedView, measurementUid, notFound = false }) => {
   )
 
   const color =
-    failure === true
+    isFailure === true
       ? pageColors.error
       : (pageColors[status] ?? pageColors.default)
 
@@ -268,9 +281,11 @@ const Measurement = ({ isEmbeddedView, measurementUid, notFound = false }) => {
         testName: test_name,
         measurement: rawMeasurement,
         scores,
-        isConfirmed: confirmed,
-        isAnomaly: anomaly,
-        isFailure: failure,
+        status: analysisOutcome?.status,
+        blockingType: analysisOutcome?.blockingType,
+        isConfirmed,
+        isAnomaly,
+        isFailure,
         input,
         country,
         date: formattedDate,
@@ -282,9 +297,10 @@ const Measurement = ({ isEmbeddedView, measurementUid, notFound = false }) => {
       test_name,
       rawMeasurement,
       scores,
-      confirmed,
-      anomaly,
-      failure,
+      analysisOutcome,
+      isConfirmed,
+      isAnomaly,
+      isFailure,
       input,
       country,
       formattedDate,
@@ -336,6 +352,7 @@ const Measurement = ({ isEmbeddedView, measurementUid, notFound = false }) => {
                     icon={statusIcon}
                     label={statusLabel}
                     info={info}
+                    isPreliminary={analysisOutcome?.isPreliminary}
                   />
                 }
                 onVerifyClick={() => setShowModal(true)}

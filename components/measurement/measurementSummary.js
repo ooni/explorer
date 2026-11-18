@@ -163,7 +163,8 @@ const UrlWrapper = ({ href }) => {
 
 const getWebConnectivitySummary = ({
   measurement,
-  scores,
+  status,
+  blockingType,
   isConfirmed,
   isAnomaly,
   isFailure,
@@ -175,6 +176,8 @@ const getWebConnectivitySummary = ({
   isEmbeddedView,
 }) => {
   const { accessible, blocking } = measurement?.test_keys ?? {}
+  const isAccessible = status ? status === 'reachable' : accessible
+  const isDown = status ? status === 'down' : blocking === false
   const hostname = input ? hostnameFromUrl(input) : input
   const values = {
     date,
@@ -214,7 +217,7 @@ const getWebConnectivitySummary = ({
   }
 
   if (isAnomaly) {
-    const blockingReason = blocking ?? scores?.analysis?.blocking_type ?? null
+    const blockingReason = blockingType ?? blocking ?? null
     const reasonMessage = messages[`blockingReason.${blockingReason}`]
     const reason = reasonMessage ? intl.formatMessage(reasonMessage) : null
     return {
@@ -239,7 +242,7 @@ const getWebConnectivitySummary = ({
     }
   }
 
-  if (accessible) {
+  if (isAccessible) {
     return {
       summaryText: (
         <FormattedMessage
@@ -251,7 +254,7 @@ const getWebConnectivitySummary = ({
     }
   }
 
-  if (blocking === false) {
+  if (isDown) {
     // When not accessible, but also not blocking, it must be down
     return {
       summaryText: (
@@ -545,6 +548,8 @@ export const getMeasurementSummary = ({
   testName,
   measurement,
   scores,
+  status,
+  blockingType,
   isConfirmed,
   isAnomaly,
   isFailure,
@@ -559,6 +564,8 @@ export const getMeasurementSummary = ({
     testName,
     measurement,
     scores,
+    status,
+    blockingType,
     isConfirmed,
     isAnomaly,
     isFailure,

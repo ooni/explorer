@@ -242,7 +242,13 @@ const resolverIpLabel = (rg: ResolverGroup) => {
   return ip ? ` (${ip})` : ''
 }
 
-const DnsSection = ({ group }: { group: TargetGroup }) => {
+const DnsSection = ({
+  group,
+  isCtrlLoading,
+}: {
+  group: TargetGroup
+  isCtrlLoading: boolean
+}) => {
   const ctrl = useMemo(() => indexCtrlByHostname(group.ctrl), [group.ctrl])
   const multiHost = group.hostnames.length > 1
 
@@ -370,7 +376,11 @@ const DnsSection = ({ group }: { group: TargetGroup }) => {
           <h4 className="text-xs font-semibold uppercase tracking-wide mb-2">
             <FormattedMessage id="Measurement.Observations.ControlResolution" />
           </h4>
-          {ctrlHostnames.length === 0 ? (
+          {isCtrlLoading ? (
+            <div className="flex justify-center py-4">
+              <SpinLoader />
+            </div>
+          ) : ctrlHostnames.length === 0 ? (
             <p className="">
               <FormattedMessage id="Measurement.Observations.Control.NoHostnames" />
             </p>
@@ -771,11 +781,13 @@ const TargetSection = ({
   probeASN,
   chartSince,
   chartUntil,
+  isCtrlLoading,
 }: {
   group: TargetGroup
   probeASN: number
   chartSince: string
   chartUntil: string
+  isCtrlLoading: boolean
 }) => {
   // The resolver the probe actually used, as annotated on the observations
   const resolverASN =
@@ -807,7 +819,7 @@ const TargetSection = ({
           />
         </span>
       </h2>
-      <DnsSection group={group} />
+      <DnsSection group={group} isCtrlLoading={isCtrlLoading} />
       <EndpointsSection group={group} />
       <StandaloneHttpSection group={group} />
       <FailurePanel

@@ -39,7 +39,7 @@ const webConnectivityBlockingReasonIds = {
 
 const getWebConnectivityHero = ({
   measurement,
-  scores,
+  blockingType,
   isConfirmed,
   isAnomaly,
   isFailure,
@@ -60,7 +60,7 @@ const getWebConnectivityHero = ({
     status = 'confirmed'
   } else if (isAnomaly) {
     status = 'anomaly'
-    const blockingReason = blocking ?? scores?.analysis?.blocking_type ?? null
+    const blockingReason = blockingType ?? blocking ?? null
     const reasonId = webConnectivityBlockingReasonIds[blockingReason]
     if (reasonId) {
       reason = intl.formatMessage({ id: reasonId, defaultMessage: '' })
@@ -407,6 +407,8 @@ export const getMeasurementHeroProps = ({
   testName,
   measurement,
   scores,
+  status,
+  blockingType,
   isConfirmed,
   isAnomaly,
   isFailure,
@@ -418,6 +420,7 @@ export const getMeasurementHeroProps = ({
     testName,
     measurement,
     scores,
+    blockingType,
     isConfirmed,
     isAnomaly,
     isFailure,
@@ -474,7 +477,7 @@ export const getMeasurementHeroProps = ({
   const info = scores?.msg ?? hero.info ?? null
 
   return {
-    status: hero.status,
+    status: status ?? hero.status,
     statusIcon: hero.statusIcon ?? null,
     statusLabel: hero.statusLabel ?? null,
     info,

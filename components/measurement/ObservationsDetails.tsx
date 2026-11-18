@@ -52,7 +52,7 @@ const ObservationsDetails = ({
 
   // The control ground truth is keyed by hostname, so it can only be requested
   // once the observations are in
-  const { data: ctrl } = useSWR(
+  const { data: ctrl, isLoading: isCtrlLoading } = useSWR(
     hostnames.length > 0
       ? [
           'observations-ctrl',
@@ -120,6 +120,7 @@ const ObservationsDetails = ({
           probeASN={probeASN}
           chartSince={chart.since}
           chartUntil={chart.until}
+          isCtrlLoading={isCtrlLoading && hostnames.length > 0}
         />
       ))}
     </div>
