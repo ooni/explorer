@@ -346,13 +346,14 @@ const Measurement = ({ isEmbeddedView, measurementUid, notFound = false }) => {
                 color={color}
                 country={country}
                 verification_status={verification_status}
+                isPreliminary={!!analysisOutcome?.isPreliminary}
                 hero={
                   <Hero
                     status={status}
                     icon={statusIcon}
                     label={statusLabel}
                     info={info}
-                    isPreliminary={analysisOutcome?.isPreliminary}
+                    isPreliminary={!!analysisOutcome?.isPreliminary}
                   />
                 }
                 onVerifyClick={() => setShowModal(true)}

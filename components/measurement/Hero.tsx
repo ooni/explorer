@@ -4,6 +4,8 @@ import { FaQuestion } from 'react-icons/fa'
 import { MdPriorityHigh, MdWarning } from 'react-icons/md'
 import { useIntl } from 'react-intl'
 
+import AnalysisProgressStepper from './AnalysisProgressStepper'
+
 interface HeroProps {
   status: string
   icon: React.ReactNode
@@ -12,7 +14,13 @@ interface HeroProps {
   isPreliminary?: boolean
 }
 
-const Hero = ({ status, icon, label, info, isPreliminary }: HeroProps) => {
+const Hero = ({
+  status,
+  icon,
+  label,
+  info,
+  isPreliminary = false,
+}: HeroProps) => {
   const intl = useIntl()
   let computedLabel = ''
 
@@ -57,13 +65,11 @@ const Hero = ({ status, icon, label, info, isPreliminary }: HeroProps) => {
         <div className="flex my-2 justify-center items-center">
           {icon} <div>{label}</div>
         </div>
-        {isPreliminary && (
-          <div className="text-sm text-center opacity-80">
-            {intl.formatMessage({ id: 'Measurement.Hero.PreliminaryAnalysis' })}
-          </div>
-        )}
       </div>
       {info && <div className="text-3xl font-light text-center">{info}</div>}
+      <div className="mt-2 flex justify-center">
+        <AnalysisProgressStepper isPreliminary={isPreliminary} />
+      </div>
     </div>
   )
 }
