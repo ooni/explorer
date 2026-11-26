@@ -2,6 +2,7 @@
 import axios from 'axios'
 import Link from 'next/link'
 import { colors } from 'ooni-components'
+import { DonationBanner } from 'components/DonationBanner'
 import { FormattedMessage } from 'react-intl'
 import { twMerge } from 'tailwind-merge'
 import FormattedMarkdown from 'components/FormattedMarkdown'
@@ -10,6 +11,8 @@ import CoverageChart from 'components/landing/Stats'
 import highlightContent from 'components/landing/highlights.json'
 import { toCompactNumberUnit } from 'utils'
 import ExploreBar from 'components/landing/ExploreBar'
+
+
 interface StatsItemProps {
   label: React.ReactNode
   unit?: string
@@ -108,6 +111,7 @@ const LandingPage = ({
 
   return (
     <>
+      <DonationBanner />
       <div
         className="pt-4 pb-12"
         style={{
