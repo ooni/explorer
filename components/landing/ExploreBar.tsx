@@ -87,7 +87,6 @@ const ExploreBar = () => {
   const [activeIndex, setActiveIndex] = useState(-1)
 
   // debounces the query to prevent excessive API requests
-  // biome-ignore lint/correctness/useExhaustiveDependencies: debounce identity must be stable
   const debouncedSetQuery = useMemo(() => debounce(setQuery, 200), [])
   useEffect(() => () => debouncedSetQuery.cancel(), [debouncedSetQuery])
 
@@ -269,7 +268,7 @@ const ExploreBar = () => {
         return (
           <>
             <span>AS{option.key}</span>
-            {option.name && <span> · {option.name}</span>}
+            {option.name && <span> • {option.name}</span>}
           </>
         )
       case 'theme':
