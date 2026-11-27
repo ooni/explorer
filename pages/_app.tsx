@@ -8,6 +8,7 @@ import 'styles/globals.css'
 import 'styles/nprogress.css'
 import Layout from 'components/Layout'
 import { LocaleProvider } from 'components/withIntl'
+import { TimezoneProvider } from 'hooks/useTimezone'
 
 type ExplorerAppProps = AppProps & {
   err?: Error
@@ -38,11 +39,13 @@ export default function App({ Component, pageProps, err }: ExplorerAppProps) {
   return (
     <>
       <LocaleProvider>
-        <main className={firaSans.className}>
-          <Layout isEmbeddedView={!!pageProps?.isEmbeddedView}>
-            <Component {...pageProps} err={err} />
-          </Layout>
-        </main>
+        <TimezoneProvider>
+          <main className={firaSans.className}>
+            <Layout isEmbeddedView={!!pageProps?.isEmbeddedView}>
+              <Component {...pageProps} err={err} />
+            </Layout>
+          </main>
+        </TimezoneProvider>
       </LocaleProvider>
     </>
   )
